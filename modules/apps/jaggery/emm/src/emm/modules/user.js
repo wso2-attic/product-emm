@@ -589,9 +589,11 @@ var userModule = function () {
 
     publicMethods.getUIPermissions = function () {
         var permissions = {};
-        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list") ||
-            publicMethods.isAuthorized("/permission/admin/device-mgt/user/devices/list")) {
-            permissions["LIST_DEVICES"] = true;
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list")) {
+            permissions["LIST_DEVICES_ADMIN"] = true;
+        }
+        if (publicMethods.isAuthorized("/permission/admin/device-mgt/user/devices/list")) {
+            permissions["LIST_DEVICES_USER"] = true;
         }
         if (publicMethods.isAuthorized("/permission/admin/device-mgt/emm-admin/users/list")) {
             permissions["LIST_USERS"] = true;

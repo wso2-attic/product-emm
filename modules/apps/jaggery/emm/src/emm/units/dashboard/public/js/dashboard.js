@@ -18,10 +18,18 @@ var updateStats = function (serviceURL, id) {
 };
 
 $(document).ready(function () {
-    updateStats("/mdm-admin/devices/count", "#device-count");
-    updateStats("/mdm-admin/policies/count", "#policy-count");
-    updateStats("/mdm-admin/users/count", "#user-count");
-    updateStats("/mdm-admin/roles/count", "#role-count");
+    if ($("#device-count").data("device-count")) {
+        updateStats("/mdm-admin/devices/count", "#device-count");
+    }
+    if ($("#policy-count").data("policy-count")) {
+        updateStats("/mdm-admin/policies/count", "#policy-count");
+    }
+    if ($("#user-count").data("user-count")) {
+        updateStats("/mdm-admin/users/count", "#user-count");
+    }
+    if ($("#role-count").data("role-count")) {
+        updateStats("/mdm-admin/roles/count", "#role-count");
+    }
 });
 
 function toggleEnrollment() {

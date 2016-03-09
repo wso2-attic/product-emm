@@ -311,7 +311,6 @@ $(document).ready(function () {
             $(modalPopupContent).html($('#remove-policy-modal-content').html());
         }
         showPopup();
-
         $("a#remove-policy-yes-link").click(function () {
             invokerUtil.post(
                 deletePolicyAPI,

@@ -63,40 +63,51 @@ utility = function () {
         userModule.addPermissions([{key: "dashboard", name: "Dashboard"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "dashboard/view", name: "View Dashboard"}], "device-mgt/emm-admin", type);
 
+        userModule.addPermissions([{key: "operations", name: "Operations"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "operations/applications", name: "MAM"}], "device-mgt/emm-admin", type);
+
         userModule.addPermissions([{key: "devices", name: "Devices"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "devices/list", name: "List All Devices"}], "device-mgt/emm-admin", type);
-        userModule.addPermissions([{key: "devices/operation", name: "Perform Operation on Any Device"}],
-                                         "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "devices/view", name: "View Device"}], "device-mgt/emm-admin", type);
 
         userModule.addPermissions([{key: "users", name: "Users"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "users/add", name: "Add New Users"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "users/invite", name: "Invite Users"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "users/list", name: "List Users"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "users/remove", name: "Remove Users"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "users/update", name: "Update Users"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "users/view", name: "View User"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "users/password-reset", name: "Reset Password"}], "device-mgt/emm-admin", type);
 
         userModule.addPermissions([{key: "roles", name: "Roles"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "roles/add", name: "Add New Roles"}], "device-mgt/emm-admin", type);
-        userModule.addPermissions([{key: "roles/invite", name: "Invite Roles"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "roles/list", name: "List Roles"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "roles/remove", name: "Remove Roles"}], "device-mgt/emm-admin", type);
-        userModule.addPermissions([{key: "roles/permission", name: "Update Role Permission"}], "device-mgt/emm-admin", type);
-
+        userModule.addPermissions([{key: "roles/update", name: "Update Role"}], "device-mgt/emm-admin", type);
 
         userModule.addPermissions([{key: "policies", name: "Policy"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "policies/add", name: "Add Policy"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "policies/list", name: "List Policy"}], "device-mgt/emm-admin", type);
-        userModule.addPermissions([{key: "policies/edit", name: "Edit Policy"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "policies/update", name: "Edit Policy"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "policies/remove", name: "Remove Policy"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "policies/priority", name: "Policy Priority"}], "device-mgt/emm-admin", type);
 
-        // adding permission definitions for device-mgt/user
-        userModule.addPermissions([{key: "devices", name: "Devices"}], "device-mgt/user", type);
-        userModule.addPermissions([{key: "devices/list", name: "List Individual Devices"}], "device-mgt/user", type);
-        userModule.addPermissions([{key: "devices/operation", name: "Perform Operation on an Individual Device"}],
-                                         "device-mgt/user", type);
+        userModule.addPermissions([{key: "notifications", name: "Notifications"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "notifications/add", name: "Add Notifications"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "notifications/view", name: "List Notifications"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "notifications/update", name: "Edit Notifications"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "notifications/remove", name: "Remove Notifications"}], "device-mgt/emm-admin", type);
 
         userModule.addPermissions([{key: "platform-configs", name: "Platform Configurations"}], "device-mgt/emm-admin", type);
         userModule.addPermissions([{key: "platform-configs/view", name: "View Configurations"}], "device-mgt/emm-admin", type);
+        userModule.addPermissions([{key: "platform-configs/modify", name: "Modify Configurations"}], "device-mgt/emm-admin", type);
+
+        // adding permission definitions for device-mgt/user
+        userModule.addPermissions([{key: "devices", name: "Devices"}], "device-mgt/user", type);
+        userModule.addPermissions([{key: "enroll", name: "Enroll"}], "device-mgt/user", type);
+        userModule.addPermissions([{key: "devices/list", name: "List Individual Devices"}], "device-mgt/user", type);
+        userModule.addPermissions([{key: "devices/view", name: "View Devices"}], "device-mgt/user", type);
+
     };
     return publicMethods;
 

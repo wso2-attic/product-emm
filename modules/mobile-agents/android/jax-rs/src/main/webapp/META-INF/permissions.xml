@@ -32,301 +32,279 @@
     <!-- Operations management related permissions for admin -->
     <Permission>
         <name>Get Pending Operation</name>
-        <path>/device-mgt/android/operations/poll</path>
+        <path>/device-mgt/user/enroll/android</path>
         <url>/operation/*</url>
         <method>PUT</method>
-        <scope>emm_android_agent</scope>
     </Permission>
 
     <Permission>
         <name>Lock</name>
-        <path>/device-mgt/android/operations/lock</path>
+        <path>/device-mgt/emm-admin/operations/android/lock</path>
         <url>/operation/lock</url>
         <method>POST</method>
-        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Mute</name>
-        <path>/device-mgt/android/operations/mute</path>
+        <path>/device-mgt/emm-admin/operations/android/mute</path>
         <url>/operation/mute</url>
         <method>POST</method>
-        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Location</name>
-        <path>/device-mgt/android/operations/location</path>
+        <path>/device-mgt/emm-admin/operations/android/location</path>
         <url>/operation/location</url>
         <method>POST</method>
-        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Clear Passcode</name>
-        <path>/device-mgt/android/operations/clear-password</path>
+        <path>/device-mgt/emm-admin/operations/android/clear-password</path>
         <url>/operation/clear-password</url>
         <method>POST</method>
-        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Camera</name>
-        <path>/device-mgt/android/operations/camera</path>
+        <path>/device-mgt/emm-admin/operations/android/camera</path>
         <url>/operation/camera</url>
         <method>POST</method>
-        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Device Info</name>
-        <path>/device-mgt/android/operations/device-info</path>
+        <path>/device-mgt/emm-admin/operations/android/device-info</path>
         <url>/operation/device-info</url>
         <method>POST</method>
-        <scope>emm_admin,emm_user</scope>
+    </Permission>
+
+    <Permission>
+        <name>Device Info</name>
+        <path>/device-mgt/emm-admin/devices/view</path>
+        <url>/operation/device-info</url>
+        <method>POST</method>
+    </Permission>
+
+    <Permission>
+        <name>Device Info</name>
+        <path>/device-mgt/user/devices/view</path>
+        <url>/operation/device-info</url>
+        <method>POST</method>
     </Permission>
 
     <Permission>
         <name>Enterprise Wipe</name>
-        <path>/device-mgt/android/operations/enterprise-wipe</path>
+        <path>/device-mgt/emm-admin/operations/android/enterprise-wipe</path>
         <url>/operation/enterprise-wipe</url>
         <method>POST</method>
-        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Wipe Data</name>
-        <path>/device-mgt/android/operations/wipe-data</path>
+        <path>/device-mgt/emm-admin/operations/android/wipe-data</path>
         <url>/operation/wipe-data</url>
         <method>POST</method>
-        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Application List</name>
-        <path>/device-mgt/android/operations/application-list</path>
+        <path>/device-mgt/emm-admin/operations/android/application-list</path>
         <url>/operation/application-list</url>
         <method>POST</method>
-        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Ring</name>
-        <path>/device-mgt/android/operations/ring-device</path>
+        <path>/device-mgt/emm-admin/operations/android/ring-device</path>
         <url>/operation/ring-device</url>
         <method>POST</method>
-        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Reboot</name>
-        <path>/device-mgt/android/operations/reboot-device</path>
+        <path>/device-mgt/emm-admin/operations/android/reboot-device</path>
         <url>/operation/reboot-device</url>
         <method>POST</method>
-        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Upgrade Firmware</name>
-        <path>/device-mgt/android/operations/upgrade-firmware</path>
+        <path>/device-mgt/emm-admin/operations/android/upgrade-firmware</path>
         <url>/operation/upgrade-firmware</url>
         <method>POST</method>
-        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Install Application</name>
-        <path>/device-mgt/android/operations/install-application</path>
+        <path>/device-mgt/emm-admin/operations/android/install-application</path>
         <url>/operation/install-application</url>
         <method>POST</method>
-        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Uninstall Application</name>
-        <path>/device-mgt/android/operations/uninstall-application</path>
+        <path>/device-mgt/emm-admin/operations/android/uninstall-application</path>
         <url>/operation/uninstall-application</url>
         <method>POST</method>
-        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Blacklist Applications</name>
-        <path>/device-mgt/android/operations/blacklist-applications</path>
+        <path>/device-mgt/emm-admin/operations/android/blacklist-applications</path>
         <url>/operation/blacklist-applications</url>
         <method>POST</method>
-        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Notification</name>
-        <path>/device-mgt/android/operations/notification</path>
+        <path>/device-mgt/emm-admin/operations/android/notification</path>
         <url>/operation/notification</url>
         <method>POST</method>
-        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Wifi</name>
-        <path>/device-mgt/android/operations/wifi</path>
+        <path>/device-mgt/emm-admin/operations/android/wifi</path>
         <url>/operation/wifi</url>
         <method>POST</method>
-        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Encryption</name>
-        <path>/device-mgt/android/operations/encrypt</path>
+        <path>/device-mgt/emm-admin/operations/android/encrypt</path>
         <url>/operation/encrypt</url>
         <method>POST</method>
-        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Change lock code</name>
-        <path>/device-mgt/android/operations/change-lock-code</path>
+        <path>/device-mgt/emm-admin/operations/android/change-lock-code</path>
         <url>/operation/change-lock-code</url>
         <method>POST</method>
-        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Password Policy</name>
-        <path>/device-mgt/android/operations/password-policy</path>
+        <path>/device-mgt/emm-admin/operations/android/password-policy</path>
         <url>/operation/password-policy</url>
         <method>POST</method>
-        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Webclip</name>
-        <path>/device-mgt/android/operations/webclip</path>
+        <path>/device-mgt/emm-admin/operations/android/webclip</path>
         <url>/operation/webclip</url>
         <method>POST</method>
-        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Disenroll</name>
-        <path>/device-mgt/android/operations/disenroll</path>
+        <path>/device-mgt/emm-admin/operations/android/disenroll</path>
         <url>/operation/disenroll</url>
         <method>POST</method>
-        <scope>emm_android_agent</scope>
     </Permission>
 
     <!-- Device management related permissions -->
     <Permission>
         <name>View devices</name>
-        <path>/device-mgt/android/devices/list</path>
+        <path>/device-mgt/emm-admin/devices/list</path>
         <url>/device</url>
         <method>GET</method>
-        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>View device</name>
-        <path>/device-mgt/android/devices/view</path>
+        <path>/device-mgt/emm-admin/devices/view</path>
         <url>/device/*</url>
         <method>GET</method>
-        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Update device</name>
-        <path>/device-mgt/android/devices/update</path>
+        <path>/device-mgt/emm-admin/devices/view</path>
         <url>/device/*</url>
         <method>PUT</method>
-        <scope>emm_admin,emm_user</scope>
     </Permission>
 
     <Permission>
         <name>Update application list</name>
-        <path>/device-mgt/android/devices/update-app</path>
+        <path>/device-mgt/user/enroll</path>
         <url>/device/appList/*</url>
         <method>POST</method>
-        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>View license</name>
-        <path>/device-mgt/android/license/view</path>
+        <path>/device-mgt/user/enroll/android</path>
         <url>/device/license</url>
         <method>GET</method>
-        <scope>emm_android_agent</scope>
     </Permission>
 
     <!-- Enrollment related permissions -->
     <Permission>
         <name>Enroll device</name>
-        <path>/device-mgt/android/devices/enroll</path>
+        <path>/device-mgt/user/enroll/android</path>
         <url>/enrollment</url>
         <method>POST</method>
-        <scope>emm_android_agent</scope>
     </Permission>
 
     <Permission>
         <name>Get Enrollment Status</name>
-        <path>/device-mgt/android/devices/enroll</path>
+        <path>/device-mgt/user/enroll/android</path>
         <url>/enrollment/*</url>
         <method>GET</method>
-        <scope>emm_android_agent</scope>
     </Permission>
 
     <Permission>
         <name>Update Enrollment</name>
-        <path>/device-mgt/android/devices/enroll</path>
+        <path>/device-mgt/user/enroll/android</path>
         <url>/enrollment/*</url>
         <method>PUT</method>
-        <scope>emm_user,emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Disenroll device</name>
-        <path>/device-mgt/android/devices/enroll</path>
+        <path>/device-mgt/user/enroll/android</path>
         <url>/enrollment/*</url>
         <method>DELETE</method>
-        <scope>emm_user,emm_admin</scope>
     </Permission>
 
     <!-- Policy related permissions -->
     <Permission>
         <name>View Policies</name>
-        <path>/device-mgt/android/policies/view</path>
+        <path>/device-mgt/user/enroll/android</path>
         <url>/policy/*</url>
         <method>GET</method>
-        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>View Policy Features</name>
-        <path>/device-mgt/android/policies/view</path>
+        <path>/device-mgt/user/enroll/android</path>
         <url>/policy/features/*</url>
         <method>GET</method>
-        <scope>emm_admin</scope>
     </Permission>
 
     <!-- Configuration related permissions -->
     <Permission>
         <name>View Tenant configuration</name>
-        <path>/device-mgt/android/tenant/configuration/view</path>
+        <path>/device-mgt/emm-admin/platform-configs/view</path>
         <url>/configuration</url>
         <method>GET</method>
-        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Add Tenant configuration</name>
-        <path>/device-mgt/android/tenant/configuration/modify</path>
+        <path>/device-mgt/emm-admin/platform-configs/modify</path>
         <url>/configuration</url>
         <method>POST</method>
-        <scope>emm_admin</scope>
     </Permission>
 
     <Permission>
         <name>Update Tenant configuration</name>
-        <path>/device-mgt/android/tenant/configuration/modify</path>
+        <path>/device-mgt/emm-admin/platform-configs/modify</path>
         <url>/configuration</url>
         <method>PUT</method>
-        <scope>emm_admin</scope>
     </Permission>
+
 </PermissionConfiguration>

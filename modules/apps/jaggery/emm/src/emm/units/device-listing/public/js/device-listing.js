@@ -157,9 +157,7 @@ function toTitleCase(str) {
 
 function loadDevices(searchType, searchParam){
     var deviceListing = $("#device-listing");
-    var deviceListingSrc = deviceListing.attr("src");
     var currentUser = deviceListing.data("currentUser");
-    var frontEndPagination = false;
 
     var serviceURL;
     if ($.hasPermission("LIST_DEVICES")) {
@@ -240,16 +238,17 @@ function loadDevices(searchType, searchParam){
             { targets: 5, data: 'enrolmentInfo.ownership' , className: 'fade-edge remove-padding-top' },
             { targets: 6, data: 'enrolmentInfo.status' , className: 'text-right content-fill text-left-on-grid-view no-wrap' ,
                 render: function ( status, type, row, meta ) {
-                var deviceType = row.type;
-                var deviceIdentifier = row.deviceIdentifier;
-                var html = '<span></span>';
-                if (status != 'REMOVED') {
-                    html = '<a href="device?type=' + deviceType + '&id=' + deviceIdentifier + '" data-click-event="remove-form"' +
-                    ' class="btn padding-reduce-on-grid-view"><span class="fw-stack"><i class="fw fw-ring fw-stack-2x"></i>' +
+                    var deviceType = row.type;
+                    var deviceIdentifier = row.deviceIdentifier;
+                    var html = '<span></span>';
+                    if (status != 'REMOVED' && ($.hasPermission("VIEW_DEVICES") || $.hasPermission("VIEW_OWN_DEVICES"))) {
+                        html = '<a href="device?type=' + deviceType + '&id=' + deviceIdentifier + '" data-click-event="remove-form"' +
+                        ' class="btn padding-reduce-on-grid-view"><span class="fw-stack"><i class="fw fw-ring fw-stack-2x"></i>' +
                         '<i class="fw fw-view fw-stack-1x"></i></span><span class="hidden-xs hidden-on-grid-view">View</span></a>';
+                    }
+                    return html;
                 }
-                return html;
-            }}
+            }
         ],
         "createdRow": function( row, data, dataIndex ) {
             $(row).attr('data-type', 'selectable');
@@ -315,12 +314,20 @@ function openCollapsedNav(){
 }
 
 function initPage() {
+    var currentUser = $("#device-listing").data("currentUser");
+    var serviceURL;
+    if ($.hasPermission("LIST_DEVICES")) {
+        serviceURL = "/mdm-admin/devices";
+    } else if ($.hasPermission("LIST_OWN_DEVICES")) {
+        //Get authenticated users devices
+        serviceURL = "/mdm-admin/users/devices?username=" + currentUser;
+    }
     invokerUtil.get(
-        "/mdm-admin/devices/count",
+        serviceURL,
         function (data) {
             if (data) {
                 data = JSON.parse(data);
-                if (Number(data) > 0) {
+                if (data.length > 0) {
                     loadDevices();
                 } else {
                     $("#loading-content").remove();
