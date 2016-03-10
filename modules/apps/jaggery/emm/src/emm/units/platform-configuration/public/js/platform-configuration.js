@@ -128,7 +128,6 @@ function promptErrorPolicyPlatform(errorMsg) {
 }
 
 $(document).ready(function () {
-
     var platformsSupported = $("#typeDiv").attr("typeData");
     $("#gcm-inputs").hide();
     tinymce.init({
@@ -141,7 +140,8 @@ $(document).ready(function () {
             "searchreplace visualblocks code fullscreen",
             "insertdatetime image table contextmenu paste"
         ],
-        toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+        toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | " +
+                 "bullist numlist outdent indent | link image"
     });
 
     var getAndroidConfigAPI = "/mdm-android-agent/configuration";
@@ -155,6 +155,24 @@ $(document).ready(function () {
      * Upon receiving the response, the parameters will be set to the fields,
      * in case those configurations are already set.
      */
+    var defaultNotifierFrequency = 60;
+    invokerUtil.get(
+            getGeneralConfigAPI,
+            function (data) {
+                data = JSON.parse(data);
+                if (data && data.configuration) {
+                    for (var i = 0; i < data.configuration.length; i++) {
+                        var config = data.configuration[i];
+                        if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
+                            defaultNotifierFrequency = config.value / 1000;
+                            $("input#android-config-notifier-frequency").val(defaultNotifierFrequency);
+                            $("input#windows-config-notifier-frequency").val(defaultNotifierFrequency);
+                        }
+                    }
+                }
+            }, function (data) {
+                promptErrorPolicyPlatform("Unexpected Error Occurred While Retrieving Configurations. Please Try again");
+            });
 
     if (platformsSupported.indexOf('android') != -1) {
         invokerUtil.get(
@@ -174,7 +192,11 @@ $(document).ready(function () {
                                 $("#local-inputs").hide();
                             }
                         } else if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
-                            $("input#android-config-notifier-frequency").val(config.value / 1000);
+                            if (config.value) {
+                                $("input#android-config-notifier-frequency").val(config.value / 1000);
+                            } else {
+                                $("input#android-config-notifier-frequency").val(defaultNotifierFrequency);
+                            }
                         } else if (config.name == configParams["GCM_API_KEY"]) {
                             $("input#android-config-gcm-api-key").val(config.value);
                         } else if (config.name == configParams["GCM_SENDER_ID"]) {
@@ -189,22 +211,6 @@ $(document).ready(function () {
             });
     }
 
-    invokerUtil.get(
-        getGeneralConfigAPI,
-        function (data) {
-            data = JSON.parse(data);
-            if (data && data.configuration) {
-                for (var i = 0; i < data.configuration.length; i++) {
-                    var config = data.configuration[i];
-                    if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
-                        $("input#monitoring-config-frequency").val(config.value / 1000);
-                    }
-                }
-            }
-        }, function (data) {
-            console.log(data);
-        });
-
     if (platformsSupported.indexOf('windows') != -1) {
         invokerUtil.get(
             getWindowsConfigAPI,
@@ -214,7 +220,11 @@ $(document).ready(function () {
                     for (var i = 0; i < data.configuration.length; i++) {
                         var config = data.configuration[i];
                         if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
-                            $("input#windows-config-notifier-frequency").val(config.value / 1000);
+                            if (config.value) {
+                                $("input#windows-config-notifier-frequency").val(config.value / 1000);
+                            } else {
+                                $("input#windows-config-notifier-frequency").val(defaultNotifierFrequency);
+                            }
                         } else if (config.name == configParams["WINDOWS_EULA"]) {
                             $("#windows-eula").val(config.value);
                         }
@@ -860,9 +870,6 @@ var showAdvanceOperation = function (operation, button) {
                 isPluginEnabled = true;
             }
             break;
-        case 'general':
-            isPluginEnabled = true;
-            break;
     }
     if (isPluginEnabled) {
         var hiddenOperation = ".wr-hidden-operations-content > div";
@@ -873,6 +880,6 @@ var showAdvanceOperation = function (operation, button) {
         $(hiddenOperation + '[data-operation="error"]').show();
         $(hiddenOperation + '[data-operation="error"]').siblings().hide();
         promptErrorPolicyPlatform("To use " + operation + " related functionality you need to configure the server " +
-                                 "accordingly.Please refer to the documentation.");
+                                 "accordingly. Please refer to the documentation.");
     }
 };

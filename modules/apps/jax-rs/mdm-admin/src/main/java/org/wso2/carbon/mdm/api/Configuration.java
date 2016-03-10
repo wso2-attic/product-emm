@@ -21,16 +21,20 @@ package org.wso2.carbon.mdm.api;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationManagementException;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfiguration;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.api.util.MDMAppConstants;
 import org.wso2.carbon.mdm.api.util.ResponsePayload;
+import org.wso2.carbon.policy.mgt.core.util.PolicyManagerUtil;
 
 import javax.jws.WebService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * General Tenant Configuration REST-API implementation.
@@ -67,8 +71,19 @@ public class Configuration {
 	public TenantConfiguration getConfiguration() throws MDMAPIException {
 		String msg;
 		try {
-			return MDMAPIUtils.getTenantConfigurationManagementService().getConfiguration(MDMAppConstants.
-                                        RegistryConstants.GENERAL_CONFIG_RESOURCE_PATH);
+			TenantConfiguration tenantConfiguration = MDMAPIUtils.getTenantConfigurationManagementService().
+					getConfiguration(MDMAppConstants.RegistryConstants.GENERAL_CONFIG_RESOURCE_PATH);
+			ConfigurationEntry configurationEntry = new ConfigurationEntry();
+			configurationEntry.setContentType("text");
+			configurationEntry.setName("notifierFrequency");
+			configurationEntry.setValue(PolicyManagerUtil.getMonitoringFequency());
+			List<ConfigurationEntry> configList = tenantConfiguration.getConfiguration();
+			if (configList == null) {
+				configList = new ArrayList<ConfigurationEntry>();
+			}
+			configList.add(configurationEntry);
+			tenantConfiguration.setConfiguration(configList);
+			return tenantConfiguration;
 		} catch (ConfigurationManagementException e) {
 			msg = "Error occurred while retrieving the tenant configuration.";
 			log.error(msg, e);

@@ -7,7 +7,16 @@
         Loading policies . . .
         <br>
     </div>
-    <span id="policy-listing-status-msg" class="hidden">{{policyListingStatusMsg}}</span>
+    <div id="policy-listing-status" class="raw hidden">
+        <ul style="list-style-type: none;">
+            <li class="message message-info" >
+                <h4>
+                    <i class="icon fw fw-info"></i>
+                    <a id="policy-listing-status-msg">{{policyListingStatusMsg}}</a>
+                </h4>
+            </li>
+        </ul>
+    </div>
     {{#equal noPolicy false}}
         <table class="table table-striped table-hover list-table display responsive nowrap data-table grid-view hidden"
                id="policy-grid">
