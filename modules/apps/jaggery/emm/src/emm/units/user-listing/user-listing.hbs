@@ -21,7 +21,18 @@
         Loading users . . .
         <br>
     </div>
-    <span id="user-listing-status-msg"></span>
+
+    <div id="user-listing-status" class="raw hidden">
+        <ul style="list-style-type: none;">
+            <li class="message message-info" >
+                <h4>
+                    <i class="icon fw fw-info"></i>
+                    <a id="user-listing-status-msg"></a>
+                </h4>
+            </li>
+        </ul>
+    </div>
+
     <div id="user-table" data-user={{adminUser}}>
         <table class="table table-striped table-hover list-table display responsive nowrap data-table grid-view"
                id="user-grid">

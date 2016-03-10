@@ -21,8 +21,10 @@
  * when a user clicks on the list item
  * initial mode and with out select mode.
  */
-function InitiateViewOption() {
-    $(location).attr('href', $(this).data("url"));
+function InitiateViewOption(url) {
+    if ($(".select-enable-btn").text() == "Select") {
+        $(location).attr('href', url);
+    }
 }
 
 (function () {
@@ -169,6 +171,7 @@ function loadDevices(searchType, searchParam){
         $("#loading-content").remove();
         $('#device-table').addClass('hidden');
         $('#device-listing-status-msg').text('Permission denied.');
+        $("#device-listing-status").show();
         return;
     }
 
@@ -202,8 +205,14 @@ function loadDevices(searchType, searchParam){
                 }
         },
         columnDefs: [
-            { targets: 0, data: 'name', className: 'remove-padding icon-only content-fill' , render: function ( data, type, row, meta ) {
-                return '<div class="thumbnail icon"><i class="square-element text fw fw-mobile"></i></div>';
+            { targets: 0, data: 'name', className: 'remove-padding icon-only content-fill viewEnabledIcon' , render: function ( data, type, row, meta ) {
+                var deviceType = row.type;
+                var deviceIdentifier = row.deviceIdentifier;
+                var url = "#";
+                if (status != 'REMOVED') {
+                    url = "device?type=" + deviceType + "&id=" + deviceIdentifier;
+                }
+                return '<div onclick="javascript:InitiateViewOption(\'' + url + '\')" class="thumbnail icon"><i class="square-element text fw fw-mobile"></i></div>';
             }},
             { targets: 1, data: 'name', className: 'fade-edge' , render: function ( name, type, row, meta ) {
                 var model = getPropertyValue(row.properties, 'DEVICE_MODEL');
@@ -238,17 +247,11 @@ function loadDevices(searchType, searchParam){
             { targets: 5, data: 'enrolmentInfo.ownership' , className: 'fade-edge remove-padding-top' },
             { targets: 6, data: 'enrolmentInfo.status' , className: 'text-right content-fill text-left-on-grid-view no-wrap' ,
                 render: function ( status, type, row, meta ) {
-                    var deviceType = row.type;
-                    var deviceIdentifier = row.deviceIdentifier;
-                    var html = '<span></span>';
-                    if (status != 'REMOVED' && ($.hasPermission("VIEW_DEVICES") || $.hasPermission("VIEW_OWN_DEVICES"))) {
-                        html = '<a href="device?type=' + deviceType + '&id=' + deviceIdentifier + '" data-click-event="remove-form"' +
-                        ' class="btn padding-reduce-on-grid-view"><span class="fw-stack"><i class="fw fw-ring fw-stack-2x"></i>' +
-                        '<i class="fw fw-view fw-stack-1x"></i></span><span class="hidden-xs hidden-on-grid-view">View</span></a>';
-                    }
-                    return html;
-                }
-            }
+                var deviceType = row.type;
+                var deviceIdentifier = row.deviceIdentifier;
+                var html = '<span></span>';
+                return html;
+            }}
         ],
         "createdRow": function( row, data, dataIndex ) {
             $(row).attr('data-type', 'selectable');
@@ -332,6 +335,7 @@ function initPage() {
                 } else {
                     $("#loading-content").remove();
                     $("#device-listing-status-msg").text("No enrolled devices found.");
+                    $("#device-listing-status").show();
                 }
             }
         }, function (message) {
@@ -344,7 +348,7 @@ function initPage() {
  * DOM ready functions.
  */
 $(document).ready(function () {
-
+    $("#device-listing-status").hide();
     initPage();
 
     /* Adding selected class for selected devices */

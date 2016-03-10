@@ -2048,7 +2048,7 @@ $(document).ready(function () {
             promptErrorPolicyPlatform("You need to configure Windows plugging in order to use windows related feature.");
         });
     }
-    var iosLink = $(".windows-platform");
+    var iosLink = $(".ios-platform");
     if (isIosEnabled) {
         iosLink.attr("data-platform-id",iosID);
     } else {
