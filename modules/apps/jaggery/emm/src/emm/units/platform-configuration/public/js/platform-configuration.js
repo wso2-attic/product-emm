@@ -130,6 +130,7 @@ function promptErrorPolicyPlatform(errorMsg) {
 }
 
 $(document).ready(function () {
+
     var platformsSupported = $("#typeDiv").attr("typeData");
     $("#gcm-inputs").hide();
     tinymce.init({
