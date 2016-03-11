@@ -28,13 +28,15 @@
                                 Role Name *
                             </label>
                             <br>
-                            <label class="wr-input-label" id="roleNameValidationText">
+                            <label class="wr-input-label">
                                 ( {{roleNameHelpText}} )
                             </label>
 
-                            <div class="wr-input-control">
+                            <div id="roleNameField" class="form-group wr-input-control">
                                 <input type="text" id="rolename" data-regex="{{roleNameJSRegEx}}"
                                        data-errormsg="{{roleNameRegExViolationErrorMsg}}" class="form-control"/>
+                                <span class=" rolenameError hidden glyphicon glyphicon-remove form-control-feedback"></span>
+                                <label class="error rolenameEmpty hidden" for="summary">Role name is required & Should be in minimum 3 characters long and do not include any whitespaces. </label>
                             </div>
                             <label class="wr-input-label">
                                 User list

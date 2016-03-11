@@ -394,7 +394,7 @@
             -->
             <MDM name="WSO2MDM" bundle="org.wso2.carbon.appmgt.mdm.wso2mdm">
                 <Property name="IsRemote">true</Property>
-                <Property name="ServerURL">https://localhost:9450</Property>
+                <Property name="ServerURL">https://localhost:9450/mdm-admin</Property>
                 <Property name="TokenApiURL">https://localhost:9448/oauth2/token</Property>
                 <Property name="ClientKey">WjLm24IxBVLF0oz0VJfmtJbjJbka</Property>
                 <Property name="ClientSecret">v3KkIQXkJ1SDp_Bf8uUQxu5p7TQa</Property>
