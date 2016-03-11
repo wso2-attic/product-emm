@@ -466,9 +466,6 @@
 
                                 <!-- MDM Server Feature -->
 
-                                <featureArtifactDef>
-                                    org.wso2.mdm:org.wso2.mdm.mdmmgt.server.feature:${mdm.version}
-                                </featureArtifactDef>
 
                                 <!-- Cipher tools feature -->
 
@@ -964,10 +961,6 @@
                                 <!-- End of app management features-->
 
                                 <!-- MDM Server Feature -->
-                                <feature>
-                                    <id>org.wso2.mdm.mdmmgt.server.feature.group</id>
-                                    <version>${mdm.version}</version>
-                                </feature>
                                 <feature>
                                     <id>org.wso2.carbon.social.feature.group</id>
                                     <version>${carbon.store.version}</version>
@@ -1471,11 +1464,6 @@
 
                                 <!-- End of app management features-->
 
-                                <!-- MDM Server Feature -->
-                                <feature>
-                                    <id>org.wso2.mdm.mdmmgt.server.feature.group</id>
-                                    <version>${mdm.version}</version>
-                                </feature>
                                 <feature>
                                     <id>org.wso2.carbon.social.feature.group</id>
                                     <version>${carbon.store.version}</version>
