@@ -159,9 +159,7 @@ function toTitleCase(str) {
 
 function loadDevices(searchType, searchParam){
     var deviceListing = $("#device-listing");
-    var deviceListingSrc = deviceListing.attr("src");
     var currentUser = deviceListing.data("currentUser");
-    var frontEndPagination = false;
 
     var serviceURL;
     if ($.hasPermission("LIST_DEVICES")) {
@@ -319,12 +317,20 @@ function openCollapsedNav(){
 }
 
 function initPage() {
+    var currentUser = $("#device-listing").data("currentUser");
+    var serviceURL;
+    if ($.hasPermission("LIST_DEVICES")) {
+        serviceURL = "/mdm-admin/devices";
+    } else if ($.hasPermission("LIST_OWN_DEVICES")) {
+        //Get authenticated users devices
+        serviceURL = "/mdm-admin/users/devices?username=" + currentUser;
+    }
     invokerUtil.get(
-        "/mdm-admin/devices/count",
+        serviceURL,
         function (data) {
             if (data) {
                 data = JSON.parse(data);
-                if (Number(data) > 0) {
+                if (data.length > 0) {
                     loadDevices();
                 } else {
                     $("#loading-content").remove();

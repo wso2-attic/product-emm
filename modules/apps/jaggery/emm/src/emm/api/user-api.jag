@@ -42,7 +42,6 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
             if (log.isDebugEnabled()) {
                 log.debug("User Logged In : " + user);
             }
-            utility.insertAppPermissions(userModule, "login");
             apiWrapperUtil.setupAccessTokenPair("password", {"username": username, "password": password});
             var permissions = userModule.getUIPermissions();
             if (permissions.VIEW_DASHBOARD) {
