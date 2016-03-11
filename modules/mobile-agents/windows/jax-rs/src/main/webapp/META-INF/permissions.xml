@@ -31,6 +31,27 @@
     <APIVersion></APIVersion>
     <!-- Operations management related permissions for admin -->
     <Permission>
+        <name>Device Management</name>
+        <path>/device-mgt</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Operations</name>
+        <path>/device-mgt/emm-admin/operations</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Windows</name>
+        <path>/device-mgt/emm-admin/operations/windows</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
         <name>Lock</name>
         <path>/device-mgt/emm-admin/operations/windows/lock</path>
         <url>/services/windows/operation/lock</url>
@@ -39,7 +60,7 @@
 
     <Permission>
         <name>Enterprise Wipe</name>
-        <path>/device-mgt/emm-admin/operations/windows/ipe-data</path>
+        <path>/device-mgt/emm-admin/operations/windows/wipe-data</path>
         <url>/services/windows/operation/wipe-data</url>
         <method>POST</method>
     </Permission>
@@ -59,7 +80,7 @@
     </Permission>
 
     <Permission>
-        <name>LockReset</name>
+        <name>Lock Reset</name>
         <path>/device-mgt/emm-admin/operations/windows/lock-reset</path>
         <url>/services/windows/operation/lock-reset</url>
         <method>POST</method>
@@ -67,63 +88,70 @@
 
     <!-- Enrollment related permissions -->
     <Permission>
-        <name>Get CSR Policy</name>
+        <name>Enroll</name>
+        <path>/device-mgt/user/enroll</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Windows</name>
         <path>/device-mgt/user/enroll/windows</path>
         <url>/services/certificatepolicy/xcep</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>Get BST</name>
+        <name>Windows</name>
         <path>/device-mgt/user/enroll/windows</path>
         <url>/services/federated/bst/authentication</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>Provide CSR</name>
+        <name>Windows</name>
         <path>/device-mgt/user/enroll/windows</path>
         <url>/services/deviceenrolment/wstep</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>GetLicense</name>
+        <name>Windows</name>
         <path>/device-mgt/user/enroll/windows</path>
         <url>/services/device/license</url>
         <method>GET</method>
     </Permission>
     <!-- Policy related permissions -->
     <Permission>
-        <name>View Policies</name>
+        <name>Windows</name>
         <path>/device-mgt/user/enroll/windows</path>
         <url>/services/policy/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>View Policy Features</name>
+        <name>Windows</name>
         <path>/device-mgt/user/enroll/windows</path>
         <url>/services/policy/features/*</url>
         <method>GET</method>
     </Permission>
     <!-- Configuration related permissions -->
     <Permission>
-        <name>View Tenant configuration</name>
+        <name>View configuration</name>
         <path>/device-mgt/emm-admin/platform-configs/view</path>
         <url>/services/configuration</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Add Tenant configuration</name>
-        <path>/device-mgt/emm-admin/platform-configs/modify</path>
+        <name>Add configuration</name>
+        <path>/device-mgt/emm-admin/platform-configs/add</path>
         <url>/services/configuration</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>Update Tenant configuration</name>
+        <name>Update configuration</name>
         <path>/device-mgt/emm-admin/platform-configs/modify</path>
         <url>/services/configuration</url>
         <method>PUT</method>

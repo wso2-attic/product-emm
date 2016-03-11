@@ -30,29 +30,114 @@
 <PermissionConfiguration>
     <APIVersion></APIVersion>
     <!-- Device related APIs -->
+
     <Permission>
-        <name>Get all devices</name>
+        <name>Device Management</name>
+        <path>/device-mgt</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Device Management Admin</name>
+        <path>/device-mgt/emm-admin</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Device Management User</name>
+        <path>/device-mgt/user</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Devices</name>
+        <path>/device-mgt/emm-admin/devices</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Policies</name>
+        <path>/device-mgt/emm-admin/policies</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Notifications</name>
+        <path>/device-mgt/emm-admin/notifications</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Users</name>
+        <path>/device-mgt/emm-admin/users</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Operations</name>
+        <path>/device-mgt/emm-admin/operations</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Applications</name>
+        <path>/device-mgt/emm-admin/operations/applications</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Roles</name>
+        <path>/device-mgt/emm-admin/roles</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Configurations</name>
+        <path>/device-mgt/emm-admin/platform-configs</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>View Dashboard</name>
+        <path>/device-mgt/emm-admin/dashboard</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>List devices</name>
         <path>/device-mgt/emm-admin/devices/list</path>
         <url>/devices</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get all device types</name>
+        <name>List devices</name>
         <path>/device-mgt/emm-admin/devices/list</path>
         <url>/devices/types</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get all device types</name>
+        <name>Add policy</name>
         <path>/device-mgt/emm-admin/policies/add</path>
         <url>/devices/types</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get all device types</name>
+        <name>Edit policy</name>
         <path>/device-mgt/emm-admin/policies/update</path>
         <url>/devices/types</url>
         <method>GET</method>
@@ -81,21 +166,21 @@
     <!--</Permission>-->
 
     <Permission>
-        <name>Get users' devices</name>
+        <name>View device</name>
         <path>/device-mgt/emm-admin/devices/view</path>
         <url>/devices/user/*/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get device count</name>
+        <name>List devices</name>
         <path>/device-mgt/emm-admin/devices/list</path>
         <url>/devices/count</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get all users' devices</name>
+        <name>List devices</name>
         <path>/device-mgt/emm-admin/devices/list</path>
         <url>/devices/name/*/*</url>
         <method>GET</method>
@@ -104,7 +189,7 @@
 
     <!-- Notification related APIs -->
     <Permission>
-        <name>Get all notifications</name>
+        <name>View notifications</name>
         <path>/device-mgt/emm-admin/notifications/view</path>
         <url>/notifications</url>
         <method>GET</method>
@@ -125,7 +210,7 @@
     </Permission>
 
     <Permission>
-        <name>Get new notifications</name>
+        <name>View notifications</name>
         <path>/device-mgt/emm-admin/notifications/view</path>
         <url>/notifications/*</url>
         <method>GET</method>
@@ -134,77 +219,77 @@
 
     <!-- Operations related APIs -->
     <Permission>
-        <name>Get all operations</name>
+        <name>View user</name>
         <path>/device-mgt/emm-admin/users/view</path>
         <url>/operations</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Add Operation</name>
+        <name>Install application</name>
         <path>/device-mgt/emm-admin/operations/applications/install-applications</path>
         <url>/operations</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>Install Application</name>
+        <name>Install application</name>
         <path>/device-mgt/emm-admin/operations/applications/install-applications</path>
         <url>/operations/installApp/*</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>Uninstall Application</name>
+        <name>Uninstall application</name>
         <path>/device-mgt/emm-admin/operations/applications/uninstall-applications</path>
         <url>/operations/uninstallApp/*</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>Get Applications For Devices</name>
+        <name>View application</name>
         <path>/device-mgt/emm-admin/operations/applications/view-applications</path>
         <url>/operations/*/*/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get Applications For Devices</name>
+        <name>View devices</name>
         <path>/device-mgt/user/devices/view</path>
         <url>/operations/*/*/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get Applications For Devices</name>
+        <name>View device</name>
         <path>/device-mgt/emm-admin/devices/view</path>
         <url>/operations/*/*/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get Device Operations</name>
+        <name>View device</name>
         <path>/device-mgt/emm-admin/devices/view</path>
         <url>/operations/*/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get Device Operations</name>
+        <name>View device</name>
         <path>/device-mgt/emm-admin/devices/view</path>
         <url>/operations/paginate/*/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get Device Operations</name>
+        <name>View device</name>
         <path>/device-mgt/user/devices/view</path>
         <url>/operations/*/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get Device Operations</name>
+        <name>View device</name>
         <path>/device-mgt/user/devices/view</path>
         <url>/operations/paginate/*/*</url>
         <method>GET</method>
@@ -221,28 +306,28 @@
 
     <!-- Feature related APIs -->
     <Permission>
-        <name>Get features</name>
+        <name>List policies</name>
         <path>/device-mgt/emm-admin/policies/list</path>
         <url>/features/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get features</name>
+        <name>View device</name>
         <path>/device-mgt/emm-admin/devices/view</path>
         <url>/features/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get features</name>
+        <name>View device</name>
         <path>/device-mgt/user/devices/view</path>
         <url>/features/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get all features</name>
+        <name>View device</name>
         <path>/device-mgt/user/devices/view</path>
         <url>/features</url>
         <method>GET</method>
@@ -252,56 +337,56 @@
 
     <!-- Role related APIs -->
     <Permission>
-        <name>Get all roles</name>
+        <name>List roles</name>
         <path>/device-mgt/emm-admin/roles/list</path>
         <url>/roles</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get user roles by name</name>
+        <name>View user</name>
         <path>/device-mgt/emm-admin/users/view</path>
         <url>/roles</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get all roles</name>
+        <name>Add policy</name>
         <path>/device-mgt/emm-admin/policies/add</path>
         <url>/roles</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get all roles</name>
+        <name>Update policy</name>
         <path>/device-mgt/emm-admin/policies/update</path>
         <url>/roles</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get role permissions</name>
+        <name>List roles</name>
         <path>/device-mgt/emm-admin/roles/list</path>
         <url>/roles/permissions</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get User roles</name>
+        <name>List roles</name>
         <path>/device-mgt/emm-admin/roles/list</path>
         <url>/roles/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get User roles</name>
+        <name>Add user</name>
         <path>/device-mgt/emm-admin/users/add</path>
         <url>/roles/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Update User roles</name>
+        <name>Update role</name>
         <path>/device-mgt/emm-admin/roles/update</path>
         <url>/roles</url>
         <method>PUT</method>
@@ -316,28 +401,28 @@
     <!--</Permission>-->
 
     <Permission>
-        <name>Update User roles</name>
+        <name>Update role</name>
         <path>/device-mgt/emm-admin/roles/update</path>
         <url>/roles/users</url>
         <method>PUT</method>
     </Permission>
 
     <Permission>
-        <name>Save User roles</name>
+        <name>Add role</name>
         <path>/device-mgt/emm-admin/roles/add</path>
         <url>/roles</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>Delete User roles</name>
+        <name>Remove role</name>
         <path>/device-mgt/emm-admin/roles/remove</path>
         <url>/roles</url>
         <method>DELETE</method>
     </Permission>
 
     <Permission>
-        <name>Count User roles</name>
+        <name>List roles</name>
         <path>/device-mgt/emm-admin/roles/list</path>
         <url>/roles/count</url>
         <method>GET</method>
@@ -346,7 +431,7 @@
 
     <!-- User related APIs -->
     <Permission>
-        <name>Get all users</name>
+        <name>List users</name>
         <path>/device-mgt/emm-admin/users/list</path>
         <url>/users</url>
         <method>GET</method>
@@ -360,7 +445,7 @@
     </Permission>
 
     <Permission>
-        <name>Get user</name>
+        <name>View user</name>
         <path>/device-mgt/emm-admin/users/view</path>
         <url>/users/view</url>
         <method>GET</method>
@@ -382,21 +467,21 @@
     </Permission>
 
     <Permission>
-        <name>Reset user password by admin</name>
+        <name>Reset password</name>
         <path>/device-mgt/emm-admin/users/password-reset</path>
         <url>/users/reset-password</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>Delete user</name>
+        <name>Remove user</name>
         <path>/device-mgt/emm-admin/users/remove</path>
         <url>/users</url>
         <method>DELETE</method>
     </Permission>
 
     <Permission>
-        <name>Get user roles by name</name>
+        <name>View user</name>
         <path>/device-mgt/emm-admin/users/view</path>
         <url>/users/roles</url>
         <method>GET</method>
@@ -410,91 +495,91 @@
     <!--</Permission>-->
 
     <Permission>
-        <name>Save Roles</name>
+        <name>Add user</name>
         <path>/device-mgt/emm-admin/users/add</path>
         <url>/roles</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>Get all devices of user</name>
+        <name>List devices</name>
         <path>/device-mgt/user/devices/list</path>
         <url>/users/devices</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get all devices of user</name>
+        <name>List devices</name>
         <path>/device-mgt/emm-admin/devices/list</path>
         <url>/users/devices</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get user roles</name>
+        <name>View user</name>
         <path>/device-mgt/emm-admin/users/view</path>
         <url>/users/*/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get user count</name>
+        <name>List users</name>
         <path>/device-mgt/emm-admin/users/list</path>
         <url>/users/count</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get all user names</name>
+        <name>List users</name>
         <path>/device-mgt/emm-admin/users/list</path>
         <url>/users/view-users</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get all user names</name>
+        <name>Add role</name>
         <path>/device-mgt/emm-admin/roles/add</path>
         <url>/users/view-users</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get all user names</name>
+        <name>Update role</name>
         <path>/device-mgt/emm-admin/roles/update</path>
         <url>/users/view-users</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get all user names</name>
+        <name>Add policy</name>
         <path>/device-mgt/emm-admin/policies/add</path>
         <url>/users/view-users</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get all user names</name>
+        <name>Update policy</name>
         <path>/device-mgt/emm-admin/policies/update</path>
         <url>/users/view-users</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get all usernames</name>
+        <name>List users</name>
         <path>/device-mgt/emm-admin/users/list</path>
         <url>/users/users-by-username</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get filtered usernames</name>
+        <name>List users</name>
         <path>/device-mgt/emm-admin/users/list</path>
         <url>/users/users-by-username/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Send invitation</name>
+        <name>Invite user</name>
         <path>/device-mgt/emm-admin/users/invite</path>
         <url>/users/email-invitation</url>
         <method>POST</method>
@@ -517,147 +602,147 @@
     </Permission>
 
     <Permission>
-        <name>Get Policy For Device</name>
+        <name>List policies</name>
         <path>/device-mgt/emm-admin/policies/list</path>
         <url>/policies/*/*</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>Get Policy For Device By Type</name>
+        <name>List policies</name>
         <path>/device-mgt/emm-admin/policies/list</path>
         <url>/policies/*/*/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get Policy For Device By Type</name>
+        <name>View device</name>
         <path>/device-mgt/emm-admin/devices/view</path>
         <url>/policies/*/*/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get Policy For Device By Type</name>
+        <name>View device</name>
         <path>/device-mgt/user/devices/view</path>
         <url>/policies/*/*/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Add Active Policy</name>
+        <name>Add policy</name>
         <path>/device-mgt/emm-admin/policies/add</path>
         <url>/policies/active-policy</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>Bulk Policy Removal</name>
+        <name>Remove policy</name>
         <path>/device-mgt/emm-admin/policies/remove</path>
         <url>/policies/bulk-remove</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>Get Policies</name>
+        <name>List policies</name>
         <path>/device-mgt/emm-admin/policies/list</path>
         <url>/policies</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get Policy</name>
+        <name>List policies</name>
         <path>/device-mgt/emm-admin/policies/list</path>
         <url>/policies/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Update Policy</name>
+        <name>Update policy</name>
         <path>/device-mgt/emm-admin/policies/update</path>
         <url>/policies/*</url>
         <method>PUT</method>
     </Permission>
 
     <Permission>
-        <name>Delete Policy</name>
+        <name>Remove policy</name>
         <path>/device-mgt/emm-admin/policies/remove</path>
         <url>/policies</url>
         <method>DELETE</method>
     </Permission>
 
     <Permission>
-        <name>Policy Count</name>
+        <name>List policies</name>
         <path>/device-mgt/emm-admin/policies/list</path>
         <url>/policies/count</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Policy priorities</name>
+        <name>Edit policy</name>
         <path>/device-mgt/emm-admin/policies/update</path>
         <url>/policies/priorities</url>
         <method>PUT</method>
     </Permission>
 
     <Permission>
-        <name>Activate Policy</name>
+        <name>Edit policy</name>
         <path>/device-mgt/emm-admin/policies/update</path>
         <url>/policies/activate</url>
         <method>PUT</method>
     </Permission>
 
     <Permission>
-        <name>Activate Policy</name>
+        <name>Add policy</name>
         <path>/device-mgt/emm-admin/policies/add</path>
         <url>/policies/activate</url>
         <method>PUT</method>
     </Permission>
 
     <Permission>
-        <name>Inactivate Policy</name>
+        <name>Edit policy</name>
         <path>/device-mgt/emm-admin/policies/update</path>
         <url>/policies/inactivate</url>
         <method>PUT</method>
     </Permission>
 
     <Permission>
-        <name>Inactivate Policy</name>
+        <name>Add policy</name>
         <path>/device-mgt/emm-admin/policies/add</path>
         <url>/policies/inactivate</url>
         <method>PUT</method>
     </Permission>
 
     <Permission>
-        <name>Apply Policy changes</name>
+        <name>Edit policy</name>
         <path>/device-mgt/emm-admin/policies/update</path>
         <url>/policies/apply-changes</url>
         <method>PUT</method>
     </Permission>
 
     <Permission>
-        <name>Start Task</name>
+        <name>Add policy</name>
         <path>/device-mgt/emm-admin/policies/add</path>
         <url>/policies/start-task/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Update Task</name>
+        <name>Add policy</name>
         <path>/device-mgt/emm-admin/policies/add</path>
         <url>/policies/update-task/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Stop Task</name>
+        <name>Add policy</name>
         <path>/device-mgt/emm-admin/policies/add</path>
         <url>/policies/stop-task</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Get Policy Compliance</name>
+        <name>List policies</name>
         <path>/device-mgt/emm-admin/policies/list</path>
         <url>/policies/*/*</url>
         <method>GET</method>
@@ -666,21 +751,21 @@
 
     <!-- Profile related APIs -->
     <Permission>
-        <name>Add profile</name>
+        <name>Add policy</name>
         <path>/device-mgt/emm-admin/policies/add</path>
         <url>/profiles</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>Update profile</name>
+        <name>Edit policy</name>
         <path>/device-mgt/emm-admin/policies/update</path>
         <url>/profiles/*</url>
         <method>PUT</method>
     </Permission>
 
     <Permission>
-        <name>Add profile</name>
+        <name>Remove policy</name>
         <path>/device-mgt/emm-admin/policies/remove</path>
         <url>/profiles/*</url>
         <method>DELETE</method>
@@ -706,7 +791,7 @@
 
     <!-- Configuration related APIs -->
     <Permission>
-        <name>Get configuration</name>
+        <name>View configuration</name>
         <path>/device-mgt/emm-admin/platform-configs/view</path>
         <url>/configuration</url>
         <method>GET</method>
@@ -714,7 +799,7 @@
 
     <Permission>
         <name>Add configuration</name>
-        <path>/device-mgt/emm-admin/platform-configs/modify</path>
+        <path>/device-mgt/emm-admin/platform-configs/add</path>
         <url>/configuration</url>
         <method>POST</method>
     </Permission>

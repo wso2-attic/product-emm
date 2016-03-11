@@ -31,7 +31,42 @@
     <APIVersion></APIVersion>
     <!-- Operations management related permissions for admin -->
     <Permission>
-        <name>Get Pending Operation</name>
+        <name>Device Management</name>
+        <path>/device-mgt</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Device Management User</name>
+        <path>/device-mgt/user</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Enroll</name>
+        <path>/device-mgt/user/enroll</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Operations</name>
+        <path>/device-mgt/emm-admin/operations</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Android</name>
+        <path>/device-mgt/emm-admin/operations/android</path>
+        <url>/</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Android</name>
         <path>/device-mgt/user/enroll/android</path>
         <url>/operation/*</url>
         <method>PUT</method>
@@ -207,7 +242,7 @@
 
     <!-- Device management related permissions -->
     <Permission>
-        <name>View devices</name>
+        <name>List devices</name>
         <path>/device-mgt/emm-admin/devices/list</path>
         <url>/device</url>
         <method>GET</method>
@@ -221,21 +256,21 @@
     </Permission>
 
     <Permission>
-        <name>Update device</name>
+        <name>View device</name>
         <path>/device-mgt/emm-admin/devices/view</path>
         <url>/device/*</url>
         <method>PUT</method>
     </Permission>
 
     <Permission>
-        <name>Update application list</name>
+        <name>Enroll</name>
         <path>/device-mgt/user/enroll</path>
         <url>/device/appList/*</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>View license</name>
+        <name>Android</name>
         <path>/device-mgt/user/enroll/android</path>
         <url>/device/license</url>
         <method>GET</method>
@@ -243,28 +278,28 @@
 
     <!-- Enrollment related permissions -->
     <Permission>
-        <name>Enroll device</name>
+        <name>Android</name>
         <path>/device-mgt/user/enroll/android</path>
         <url>/enrollment</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>Get Enrollment Status</name>
+        <name>Android</name>
         <path>/device-mgt/user/enroll/android</path>
         <url>/enrollment/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Update Enrollment</name>
+        <name>Android</name>
         <path>/device-mgt/user/enroll/android</path>
         <url>/enrollment/*</url>
         <method>PUT</method>
     </Permission>
 
     <Permission>
-        <name>Disenroll device</name>
+        <name>Android</name>
         <path>/device-mgt/user/enroll/android</path>
         <url>/enrollment/*</url>
         <method>DELETE</method>
@@ -272,14 +307,14 @@
 
     <!-- Policy related permissions -->
     <Permission>
-        <name>View Policies</name>
+        <name>Android</name>
         <path>/device-mgt/user/enroll/android</path>
         <url>/policy/*</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>View Policy Features</name>
+        <name>Android</name>
         <path>/device-mgt/user/enroll/android</path>
         <url>/policy/features/*</url>
         <method>GET</method>
@@ -287,21 +322,21 @@
 
     <!-- Configuration related permissions -->
     <Permission>
-        <name>View Tenant configuration</name>
+        <name>View configuration</name>
         <path>/device-mgt/emm-admin/platform-configs/view</path>
         <url>/configuration</url>
         <method>GET</method>
     </Permission>
 
     <Permission>
-        <name>Add Tenant configuration</name>
-        <path>/device-mgt/emm-admin/platform-configs/modify</path>
+        <name>Add configuration</name>
+        <path>/device-mgt/emm-admin/platform-configs/add</path>
         <url>/configuration</url>
         <method>POST</method>
     </Permission>
 
     <Permission>
-        <name>Update Tenant configuration</name>
+        <name>Update configuration</name>
         <path>/device-mgt/emm-admin/platform-configs/modify</path>
         <url>/configuration</url>
         <method>PUT</method>
