@@ -55,7 +55,7 @@ public class ConfigurationManagement extends TestBase {
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                         Constants.ConfigurationManagement.CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME ,
-                        Constants.HTTP_METHOD_GET).toString(), response.getBody(), true);
+                        Constants.HTTP_METHOD_GET).toString(), response.getBody(), false);
     }
 
     @Test(description = "Test get configuration with erroneous end point.",

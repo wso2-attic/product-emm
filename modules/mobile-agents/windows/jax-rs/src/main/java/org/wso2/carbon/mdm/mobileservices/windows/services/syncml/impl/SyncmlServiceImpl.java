@@ -232,7 +232,7 @@ public class SyncmlServiceImpl implements SyncmlService {
         String devMan;
         String devMod;
         String devLang;
-        String vender;
+        String vendor;
         String macAddress;
         String resolution;
         String modVersion;
@@ -283,7 +283,7 @@ public class SyncmlServiceImpl implements SyncmlService {
                 osVersion = itemList.get(PluginConstants.SyncML.OSVERSION_POSITION).getData();
                 imsi = itemList.get(PluginConstants.SyncML.IMSI_POSITION).getData();
                 imei = itemList.get(PluginConstants.SyncML.IMEI_POSITION).getData();
-                vender = itemList.get(PluginConstants.SyncML.VENDOR_POSITION).getData();
+                vendor = itemList.get(PluginConstants.SyncML.VENDOR_POSITION).getData();
                 devMod = itemList.get(PluginConstants.SyncML.MODEL_POSITION).getData();
                 macAddress = itemList.get(PluginConstants.SyncML.MAC_ADDRESS_POSITION).getData();
                 resolution = itemList.get(PluginConstants.SyncML.RESOLUTION_POSITION).getData();
@@ -309,10 +309,10 @@ public class SyncmlServiceImpl implements SyncmlService {
                     imsiProperty.setValue(imsi);
                     existingProperties.add(imsiProperty);
 
-                    Device.Property venderProperty = new Device.Property();
-                    venderProperty.setName(PluginConstants.SyncML.VENDOR);
-                    venderProperty.setValue(vender);
-                    existingProperties.add(venderProperty);
+                    Device.Property vendorProperty = new Device.Property();
+                    vendorProperty.setName(PluginConstants.SyncML.VENDOR);
+                    vendorProperty.setValue(vendor);
+                    existingProperties.add(vendorProperty);
 
                     Device.Property macAddressProperty = new Device.Property();
                     macAddressProperty.setName(PluginConstants.SyncML.MAC_ADDRESS);

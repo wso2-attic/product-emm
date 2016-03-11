@@ -24,6 +24,73 @@ var policy = {};
 var configuredOperations = [];
 var currentlyEffected = {};
 
+var validateInline = {};
+var clearInline = {};
+
+var enableInlineError = function (inputField, errorMsg, errorSign) {
+    var fieldIdentifier = "#" + inputField;
+    var errorMsgIdentifier = "#" + inputField + " ." + errorMsg;
+    var errorSignIdentifier = "#" + inputField + " ." + errorSign;
+
+    if (inputField) {
+        $(fieldIdentifier).addClass(" has-error has-feedback");
+    }
+
+    if (errorMsg) {
+        $(errorMsgIdentifier).removeClass(" hidden");
+    }
+
+    if (errorSign) {
+        $(errorSignIdentifier).removeClass(" hidden");
+    }
+};
+
+var disableInlineError = function (inputField, errorMsg, errorSign) {
+    var fieldIdentifier = "#" + inputField;
+    var errorMsgIdentifier = "#" + inputField + " ." + errorMsg;
+    var errorSignIdentifier = "#" + inputField + " ." + errorSign;
+
+    if (inputField) {
+        $(fieldIdentifier).removeClass(" has-error has-feedback");
+    }
+
+    if (errorMsg) {
+        $(errorMsgIdentifier).addClass(" hidden");
+    }
+
+    if (errorSign) {
+        $(errorSignIdentifier).addClass(" hidden");
+    }
+};
+
+/**
+ *clear inline validation messages.
+ */
+clearInline["policy-name"] = function () {
+    disableInlineError("plicynameField", "nameEmpty", "nameError");
+};
+
+
+/**
+ * Validate if provided policy name is valid against RegEx configures.
+ */
+validateInline["policy-name"] = function () {
+    var policyName = $("input#policy-name-input").val();
+    if (policyName && inputIsValidAgainstLength(policyName, 1, 30)) {
+        disableInlineError("plicynameField", "nameEmpty", "nameError");
+    } else {
+        enableInlineError("plicynameField", "nameEmpty", "nameError");
+    }
+};
+
+$("#policy-name-input").focus(function(){
+    clearInline["policy-name"]();
+});
+
+$("#policy-name-input").blur(function(){
+    validateInline["policy-name"]();
+});
+
 // Constants to define platform types available
 var platformTypeConstants = {
     "ANDROID": "android",

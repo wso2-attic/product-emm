@@ -19,24 +19,29 @@
                             <div class="wr-input-control">
                                 <input type="text" id="username" data-regex="{{usernameJSRegEx}}" data-errormsg="{{usernameRegExViolationErrorMsg}}" class="form-control" value="{{editUser.username}}" disabled/>
                             </div>
+
+
                             <label class="wr-input-label">First Name *</label>
-                            <div class="wr-input-control">
+                            <div id="firstNameField" class="form-group wr-input-control">
                                 <input type="text" id="firstname" data-regex="{{firstnameJSRegEx}}" data-errormsg="{{firstnameRegExViolationErrorMsg}}" class="form-control" value="{{editUser.firstname}}"/>
+                                <span class="glyphicon glyphicon-remove form-control-feedback hidden fnError"></span>
+                                <label class=" hidden error fnError" for="summary">This field is required.</label>
                             </div>
                             <label class="wr-input-label">Last Name *</label>
-                            <div class="wr-input-control">
+                            <div id="lastNameField" class="form-group wr-input-control">
                                 <input type="text" id="lastname" data-regex="{{lastnameJSRegEx}}" data-errormsg="{{lastnameRegExViolationErrorMsg}}" class="form-control" value="{{editUser.lastname}}"/>
+                                <span class="glyphicon glyphicon-remove form-control-feedback hidden lnError"></span>
+                                <label class=" hidden error lnError" for="summary">This field is required.</label>
                             </div>
                             <label class="wr-input-label">
-                                Email Address  <br>
+                                Email Address * <br>
                                 ( ex: sam@gmail.com )
                             </label>
-                            <br>
-                            <label class="wr-input-label" id="emailValidationText">
-                                Invalid Email Address.
-                            </label>
-                            <div class="wr-input-control">
-                                <input type="email" id="emailAddress" class="form-control" value="{{editUser.emailAddress}}"/>
+                            <div id="emailField" class=" form-group wr-input-control">
+                                <input type="email" id="emailAddress" class="form-control"  value="{{editUser.emailAddress}}"/>
+                                <span class="glyphicon glyphicon-remove form-control-feedback hidden emailError"></span>
+                                <label class=" hidden error email-required" for="summary">This field is required.</label>
+                                <label class=" hidden error email-invalid" for="summary">Invalid Email Address.</label>
                             </div>
                             <label class="wr-input-label" title="Optional field that can have 0-to-many roles for the user">
                                 User Roles
