@@ -980,11 +980,11 @@
         <carbon.governance.version>4.5.8</carbon.governance.version>
 
         <!-- Carbon Device Management -->
-        <carbon.device.mgt.version>1.0.4-SNAPSHOT</carbon.device.mgt.version>
+        <carbon.device.mgt.version>1.0.4</carbon.device.mgt.version>
         <carbon.device.mgt.version.range>[0.8.0, 2.0.0)</carbon.device.mgt.version.range>
 
         <!-- Carbon Mobile Device Management -->
-        <carbon.mobile.device.mgt.version>2.0.4-SNAPSHOT</carbon.mobile.device.mgt.version>
+        <carbon.mobile.device.mgt.version>2.0.4</carbon.mobile.device.mgt.version>
         <mdm.version>2.0.1-SNAPSHOT</mdm.version>
 
         <!-- API Management -->
@@ -1226,5 +1226,10 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
+	<repository>
+	   <id>nexus-releases</id>
+	   <name>WSO2 Release Distribution Repository</name>
+	   <url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbondevicemgt-404/</url>
+	</repository>
     </repositories>
 </project>
