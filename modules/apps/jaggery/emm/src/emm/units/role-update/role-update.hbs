@@ -15,8 +15,7 @@
                             </div>
                             <label class="wr-input-label">Domain</label>
                             <div class="wr-input-control">
-                                <input type="text" id="domain" class="form-control" placeholder=""
-                                       value="PRIMARY"/>
+                                <input type="text" id="domain" class="form-control" placeholder="" value="PRIMARY" disabled/>
                             </div>
                             <label class="wr-input-label">
                                 Role Name *
@@ -25,9 +24,11 @@
                             <label class="wr-input-label" id="roleNameValidationText">
                                 ( {{roleNameHelpText}} )
                             </label>
-                            <div class="wr-input-control">
+                            <div id="roleNameField" class="form-group wr-input-control">
                                 <input type="text" id="rolename" data-regex="{{roleNameJSRegEx}}" data-errormsg="{{roleNameRegExViolationErrorMsg}}" class="form-control" data-currentrole="{{role.roleName}}"
                                         value="{{role.roleName}}"/>
+                                <span class=" rolenameError hidden glyphicon glyphicon-remove form-control-feedback"></span>
+                                <label class="error rolenameEmpty hidden" for="summary">Role name is required & Should be in minimum 3 characters long and do not include any whitespaces. </label>
                             </div>
                         </div>
                     </div>
