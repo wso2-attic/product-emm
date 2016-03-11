@@ -86,22 +86,22 @@ public class User {
                 // if user already exists
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + userWrapper.getUsername() +
-                              " already exists. Therefore, request made to add user was refused.");
+                            " already exists. Therefore, request made to add user was refused.");
                 }
                 // returning response with bad request state
                 responsePayload.setStatusCode(HttpStatus.SC_CONFLICT);
                 responsePayload.
                         setMessageFromServer("User by username: " + userWrapper.getUsername() +
-                                             " already exists. Therefore, request made to add user was refused.");
+                                " already exists. Therefore, request made to add user was refused.");
                 return Response.status(HttpStatus.SC_CONFLICT).entity(responsePayload).build();
             } else {
                 String initialUserPassword = generateInitialUserPassword();
                 Map<String, String> defaultUserClaims =
                         buildDefaultUserClaims(userWrapper.getFirstname(), userWrapper.getLastname(),
-                                               userWrapper.getEmailAddress());
+                                userWrapper.getEmailAddress());
                 // calling addUser method of carbon user api
                 userStoreManager.addUser(userWrapper.getUsername(), initialUserPassword,
-                                         userWrapper.getRoles(), defaultUserClaims, null);
+                        userWrapper.getRoles(), defaultUserClaims, null);
                 // invite newly added user to enroll device
                 inviteNewlyAddedUserToEnrollDevice(userWrapper.getUsername(), initialUserPassword);
                 // Outputting debug message upon successful addition of user
@@ -111,7 +111,7 @@ public class User {
                 // returning response with success state
                 responsePayload.setStatusCode(HttpStatus.SC_CREATED);
                 responsePayload.setMessageFromServer("User by username: " + userWrapper.getUsername() +
-                                                     " was successfully added.");
+                        " was successfully added.");
                 return Response.status(HttpStatus.SC_CREATED).entity(responsePayload).build();
             }
         } catch (UserStoreException e) {
@@ -189,12 +189,12 @@ public class User {
             if (userStoreManager.isExistingUser(userWrapper.getUsername())) {
                 Map<String, String> defaultUserClaims =
                         buildDefaultUserClaims(userWrapper.getFirstname(), userWrapper.getLastname(),
-                                               userWrapper.getEmailAddress());
+                                userWrapper.getEmailAddress());
                 if (StringUtils.isNotEmpty(userWrapper.getPassword())) {
                     // Decoding Base64 encoded password
                     byte[] decodedBytes = Base64.decodeBase64(userWrapper.getPassword());
                     userStoreManager.updateCredentialByAdmin(userWrapper.getUsername(),
-                                                             new String(decodedBytes, "UTF-8"));
+                            new String(decodedBytes, "UTF-8"));
                     log.debug("User credential of username: " + userWrapper.getUsername() + " has been changed");
                 }
                 List<String> listofFilteredRoles = getFilteredRoles(userStoreManager, userWrapper.getUsername());
@@ -230,18 +230,18 @@ public class User {
                 // returning response with success state
                 responsePayload.setStatusCode(HttpStatus.SC_CREATED);
                 responsePayload.setMessageFromServer("User by username: " + userWrapper.getUsername() +
-                                                     " was successfully updated.");
+                        " was successfully updated.");
                 return Response.status(HttpStatus.SC_CREATED).entity(responsePayload).build();
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + userWrapper.getUsername() +
-                              " doesn't exists. Therefore, request made to update user was refused.");
+                            " doesn't exists. Therefore, request made to update user was refused.");
                 }
                 // returning response with bad request state
                 responsePayload.setStatusCode(HttpStatus.SC_CONFLICT);
                 responsePayload.
                         setMessageFromServer("User by username: " + userWrapper.getUsername() +
-                                             " doesn't  exists. Therefore, request made to update user was refused.");
+                                " doesn't  exists. Therefore, request made to update user was refused.");
                 return Response.status(HttpStatus.SC_CONFLICT).entity(responsePayload).build();
             }
         } catch (UserStoreException e) {
@@ -445,7 +445,7 @@ public class User {
             count = userList.size();
         }
         responsePayload.setMessageFromServer("All users were successfully retrieved. " +
-                                             "Obtained user count: " + count);
+                "Obtained user count: " + count);
         responsePayload.setResponseContent(userList);
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
@@ -489,7 +489,7 @@ public class User {
             count = userList.size();
         }
         responsePayload.setMessageFromServer("All users were successfully retrieved. " +
-                                             "Obtained user count: " + count);
+                "Obtained user count: " + count);
         responsePayload.setResponseContent(userList);
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
@@ -532,7 +532,7 @@ public class User {
             count = userList.size();
         }
         responsePayload.setMessageFromServer("All users by username were successfully retrieved. " +
-                                             "Obtained user count: " + count);
+                "Obtained user count: " + count);
         responsePayload.setResponseContent(userList);
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
@@ -570,7 +570,7 @@ public class User {
             count = userList.size();
         }
         responsePayload.setMessageFromServer("All users by username were successfully retrieved. " +
-                                             "Obtained user count: " + count);
+                "Obtained user count: " + count);
         responsePayload.setResponseContent(userList);
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
@@ -595,9 +595,9 @@ public class User {
      * @throws MDMAPIException, UserStoreException, DeviceManagementException
      */
     private void inviteNewlyAddedUserToEnrollDevice(String username, String password) throws
-                                                                                      MDMAPIException,
-                                                                                      UserStoreException,
-                                                                                      DeviceManagementException {
+            MDMAPIException,
+            UserStoreException,
+            DeviceManagementException {
         if (log.isDebugEnabled()) {
             log.debug("Sending invitation mail to user by username: " + username);
         }
@@ -735,7 +735,7 @@ public class User {
             }
             SetReferenceTransformer transformer = new SetReferenceTransformer();
             transformer.transform(Arrays.asList(userStoreManager.getRoleListOfUser(username)),
-                                  userList);
+                    userList);
             final String[] rolesToAdd = (String[])
                     transformer.getObjectsToAdd().toArray(new String[transformer.getObjectsToAdd().size()]);
             final String[] rolesToDelete = (String[])

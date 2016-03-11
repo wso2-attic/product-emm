@@ -65,25 +65,32 @@
                 </ul>
             </div>
             {{#defineZone "user-enrolled-devices"}}
-                <div class="media-body add-padding-left-5x remove-padding-xs tab-content">
-                    <div class="panel-group tab-content">
-                        <div class="panel panel-default tab-pane active" id="enrolled_devices" role="tabpanel"
-                             aria-labelledby="enrolled_devices">
-                            <div class="panel-heading">Enrolled Devices</div>
-                            <div class="panel-body">
-                                <div id="enrolled_devices-container">
-                                    <div class="panel-body">
-                                        Not available yet
+                {{#if listDevicePermitted}}
+                    <input type="hidden" id="can-list-devices" value="true"/>
+                    <div class="media-body add-padding-left-5x remove-padding-xs tab-content">
+                        <div class="panel-group tab-content">
+                            <div class="panel panel-default tab-pane active" id="enrolled_devices" role="tabpanel"
+                                 aria-labelledby="enrolled_devices">
+                                <div class="panel-heading">Enrolled Devices</div>
+                                <div class="panel-body">
+                                    <div id="enrolled_devices-container">
+                                        <div class="panel-body">
+                                            Not available yet
+                                        </div>
+                                        <br class="c-both"/>
                                     </div>
                                     <br class="c-both"/>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                {{/if}}
             {{/defineZone}}
         </div>
     </div>
+    {{#if viewDevicePermitted}}
+        <input type="hidden" id="can-view-devices" value="true"/>
+    {{/if}}
 {{/zone}}
 {{#zone "bottomJs"}}
     <script src="{{self.publicURL}}/js/bottomJs.js"></script>

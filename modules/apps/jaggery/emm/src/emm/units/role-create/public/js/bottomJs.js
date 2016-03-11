@@ -182,11 +182,12 @@ $(document).ready(function () {
                         $(errorMsgWrapper).removeClass("hidden");
                     } else {
                         // Clearing user input fields.
-                        $("input#rolename").val("");
-                        $("#domain").val("");
-                        // Refreshing with success message
-                        $("#role-create-form").addClass("hidden");
-                        $("#role-created-msg").removeClass("hidden");
+                        //$("input#rolename").val("");
+                        //$("#domain").val("");
+                        //// Refreshing with success message
+                        //$("#role-create-form").addClass("hidden");
+                        //$("#role-created-msg").removeClass("hidden");
+                        window.location.href = '/emm/roles/edit-role-permission?wizard=true&rolename=' + roleName;
                     }
                 }, function (data) {
                     if (JSON.parse(data.responseText).errorMessage.indexOf("RoleExisting") > -1) {
