@@ -413,7 +413,10 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.mediation:org.wso2.carbon.mediation.ui.feature:${carbon.mediation.version}
                                 </featureArtifactDef>
-                                <!-- End of Mediation Features -->
+				<featureArtifactDef>
+                                    org.wso2.carbon.mediation:org.wso2.carbon.relay.server.feature:${carbon.mediation.version}
+                                </featureArtifactDef>
+				<!-- End of Mediation Features -->
 
                                 <!-- App Manager features-->
 
@@ -913,6 +916,10 @@
                                 <!--</feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.mediation.ui.feature.group</id>
+                                    <version>${carbon.mediation.version}</version>
+                                </feature>
+				<feature>
+                                    <id>org.wso2.carbon.relay.server.feature.group</id>
                                     <version>${carbon.mediation.version}</version>
                                 </feature>
                                 <!-- End of Mediation Features -->
