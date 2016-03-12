@@ -602,7 +602,9 @@ public class User {
         try {
             deviceManagementProviderService.sendRegistrationEmail(emailCtx);
         } catch (DeviceManagementException e) {
-            throw new MDMAPIException("Error occurred while sending registration email to user '" + username + "'", e);
+            String msg = "Error occurred while sending registration email to user '" + username + "'";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
         }
     }
 
