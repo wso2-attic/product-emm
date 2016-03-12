@@ -436,7 +436,7 @@
             </outputDirectory>
         </fileSet>
 
-        <!-- Copying default email templates -->
+        <!-- Copying email templates -->
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/resources/email-templates</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/resources/email-templates
@@ -756,12 +756,12 @@
             <fileMode>644</fileMode>
         </file>
 
-        <!--Notification Config File-->
+        <!-- Copying email-sender-config.xml -->
         <file>
             <source>
-                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/notification-messages.xml
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/email-sender-config.xml
             </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
