@@ -1078,7 +1078,7 @@ var operationModule = function () {
                 } else if (operationDataObj.is("select")) {
                     operationDataObj.val(value);
                     /* trigger a change of value, so that if slidable panes exist,
-                    make them slide-down or slide-up accordingly */
+                     make them slide-down or slide-up accordingly */
                     operationDataObj.trigger("change");
                 } else if (operationDataObj.hasClass("grouped-array-input")) {
                     // then value is complex

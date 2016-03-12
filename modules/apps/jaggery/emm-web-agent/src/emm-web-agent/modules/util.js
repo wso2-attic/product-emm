@@ -31,7 +31,7 @@ var util = function () {
             "clientName": "emm-web-agent",
             "tokenScope": "admin",
             "owner": adminUserName,
-            "applicationType": "webapp", 
+            "applicationType": "webapp",
             "grantType": "password refresh_token urn:ietf:params:oauth:grant-type:saml2-bearer",
             "saasApp" :true
         };
@@ -122,7 +122,7 @@ var util = function () {
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.setRequestHeader("Authorization", "Basic " + clientKeys);
         xhr.send("grant_type=urn:ietf:params:oauth:grant-type:saml2-bearer&assertion=" +
-                 encodeURIComponent(encodedExtractedAssertion) + "&scope=" + "PRODUCTION");
+            encodeURIComponent(encodedExtractedAssertion) + "&scope=" + "PRODUCTION");
         var tokenPair = {};
         if (xhr.status == 200) {
             var data = parse(xhr.responseText);

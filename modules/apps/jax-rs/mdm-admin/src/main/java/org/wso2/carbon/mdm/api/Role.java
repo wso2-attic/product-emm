@@ -421,7 +421,7 @@ public class Role {
     }
 
     /**
-     * This method is used to retrieve the user count of the system.
+     * This method is used to retrieve the role count of the system.
      *
      * @return returns the count.
      * @throws MDMAPIException

@@ -45,6 +45,6 @@
         "copyrightPrefix" : "\u00A9 %date-year%, ",
         "copyrightOwner" : "WSO2 Inc.",
         "copyrightOwnersSite" : "http://www.wso2.org",
-        "copyrightSuffix" : " All Rights Reserved."
+        "copyrightSuffix" : ""
     }
 }

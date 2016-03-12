@@ -6989,12 +6989,6 @@ ul.tiles .icon {
     display: inline-block;
     margin-right: 10px;
 }
-.tree-view li > .icon:before {
-    content: "\e687";
-}
-.tree-view li[aria-expanded=true] > .icon:before {
-    content: "\e685";
-}
 .tree-view li a,
 .tree-view li a:hover {
     text-decoration: none;
@@ -7136,3 +7130,59 @@ ul.tiles .icon {
  .media .panel.active .panel-heading .caret-updown{
     color:#fff;
  }
+.alert {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  border: none;
+  position: relative;
+  padding: 15px 50px 15px 15px;
+}
+.alert.alert-danger {
+  color: #ffffff;
+  background: #d9534f;
+}
+.wr-form button.close{
+  margin-right:0px;
+}
+.alert .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 50px;
+  width: 50px;
+  line-height: 1;
+  padding: 0 10px;
+  font-size: 12px;
+  background: #222222;
+  color: #ffffff;
+}
+.alert.alert-danger .close {
+  background: #220807;
+}
+.has-error .form-control:focus{
+  border-color:#F44336;
+  -webkit-box-shadow: 0px 0px 0px 0px rgba(0,0,0,0);
+  -moz-box-shadow: 0px 0px 0px 0px rgba(0,0,0,0);
+  box-shadow: 0px 0px 0px 0px rgba(0,0,0,0);
+}
+.has-success .form-control:focus{
+  border-color:#4CAF50;
+  -webkit-box-shadow: 0px 0px 0px 0px rgba(0,0,0,0);
+  -moz-box-shadow: 0px 0px 0px 0px rgba(0,0,0,0);
+  box-shadow: 0px 0px 0px 0px rgba(0,0,0,0);
+}
+
+.form-group>label.error {
+  line-height: 1.5em;
+  color: rgb(255, 255, 255);
+  background-color: #e74c3c;
+  width: 100%;
+  padding: 5px 10px;
+  border-left: 5px solid #942F25;
+  font-weight: 500;
+}
+.form-group label>.required {
+  color: #E74C3C;
+  font-weight: 400;
+}

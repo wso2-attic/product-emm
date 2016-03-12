@@ -11,6 +11,43 @@ function inputIsValid(regExp, inputString) {
 }
 
 var validateInline = {};
+var clearInline = {};
+
+var enableInlineError = function (inputField, errorMsg, errorSign) {
+    var fieldIdentifier = "#" + inputField;
+    var errorMsgIdentifier = "#" + inputField + " ." + errorMsg;
+    var errorSignIdentifier = "#" + inputField + " ." + errorSign;
+
+    if (inputField) {
+        $(fieldIdentifier).addClass(" has-error has-feedback");
+    }
+
+    if (errorMsg) {
+        $(errorMsgIdentifier).removeClass(" hidden");
+    }
+
+    if (errorSign) {
+        $(errorSignIdentifier).removeClass(" hidden");
+    }
+};
+
+var disableInlineError = function (inputField, errorMsg, errorSign) {
+    var fieldIdentifier = "#" + inputField;
+    var errorMsgIdentifier = "#" + inputField + " ." + errorMsg;
+    var errorSignIdentifier = "#" + inputField + " ." + errorSign;
+
+    if (inputField) {
+        $(fieldIdentifier).removeClass(" has-error has-feedback");
+    }
+
+    if (errorMsg) {
+        $(errorMsgIdentifier).addClass(" hidden");
+    }
+
+    if (errorSign) {
+        $(errorSignIdentifier).addClass(" hidden");
+    }
+};
 
 /**
  * Validate if provided username is valid against RegEx configures.
@@ -18,9 +55,33 @@ var validateInline = {};
 validateInline["user-name"] = function () {
     var usernameinput = $("input#username");
     if (inputIsValid( usernameinput.data("regex"), usernameinput.val())) {
-        $("#userNameValidationText").removeClass("inline-warning");
+       disableInlineError("usernameInputField", "usernameEmpty", "usernameError");
     } else {
-        $("#userNameValidationText").addClass("inline-warning");
+        enableInlineError("usernameInputField", "usernameEmpty", "usernameError");
+    }
+};
+
+/**
+ * Validate if provided first name is valid against RegEx configures.
+ */
+validateInline["first-name"] = function () {
+    var firstnameinput = $("input#firstname");
+    if (firstnameinput.val()) {
+       disableInlineError("firstNameField", "fnError");
+    } else {
+        enableInlineError("firstNameField", "fnError");
+    }
+};
+
+/**
+ * Validate if provided last name is valid against RegEx configures.
+ */
+validateInline["last-name"] = function () {
+    var lastnameinput = $("input#lastname");
+    if (lastnameinput.val()) {
+       disableInlineError("lastNameField", "lnError");
+    } else {
+        enableInlineError("lastNameField", "lnError");
     }
 };
 
@@ -30,13 +91,44 @@ validateInline["user-name"] = function () {
  */
 validateInline["emailAddress"] = function () {
     var email = $("#emailAddress").val();
-    if (emailIsValid(email)) {
-        $("#emailValidationText").removeClass("inline-warning");
-        $("#emailValidationText").hide();
+    if (!email) {
+        enableInlineError("emailField", "email-required" , "emailError");
+    } else if (emailIsValid(email)) {
+        disableInlineError("emailField", "email-required" , "emailError");
+        disableInlineError("emailField", "email-invalid" , "emailError");
     } else {
-        $("#emailValidationText").addClass("inline-warning");
-        $("#emailValidationText").show();
+        enableInlineError("emailField", "email-invalid" , "emailError");
     }
+};
+
+/**
+ * clear Validation messages when gain focus to the field.
+ */
+clearInline["user-name"] = function () {
+       disableInlineError("usernameInputField", "usernameEmpty", "usernameError");
+};
+
+/**
+ * clear Validation messages when gain focus to the field.
+ */
+clearInline["first-name"] = function () {
+       disableInlineError("firstNameField", "fnError");
+};
+
+/**
+ * clear Validation messages when gain focus to the field.
+ */
+clearInline["last-name"] = function () {
+       disableInlineError("lastNameField", "lnError");
+};
+
+
+/**
+ * clear Validation messages when gain focus to the field.
+ */
+clearInline["emailAddress"] = function () {
+        disableInlineError("emailField", "email-required" , "emailError");
+        disableInlineError("emailField", "email-invalid" , "emailError");
 };
 
 /**
@@ -49,6 +141,7 @@ function emailIsValid(email) {
     var regExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return regExp.test(email);
 }
+
 $( "#userStore" )
     .change(function () {
         var str = "";
@@ -176,7 +269,7 @@ $(document).ready(function () {
     });
 
     $("#username").focus(function() {
-        $("#userNameValidationText").removeClass("inline-warning");
+        clearInline["user-name"]();
     });
 
     $("#username").blur(function() {
@@ -184,10 +277,26 @@ $(document).ready(function () {
     });
 
     $("#emailAddress").focus(function() {
-        $("#emailValidationText").hide();
+        clearInline["emailAddress"]();
     });
 
     $("#emailAddress").blur(function() {
         validateInline["emailAddress"]();
+    });
+
+    $("#lastname").focus(function() {
+        clearInline["last-name"]();
+    });
+
+    $("#lastname").blur(function() {
+        validateInline["last-name"]();
+    });
+
+    $("#firstname").focus(function() {
+        clearInline["first-name"]();
+    });
+
+    $("#firstname").blur(function() {
+        validateInline["first-name"]();
     });
 });

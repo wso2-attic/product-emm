@@ -29,7 +29,7 @@ var loadPaginatedObjects = function (objectGridId, objectGridContainer, objectGr
                             data = callback(data);
                             if (data.length > 0 && data != null) {
                                 $('#ast-container').removeClass('hidden');
-                                $('#role-listing-status-msg').text('');
+                                $('#role-listing-status').hide();
                                 for (var i = 0; i < data.viewModel.roles.length; i++) {
                                    data.viewModel.roles[i].adminRole = $("#role-table").data("role");
                                 }
@@ -44,12 +44,15 @@ var loadPaginatedObjects = function (objectGridId, objectGridContainer, objectGr
                             } else {
                                 $('#ast-container').addClass('hidden');
                                 $('#role-listing-status-msg').text('No roles are available to be displayed.');
+                                $('#role-listing-status').show();
                             }
 
                             //$(objectGridId).datatables_extended();
                         }, function (message) {
-                $('#ast-container').addClass('hidden');
-                $('#role-listing-status-msg').text('Invalid search query. Try again with a valid search query');
+                            $('#ast-container').addClass('hidden');
+                            $('#role-listing-status-msg').text('Invalid search query. Try again with a valid search ' +
+                                                               'query');
+                            $('#role-listing-status').show();
             });
     });
 };
@@ -176,6 +179,7 @@ $("#search-btn").click(function () {
 });
 
 $(document).ready(function () {
+    $('#role-listing-status').hide();
     loadRoles();
     isInit = true;
 });

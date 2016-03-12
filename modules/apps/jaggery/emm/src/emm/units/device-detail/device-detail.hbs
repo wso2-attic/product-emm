@@ -143,39 +143,45 @@
                                             {{/if}}
                                             {{#if device.viewModel.DeviceCapacity}}
                                                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                                    <div class="wr-stats-board-tile">
-                                                        <div class="tile-name">STORAGE</div>
-                                                        <div>
-                                                            <div class="tile-icon"><i class="fw fw-hdd"></i></div>
-                                                            <div class="tile-stats">{{device.viewModel.DeviceCapacityPercentage}}
-                                                                %<span class="tile-stats-free">{{device.viewModel.AvailableDeviceCapacity}}
-                                                                    GB Free</span></div>
+                                                    <div class="col-md-12">
+                                                        <div class="wr-stats-board-tile">
+                                                            <div class="tile-name">STORAGE</div>
+                                                            <div>
+                                                                <div class="tile-icon"><i class="fw fw-hdd"></i></div>
+                                                                <div class="tile-stats">{{device.viewModel.DeviceCapacityPercentage}}
+                                                                    %<span class="tile-stats-free">{{device.viewModel.AvailableDeviceCapacity}}
+                                                                        GB Free</span></div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             {{/if}}
                                             {{#if device.viewModel.internal_memory.FreeCapacity}}
                                                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                                    <div class="wr-stats-board-tile">
-                                                        <div class="tile-name">LOCAL STORAGE</div>
-                                                        <div>
-                                                            <div class="tile-icon"><i class="fw fw-hdd"></i></div>
-                                                            <div class="tile-stats">{{device.viewModel.internal_memory.DeviceCapacityPercentage}}
-                                                                %<span class="tile-stats-free">{{device.viewModel.internal_memory.FreeCapacity}}
-                                                                    GB Free</span></div>
+                                                    <div class="col-md-12">
+                                                        <div class="wr-stats-board-tile">
+                                                            <div class="tile-name">LOCAL STORAGE</div>
+                                                            <div>
+                                                                <div class="tile-icon"><i class="fw fw-hdd"></i></div>
+                                                                <div class="tile-stats">{{device.viewModel.internal_memory.DeviceCapacityPercentage}}
+                                                                    %<span class="tile-stats-free">{{device.viewModel.internal_memory.FreeCapacity}}
+                                                                        GB Free</span></div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             {{/if}}
                                             {{#if device.viewModel.external_memory.FreeCapacity}}
                                                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                                    <div class="wr-stats-board-tile">
-                                                        <div class="tile-name">EXTERNAL STORAGE</div>
-                                                        <div>
-                                                            <div class="tile-icon"><i class="fw fw-usb-drive"></i></div>
-                                                            <div class="tile-stats">{{device.viewModel.external_memory.DeviceCapacityPercentage}}
-                                                                %<span class="tile-stats-free">{{device.viewModel.external_memory.FreeCapacity}}
-                                                                    GB Free</span></div>
+                                                    <div class="col-md-12">
+                                                        <div class="wr-stats-board-tile">
+                                                            <div class="tile-name">EXTERNAL STORAGE</div>
+                                                            <div>
+                                                                <div class="tile-icon"><i class="fw fw-usb-drive"></i></div>
+                                                                <div class="tile-stats">{{device.viewModel.external_memory.DeviceCapacityPercentage}}
+                                                                    %<span class="tile-stats-free">{{device.viewModel.external_memory.FreeCapacity}}
+                                                                        GB Free</span></div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
