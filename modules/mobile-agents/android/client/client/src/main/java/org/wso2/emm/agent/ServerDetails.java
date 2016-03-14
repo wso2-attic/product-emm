@@ -67,7 +67,6 @@ public class ServerDetails extends Activity {
 		btnStartRegistration.setBackground(getResources().getDrawable(R.drawable.btn_grey));
 		btnStartRegistration.setTextColor(getResources().getColor(R.color.black));
 		Response deviceCompatibility = state.evaluateCompatibility();
-        Response androidForWorkCompatibility = state.evaluateAndroidForWorkCompatibility();
 
 		if (!deviceCompatibility.getCode()) {
 			txtSeverAddress.setText(deviceCompatibility.getDescriptionResourceID());

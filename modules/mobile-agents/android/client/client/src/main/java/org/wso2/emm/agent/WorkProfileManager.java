@@ -21,8 +21,12 @@ import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import org.wso2.emm.agent.api.ApplicationManager;
+import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 
 import static android.app.admin.DevicePolicyManager.ACTION_PROVISION_MANAGED_PROFILE;
 import static android.app.admin.DevicePolicyManager.EXTRA_PROVISIONING_DEVICE_ADMIN_PACKAGE_NAME;
@@ -34,31 +38,7 @@ public class WorkProfileManager extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_entry);
-        DevicePolicyManager manager = (DevicePolicyManager)
-                getSystemService(Context.DEVICE_POLICY_SERVICE);
-        if (manager.isProfileOwnerApp(getApplicationContext().getPackageName())) {
-            // If the managed profile is already set up, we show the main screen.
-            showMainFragment();
-        } else {
-            // If not, we show the set up screen.
-            provisionManagedProfile();
-        }
-    }
-
-    private void showSetupProfile() {
-        /*getFragmentManager().beginTransaction()
-                .replace(R.id.activity_entry, SetupProfileFragment.newInstance())
-                .commit();
-    */
-    }
-
-    private void showMainFragment() {
-       /* getFragmentManager().beginTransaction()
-                .add(R.id.container, BasicManagedProfileFragment.newInstance())
-                .commit();
-    */
-
+        provisionManagedProfile();
 
     }
 
@@ -68,14 +48,29 @@ public class WorkProfileManager extends Activity {
             return;
         }
         Intent intent = new Intent(ACTION_PROVISION_MANAGED_PROFILE);
-        intent.putExtra(EXTRA_PROVISIONING_DEVICE_ADMIN_PACKAGE_NAME,
-                activity.getApplicationContext().getPackageName());
+        intent.putExtra(EXTRA_PROVISIONING_DEVICE_ADMIN_PACKAGE_NAME, activity.getApplicationContext().getPackageName());
+        ApplicationManager am = new ApplicationManager(this.getApplicationContext());
+        am.uninstallApplication("org.wso2.emm.agent");
         if (intent.resolveActivity(activity.getPackageManager()) != null) {
             startActivityForResult(intent, REQUEST_PROVISION_MANAGED_PROFILE);
             activity.finish();
-        } else {
-            Toast.makeText(activity, "Device provisioning is not enabled. Stopping.",
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            // Two toasts to increase the duration
+            Toast.makeText(this,
+                    "Only Agent in Work Profile is needed after this step. You can uninstall Agent in Personal Profile.",
+                    Toast.LENGTH_LONG).show();
+            Toast.makeText(this,
+                    "Only Agent in Work Profile is needed after this step. You can uninstall Agent in Personal Profile now.",
+                    Toast.LENGTH_LONG).show();
+            Toast.makeText(this,
+                    "Only Agent in Work Profile is needed after this step. You can uninstall Agent in Personal Profile now.",
                     Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(activity, "Device provisioning is not enabled. Stopping.", Toast.LENGTH_SHORT).show();
         }
         finish();
     }
@@ -85,7 +80,7 @@ public class WorkProfileManager extends Activity {
         if (requestCode == REQUEST_PROVISION_MANAGED_PROFILE) {
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(this, "Provisioning done.", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this,ServerDetails.class);
+                Intent intent = new Intent(this, ServerDetails.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             } else {

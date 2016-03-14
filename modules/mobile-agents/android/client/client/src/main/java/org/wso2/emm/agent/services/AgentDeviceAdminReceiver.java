@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
@@ -33,6 +34,7 @@ import android.app.admin.DeviceAdminReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.util.Log;
 import android.widget.Toast;
@@ -155,6 +157,11 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 	public void onProfileProvisioningComplete(Context context, Intent intent) {
 		Intent launch = new Intent(context, EnableProfileActivity.class);
 		launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		context.startActivity(launch);
 
 	}

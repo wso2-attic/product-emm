@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -43,11 +44,18 @@ public class EnableProfileActivity extends Activity {
         if (null == savedInstanceState) {
             // Important: After the profile has been created, the MDM must enable it for corporate
             // apps to become visible in the launcher.
+            //uninstallPersonalProfileAgent();
             enableProfile();
+            //disablePersonalAgent();
             finish();
             startEnrollment();
         }
 
+    }
+
+    private void disablePersonalAgent(){
+        PackageManager pm = this.getPackageManager();
+        pm.setApplicationEnabledSetting("org.wso2.emm.agent",2,0);
     }
 
     private void enableProfile() {
@@ -94,8 +102,8 @@ public class EnableProfileActivity extends Activity {
                 devicePolicyManager.setApplicationHidden(
                         AgentDeviceAdminReceiver.getComponentName(this), packageName, !enabled);
             }
-            Toast.makeText(this, enabled ? packageName + " enabled" : packageName + " disabled",
-                    Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, enabled ? packageName + " enabled" : packageName + " disabled",
+              //      Toast.LENGTH_SHORT).show();
         } catch (PackageManager.NameNotFoundException e) {
             //Log.e(TAG, "The app cannot be found: " + packageName, e);
         }

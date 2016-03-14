@@ -25,14 +25,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import org.wso2.emm.agent.api.DeviceState;
+import org.wso2.emm.agent.utils.Response;
 
 public class LanderM extends Activity {
     private Context context;
     private Button btnEnableMngProfile;
     private Button btnSkipProfile;
+    private DeviceState state;
     private static final int TAG_BTN_ENABLE_PROFILE = 0;
     private static final int TAG_BTN_SKIP_PROFILE = 2;
 
@@ -40,21 +41,25 @@ public class LanderM extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this.getApplicationContext();
-        DevicePolicyManager manager = (DevicePolicyManager)
-                getSystemService(Context.DEVICE_POLICY_SERVICE);
-        if (manager.isProfileOwnerApp(getApplicationContext().getPackageName())) {
-            // If the managed profile is already set up, we show the main screen.
-            skipToEnrollment();
-        }
-        else {
-            setContentView(R.layout.activity_enable_work_profile);
-            btnEnableMngProfile = (Button) findViewById(R.id.btnSetupWorkProfile);
-            btnEnableMngProfile.setTag(TAG_BTN_ENABLE_PROFILE);
-            btnEnableMngProfile.setOnClickListener(onClickListenerButtonClicked);
+        state = new DeviceState(context);
+        Response androidForWorkCompatibility = state.evaluateAndroidForWorkCompatibility();
+        DevicePolicyManager manager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        if (androidForWorkCompatibility.getCode()) {
+            if (manager.isProfileOwnerApp(getApplicationContext().getPackageName())) {
+                // If the managed profile is already set up, we show the main screen.
+                skipToEnrollment();
+            } else {
+                setContentView(R.layout.activity_enable_work_profile);
+                btnEnableMngProfile = (Button) findViewById(R.id.btnSetupWorkProfile);
+                btnEnableMngProfile.setTag(TAG_BTN_ENABLE_PROFILE);
+                btnEnableMngProfile.setOnClickListener(onClickListenerButtonClicked);
 
-            btnSkipProfile = (Button) findViewById(R.id.btnSkipProfile);
-            btnSkipProfile.setTag(TAG_BTN_SKIP_PROFILE);
-            btnSkipProfile.setOnClickListener(onClickListenerButtonClicked);
+                btnSkipProfile = (Button) findViewById(R.id.btnSkipProfile);
+                btnSkipProfile.setTag(TAG_BTN_SKIP_PROFILE);
+                btnSkipProfile.setOnClickListener(onClickListenerButtonClicked);
+            }
+        } else {
+            skipToEnrollment();
         }
     }
 
@@ -66,31 +71,34 @@ public class LanderM extends Activity {
 
             switch (iTag) {
 
-                case TAG_BTN_ENABLE_PROFILE:
-                    startManagedProfileManager();
-                    finish();
-                    break;
+            case TAG_BTN_ENABLE_PROFILE:
+                startManagedProfileManager();
+                finish();
+                break;
 
-                case TAG_BTN_SKIP_PROFILE:
-                    skipToEnrollment();
-                    break;
+            case TAG_BTN_SKIP_PROFILE:
+                skipToEnrollment();
+                break;
 
-                default:
-                    break;
+            default:
+                break;
             }
 
         }
     };
 
     /**
-     * Start WorkProfileManager which configures Android Managed Profile Feature
+     * Start WorkProfileManager which configures Android Managed Profile Feature.
      */
-    private void startManagedProfileManager(){
+    private void startManagedProfileManager() {
         Intent ManagedProfileManager = new Intent(getApplicationContext(), WorkProfileManager.class);
         startActivity(ManagedProfileManager);
     }
 
-    private void skipToEnrollment(){
+    /**
+     * Go to the Enrollment Screen if the user don't want a separate managed profile.
+     */
+    private void skipToEnrollment() {
         Intent intent = new Intent(context, ServerDetails.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
