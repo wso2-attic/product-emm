@@ -114,20 +114,17 @@ function loadNotifications() {
                     var content = template(viewModel);
                     $(".sidebar-messages").html(content);
                 } else {
-                    var content = "<li class='message message-info'><h4><i class='icon fw fw-info'></i>Message</h4>" +
-                                  "<p>You have no new notifications</p></li>";
+                    var content = "<h4 class='text-center' >You have no new notifications</a></h4>";
                     $(".sidebar-messages").html(content);
                 }
             };
             invokerUtil.get(serviceURL, successCallback, function (message) {
-                var content = "<li class='message message-danger'><h4><i class='icon fw fw-error'></i>Warning</h4>" +
-                              "<p>Unexpected error occurred while notification listing </p></li>";
+                var content = "<p>Unexpected error occurred while notification listing </p>";
                 $(".sidebar-messages").html(content);
             });
         });
     } else {
-        var content = "<li class='message message-danger'><h4><i class='icon fw fw-error'></i>Warning</h4>" +
-                      "<p>You are not authorized to view notifications</p></li>";
+        var content = "<h4 class ='message-danger'>You are not authorized to view notifications</h4>";
         $(".sidebar-messages").html(content);
     }
 }

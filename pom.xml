@@ -23,7 +23,7 @@
     <groupId>org.wso2.mdm</groupId>
     <artifactId>wso2mdm-parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>2.0.2-SNAPSHOT</version>
     <name>WSO2 MDM - Parent</name>
     <url>http://wso2.org</url>
     <description>WSO2 Mobile Device Manager</description>
@@ -35,15 +35,13 @@
     </parent>
 
     <modules>
-        <module>modules/components/mdm-mgt</module>
-        <module>modules/components/app-mgt</module>
         <module>modules/apps/jax-rs/mdm-admin</module>
         <module>modules/mobile-agents</module>
         <module>modules/apps/jaggery/emm</module>
 	<module>modules/apps/jaggery/emm-web-agent</module>
         <!--<module>modules/tools</module>-->
         <module>modules/mdm-ui</module>
-        <module>modules/features</module>
+	<module>modules/features</module>
         <module>modules/p2-profile-gen</module>
         <module>modules/distribution</module>
         <module>modules/integration</module>
@@ -898,65 +896,7 @@
                 <version>1.9.0</version>
             </dependency>
 
-
-            <!-- App Management feature dependencies-->
-            <dependency>
-                <groupId>org.wso2.carbon.appmgt</groupId>
-                <artifactId>org.wso2.carbon.appmgt.core.feature</artifactId>
-                <version>${appmgt.feature.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon.appmgt</groupId>
-                <artifactId>org.wso2.carbon.appmgt.feature</artifactId>
-                <version>${appmgt.feature.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon.appmgt</groupId>
-                <artifactId>org.wso2.carbon.appmgt.mdm.wso2emm.feature</artifactId>
-                <version>${appmgt.feature.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon.appmgt</groupId>
-                <artifactId>org.wso2.carbon.appmgt.mdm.wso2mdm.feature</artifactId>
-                <version>${appmgt.feature.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon.appmgt</groupId>
-                <artifactId>org.wso2.carbon.appmgt.mobile.feature</artifactId>
-                <version>${appmgt.feature.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon.appmgt</groupId>
-                <artifactId>org.wso2.carbon.appmgt.publisher.feature</artifactId>
-                <version>${appmgt.feature.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon.appmgt</groupId>
-                <artifactId>org.wso2.carbon.appmgt.services.api.feature</artifactId>
-                <version>${appmgt.feature.version}</version>
-            </dependency>
-
-           <dependency>
-               <groupId>org.wso2.carbon.appmgt</groupId>
-               <artifactId>org.wso2.carbon.appmgt.store.feature</artifactId>
-               <version>${appmgt.feature.version}</version>
-           </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.appmgt</groupId>
-                <artifactId>org.wso2.carbon.appmgt.mobile</artifactId>
-                <version>${carbon.appmgt.version}</version>
-            </dependency>
-
-            <!-- End of app management features-->
-
             <!-- Carbon store -->
-
             <dependency>
                 <groupId>org.wso2.carbon.store</groupId>
                 <artifactId>org.wso2.store.feature</artifactId>
@@ -1045,7 +985,7 @@
 
         <!-- Carbon Mobile Device Management -->
         <carbon.mobile.device.mgt.version>2.0.4-SNAPSHOT</carbon.mobile.device.mgt.version>
-        <mdm.version>2.0.1-SNAPSHOT</mdm.version>
+        <mdm.version>2.0.2-SNAPSHOT</mdm.version>
 
         <!-- API Management -->
         <carbon.api.mgt.version>4.3.0</carbon.api.mgt.version>
@@ -1090,8 +1030,7 @@
         <caramel.version>1.0.1</caramel.version>
 
         <!-- App manager version-->
-        <appmgt.feature.version>1.1.1</appmgt.feature.version>
-        <carbon.appmgt.version>1.1.1</carbon.appmgt.version>
+        <appmgt.feature.version>1.1.2</appmgt.feature.version>
 
         <!-- Carbon Store version-->
         <carbon.store.version>1.4.1</carbon.store.version>
@@ -1287,5 +1226,10 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
+	<repository>
+	   <id>nexus-releases</id>
+	   <name>WSO2 Release Distribution Repository</name>
+	   <url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbondevicemgt-404/</url>
+	</repository>
     </repositories>
 </project>

@@ -173,24 +173,6 @@ public class Policy {
     @Path("{id}")
     public ResponsePayload updatePolicy(PolicyWrapper policyWrapper, @PathParam("id") int policyId)
             throws MDMAPIException {
-//        PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
-//        ResponsePayload responseMsg = new ResponsePayload();
-//        try {
-//            PolicyAdministratorPoint pap = policyManagementService.getPAP();
-//            org.wso2.carbon.policy.mgt.common.Policy previousPolicy = pap.getPolicy(policyId);
-//            policy.setProfile(pap.getProfile(previousPolicy.getProfileId()));
-//            policy.setId(previousPolicy.getId());
-//            pap.updatePolicy(policy);
-//            Response.status(HttpStatus.SC_OK);
-//            responseMsg.setMessageFromServer("Policy has been updated successfully.");
-//            return responseMsg;
-//        } catch (PolicyManagementException e) {
-//            String error = "Policy Management related exception";
-//            log.error(error, e);
-//            throw new MDMAPIException(error, e);
-//        }
-
-
 
         PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
         ResponsePayload responseMsg = new ResponsePayload();
@@ -205,16 +187,12 @@ public class Policy {
         policy.setUsers(policyWrapper.getUsers());
         policy.setTenantId(policyWrapper.getTenantId());
         policy.setCompliance(policyWrapper.getCompliance());
-       // policy.setActive(true);
 
         try {
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
-//            pap.addPolicy(policy);
             pap.updatePolicy(policy);
-//            Response.status(HttpStatus.SC_CREATED);
             Response.status(HttpStatus.SC_OK);
             responseMsg.setStatusCode(HttpStatus.SC_CREATED);
-//            responseMsg.setMessageFromServer("Policy has been added successfully.");
             responseMsg.setMessageFromServer("Policy has been updated successfully.");
             return responseMsg;
         } catch (PolicyManagementException e) {
@@ -293,23 +271,6 @@ public class Policy {
         }
     }
 
-//    @GET
-//    @Path("task/{mf}")
-//    public int taskService(@PathParam("mf") int monitoringFrequency) throws MDMAPIException {
-//        int policyCount = 0;
-//        PolicyManagerService policyManagementService = MDMAPIUtils.getPolicyManagementService();
-//        try {
-//            TaskScheduleService taskScheduleService = policyManagementService.getTaskScheduleService();
-//            taskScheduleService.startTask(monitoringFrequency);
-//            return policyCount;
-//        } catch (PolicyMonitoringTaskException e) {
-//            String error = "Policy Management related exception";
-//            log.error(error, e);
-//            throw new MDMAPIException(error, e);
-//        }
-//    }
-
-
     @PUT
     @Produces("application/json")
     @Path("activate")
@@ -333,7 +294,6 @@ public class Policy {
 
     }
 
-
     @PUT
     @Produces("application/json")
     @Path("inactivate")
@@ -355,7 +315,6 @@ public class Policy {
         responsePayload.setMessageFromServer("Selected policies have been successfully inactivated.");
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
-
 
     @PUT
     @Produces("application/json")
@@ -400,7 +359,6 @@ public class Policy {
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
 
-
     @GET
     @Path("update-task/{milliseconds}")
     public Response updateTaskService(@PathParam("milliseconds") int monitoringFrequency) throws MDMAPIException {
@@ -421,7 +379,6 @@ public class Policy {
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
 
-
     @GET
     @Path("stop-task")
     public Response stopTaskService() throws MDMAPIException {
@@ -441,7 +398,6 @@ public class Policy {
         responsePayload.setMessageFromServer("Policy monitoring service stopped successfully.");
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
-
 
     @GET
     @Path("{type}/{id}")

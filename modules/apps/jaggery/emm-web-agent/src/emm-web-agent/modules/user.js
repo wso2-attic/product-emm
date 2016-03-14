@@ -482,67 +482,6 @@ var userModule = function () {
         }
     };
 
-
-    publicMethods.addPermissions = function (permissionList, path, init) {
-        var registry, carbon = require("carbon");
-        var carbonServer = application.get("carbonServer");
-        var utility = require('/modules/utility.js').utility;
-        var options = {system: true};
-        if (init == "login") {
-            try {
-                var carbonUser = session.get(constants.USER_SESSION_KEY);
-                if (!carbonUser) {
-                    log.error("User object was not found in the session");
-                    throw constants.ERRORS.USER_NOT_FOUND;
-                }
-                utility.startTenantFlow(carbonUser);
-                var tenantId = carbon.server.tenantId();
-                if (carbonUser) {
-                    options.tenantId = tenantId;
-                }
-                registry = new carbon.registry.Registry(carbonServer, options);
-                var i, permission, resource;
-                for (i = 0; i < permissionList.length; i++) {
-                    permission = permissionList[i];
-                    resource = {
-                        collection: true,
-                        name: permission.name,
-                        properties: {
-                            name: permission.name
-                        }
-                    };
-                    if (path != "") {
-                        registry.put("/_system/governance/permission/admin/" + path + "/" + permission.key, resource);
-                    } else {
-                        registry.put("/_system/governance/permission/admin/" + permission.key, resource);
-                    }
-                }
-            } catch (e) {
-                throw e;
-            } finally {
-                utility.endTenantFlow();
-            }
-        } else {
-            registry = new carbon.registry.Registry(carbonServer, options);
-            var i, permission, resource;
-            for (i = 0; i < permissionList.length; i++) {
-                permission = permissionList[i];
-                resource = {
-                    collection: true,
-                    name: permission.name,
-                    properties: {
-                        name: permission.name
-                    }
-                };
-                if (path != "") {
-                    registry.put("/_system/governance/permission/admin/" + path + "/" + permission.key, resource);
-                } else {
-                    registry.put("/_system/governance/permission/admin/" + permission.key, resource);
-                }
-            }
-        }
-    };
-
     /**
      * Private method to be used by addUser() to
      * retrieve secondary user stores.

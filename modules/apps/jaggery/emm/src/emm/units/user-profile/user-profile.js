@@ -22,8 +22,16 @@ function onRequest(context) {
         }
     }
 
-    if(userModule.isAuthorized("/permission/admin/device-mgt/users/update")){
+    if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/users/update")){
         context["editPermitted"] = true;
+    }
+
+    if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list")){
+        context["listDevicePermitted"] = true;
+    }
+
+    if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/view")){
+        context["viewDevicePermitted"] = true;
     }
 
     return context;

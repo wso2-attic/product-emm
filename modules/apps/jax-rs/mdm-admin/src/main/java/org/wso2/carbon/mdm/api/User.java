@@ -25,9 +25,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.EmailMessageProperties;
 import org.wso2.carbon.device.mgt.common.PaginationRequest;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
+import org.wso2.carbon.device.mgt.core.service.EmailMetaInfo;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.CredentialManagementResponseBuilder;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
@@ -38,6 +38,7 @@ import org.wso2.carbon.mdm.util.Constants;
 import org.wso2.carbon.mdm.util.SetReferenceTransformer;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
+import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -51,14 +52,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * This class represents the JAX-RS services of User related functionality.
@@ -66,7 +60,7 @@ import java.util.TreeSet;
 public class User {
 
     private static Log log = LogFactory.getLog(User.class);
-    private String ROLE_EVERYONE = "Internal/everyone";
+    private static final String ROLE_EVERYONE = "Internal/everyone";
 
     /**
      * Method to add user to emm-user-store.
@@ -86,22 +80,22 @@ public class User {
                 // if user already exists
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + userWrapper.getUsername() +
-                              " already exists. Therefore, request made to add user was refused.");
+                            " already exists. Therefore, request made to add user was refused.");
                 }
                 // returning response with bad request state
                 responsePayload.setStatusCode(HttpStatus.SC_CONFLICT);
                 responsePayload.
                         setMessageFromServer("User by username: " + userWrapper.getUsername() +
-                                             " already exists. Therefore, request made to add user was refused.");
+                                " already exists. Therefore, request made to add user was refused.");
                 return Response.status(HttpStatus.SC_CONFLICT).entity(responsePayload).build();
             } else {
                 String initialUserPassword = generateInitialUserPassword();
                 Map<String, String> defaultUserClaims =
                         buildDefaultUserClaims(userWrapper.getFirstname(), userWrapper.getLastname(),
-                                               userWrapper.getEmailAddress());
+                                userWrapper.getEmailAddress());
                 // calling addUser method of carbon user api
                 userStoreManager.addUser(userWrapper.getUsername(), initialUserPassword,
-                                         userWrapper.getRoles(), defaultUserClaims, null);
+                        userWrapper.getRoles(), defaultUserClaims, null);
                 // invite newly added user to enroll device
                 inviteNewlyAddedUserToEnrollDevice(userWrapper.getUsername(), initialUserPassword);
                 // Outputting debug message upon successful addition of user
@@ -111,17 +105,13 @@ public class User {
                 // returning response with success state
                 responsePayload.setStatusCode(HttpStatus.SC_CREATED);
                 responsePayload.setMessageFromServer("User by username: " + userWrapper.getUsername() +
-                                                     " was successfully added.");
+                        " was successfully added.");
                 return Response.status(HttpStatus.SC_CREATED).entity(responsePayload).build();
             }
         } catch (UserStoreException e) {
-            String errorMsg = "Exception in trying to add user by username: " + userWrapper.getUsername();
-            log.error(errorMsg, e);
-            throw new MDMAPIException(errorMsg, e);
-        } catch (DeviceManagementException e) {
-            String errorMsg = "Exception in trying to add user by username: " + userWrapper.getUsername();
-            log.error(errorMsg, e);
-            throw new MDMAPIException(errorMsg, e);
+            String msg = "Exception in trying to add user by username: " + userWrapper.getUsername();
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
         }
     }
 
@@ -165,9 +155,9 @@ public class User {
                 return Response.status(HttpStatus.SC_NOT_FOUND).entity(responsePayload).build();
             }
         } catch (UserStoreException e) {
-            String errorMsg = "Exception in trying to retrieve user by username: " + username;
-            log.error(errorMsg, e);
-            throw new MDMAPIException(errorMsg, e);
+            String msg = "Exception in trying to retrieve user by username: " + username;
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
         }
     }
 
@@ -189,12 +179,12 @@ public class User {
             if (userStoreManager.isExistingUser(userWrapper.getUsername())) {
                 Map<String, String> defaultUserClaims =
                         buildDefaultUserClaims(userWrapper.getFirstname(), userWrapper.getLastname(),
-                                               userWrapper.getEmailAddress());
+                                userWrapper.getEmailAddress());
                 if (StringUtils.isNotEmpty(userWrapper.getPassword())) {
                     // Decoding Base64 encoded password
                     byte[] decodedBytes = Base64.decodeBase64(userWrapper.getPassword());
                     userStoreManager.updateCredentialByAdmin(userWrapper.getUsername(),
-                                                             new String(decodedBytes, "UTF-8"));
+                            new String(decodedBytes, "UTF-8"));
                     log.debug("User credential of username: " + userWrapper.getUsername() + " has been changed");
                 }
                 List<String> listofFilteredRoles = getFilteredRoles(userStoreManager, userWrapper.getUsername());
@@ -205,16 +195,16 @@ public class User {
                     The difference of roles in existingRolesSet and newRolesSet needed to be deleted
                     new roles to add = newRolesSet - The intersection of roles in existingRolesSet and newRolesSet
 				 */
-                final TreeSet<String> existingRolesSet = new TreeSet<String>();
+                final TreeSet<String> existingRolesSet = new TreeSet<>();
                 Collections.addAll(existingRolesSet, existingRoles);
-                final TreeSet<String> newRolesSet = new TreeSet<String>();
+                final TreeSet<String> newRolesSet = new TreeSet<>();
                 Collections.addAll(newRolesSet, userWrapper.getRoles());
                 existingRolesSet.removeAll(newRolesSet);
                 // Now we have the roles to delete
                 String[] rolesToDelete = existingRolesSet.toArray(new String[existingRolesSet.size()]);
-                List<String> roles = new ArrayList<String>(Arrays.asList(rolesToDelete));
+                List<String> roles = new ArrayList<>(Arrays.asList(rolesToDelete));
                 roles.remove(ROLE_EVERYONE);
-                rolesToDelete = roles.toArray(new String[0]);
+                rolesToDelete = new String[0];
                 // Clearing and re-initializing the set
                 existingRolesSet.clear();
                 Collections.addAll(existingRolesSet, existingRoles);
@@ -230,28 +220,24 @@ public class User {
                 // returning response with success state
                 responsePayload.setStatusCode(HttpStatus.SC_CREATED);
                 responsePayload.setMessageFromServer("User by username: " + userWrapper.getUsername() +
-                                                     " was successfully updated.");
+                        " was successfully updated.");
                 return Response.status(HttpStatus.SC_CREATED).entity(responsePayload).build();
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + userWrapper.getUsername() +
-                              " doesn't exists. Therefore, request made to update user was refused.");
+                            " doesn't exists. Therefore, request made to update user was refused.");
                 }
                 // returning response with bad request state
                 responsePayload.setStatusCode(HttpStatus.SC_CONFLICT);
                 responsePayload.
                         setMessageFromServer("User by username: " + userWrapper.getUsername() +
-                                             " doesn't  exists. Therefore, request made to update user was refused.");
+                                " doesn't  exists. Therefore, request made to update user was refused.");
                 return Response.status(HttpStatus.SC_CONFLICT).entity(responsePayload).build();
             }
-        } catch (UserStoreException e) {
-            String errorMsg = "Exception in trying to update user by username: " + userWrapper.getUsername();
-            log.error(errorMsg, e);
-            throw new MDMAPIException(errorMsg, e);
-        } catch (UnsupportedEncodingException e) {
-            String errorMsg = "Exception in trying to update user by username: " + userWrapper.getUsername();
-            log.error(errorMsg, e);
-            throw new MDMAPIException(errorMsg, e);
+        } catch (UserStoreException | UnsupportedEncodingException e) {
+            String msg = "Exception in trying to update user by username: " + userWrapper.getUsername();
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
         }
     }
 
@@ -271,7 +257,7 @@ public class User {
         Random randomGenerator = new Random();
         String totalCharset = lowerCaseCharset + upperCaseCharset + numericCharset;
         int totalCharsetLength = totalCharset.length();
-        StringBuffer initialUserPassword = new StringBuffer();
+        StringBuilder initialUserPassword = new StringBuilder();
         for (int i = 0; i < passwordLength; i++) {
             initialUserPassword
                     .append(totalCharset.charAt(randomGenerator.nextInt(totalCharsetLength)));
@@ -291,7 +277,7 @@ public class User {
      * @return {Object} Default user claims to be provided
      */
     private Map<String, String> buildDefaultUserClaims(String firstname, String lastname, String emailAddress) {
-        Map<String, String> defaultUserClaims = new HashMap<String, String>();
+        Map<String, String> defaultUserClaims = new HashMap<>();
         defaultUserClaims.put(Constants.USER_CLAIM_FIRST_NAME, firstname);
         defaultUserClaims.put(Constants.USER_CLAIM_LAST_NAME, lastname);
         defaultUserClaims.put(Constants.USER_CLAIM_EMAIL_ADDRESS, emailAddress);
@@ -338,24 +324,24 @@ public class User {
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(responsePayload).build();
             }
         } catch (UserStoreException e) {
-            String errorMsg = "Exception in trying to remove user by username: " + username;
-            log.error(errorMsg, e);
-            throw new MDMAPIException(errorMsg, e);
+            String msg = "Exception in trying to remove user by username: " + username;
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
         }
     }
 
     /**
      * get all the roles except for the internal/xxx and application/xxx
      *
-     * @param userStoreManager
-     * @param username
+     * @param userStoreManager User Store Manager associated with the currently logged in user
+     * @param username         Username of the currently logged in user
      * @return the list of filtered roles
      * @throws UserStoreException
      */
     private List<String> getFilteredRoles(UserStoreManager userStoreManager, String username)
             throws UserStoreException {
         String[] roleListOfUser = userStoreManager.getRoleListOfUser(username);
-        List<String> filteredRoles = new ArrayList<String>();
+        List<String> filteredRoles = new ArrayList<>();
         for (String role : roleListOfUser) {
             if (!(role.startsWith("Internal/") || role.startsWith("Application/"))) {
                 filteredRoles.add(role);
@@ -401,9 +387,9 @@ public class User {
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(responsePayload).build();
             }
         } catch (UserStoreException e) {
-            String errorMsg = "Exception in trying to retrieve roles for user by username: " + username;
-            log.error(errorMsg, e);
-            throw new MDMAPIException(errorMsg, e);
+            String msg = "Exception in trying to retrieve roles for user by username: " + username;
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
         }
     }
 
@@ -423,7 +409,7 @@ public class User {
         List<UserWrapper> userList;
         try {
             String[] users = userStoreManager.listUsers("*", -1);
-            userList = new ArrayList<UserWrapper>(users.length);
+            userList = new ArrayList<>(users.length);
             UserWrapper user;
             for (String username : users) {
                 user = new UserWrapper();
@@ -440,12 +426,10 @@ public class User {
         }
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
-        int count = 0;
-        if (userList != null) {
-            count = userList.size();
-        }
+        int count;
+        count = userList.size();
         responsePayload.setMessageFromServer("All users were successfully retrieved. " +
-                                             "Obtained user count: " + count);
+                "Obtained user count: " + count);
         responsePayload.setResponseContent(userList);
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
@@ -467,7 +451,7 @@ public class User {
         List<UserWrapper> userList;
         try {
             String[] users = userStoreManager.listUsers(filter + "*", -1);
-            userList = new ArrayList<UserWrapper>(users.length);
+            userList = new ArrayList<>(users.length);
             UserWrapper user;
             for (String username : users) {
                 user = new UserWrapper();
@@ -484,12 +468,10 @@ public class User {
         }
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
-        int count = 0;
-        if (userList != null) {
-            count = userList.size();
-        }
+        int count;
+        count = userList.size();
         responsePayload.setMessageFromServer("All users were successfully retrieved. " +
-                                             "Obtained user count: " + count);
+                "Obtained user count: " + count);
         responsePayload.setResponseContent(userList);
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
@@ -510,7 +492,7 @@ public class User {
         List<UserWrapper> userList;
         try {
             String[] users = userStoreManager.listUsers("*" + userName + "*", -1);
-            userList = new ArrayList<UserWrapper>(users.length);
+            userList = new ArrayList<>(users.length);
             UserWrapper user;
             for (String username : users) {
                 user = new UserWrapper();
@@ -527,12 +509,10 @@ public class User {
         }
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
-        int count = 0;
-        if (userList != null) {
-            count = userList.size();
-        }
+        int count;
+        count = userList.size();
         responsePayload.setMessageFromServer("All users by username were successfully retrieved. " +
-                                             "Obtained user count: " + count);
+                "Obtained user count: " + count);
         responsePayload.setResponseContent(userList);
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
@@ -553,11 +533,8 @@ public class User {
         List<String> userList;
         try {
             String[] users = userStoreManager.listUsers("*" + userName + "*", -1);
-            userList = new ArrayList<String>(users.length);
-            UserWrapper user;
-            for (String username : users) {
-                userList.add(username);
-            }
+            userList = new ArrayList<>(users.length);
+            Collections.addAll(userList, users);
         } catch (UserStoreException e) {
             String msg = "Error occurred while retrieving the list of users";
             log.error(msg, e);
@@ -565,12 +542,10 @@ public class User {
         }
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
-        int count = 0;
-        if (userList != null) {
-            count = userList.size();
-        }
+        int count;
+        count = userList.size();
         responsePayload.setMessageFromServer("All users by username were successfully retrieved. " +
-                                             "Obtained user count: " + count);
+                "Obtained user count: " + count);
         responsePayload.setResponseContent(userList);
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
@@ -583,9 +558,14 @@ public class User {
      * @return A list of usernames
      * @throws MDMAPIException, UserStoreException
      */
-    private String getClaimValue(String username, String claimUri) throws MDMAPIException, UserStoreException {
+    private String getClaimValue(String username, String claimUri) throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        return userStoreManager.getUserClaimValue(username, claimUri, null);
+        try {
+            return userStoreManager.getUserClaimValue(username, claimUri, null);
+        } catch (UserStoreException e) {
+            throw new MDMAPIException("Error occurred while retrieving value assigned to the claim '" +
+                    claimUri + "'", e);
+        }
     }
 
     /**
@@ -594,31 +574,37 @@ public class User {
      * @param username Username of the user
      * @throws MDMAPIException, UserStoreException, DeviceManagementException
      */
-    private void inviteNewlyAddedUserToEnrollDevice(String username, String password) throws
-                                                                                      MDMAPIException,
-                                                                                      UserStoreException,
-                                                                                      DeviceManagementException {
+    private void inviteNewlyAddedUserToEnrollDevice(
+            String username, String password) throws MDMAPIException {
         if (log.isDebugEnabled()) {
             log.debug("Sending invitation mail to user by username: " + username);
         }
-        String tennentDomain = CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
-        if ("carbon.super".equalsIgnoreCase(tennentDomain)) {
-            tennentDomain = "";
+        String tenantDomain = CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
+        if (MultitenantConstants.SUPER_TENANT_DOMAIN_NAME.equalsIgnoreCase(tenantDomain)) {
+            tenantDomain = "";
         }
         if (!username.contains("/")) {
             username = "/" + username;
         }
         String[] usernameBits = username.split("/");
         DeviceManagementProviderService deviceManagementProviderService = MDMAPIUtils.getDeviceManagementService();
-        EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
-        emailMessageProperties.setUserName(usernameBits[1]);
-        emailMessageProperties.setDomainName(tennentDomain);
-        emailMessageProperties.setFirstName(getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
-        emailMessageProperties.setPassword(password);
-        String[] mailAddress = new String[1];
-        mailAddress[0] = getClaimValue(username, Constants.USER_CLAIM_EMAIL_ADDRESS);
-        emailMessageProperties.setMailTo(mailAddress);
-        deviceManagementProviderService.sendRegistrationEmail(emailMessageProperties);
+
+        Properties props = new Properties();
+        props.setProperty("username", usernameBits[1]);
+        props.setProperty("domain-name", tenantDomain);
+        props.setProperty("first-name", getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
+        props.setProperty("password", password);
+
+        String recipient = getClaimValue(username, Constants.USER_CLAIM_EMAIL_ADDRESS);
+
+        EmailMetaInfo metaInfo = new EmailMetaInfo(recipient, props);
+        try {
+            deviceManagementProviderService.sendRegistrationEmail(metaInfo);
+        } catch (DeviceManagementException e) {
+            String msg = "Error occurred while sending registration email to user '" + username + "'";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
     }
 
     /**
@@ -636,26 +622,20 @@ public class User {
         }
         DeviceManagementProviderService deviceManagementProviderService = MDMAPIUtils.getDeviceManagementService();
         try {
-            for (int i = 0; i < usernames.size(); i++) {
-                EmailMessageProperties emailMessageProperties = new EmailMessageProperties();
-                emailMessageProperties
-                        .setFirstName(getClaimValue(usernames.get(i), Constants.USER_CLAIM_FIRST_NAME));
-                emailMessageProperties.setUserName(usernames.get(i));
-                String[] mailAddress = new String[1];
-                mailAddress[0] = getClaimValue(usernames.get(i), Constants.USER_CLAIM_EMAIL_ADDRESS);
-                if (StringUtils.isNotEmpty(mailAddress[0])) {
-                    emailMessageProperties.setMailTo(mailAddress);
-                    deviceManagementProviderService.sendEnrolmentInvitation(emailMessageProperties);
-                }
+            for (String username : usernames) {
+                String recipient = getClaimValue(username, Constants.USER_CLAIM_EMAIL_ADDRESS);
+
+                Properties props = new Properties();
+                props.setProperty("first-name", getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
+                props.setProperty("username", username);
+
+                EmailMetaInfo metaInfo = new EmailMetaInfo(recipient, props);
+                deviceManagementProviderService.sendEnrolmentInvitation(metaInfo);
             }
-        } catch (UserStoreException e) {
-            String errorMsg = "Exception in trying to invite user.";
-            log.error(errorMsg, e);
-            throw new MDMAPIException(errorMsg, e);
         } catch (DeviceManagementException e) {
-            String errorMsg = "Exception in trying to invite user.";
-            log.error(errorMsg, e);
-            throw new MDMAPIException(errorMsg, e);
+            String msg = "Error occurred while inviting user to enrol their device";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
         }
         ResponsePayload responsePayload = new ResponsePayload();
         responsePayload.setStatusCode(HttpStatus.SC_OK);
@@ -686,9 +666,9 @@ public class User {
             }
             return dmService.getDevicesOfUser(username);
         } catch (DeviceManagementException e) {
-            String errorMsg = "Device management error";
-            log.error(errorMsg, e);
-            throw new MDMAPIException(errorMsg, e);
+            String msg = "Device management error";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
         }
     }
 
@@ -735,7 +715,7 @@ public class User {
             }
             SetReferenceTransformer transformer = new SetReferenceTransformer();
             transformer.transform(Arrays.asList(userStoreManager.getRoleListOfUser(username)),
-                                  userList);
+                    userList);
             final String[] rolesToAdd = (String[])
                     transformer.getObjectsToAdd().toArray(new String[transformer.getObjectsToAdd().size()]);
             final String[] rolesToDelete = (String[])
@@ -779,4 +759,5 @@ public class User {
     public Response resetPasswordByAdmin(UserCredentialWrapper credentials) throws MDMAPIException {
         return CredentialManagementResponseBuilder.buildResetPasswordResponse(credentials);
     }
+
 }
