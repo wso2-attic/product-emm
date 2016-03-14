@@ -25,10 +25,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.EmailMessageProperties;
 import org.wso2.carbon.device.mgt.common.PaginationRequest;
-import org.wso2.carbon.device.mgt.core.email.EmailContext;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
+import org.wso2.carbon.device.mgt.core.service.EmailMetaInfo;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.CredentialManagementResponseBuilder;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
@@ -598,9 +597,9 @@ public class User {
 
         String recipient = getClaimValue(username, Constants.USER_CLAIM_EMAIL_ADDRESS);
 
-        EmailContext emailCtx = new EmailContext(recipient, props);
+        EmailMetaInfo metaInfo = new EmailMetaInfo(recipient, props);
         try {
-            deviceManagementProviderService.sendRegistrationEmail(emailCtx);
+            deviceManagementProviderService.sendRegistrationEmail(metaInfo);
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while sending registration email to user '" + username + "'";
             log.error(msg, e);
@@ -630,8 +629,8 @@ public class User {
                 props.setProperty("first-name", getClaimValue(username, Constants.USER_CLAIM_FIRST_NAME));
                 props.setProperty("username", username);
 
-                EmailContext emailCtx = new EmailContext(recipient, props);
-                deviceManagementProviderService.sendEnrolmentInvitation(emailCtx);
+                EmailMetaInfo metaInfo = new EmailMetaInfo(recipient, props);
+                deviceManagementProviderService.sendEnrolmentInvitation(metaInfo);
             }
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while inviting user to enrol their device";
