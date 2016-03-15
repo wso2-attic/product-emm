@@ -132,11 +132,13 @@
                                             {{/equal}}
                                             {{#if device.viewModel.BatteryLevel}}
                                                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                                    <div class="wr-stats-board-tile">
-                                                        <div class="tile-name">BATTERY</div>
-                                                        <div>
-                                                            <div class="tile-icon"><i class="fw fw-battery"></i></div>
-                                                            <div class="tile-stats">{{device.viewModel.BatteryLevel}}%</div>
+                                                    <div class="col-md-12">
+                                                        <div class="wr-stats-board-tile">
+                                                            <div class="tile-name">BATTERY</div>
+                                                            <div>
+                                                                <div class="tile-icon"><i class="fw fw-battery"></i></div>
+                                                                <div class="tile-stats">{{device.viewModel.BatteryLevel}}%</div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
