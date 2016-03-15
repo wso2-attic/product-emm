@@ -84,13 +84,16 @@
                     {{#if permissions.VIEW_DASHBOARD}}
                         <li><a href="/emm"><i class="fw fw-dashboard"></i>Admin Dashboard</a></li>
                     {{/if}}
-                    {{#if permissions.LIST_DEVICES}}
+                    {{#if permissions.LIST_DEVICES_ADMIN}}
                         <li><a href="/emm/device-mgt"><i class="fw fw-mobile"></i>Device Management</a></li>
+                    {{else}}
+                        {{#if permissions.LIST_OWN_DEVICES}}
+                            <li><a href="/emm/device-mgt"><i class="fw fw-mobile"></i>Device Management</a></li>
+                        {{/if}}
                     {{/if}}
                     {{#if permissions.LIST_USERS}}
                         <li><a href="/emm/users"><i class="fw fw-user"></i>User Management</a></li>
                     {{/if}}
-
                     {{#if permissions.LIST_ROLES}}
                         <li><a href="/emm/roles"><i class="fw fw-bookmark"></i>Role Management</a></li>
                     {{/if}}
