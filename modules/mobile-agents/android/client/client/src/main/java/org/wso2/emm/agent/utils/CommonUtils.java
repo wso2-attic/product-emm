@@ -78,13 +78,22 @@ public class CommonUtils {
 			apiUtilities.setRequestParams(requestParams);
 		}
 		APIController apiController;
-		String clientKey = Preference.getString(context, Constants.CLIENT_ID);
-		String clientSecret = Preference.getString(context, Constants.CLIENT_SECRET);
-		if (utils.getHostFromPreferences(context) != null && !utils.getHostFromPreferences(context).isEmpty() &&
-		    clientKey != null && !clientKey.isEmpty() && !clientSecret.isEmpty()) {
-			apiController = new APIController(clientKey, clientSecret);
-			apiController.invokeAPI(apiUtilities, apiResultCallBack, requestCode,
-					context.getApplicationContext());
+
+		if (org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE.
+				equals(org.wso2.emm.agent.proxy.utils.Constants.Authenticator.
+						       MUTUAL_SSL_AUTHENTICATOR)) {
+			apiController = new APIController();
+			apiController.securedNetworkCall(apiResultCallBack, requestCode, apiUtilities, context);
+		} else {
+			String clientKey = Preference.getString(context, Constants.CLIENT_ID);
+			String clientSecret = Preference.getString(context, Constants.CLIENT_SECRET);
+			if (utils.getHostFromPreferences(context) != null
+			    && !utils.getHostFromPreferences(context).isEmpty() &&
+			    clientKey != null && !clientKey.isEmpty() && !clientSecret.isEmpty()) {
+				apiController = new APIController(clientKey, clientSecret);
+				apiController.invokeAPI(apiUtilities, apiResultCallBack, requestCode,
+				                        context.getApplicationContext());
+			}
 		}
 
 	}
@@ -188,6 +197,7 @@ public class CommonUtils {
 	 */
 	public static void disableAdmin(Context context) {
 		DevicePolicyManager devicePolicyManager;
+
 		ComponentName demoDeviceAdmin;
 		devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
 		demoDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
@@ -248,10 +258,10 @@ public class CommonUtils {
 	public static void callSystemApp(Context context, String operation, String command) {
 		if(Constants.SYSTEM_APP_ENABLED) {
 			Intent intent = new Intent(Constants.SYSTEM_APP_SERVICE_NAME);
-			intent.putExtra("code", operation);
-			if (command != null) {
-				intent.putExtra("command", command);
-			}
+//			intent.putExtra("code", operation);
+//			if (command != null) {
+//				intent.putExtra("command", command);
+//			}
 			context.startService(intent);
 		} else {
 			Log.e(TAG, "System app not enabled.");

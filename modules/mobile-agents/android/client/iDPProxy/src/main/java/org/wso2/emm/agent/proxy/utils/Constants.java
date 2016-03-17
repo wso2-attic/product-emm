@@ -22,8 +22,37 @@ package org.wso2.emm.agent.proxy.utils;
  * This class holds all the constants used throughout the application.
  */
 public class Constants {
+
+
+	/**
+	 * Authenticators
+	 */
+	public final class Authenticator {
+		private Authenticator(){
+			throw new AssertionError();
+		}
+		public static final String OAUTH_AUTHENTICATOR = "OAUTH_AUTHENTICATOR";
+		public static final String MUTUAL_SSL_AUTHENTICATOR = "MUTUAL_SSL_AUTHENTICATOR";
+		public static final String MUTUAL_AUTH_HEADER = "mutual-auth-header";
+		public static final String MUTUAL_AUTH_HEADER_VALUE = "mutual-auth-enabled";
+		public static final String AUTHENTICATOR_IN_USE = OAUTH_AUTHENTICATOR;
+	}
+
+	/**
+	 * HTTP clients
+	 */
+	public final class HttpClient {
+		private HttpClient(){
+			throw new AssertionError();
+		}
+		public static final String OAUTH_HTTP_CLIENT = "OAUTH_HTTP_CLIENT";
+		public static final String MUTUAL_HTTP_CLIENT = "MUTUAL_HTTP_CLIENT";
+		public static final String HTTP_CLIENT_IN_USE = OAUTH_HTTP_CLIENT;
+	}
+
 	public static final String SERVER_PROTOCOL = "http://";
 	public static final String TRUSTSTORE_PASSWORD = "wso2carbon";
+	public static final String KEYSTORE_PASSWORD = "wso2carbon";
 	public final static int ACCESS_TOKEN_AGE = 3000;
 	public final static String GRANT_TYPE = "grant_type";
 	public final static String GRANT_TYPE_PASSWORD = "password";
@@ -59,4 +88,8 @@ public class Constants {
 	public static final boolean DEBUG_ENABLED = true;
 	public static final int HTTP = 80;
 	public static final int HTTPS = 443;
+	public static final String BKS = "BKS";
+
+
+	public static final int ADD_HEADER_CALLBACK = 5001;
 }

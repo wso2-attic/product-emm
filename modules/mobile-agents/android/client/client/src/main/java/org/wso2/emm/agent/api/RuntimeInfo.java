@@ -52,7 +52,6 @@ public class RuntimeInfo {
         List<Device.Property> properties = new ArrayList<>();
         Device.Property property;
 
-
         for (String topCommandRow : topCommandRows) {
             if (topCommandRow != null && !topCommandRow.isEmpty()) {
                 String[] columns = topCommandRow.split(", ");
@@ -81,11 +80,12 @@ public class RuntimeInfo {
         List<AppData> properties = new ArrayList<>();
         AppData appData;
         Device.Property property;
-
-        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager =
+                (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
         for (String topCommandRow : topCommandRows) {
-            if (topCommandRow != null && !topCommandRow.isEmpty() && !topCommandRow.contains(" root ")) {
+            if (topCommandRow != null && !topCommandRow.isEmpty()
+                && !topCommandRow.contains(" root ")) {
                 String[] columns = topCommandRow.replaceFirst("^\\s*", "").split(" ");
                 String pidColumnValue = columns[0].trim();
 
@@ -102,19 +102,22 @@ public class RuntimeInfo {
                     property.setValue(String.valueOf(columns[0].trim()));
                     appData.addApps(property);
 
-                    int totalPSS = activityManager.getProcessMemoryInfo(new int[]{pid})[0].getTotalPss();
+                    int totalPSS = activityManager.
+                            getProcessMemoryInfo(new int[]{pid})[0].getTotalPss();
                     property = new Device.Property();
                     property.setName(Constants.Device.PSS);
                     property.setValue(String.valueOf(totalPSS));
                     appData.addApps(property);
 
-                    int totalPrivateDirty = activityManager.getProcessMemoryInfo(new int[]{pid})[0].getTotalPrivateDirty();
+                    int totalPrivateDirty = activityManager.
+                            getProcessMemoryInfo(new int[]{pid})[0].getTotalPrivateDirty();
                     property = new Device.Property();
                     property.setName(Constants.Device.USS);
                     property.setValue(String.valueOf(totalPrivateDirty));
                     appData.addApps(property);
 
-                    int totalSharedDirty = activityManager.getProcessMemoryInfo(new int[]{pid})[0].getTotalSharedDirty();
+                    int totalSharedDirty = activityManager.getProcessMemoryInfo(new int[]{pid})[0].
+                            getTotalSharedDirty();
                     property = new Device.Property();
                     property.setName(Constants.Device.SHARED_DIRTY);
                     property.setValue(String.valueOf(totalSharedDirty));

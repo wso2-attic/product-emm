@@ -62,7 +62,7 @@ public class AndroidAPIUtils {
         PrivilegedCarbonContext threadLocalCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         String username = threadLocalCarbonContext.getUsername();
         String tenantDomain = threadLocalCarbonContext.getTenantDomain();
-        if (username.endsWith(tenantDomain)) {
+        if (username != null && username.endsWith(tenantDomain)) {
             return username.substring(0, username.lastIndexOf("@"));
         }
         return username;

@@ -126,4 +126,9 @@
             <class name="org.wso2.mdm.integration.notification.NotificationManagement"/>
         </classes>
     </test>
+    <test name="certificate-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.certificate.CertificateManagement"/>
+        </classes>
+    </test>
 </suite>

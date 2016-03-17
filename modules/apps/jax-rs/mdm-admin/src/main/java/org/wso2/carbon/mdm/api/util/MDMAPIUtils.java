@@ -20,6 +20,7 @@ package org.wso2.carbon.mdm.api.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.certificate.mgt.core.service.CertificateManagementService;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
@@ -43,6 +44,7 @@ import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 /**
@@ -51,6 +53,7 @@ import java.util.List;
 public class MDMAPIUtils {
 
     private static final String NOTIFIER_FREQUENCY = "notifierFrequency";
+    public static final MediaType DEFAULT_CONTENT_TYPE = MediaType.APPLICATION_JSON_TYPE;
 
     private static Log log = LogFactory.getLog(MDMAPIUtils.class);
 
@@ -251,5 +254,32 @@ public class MDMAPIUtils {
         pagingResponse.setDraw(draw);
         pagingResponse.setData(data);
         return pagingResponse;
+    }
+
+    public static CertificateManagementService getCertificateManagementService() {
+
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        CertificateManagementService certificateManagementService = (CertificateManagementService)
+                ctx.getOSGiService(CertificateManagementService.class, null);
+
+        if (certificateManagementService == null) {
+            String msg = "Certificate Management service not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+
+        return certificateManagementService;
+    }
+
+
+    public static MediaType getResponseMediaType(String acceptHeader) {
+        MediaType responseMediaType;
+        if (acceptHeader == null || MediaType.WILDCARD.equals(acceptHeader)) {
+            responseMediaType = DEFAULT_CONTENT_TYPE;
+        } else {
+            responseMediaType = MediaType.valueOf(acceptHeader);
+        }
+
+        return responseMediaType;
     }
 }

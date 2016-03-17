@@ -36,8 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  Network statistics such as connection type and signal details can be fetched
- *  from this class.
+ * Network statistics such as connection type and signal details can be fetched
+ * from this class.
  */
 public class DeviceNetworkStatus extends PhoneStateListener {
 
@@ -45,11 +45,13 @@ public class DeviceNetworkStatus extends PhoneStateListener {
     Context context;
     WifiManager wifiManager;
     private ObjectMapper mapper;
+    NetworkInfo info;
     private static final String TAG = DeviceNetworkStatus.class.getName();
 
     public DeviceNetworkStatus(Context context) {
         this.context = context;
         wifiManager = (WifiManager) this.context.getSystemService(Context.WIFI_SERVICE);
+        info = getNetworkInfo(this.context);
         mapper = new ObjectMapper();
     }
 
@@ -76,6 +78,13 @@ public class DeviceNetworkStatus extends PhoneStateListener {
         this.cellSignalStrength = cellSignalStrength;
     }
 
+    public boolean isConnectedMobile() {
+        if (info.isConnected() && info.getType() == ConnectivityManager.TYPE_MOBILE) {
+            return true;
+        }
+        return false;
+    }
+
     private NetworkInfo getNetworkInfo(Context context) {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -84,11 +93,11 @@ public class DeviceNetworkStatus extends PhoneStateListener {
 
     /**
      * Network data such as  connection type and signal details can be fetched with this method.
+     *
      * @return String representing network details.
      * @throws AndroidAgentException
      */
     public String getNetworkStatus() throws AndroidAgentException {
-        NetworkInfo info = getNetworkInfo(context);
         List<Device.Property> properties = new ArrayList<>();
         Device.Property property = new Device.Property();
         property.setName(Constants.Device.CONNECTION_TYPE);
@@ -142,13 +151,6 @@ public class DeviceNetworkStatus extends PhoneStateListener {
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         return wifiInfo.getSSID();
     }
-
-
-//    DeviceNetworkStatus deviceNetworkStatus = new DeviceNetworkStatus();
-//    if(deviceNetworkStatus.isConnectedMobile()){
-//    telephonyManager = (TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-//    telephonyManager.listen(deviceNetworkStatus,PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-//    }
 
 
 }

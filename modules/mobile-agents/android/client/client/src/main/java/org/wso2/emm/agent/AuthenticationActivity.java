@@ -17,27 +17,6 @@
  */
 package org.wso2.emm.agent;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.wso2.emm.agent.api.DeviceInfo;
-import org.wso2.emm.agent.beans.RegistrationProfile;
-import org.wso2.emm.agent.beans.ServerConfig;
-import org.wso2.emm.agent.proxy.beans.CredentialInfo;
-import org.wso2.emm.agent.proxy.interfaces.APIAccessCallBack;
-import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
-import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
-import org.wso2.emm.agent.proxy.IdentityProxy;
-import org.wso2.emm.agent.services.DynamicClientManager;
-import org.wso2.emm.agent.utils.CommonDialogUtils;
-import org.wso2.emm.agent.utils.Constants;
-import org.wso2.emm.agent.utils.Preference;
-import org.wso2.emm.agent.utils.CommonUtils;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -55,19 +34,43 @@ import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toast;
-
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.wso2.emm.agent.api.DeviceInfo;
+import org.wso2.emm.agent.beans.RegistrationProfile;
+import org.wso2.emm.agent.beans.ServerConfig;
+import org.wso2.emm.agent.proxy.IdentityProxy;
+import org.wso2.emm.agent.proxy.authenticators.AuthenticatorFactory;
+import org.wso2.emm.agent.proxy.authenticators.ClientAuthenticator;
+import org.wso2.emm.agent.proxy.beans.CredentialInfo;
+import org.wso2.emm.agent.proxy.interfaces.APIAccessCallBack;
+import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
+import org.wso2.emm.agent.proxy.interfaces.AuthenticationCallback;
+import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
+import org.wso2.emm.agent.services.DynamicClientManager;
+import org.wso2.emm.agent.utils.CommonDialogUtils;
+import org.wso2.emm.agent.utils.CommonUtils;
+import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Map;
 
 /**
  * Activity that captures username, password and device ownership details 
  * and handles authentication.
  */
 public class AuthenticationActivity extends SherlockActivity implements APIAccessCallBack,
-                                                                        APIResultCallBack {
+                                                                        APIResultCallBack,
+                                                                        AuthenticationCallback{
 	private Button btnRegister;
 	private EditText etUsername;
 	private EditText etDomain;
@@ -79,14 +82,12 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	private String usernameVal;
 	private String passwordVal;
 	private ProgressDialog progressDialog;
+	private LinearLayout loginLayout;
 
-	private static final String MIME_TYPE = "text/html";
-	private static final String ENCODING_METHOD = "utf-8";
-	private static final int DEFAILT_REPEAT_COUNT = 0;
-	private static final int NOTIFIER_CHECK = 2;
-	public static int DEFAULT_INTERVAL = 30000;
+
 	private DeviceInfo deviceInfo;
 	private static final String TAG = AuthenticationActivity.class.getSimpleName();
+	private ClientAuthenticator authenticator;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -98,11 +99,11 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 
 		context = this;
 		deviceInfo = new DeviceInfo(context);
-		deviceType = Constants.OWNERSHIP_BYOD;
 		etDomain = (EditText) findViewById(R.id.etDomain);
 		etUsername = (EditText) findViewById(R.id.etUsername);
 		etPassword = (EditText) findViewById(R.id.etPassword);
 		radioBYOD = (RadioButton) findViewById(R.id.radioBYOD);
+		loginLayout = (LinearLayout) findViewById(R.id.errorLayout);
 		etDomain.setFocusable(true);
 		etDomain.requestFocus();
 		btnRegister = (Button) findViewById(R.id.btnRegister);
@@ -112,7 +113,9 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		// change button color background till user enters a valid input
 		btnRegister.setBackground(getResources().getDrawable(R.drawable.btn_grey));
 		btnRegister.setTextColor(getResources().getColor(R.color.black));
-
+		if(Constants.HIDE_LOGIN_UI) {
+			loginLayout.setVisibility(View.GONE);
+		}
 		etUsername.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -145,6 +148,22 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			}
 		});
 
+		if (org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE.
+				equals(org.wso2.emm.agent.proxy.utils.Constants.Authenticator.
+						       MUTUAL_SSL_AUTHENTICATOR)) {
+			AuthenticatorFactory authenticatorFactory = new AuthenticatorFactory();
+			authenticator = authenticatorFactory.getClient(
+					org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE,
+					AuthenticationActivity.this, Constants.AUTHENTICATION_REQUEST_CODE);
+			authenticator.doAuthenticate();
+		}
+
+		//This is an override to ownership type.
+		if(Constants.DEFAULT_OWNERSHIP != null){
+			deviceType = Constants.DEFAULT_OWNERSHIP;
+			Preference.putString(context, Constants.DEVICE_TYPE, deviceType);
+		}
+
 	}
 
 	private OnClickListener onClickAuthenticate = new OnClickListener() {
@@ -167,6 +186,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 				} else {
 					deviceType = Constants.OWNERSHIP_COPE;
 				}
+
 				
 				showAuthenticationDialog();			
 			} else {
@@ -209,20 +229,16 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 */
 	private void startAuthentication() {
 		Preference.putString(context, Constants.DEVICE_TYPE,
-				deviceType);
+		                     deviceType);
 
 		// Check network connection availability before calling the API.
 		if (CommonUtils.isNetworkAvailable(context)) {
-
 			String clientId = Preference.getString(context, Constants.CLIENT_ID);
 			String clientSecret = Preference.getString(context, Constants.CLIENT_SECRET);
 			String clientName;
+			progressDialog = ProgressDialog.show(context, getResources().getString(R.string.dialog_authenticate), getResources().
+					getString(R.string.dialog_message_please_wait), true);
 
-			progressDialog =
-					ProgressDialog.show(context,
-							getResources().getString(R.string.dialog_authenticate),
-							getResources().getString(R.string.dialog_message_please_wait),
-							true);
 
 			if (clientId == null || clientSecret == null) {
 				try {
@@ -238,7 +254,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 								Preference.putString(context, Constants.CLIENT_NAME, clientName);
 							}
 							if (clientId != null && !clientId.isEmpty() &&
-									clientSecret != null && !clientSecret.isEmpty()) {
+							    clientSecret != null && !clientSecret.isEmpty()) {
 								initializeIDPLib(clientId, clientSecret);
 							}
 						} catch (JSONException e) {
@@ -256,6 +272,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					Log.e(TAG, msg, e);
 					showInternalServerErrorMessage();
 				}
+
 			} else {
 				initializeIDPLib(clientId, clientSecret);
 			}
@@ -353,10 +370,16 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		String licenseAgreedResponse =
 				Preference.getString(context,
 				                     getResources().getString(R.string.shared_pref_isagreed));
-		String type =
+		deviceType =
 				Preference.getString(context, Constants.DEVICE_TYPE);
+		if(deviceType == null) {
+			deviceType = Constants.DEFAULT_OWNERSHIP;
+			Preference.putString(context, Constants.DEVICE_TYPE,
+			                     deviceType);
 
-		if (Constants.OWNERSHIP_BYOD.equals(type.trim())) {
+		}
+
+		if (Constants.OWNERSHIP_BYOD.equals(deviceType.trim())) {
 			if (licenseAgreedResponse == null) {
 
 				OnCancelListener cancelListener = new OnCancelListener() {
@@ -477,7 +500,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 								if(param.getString(context.getString(R.string.shared_pref_config_key)).trim().equals(
 										context.getString(R.string.shared_pref_notifier))){
 									String type = param.getString(context.getString(R.string.shared_pref_config_value)).trim();
-									if(type.equals(String.valueOf(NOTIFIER_CHECK))) {
+									if(type.equals(String.valueOf(Constants.NOTIFIER_CHECK))) {
 										Preference.putString(context, getResources().getString(R.string.shared_pref_notifier),
 										                     Constants.NOTIFIER_GCM);
 									}else{
@@ -525,7 +548,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		Preference.putString(context, getResources().getString(R.string.shared_pref_notifier),
 		                     Constants.NOTIFIER_LOCAL);
 		Preference.putInt(context, getResources().getString(R.string.shared_pref_frequency),
-		                    DEFAULT_INTERVAL);
+		                    Constants.DEFAULT_INTERVAL);
 	}
 
 
@@ -617,7 +640,8 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 
 		WebView webView = (WebView) dialog.findViewById(R.id.webview);
 
-		webView.loadDataWithBaseURL(null, message, MIME_TYPE, ENCODING_METHOD, null);
+		webView.loadDataWithBaseURL(null, message, Constants.MIME_TYPE,
+		                            Constants.ENCODING_METHOD, null);
 
 		Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
 		Button cancelButton = (Button) dialog.findViewById(R.id.dialogButtonCancel);
@@ -648,10 +672,10 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			@Override
 			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 				if (keyCode == KeyEvent.KEYCODE_SEARCH &&
-						event.getRepeatCount() == DEFAILT_REPEAT_COUNT) {
+						event.getRepeatCount() == Constants.DEFAILT_REPEAT_COUNT) {
 					return true;
 				} else if (keyCode == KeyEvent.KEYCODE_BACK &&
-						event.getRepeatCount() == DEFAILT_REPEAT_COUNT) {
+						event.getRepeatCount() == Constants.DEFAILT_REPEAT_COUNT) {
 					return true;
 				}
 				return false;
@@ -859,6 +883,22 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			loadPinCodeActivity();
 		} else {
 			loadRegistrationActivity();
+		}
+	}
+
+	@Override
+	public void onAuthenticated(boolean status, int requestCode) {
+		if (requestCode == Constants.AUTHENTICATION_REQUEST_CODE) {
+			if (status == true &&
+			    org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE.
+					    equals(org.wso2.emm.agent.proxy.utils.Constants.Authenticator.
+							           MUTUAL_SSL_AUTHENTICATOR)) {
+				if(Constants.SKIP_LICENSE){
+					getConfigurationsFromServer();
+				} else {
+					getLicense();
+				}
+			}
 		}
 	}
 }
