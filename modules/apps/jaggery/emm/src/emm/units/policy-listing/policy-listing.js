@@ -1,5 +1,4 @@
 function onRequest(context) {
-    // var log = new Log("policy-listing.js");
     var policyModule = require("/modules/policy.js")["policyModule"];
     var userModule = require("/modules/user.js")["userModule"];
     var response = policyModule.getAllPolicies();
@@ -28,8 +27,11 @@ function onRequest(context) {
         context["noPolicy"] = true;
     }
 
-    if(userModule.isAuthorized("/permission/admin/device-mgt/policies/delete")){
+    if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/remove")) {
         context["removePermitted"] = true;
+    }
+    if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/update")) {
+        context["editPermitted"] = true;
     }
 
     return context;

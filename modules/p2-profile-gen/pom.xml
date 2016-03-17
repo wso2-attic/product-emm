@@ -16,12 +16,11 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>org.wso2.mdm</groupId>
         <artifactId>wso2mdm-parent</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.0.2-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -135,6 +134,9 @@
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.devicemgt:org.wso2.carbon.apimgt.webapp.publisher.feature:${carbon.device.mgt.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.devicemgt:org.wso2.carbon.email.sender.feature:${carbon.device.mgt.version}
                                 </featureArtifactDef>
                                 <!-- End of Device Management Features -->
 
@@ -413,7 +415,10 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.mediation:org.wso2.carbon.mediation.ui.feature:${carbon.mediation.version}
                                 </featureArtifactDef>
-                                <!-- End of Mediation Features -->
+				<featureArtifactDef>
+                                    org.wso2.carbon.mediation:org.wso2.carbon.relay.server.feature:${carbon.mediation.version}
+                                </featureArtifactDef>
+				<!-- End of Mediation Features -->
 
                                 <!-- App Manager features-->
 
@@ -466,9 +471,6 @@
 
                                 <!-- MDM Server Feature -->
 
-                                <featureArtifactDef>
-                                    org.wso2.mdm:org.wso2.mdm.mdmmgt.server.feature:${mdm.version}
-                                </featureArtifactDef>
 
                                 <!-- Cipher tools feature -->
 
@@ -578,6 +580,10 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.device.mgt.oauth.extensions.feature.group</id>
+                                    <version>${carbon.device.mgt.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.email.sender.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
                                 <!-- End of Device Management Features -->
@@ -915,6 +921,10 @@
                                     <id>org.wso2.carbon.mediation.ui.feature.group</id>
                                     <version>${carbon.mediation.version}</version>
                                 </feature>
+				<feature>
+                                    <id>org.wso2.carbon.relay.server.feature.group</id>
+                                    <version>${carbon.mediation.version}</version>
+                                </feature>
                                 <!-- End of Mediation Features -->
 
                                 <!-- App management features-->
@@ -965,10 +975,6 @@
 
                                 <!-- MDM Server Feature -->
                                 <feature>
-                                    <id>org.wso2.mdm.mdmmgt.server.feature.group</id>
-                                    <version>${mdm.version}</version>
-                                </feature>
-                                <feature>
                                     <id>org.wso2.carbon.social.feature.group</id>
                                     <version>${carbon.store.version}</version>
                                 </feature>
@@ -1010,7 +1016,6 @@
 
 
                     <!-- Worker profile creation -->
-
                     <execution>
                         <id>p2-profile-generation-for-worker-profile</id>
                         <phase>package</phase>
@@ -1471,11 +1476,6 @@
 
                                 <!-- End of app management features-->
 
-                                <!-- MDM Server Feature -->
-                                <feature>
-                                    <id>org.wso2.mdm.mdmmgt.server.feature.group</id>
-                                    <version>${mdm.version}</version>
-                                </feature>
                                 <feature>
                                     <id>org.wso2.carbon.social.feature.group</id>
                                     <version>${carbon.store.version}</version>
@@ -1522,9 +1522,8 @@
                         <phase>package</phase>
                         <configuration>
                             <tasks>
-                                <replace token="false" value="true"
-                                         dir="target/wso2carbon-core-${carbon.kernel.version}/repository/components">
-                                    <include name="**/bundles.info"/>
+                                <replace token="false" value="true" dir="target/wso2carbon-core-${carbon.kernel.version}/repository/components">
+                                    <include name="**/bundles.info" />
                                 </replace>
                             </tasks>
                         </configuration>

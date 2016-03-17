@@ -10,9 +10,19 @@
         Loading roles . . .
         <br>
     </div>
-    <span id="role-listing-status-msg"></span>
 
-    <div id="role-table">
+    <div id="role-listing-status" class="raw">
+        <ul style="list-style-type: none;">
+            <li class="message message-info" >
+                <h4>
+                    <i class="icon fw fw-info"></i>
+                    <a id="role-listing-status-msg"></a>
+                </h4>
+            </li>
+        </ul>
+    </div>
+
+    <div id="role-table" data-role={{adminRole}}>
         <table class="table table-striped table-hover list-table display responsive nowrap data-table row-view"
                id="role-grid">
             <thead>

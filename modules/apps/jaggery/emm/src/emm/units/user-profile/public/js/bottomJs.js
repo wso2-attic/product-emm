@@ -31,7 +31,9 @@ $(document).ready(function () {
             }, {});
         }
     });
-    loadDevicesList();
+    if ($("#can-list-devices").val()) {
+        loadDevicesList();
+    }
 });
 
 function loadDevicesList() {
@@ -51,7 +53,9 @@ function loadDevicesList() {
                 var content = template(viewModel);
                 $("#enrolled_devices-container").html(content);
             }
-
+            if (!$("#can-view-devices").val()) {
+                $(".hide-view").remove();
+            }
         };
         invokerUtil.get(serviceURL,
             successCallback, function(message){

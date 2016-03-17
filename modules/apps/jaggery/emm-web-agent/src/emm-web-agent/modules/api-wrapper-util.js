@@ -37,7 +37,7 @@ var apiWrapperUtil = function () {
                 tokenUtil.getTokenWithPasswordGrantType(properties.username, encodeURIComponent(properties.password), encodedClientKeys);
         } else if (type == "saml") {
             tokenPair = tokenUtil.
-                getTokenWithSAMLGrantType(properties.samlToken, encodedClientKeys, "PRODUCTION");
+            getTokenWithSAMLGrantType(properties.samlToken, encodedClientKeys, "PRODUCTION");
         }
         session.put(constants.ACCESS_TOKEN_PAIR_IDENTIFIER, tokenPair);
     };

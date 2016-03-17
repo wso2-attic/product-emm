@@ -7,7 +7,8 @@
         </td>
         <td class="fade-edge remove-padding-top" >{{roleName}}</td>
         <td class="text-right content-fill text-left-on-grid-view no-wrap">
-            {{#unequal "admin" roleName }}
+
+            {{#unequal adminRole roleName }}
             {{#if canEdit}}
                 <a onclick="javascript:loadRoleBasedActionURL('edit-role', '{{roleName}}')" data-role="{{roleName}}" data-click-event="edit-form"
                    class="btn padding-reduce-on-grid-view edit-role-link">
