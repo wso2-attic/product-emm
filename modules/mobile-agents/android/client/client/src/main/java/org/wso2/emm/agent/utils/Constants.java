@@ -47,7 +47,7 @@ public class Constants {
 	public static final String DEFAULT_OWNERSHIP = null;
 	// This is set to overide the server host name retrieveing screen. If overiding is not
 	// needed, set this to null.
-	public static final String DEFAULT_HOST = "http://10.10.10.201:9763";
+	public static final String DEFAULT_HOST = null;
 
 	// TODO: Add API_VERSION to server endpoint
 	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";
