@@ -48,6 +48,7 @@
         <param-name>doAuthentication</param-name>
         <param-value>true</param-value>
     </context-param>
+
     <!--<context-param>-->
     <!--<param-name>managed-api-version</param-name>-->
     <!--<param-value>1.0.0</param-value>-->
@@ -64,14 +65,19 @@
     </context-param-->
 
     <!-- Below configuration is used to redirect http requests to https -->
-    <!--security-constraint>
-        <web-resource-collection>
-            <web-resource-name>MDM-Admin</web-resource-name>
-            <url-pattern>/*</url-pattern>
-        </web-resource-collection>
-        <user-data-constraint>
-            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
-    </security-constraint-->
+    <!--<security-constraint>-->
+        <!--<web-resource-collection>-->
+            <!--<web-resource-name>MDM-Admin</web-resource-name>-->
+            <!--<url-pattern>/*</url-pattern>-->
+        <!--</web-resource-collection>-->
+        <!--<user-data-constraint>-->
+            <!--<transport-guarantee>CONFIDENTIAL</transport-guarantee>-->
+        <!--</user-data-constraint>-->
+    <!--</security-constraint>-->
+
+    <!--&lt;!&ndash; For Mutual SSL enabling, please uncomment login-config and security-constraint tags&ndash;&gt;-->
+    <!--<login-config>-->
+        <!--<auth-method>CLIENT-CERT</auth-method>-->
+    <!--</login-config>-->
 
 </web-app>

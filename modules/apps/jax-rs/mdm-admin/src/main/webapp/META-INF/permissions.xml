@@ -810,6 +810,30 @@
         <url>/configuration</url>
         <method>PUT</method>
     </Permission>
+
     <!-- End of Configuration related APIs -->
 
+    <!-- Certificate related APIs -->
+    <Permission>
+        <name>Save certificate in the database</name>
+        <path>/device-mgt/android/certificate/save</path>
+        <url>/certificates/saveCertificate</url>
+        <method>POST</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get certificate in the database</name>
+        <path>/device-mgt/android/certificate/Get</path>
+        <url>/certificates/*</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get certificate in the database</name>
+        <path>/device-mgt/android/certificate/Get</path>
+        <url>/certificates/*</url>
+        <method>DELETE</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <!-- End of Certificate related APIs -->
 </PermissionConfiguration>

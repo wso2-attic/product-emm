@@ -17,9 +17,6 @@
  */
 package org.wso2.emm.agent.proxy.utils;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.util.Log;
 import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
@@ -32,31 +29,28 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.wso2.emm.agent.proxy.IDPTokenManagerException;
-import org.wso2.emm.agent.proxy.IdentityProxy;
-import org.wso2.emm.agent.proxy.R;
 import org.wso2.emm.agent.proxy.beans.EndPointInfo;
+import org.wso2.emm.agent.proxy.clients.CommunicationClient;
+import org.wso2.emm.agent.proxy.clients.CommunicationClientFactory;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 
-import java.io.*;
-import java.security.*;
-import java.security.cert.CertificateException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
 
 /**
@@ -64,10 +58,10 @@ import java.util.Map.Entry;
  * and authorization server.
  */
 public class ServerUtilities {
-	private final static String PACKAGE_NAME = "org.wso2.emm.agent";
 	private final static String TAG = "ServerUtilities";
 	private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss",
 	                                                                  Locale.getDefault());
+
 
 	/**
 	 * Validate the token expiration date.
@@ -137,7 +131,8 @@ public class ServerUtilities {
         }
 
         Map<String, String> responseParams = new HashMap<String, String>();
-		
+		addHeaders(headers);
+
 		switch (httpMethod) {
 			case GET:
 				responseParams = sendGetRequest(url, headers);
@@ -152,9 +147,7 @@ public class ServerUtilities {
                 responseParams = sendPutRequest(url, params, headers);
 				break;
 		}
-
 		return responseParams;
-
 	}
 
 	public static Map<String, String> sendGetRequest(String url, Map<String, String> headers)
@@ -188,8 +181,23 @@ public class ServerUtilities {
 			Log.e(TAG, errorMsg);
 			throw new IDPTokenManagerException(errorMsg, e);
 		}
-
 		return responseParams;
+	}
+
+	private static void addHeaders(Map<String, String> headers) {
+		CommunicationClientFactory communicationClientFactory = new CommunicationClientFactory();
+		CommunicationClient communicationClient = communicationClientFactory.
+				getClient(Constants.HttpClient.HTTP_CLIENT_IN_USE);
+		if(communicationClient != null) {
+			communicationClient.addAdditionalHeader(headers);
+		}
+	}
+
+	private static HttpClient getCertifiedHttpClient() throws IDPTokenManagerException {
+		CommunicationClientFactory communicationClientFactory = new CommunicationClientFactory();
+		CommunicationClient communicationClient = communicationClientFactory.
+				getClient(Constants.HttpClient.HTTP_CLIENT_IN_USE);
+		return communicationClient.getHttpClient();
 	}
 
     public static Map<String, String> sendDeleteRequest(String url, Map<String, String> headers)
@@ -287,7 +295,7 @@ public class ServerUtilities {
 
         if (params != null) {
             try {
-				httpPut.setEntity(new StringEntity(params));
+	            httpPut.setEntity(new StringEntity(params));
             } catch (UnsupportedEncodingException e) {
                 throw new IDPTokenManagerException("Invalid encoding type.", e);
             }
@@ -330,7 +338,6 @@ public class ServerUtilities {
 		HttpClient httpclient = getCertifiedHttpClient();
 		String payload = buildPayload(params);
 
-
 		if (httpMethod.equals(HTTP_METHODS.POST)) {		
 			HttpPost httpPost = new HttpPost(url);
 			httpPost = (HttpPost) buildHeaders(httpPost, headers);
@@ -364,60 +371,6 @@ public class ServerUtilities {
 			}
 		}
 		return responseParams;
-	}
-
-	public static HttpClient getCertifiedHttpClient() throws IDPTokenManagerException {
-		HttpClient client = null;
-		InputStream inStream = null;
-		try {
-			if (Constants.SERVER_PROTOCOL.equalsIgnoreCase("https://")) {
-				KeyStore localTrustStore = KeyStore.getInstance("BKS");
-				inStream = IdentityProxy.getInstance().getContext().getResources().
-						openRawResource(R.raw.emmtruststore);
-				localTrustStore.load(inStream, Constants.TRUSTSTORE_PASSWORD.toCharArray());
-
-				SchemeRegistry schemeRegistry = new SchemeRegistry();
-				schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), Constants.HTTP));
-				SSLSocketFactory sslSocketFactory = new SSLSocketFactory(localTrustStore);
-				sslSocketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-				schemeRegistry.register(new Scheme("https", sslSocketFactory, Constants.HTTPS));
-				HttpParams params = new BasicHttpParams();
-				ClientConnectionManager connectionManager = new ThreadSafeClientConnManager(params, schemeRegistry);
-
-				client = new DefaultHttpClient(connectionManager, params);
-
-			} else {
-				client = new DefaultHttpClient();
-			}
-
-		} catch (KeyStoreException e) {
-			String errorMsg = "Error occurred while accessing keystore.";
-			Log.e(TAG, errorMsg);
-			throw new IDPTokenManagerException(errorMsg, e);
-		} catch (CertificateException e) {
-			String errorMsg = "Error occurred while loading certificate.";
-			Log.e(TAG, errorMsg);
-			throw new IDPTokenManagerException(errorMsg, e);
-		} catch (NoSuchAlgorithmException e) {
-			String errorMsg = "Error occurred while due to mismatch of defined algorithm.";
-			Log.e(TAG, errorMsg);
-			throw new IDPTokenManagerException(errorMsg, e);
-		} catch (UnrecoverableKeyException e) {
-			String errorMsg = "Error occurred while accessing keystore.";
-			Log.e(TAG, errorMsg);
-			throw new IDPTokenManagerException(errorMsg, e);
-		} catch (KeyManagementException e) {
-			String errorMsg = "Error occurred while accessing keystore.";
-			Log.e(TAG, errorMsg);
-			throw new IDPTokenManagerException(errorMsg, e);
-		} catch (IOException e) {
-            String errorMsg = "Error occurred while loading trust store. ";
-			Log.e(TAG, errorMsg);
-			throw new IDPTokenManagerException(errorMsg, e);
-		} finally {
-			StreamHandlerUtil.closeInputStream(inStream, TAG);
-		}
-		return client;
 	}
 
 	public static String getResponseBody(HttpResponse response) throws IDPTokenManagerException {

@@ -18,6 +18,8 @@
 package org.wso2.emm.agent.services;
 
 import android.content.Context;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -195,6 +197,11 @@ public class DeviceInfoPayload {
         properties.add(property);
 
         DeviceNetworkStatus deviceNetworkStatus = new DeviceNetworkStatus(context);
+        if(deviceNetworkStatus.isConnectedMobile()){
+            TelephonyManager telephonyManager = (TelephonyManager)
+                    context.getSystemService(Context.TELEPHONY_SERVICE);
+            telephonyManager.listen(deviceNetworkStatus, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+        }
 
         property = new Device.Property();
         property.setName(Constants.Device.NETWORK_INFO);
@@ -224,7 +231,7 @@ public class DeviceInfoPayload {
         batteryProperties.add(property);
 
         property = new Device.Property();
-        property.setName(Constants.Device.VOLTAGE);
+        property.setName(Constants.Device.BATTERY_VOLTAGE);
         property.setValue(String.valueOf(power.getVoltage()));
         batteryProperties.add(property);
 

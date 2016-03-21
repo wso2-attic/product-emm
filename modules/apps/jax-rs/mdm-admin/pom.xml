@@ -169,6 +169,11 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.devicemgt</groupId>
+            <artifactId>org.wso2.carbon.certificate.mgt.core</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 </project>

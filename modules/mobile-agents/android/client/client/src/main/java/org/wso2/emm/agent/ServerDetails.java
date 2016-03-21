@@ -34,7 +34,11 @@ import android.widget.Toast;
 
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.api.DeviceState;
+<<<<<<< HEAD
 import org.wso2.emm.agent.services.managedProfileServices.AlreadyEnabledActivity;
+=======
+import org.wso2.emm.agent.utils.CommonUtils;
+>>>>>>> 29e0f9a23fd7bf69ab854a74777853c1c3f2f95f
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.Response;
@@ -68,12 +72,20 @@ public class ServerDetails extends Activity {
 		btnStartRegistration.setTextColor(getResources().getColor(R.color.black));
 		Response deviceCompatibility = state.evaluateCompatibility();
 
+<<<<<<< HEAD
 		if (!deviceCompatibility.getCode()) {
 			txtSeverAddress.setText(deviceCompatibility.getDescriptionResourceID());
+=======
+		CommonUtils.callSystemApp(this,"sd","werwe");
+
+		if (!compatibility.getCode()) {
+			txtSeverAddress.setText(compatibility.getDescriptionResourceID());
+>>>>>>> 29e0f9a23fd7bf69ab854a74777853c1c3f2f95f
 			btnStartRegistration.setVisibility(View.GONE);
 			txtSeverAddress.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.GONE);
 		} else {
+<<<<<<< HEAD
             DevicePolicyManager manager = (DevicePolicyManager)
                     getSystemService(Context.DEVICE_POLICY_SERVICE);
             /*if (androidForWorkCompatibility == Response.ANDROID_FOR_WORK_COMPATIBLE && manager.
@@ -130,6 +142,60 @@ public class ServerDetails extends Activity {
             }
         //}
     }
+=======
+
+			btnStartRegistration.setVisibility(View.VISIBLE);
+			evServerIP.setVisibility(View.VISIBLE);
+			String ipSaved =
+					Preference.getString(context.getApplicationContext(), Constants.IP);
+			if (Constants.DEFAULT_HOST != null){
+				ipSaved = Constants.DEFAULT_HOST;
+				saveHostDeatils(ipSaved);
+			}
+
+			// check if we have the IP saved previously.
+			if (ipSaved != null && !ipSaved.isEmpty()) {
+				evServerIP.setText(ipSaved);
+				startAuthenticationActivity();
+			} else {
+				evServerIP.setText(ipSaved);
+			}
+
+			String deviceActive = Preference.getString(context, context.getResources().
+					getString(R.string.shared_pref_device_active));
+
+			if (deviceActive != null && deviceActive.equals(context.getResources().
+					getString(R.string.shared_pref_reg_success))) {
+				Intent intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			}
+
+			evServerIP.addTextChangedListener(new TextWatcher() {
+				@Override
+				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				}
+
+				@Override
+				public void onTextChanged(CharSequence s, int start, int before, int count) {
+					enableSubmitIfReady();
+				}
+
+				@Override
+				public void afterTextChanged(Editable s) {
+					enableSubmitIfReady();
+				}
+			});
+			// on click handler for start registration.
+			btnStartRegistration.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					loadStartRegistrationDialog();
+				}
+			});
+		}
+	}
+>>>>>>> 29e0f9a23fd7bf69ab854a74777853c1c3f2f95f
 
 	/**
 	 * Validation done to see if the server IP field is properly
@@ -176,28 +242,7 @@ public class ServerDetails extends Activity {
 				case DialogInterface.BUTTON_POSITIVE:
 					if (!evServerIP.getText().toString().trim().isEmpty()) {
 						String host = evServerIP.getText().toString().trim();
-                        if (host.indexOf(PROTOCOL_HTTP) > -1) {
-	                        String hostWithPort = host.substring(PROTOCOL_HTTP.length(), host.length());
-	                        Preference.putString(context.getApplicationContext(), Constants.IP,
-	                                             getHostFromUrl(hostWithPort));
-	                        Preference.putString(context.getApplicationContext(), Constants.PROTOCOL, PROTOCOL_HTTP);
-	                        Preference.putString(context.getApplicationContext(), Constants.PORT,
-	                                             getPortFromUrl(hostWithPort));
-                        } else if (host.indexOf(PROTOCOL_HTTPS) > -1) {
-	                        String hostWithPort = host.substring(PROTOCOL_HTTPS.length(), host.length());
-	                        Preference.putString(context.getApplicationContext(), Constants.IP,
-	                                             getHostFromUrl(hostWithPort));
-	                        Preference.putString(context.getApplicationContext(), Constants.PROTOCOL, PROTOCOL_HTTPS);
-	                        Preference.putString(context.getApplicationContext(), Constants.PORT,
-	                                             getPortFromUrl(hostWithPort));
-                        } else if (host.indexOf(COLON) > -1) {
-	                        Preference.putString(context.getApplicationContext(), Constants.IP,
-	                                             getHostFromUrl(host));
-	                        Preference.putString(context.getApplicationContext(), Constants.PORT,
-	                                             getPortFromUrl(host));
-                        } else {
-	                        Preference.putString(context.getApplicationContext(), Constants.IP, host);
-                        }
+						saveHostDeatils(host);
 
 						startAuthenticationActivity();
 					} else {
@@ -217,6 +262,31 @@ public class ServerDetails extends Activity {
 			}
 		}
 	};
+
+	private void saveHostDeatils(String host){
+		if (host.indexOf(PROTOCOL_HTTP) > -1) {
+			String hostWithPort = host.substring(PROTOCOL_HTTP.length(), host.length());
+			Preference.putString(context.getApplicationContext(), Constants.IP,
+			                     getHostFromUrl(hostWithPort));
+			Preference.putString(context.getApplicationContext(), Constants.PROTOCOL, PROTOCOL_HTTP);
+			Preference.putString(context.getApplicationContext(), Constants.PORT,
+			                     getPortFromUrl(hostWithPort));
+		} else if (host.indexOf(PROTOCOL_HTTPS) > -1) {
+			String hostWithPort = host.substring(PROTOCOL_HTTPS.length(), host.length());
+			Preference.putString(context.getApplicationContext(), Constants.IP,
+			                     getHostFromUrl(hostWithPort));
+			Preference.putString(context.getApplicationContext(), Constants.PROTOCOL, PROTOCOL_HTTPS);
+			Preference.putString(context.getApplicationContext(), Constants.PORT,
+			                     getPortFromUrl(hostWithPort));
+		} else if (host.indexOf(COLON) > -1) {
+			Preference.putString(context.getApplicationContext(), Constants.IP,
+			                     getHostFromUrl(host));
+			Preference.putString(context.getApplicationContext(), Constants.PORT,
+			                     getPortFromUrl(host));
+		} else {
+			Preference.putString(context.getApplicationContext(), Constants.IP, host);
+		}
+	}
 
 	private String getHostFromUrl (String url) {
 		if (url.indexOf(COLON) > -1) {
