@@ -56,7 +56,7 @@ public class MessageProcessor implements APIResultCallBack {
 	private String deviceId;
 	private static final String DEVICE_ID_PREFERENCE_KEY = "deviceId";
 	private static List<org.wso2.emm.agent.beans.Operation> replyPayload;
-	private org.wso2.emm.agent.services.Operation operation;
+	private OperationProcessor operation;
 	private ObjectMapper mapper;
 	private boolean isWipeTriggered = false;
 	private boolean isRebootTriggered = false;
@@ -76,7 +76,7 @@ public class MessageProcessor implements APIResultCallBack {
 		this.context = context;
 
 		deviceId = Preference.getString(context, DEVICE_ID_PREFERENCE_KEY);
-		operation = new org.wso2.emm.agent.services.Operation(context.getApplicationContext());
+		operation = new OperationProcessor(context.getApplicationContext());
 		mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);

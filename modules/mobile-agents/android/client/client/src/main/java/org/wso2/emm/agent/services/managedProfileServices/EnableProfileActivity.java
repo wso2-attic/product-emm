@@ -66,7 +66,8 @@ public class EnableProfileActivity extends Activity {
         manager.setProfileName(componentName, "WSO2-EMM");
         // Enable the profile here.
         manager.setProfileEnabled(componentName);
-        setAppEnabled("com.android.providers.settings", true);
+        setAppEnabled("com.google.android.GoogleCamera", true);
+
     }
 
     /**
