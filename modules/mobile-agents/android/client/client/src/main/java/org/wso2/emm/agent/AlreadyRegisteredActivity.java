@@ -19,12 +19,7 @@ package org.wso2.emm.agent;
 
 import java.util.Map;
 
-<<<<<<< HEAD
-=======
-import android.app.Activity;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
->>>>>>> 29e0f9a23fd7bf69ab854a74777853c1c3f2f95f
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
@@ -124,17 +119,12 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		txtRegText = (TextView) findViewById(R.id.txtRegText);
 		btnUnregister = (Button) findViewById(R.id.btnUnreg);
-<<<<<<< HEAD
-        btnUnregister.setTag(TAG_BTN_UNREGISTER);
-        btnUnregister.setOnClickListener(onClickListenerButtonClicked);
-=======
 		btnUnregister.setTag(TAG_BTN_UNREGISTER);
 		btnUnregister.setOnClickListener(onClickListenerButtonClicked);
 		unregisterLayout = (RelativeLayout) findViewById(R.id.unregisterLayout);
 		if(Constants.HIDE_UNREGISTER_BUTTON){
 			unregisterLayout.setVisibility(View.GONE);
 		}
->>>>>>> 29e0f9a23fd7bf69ab854a74777853c1c3f2f95f
 	}
 
 	private DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
