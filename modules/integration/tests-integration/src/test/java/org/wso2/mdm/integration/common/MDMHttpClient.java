@@ -27,13 +27,10 @@ import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.automation.engine.context.AutomationContext;
-import org.wso2.carbon.automation.engine.context.TestUserMode;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**

@@ -47,6 +47,9 @@ public class APIController implements TokenCallBack {
 		this.clientSecret = clientSecret;
 	}
 
+	public APIController() {
+	}
+
 	/**
 	 * Invoking an API using retrieved token.
 	 *
@@ -127,6 +130,64 @@ public class APIController implements TokenCallBack {
 		@Override
 		protected void onPostExecute(Map<String, String> result) {
             apiResultCallBack.onReceiveAPIResult(result, IdentityProxy.getInstance().getRequestCode());
+		}
+	}
+
+	public void securedNetworkCall(APIResultCallBack callback, int licenseRequestCode,
+	                               EndPointInfo apiUtilities, Context context) {
+
+		if (IdentityProxy.getInstance().getContext() == null) {
+			IdentityProxy.getInstance().setContext(context);
+		}
+
+		IdentityProxy.getInstance().setRequestCode(licenseRequestCode);
+		new SecuredNetworkCallTask(callback,licenseRequestCode).execute(apiUtilities);
+	}
+
+	public class SecuredNetworkCallTask extends AsyncTask<EndPointInfo, Void, Map<String, String>> {
+		APIResultCallBack apiResultCallBack;
+		int requestCode;
+
+		public SecuredNetworkCallTask(APIResultCallBack apiResultCallBack, int requestCode) {
+			this.apiResultCallBack = apiResultCallBack;
+			this.requestCode = requestCode;
+		}
+
+		@Override
+		protected Map<String, String> doInBackground(EndPointInfo... params) {
+			EndPointInfo endPointInfo = params[0];
+
+			Map<String, String> responseParams = null;
+			Map<String, String> headers = new HashMap<String, String>();
+			headers.put("Content-Type", "application/json");
+			headers.put("Accept", "*/*");
+			headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
+
+			try {
+				responseParams = ServerUtilities.postData(endPointInfo, headers);
+				if (Constants.DEBUG_ENABLED) {
+					Iterator<Map.Entry<String, String>> iterator = responseParams.entrySet().iterator();
+					while (iterator.hasNext()) {
+						Map.Entry<String, String> respParams = iterator.next();
+						StringBuilder paras = new StringBuilder();
+						paras.append("response-params: key:");
+						paras.append(respParams.getKey());
+						paras.append(", value:");
+						paras.append(respParams.getValue());
+						Log.d(TAG, paras.toString());
+					}
+				}
+
+			} catch (IDPTokenManagerException e) {
+				Log.e(TAG, "Failed to contact server." + e);
+			}
+
+			return responseParams;
+		}
+
+		@Override
+		protected void onPostExecute(Map<String, String> result) {
+			apiResultCallBack.onReceiveAPIResult(result, requestCode);
 		}
 	}
 

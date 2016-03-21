@@ -73,7 +73,7 @@ var operationModule = function () {
     publicMethods.getIOSServiceEndpoint = function (operationCode) {
         var featureMap = {
             "DEVICE_LOCK": "lock",
-            "ALARM": "alarm",
+            "RING": "ring",
             "LOCATION": "location",
             "NOTIFICATION": "notification",
             "AIR_PLAY": "airplay",
@@ -910,7 +910,7 @@ var operationModule = function () {
             "LOCATION": "fw-map-location",
             "ENTERPRISE_WIPE": "fw-clear",
             "NOTIFICATION": "fw-message",
-            "ALARM": "fw-dial-up"
+            "RING": "fw-dial-up"
         };
         return featureMap[operationCode];
     };
@@ -1133,7 +1133,7 @@ var operationModule = function () {
                 } else if (operationDataObj.is("select")) {
                     operationDataObj.val(value);
                     /* trigger a change of value, so that if slidable panes exist,
-                    make them slide-down or slide-up accordingly */
+                     make them slide-down or slide-up accordingly */
                     operationDataObj.trigger("change");
                 } else if (operationDataObj.is("button")) {
                     if(value == "Black List "){

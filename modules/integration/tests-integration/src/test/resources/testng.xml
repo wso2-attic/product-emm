@@ -86,11 +86,11 @@
             <class name="org.wso2.mdm.integration.mobileDevice.OracleMobileDeviceManagement"/>
         </classes>
     </test>
-    <test name="user-mgt" preserve-order="true" parallel="false">
-        <classes>
-            <class name="org.wso2.mdm.integration.user.UserManagement"/>
-        </classes>
-    </test>
+    <!--<test name="user-mgt" preserve-order="true" parallel="false">-->
+        <!--<classes>-->
+            <!--<class name="org.wso2.mdm.integration.user.UserManagement"/>-->
+        <!--</classes>-->
+    <!--</test>-->
     <test name="role-mgt" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.mdm.integration.role.RoleManagement"/>
@@ -124,6 +124,11 @@
     <test name="notification-mgt" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.mdm.integration.notification.NotificationManagement"/>
+        </classes>
+    </test>
+    <test name="certificate-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.certificate.CertificateManagement"/>
         </classes>
     </test>
 </suite>

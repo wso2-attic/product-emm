@@ -26,7 +26,7 @@ public class Constants {
 	public static final boolean DEBUG_MODE_ENABLED = false;
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
-	public static final boolean SYSTEM_APP_ENABLED = false;
+	public static final boolean SYSTEM_APP_ENABLED = true;
 	public static final String SYSTEM_APP_SERVICE_NAME = "org.wso2.emm.system.service.START_SERVICE";
 	public static final String GCM_PROJECT_NUMBER = "GOOGLE-API-PROJECT-NUMBER";
 	public static final String REG_ID = "gcm_reg_id";
@@ -37,6 +37,17 @@ public class Constants {
 	public static final String SERVER_PROTOCOL = "http://";
 	public static final String API_VERSION = "1.0.0/";
 	public static final String API_SERVER_PORT = "80";
+	public static final String OWNERSHIP_BYOD = "BYOD";
+	public static final String OWNERSHIP_COPE = "COPE";
+	public static final boolean SKIP_LICENSE = false;
+	public static final boolean HIDE_LOGIN_UI = false;
+	public static final boolean HIDE_UNREGISTER_BUTTON = false;
+	// Set DEFAULT_OWNERSHIP to null if no overiding is needed. Other possible values are,
+	// OWNERSHIP_BYOD or OWNERSHIP_COPE
+	public static final String DEFAULT_OWNERSHIP = null;
+	// This is set to overide the server host name retrieveing screen. If overiding is not
+	// needed, set this to null.
+	public static final String DEFAULT_HOST = null;
 
 	// TODO: Add API_VERSION to server endpoint
 	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";
@@ -76,8 +87,6 @@ public class Constants {
 	public static final String LOCAL = "LOCAL";
 	public static final String LOG_FILE = "wso2log.txt";
 	public static final String MESSAGE_TYPE_GCM = "gcm";
-	public static final String OWNERSHIP_BYOD = "BYOD";
-	public static final String OWNERSHIP_COPE = "COPE";
 	public static final String DEVICE_TYPE = "deviceType";
 	public static final String CLIENT_ID = "client_id";
 	public static final String CLIENT_SECRET = "client_secret";
@@ -105,6 +114,7 @@ public class Constants {
 	public static final int GCM_REGISTRATION_ID_SEND_CODE = 308;
 	public static final int POLICY_REQUEST_CODE = 309;
 	public static final int CONFIGURATION_REQUEST_CODE = 310;
+	public static final int AUTHENTICATION_REQUEST_CODE = 311;
 
 	/**
 	 * Google API project id registered to use GCM.
@@ -144,6 +154,12 @@ public class Constants {
 		public static final String AUTHENTICATION_FAILED = "400";
 		public static final String INTERNAL_SERVER_ERROR = "500";
 	}
+
+	public static final String MIME_TYPE = "text/html";
+	public static final String ENCODING_METHOD = "utf-8";
+	public static final int DEFAILT_REPEAT_COUNT = 0;
+	public static int DEFAULT_INTERVAL = 30000;
+	public static final int NOTIFIER_CHECK = 2;
 
 
 	/**
@@ -223,7 +239,7 @@ public class Constants {
 		public static final String AVAILABLE_MEMORY = "AVAILABLE_MEMORY";
 		public static final String BATTERY_INFO = "BATTERY_INFO";
 		public static final String SCALE = "SCALE";
-		public static final String VOLTAGE = "VOLTAGE";
+		public static final String BATTERY_VOLTAGE = "BATTERY_VOLTAGE";
 		public static final String TEMPERATURE = "TEMPERATURE";
 		public static final String CURRENT_AVERAGE = "CURRENT_AVERAGE";
 		public static final String TECHNOLOGY = "TECHNOLOGY";

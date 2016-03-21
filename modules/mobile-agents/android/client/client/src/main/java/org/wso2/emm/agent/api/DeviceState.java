@@ -49,7 +49,7 @@ public class DeviceState {
     public static final String USB = "USB";
     public static final String AC = "AC";
     public static final String TECHNOLOGY = "TECHNOLOGY";
-    public static final String VOLTAGE = "VOLTAGE";
+    public static final String VOLTAGE = "BATTERY_VOLTAGE";
     public static final String TEMPERATURE = "TEMPERATURE";
     public static final String CURRENT_AVG = "CURRENT_AVG";
     public static final String HEALTH = "HEALTH";
@@ -274,7 +274,6 @@ public class DeviceState {
      */
     private String getStatus(int status) {
         String statusString = UNKNOWN;
-
         switch (status) {
             case BatteryManager.BATTERY_STATUS_CHARGING:
                 statusString = CHARGING;

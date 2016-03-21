@@ -107,17 +107,67 @@ var updateGroupedInputVisibility = function (domElement) {
     }
 };
 
+var validateInline = {};
+var clearInline = {};
+
+var enableInlineError = function (inputField, errorMsg, errorSign) {
+    var fieldIdentifier = "#" + inputField;
+    var errorMsgIdentifier = "#" + inputField + " ." + errorMsg;
+    var errorSignIdentifier = "#" + inputField + " ." + errorSign;
+
+    if (inputField) {
+        $(fieldIdentifier).addClass(" has-error has-feedback");
+    }
+
+    if (errorMsg) {
+        $(errorMsgIdentifier).removeClass(" hidden");
+    }
+
+    if (errorSign) {
+        $(errorSignIdentifier).removeClass(" hidden");
+    }
+};
+
+var disableInlineError = function (inputField, errorMsg, errorSign) {
+    var fieldIdentifier = "#" + inputField;
+    var errorMsgIdentifier = "#" + inputField + " ." + errorMsg;
+    var errorSignIdentifier = "#" + inputField + " ." + errorSign;
+
+    if (inputField) {
+        $(fieldIdentifier).removeClass(" has-error has-feedback");
+    }
+
+    if (errorMsg) {
+        $(errorMsgIdentifier).addClass(" hidden");
+    }
+
+    if (errorSign) {
+        $(errorSignIdentifier).addClass(" hidden");
+    }
+};
+
+/**
+ *clear inline validation messages.
+ */
+clearInline["policy-name"] = function () {
+    disableInlineError("plicynameField", "nameEmpty", "nameError");
+};
+
+
+/**
+ * Validate if provided policy name is valid against RegEx configures.
+ */
 validateInline["policy-name"] = function () {
     var policyName = $("input#policy-name-input").val();
     if (policyName && inputIsValidAgainstLength(policyName, 1, 30)) {
-        $("#policyNameValidationText").removeClass("inline-warning");
+        disableInlineError("plicynameField", "nameEmpty", "nameError");
     } else {
-        $("#policyNameValidationText").addClass("inline-warning");
+        enableInlineError("plicynameField", "nameEmpty", "nameError");
     }
 };
 
 $("#policy-name-input").focus(function(){
-    $("#policyNameValidationText").removeClass("inline-warning");
+    clearInline["policy-name"]();
 });
 
 $("#policy-name-input").blur(function(){
@@ -2141,7 +2191,7 @@ $(document).ready(function () {
             promptErrorPolicyPlatform("You need to configure Windows plugging in order to use windows related feature.");
         });
     }
-    var iosLink = $(".windows-platform");
+    var iosLink = $(".ios-platform");
     if (isIosEnabled) {
         iosLink.attr("data-platform-id",iosID);
     } else {

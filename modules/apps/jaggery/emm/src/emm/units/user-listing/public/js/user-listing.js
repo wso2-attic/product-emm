@@ -221,7 +221,12 @@ $("#search-btn").click(function () {
  * initial mode and with out select mode.
  */
 function InitiateViewOption() {
-    $(location).attr('href', $(this).data("url"));
+    if ($("#can-view").val()) {
+        $(location).attr('href', $(this).data("url"));
+    } else {
+        $(modalPopupContent).html($('#errorUserView').html());
+        showPopup();
+    }
 }
 
 function loadUsers(searchParam) {
@@ -255,7 +260,7 @@ function loadUsers(searchParam) {
                     viewModel.users[i].canEdit = true;
                 }
                 if (canResetPassword) {
-                    viewModel.users[i].canEdit = true;
+                    viewModel.users[i].canResetPassword = true;
                 }
                 viewModel.users[i].adminUser = $("#user-table").data("user");
             }
@@ -292,4 +297,7 @@ $(document).ready(function () {
     $(".viewEnabledIcon").click(function () {
         InitiateViewOption();
     });
+    if (!$("#can-invite").val()) {
+        $("#invite-user-button").remove();
+    }
 });

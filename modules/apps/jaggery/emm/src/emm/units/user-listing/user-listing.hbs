@@ -7,6 +7,12 @@
         {{#if editPermitted}}
             <input type="hidden" id="can-edit" value="true"/>
         {{/if}}
+        {{#if viewPermitted}}
+            <input type="hidden" id="can-view" value="true"/>
+        {{/if}}
+        {{#if invitePermitted}}
+            <input type="hidden" id="can-invite" value="true"/>
+        {{/if}}
         {{#if resetPasswordPermitted}}
             <input type="hidden" id="can-reset-password" value="true"/>
         {{/if}}
@@ -15,7 +21,18 @@
         Loading users . . .
         <br>
     </div>
-    <span id="user-listing-status-msg"></span>
+
+    <div id="user-listing-status" class="raw hidden">
+        <ul style="list-style-type: none;">
+            <li class="message message-info" >
+                <h4>
+                    <i class="icon fw fw-info"></i>
+                    <a id="user-listing-status-msg"></a>
+                </h4>
+            </li>
+        </ul>
+    </div>
+
     <div id="user-table" data-user={{adminUser}}>
         <table class="table table-striped table-hover list-table display responsive nowrap data-table grid-view"
                id="user-grid">
@@ -41,7 +58,7 @@
                     </button>
                 </th>
             </tr>
-            <tr class="bulk-action-row">
+            <tr class="bulk-action-row" id="invite-user-button">
                 <th colspan="5">
                     <ul class="tiles">
                         <li class="square">
@@ -193,6 +210,22 @@
                             Ok
                         </a>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="errorUserView" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>
+                        <span class="fw-stack">
+                            <i class="fw fw-ring fw-stack-2x"></i>
+                            <i class="fw fw-error fw-stack-1x"></i>
+                        </span>
+                        Unauthorized action!
+                    </h3>
                 </div>
             </div>
         </div>

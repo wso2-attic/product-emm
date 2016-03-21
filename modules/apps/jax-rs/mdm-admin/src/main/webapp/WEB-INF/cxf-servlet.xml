@@ -105,6 +105,15 @@
             <ref bean="errorHandler"/>
         </jaxrs:providers>
     </jaxrs:server>
+    <jaxrs:server id="certificateService" address="/certificates">
+        <jaxrs:serviceBeans>
+            <ref bean="certificateServiceBean"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+            <ref bean="errorHandler"/>
+        </jaxrs:providers>
+    </jaxrs:server>
     <jaxrs:server id="notificationService" address="/notifications">
         <jaxrs:serviceBeans>
             <ref bean="notificationServiceBean"/>
@@ -133,6 +142,7 @@
     <bean id="configurationServiceBean" class="org.wso2.carbon.mdm.api.Configuration"/>
     <bean id="notificationServiceBean" class="org.wso2.carbon.mdm.api.DeviceNotification"/>
     <bean id="licenseServiceBean" class="org.wso2.carbon.mdm.api.License"/>
+    <bean id="certificateServiceBean" class="org.wso2.carbon.mdm.api.Certificate"/>
     <!--
     <bean id="authenticationServiceBean" class="org.wso2.carbon.mdm.api.Authentication"/>
     -->
