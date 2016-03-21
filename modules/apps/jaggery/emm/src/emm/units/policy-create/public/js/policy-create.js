@@ -138,29 +138,11 @@ stepForwardFrom["policy-platform"] = function (actionButton) {
     setTimeout(
         function () {
             $.template(hiddenOperationsByDeviceTypeCacheKey, hiddenOperationsByDeviceTypeSrc, function (template) {
-                var serviceURL = "/mdm-admin/roles/primary";
-
-                var successCallback = function (data) {
-
-                    data = JSON.parse(data);
-                    data = data.responseContent;
-                    var viewModel = {};
-                    viewModel.roles = data;
-                    var content = template(viewModel);
-                    $(".wr-advance-operations").html(content);
-                    $(".wr-advance-operations li.grouped-input").each(function () {
-                        updateGroupedInputVisibility(this);
-                    });
-                    $("#roles").select2();
-
-                };
-
-                invokerUtil.get(serviceURL,
-                    successCallback,
-                    function (message) {
-                        console.log("failed...!!");
-                    }
-                );
+                var content = template();
+                $(".wr-advance-operations").html(content);
+                $(".wr-advance-operations li.grouped-input").each(function () {
+                    updateGroupedInputVisibility(this);
+                });
             });
         },
         250 // time delayed for the execution of above function, 250 milliseconds
@@ -324,10 +306,13 @@ validateStep["policy-profile"] = function () {
             if ($.inArray(androidOperationConstants["APPLICATION_OPERATION_CODE"], configuredOperations) != -1){
                 operation = androidOperationConstants["APPLICATION_OPERATION"];
 
+                var whiteListEnabled = $("#white-list-enabled").is(":checked");
+                var whiteListStoreLoc = $("#app-store-location").val();
+
                 if($("button.dropdown-toggle").text().trim() == "Black List" && $('table.black-list tbody tr').length > 0){
                     continueToCheckNextInputs = true;
                 }
-                else if($("button.dropdown-toggle").text().trim() == "White List" && $('table.white-list tbody tr').length > 0){
+                else if($("button.dropdown-toggle").text().trim() == "White List" && whiteListEnabled && whiteListStoreLoc){
                     continueToCheckNextInputs = true;
                 }
                 else{
@@ -1846,7 +1831,7 @@ stepForwardFrom["policy-naming-publish"] = function () {
     policy["description"] = $("#policy-description-input").val();
     //All data is collected. Policy can now be updated.
     savePolicy(policy, "/mdm-admin/policies/active-policy");
-    appRestrictionInStoreByRole(policy);
+    //appRestrictionInStoreByRole(policy);
 
 };
 stepForwardFrom["policy-naming"] = function () {
@@ -2113,6 +2098,19 @@ var searchAndFade = function(keyWord){
     });
 }
 
+var addDeleteButton = function(){
+     return "<td>"+
+        "<a class='row-delete'>"+
+        "<span class='fw-stack'>"+
+        "<i class='fw fw-ring fw-stack-2x'></i>"+
+        "<i class='fw fw-delete fw-stack-1x'></i>"+
+        "</span>"+
+        "<span class='hidden-xs hidden-on-grid-view'>Delete</span>"+
+        "</a>"+
+        "</td>";
+
+}
+
 $(document).ready(function () {
     var enabledPlatforms = $("#supportedPlatforms");
     var isAndroidEnabled = enabledPlatforms.data("android");
@@ -2328,14 +2326,16 @@ $(document).ready(function () {
             $("#app-list-add-widget").removeClass("hidden");
             if(selText == "Black List"){
                 $("#searchable-container_black_list").removeClass("hidden");
-                $("#searchable-container_white_list").addClass("hidden");
-                $(".user-role").addClass("hidden");
-
+                $("#search-on-app-store").removeClass("hidden");
+                $("#white-list-options").addClass("hidden");
+                $("#white-list-enabled").removeAttr("checked");
+                $("#app-store-location").val("");
             }
             else if(selText == "White List"){
                 $("#searchable-container_black_list").addClass("hidden");
-                $("#searchable-container_white_list").removeClass("hidden");
-                $(".user-role").removeClass("hidden");
+                $("#search-on-app-store").addClass("hidden");
+                $("#white-list-options").removeClass("hidden");
+                $(".black-list > tbody").html("");
 
             }
 
@@ -2344,18 +2344,11 @@ $(document).ready(function () {
                 if(packageName == "" | packageName == null){
                     return;
                 }
-                var rolesList = $("#roles").val();
-                if(rolesList == null){
-                    rolesList = "ANY";
-                }
 
                 var application_index = $('th:contains("Application")').index();
                 var has_duplicate = false;
                 if(selText == "Black List"){
                     check_for_duplicates("black-list");
-                }
-                else if(selText == "White List"){
-                    check_for_duplicates("white-list");
                 }
 
 
@@ -2373,34 +2366,23 @@ $(document).ready(function () {
                     return;
                 }
 
-                var deleteButton = "<td>"+
-                    "<a class='row-delete'>"+
-                    "<span class='fw-stack'>"+
-                    "<i class='fw fw-ring fw-stack-2x'></i>"+
-                    "<i class='fw fw-delete fw-stack-1x'></i>"+
-                    "</span>"+
-                    "<span class='hidden-xs hidden-on-grid-view'>Delete</span>"+
-                    "</a>"+
-                    "</td>";
+                //var deleteButton = "<td>"+
+                //    "<a class='row-delete'>"+
+                //    "<span class='fw-stack'>"+
+                //    "<i class='fw fw-ring fw-stack-2x'></i>"+
+                //    "<i class='fw fw-delete fw-stack-1x'></i>"+
+                //    "</span>"+
+                //    "<span class='hidden-xs hidden-on-grid-view'>Delete</span>"+
+                //    "</a>"+
+                //    "</td>";
 
                 if(selText == "Black List"){
                     var new_table_row = "<tr>"+
-                        "<td>"+packageName+"</td>"+deleteButton+"</tr>";
+                        "<td>"+packageName+"</td>"+addDeleteButton()+"</tr>";
                     $('#searchable-container_black_list > table > tbody').append(new_table_row);
-                }
-                else if(selText == "White List"){
-                    var new_table_row = "<tr>"+
-                        "<td>"+packageName+"</td>"+
-                        "<td>"+rolesList+"</td>"+deleteButton+"</tr>";
-
-                    $('#searchable-container_white_list > table > tbody').append(new_table_row);
-
                 }
 
                 $("#app-select").select2("val", "");
-                $("#userStore").prop("disabled", true);
-                $("#roles").select2("val", "");
-                $("#roles").prop("disabled", true);
 
             });
         });
@@ -2442,7 +2424,9 @@ $(document).ready(function () {
             multiple: true,
             templateResult: formatRepo,
             templateSelection: formatRepoSelection
-        }).on('select2:select', function (e) {
+        });
+
+        $("#app-select").on('select2:select', function (e) {
             //clear the input box after a selection is made
             $(this).val([]).trigger('change');
             $(this).val([e.params.data.id]).trigger("change");
@@ -2450,6 +2434,7 @@ $(document).ready(function () {
             $("#roles").prop("disabled", false);
 
         });
+
 
         function formatRepo (repo) {
             if (repo.loading) return repo.text;
@@ -2478,14 +2463,9 @@ $(document).ready(function () {
             return repo.full_name || repo.text;
         }
 
-        //$("#container-search").on("keyup", function(){
-        //        var searchVal = $(this).val();
-        //        //searchAndFade(searchVal);
-        //        searchInAppStores(searchVal);
-        //
-        //});
 
     });
+
 
     // adding support for cloning multiple profiles per feature with cloneable class definitions
     $(advanceOperations).on("click", ".multi-view.add.enabled", function () {
