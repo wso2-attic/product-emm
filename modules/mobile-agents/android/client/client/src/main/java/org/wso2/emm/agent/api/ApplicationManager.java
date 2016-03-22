@@ -29,9 +29,16 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.pm.ApplicationInfo;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
+import org.wso2.emm.agent.proxy.IDPTokenManagerException;
+import org.wso2.emm.agent.proxy.utils.Constants;
+import org.wso2.emm.agent.proxy.utils.ServerUtilities;
 import org.wso2.emm.agent.utils.StreamHandler;
 
 import android.content.Context;
@@ -217,12 +224,9 @@ public class ApplicationManager {
 			FileOutputStream outStream=null;
 			InputStream inStream=null;
 			try {
-				URL url = new URL(inputData[BUFFER_OFFSET]);
-				HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-				urlConnection
-						.setRequestMethod(resources.getString(R.string.server_util_req_type_get));
-				urlConnection.setDoOutput(true);
-				urlConnection.connect();
+				HttpGet httpGet = new HttpGet(inputData[BUFFER_OFFSET]);
+				HttpClient httpClient = ServerUtilities.getCertifiedHttpClient();
+				HttpResponse response = httpClient.execute(httpGet);
 				
 				String directory = Environment.getExternalStorageDirectory().getPath() +
 										resources.getString(R.string.application_mgr_download_location);
@@ -237,7 +241,7 @@ public class ApplicationManager {
 				
 				outStream = new FileOutputStream(outputFile);
 
-				inStream = urlConnection.getInputStream();
+				inStream = response.getEntity().getContent();
 
 				byte[] buffer = new byte[BUFFER_SIZE];
 				int lengthFile;
@@ -255,8 +259,12 @@ public class ApplicationManager {
 				
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				context.startActivity(intent);
+			} catch (IDPTokenManagerException e) {
+				Log.e(TAG, "Error occurred while sending 'Get' request due to IDP proxy initialization issue.");
 			} catch (IOException e) {
 				Log.e(TAG, "File download/save failure in AppUpdator.", e);
+			} catch (IllegalArgumentException e) {
+				Log.e(TAG, "Error occurred while sending 'Get' request due to empty host name");
 			} finally {
 				StreamHandler.closeOutputStream(outStream, TAG);
 				StreamHandler.closeInputStream(inStream, TAG);
