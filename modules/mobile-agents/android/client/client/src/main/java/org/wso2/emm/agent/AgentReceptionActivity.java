@@ -29,7 +29,7 @@ import android.widget.Button;
 import org.wso2.emm.agent.api.DeviceState;
 import org.wso2.emm.agent.utils.Response;
 
-public class LanderM extends Activity {
+public class AgentReceptionActivity extends Activity {
     private Context context;
     private Button btnEnableMngProfile;
     private Button btnSkipProfile;
@@ -46,17 +46,10 @@ public class LanderM extends Activity {
         DevicePolicyManager manager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         if (androidForWorkCompatibility.getCode()) {
             if (manager.isProfileOwnerApp(getApplicationContext().getPackageName())) {
-                // If the managed profile is already set up, we show the main screen.
+                // If the managed profile is already set up, we show the enrollment screen.
                 skipToEnrollment();
             } else {
-                setContentView(R.layout.activity_enable_work_profile);
-                btnEnableMngProfile = (Button) findViewById(R.id.btnSetupWorkProfile);
-                btnEnableMngProfile.setTag(TAG_BTN_ENABLE_PROFILE);
-                btnEnableMngProfile.setOnClickListener(onClickListenerButtonClicked);
-
-                btnSkipProfile = (Button) findViewById(R.id.btnSkipProfile);
-                btnSkipProfile.setTag(TAG_BTN_SKIP_PROFILE);
-                btnSkipProfile.setOnClickListener(onClickListenerButtonClicked);
+               displayProfileProvisionPromptScreen();
             }
         } else {
             skipToEnrollment();
@@ -103,5 +96,19 @@ public class LanderM extends Activity {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 
+    }
+
+    /**
+     * Display Manage-profile provisioning prompt
+     */
+    private void displayProfileProvisionPromptScreen(){
+        setContentView(R.layout.activity_enable_work_profile);
+        btnEnableMngProfile = (Button) findViewById(R.id.btnSetupWorkProfile);
+        btnEnableMngProfile.setTag(TAG_BTN_ENABLE_PROFILE);
+        btnEnableMngProfile.setOnClickListener(onClickListenerButtonClicked);
+
+        btnSkipProfile = (Button) findViewById(R.id.btnSkipProfile);
+        btnSkipProfile.setTag(TAG_BTN_SKIP_PROFILE);
+        btnSkipProfile.setOnClickListener(onClickListenerButtonClicked);
     }
 }

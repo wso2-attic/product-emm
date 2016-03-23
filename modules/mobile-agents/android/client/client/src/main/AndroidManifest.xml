@@ -45,7 +45,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
     <permission
         android:name="org.wso2.emm.agent.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -175,7 +175,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="org.wso2.emm.agent.LanderM"
+            android:name=".AgentReceptionActivity"
             android:label="WSO2 Agent">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />

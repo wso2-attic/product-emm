@@ -24,6 +24,11 @@ import org.wso2.emm.agent.AndroidAgentException;
  */
 public interface VersionBasedOperations {
 
+    /**
+     * Wipe the device.
+     *
+     * @param operation - Operation object.
+     */
     void wipeDevice(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
     /**
@@ -32,27 +37,6 @@ public interface VersionBasedOperations {
      * @param operation - Operation object.
      */
     void clearPassword(org.wso2.emm.agent.beans.Operation operation);
-
-    /**
-     * Display notification.
-     *
-     * @param operation - Operation object.
-     */
-    void displayNotification(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
-
-    /**
-     * Configure device WIFI profile.
-     *
-     * @param operation - Operation object.
-     */
-    void configureWifi(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
-
-    /**
-     * Disable/Enable device camera.
-     *
-     * @param operation - Operation object.
-     */
-    void disableCamera(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
     /**
      * Install application/bundle.
@@ -76,27 +60,6 @@ public interface VersionBasedOperations {
     void encryptStorage(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
     /**
-     * Ring the device.
-     *
-     * @param operation - Operation object.
-     */
-    void ringDevice(org.wso2.emm.agent.beans.Operation operation);
-
-    /**
-     * Mute the device.
-     *
-     * @param operation - Operation object.
-     */
-    void muteDevice(org.wso2.emm.agent.beans.Operation operation);
-
-    /**
-     * Create web clip (Web app shortcut on device home screen).
-     *
-     * @param operation - Operation object.
-     */
-    void manageWebClip(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
-
-    /**
      * Set device password policy.
      *
      * @param operation - Operation object.
@@ -111,13 +74,6 @@ public interface VersionBasedOperations {
     void installGooglePlayApp(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
     /**
-     * Open Google Play store application with an application given.
-     *
-     * @param packageName - Application package name.
-     */
-    void triggerGooglePlayApp(String packageName);
-
-    /**
      * Change device lock code.
      *
      * @param operation - Operation object.
@@ -130,20 +86,6 @@ public interface VersionBasedOperations {
      * @param operation - Operation object.
      */
     void setPolicyBundle(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
-
-    /**
-     * Monitor currently enforced policy for compliance.
-     *
-     * @param operation - Operation object.
-     */
-    void monitorPolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
-
-    /**
-     * Revoke currently enforced policy.
-     *
-     * @param operation - Operation object.
-     */
-    void revokePolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
     /**
      * Enterprise wipe the device.
@@ -184,5 +126,12 @@ public interface VersionBasedOperations {
      * @param operation - Operation object.
      */
     void executeShellCommand(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+
+    /**
+     * Lock the device.
+     *
+     * @param operation - Operation object.
+     */
+    public void lockDevice(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
 }
