@@ -71,7 +71,7 @@ public class ServerDetails extends Activity {
 
 		if (!deviceCompatibility.getCode()) {
 			txtSeverAddress.setText(deviceCompatibility.getDescriptionResourceID());
-		CommonUtils.callSystemApp(this,"sd","werwe");
+			CommonUtils.callSystemApp(this,"sd","werwe");
 			btnStartRegistration.setVisibility(View.GONE);
 			txtSeverAddress.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.GONE);
@@ -130,7 +130,6 @@ public class ServerDetails extends Activity {
                     }
                 });
             }
-        //}
     }
 
 

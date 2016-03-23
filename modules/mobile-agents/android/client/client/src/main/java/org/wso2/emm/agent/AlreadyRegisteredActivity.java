@@ -171,8 +171,8 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 * Send unregistration request.
 	 */
 	private void startUnRegistration() {
+		final Context context = AlreadyRegisteredActivity.this;
 		isUnregisterBtnClicked = true;
-
 		progressDialog = ProgressDialog.show(AlreadyRegisteredActivity.this,
 				getResources().getString(R.string.dialog_message_unregistering),
 				getResources().getString(R.string.dialog_message_please_wait),
