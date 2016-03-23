@@ -246,4 +246,13 @@ public class OperationProcessor {
         }
     }
 
+	public void checkPreviousNotifications() {
+        operationManager.checkPreviousNotifications();
+    }
+
+    public List<org.wso2.emm.agent.beans.Operation> getResultPayload() {
+        return operationManager.getResultPayload();
+    }
+
+
 }

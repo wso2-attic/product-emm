@@ -56,7 +56,7 @@ public class MessageProcessor implements APIResultCallBack {
 	private String deviceId;
 	private static final String DEVICE_ID_PREFERENCE_KEY = "deviceId";
 	private static List<org.wso2.emm.agent.beans.Operation> replyPayload;
-	private OperationProcessor operation;
+	private OperationProcessor operationProcessor;
 	private ObjectMapper mapper;
 	private boolean isWipeTriggered = false;
 	private boolean isRebootTriggered = false;
@@ -76,7 +76,7 @@ public class MessageProcessor implements APIResultCallBack {
 		this.context = context;
 
 		deviceId = Preference.getString(context, DEVICE_ID_PREFERENCE_KEY);
-		operation = new OperationProcessor(context.getApplicationContext());
+		operationProcessor = new OperationProcessor(context.getApplicationContext());
 		mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
@@ -115,16 +115,16 @@ public class MessageProcessor implements APIResultCallBack {
 			Log.e(TAG, "Issue in stream parsing", e);
 		}
 		// check whether if there are any dismissed notifications to be sent
-		operation.checkPreviousNotifications();
+		operationProcessor.checkPreviousNotifications();
 
 		for (org.wso2.emm.agent.beans.Operation op : operations) {
 			try {
-				operation.doTask(op);
+				operationProcessor.doTask(op);
 			} catch (AndroidAgentException e) {
 				Log.e(TAG, "Failed to perform operation", e);
 			}
 		}
-		replyPayload = operation.getResultPayload();
+		replyPayload = operationProcessor.getResultPayload();
 	}
 
 
