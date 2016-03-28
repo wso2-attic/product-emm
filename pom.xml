@@ -23,7 +23,7 @@
     <groupId>org.wso2.mdm</groupId>
     <artifactId>wso2mdm-parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.0.2-SNAPSHOT</version>
+    <version>2.1.0-SNAPSHOT</version>
     <name>WSO2 MDM - Parent</name>
     <url>http://wso2.org</url>
     <description>WSO2 Mobile Device Manager</description>
@@ -985,12 +985,12 @@
         <carbon.governance.version>4.5.8</carbon.governance.version>
 
         <!-- Carbon Device Management -->
-        <carbon.device.mgt.version>1.0.4-SNAPSHOT</carbon.device.mgt.version>
+        <carbon.device.mgt.version>1.1.0-SNAPSHOT</carbon.device.mgt.version>
         <carbon.device.mgt.version.range>[0.8.0, 2.0.0)</carbon.device.mgt.version.range>
 
         <!-- Carbon Mobile Device Management -->
-        <carbon.mobile.device.mgt.version>2.0.4-SNAPSHOT</carbon.mobile.device.mgt.version>
-        <mdm.version>2.0.2-SNAPSHOT</mdm.version>
+        <carbon.mobile.device.mgt.version>2.1.0-SNAPSHOT</carbon.mobile.device.mgt.version>
+        <mdm.version>2.1.0-SNAPSHOT</mdm.version>
 
         <!-- API Management -->
         <carbon.api.mgt.version>4.3.0</carbon.api.mgt.version>
