@@ -40,17 +40,17 @@ public class DeviceSearch {
     @GET
     public Response getDeviceInfo(SearchContext searchContext) throws MDMAPIException {
         SearchManagerService searchManagerService;
-        List<DeviceWrapper> deviceInfo;
+        List<DeviceWrapper> devices;
         try {
             searchManagerService = MDMAPIUtils.getSearchManagerService();
-            deviceInfo = searchManagerService.search(searchContext);
+            devices = searchManagerService.search(searchContext);
 
         } catch (SearchMgtException e) {
             String msg = "Error occurred while searching the device information.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
-        return Response.status(HttpStatus.SC_OK).entity(deviceInfo).build();
+        return Response.status(HttpStatus.SC_OK).entity(devices).build();
     }
 }
 
