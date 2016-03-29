@@ -772,6 +772,25 @@
     </Permission>
     <!-- End of Profile related APIs -->
 
+    <!--Start of the device search and information -->
+
+    <Permission>
+        <name>Device Information</name>
+        <path>/device-mgt/emm-admin/information/get</path>
+        <url>/information/*/*</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Device Search</name>
+        <path>/device-mgt/emm-admin/search</path>
+        <url>/information/*</url>
+        <method>GET</method>
+    </Permission>
+
+    <!--End of the device search and information -->
+
+
     <!-- License related APIs -->
     <!--<Permission>-->
     <!--<name>Get license</name>-->
