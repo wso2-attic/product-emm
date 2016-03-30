@@ -47,7 +47,7 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
             if (permissions.VIEW_DASHBOARD) {
                 response.sendRedirect(constants.WEB_APP_CONTEXT);
             } else {
-                response.sendRedirect(constants.WEB_APP_CONTEXT + "/device-mgt");
+                response.sendRedirect(constants.WEB_APP_CONTEXT + "/devices");
             }
         }, function (failureCotext) {
             if (failureCotext == "authentication") {

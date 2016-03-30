@@ -47,10 +47,10 @@ public class Constants {
 	// needed, set this to null.
 	public static final String DEFAULT_HOST = null;
 
+
 	// This is used to skip the license
 	public static final boolean SKIP_LICENSE = false;
 	public static final boolean HIDE_LOGIN_UI = false;
-	public static final boolean HIDE_UNREGISTER_BUTTON = false;
 
 	// TODO: Add API_VERSION to server endpoint
 	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";

@@ -1,0 +1,80 @@
+<!-- Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+
+WSO2 Inc. licenses this file to you under the Apache License,
+Version 2.0 (the "License"); you may not use this file except
+in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License. -->
+{{#zone "main"}}
+    <!-- content/body -->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- content -->
+            <div id="certificate-create-form" class="container col-centered wr-content">
+                <div class="wr-form">
+                    <p class="page-sub-title">Add Certificate</p>
+                    <p>Please note that * sign represents required fields of data.</p>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div id="certificate-create-error-msg" class="alert alert-danger hidden" role="alert">
+                                <i class="icon fw fw-error"></i><span></span>
+                            </div>
+
+                            <label class="wr-input-label ">
+                                Serial Number *
+                            </label>
+                            <br>
+                            <div id="serialNoInputField" class="form-group wr-input-control">
+                                <input type="text" id="serialNo" class="form-control"/>
+                            </div>
+                            <label class="wr-input-label">Certificate *</label>
+                            <div id="certificateField" class="form-group wr-input-control">
+                                <input type="file" id="certificate" class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <button id="add-certificate-btn" class="wr-btn">Add Certificate</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="certificate-created-msg" class="container col-centered wr-content hidden">
+                <div class="wr-form">
+                    <p class="page-sub-title">Certificate was added successfully.</p>
+                    <br>
+                    <br>Please click <b>"Add Another Certificate"</b>, if you wish to add another certificate or
+                        click
+                    <b>"View Certificate List"</b> to complete the process and go back to the certificate list.
+                    <hr/>
+                    <button class="wr-btn" onclick="window.location.href='/emm/certificates'">View Certificate List
+                    </button>
+                    <a href="/emm/certificates/add-certificate" class="cu-btn-inner">
+                        <span class="fw-stack">
+                            <i class="fw fw-ring fw-stack-2x"></i>
+                            <i class="fw fw-add fw-stack-1x"></i>
+                        </span>
+                        Add Another Certificate
+                    </a>
+                </div>
+            </div>
+            <!-- /content -->
+        </div>
+    </div>
+    <!-- /content/body -->
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script src="{{self.publicURL}}/js/bottomJs.js"></script>
+{{/zone}}
+
