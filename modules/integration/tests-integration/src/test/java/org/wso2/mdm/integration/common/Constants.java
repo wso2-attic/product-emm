@@ -145,6 +145,7 @@ public final class Constants {
         public static final String OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID =
                                                                             "Device Id not found for device found at 2";
         public static final String CAMERA_OPERATION = "camera";
+        public static final String LOCK_OPERATION = "lock";
         public static final String WIPE_DATA_OPERATION = "wipe_data";
         public static final String INSTALL_APPS_OPERATION = "install_apps";
         public static final String NOTIFICATION_OPERATION = "notification";
@@ -157,6 +158,7 @@ public final class Constants {
         public static final String DEVICE_LIST_LENGTH = "10";
         public static final String OPERATION_ENDPOINT = "/mdm-android-agent/operation/";
         public static final String LOCK_ENDPOINT = "/mdm-android-agent/operation/lock";
+        public static final String UNLOCK_ENDPOINT = "/mdm-android-agent/operation/unlock";
         public static final String LOCATION_ENDPOINT = "/mdm-android-agent/operation/location";
         public static final String CLEAR_PASSWORD_ENDPOINT = "/mdm-android-agent/operation/clear-password";
         public static final String CAMERA_ENDPOINT = "/mdm-android-agent/operation/camera";

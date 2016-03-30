@@ -6,7 +6,6 @@
     "deviceIdentifier": "1234",
     "enrolmentInfo": {
       "ownership": "BYOD",
-      "status": "ACTIVE",
       "owner": "admin"
     },
     "properties": [

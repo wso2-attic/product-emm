@@ -42,7 +42,8 @@ var operationModule = function () {
         "WIFI_OPERATION_CODE": "WIFI",
         "WIPE_OPERATION_CODE": "WIPE_DATA",
         "NOTIFICATION_OPERATION_CODE": "NOTIFICATION",
-        "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE"
+        "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE",
+        "LOCK_OPERATION_CODE": "DEVICE_LOCK"
     };
 
     // Constants to define Windows Operation Constants
@@ -656,6 +657,14 @@ var operationModule = function () {
                     }
                 };
                 break;
+            case androidOperationConstants["LOCK_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "message" : operationData["message"]
+                    }
+                };
+                break;
             case androidOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
@@ -689,6 +698,7 @@ var operationModule = function () {
             "WIFI": "wifi",
             "CAMERA": "camera",
             "DEVICE_LOCK": "lock",
+            "DEVICE_UNLOCK": "unlock",
             "DEVICE_LOCATION": "location",
             "CLEAR_PASSWORD": "clear-password",
             "APPLICATION_LIST": "get-application-list",
@@ -852,9 +862,10 @@ var operationModule = function () {
             "DEVICE_RING": "fw-dial-up",
             "DEVICE_REBOOT": "fw-refresh",
             "UPGRADE_FIRMWARE": "fw-up-arrow",
-            "DEVICE_MUTE": "fw-incoming-call",
+            "DEVICE_MUTE": "fw-mute",
             "NOTIFICATION": "fw-message",
-            "CHANGE_LOCK_CODE": "fw-security"
+            "CHANGE_LOCK_CODE": "fw-security",
+            "DEVICE_UNLOCK": "fw-lock"
         };
         return featureMap[operationCode];
     };

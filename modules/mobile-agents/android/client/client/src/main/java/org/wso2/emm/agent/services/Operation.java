@@ -20,21 +20,28 @@ package org.wso2.emm.agent.services;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import android.annotation.TargetApi;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
 import org.json.JSONException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.LockActivity;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.AlertActivity;
 import org.wso2.emm.agent.ServerDetails;
 import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.api.GPSTracker;
+import org.wso2.emm.agent.api.RuntimeInfo;
 import org.wso2.emm.agent.api.WiFiConfig;
+import org.wso2.emm.agent.beans.Application;
 import org.wso2.emm.agent.beans.ComplianceFeature;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.beans.Notification;
@@ -42,7 +49,6 @@ import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.dao.NotificationDAO;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.utils.Constants;
-import org.wso2.emm.agent.utils.DatabaseHelper;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.CommonUtils;
 
@@ -74,6 +80,8 @@ public class Operation implements APIResultCallBack {
 	private DeviceInfo deviceInfo;
 	private GPSTracker gps;
 	private NotificationDAO notificationDAO;
+	private NotificationManager notifyManager;
+	private int currentNotificationId;
 
 	private static final String TAG = "Operation Handler";
 
@@ -87,6 +95,8 @@ public class Operation implements APIResultCallBack {
 	private static final int DEFAULT_FLAG = 0;
 	private static final int DEFAULT_PASSWORD_MIN_LENGTH = 4;
 	private static final long DAY_MILLISECONDS_MULTIPLIER = 24 * 60 * 60 * 1000;
+	private static String[] AUTHORIZED_PINNING_APPS;
+	private static String AGENT_PACKAGE_NAME;
 
 	public Operation(Context context) {
 		this.context = context;
@@ -99,6 +109,9 @@ public class Operation implements APIResultCallBack {
 		deviceInfo = new DeviceInfo(context.getApplicationContext());
 		gps = new GPSTracker(context.getApplicationContext());
 		notificationDAO = new NotificationDAO(context);
+		AGENT_PACKAGE_NAME = context.getPackageName();
+		AUTHORIZED_PINNING_APPS = new String[]{AGENT_PACKAGE_NAME};
+		notifyManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 	}
 
 	/**
@@ -119,6 +132,9 @@ public class Operation implements APIResultCallBack {
 				break;
 			case Constants.Operation.DEVICE_LOCK:
 				lockDevice(operation);
+				break;
+			case Constants.Operation.DEVICE_UNLOCK:
+				unlockDevice(operation);
 				break;
 			case Constants.Operation.WIPE_DATA:
 				wipeDevice(operation);
@@ -211,18 +227,18 @@ public class Operation implements APIResultCallBack {
 
 		String replyPayload = deviceInfoPayload.getDeviceInfoPayload();
 
-		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.IP);
-		ServerConfig utils = new ServerConfig();
-		utils.setServerIP(ipSaved);
+//		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.IP);
+//		ServerConfig utils = new ServerConfig();
+//		utils.setServerIP(ipSaved);
+//
+//		String url = utils.getAPIServerURL(context) + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
+//
+//		CommonUtils.callSecuredAPI(context, url,
+//				org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.PUT, replyPayload,
+//				Operation.this,
+//				Constants.DEVICE_INFO_REQUEST_CODE);
 
-		String url = utils.getAPIServerURL(context) + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
-
-		CommonUtils.callSecuredAPI(context, url,
-				org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.PUT, replyPayload,
-				Operation.this,
-				Constants.DEVICE_INFO_REQUEST_CODE);
-
-		operation.setPayLoad(replyPayload);
+		operation.setOperationResponse(replyPayload);
 		operation.setStatus(resources.getString(R.string.operation_value_completed));
 		resultBuilder.build(operation);
 	}
@@ -233,17 +249,19 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void getLocationInfo(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-		double latitude;
-		double longitude;
 		JSONObject result = new JSONObject();
 
 		try {
-			latitude = gps.getLatitude();
-			longitude = gps.getLongitude();
-			result.put(LOCATION_INFO_TAG_LATITUDE, latitude);
-			result.put(LOCATION_INFO_TAG_LONGITUDE, longitude);
+			result.put(Constants.LocationInfo.LATITUDE, gps.getLatitude());
+			result.put(Constants.LocationInfo.LONGITUDE, gps.getLongitude());
+			result.put(Constants.LocationInfo.CITY, gps.getCity());
+			result.put(Constants.LocationInfo.COUNTRY, gps.getCountry());
+			result.put(Constants.LocationInfo.STATE, gps.getState());
+			result.put(Constants.LocationInfo.STREET1, gps.getStreet1());
+			result.put(Constants.LocationInfo.STREET2, gps.getStreet2());
+			result.put(Constants.LocationInfo.ZIP, gps.getZip());
 
-			operation.setPayLoad(result.toString());
+			operation.setOperationResponse(result.toString());
 			operation.setStatus(resources.getString(R.string.operation_value_completed));
 			resultBuilder.build(operation);
 			if (Constants.DEBUG_MODE_ENABLED) {
@@ -264,12 +282,18 @@ public class Operation implements APIResultCallBack {
 	public void getApplicationList(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
 		ArrayList<DeviceAppInfo> apps = new ArrayList<>(appList.getInstalledApps().values());
 		JSONArray result = new JSONArray();
+		RuntimeInfo runtimeInfo = new RuntimeInfo(context);
+		Map<String, Application> applications = runtimeInfo.getAppMemory();
 		for (DeviceAppInfo infoApp : apps) {
 			JSONObject app = new JSONObject();
 			try {
+				Application application = applications.get(infoApp.getPackagename());
 				app.put(APP_INFO_TAG_NAME, Uri.encode(infoApp.getAppname()));
 				app.put(APP_INFO_TAG_PACKAGE, infoApp.getPackagename());
 				app.put(APP_INFO_TAG_VERSION, infoApp.getVersionCode());
+				if (application != null) {
+					app.put(Constants.Device.USS, application.getUss());
+				}
 				result.put(app);
 			} catch (JSONException e) {
 				operation.setStatus(resources.getString(R.string.operation_value_error));
@@ -291,12 +315,63 @@ public class Operation implements APIResultCallBack {
 	 *
 	 * @param operation - Operation object.
 	 */
-	public void lockDevice(org.wso2.emm.agent.beans.Operation operation) {
+	public void lockDevice(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
 		operation.setStatus(resources.getString(R.string.operation_value_completed));
 		resultBuilder.build(operation);
-		devicePolicyManager.lockNow();
+		JSONObject inputData;
+		String message = null;
+		try {
+			if (operation.getPayLoad() != null) {
+				inputData = new JSONObject(operation.getPayLoad().toString());
+				message = inputData.getString(resources.getString(R.string.intent_extra_message));
+			}
+		} catch (JSONException e) {
+			operation.setStatus(resources.getString(R.string.operation_value_error));
+			resultBuilder.build(operation);
+			throw new AndroidAgentException("Invalid JSON format.", e);
+		}
+
+		if (message == null || message.isEmpty()) {
+			message = resources.getString(R.string.txt_lock_activity);
+		}
+		Preference.putBoolean(context, Constants.IS_LOCKED, true);
+		Preference.putString(context, Constants.LOCK_MESSAGE, message);
+		enableLock(message);
 		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.d(TAG, "Device locked");
+		}
+	}
+
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+	public void enableLock(String message) {
+		if (isDeviceOwner()) {
+			devicePolicyManager.setLockTaskPackages(cdmDeviceAdmin, AUTHORIZED_PINNING_APPS);
+			Intent intent = new Intent(context, LockActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
+			                Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.putExtra(Constants.ADMIN_MESSAGE, message);
+			intent.putExtra(Constants.IS_LOCKED, true);
+			context.startActivity(intent);
+		} else {
+			devicePolicyManager.lockNow();
+		}
+	}
+
+	public void unlockDevice(org.wso2.emm.agent.beans.Operation operation) {
+		operation.setStatus(resources.getString(R.string.operation_value_completed));
+		resultBuilder.build(operation);
+
+		boolean isLocked = Preference.getBoolean(context, Constants.IS_LOCKED);
+		if (isLocked) {
+			if (isDeviceOwner()) {
+				Intent intent = new Intent(context, ServerDetails.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
+				                Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(intent);
+			}
+		}
+		if (Constants.DEBUG_MODE_ENABLED) {
+			Log.d(TAG, "Device unlocked");
 		}
 	}
 
@@ -401,25 +476,38 @@ public class Operation implements APIResultCallBack {
 		try {
 
 			operation.setStatus(resources.getString(R.string.operation_value_progress));
-			operation.setOperationResponse("Alert is received: " + Calendar.getInstance().getTime().toString());
+			boolean isLocked = Preference.getBoolean(context, Constants.IS_LOCKED);
+			if (isLocked) {
+				operation.setOperationResponse("Alert is received to locked device: " +
+				                               Calendar.getInstance().getTime().toString());
+			} else {
+				operation.setOperationResponse("Alert is received: " +
+				                               Calendar.getInstance().getTime().toString());
+			}
+
 			resultBuilder.build(operation);
 			JSONObject inputData = new JSONObject(operation.getPayLoad().toString());
 			String message = inputData.getString(resources.getString(R.string.intent_extra_message));
 
 			if (message != null && !message.isEmpty()) {
 				addNotification(operation.getId(), message, Notification.Status.PENDING); //adding notification to the db
-				Intent intent = new Intent(context, AlertActivity.class);
-				intent.putExtra(resources.getString(R.string.intent_extra_message), message);
-				intent.putExtra(resources.getString(R.string.intent_extra_operation_id), operation.getId());
-				intent.putExtra(resources.getString(R.string.intent_extra_type),
-						resources.getString(R.string.intent_extra_alert));
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
-						Intent.FLAG_ACTIVITY_NEW_TASK);
-				context.startActivity(intent);
+				if (deviceInfo.getSdkVersion() >= Build.VERSION_CODES.LOLLIPOP) {
+					initNotification(operation.getId(), message);
+				} else {
+					Intent intent = new Intent(context, AlertActivity.class);
+					intent.putExtra(resources.getString(R.string.intent_extra_message), message);
+					intent.putExtra(resources.getString(R.string.intent_extra_operation_id), operation.getId());
+					intent.putExtra(resources.getString(R.string.intent_extra_type),
+					                resources.getString(R.string.intent_extra_alert));
+					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
+					                Intent.FLAG_ACTIVITY_NEW_TASK);
+					intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+					context.startActivity(intent);
 
-				if (Constants.DEBUG_MODE_ENABLED) {
-					Log.d(TAG, "Notification received");
 				}
+			}
+			if (Constants.DEBUG_MODE_ENABLED) {
+				Log.d(TAG, "Notification received");
 			}
 		} catch (JSONException e) {
 			operation.setStatus(resources.getString(R.string.operation_value_error));
@@ -1257,4 +1345,43 @@ public class Operation implements APIResultCallBack {
 		}
 		notificationDAO.close();
 	}
+
+	/**
+	 * This method is used to check whether agent is registered as the device owner.
+	 *
+	 * @return true if agent is the device owner.
+	 */
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+	private boolean isDeviceOwner() {
+		return devicePolicyManager.isDeviceOwnerApp(AGENT_PACKAGE_NAME);
+	}
+
+	/**
+	 * This method is used to post a notification in the device.
+	 *
+	 * @param operationId id of the calling notification operation.
+	 * @param message message to be displayed
+	 */
+	private void initNotification(int operationId, String message) {
+
+		Intent notification = new Intent(context, NotificationReceiver.class);
+		notification.putExtra(Constants.OPERATION_ID, operationId);
+		PendingIntent dismiss = PendingIntent.getBroadcast(context, operationId, notification, PendingIntent.FLAG_ONE_SHOT);
+		NotificationCompat.Builder mBuilder =
+				new NotificationCompat.Builder(context)
+						.setSmallIcon(R.drawable.notification)
+						.setContentTitle(resources.getString(R.string.txt_notification))
+						.setContentText(message)
+						.setPriority(android.app.Notification.PRIORITY_MAX)
+						.setDefaults(android.app.Notification.DEFAULT_VIBRATE)
+						.setDefaults(android.app.Notification.DEFAULT_SOUND)
+						.setCategory(android.app.Notification.CATEGORY_CALL)
+						.setOngoing(true)
+						.setOnlyAlertOnce(true)
+						.setTicker(resources.getString(R.string.txt_notification))
+						.addAction(R.drawable.abs__ic_clear, "Dismiss", dismiss);
+
+		notifyManager.notify(operationId, mBuilder.build());
+	}
+
 }

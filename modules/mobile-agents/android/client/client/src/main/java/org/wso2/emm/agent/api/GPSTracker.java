@@ -23,9 +23,20 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.wso2.emm.agent.proxy.IDPTokenManagerException;
+import org.wso2.emm.agent.proxy.beans.EndPointInfo;
+import org.wso2.emm.agent.proxy.utils.ServerUtilities;
+import org.wso2.emm.agent.utils.Constants;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * This class handles all the functionalities related to retrieving device 
@@ -36,9 +47,21 @@ public class GPSTracker extends Service implements LocationListener {
 	private Location location;
 	private double latitude;
 	private double longitude;
+
+	private String street1;
+	private String street2;
+
+	private String city;
+	private String state;
+	private String zip;
+	private String country;
+
 	private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
 	private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
+
 	protected LocationManager locationManager;
+
+	private static final String TAG = GPSTracker.class.getName();
 
 	public GPSTracker(Context context) {
 		locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
@@ -84,9 +107,13 @@ public class GPSTracker extends Service implements LocationListener {
 					}
 				}
 			}
-
+			setReversGeoCoordinates();
 		} catch (RuntimeException e) {
-			Log.e("Location", "No network/GPS Switched off.", e);
+			Log.e(TAG, "No network/GPS Switched off.", e);
+		} catch (InterruptedException e) {
+			Log.e(TAG, "Error occured while calling reverse geo coordination API.", e);
+		} catch (ExecutionException e) {
+			Log.e(TAG, "Error occured while calling reverse geo coordination API.", e);
 		}
 
 		return location;
@@ -144,4 +171,107 @@ public class GPSTracker extends Service implements LocationListener {
 	public IBinder onBind(Intent arg0) {
 		return null;
 	}
+
+	public String getStreet1() {
+		return street1;
+	}
+
+	public String getStreet2() {
+		return street2;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public String getZip() {
+		return zip;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	/**
+	 * In this method, it calls reverse geo coordination API and set relevant values.
+	 */
+	private void setReversGeoCoordinates() throws ExecutionException, InterruptedException {
+
+		StringBuilder endPoint = new StringBuilder();
+		endPoint.append(Constants.Location.GEO_ENDPOINT);
+		endPoint.append("?" + Constants.Location.RESULT_FORMAT);
+		endPoint.append("&" + Constants.Location.ACCEPT_LANGUAGE + "=" + Constants.Location.LANGUAGE_CODE);
+		endPoint.append("&" + Constants.Location.LATITUDE + "=" + latitude);
+		endPoint.append("&" + Constants.Location.LONGITUDE + "=" + longitude);
+
+		EndPointInfo endPointInfo = new EndPointInfo();
+		endPointInfo.setHttpMethod(org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.GET);
+		endPointInfo.setEndPoint(endPoint.toString());
+
+		SendRequest sendRequestTask = new SendRequest();
+		sendRequestTask.execute(endPointInfo).get();
+	}
+
+
+
+	/**
+	 * This class is used to send requests to reverse geo coordination API.
+	 * The reason to use this private class because the function which is already
+	 * available for sending requests is secured with token. Therefor this async task can be used
+	 * to send requests without tokens.
+	 */
+	private class SendRequest extends AsyncTask<EndPointInfo, Void, Map<String, String>> {
+		@Override
+		protected Map<String, String> doInBackground(EndPointInfo... params) {
+			EndPointInfo endPointInfo = params[0];
+
+			Map<String, String> responseParams = null;
+			Map<String, String> headers = new HashMap<String, String>();
+			headers.put("User-Agent", Constants.USER_AGENT);
+
+			try {
+				responseParams = ServerUtilities.postData(endPointInfo, headers);
+				if (Constants.DEBUG_MODE_ENABLED) {
+					Log.d(TAG, "Response Code: " +
+					           responseParams.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_STATUS));
+					Log.d(TAG, "Response Payload: " +
+					           responseParams.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_BODY));
+				}
+			} catch (IDPTokenManagerException e) {
+				Log.e(TAG, "Failed to contact server", e);
+			}
+			return responseParams;
+		}
+
+		@Override
+		protected void onPostExecute(Map<String, String> result) {
+
+			String responseCode = result.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_STATUS);
+			if (Constants.Status.SUCCESSFUL.equals(responseCode)) {
+				String resultPayload = result.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_BODY);
+				try {
+					JSONObject data = new JSONObject(resultPayload);
+					JSONObject address = data.getJSONObject(Constants.Location.ADDRESS);
+					city = address.getString(Constants.Location.CITY);
+					country = address.getString(Constants.Location.COUNTRY);
+					street1 = address.getString(Constants.Location.STREET1);
+					street2 = address.getString(Constants.Location.STREET2);
+					state = address.getString(Constants.Location.STATE);
+					zip = address.getString(Constants.Location.ZIP);
+
+					if (Constants.DEBUG_MODE_ENABLED) {
+						Log.d(TAG, "Address: " + street1 + ", " + street2 + ", " + city + ", " + state + ", " + zip +
+						           ", " + country);
+					}
+				} catch (JSONException e) {
+					Log.e(TAG, "Error occurred while parsing the result payload", e);
+				}
+			}
+		}
+	}
+
 }
