@@ -82,6 +82,7 @@ public class Operation implements APIResultCallBack {
 	private NotificationDAO notificationDAO;
 	private NotificationManager notifyManager;
 	private int currentNotificationId;
+	private ApplicationManager applicationManager;
 
 	private static final String TAG = "Operation Handler";
 
@@ -112,6 +113,7 @@ public class Operation implements APIResultCallBack {
 		AGENT_PACKAGE_NAME = context.getPackageName();
 		AUTHORIZED_PINNING_APPS = new String[]{AGENT_PACKAGE_NAME};
 		notifyManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		applicationManager = new ApplicationManager(context);
 	}
 
 	/**
@@ -211,7 +213,12 @@ public class Operation implements APIResultCallBack {
 				executeShellCommand(operation);
 				break;
 			default:
-				Log.e(TAG, "Invalid operation code received");
+				if(applicationManager.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
+					CommonUtils.callSystemApp(context,operation.getCode(),
+					                          Boolean.toString(operation.isEnabled()), null);
+				} else {
+					Log.e(TAG, "Invalid operation code received");
+				}
 				break;
 		}
 	}

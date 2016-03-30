@@ -39,15 +39,18 @@ public class Constants {
 	public static final String API_SERVER_PORT = "80";
 	public static final String OWNERSHIP_BYOD = "BYOD";
 	public static final String OWNERSHIP_COPE = "COPE";
-	public static final boolean SKIP_LICENSE = false;
-	public static final boolean HIDE_LOGIN_UI = false;
-	public static final boolean HIDE_UNREGISTER_BUTTON = false;
 	// Set DEFAULT_OWNERSHIP to null if no overiding is needed. Other possible values are,
-	// OWNERSHIP_BYOD or OWNERSHIP_COPE
+	// OWNERSHIP_BYOD or OWNERSHIP_COPE. If you are using the mutual SSL authentication
+	// This value must be set to a value other than null.
 	public static final String DEFAULT_OWNERSHIP = null;
-	// This is set to overide the server host name retrieveing screen. If overiding is not
+	// This is set to override the server host name retrieving screen. If overriding is not
 	// needed, set this to null.
 	public static final String DEFAULT_HOST = null;
+
+
+	// This is used to skip the license
+	public static final boolean SKIP_LICENSE = false;
+	public static final boolean HIDE_LOGIN_UI = false;
 
 	// TODO: Add API_VERSION to server endpoint
 	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";
@@ -103,6 +106,9 @@ public class Constants {
 	public static final String IS_LOCKED = "lock";
 	public static final String LOCK_MESSAGE = "lockMessage";
 	public static final String OPERATION_ID = "operationId";
+	public static final boolean HIDE_UNREGISTER_BUTTON = false;
+
+	public static final String SERVICE_PACKAGE_NAME = "org.wso2.emm.system.service";
 
 	/**
 	 * Request codes.
@@ -203,6 +209,45 @@ public class Constants {
 		public static final String UPGRADE_FIRMWARE = "UPGRADE_FIRMWARE";
 		public static final String REBOOT = "REBOOT";
 		public static final String EXECUTE_SHELL_COMMAND = "SHELL_COMMAND";
+		public static final String DISALLOW_ADJUST_VOLUME = "DISALLOW_ADJUST_VOLUME";
+		public static final String DISALLOW_CONFIG_BLUETOOTH = "DISALLOW_CONFIG_BLUETOOTH";
+		public static final String DISALLOW_CONFIG_CELL_BROADCASTS =
+				"DISALLOW_CONFIG_CELL_BROADCASTS";
+		public static final String DISALLOW_CONFIG_CREDENTIALS = "DISALLOW_CONFIG_CREDENTIALS";
+		public static final String DISALLOW_CONFIG_MOBILE_NETWORKS =
+				"DISALLOW_CONFIG_MOBILE_NETWORKS";
+		public static final String DISALLOW_CONFIG_TETHERING = "DISALLOW_CONFIG_TETHERING";
+		public static final String DISALLOW_CONFIG_VPN = "DISALLOW_CONFIG_VPN";
+		public static final String DISALLOW_CONFIG_WIFI = "DISALLOW_CONFIG_WIFI";
+		public static final String DISALLOW_APPS_CONTROL = "DISALLOW_APPS_CONTROL";
+		public static final String DISALLOW_CREATE_WINDOWS = "DISALLOW_CREATE_WINDOWS";
+		public static final String DISALLOW_CROSS_PROFILE_COPY_PASTE
+				= "DISALLOW_CROSS_PROFILE_COPY_PASTE";
+		public static final String DISALLOW_DEBUGGING_FEATURES = "DISALLOW_DEBUGGING_FEATURES";
+		public static final String DISALLOW_FACTORY_RESET = "DISALLOW_FACTORY_RESET";
+		public static final String DISALLOW_ADD_USER = "DISALLOW_ADD_USER";
+		public static final String DISALLOW_INSTALL_APPS = "DISALLOW_INSTALL_APPS";
+		public static final String DISALLOW_INSTALL_UNKNOWN_SOURCES
+				= "DISALLOW_INSTALL_UNKNOWN_SOURCES";
+		public static final String DISALLOW_MODIFY_ACCOUNTS = "DISALLOW_MODIFY_ACCOUNTS";
+		public static final String DISALLOW_MOUNT_PHYSICAL_MEDIA = "DISALLOW_MOUNT_PHYSICAL_MEDIA";
+		public static final String DISALLOW_NETWORK_RESET = "DISALLOW_NETWORK_RESET";
+		public static final String DISALLOW_OUTGOING_BEAM = "DISALLOW_OUTGOING_BEAM";
+		public static final String DISALLOW_OUTGOING_CALLS = "DISALLOW_OUTGOING_CALLS";
+		public static final String DISALLOW_REMOVE_USER = "DISALLOW_REMOVE_USER";
+		public static final String DISALLOW_SAFE_BOOT = "DISALLOW_SAFE_BOOT";
+		public static final String DISALLOW_SHARE_LOCATION = "DISALLOW_SHARE_LOCATION";
+		public static final String DISALLOW_SMS = "DISALLOW_SMS";
+		public static final String DISALLOW_UNINSTALL_APPS = "DISALLOW_UNINSTALL_APPS";
+		public static final String DISALLOW_UNMUTE_MICROPHONE = "DISALLOW_UNMUTE_MICROPHONE";
+		public static final String DISALLOW_USB_FILE_TRANSFER = "DISALLOW_USB_FILE_TRANSFER";
+		public static final String ALLOW_PARENT_PROFILE_APP_LINKING
+				= "ALLOW_PARENT_PROFILE_APP_LINKING";
+		public static final String ENSURE_VERIFY_APPS = "ENSURE_VERIFY_APPS";
+		public static final String AUTO_TIME = "AUTO_TIME";
+		public static final String ENABLE_ADMIN = "ENABLE_ADMIN";
+		public static final String SET_SCREEN_CAPTURE_DISABLED = "SET_SCREEN_CAPTURE_DISABLED";
+		public static final String SET_STATUS_BAR_DISABLED = "SET_STATUS_BAR_DISABLED";
 		public static final String SILENT_INSTALL_APPLICATION = "SILENT_INSTALL_APPLICATION";
 		public static final String SILENT_UNINSTALL_APPLICATION = "SILENT_UNINSTALL_APPLICATION";
 	}

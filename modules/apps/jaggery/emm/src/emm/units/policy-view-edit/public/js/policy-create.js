@@ -1892,7 +1892,7 @@ var updatePolicy = function (policy, state) {
 
     $.each(profilePayloads, function (i, item) {
         $.each(item.content, function (key, value) {
-            if (value === "" || value === undefined) {
+            if (value === null || value === undefined || value === "") {
                 item.content[key] = null;
             }
         });
