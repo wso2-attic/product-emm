@@ -784,8 +784,8 @@
     <Permission>
         <name>Device Search</name>
         <path>/device-mgt/emm-admin/search</path>
-        <url>/information/*</url>
-        <method>GET</method>
+        <url>/search</url>
+        <method>POST</method>
     </Permission>
 
     <!--End of the device search and information -->

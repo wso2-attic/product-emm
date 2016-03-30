@@ -36,12 +36,12 @@ $(document).ready(function () {
     $("#add-custom-param").click(function () {
         $("#customSearchParam").prepend(dynamicForm);
         $(".close-button-div").unbind("click");
-        $(".close-button-div").bind("click",removeCustomParam);
+        $(".close-button-div").bind("click", removeCustomParam);
     });
 
     $("#device-search-btn").click(function () {
         var location = $("#location").val();
-        var payload = {};
+        var payload_obj = {};
         var conditions = [];
         if (location) {
             var conditionObject = {};
@@ -64,25 +64,87 @@ $(document).ready(function () {
                 conditions.push(conditionObject)
             }
         });
-        payload.conditions = conditions;
-        invokerUtil.post(
-                addUserAPI,
-                addUserFormData,
-                function (data) {
-                    data = JSON.parse(data);
-                    $("#advance-search-form").addClass(" hidden");
-                    $("#advance-search-result").removeClass("hidden");
-                }, function (data) {
-                    if (data["status"] == 409) {
-                        $(errorMsg).text("User : " + username + " already exists. Pick another username.");
-                    } else if (data["status"] == 500) {
-                        $(errorMsg).text("An unexpected error occurred @ backend server. Please try again later.");
-                    } else {
-                        $(errorMsg).text(data.errorMessage);
-                    }
-                    $(errorMsgWrapper).removeClass("hidden");
+        payload_obj.conditions = conditions;
+        var deviceSearchAPI = "/mdm-admin/search";
+        //===================
+        $("#advance-search-form").addClass(" hidden");
+        $("#loading-content").removeClass('hidden');
+        var deviceListing = $("#device-listing");
+        var deviceListingSrc = deviceListing.attr("src");
+        $.template("device-listing", deviceListingSrc, function (template) {
+
+            var successCallback = function (data) {
+                if (!data) {
+                    $('#device-listing-status').removeClass('hidden');
+                    $('#device-listing-status-msg').text('No Device are available to be displayed.');
+                    return;
                 }
-        );
+                console.log("data");
+                data = JSON.parse(data);
+                console.log(data);
+                console.log("-------------------------");
+                console.log("/data");
+                data = data.responseContent;
+                console.log(data);
+                var viewModel = {};
+                if (data.length > 0) {
+                    $('#ast-container').removeClass('hidden');
+                    $('#user-listing-status-msg').text("");
+                    var content = template(viewModel);
+                    $("#ast-container").html(content);
+                } else {
+                    $('#device-listing-status').removeClass('hidden');
+                    $('#device-listing-status-msg').text('No Device are available to be displayed.');
+                }
+                $("#loading-content").addClass('hidden');
+                if (isInit) {
+                    $('#user-grid').datatables_extended();
+                    isInit = false;
+                }
+                $(".icon .text").res_text(0.2);
+            };
+            invokerUtil.post(deviceSearchAPI,
+                             payload_obj,
+                             successCallback,
+                             function (message) {
+                                 $("#loading-content").addClass('hidden');
+                                 $("#advance-search-result").addClass("hidden");
+                                 $("#advance-search-form").removeClass(" hidden");
+                                 $('#device-listing-status').removeClass('hidden');
+                                 $('#certificate-listing-status-msg').text('Invalid search query. Try again with a valid search query');
+                             }
+            );
+        });
+
+
+        //===================
+
+
+        //
+        //
+        //
+        //
+        //
+        //invokerUtil.post(
+        //        deviceSearchAPI,
+        //        payload_obj,
+        //        function (data) {
+        //            data = JSON.parse(data);
+        //            console.log(data);
+        //
+        //            $("#advance-search-result").removeClass("hidden");
+        //        }, function (data) {
+        //            console.log("huta");
+        //            if (data["status"] == 409) {
+        //                $(errorMsg).text("User : " + username + " already exists. Pick another username.");
+        //            } else if (data["status"] == 500) {
+        //                $(errorMsg).text("An unexpected error occurred @ backend server. Please try again later.");
+        //            } else {
+        //                $(errorMsg).text(data.errorMessage);
+        //            }
+        //            $(errorMsgWrapper).removeClass("hidden");
+        //        }
+        //);
 
     });
 });
