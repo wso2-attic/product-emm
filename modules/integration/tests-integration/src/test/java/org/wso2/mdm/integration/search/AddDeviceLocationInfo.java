@@ -19,10 +19,6 @@
 
 package org.wso2.mdm.integration.search;
 
-import org.wso2.mdm.integration.common.TestBase;
-
-public class AddOperations extends TestBase {
-
-
+public class AddDeviceLocationInfo {
 }
 
