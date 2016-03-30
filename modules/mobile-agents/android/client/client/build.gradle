@@ -18,13 +18,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 22
     buildToolsVersion "22.0.1"
 
     defaultConfig {
         applicationId "org.wso2.emm.agent"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 22
         multiDexEnabled true
     }
 
@@ -63,5 +63,4 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-core:2.6.0-rc3'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.6.0-rc3'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.0-rc3'
-
 }

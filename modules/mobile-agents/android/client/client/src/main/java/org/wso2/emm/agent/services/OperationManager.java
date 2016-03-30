@@ -44,6 +44,7 @@ import org.wso2.emm.agent.api.WiFiConfig;
 import org.wso2.emm.agent.beans.ComplianceFeature;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.beans.Notification;
+import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.dao.NotificationDAO;
 import org.wso2.emm.agent.interfaces.VersionBasedOperations;
@@ -473,6 +474,45 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
     }
 
     /**
+     * Uninstall application.
+     *
+     * @param operation - Operation object.
+     */
+    public void uninstallApplication(Operation operation) throws AndroidAgentException {
+        String packageName;
+        String type;
+        try {
+            JSONObject appData = new JSONObject(operation.getPayLoad().toString());
+            type = appData.getString(getContextResources().getString(R.string.app_type));
+
+            if (getContextResources().getString(R.string.intent_extra_web).equalsIgnoreCase(type)) {
+                String appUrl = appData.getString(getContextResources().getString(R.string.app_url));
+                String name = appData.getString(getContextResources().getString(R.string.intent_extra_name));
+                String operationType = getContextResources().getString(R.string.operation_uninstall);
+                JSONObject payload = new JSONObject();
+                payload.put(getContextResources().getString(R.string.intent_extra_identity), appUrl);
+                payload.put(getContextResources().getString(R.string.intent_extra_title), name);
+                payload.put(getContextResources().getString(R.string.operation_type), operationType);
+                operation.setPayLoad(payload.toString());
+                manageWebClip(operation);
+            } else {
+                packageName = appData.getString(getContextResources().getString(R.string.app_identifier));
+                getAppList().uninstallApplication(packageName);
+                operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+                getResultBuilder().build(operation);
+            }
+
+            if (Constants.DEBUG_MODE_ENABLED) {
+                Log.d(TAG, "Application started to uninstall");
+            }
+        } catch (JSONException e) {
+            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            getResultBuilder().build(operation);
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
+    }
+
+    /**
      * Reboot the device [System app required].
      *
      * @param operation - Operation object.
@@ -617,6 +657,47 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             notificationDAO.updateNotification(notification.getId(), Notification.Status.SENT);
         }
         notificationDAO.close();
+    }
+
+    /**
+     * Lock the device.
+     *
+     * @param operation - Operation object.
+     */
+    public void lockDevice(Operation operation) {
+        operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+        getResultBuilder().build(operation);
+        getDevicePolicyManager().lockNow();
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "Device locked");
+        }
+    }
+
+    /**
+     * Install google play applications.
+     *
+     * @param operation - Operation object.
+     */
+    public void installGooglePlayApp(Operation operation) throws AndroidAgentException {
+        String packageName;
+        try {
+            JSONObject appData = new JSONObject(operation.getPayLoad().toString());
+            packageName = (String) appData.get(getContextResources().getString(R.string.intent_extra_package));
+
+        } catch (JSONException e) {
+            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            getResultBuilder().build(operation);
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
+
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "Started installing GoogleApp");
+        }
+
+        operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+        getResultBuilder().build(operation);
+
+        triggerGooglePlayApp(packageName);
     }
 
     /**

@@ -46,13 +46,6 @@ public interface VersionBasedOperations {
     void installAppBundle(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
     /**
-     * Uninstall application.
-     *
-     * @param operation - Operation object.
-     */
-    void uninstallApplication(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
-
-    /**
      * Encrypt/Decrypt device storage.
      *
      * @param operation - Operation object.
@@ -65,13 +58,6 @@ public interface VersionBasedOperations {
      * @param operation - Operation object.
      */
     void setPasswordPolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
-
-    /**
-     * Install google play applications.
-     *
-     * @param operation - Operation object.
-     */
-    void installGooglePlayApp(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
     /**
      * Change device lock code.
@@ -126,12 +112,5 @@ public interface VersionBasedOperations {
      * @param operation - Operation object.
      */
     void executeShellCommand(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
-
-    /**
-     * Lock the device.
-     *
-     * @param operation - Operation object.
-     */
-    public void lockDevice(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
 }

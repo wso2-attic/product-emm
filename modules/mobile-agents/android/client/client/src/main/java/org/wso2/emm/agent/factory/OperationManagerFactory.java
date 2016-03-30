@@ -24,6 +24,8 @@ import android.os.Build;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.services.OperationManager;
 import org.wso2.emm.agent.services.OperationManagerOlderSdk;
+import org.wso2.emm.agent.services.OperationManagerWorkProfile;
+import org.wso2.emm.agent.services.OperationProcessor;
 
 public class OperationManagerFactory {
     private DeviceInfo info;
@@ -34,10 +36,12 @@ public class OperationManagerFactory {
         this.info = new DeviceInfo(context);
     }
 
-    public OperationManager getOperationManager() {
+    public OperationManager getOperationManager(OperationProcessor operationProcessor) {
         if ((info.getSdkVersion() >= Build.VERSION_CODES.JELLY_BEAN) && (info.getSdkVersion() <= Build.VERSION_CODES.LOLLIPOP)) {
             return new OperationManagerOlderSdk(context);
         }
+        else if ((info.getSdkVersion() >= Build.VERSION_CODES.LOLLIPOP))
+            return new OperationManagerWorkProfile(context,operationProcessor);
         return null;
     }
 }

@@ -67,8 +67,6 @@ public class ServerDetails extends Activity {
 		btnStartRegistration.setBackground(getResources().getDrawable(R.drawable.btn_grey));
 		btnStartRegistration.setTextColor(getResources().getColor(R.color.black));
 		Response deviceCompatibility = state.evaluateCompatibility();
-
-
 		if (!deviceCompatibility.getCode()) {
 			txtSeverAddress.setText(deviceCompatibility.getDescriptionResourceID());
 			CommonUtils.callSystemApp(this,"sd","werwe");
@@ -76,15 +74,7 @@ public class ServerDetails extends Activity {
 			txtSeverAddress.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.GONE);
 		} else {
-            DevicePolicyManager manager = (DevicePolicyManager)
-                    getSystemService(Context.DEVICE_POLICY_SERVICE);
-            /*if (androidForWorkCompatibility == Response.ANDROID_FOR_WORK_COMPATIBLE && manager.
-                    isProfileOwnerApp(getApplicationContext().getPackageName())) {
-                Intent intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            } else {*/
-                btnStartRegistration.setVisibility(View.VISIBLE);
+            btnStartRegistration.setVisibility(View.VISIBLE);
                 evServerIP.setVisibility(View.VISIBLE);
                 String ipSaved =
                         Preference.getString(context.getApplicationContext(), Constants.IP);

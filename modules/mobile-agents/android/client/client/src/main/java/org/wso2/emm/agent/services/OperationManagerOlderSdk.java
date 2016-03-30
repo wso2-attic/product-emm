@@ -53,16 +53,6 @@ public class OperationManagerOlderSdk extends OperationManager{
     }
 
     @Override
-    public void lockDevice(Operation operation) {
-        operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
-        getResultBuilder().build(operation);
-        getDevicePolicyManager().lockNow();
-        if (Constants.DEBUG_MODE_ENABLED) {
-            Log.d(TAG, "Device locked");
-        }
-    }
-
-    @Override
     public void wipeDevice(Operation operation) throws AndroidAgentException {
         String inputPin;
         String savedPin = Preference.getString(getContext(), getContextResources().getString(R.string.shared_pref_pin));
@@ -195,41 +185,6 @@ public class OperationManagerOlderSdk extends OperationManager{
                 if (Constants.DEBUG_MODE_ENABLED) {
                     Log.d(TAG, "Application installation started");
                 }
-            }
-        } catch (JSONException e) {
-            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
-            getResultBuilder().build(operation);
-            throw new AndroidAgentException("Invalid JSON format.", e);
-        }
-    }
-
-    @Override
-    public void uninstallApplication(Operation operation) throws AndroidAgentException {
-        String packageName;
-        String type;
-        try {
-            JSONObject appData = new JSONObject(operation.getPayLoad().toString());
-            type = appData.getString(getContextResources().getString(R.string.app_type));
-
-            if (getContextResources().getString(R.string.intent_extra_web).equalsIgnoreCase(type)) {
-                String appUrl = appData.getString(getContextResources().getString(R.string.app_url));
-                String name = appData.getString(getContextResources().getString(R.string.intent_extra_name));
-                String operationType = getContextResources().getString(R.string.operation_uninstall);
-                JSONObject payload = new JSONObject();
-                payload.put(getContextResources().getString(R.string.intent_extra_identity), appUrl);
-                payload.put(getContextResources().getString(R.string.intent_extra_title), name);
-                payload.put(getContextResources().getString(R.string.operation_type), operationType);
-                operation.setPayLoad(payload.toString());
-                manageWebClip(operation);
-            } else {
-                packageName = appData.getString(getContextResources().getString(R.string.app_identifier));
-                getAppList().uninstallApplication(packageName);
-                operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
-                getResultBuilder().build(operation);
-            }
-
-            if (Constants.DEBUG_MODE_ENABLED) {
-                Log.d(TAG, "Application started to uninstall");
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
@@ -407,34 +362,6 @@ public class OperationManagerOlderSdk extends OperationManager{
     }
 
     @Override
-    public void installGooglePlayApp(Operation operation) throws AndroidAgentException {
-        String packageName;
-        try {
-            JSONObject appData = new JSONObject(operation.getPayLoad().toString());
-            packageName = (String) appData.get(getContextResources().getString(R.string.intent_extra_package));
-
-        } catch (JSONException e) {
-            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
-            getResultBuilder().build(operation);
-            throw new AndroidAgentException("Invalid JSON format.", e);
-        }
-
-        if (Constants.DEBUG_MODE_ENABLED) {
-            Log.d(TAG, "Started installing GoogleApp");
-        }
-
-        operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
-        getResultBuilder().build(operation);
-
-        triggerGooglePlayApp(packageName);
-    }
-
-    @Override
-    public void triggerGooglePlayApp(String packageName) {
-
-    }
-
-    @Override
     public void changeLockCode(Operation operation) throws AndroidAgentException {
         getDevicePolicyManager().setPasswordMinimumLength(getCdmDeviceAdmin(), getDefaultPasswordMinLength());
         String password = null;
@@ -476,11 +403,6 @@ public class OperationManagerOlderSdk extends OperationManager{
     }
 
     @Override
-    public void revokePolicy(Operation operation) throws AndroidAgentException {
-
-    }
-
-    @Override
     public void enterpriseWipe(Operation operation) throws AndroidAgentException {
         operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
         getResultBuilder().build(operation);
@@ -494,7 +416,6 @@ public class OperationManagerOlderSdk extends OperationManager{
         if (Constants.DEBUG_MODE_ENABLED) {
             Log.d(TAG, "Started enterprise wipe");
         }
-
     }
 
     @Override

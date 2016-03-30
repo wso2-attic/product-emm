@@ -24,7 +24,7 @@
 
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="23" />
+        android:targetSdkVersion="22" />
 
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -46,6 +46,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
 
+    <permission
+         android:name="android.permission.READ_PHONE_STATE"
+        android:protectionLevel="dangerous" />
     <permission
         android:name="org.wso2.emm.agent.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />

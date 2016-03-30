@@ -22,7 +22,9 @@ import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 
@@ -46,7 +48,7 @@ public class AgentReceptionActivity extends Activity {
         DevicePolicyManager manager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         if (androidForWorkCompatibility.getCode()) {
             if (manager.isProfileOwnerApp(getApplicationContext().getPackageName())) {
-                // If the managed profile is already set up, we show the enrollment screen.
+                /* If the managed profile is already set up, we show the enrollment screen. */
                 skipToEnrollment();
             } else {
                displayProfileProvisionPromptScreen();
@@ -57,7 +59,6 @@ public class AgentReceptionActivity extends Activity {
     }
 
     private View.OnClickListener onClickListenerButtonClicked = new View.OnClickListener() {
-
         @Override
         public void onClick(View view) {
             int iTag = (Integer) view.getTag();
@@ -95,7 +96,6 @@ public class AgentReceptionActivity extends Activity {
         Intent intent = new Intent(context, ServerDetails.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-
     }
 
     /**
@@ -111,4 +111,5 @@ public class AgentReceptionActivity extends Activity {
         btnSkipProfile.setTag(TAG_BTN_SKIP_PROFILE);
         btnSkipProfile.setOnClickListener(onClickListenerButtonClicked);
     }
+
 }

@@ -102,7 +102,7 @@ public class OperationProcessor {
 		notificationDAO = new NotificationDAO(context);
         /* Get matching OperationManager from the Factory */
         OperationManagerFactory operationManagerFactory = new OperationManagerFactory(context);
-        operationManager = operationManagerFactory.getOperationManager();
+        operationManager = operationManagerFactory.getOperationManager(this);
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class OperationProcessor {
 				break;
 			case Constants.Operation.POLICY_BUNDLE:
 				if(devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
-					setPolicyBundle(operation);
+					operationManager.setPolicyBundle(operation);
 				}
 				break;
 			case Constants.Operation.POLICY_MONITOR:
@@ -234,7 +234,7 @@ public class OperationProcessor {
                 this.doTask(op);
             }
             operation.setStatus(resources.getString(R.string.operation_value_completed));
-            resultBuilder.build(operation);
+            operationManager.getResultBuilder().build(operation);
 
             if (Constants.DEBUG_MODE_ENABLED) {
                 Log.d(TAG, "Policy applied");
@@ -253,6 +253,5 @@ public class OperationProcessor {
     public List<org.wso2.emm.agent.beans.Operation> getResultPayload() {
         return operationManager.getResultPayload();
     }
-
-
 }
+
