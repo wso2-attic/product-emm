@@ -123,6 +123,26 @@
             <ref bean="errorHandler"/>
         </jaxrs:providers>
     </jaxrs:server>
+
+    <jaxrs:server id="informationService" address="/information">
+        <jaxrs:serviceBeans>
+            <ref bean="informationServiceBean"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+            <ref bean="errorHandler"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+
+    <jaxrs:server id="searchService" address="/search">
+        <jaxrs:serviceBeans>
+            <ref bean="searchingServiceBean"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+            <ref bean="errorHandler"/>
+        </jaxrs:providers>
+    </jaxrs:server>
     <!--
     <jaxrs:server id="authenticationService" address="/authentication">
         <jaxrs:serviceBeans>
@@ -143,6 +163,10 @@
     <bean id="notificationServiceBean" class="org.wso2.carbon.mdm.api.DeviceNotification"/>
     <bean id="licenseServiceBean" class="org.wso2.carbon.mdm.api.License"/>
     <bean id="certificateServiceBean" class="org.wso2.carbon.mdm.api.Certificate"/>
+
+
+    <bean id="informationServiceBean" class="org.wso2.carbon.mdm.api.DeviceInformation"/>
+    <bean id="searchingServiceBean" class="org.wso2.carbon.mdm.api.DeviceSearch"/>
     <!--
     <bean id="authenticationServiceBean" class="org.wso2.carbon.mdm.api.Authentication"/>
     -->
