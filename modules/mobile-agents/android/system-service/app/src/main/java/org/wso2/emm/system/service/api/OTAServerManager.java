@@ -247,6 +247,7 @@ public class OTAServerManager {
 
         try {
             wakeLock.acquire();
+            Log.d(TAG, "Verifying upgrade package");
             RecoverySystem.verifyPackage(recoveryFile, recoveryVerifyListener, null);
         } catch (IOException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_VERIFY_FAILED);
@@ -264,6 +265,7 @@ public class OTAServerManager {
 
         try {
             wakeLock.acquire();
+            Log.d(TAG, "Installing upgrade package");
             RecoverySystem.installPackage(context, recoveryFile);
         } catch (IOException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_INSTALL_FAILED);
@@ -278,18 +280,8 @@ public class OTAServerManager {
     }
 
     private boolean checkURL(URL url) {
-        try {
-            HttpURLConnection.setFollowRedirects(false);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("HEAD");
-            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
-        } catch (ProtocolException e) {
-            Log.e(TAG, "Invalid URL due to protocol failure." + e);
-            return false;
-        } catch (IOException e) {
-            Log.e(TAG, "Invalid URL due to connection failure." + e);
-            return false;
-        }
+        // Returns true since this is a static URL case
+        return true;
     }
 
     /**
