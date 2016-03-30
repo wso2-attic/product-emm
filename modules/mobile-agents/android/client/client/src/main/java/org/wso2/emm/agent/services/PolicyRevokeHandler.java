@@ -117,7 +117,7 @@ public class PolicyRevokeHandler {
             case Constants.Operation.SET_STATUS_BAR_DISABLED:
                 if(appList.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
                     CommonUtils.callSystemApp(context, operation.getCode(),
-                                              Boolean.toString(false));
+                                              Boolean.toString(false), null);
                 } else {
                     throw new AndroidAgentException("Invalid operation code received");
                 }

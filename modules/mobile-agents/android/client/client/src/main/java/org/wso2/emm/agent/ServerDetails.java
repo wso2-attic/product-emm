@@ -90,7 +90,6 @@ public class ServerDetails extends Activity {
 			} else {
 				evServerIP.setText(ipSaved);
 			}
-
 			String deviceActive = Preference.getString(context, context.getResources().
 					getString(R.string.shared_pref_device_active));
 

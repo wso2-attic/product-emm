@@ -120,7 +120,7 @@ public class PolicyComplianceChecker {
             case Constants.Operation.SET_STATUS_BAR_DISABLED:
                 if(appList.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
                     CommonUtils.callSystemApp(context,operation.getCode(),
-                                              Boolean.toString(operation.isEnabled()));
+                                              Boolean.toString(operation.isEnabled()), null);
                     // Since without rooting the device a policy set by the device owner cannot
                     // be violated or overridden, no compliance check is necessary.
                     policy.setCompliance(true);

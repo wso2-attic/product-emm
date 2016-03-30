@@ -65,6 +65,7 @@ public final class AndroidConstants {
 			throw new AssertionError();
 		}
 		public static final String DEVICE_LOCK = "DEVICE_LOCK";
+		public static final String DEVICE_UNLOCK = "DEVICE_UNLOCK";
 		public static final String DEVICE_LOCATION = "DEVICE_LOCATION";
 		public static final String WIFI = "WIFI";
 		public static final String CAMERA = "CAMERA";
