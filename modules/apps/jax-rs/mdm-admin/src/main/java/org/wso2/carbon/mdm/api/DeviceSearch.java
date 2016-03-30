@@ -29,7 +29,7 @@ import org.wso2.carbon.device.mgt.core.search.mgt.SearchMgtException;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class DeviceSearch {
 
     private static Log log = LogFactory.getLog(DeviceSearch.class);
 
-    @GET
+    @POST
     public Response getDeviceInfo(SearchContext searchContext) throws MDMAPIException {
         SearchManagerService searchManagerService;
         List<DeviceWrapper> devices;
