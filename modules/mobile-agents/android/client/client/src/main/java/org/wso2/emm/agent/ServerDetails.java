@@ -67,8 +67,6 @@ public class ServerDetails extends Activity {
 		btnStartRegistration.setTextColor(getResources().getColor(R.color.black));
 		Response compatibility = state.evaluateCompatibility();
 
-		CommonUtils.callSystemApp(this,"sd","werwe");
-
 		if (!compatibility.getCode()) {
 			txtSeverAddress.setText(compatibility.getDescriptionResourceID());
 			btnStartRegistration.setVisibility(View.GONE);

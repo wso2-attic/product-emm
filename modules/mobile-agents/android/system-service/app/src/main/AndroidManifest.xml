@@ -39,5 +39,26 @@
                 <action android:name="org.wso2.emm.system.service.START_SERVICE" />
             </intent-filter>
         </service>
+
+        <activity
+                android:name=".MainActivity"
+                android:exported="true"
+                android:screenOrientation="portrait">
+        </activity>
+
+        <receiver
+                android:name="org.wso2.emm.system.service.ServiceDeviceAdminReceiver"
+                android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <intent-filter>
+
+                <!-- This action is required -->
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED"/>
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.app.device_admin"
+                    android:resource="@xml/agent_device_admin">
+            </meta-data>
+        </receiver>
     </application>
 </manifest>

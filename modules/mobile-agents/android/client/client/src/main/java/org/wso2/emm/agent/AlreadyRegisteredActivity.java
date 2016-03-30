@@ -488,4 +488,17 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		}
 	}
 
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == ACTIVATION_REQUEST) {
+			if (resultCode == Activity.RESULT_OK) {
+				CommonUtils.callSystemApp(context, null, null);
+				Log.i("onActivityResult", "Administration enabled!");
+			} else {
+				Log.i("onActivityResult", "Administration enable FAILED!");
+			}
+		}
+	}
+
 }

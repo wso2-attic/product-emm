@@ -60,7 +60,6 @@ public class Certificate {
      * @throws MDMAPIException
      */
     @POST
-    @Path("saveCertificate")
     public Response saveCertificate(@HeaderParam("Accept") String acceptHeader,
                                     EnrollmentCertificate[] enrollmentCertificates) throws MDMAPIException {
         MediaType responseMediaType = MDMAPIUtils.getResponseMediaType(acceptHeader);
@@ -78,7 +77,7 @@ public class Certificate {
                 certificates.add(certificate);
             }
             certificateService.saveCertificate(certificates);
-            return Response.status(Response.Status.CREATED).entity("Added successfully.").
+            return Response.status(Response.Status.CREATED).entity("").
                     type(responseMediaType).build();
         } catch (KeystoreException e) {
             String msg = "Error occurred while converting PEM file to X509Certificate.";
@@ -161,6 +160,29 @@ public class Certificate {
         }
     }
 
+    /**
+     * Get all certificatess
+     *
+     * @return certificate details in an array.
+     * @throws MDMAPIException
+     */
+    @GET
+    @Path("paginate")
+    public Response getAllCertificates(@HeaderParam("Accept") String acceptHeader)
+            throws MDMAPIException {
+        MediaType responseMediaType = MDMAPIUtils.getResponseMediaType(acceptHeader);
+
+        CertificateManagementService certificateService = MDMAPIUtils.getCertificateManagementService();
+        try {
+            List<CertificateResponse> certificates = certificateService.getCertificates();
+            return Response.status(Response.Status.OK).entity(certificates).type(responseMediaType).build();
+        } catch (CertificateManagementDAOException e) {
+            String msg = "Error occurred while fetching all certificates.";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+    }
+
     @DELETE
     @Path("{serialNumber}")
     public Response removeCertificate(@HeaderParam("Accept") String acceptHeader,
@@ -179,9 +201,9 @@ public class Certificate {
         try {
             deleted = certificateService.removeCertificate(serialNumber);
             if(deleted){
-                return Response.status(Response.Status.OK).entity(deleted).type(responseMediaType).build();
+                return Response.status(Response.Status.OK).entity("").type(responseMediaType).build();
             } else {
-                return Response.status(Response.Status.GONE).entity(deleted).type(responseMediaType).build();
+                return Response.status(Response.Status.NOT_FOUND).entity("").type(responseMediaType).build();
             }
         } catch (CertificateManagementDAOException e) {
             String msg = "Error occurred while converting PEM file to X509Certificate";

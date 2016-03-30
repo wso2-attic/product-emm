@@ -15,6 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.wso2.emm.agent.api;
 
 import java.io.ByteArrayOutputStream;
@@ -112,6 +113,19 @@ public class ApplicationManager {
 		}
 		
 		return appName;
+	}
+
+	public boolean isPackageInstalled(String packagename) {
+		try {
+			PackageInfo packageInfo = packageManager.
+					getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
+			if(packageInfo != null) {
+				return true;
+			}
+		} catch (PackageManager.NameNotFoundException e) {
+			return false;
+		}
+		return false;
 	}
 
 	/**

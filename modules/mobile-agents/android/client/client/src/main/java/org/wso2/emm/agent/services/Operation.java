@@ -74,6 +74,7 @@ public class Operation implements APIResultCallBack {
 	private DeviceInfo deviceInfo;
 	private GPSTracker gps;
 	private NotificationDAO notificationDAO;
+	private ApplicationManager applicationManager;
 
 	private static final String TAG = "Operation Handler";
 
@@ -99,6 +100,7 @@ public class Operation implements APIResultCallBack {
 		deviceInfo = new DeviceInfo(context.getApplicationContext());
 		gps = new GPSTracker(context.getApplicationContext());
 		notificationDAO = new NotificationDAO(context);
+		applicationManager = new ApplicationManager(context);
 	}
 
 	/**
@@ -195,7 +197,12 @@ public class Operation implements APIResultCallBack {
 				executeShellCommand(operation);
 				break;
 			default:
-				Log.e(TAG, "Invalid operation code received");
+				if(applicationManager.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
+					CommonUtils.callSystemApp(context,operation.getCode(),
+					                          Boolean.toString(operation.isEnabled()));
+				} else {
+					Log.e(TAG, "Invalid operation code received");
+				}
 				break;
 		}
 	}
