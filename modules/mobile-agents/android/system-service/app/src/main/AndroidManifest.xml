@@ -25,6 +25,9 @@
     <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <permission android:name="android.permission.REBOOT" />
     <permission android:name="android.permission.READ_LOGS" />
     <!--<permission android:name="org.wso2.emm.system.service.EMMSystemService.permission.Access" android:protectionLevel="signature"/>-->
