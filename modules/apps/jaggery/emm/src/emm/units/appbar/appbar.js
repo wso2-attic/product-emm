@@ -79,6 +79,7 @@ function onRequest(context) {
     var currentUser = session.get(constants.USER_SESSION_KEY);
     context.isAuthorizedForNotifications = isAuthorizedForNotifications;
     context.currentUser = currentUser;
+    context.appContext = mdmProps.appContext;
     return context;
 }
 

@@ -21,10 +21,11 @@ under the License. --}}
 {{#zone "title"}}
     {{
         unit "title"
-        pageTitle = "Device Management"
+        pageTitle = "Certificate Management"
     }}
 {{/zone}}
 {{#zone "body"}}
-    {{unit "appbar" pageTitle="Platform Configurations" pageLink="devices"}}
-    {{unit "platform-configuration"}}
+    {{unit "appbar" pageTitle="Certificate Management" pageLink="certificate-mgt" enableBack=true}}
+    {{unit "datatables"}}
+    {{unit "certificate-listing"}}
 {{/zone}}

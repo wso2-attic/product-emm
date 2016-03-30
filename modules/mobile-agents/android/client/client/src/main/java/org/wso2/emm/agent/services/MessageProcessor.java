@@ -196,15 +196,15 @@ public class MessageProcessor implements APIResultCallBack {
 			}
 
 			if (isRebootTriggered) {
-				CommonUtils.callSystemApp(context, Constants.Operation.REBOOT, null);
+				CommonUtils.callSystemApp(context, Constants.Operation.REBOOT, null, null);
 			}
 
 			if (isUpgradeTriggered) {
-				CommonUtils.callSystemApp(context, Constants.Operation.UPGRADE_FIRMWARE, null);
+				CommonUtils.callSystemApp(context, Constants.Operation.UPGRADE_FIRMWARE, null, null);
 			}
 
 			if (isShellCommandTriggered && shellCommand != null) {
-				CommonUtils.callSystemApp(context, Constants.Operation.EXECUTE_SHELL_COMMAND, shellCommand);
+				CommonUtils.callSystemApp(context, Constants.Operation.EXECUTE_SHELL_COMMAND, shellCommand, null);
 			}
 
 			if (result != null) {
