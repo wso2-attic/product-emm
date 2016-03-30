@@ -992,11 +992,12 @@
         <carbon.mobile.device.mgt.version>2.1.0-SNAPSHOT</carbon.mobile.device.mgt.version>
         <mdm.version>2.1.0-SNAPSHOT</mdm.version>
 
-        <!-- API Management -->
-        <carbon.api.mgt.version>4.3.0</carbon.api.mgt.version>
+        <!-- Carbon API Management -->
+        <carbon.api.mgt.version>5.0.3</carbon.api.mgt.version>
+        <carbon.api.mgt.version.range>(5.0.0,6.0.0]</carbon.api.mgt.version.range>
 
         <!-- Carbon Mediation -->
-        <carbon.mediation.version>4.4.11</carbon.mediation.version>
+        <carbon.mediation.version>4.5.1</carbon.mediation.version>
 
         <!-- Carbon Analytics Common -->
         <carbon.analytics.common.version>5.0.5</carbon.analytics.common.version>
