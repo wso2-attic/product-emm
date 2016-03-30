@@ -26,10 +26,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.UserManager;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
+import android.os.UserManager;
 import android.util.Log;
 import android.widget.Toast;
 import org.wso2.emm.system.service.api.OTADownload;
@@ -107,7 +107,7 @@ public class EMMSystemService extends IntentService {
             startAdmin();
         } else {
         /*This function handles the "Execute Command on Device" Operation.
-		All requests are handled on a single worker thread. They may take as long as necessary
+        All requests are handled on a single worker thread. They may take as long as necessary
 		(and will not block the application's main thread),
 		but only one request will be processed at a time.*/
 
@@ -134,8 +134,14 @@ public class EMMSystemService extends IntentService {
                 if (Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
                     doTask(operationCode);
                 }
+
+                if (extras.containsKey("appUri")) {
+                    appUri = extras.getString("appUri");
+                }
             }
+
         }
+
 
     }
 

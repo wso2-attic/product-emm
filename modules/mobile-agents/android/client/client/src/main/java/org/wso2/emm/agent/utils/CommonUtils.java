@@ -258,7 +258,7 @@ public class CommonUtils {
 	 * @param operation - Operation code.
 	 * @param command - Shell command to be executed.
 	 */
-	public static void callSystemApp(Context context, String operation, String command) {
+	public static void callSystemApp(Context context, String operation, String command, String appUri) {
 		if(Constants.SYSTEM_APP_ENABLED) {
 			Intent intent =  new Intent(Constants.SYSTEM_APP_SERVICE_NAME);
 			intent = createExplicitFromImplicitIntent(context,intent);
@@ -266,6 +266,9 @@ public class CommonUtils {
 			intent.setPackage(Constants.PACKAGE_NAME);
 			if (command != null) {
 				intent.putExtra("command", command);
+			}
+			if (appUri != null) {
+				intent.putExtra("appUri", appUri);
 			}
 			context.startService(intent);
 		} else {
