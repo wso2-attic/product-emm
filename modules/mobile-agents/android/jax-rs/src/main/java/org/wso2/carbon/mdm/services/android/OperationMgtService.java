@@ -111,7 +111,8 @@ public class OperationMgtService {
 
     @POST
     @Path("lock")
-    public Response configureDeviceLock(@HeaderParam(ACCEPT) String acceptHeader, List<String> deviceIDs) {
+    public Response configureDeviceLock(@HeaderParam(ACCEPT) String acceptHeader,
+                                        DeviceLockBeanWrapper deviceLockBeanWrapper) {
 
         if (log.isDebugEnabled()) {
             log.debug("Invoking Android device lock operation");
@@ -122,8 +123,49 @@ public class OperationMgtService {
         Response response;
 
         try {
+            Notification adminMessage = deviceLockBeanWrapper.getOperation();
+
+            if (adminMessage == null) {
+                throw new OperationManagementException("Lock bean is empty");
+            }
             CommandOperation operation = new CommandOperation();
             operation.setCode(AndroidConstants.OperationCodes.DEVICE_LOCK);
+            operation.setType(Operation.Type.PROFILE);
+            operation.setEnabled(true);
+            operation.setPayLoad(adminMessage.toJSON());
+            response = AndroidAPIUtils.getOperationResponse(deviceLockBeanWrapper.getDeviceIDs(), operation,
+                    message, responseMediaType);
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            log.error(errorMessage, e);
+            throw new AndroidOperationException(message, responseMediaType);
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Issue in retrieving device management service instance";
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            log.error(errorMessage, e);
+            throw new AndroidOperationException(message, responseMediaType);
+        }
+        return response;
+    }
+
+    @POST
+    @Path("unlock")
+    public Response configureDeviceUnlock(@HeaderParam(ACCEPT) String acceptHeader, List<String> deviceIDs) {
+
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking Android device unlock operation");
+        }
+
+        MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
+        Message message = new Message();
+        Response response;
+
+        try {
+            CommandOperation operation = new CommandOperation();
+            operation.setCode(AndroidConstants.OperationCodes.DEVICE_UNLOCK);
             operation.setType(Operation.Type.COMMAND);
             operation.setEnabled(true);
             response = AndroidAPIUtils.getOperationResponse(deviceIDs, operation, message, responseMediaType);

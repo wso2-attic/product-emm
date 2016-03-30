@@ -102,8 +102,13 @@ public class Constants {
 	public static final String APPLICATION_TYPE = "device";
 	public static final String USER_AGENT = "Mozilla/5.0 ( compatible ), Android";
 	public static final String PACKAGE_NAME = "org.wso2.emm.agent";
-	public static final String SERVICE_PACKAGE_NAME = "org.wso2.emm.system.service";
+	public static final String ADMIN_MESSAGE = "message";
+	public static final String IS_LOCKED = "lock";
+	public static final String LOCK_MESSAGE = "lockMessage";
+	public static final String OPERATION_ID = "operationId";
+	public static final boolean HIDE_UNREGISTER_BUTTON = false;
 
+	public static final String SERVICE_PACKAGE_NAME = "org.wso2.emm.system.service";
 
 	/**
 	 * Request codes.
@@ -174,6 +179,7 @@ public class Constants {
 			throw new AssertionError();
 		}
 		public static final String DEVICE_LOCK = "DEVICE_LOCK";
+		public static final String DEVICE_UNLOCK = "DEVICE_UNLOCK";
 		public static final String DEVICE_LOCATION = "DEVICE_LOCATION";
 		public static final String WIFI = "WIFI";
 		public static final String CAMERA = "CAMERA";
@@ -309,6 +315,39 @@ public class Constants {
 		public static final String RECEIVED_TIME = "received_time";
 		public static final String RESPONSE_TIME = "response_time";
 		public static final String STATUS = "status";
+	}
+
+	public final class Location {
+		private Location() {
+			throw new AssertionError();
+		}
+		public static final String GEO_ENDPOINT = "http://nominatim.openstreetmap.org/reverse";
+		public static final String RESULT_FORMAT = "format=json";
+		public static final String LONGITUDE = "lon";
+		public static final String LATITUDE = "lat";
+		public static final String ACCEPT_LANGUAGE = "accept-language";
+		public static final String LANGUAGE_CODE = "en-us";
+		public static final String ADDRESS = "address";
+		public static final String CITY = "city";
+		public static final String COUNTRY = "country";
+		public static final String ZIP = "postcode";
+		public static final String STREET1 = "road";
+		public static final String STREET2 = "suburb";
+		public static final String STATE = "state";
+	}
+
+	public final class LocationInfo {
+		private LocationInfo() {
+			throw new AssertionError();
+		}
+		public static final String CITY = "city";
+		public static final String COUNTRY = "country";
+		public static final String ZIP = "zip";
+		public static final String STREET1 = "street1";
+		public static final String STREET2 = "street2";
+		public static final String STATE = "state";
+		public static final String LONGITUDE = "longitude";
+		public static final String LATITUDE = "latitude";
 	}
 
 }

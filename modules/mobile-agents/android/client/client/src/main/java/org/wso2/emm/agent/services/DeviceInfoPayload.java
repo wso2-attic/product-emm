@@ -279,11 +279,6 @@ public class DeviceInfoPayload {
         property.setValue(batteryInfoPayload);
         properties.add(property);
 
-        property = new Device.Property();
-        property.setName(Constants.Device.APP_MEMORY_INFO);
-        property.setValue(runtimeInfo.getAppMemory());
-        properties.add(property);
-
         device.setProperties(properties);
     }
 
@@ -295,7 +290,7 @@ public class DeviceInfoPayload {
     public String getDeviceInfoPayload() {
         try {
             if(Constants.DEBUG_MODE_ENABLED){
-                Log.e(TAG, "device info " + device.toJSON());
+                Log.d(TAG, "device info " + device.toJSON());
             }
             return device.toJSON();
         } catch (AndroidAgentException e) {

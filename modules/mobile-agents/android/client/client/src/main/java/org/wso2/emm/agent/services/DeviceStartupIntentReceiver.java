@@ -56,6 +56,18 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 		String mode =
 				Preference
 						.getString(context, resources.getString(R.string.shared_pref_notifier));
+		boolean isLocked = Preference.getBoolean(context, Constants.IS_LOCKED);
+		String lockMessage = Preference.getString(context, Constants.LOCK_MESSAGE);
+
+		if (lockMessage == null || lockMessage.isEmpty()) {
+			lockMessage = resources.getString(R.string.txt_lock_activity);
+		}
+
+		if (isLocked) {
+			Operation operation = new Operation(context);
+			operation.enableLock(lockMessage);
+		}
+
 		int interval = Preference.getInt(context, context.getResources().getString(R.string.shared_pref_frequency));
 		if(interval == DEFAULT_INDEX){
 			interval = DEFAULT_INTERVAL;
