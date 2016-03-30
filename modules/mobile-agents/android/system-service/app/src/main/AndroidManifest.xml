@@ -15,7 +15,8 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.wso2.emm.system.service">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.wso2.emm.system.service"
+    android:sharedUserId="android.uid.system">
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -27,7 +28,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <permission android:name="android.permission.REBOOT" />
     <permission android:name="android.permission.READ_LOGS" />
-    <!--<permission android:name="org.wso2.emm.system.service.EMMSystemService.permission.Access" android:protectionLevel="signature"/>-->
     <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
 

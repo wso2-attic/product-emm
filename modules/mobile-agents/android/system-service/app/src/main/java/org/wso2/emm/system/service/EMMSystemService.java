@@ -26,6 +26,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
@@ -142,14 +143,11 @@ public class EMMSystemService extends IntentService {
                        Toast.LENGTH_SHORT).show();
         try {
             Thread.sleep(5000);
-            Runtime.getRuntime().exec("su -c reboot");
+            PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            powerManager.reboot(null);
         } catch (InterruptedException e) {
             Log.e(TAG, "Reboot initiating thread interrupted." + e);
-        } catch (IOException e) {
-            Log.e(TAG, "Reboot interrupted." + e);
         }
-        /*PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        powerManager.reboot(null);*/
     }
 
     /**
