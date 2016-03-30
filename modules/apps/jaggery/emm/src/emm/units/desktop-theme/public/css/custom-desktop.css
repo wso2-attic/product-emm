@@ -7186,3 +7186,20 @@ ul.tiles .icon {
   color: #E74C3C;
   font-weight: 400;
 }
+
+.dynamic-search-param {
+  background-color: lightgrey;
+  padding: 25px;
+  border: 5px solid navy;
+  margin: 25px;
+}
+
+.close-button-div
+{
+  display:block;
+  float:right;
+  width:27px;
+  height:27px;
+  /*background:url('http://cdn-sg1.pgimgs.com/images/pg/close-button.png') no-repeat center center;*/
+}
+
