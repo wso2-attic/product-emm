@@ -72,14 +72,17 @@ public class EMMSystemService extends IntentService {
             if (extras.containsKey("command")) {
                 shellCommand = extras.getString("command");
             }
+
+            if (extras.containsKey("appUri")) {
+                appUri = extras.getString("appUri");
+            }
         }
 
         Log.d(TAG, "EMM agent has sent a command.");
         if ((operationCode != null)) {
             Log.d(TAG, "The operation code is: " + operationCode);
-
             Log.i(TAG, "Will now executing the command ..." + operationCode);
-            //Log.i(TAG, "The serial Number for current user is:" + ActivityManager.getCurrentUser());
+
             if (Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
                 doTask(operationCode);
             }

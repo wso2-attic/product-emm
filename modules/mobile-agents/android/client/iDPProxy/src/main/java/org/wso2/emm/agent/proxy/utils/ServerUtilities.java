@@ -193,7 +193,7 @@ public class ServerUtilities {
 		}
 	}
 
-	private static HttpClient getCertifiedHttpClient() throws IDPTokenManagerException {
+	public static HttpClient getCertifiedHttpClient() throws IDPTokenManagerException {
 		CommunicationClientFactory communicationClientFactory = new CommunicationClientFactory();
 		CommunicationClient communicationClient = communicationClientFactory.
 				getClient(Constants.HttpClient.HTTP_CLIENT_IN_USE);
