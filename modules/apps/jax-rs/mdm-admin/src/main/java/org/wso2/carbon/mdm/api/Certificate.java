@@ -18,7 +18,6 @@
 
 package org.wso2.carbon.mdm.api;
 
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.certificate.mgt.core.dao.CertificateManagementDAOException;
@@ -30,11 +29,9 @@ import org.wso2.carbon.device.mgt.common.PaginationRequest;
 import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
-import org.wso2.carbon.mdm.api.util.ResponsePayload;
 import org.wso2.carbon.mdm.beans.EnrollmentCertificate;
 import org.wso2.carbon.mdm.exception.*;
 import org.wso2.carbon.mdm.exception.BadRequestException;
-import org.wso2.carbon.mdm.util.MDMUtil;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -64,8 +61,7 @@ public class Certificate {
                                     EnrollmentCertificate[] enrollmentCertificates) throws MDMAPIException {
         MediaType responseMediaType = MDMAPIUtils.getResponseMediaType(acceptHeader);
         CertificateManagementService certificateService;
-        List<org.wso2.carbon.certificate.mgt.core.bean.Certificate> certificates = new ArrayList<org.wso2.carbon
-                .certificate.mgt.core.bean.Certificate>();
+        List<org.wso2.carbon.certificate.mgt.core.bean.Certificate> certificates = new ArrayList<>();
         org.wso2.carbon.certificate.mgt.core.bean.Certificate certificate;
         certificateService = MDMAPIUtils.getCertificateManagementService();
         try {
@@ -161,13 +157,12 @@ public class Certificate {
     }
 
     /**
-     * Get all certificatess
+     * Get all certificates
      *
      * @return certificate details in an array.
      * @throws MDMAPIException
      */
     @GET
-    @Path("paginate")
     public Response getAllCertificates(@HeaderParam("Accept") String acceptHeader)
             throws MDMAPIException {
         MediaType responseMediaType = MDMAPIUtils.getResponseMediaType(acceptHeader);
