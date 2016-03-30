@@ -66,7 +66,6 @@ $(document).ready(function () {
         });
         payload_obj.conditions = conditions;
         var deviceSearchAPI = "/mdm-admin/search";
-        //===================
         $("#advance-search-form").addClass(" hidden");
         $("#loading-content").removeClass('hidden');
         var deviceListing = $("#device-listing");
@@ -79,13 +78,13 @@ $(document).ready(function () {
                     $('#device-listing-status-msg').text('No Device are available to be displayed.');
                     return;
                 }
-                console.log("data");
+                //console.log("data");
                 data = JSON.parse(data);
-                console.log(data);
-                console.log("-------------------------");
-                console.log("/data");
+                //console.log(data);
+                //console.log("-------------------------");
+                //console.log("/data");
                 data = data.responseContent;
-                console.log(data);
+                //console.log(data);
                 var viewModel = {};
                 if (data.length > 0) {
                     $('#ast-container').removeClass('hidden');
@@ -115,36 +114,5 @@ $(document).ready(function () {
                              }
             );
         });
-
-
-        //===================
-
-
-        //
-        //
-        //
-        //
-        //
-        //invokerUtil.post(
-        //        deviceSearchAPI,
-        //        payload_obj,
-        //        function (data) {
-        //            data = JSON.parse(data);
-        //            console.log(data);
-        //
-        //            $("#advance-search-result").removeClass("hidden");
-        //        }, function (data) {
-        //            console.log("huta");
-        //            if (data["status"] == 409) {
-        //                $(errorMsg).text("User : " + username + " already exists. Pick another username.");
-        //            } else if (data["status"] == 500) {
-        //                $(errorMsg).text("An unexpected error occurred @ backend server. Please try again later.");
-        //            } else {
-        //                $(errorMsg).text(data.errorMessage);
-        //            }
-        //            $(errorMsgWrapper).removeClass("hidden");
-        //        }
-        //);
-
     });
 });
