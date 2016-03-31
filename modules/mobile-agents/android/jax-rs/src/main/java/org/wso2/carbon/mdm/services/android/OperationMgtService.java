@@ -123,16 +123,16 @@ public class OperationMgtService {
         Response response;
 
         try {
-            Notification adminMessage = deviceLockBeanWrapper.getOperation();
+            DeviceLock lock = deviceLockBeanWrapper.getOperation();
 
-            if (adminMessage == null) {
+            if (lock == null) {
                 throw new OperationManagementException("Lock bean is empty");
             }
-            CommandOperation operation = new CommandOperation();
+            ProfileOperation operation = new ProfileOperation();
             operation.setCode(AndroidConstants.OperationCodes.DEVICE_LOCK);
             operation.setType(Operation.Type.PROFILE);
             operation.setEnabled(true);
-            operation.setPayLoad(adminMessage.toJSON());
+            operation.setPayLoad(lock.toJSON());
             response = AndroidAPIUtils.getOperationResponse(deviceLockBeanWrapper.getDeviceIDs(), operation,
                     message, responseMediaType);
         } catch (OperationManagementException e) {
@@ -310,7 +310,6 @@ public class OperationMgtService {
             CommandOperation operation = new CommandOperation();
             operation.setCode(AndroidConstants.OperationCodes.DEVICE_INFO);
             operation.setType(Operation.Type.COMMAND);
-	        getApplications(acceptHeader, deviceIDs);
             return AndroidAPIUtils.getOperationResponse(deviceIDs, operation, message,
                     responseMediaType);
         } catch (OperationManagementException e) {

@@ -65,7 +65,7 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 
 		if (isLocked) {
 			Operation operation = new Operation(context);
-			operation.enableLock(lockMessage);
+			operation.enableHardLock(lockMessage);
 		}
 
 		int interval = Preference.getInt(context, context.getResources().getString(R.string.shared_pref_frequency));

@@ -16,34 +16,28 @@
  * under the License.
  */
 
-package org.wso2.carbon.mdm.services.android.bean.wrapper;
+package org.wso2.carbon.mdm.services.android.bean;
 
-import org.wso2.carbon.mdm.services.android.bean.DeviceLock;
-import org.wso2.carbon.mdm.services.android.bean.Notification;
+import java.io.Serializable;
 
-import java.util.List;
+public class DeviceLock extends AndroidOperation implements Serializable {
 
-/**
- * This class is used to wrap the Notification bean with devices.
- */
-public class DeviceLockBeanWrapper {
+    private String message;
+    private boolean isHardLockEnabled;
 
-    private List<String> deviceIDs;
-    private DeviceLock operation;
-
-    public List<String> getDeviceIDs() {
-        return deviceIDs;
+    public String getMessage() {
+        return message;
     }
 
-    public void setDeviceIDs(List<String> deviceIDs) {
-        this.deviceIDs = deviceIDs;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public DeviceLock getOperation() {
-        return operation;
+    public boolean isHardLockEnabled() {
+        return isHardLockEnabled;
     }
 
-    public void setOperation(DeviceLock operation) {
-        this.operation = operation;
+    public void setHardLockEnabled(boolean hardLockEnabled) {
+        isHardLockEnabled = hardLockEnabled;
     }
 }
