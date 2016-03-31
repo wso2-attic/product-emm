@@ -27,6 +27,7 @@ import android.os.PowerManager.WakeLock;
 import android.os.RecoverySystem;
 import android.util.Log;
 import org.wso2.emm.system.service.utils.Constants;
+import org.wso2.emm.system.service.utils.FileUtils;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -201,7 +202,7 @@ public class OTAServerManager {
             return;
         }
 
-        File targetFile = new File(Constants.DEFAULT_UPDATE_PACKAGE_LOCATION);
+        File targetFile = new File(FileUtils.getUpgradePackageFilePath());
         try {
             boolean fileStatus = targetFile.createNewFile();
             if (!fileStatus) {
@@ -252,7 +253,7 @@ public class OTAServerManager {
     }
 
     public void startVerifyUpgradePackage() {
-        File recoveryFile = new File(Constants.DEFAULT_UPDATE_PACKAGE_LOCATION);
+        File recoveryFile = new File(FileUtils.getUpgradePackageFilePath());
 
         try {
             wakeLock.acquire();
@@ -270,7 +271,7 @@ public class OTAServerManager {
     }
 
     public void startInstallUpgradePackage() {
-        File recoveryFile = new File(Constants.DEFAULT_UPDATE_PACKAGE_LOCATION);
+        File recoveryFile = new File(FileUtils.getUpgradePackageFilePath());
 
         try {
             wakeLock.acquire();
