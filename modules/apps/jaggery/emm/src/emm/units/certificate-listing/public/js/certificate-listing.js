@@ -46,46 +46,46 @@ function hidePopup() {
 /**
  * Following click function would execute
  * when a user clicks on "Remove" link
- * on User Listing page in WSO2 MDM Console.
+ * on Certificate Listing page in WSO2 MDM Console.
  */
 function removeCertificate(serialNumber) {
     var removeCertificateAPI = "/mdm-admin/certificates?serial_number=" + serialNumber;
-    $(modalPopupContent).html($('#remove-user-modal-content').html());
+    $(modalPopupContent).html($('#remove-certificate-modal-content').html());
     showPopup();
 
-    $("a#remove-user-yes-link").click(function () {
+    $("a#remove-certificate-yes-link").click(function () {
         invokerUtil.delete(
             removeCertificateAPI,
             function () {
                 $("#" + userid).remove();
-                var newUserListCount = $(".user-list > span").length;
-                $("#certificate-listing-status-msg").text("Total number of Users found : " + newUserListCount);
-                $(modalPopupContent).html($('#remove-user-success-content').html());
-                $("a#remove-user-success-link").click(function () {
+                var newCertificateListCount = $(".user-list > span").length;
+                $("#certificate-listing-status-msg").text("Total number of Certificates found : " + newCertificateListCount);
+                $(modalPopupContent).html($('#remove-certificate-success-content').html());
+                $("a#remove-certificate-success-link").click(function () {
                     hidePopup();
                 });
             },
             function () {
-                $(modalPopupContent).html($('#remove-user-error-content').html());
-                $("a#remove-user-error-link").click(function () {
+                $(modalPopupContent).html($('#remove-certificate-error-content').html());
+                $("a#remove-certificate-error-link").click(function () {
                     hidePopup();
                 });
             }
         );
     });
 
-    $("a#remove-user-cancel-link").click(function () {
+    $("a#remove-certificate-cancel-link").click(function () {
         hidePopup();
     });
 }
 
 /**
  * Following on click function would execute
- * when a user type on the search field on User Listing page in
+ * when a user type on the search field on certificate Listing page in
  * WSO2 MDM Console then click on the search button.
  */
 $("#search-btn").click(function () {
-    var searchQuery = $("#search-by-username").val();
+    var searchQuery = $("#search-by-certificate").val();
     $("#ast-container").empty();
     loadCertificates(searchQuery);
 });
@@ -99,22 +99,22 @@ function InitiateViewOption() {
     if ($("#can-view").val()) {
         $(location).attr('href', $(this).data("url"));
     } else {
-        $(modalPopupContent).html($('#errorUserView').html());
+        $(modalPopupContent).html($('#errorCertificateView').html());
         showPopup();
     }
 }
 
 function loadCertificates(searchParam) {
     $("#loading-content").show();
-    var userListing = $("#user-listing");
-    var userListingSrc = userListing.attr("src");
-    $.template("user-listing", userListingSrc, function (template) {
+    var certificateListing = $("#certificate-listing");
+    var certificateListingSrc = certificateListing.attr("src");
+    $.template("certificate-listing", certificateListingSrc, function (template) {
         var serviceURL = "/mdm-admin/certificates";
 
         var successCallback = function (data) {
             if (!data) {
                 $('#ast-container').addClass('hidden');
-                $('#certificate-listing-status-msg').text('No users are available to be displayed.');
+                $('#certificate-listing-status-msg').text('No certificates are available to be displayed.');
                 return;
             }
             var canRemove = $("#can-remove").val();
@@ -125,8 +125,8 @@ function loadCertificates(searchParam) {
             var viewModel = {};
             viewModel.certificates = data;
             for (var i = 0; i < viewModel.certificates.length; i++) {
-                viewModel.certificates[i].userid = '1';
-                viewModel.certificates[i].adminUser = 'test dilshan';
+                viewModel.certificates[i].removePermitted = true;
+                viewModel.certificates[i].viewPermitted = true;
             }
             if (data.length > 0) {
                 $('#ast-container').removeClass('hidden');
@@ -135,11 +135,11 @@ function loadCertificates(searchParam) {
                 $("#ast-container").html(content);
             } else {
                 $('#ast-container').addClass('hidden');
-                $('#certificate-listing-status-msg').text('No users are available to be displayed.');
+                $('#certificate-listing-status-msg').text('No certificates are available to be displayed.');
             }
             $("#loading-content").hide();
             if (isInit) {
-                $('#user-grid').datatables_extended();
+                $('#certificate-grid').datatables_extended();
                 isInit = false;
             }
             $(".icon .text").res_text(0.2);
@@ -161,7 +161,4 @@ $(document).ready(function () {
     $(".viewEnabledIcon").click(function () {
         InitiateViewOption();
     });
-    if (!$("#can-invite").val()) {
-        $("#invite-user-button").remove();
-    }
 });
