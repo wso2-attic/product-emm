@@ -104,7 +104,7 @@ $(document).ready(function () {
             addCertificateFormData.pem = pemContent;
             var certificateList =[];
             certificateList.push(addCertificateFormData);
-            var addCertificateAPI = "/mdm-admin/certificates/saveCertificate";
+            var addCertificateAPI = "/mdm-admin/certificates";
 
             invokerUtil.post(
                 addCertificateAPI,
