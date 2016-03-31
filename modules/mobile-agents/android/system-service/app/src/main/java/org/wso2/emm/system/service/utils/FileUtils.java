@@ -19,14 +19,15 @@
 package org.wso2.emm.system.service.utils;
 
 import android.os.Environment;
+import android.util.Log;
+
+import java.io.File;
 
 public class FileUtils {
-    private static String getPath() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return Environment.getExternalStorageDirectory().getPath();
-        } else {
-            return Environment.getDataDirectory().getPath();
-        }
+    public static String getUpgradePackageFilePath() {
+        Log.d(FileUtils.class.getName(), "FilePath: " + Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOWNLOADS).getPath() + File.separator + Constants.UPDATE_PACKAGE_NAME);
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() +
+               File.separator + Constants.UPDATE_PACKAGE_NAME;
     }
 }

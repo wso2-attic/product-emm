@@ -86,15 +86,13 @@ public class EMMSystemService extends IntentService {
     private static final int INSTALL_FORWARD_LOCK = 0x00000001;
     private static final int INSTALL_ALLOW_DOWNGRADE = 0x00000080;
     private static final int INSTALL_REPLACE_EXISTING = 0x00000002;
-    private String operationCode = null;
-    private String command = null;
-    private String appUri = null;
-
     public static ComponentName cdmDeviceAdmin;
     public static DevicePolicyManager devicePolicyManager;
     public static UserManager mUserManager;
-    ContentResolver cResolve;
     private static boolean restrictionCode = false;
+    private String operationCode = null;
+    private String command = null;
+    private String appUri = null;
 
     public EMMSystemService() {
         super("EMMSystemService");

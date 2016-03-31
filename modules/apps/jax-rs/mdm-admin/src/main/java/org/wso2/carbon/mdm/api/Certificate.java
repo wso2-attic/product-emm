@@ -103,14 +103,11 @@ public class Certificate {
         }
 
         CertificateManagementService certificateService = MDMAPIUtils.getCertificateManagementService();
-        CertificateResponse certificateResponse;
+        List<CertificateResponse> certificateResponse;
         try {
-            certificateResponse = certificateService.getCertificateBySerial(serialNumber);
-            if(certificateResponse != null) {
-                certificateResponse.setCertificate(null); //avoid sending byte array in response.
-            }
+            certificateResponse = certificateService.searchCertificates(serialNumber);
             return Response.status(Response.Status.OK).entity(certificateResponse).type(responseMediaType).build();
-        } catch (KeystoreException e) {
+        } catch (CertificateManagementDAOException e) {
             String msg = "Error occurred while converting PEM file to X509Certificate";
             log.error(msg, e);
             return Response.serverError().build();
