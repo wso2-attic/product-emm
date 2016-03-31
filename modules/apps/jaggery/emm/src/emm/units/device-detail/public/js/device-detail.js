@@ -66,14 +66,14 @@ var InitiateViewOption = null;
         var arrow = $(".media .panel-group.tab-content .arrow-left");
         var parentHeight = $(arrow).parent().outerHeight();
 
-        if($(selectedTab).prev().length){
+        /*if($(selectedTab).prev().length){
             $(selectedTab).prevAll().each(function() {
                 totalHeight += $(this).outerHeight();
             });
             arrowPosition = totalHeight + (selectedTabHeight / 2);
         }else{
             arrowPosition = selectedTabHeight / 2;
-        }
+        }*/
 
         if(arrowPosition >= parentHeight){
             parentHeight = arrowPosition + 10;
