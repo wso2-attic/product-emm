@@ -49,7 +49,7 @@ function hidePopup() {
  * on Certificate Listing page in WSO2 MDM Console.
  */
 function removeCertificate(serialNumber) {
-    var removeCertificateAPI = "/mdm-admin/certificates?serial_number=" + serialNumber;
+    var removeCertificateAPI = "/mdm-admin/certificates/" + serialNumber;
     $(modalPopupContent).html($('#remove-certificate-modal-content').html());
     showPopup();
 
@@ -57,7 +57,7 @@ function removeCertificate(serialNumber) {
         invokerUtil.delete(
             removeCertificateAPI,
             function () {
-                $("#" + userid).remove();
+                $("#" + serialNumber).remove();
                 var newCertificateListCount = $(".user-list > span").length;
                 $("#certificate-listing-status-msg").text("Total number of Certificates found : " + newCertificateListCount);
                 $(modalPopupContent).html($('#remove-certificate-success-content').html());
@@ -111,6 +111,10 @@ function loadCertificates(searchParam) {
     $.template("certificate-listing", certificateListingSrc, function (template) {
         var serviceURL = "/mdm-admin/certificates";
 
+        if(searchParam != null && searchParam != undefined && searchParam.trim() != '') {
+            serviceURL = "/mdm-admin/certificates/" + searchParam;
+        }
+
         var successCallback = function (data) {
             if (!data) {
                 $('#ast-container').addClass('hidden');
@@ -123,12 +127,19 @@ function loadCertificates(searchParam) {
             data = JSON.parse(data);
 
             var viewModel = {};
-            viewModel.certificates = data;
+
+
+            if(searchParam !=null && searchParam != undefined && searchParam.trim() != '') {
+                viewModel.certificates = new Array(data);
+            } else {
+                viewModel.certificates = data;
+            }
+
             for (var i = 0; i < viewModel.certificates.length; i++) {
                 viewModel.certificates[i].removePermitted = true;
                 viewModel.certificates[i].viewPermitted = true;
             }
-            if (data.length > 0) {
+            if (viewModel.certificates.length > 0) {
                 $('#ast-container').removeClass('hidden');
                 $('#certificate-listing-status-msg').text("");
                 var content = template(viewModel);
