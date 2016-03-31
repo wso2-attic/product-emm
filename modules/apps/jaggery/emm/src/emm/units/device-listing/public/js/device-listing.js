@@ -210,7 +210,7 @@ function loadDevices(searchType, searchParam){
                 var deviceIdentifier = row.deviceIdentifier;
                 var url = "#";
                 if (status != 'REMOVED') {
-                    url = "device?type=" + deviceType + "&id=" + deviceIdentifier;
+                    url = "devices/view?type=" + deviceType + "&id=" + deviceIdentifier;
                 }
                 return '<div onclick="javascript:InitiateViewOption(\'' + url + '\')" class="thumbnail icon"><i class="square-element text fw fw-mobile"></i></div>';
             }},
