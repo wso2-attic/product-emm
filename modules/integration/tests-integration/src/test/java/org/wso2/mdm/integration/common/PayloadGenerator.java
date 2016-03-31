@@ -18,6 +18,7 @@
 
 package org.wso2.mdm.integration.common;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.io.IOUtils;
@@ -44,6 +45,12 @@ public class PayloadGenerator {
         FileInputStream fisTargetFile = new FileInputStream(new File(url.getPath()));
         String returnString = IOUtils.toString(fisTargetFile, Constants.UTF8);
         return returnString;
+    }
+
+    public static JsonArray getJsonPayload(String fileName) throws FileNotFoundException {
+        URL url = Thread.currentThread().getContextClassLoader().getResource(PAYLOAD_LOCATION + fileName);
+        JsonArray jsonArray = parser.parse(new FileReader(url.getPath())).getAsJsonArray();
+        return jsonArray;
     }
 
 }
