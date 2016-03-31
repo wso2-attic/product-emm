@@ -26,8 +26,7 @@ var removeCustomParam = function () {
  * initial mode and with out select mode.
  */
 function InitiateViewOption() {
-    console.log($(this).data("url"));
-        //$(location).attr('href', $(this).data("url"));
+        $(location).attr('href', $(this).data("url"));
 }
 
 $("#back-to-search").click(function () {
