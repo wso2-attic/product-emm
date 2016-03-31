@@ -125,12 +125,12 @@
                     <li><a><i class="fw fw-settings"></i>Configuration Management</a>
                         <ul>
                             {{#if permissions.TENANT_CONFIGURATION}}
-                                <li><a href="{{appContext}}platform-configuration"><i class="fw fw-settings"></i>Platform Configurations</a>
+                                <li><a href="{{appContext}}platform-configuration"><i class="fw fw-service"></i>Platform Configurations</a>
                                 </li>
                             {{/if}}
                             <!-- todo change the permission and get the related permission -->
                             {{#if permissions.TENANT_CONFIGURATION}}
-                                <li><a href="{{appContext}}certificates"><i class="fw fw-settings"></i>Certificate Configurations</a>
+                                <li><a href="{{appContext}}certificates"><i class="fw fw-security-policy"></i>Certificate Configurations</a>
                                 </li>
                             {{/if}}
                         </ul>
