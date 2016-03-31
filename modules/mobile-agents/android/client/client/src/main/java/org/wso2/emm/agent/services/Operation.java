@@ -345,7 +345,7 @@ public class Operation implements APIResultCallBack {
 			}
 			Preference.putBoolean(context, Constants.IS_LOCKED, true);
 			Preference.putString(context, Constants.LOCK_MESSAGE, message);
-			enableLock(message);
+			enableHardLock(message);
 		} else {
 			devicePolicyManager.lockNow();
 		}
@@ -356,7 +356,7 @@ public class Operation implements APIResultCallBack {
 	}
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-	public void enableLock(String message) {
+	public void enableHardLock(String message) {
 		if (isDeviceOwner()) {
 			devicePolicyManager.setLockTaskPackages(cdmDeviceAdmin, AUTHORIZED_PINNING_APPS);
 			Intent intent = new Intent(context, LockActivity.class);
