@@ -20,6 +20,29 @@ var removeCustomParam = function () {
     $(this).parent().parent().remove();
 };
 
+/**
+ * Following function would execute
+ * when a user clicks on the list item
+ * initial mode and with out select mode.
+ */
+function InitiateViewOption() {
+    console.log($(this).data("url"));
+        //$(location).attr('href', $(this).data("url"));
+}
+
+$("#back-to-search").click(function () {
+    $('#advance-search-result').addClass('hidden');
+    $("#advance-search-form").removeClass('hidden');
+    $("#view-search-param").addClass('hidden');
+    $("#back-to-search").addClass('hidden');
+});
+
+$("#view-search-param").click(function () {
+    $("#advance-search-form").removeClass('hidden');
+    $(".title-result").addClass('hidden');
+    $("#view-search-param").addClass('hidden');
+});
+
 var dynamicForm = '<div class="dynamic-search-param row"><div class="row"><a class="close-button-div icon fw fw-error">' +
                   '</a></div><div class="form-group wr-input-control col-md-2"><label class="wr-input-label ">State</label>' +
                   '<select class="state form-control select"><option>AND</option><option>OR</option></select></div><div ' +
@@ -32,6 +55,7 @@ var dynamicForm = '<div class="dynamic-search-param row"><div class="row"><a cla
                   ' ">Value</label><input type="text" class="form-control txt-value"/></div></div>';
 
 $(document).ready(function () {
+    var isInit = true;
 
     $("#add-custom-param").click(function () {
         $("#customSearchParam").prepend(dynamicForm);
@@ -78,15 +102,31 @@ $(document).ready(function () {
                     $('#device-listing-status-msg').text('No Device are available to be displayed.');
                     return;
                 }
-                //console.log("data");
                 data = JSON.parse(data);
-                //console.log(data);
-                //console.log("-------------------------");
-                //console.log("/data");
-                data = data.responseContent;
-                //console.log(data);
                 var viewModel = {};
+                var devices = [];
                 if (data.length > 0) {
+                    for (var tempDevice of data) {
+                        var device = {};
+                        device.type = tempDevice.device.type;
+                        device.name = tempDevice.device.name;
+                        device.deviceIdentifier = tempDevice.device.deviceIdentifier;
+                        var properties = {} ;
+                        var enrolmentInfo = {};
+                        properties.VENDOR = tempDevice.deviceInfo.vendor;
+                        properties.DEVICE_MODEL = tempDevice.deviceInfo.deviceModel;
+                        enrolmentInfo.status = "ACTIVE";
+                        enrolmentInfo.owner = "N/A";
+                        enrolmentInfo.ownership = "N/A";
+                        device.enrolmentInfo = enrolmentInfo;
+                        device.properties = properties;
+                       devices.push(device);
+                    }
+                    viewModel.devices = devices;
+                    $('#advance-search-result').removeClass('hidden');
+                    $("#view-search-param").removeClass('hidden');
+                    $("#back-to-search").removeClass('hidden');
+                    $('#device-grid').removeClass('hidden');
                     $('#ast-container').removeClass('hidden');
                     $('#user-listing-status-msg').text("");
                     var content = template(viewModel);
@@ -97,7 +137,7 @@ $(document).ready(function () {
                 }
                 $("#loading-content").addClass('hidden');
                 if (isInit) {
-                    $('#user-grid').datatables_extended();
+                    $('#device-grid').datatables_extended();
                     isInit = false;
                 }
                 $(".icon .text").res_text(0.2);

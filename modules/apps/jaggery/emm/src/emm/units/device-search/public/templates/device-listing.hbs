@@ -1,7 +1,7 @@
 
 
         {{#each devices}}
-            {{deviceMap this}}
+
             <tr data-type="selectable" data-deviceid="{{deviceIdentifier}}" data-devicetype="{{type}}">
                 <td class="remove-padding icon-only content-fill viewEnabledIcon"
                 {{#unequal enrolmentInfo.status "REMOVED"}}
