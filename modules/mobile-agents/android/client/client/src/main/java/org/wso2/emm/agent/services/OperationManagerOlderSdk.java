@@ -490,4 +490,19 @@ public class OperationManagerOlderSdk extends OperationManager{
     public void executeShellCommand(Operation operation) throws AndroidAgentException {
 
     }
+
+    @Override
+    public void hideApps(Operation operation) throws AndroidAgentException {
+        Log.d(TAG, "Operation not supported.");
+    }
+
+    @Override
+    public void unhideApps(Operation operation) throws AndroidAgentException {
+        Log.d(TAG, "Operation not supported.");
+    }
+
+    @Override
+    public void blockUninstallByPackageName(Operation operation) throws AndroidAgentException {
+        Log.d(TAG, "Operation not supported.");
+    }
 }

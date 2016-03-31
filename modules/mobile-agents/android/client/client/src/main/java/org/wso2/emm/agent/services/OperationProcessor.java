@@ -18,41 +18,29 @@
 package org.wso2.emm.agent.services;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
-import org.json.JSONException;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.LockActivity;
 import org.wso2.emm.agent.R;
-import org.wso2.emm.agent.AlertActivity;
 import org.wso2.emm.agent.ServerDetails;
 import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.api.GPSTracker;
-import org.wso2.emm.agent.api.WiFiConfig;
-import org.wso2.emm.agent.beans.ComplianceFeature;
-import org.wso2.emm.agent.beans.DeviceAppInfo;
-import org.wso2.emm.agent.beans.Notification;
-import org.wso2.emm.agent.beans.Operation;
-import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.dao.NotificationDAO;
 import org.wso2.emm.agent.factory.OperationManagerFactory;
-import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.CommonUtils;
 
+import android.annotation.TargetApi;
+import android.app.NotificationManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.media.AudioManager;
-import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -74,7 +62,11 @@ public class OperationProcessor {
 	private DeviceInfo deviceInfo;
 	private GPSTracker gps;
 	private NotificationDAO notificationDAO;
+    private NotificationManager notifyManager;
+    private int currentNotificationId;
+    private ApplicationManager applicationManager;
     private OperationManager operationManager;
+
 
 	private static final String TAG = "Operation Handler";
 
@@ -88,6 +80,8 @@ public class OperationProcessor {
 	private static final int DEFAULT_FLAG = 0;
 	private static final int DEFAULT_PASSWORD_MIN_LENGTH = 4;
 	private static final long DAY_MILLISECONDS_MULTIPLIER = 24 * 60 * 60 * 1000;
+    private static String[] AUTHORIZED_PINNING_APPS;
+    private static String AGENT_PACKAGE_NAME;
 
 	public OperationProcessor(Context context) {
 		this.context = context;
@@ -100,9 +94,14 @@ public class OperationProcessor {
 		deviceInfo = new DeviceInfo(context.getApplicationContext());
 		gps = new GPSTracker(context.getApplicationContext());
 		notificationDAO = new NotificationDAO(context);
+        AGENT_PACKAGE_NAME = context.getPackageName();
+        AUTHORIZED_PINNING_APPS = new String[]{AGENT_PACKAGE_NAME};
+        notifyManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        applicationManager = new ApplicationManager(context);
         /* Get matching OperationManager from the Factory */
         OperationManagerFactory operationManagerFactory = new OperationManagerFactory(context);
         operationManager = operationManagerFactory.getOperationManager(this);
+
 	}
 
 	/**
@@ -124,6 +123,9 @@ public class OperationProcessor {
 			case Constants.Operation.DEVICE_LOCK:
 				operationManager.lockDevice(operation);
 				break;
+            case Constants.Operation.DEVICE_UNLOCK:
+                operationManager.unlockDevice(operation);
+                break;
 			case Constants.Operation.WIPE_DATA:
 				operationManager.wipeDevice(operation);
 				break;
@@ -199,7 +201,12 @@ public class OperationProcessor {
 				operationManager.executeShellCommand(operation);
 				break;
 			default:
-				Log.e(TAG, "Invalid operation code received");
+				if(applicationManager.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
+					CommonUtils.callSystemApp(context,operation.getCode(),
+							                    Boolean.toString(operation.isEnabled()), null);
+				} else {
+					Log.e(TAG, "Invalid operation code received");
+				}
 				break;
 		}
 	}

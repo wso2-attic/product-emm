@@ -26,7 +26,6 @@
         android:minSdkVersion="16"
         android:targetSdkVersion="22" />
 
-
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
@@ -47,9 +46,6 @@
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
 
     <permission
-         android:name="android.permission.READ_PHONE_STATE"
-        android:protectionLevel="dangerous" />
-    <permission
         android:name="org.wso2.emm.agent.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
@@ -60,12 +56,12 @@
         android:screenOrientation="portrait"
         android:theme="@style/TopBarTheme" >
         <activity
-            android:name="org.wso2.emm.agent.RegistrationActivity"
+            android:name=".RegistrationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TopBarTheme" >
         </activity>
         <activity
-            android:name="org.wso2.emm.agent.DisplayDeviceInfoActivity"
+            android:name=".DisplayDeviceInfoActivity"
             android:label="@string/title_activity_display_device_info"
             android:screenOrientation="portrait" >
         </activity>
@@ -82,7 +78,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="org.wso2.emm.agent.services.AgentDeviceAdminReceiver"
+            android:name=".services.AgentDeviceAdminReceiver"
             android:permission="android.permission.BIND_DEVICE_ADMIN" >
             <intent-filter>
 
@@ -95,9 +91,9 @@
                 android:resource="@xml/agent_device_admin" >
             </meta-data>
         </receiver>
-        <receiver android:name="org.wso2.emm.agent.services.AlarmReceiver" />
+        <receiver android:name=".services.AlarmReceiver" />
         <receiver
-            android:name="org.wso2.emm.agent.services.DeviceStartupIntentReceiver"
+            android:name=".services.DeviceStartupIntentReceiver"
             android:enabled="true"
             android:exported="false" >
             <intent-filter>
@@ -109,8 +105,8 @@
         </receiver>
 
         <service
-                android:name="org.wso2.emm.agent.GCMIntentService"
-                android:exported="false" >
+            android:name="org.wso2.emm.agent.GCMIntentService"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
@@ -128,50 +124,41 @@
             android:windowSoftInputMode="stateUnchanged|adjustPan" >
         </activity>
         <activity
-            android:name="org.wso2.emm.agent.AuthenticationErrorActivity"
+            android:name=".AuthenticationErrorActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="org.wso2.emm.agent.NotifyActivity"
+            android:name=".NotifyActivity"
             android:label="@string/title_activity_notify"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="org.wso2.emm.agent.ServerDetails"
+            android:name=".ServerDetails"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateUnchanged|adjustPan" >
         </activity>
         <activity
-            android:name="org.wso2.emm.agent.PinCodeActivity"
+            android:name=".PinCodeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateUnchanged|adjustPan" >
         </activity>
         <activity
-            android:name="org.wso2.emm.agent.AlertActivity"
+            android:name=".AlertActivity"
             android:label="@string/title_activity_alert"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
-
         <!-- Managed Profile Manifest items -->
         <activity
             android:name=".services.managedProfileServices.EnableProfileActivity"
-            android:label="@string/app_name"/>
+            android:label="@string/app_name">
+        </activity>
         <activity
             android:name=".WorkProfileManager"
             android:label="@string/title_activity_notify"
             android:screenOrientation="portrait" >
         </activity>
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="org.wso2.emm.agent.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/share_paths" />
-        </provider>
         <activity
             android:name="org.wso2.emm.agent.services.managedProfileServices.AlreadyEnabledActivity"
             android:label="@string/title_activity_notify"
@@ -184,6 +171,11 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
+        </activity>
+        <activity
+            android:name=".LockActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_lock">
         </activity>
     </application>
 

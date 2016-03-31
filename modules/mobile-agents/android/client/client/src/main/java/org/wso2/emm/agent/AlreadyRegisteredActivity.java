@@ -19,6 +19,7 @@ package org.wso2.emm.agent;
 
 import java.util.Map;
 
+import android.app.Activity;
 import android.widget.RelativeLayout;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.beans.ServerConfig;
@@ -461,5 +462,18 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
             progressDialog.dismiss();
         }
     }
+
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == ACTIVATION_REQUEST) {
+			if (resultCode == Activity.RESULT_OK) {
+				CommonUtils.callSystemApp(context, null, null, null);
+				Log.i("onActivityResult", "Administration enabled!");
+			} else {
+				Log.i("onActivityResult", "Administration enable FAILED!");
+			}
+		}
+	}
 
 }

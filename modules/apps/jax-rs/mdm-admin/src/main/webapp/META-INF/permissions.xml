@@ -835,21 +835,28 @@
     <!-- Certificate related APIs -->
     <Permission>
         <name>Save certificate in the database</name>
-        <path>/device-mgt/android/certificate/save</path>
-        <url>/certificates/saveCertificate</url>
+        <path>/device-mgt/emm-admin/certificate/save</path>
+        <url>/certificates</url>
         <method>POST</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>get certificate in the database</name>
-        <path>/device-mgt/android/certificate/Get</path>
+        <path>/device-mgt/emm-admin/certificate/Get</path>
         <url>/certificates/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>get certificate in the database</name>
-        <path>/device-mgt/android/certificate/Get</path>
+        <path>/device-mgt/emm-admin/certificate/GetAll</path>
+        <url>/certificates</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get certificate in the database</name>
+        <path>/device-mgt/emm-admin/certificate/Get</path>
         <url>/certificates/*</url>
         <method>DELETE</method>
         <scope>emm_admin</scope>

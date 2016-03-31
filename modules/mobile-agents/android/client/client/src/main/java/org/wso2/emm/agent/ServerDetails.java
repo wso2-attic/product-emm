@@ -67,53 +67,52 @@ public class ServerDetails extends Activity {
 		btnStartRegistration.setBackground(getResources().getDrawable(R.drawable.btn_grey));
 		btnStartRegistration.setTextColor(getResources().getColor(R.color.black));
 		Response deviceCompatibility = state.evaluateCompatibility();
+
 		if (!deviceCompatibility.getCode()) {
 			txtSeverAddress.setText(deviceCompatibility.getDescriptionResourceID());
-			CommonUtils.callSystemApp(this,"sd","werwe");
 			btnStartRegistration.setVisibility(View.GONE);
 			txtSeverAddress.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.GONE);
 		} else {
             btnStartRegistration.setVisibility(View.VISIBLE);
-                evServerIP.setVisibility(View.VISIBLE);
-                String ipSaved =
+            evServerIP.setVisibility(View.VISIBLE);
+            String ipSaved =
                         Preference.getString(context.getApplicationContext(), Constants.IP);
 
-                // check if we have the IP saved previously.
-                if (ipSaved != null && !ipSaved.isEmpty()) {
-                    evServerIP.setText(ipSaved);
-                    startAuthenticationActivity();
-                } else {
-                    evServerIP.setText(ipSaved);
-                }
-
-                String deviceActive = Preference.getString(context, context.getResources().
+            // check if we have the IP saved previously.
+            if (ipSaved != null && !ipSaved.isEmpty()) {
+                evServerIP.setText(ipSaved);
+                startAuthenticationActivity();
+            } else {
+                evServerIP.setText(ipSaved);
+            }
+            String deviceActive = Preference.getString(context, context.getResources().
                         getString(R.string.shared_pref_device_active));
 
-                if (deviceActive != null && deviceActive.equals(context.getResources().
+            if (deviceActive != null && deviceActive.equals(context.getResources().
                         getString(R.string.shared_pref_reg_success))) {
-                    Intent intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
+                Intent intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+
+            evServerIP.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
 
-                evServerIP.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    enableSubmitIfReady();
+                }
 
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                @Override
+                public void afterTextChanged(Editable s) {
                         enableSubmitIfReady();
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        enableSubmitIfReady();
-                    }
-                });
-                // on click handler for start registration.
-                btnStartRegistration.setOnClickListener(new OnClickListener() {
+                }
+            });
+            // on click handler for start registration.
+            btnStartRegistration.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         loadStartRegistrationDialog();
@@ -121,7 +120,6 @@ public class ServerDetails extends Activity {
                 });
             }
     }
-
 
 	/**
 	 * Validation done to see if the server IP field is properly

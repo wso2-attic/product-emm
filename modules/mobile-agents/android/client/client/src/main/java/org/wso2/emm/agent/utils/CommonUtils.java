@@ -18,6 +18,8 @@
 package org.wso2.emm.agent.utils;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.wso2.emm.agent.AndroidAgentException;
@@ -25,6 +27,7 @@ import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.beans.UnregisterProfile;
 import org.wso2.emm.agent.proxy.APIController;
+import org.wso2.emm.agent.proxy.BuildConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 import org.wso2.emm.agent.proxy.beans.EndPointInfo;
@@ -255,16 +258,46 @@ public class CommonUtils {
 	 * @param operation - Operation code.
 	 * @param command - Shell command to be executed.
 	 */
-	public static void callSystemApp(Context context, String operation, String command) {
+	public static void callSystemApp(Context context, String operation, String command, String appUri) {
 		if(Constants.SYSTEM_APP_ENABLED) {
-			Intent intent = new Intent(Constants.SYSTEM_APP_SERVICE_NAME);
-//			intent.putExtra("code", operation);
-//			if (command != null) {
-//				intent.putExtra("command", command);
-//			}
+			Intent intent =  new Intent(Constants.SYSTEM_APP_SERVICE_NAME);
+			intent = createExplicitFromImplicitIntent(context,intent);
+			intent.putExtra("code", operation);
+			intent.setPackage(Constants.PACKAGE_NAME);
+			if (command != null) {
+				intent.putExtra("command", command);
+			}
+			if (appUri != null) {
+				intent.putExtra("appUri", appUri);
+			}
 			context.startService(intent);
 		} else {
 			Log.e(TAG, "System app not enabled.");
 		}
+	}
+
+	public static Intent createExplicitFromImplicitIntent(Context context, Intent implicitIntent) {
+		//Retrieve all services that can match the given intent
+		PackageManager pm = context.getPackageManager();
+		List<ResolveInfo> resolveInfo = pm.queryIntentServices(implicitIntent, 0);
+
+		//Make sure only one match was found
+		if (resolveInfo == null || resolveInfo.size() != 1) {
+			return null;
+		}
+
+		//Get component info and create ComponentName
+		ResolveInfo serviceInfo = resolveInfo.get(0);
+		String packageName = serviceInfo.serviceInfo.packageName;
+		String className = serviceInfo.serviceInfo.name;
+		ComponentName component = new ComponentName(packageName, className);
+
+		//Create a new intent. Use the old one for extras and such reuse
+		Intent explicitIntent = new Intent(implicitIntent);
+
+		//Set the component to be explicit
+		explicitIntent.setComponent(component);
+
+		return explicitIntent;
 	}
 }

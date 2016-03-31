@@ -64,5 +64,11 @@
       "type": "install"
     },
     "deviceIDs": []
+  },
+  "lock" : {
+    "operation": {
+      "message": "message"
+    },
+    "deviceIDs": []
   }
 }

@@ -44,7 +44,7 @@ public class MutualSSLAuthenticator implements ClientAuthenticator {
     @Override
     public KeyStore getCredentialCertificate() {
         if (localKeyStore == null) {
-            localKeyStore = Keystore.getKeystore(R.raw.key,
+            localKeyStore = Keystore.getKeystore(R.raw.keystore,
                                                  Constants.KEYSTORE_PASSWORD);
         }
         return localKeyStore;

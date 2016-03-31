@@ -19,7 +19,11 @@ package org.wso2.emm.agent.services;
 
 import java.util.Locale;
 
+import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.beans.*;
+import org.wso2.emm.agent.beans.Operation;
+import org.wso2.emm.agent.factory.OperationManagerFactory;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
@@ -30,6 +34,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.SystemClock;
+import android.util.Log;
 
 /**
  * Broadcast receiver for device boot action used to start agent local
@@ -41,6 +46,7 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 	public static final int DEFAULT_INDEX = 0;
 	public static final int DEFAULT_INTERVAL = 30000;
 	private Resources resources;
+    private static final String TAG = "DeviceStartupIntent";
 
 	@Override
 	public void onReceive(final Context context, Intent intent) {
@@ -56,6 +62,24 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 		String mode =
 				Preference
 						.getString(context, resources.getString(R.string.shared_pref_notifier));
+		boolean isLocked = Preference.getBoolean(context, Constants.IS_LOCKED);
+		String lockMessage = Preference.getString(context, Constants.LOCK_MESSAGE);
+
+		if (lockMessage == null || lockMessage.isEmpty()) {
+			lockMessage = resources.getString(R.string.txt_lock_activity);
+		}
+
+		if (isLocked) {
+            org.wso2.emm.agent.beans.Operation lockOperation = new Operation();
+			lockOperation.setCode(Constants.Operation.DEVICE_LOCK);
+            OperationProcessor operationProcessor = new OperationProcessor(context);
+            try {
+                operationProcessor.doTask(lockOperation);
+            } catch (AndroidAgentException e) {
+                Log.d(TAG, "Operation not supported.");
+            }
+        }
+
 		int interval = Preference.getInt(context, context.getResources().getString(R.string.shared_pref_frequency));
 		if(interval == DEFAULT_INDEX){
 			interval = DEFAULT_INTERVAL;

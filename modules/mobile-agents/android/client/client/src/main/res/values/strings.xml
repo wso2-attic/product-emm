@@ -342,4 +342,7 @@
     <string name="operation_install">install</string>
     <string name="operation_uninstall">uninstall</string>
 
+    <string name="title_activity_lock">LockActivity</string>
+    <string name="txt_lock_activity">Device is locked. Please contact administrator</string>
+
 </resources>

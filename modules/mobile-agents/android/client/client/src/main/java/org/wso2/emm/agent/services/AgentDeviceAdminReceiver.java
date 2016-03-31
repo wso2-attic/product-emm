@@ -173,4 +173,13 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 	public static ComponentName getComponentName(Context context) {
 		return new ComponentName(context.getApplicationContext(), AgentDeviceAdminReceiver.class);
 	}
+
+	public void onLockTaskModeEntering(Context context, Intent intent, String pkg) {
+		Toast.makeText(context, "Device is locked", Toast.LENGTH_LONG).show();
+	}
+
+	public void onLockTaskModeExiting(Context context, Intent intent) {
+		Toast.makeText(context, "Device is unlocked", Toast.LENGTH_SHORT).show();
+	}
 }
+

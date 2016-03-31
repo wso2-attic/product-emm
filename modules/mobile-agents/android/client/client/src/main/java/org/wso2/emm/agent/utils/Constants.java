@@ -26,7 +26,7 @@ public class Constants {
 	public static final boolean DEBUG_MODE_ENABLED = false;
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
-	public static final boolean SYSTEM_APP_ENABLED = true;
+	public static final boolean SYSTEM_APP_ENABLED = false;
 	public static final String SYSTEM_APP_SERVICE_NAME = "org.wso2.emm.system.service.START_SERVICE";
 	public static final String GCM_PROJECT_NUMBER = "GOOGLE-API-PROJECT-NUMBER";
 	public static final String REG_ID = "gcm_reg_id";
@@ -39,15 +39,18 @@ public class Constants {
 	public static final String API_SERVER_PORT = "80";
 	public static final String OWNERSHIP_BYOD = "BYOD";
 	public static final String OWNERSHIP_COPE = "COPE";
-	public static final boolean SKIP_LICENSE = false;
-	public static final boolean HIDE_LOGIN_UI = false;
-	public static final boolean HIDE_UNREGISTER_BUTTON = false;
 	// Set DEFAULT_OWNERSHIP to null if no overiding is needed. Other possible values are,
-	// OWNERSHIP_BYOD or OWNERSHIP_COPE
+	// OWNERSHIP_BYOD or OWNERSHIP_COPE. If you are using the mutual SSL authentication
+	// This value must be set to a value other than null.
 	public static final String DEFAULT_OWNERSHIP = null;
-	// This is set to overide the server host name retrieveing screen. If overiding is not
+	// This is set to override the server host name retrieving screen. If overriding is not
 	// needed, set this to null.
 	public static final String DEFAULT_HOST = null;
+
+
+	// This is used to skip the license
+	public static final boolean SKIP_LICENSE = false;
+	public static final boolean HIDE_LOGIN_UI = false;
 
 	// TODO: Add API_VERSION to server endpoint
 	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";
@@ -99,7 +102,13 @@ public class Constants {
 	public static final String APPLICATION_TYPE = "device";
 	public static final String USER_AGENT = "Mozilla/5.0 ( compatible ), Android";
 	public static final String PACKAGE_NAME = "org.wso2.emm.agent";
+	public static final String ADMIN_MESSAGE = "message";
+	public static final String IS_LOCKED = "lock";
+	public static final String LOCK_MESSAGE = "lockMessage";
+	public static final String OPERATION_ID = "operationId";
+	public static final boolean HIDE_UNREGISTER_BUTTON = false;
 
+	public static final String SERVICE_PACKAGE_NAME = "org.wso2.emm.system.service";
 
 	/**
 	 * Request codes.
@@ -170,6 +179,7 @@ public class Constants {
 			throw new AssertionError();
 		}
 		public static final String DEVICE_LOCK = "DEVICE_LOCK";
+		public static final String DEVICE_UNLOCK = "DEVICE_UNLOCK";
 		public static final String DEVICE_LOCATION = "DEVICE_LOCATION";
 		public static final String WIFI = "WIFI";
 		public static final String CAMERA = "CAMERA";
@@ -199,6 +209,47 @@ public class Constants {
 		public static final String UPGRADE_FIRMWARE = "UPGRADE_FIRMWARE";
 		public static final String REBOOT = "REBOOT";
 		public static final String EXECUTE_SHELL_COMMAND = "SHELL_COMMAND";
+		public static final String DISALLOW_ADJUST_VOLUME = "DISALLOW_ADJUST_VOLUME";
+		public static final String DISALLOW_CONFIG_BLUETOOTH = "DISALLOW_CONFIG_BLUETOOTH";
+		public static final String DISALLOW_CONFIG_CELL_BROADCASTS =
+				"DISALLOW_CONFIG_CELL_BROADCASTS";
+		public static final String DISALLOW_CONFIG_CREDENTIALS = "DISALLOW_CONFIG_CREDENTIALS";
+		public static final String DISALLOW_CONFIG_MOBILE_NETWORKS =
+				"DISALLOW_CONFIG_MOBILE_NETWORKS";
+		public static final String DISALLOW_CONFIG_TETHERING = "DISALLOW_CONFIG_TETHERING";
+		public static final String DISALLOW_CONFIG_VPN = "DISALLOW_CONFIG_VPN";
+		public static final String DISALLOW_CONFIG_WIFI = "DISALLOW_CONFIG_WIFI";
+		public static final String DISALLOW_APPS_CONTROL = "DISALLOW_APPS_CONTROL";
+		public static final String DISALLOW_CREATE_WINDOWS = "DISALLOW_CREATE_WINDOWS";
+		public static final String DISALLOW_CROSS_PROFILE_COPY_PASTE
+				= "DISALLOW_CROSS_PROFILE_COPY_PASTE";
+		public static final String DISALLOW_DEBUGGING_FEATURES = "DISALLOW_DEBUGGING_FEATURES";
+		public static final String DISALLOW_FACTORY_RESET = "DISALLOW_FACTORY_RESET";
+		public static final String DISALLOW_ADD_USER = "DISALLOW_ADD_USER";
+		public static final String DISALLOW_INSTALL_APPS = "DISALLOW_INSTALL_APPS";
+		public static final String DISALLOW_INSTALL_UNKNOWN_SOURCES
+				= "DISALLOW_INSTALL_UNKNOWN_SOURCES";
+		public static final String DISALLOW_MODIFY_ACCOUNTS = "DISALLOW_MODIFY_ACCOUNTS";
+		public static final String DISALLOW_MOUNT_PHYSICAL_MEDIA = "DISALLOW_MOUNT_PHYSICAL_MEDIA";
+		public static final String DISALLOW_NETWORK_RESET = "DISALLOW_NETWORK_RESET";
+		public static final String DISALLOW_OUTGOING_BEAM = "DISALLOW_OUTGOING_BEAM";
+		public static final String DISALLOW_OUTGOING_CALLS = "DISALLOW_OUTGOING_CALLS";
+		public static final String DISALLOW_REMOVE_USER = "DISALLOW_REMOVE_USER";
+		public static final String DISALLOW_SAFE_BOOT = "DISALLOW_SAFE_BOOT";
+		public static final String DISALLOW_SHARE_LOCATION = "DISALLOW_SHARE_LOCATION";
+		public static final String DISALLOW_SMS = "DISALLOW_SMS";
+		public static final String DISALLOW_UNINSTALL_APPS = "DISALLOW_UNINSTALL_APPS";
+		public static final String DISALLOW_UNMUTE_MICROPHONE = "DISALLOW_UNMUTE_MICROPHONE";
+		public static final String DISALLOW_USB_FILE_TRANSFER = "DISALLOW_USB_FILE_TRANSFER";
+		public static final String ALLOW_PARENT_PROFILE_APP_LINKING
+				= "ALLOW_PARENT_PROFILE_APP_LINKING";
+		public static final String ENSURE_VERIFY_APPS = "ENSURE_VERIFY_APPS";
+		public static final String AUTO_TIME = "AUTO_TIME";
+		public static final String ENABLE_ADMIN = "ENABLE_ADMIN";
+		public static final String SET_SCREEN_CAPTURE_DISABLED = "SET_SCREEN_CAPTURE_DISABLED";
+		public static final String SET_STATUS_BAR_DISABLED = "SET_STATUS_BAR_DISABLED";
+		public static final String SILENT_INSTALL_APPLICATION = "SILENT_INSTALL_APPLICATION";
+		public static final String SILENT_UNINSTALL_APPLICATION = "SILENT_UNINSTALL_APPLICATION";
 	}
 
 	/**
@@ -264,6 +315,39 @@ public class Constants {
 		public static final String RECEIVED_TIME = "received_time";
 		public static final String RESPONSE_TIME = "response_time";
 		public static final String STATUS = "status";
+	}
+
+	public final class Location {
+		private Location() {
+			throw new AssertionError();
+		}
+		public static final String GEO_ENDPOINT = "http://nominatim.openstreetmap.org/reverse";
+		public static final String RESULT_FORMAT = "format=json";
+		public static final String LONGITUDE = "lon";
+		public static final String LATITUDE = "lat";
+		public static final String ACCEPT_LANGUAGE = "accept-language";
+		public static final String LANGUAGE_CODE = "en-us";
+		public static final String ADDRESS = "address";
+		public static final String CITY = "city";
+		public static final String COUNTRY = "country";
+		public static final String ZIP = "postcode";
+		public static final String STREET1 = "road";
+		public static final String STREET2 = "suburb";
+		public static final String STATE = "state";
+	}
+
+	public final class LocationInfo {
+		private LocationInfo() {
+			throw new AssertionError();
+		}
+		public static final String CITY = "city";
+		public static final String COUNTRY = "country";
+		public static final String ZIP = "zip";
+		public static final String STREET1 = "street1";
+		public static final String STREET2 = "street2";
+		public static final String STATE = "state";
+		public static final String LONGITUDE = "longitude";
+		public static final String LATITUDE = "latitude";
 	}
 
 }

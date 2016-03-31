@@ -25,7 +25,7 @@ import android.util.Log;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.wso2.emm.agent.AndroidAgentException;
-import org.wso2.emm.agent.beans.AppData;
+import org.wso2.emm.agent.beans.Application;
 import org.wso2.emm.agent.beans.Device;
 import org.wso2.emm.agent.utils.Constants;
 
@@ -33,7 +33,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RuntimeInfo {
     Context context;
@@ -76,10 +78,10 @@ public class RuntimeInfo {
         return payload;
     }
 
-    public String getAppMemory() throws AndroidAgentException {
-        List<AppData> properties = new ArrayList<>();
-        AppData appData;
-        Device.Property property;
+    public Map<String, Application> getAppMemory() throws AndroidAgentException {
+        Map<String, Application> applications = new HashMap<>();
+        Application appData;
+
         ActivityManager activityManager =
                 (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
@@ -90,52 +92,30 @@ public class RuntimeInfo {
                 String pidColumnValue = columns[0].trim();
 
                 if (!pidColumnValue.isEmpty() && TextUtils.isDigitsOnly(pidColumnValue)) {
-                    int pid = Integer.parseInt(pidColumnValue);
-                    appData = new AppData();
-                    property = new Device.Property();
-                    property.setName(Constants.Device.PACKAGE);
-                    property.setValue(columns[columns.length - 1]);
-                    appData.addApps(property);
 
-                    property = new Device.Property();
-                    property.setName(Constants.Device.PID);
-                    property.setValue(String.valueOf(columns[0].trim()));
-                    appData.addApps(property);
+                    appData = new Application();
+                    appData.setPackageName(columns[columns.length - 1]);
+
+                    int pid = Integer.parseInt(pidColumnValue);
+                    appData.setPid(Integer.parseInt(columns[0]));
 
                     int totalPSS = activityManager.
                             getProcessMemoryInfo(new int[]{pid})[0].getTotalPss();
-                    property = new Device.Property();
-                    property.setName(Constants.Device.PSS);
-                    property.setValue(String.valueOf(totalPSS));
-                    appData.addApps(property);
+                    appData.setPss(totalPSS);
 
                     int totalPrivateDirty = activityManager.
                             getProcessMemoryInfo(new int[]{pid})[0].getTotalPrivateDirty();
-                    property = new Device.Property();
-                    property.setName(Constants.Device.USS);
-                    property.setValue(String.valueOf(totalPrivateDirty));
-                    appData.addApps(property);
+                    appData.setUss(totalPrivateDirty);
 
                     int totalSharedDirty = activityManager.getProcessMemoryInfo(new int[]{pid})[0].
                             getTotalSharedDirty();
-                    property = new Device.Property();
-                    property.setName(Constants.Device.SHARED_DIRTY);
-                    property.setValue(String.valueOf(totalSharedDirty));
-                    appData.addApps(property);
-                    properties.add(appData);
+                    appData.setSharedDirty(totalSharedDirty);
+
+                    applications.put(appData.getPackageName(), appData);
                 }
             }
         }
-
-        String payload;
-        try {
-            payload = mapper.writeValueAsString(properties);
-        } catch (JsonProcessingException e) {
-            String errorMsg = "Error occurred while parsing App memory property object to json.";
-            Log.e(TAG, errorMsg, e);
-            throw new AndroidAgentException(errorMsg, e);
-        }
-        return payload;
+        return applications;
     }
 
     public String getRAMInfo() throws AndroidAgentException {

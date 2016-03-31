@@ -28,7 +28,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -38,7 +37,6 @@ import com.actionbarsherlock.app.SherlockActivity;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.beans.Notification;
 import org.wso2.emm.agent.dao.NotificationDAO;
-import org.wso2.emm.agent.utils.Constants;
 
 /**
  * Activity which is used to show alerts throughout the application.
@@ -162,9 +160,6 @@ public class AlertActivity extends SherlockActivity {
 	@Override
 	public void onBackPressed() {
 		//do nothing
-		if (Constants.DEBUG_MODE_ENABLED) {
-			Log.i(TAG, "Back button is pressed");
-		}
 	}
 
 	private void updateNotification (int id) {

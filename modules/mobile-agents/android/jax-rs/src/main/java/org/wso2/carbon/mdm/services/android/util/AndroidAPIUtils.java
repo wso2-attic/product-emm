@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.mdm.services.android.util;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -30,12 +31,17 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.app.mgt.Application;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
+import org.wso2.carbon.device.mgt.common.device.details.DeviceLocation;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
+import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceDetailsMgtException;
+import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
+import org.wso2.carbon.device.mgt.core.search.mgt.impl.Utils;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.device.mgt.mobile.impl.android.gcm.GCMService;
+import org.wso2.carbon.mdm.services.android.bean.property.DeviceInfo;
 import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
@@ -186,6 +192,27 @@ public class AndroidAPIUtils {
                 log.info("Received applications list from device '" + deviceId + "'");
             }
             updateApplicationList(operation, deviceIdentifier);
+
+        } else if (AndroidConstants.OperationCodes.DEVICE_INFO.equals(operation.getCode())) {
+
+            try {
+                Device device = new Gson().fromJson(operation.getOperationResponse(), Device.class);
+                org.wso2.carbon.device.mgt.common.device.details.DeviceInfo deviceInfo = convertDeviceToInfo(device);
+                deviceInfo.setDeviceIdentifier(deviceIdentifier);
+                updateDeviceInfo(deviceInfo);
+            } catch (DeviceDetailsMgtException e) {
+                throw new OperationManagementException("Error occurred while updating the device infomation.", e);
+            }
+
+
+        } else if (AndroidConstants.OperationCodes.DEVICE_LOCATION.equals(operation.getCode())) {
+            try {
+                DeviceLocation location = new Gson().fromJson(operation.getOperationResponse(), DeviceLocation.class);
+                location.setDeviceIdentifier(deviceIdentifier);
+                updateDeviceLocation(location);
+            } catch (DeviceDetailsMgtException e) {
+                throw new OperationManagementException("Error occurred while updating the device location.", e);
+            }
         }
 
         getDeviceManagementService().updateOperation(deviceIdentifier, operation);
@@ -213,8 +240,86 @@ public class AndroidAPIUtils {
             app.setApplicationIdentifier(element.getAsJsonObject().
                     get(AndroidConstants.ApplicationProperties.IDENTIFIER).getAsString());
             app.setPlatform(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
+            if (element.getAsJsonObject().get(AndroidConstants.ApplicationProperties.USS) != null) {
+                app.setMemoryUsage(element.getAsJsonObject().get(AndroidConstants.ApplicationProperties.USS).getAsInt());
+            }
             applications.add(app);
         }
         getApplicationManagerService().updateApplicationListInstalledInDevice(deviceIdentifier, applications);
+    }
+
+
+    private static void updateDeviceLocation(DeviceLocation deviceLocation) throws DeviceDetailsMgtException {
+
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        DeviceInformationManager informationManager =
+                (DeviceInformationManager) ctx.getOSGiService(DeviceInformationManager.class, null);
+
+        informationManager.addDeviceLocation(deviceLocation);
+    }
+
+
+    private static void updateDeviceInfo(org.wso2.carbon.device.mgt.common.device.details.DeviceInfo deviceInfo)
+            throws DeviceDetailsMgtException {
+
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        DeviceInformationManager informationManager =
+                (DeviceInformationManager) ctx.getOSGiService(DeviceInformationManager.class, null);
+
+        informationManager.addDeviceInfo(deviceInfo);
+    }
+
+
+    private static org.wso2.carbon.device.mgt.common.device.details.DeviceInfo convertDeviceToInfo(Device device) {
+
+        org.wso2.carbon.device.mgt.common.device.details.DeviceInfo deviceInfo =
+                new org.wso2.carbon.device.mgt.common.device.details.DeviceInfo();
+
+        List<Device.Property> props = device.getProperties();
+
+        for (Device.Property prop : props) {
+            if (Utils.getDeviceDetailsColumnNames().containsValue(prop.getName())) {
+                if (prop.getName().equalsIgnoreCase("IMEI")) {
+                    deviceInfo.setIMEI(prop.getValue());
+                } else if (prop.getName().equalsIgnoreCase("IMSI")) {
+                    deviceInfo.setIMSI(prop.getValue());
+                } else if (prop.getName().equalsIgnoreCase("DEVICE_MODEL")) {
+                    deviceInfo.setDeviceModel(prop.getValue());
+                } else if (prop.getName().equalsIgnoreCase("VENDOR")) {
+                    deviceInfo.setVendor(prop.getValue());
+                } else if (prop.getName().equalsIgnoreCase("OS_VERSION")) {
+                    deviceInfo.setOsVersion(prop.getValue());
+                } else if (prop.getName().equalsIgnoreCase("BATTERY_LEVEL")) {
+                    deviceInfo.setBatteryLevel(Double.parseDouble(prop.getValue()));
+                } else if (prop.getName().equalsIgnoreCase("INTERNAL_TOTAL_MEMORY")) {
+                    deviceInfo.setInternalTotalMemory(Double.parseDouble(prop.getValue()));
+                } else if (prop.getName().equalsIgnoreCase("INTERNAL_AVAILABLE_MEMORY")) {
+                    deviceInfo.setInternalAvailableMemory(Double.parseDouble(prop.getValue()));
+                } else if (prop.getName().equalsIgnoreCase("EXTERNAL_TOTAL_MEMORY")) {
+                    deviceInfo.setExternalTotalMemory(Double.parseDouble(prop.getValue()));
+                } else if (prop.getName().equalsIgnoreCase("EXTERNAL_AVAILABLE_MEMORY")) {
+                    deviceInfo.setExternalAvailableMemory(Double.parseDouble(prop.getValue()));
+                } else if (prop.getName().equalsIgnoreCase("OPERATOR")) {
+                    deviceInfo.setOperator(prop.getValue());
+                } else if (prop.getName().equalsIgnoreCase("CONNECTION_TYPE")) {
+                    deviceInfo.setConnectionType(prop.getValue());
+                } else if (prop.getName().equalsIgnoreCase("MOBILE_SIGNAL_STRENGTH")) {
+                    deviceInfo.setMobileSignalStrength(Double.parseDouble(prop.getValue()));
+                } else if (prop.getName().equalsIgnoreCase("SSID")) {
+                    deviceInfo.setSsid(prop.getValue());
+                } else if (prop.getName().equalsIgnoreCase("CPU_USAGE")) {
+                    deviceInfo.setCpuUsage(Double.parseDouble(prop.getValue()));
+                } else if (prop.getName().equalsIgnoreCase("TOTAL_RAM_MEMORY")) {
+                    deviceInfo.setTotalRAMMemory(Double.parseDouble(prop.getValue()));
+                } else if (prop.getName().equalsIgnoreCase("AVAILABLE_RAM_MEMORY")) {
+                    deviceInfo.setAvailableRAMMemory(Double.parseDouble(prop.getValue()));
+                } else if (prop.getName().equalsIgnoreCase("PLUGGED_IN")) {
+                    deviceInfo.setPluggedIn(Boolean.parseBoolean(prop.getValue()));
+                }
+
+            }
+        }
+
+        return deviceInfo;
     }
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">wso2-emm-system-service</string>
+    <string name="device_admin_enable_alert">Please Press activate again.</string>
 </resources>

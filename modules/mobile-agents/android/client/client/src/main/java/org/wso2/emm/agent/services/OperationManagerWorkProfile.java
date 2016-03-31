@@ -195,4 +195,19 @@ public class OperationManagerWorkProfile extends OperationManager{
         operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
         getDevicePolicyManager().wipeData(0);
     }
+
+    @Override
+    public void hideApps(Operation operation) throws AndroidAgentException {
+
+    }
+
+    @Override
+    public void unhideApps(Operation operation) throws AndroidAgentException {
+
+    }
+
+    @Override
+    public void blockUninstallByPackageName(Operation operation) throws AndroidAgentException {
+
+    }
 }

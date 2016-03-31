@@ -113,4 +113,22 @@ public interface VersionBasedOperations {
      */
     void executeShellCommand(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
+    /**
+     * Hide apps by package name
+     * @param operation - Operation object
+     */
+    void hideApps(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+
+    /**
+     * Unhide apps by package name
+     * @param operation - Operation object
+     */
+    void unhideApps(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+
+    /**
+     * Block uninstall by package name
+     * @param operation - Operation object
+     */
+    void blockUninstallByPackageName(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+
 }

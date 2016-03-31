@@ -52,7 +52,7 @@ public class MutualSSLClient implements CommunicationClient {
 
     static {
         if (localTrustStore == null) {
-            localTrustStore = Keystore.getKeystore(R.raw.trust,
+            localTrustStore = Keystore.getKeystore(R.raw.truststore,
                                                    Constants.TRUSTSTORE_PASSWORD);
         }
     }
