@@ -1,33 +1,24 @@
 {{#zone "main"}}
-        <!-- content -->
+
+<!-- content -->
 <div id="loading-content" class="col-centered">
     {{#if removePermitted}}
     <input type="hidden" id="can-remove" value="true"/>
     {{/if}}
-    {{#if editPermitted}}
-    <input type="hidden" id="can-edit" value="true"/>
-    {{/if}}
     {{#if viewPermitted}}
     <input type="hidden" id="can-view" value="true"/>
     {{/if}}
-    {{#if invitePermitted}}
-    <input type="hidden" id="can-invite" value="true"/>
-    {{/if}}
-    {{#if resetPasswordPermitted}}
-    <input type="hidden" id="can-reset-password" value="true"/>
-    {{/if}}
     <i class="fw fw-settings fw-spin fw-2x"></i>
-
-    Loading Certificates . . .
+        Loading Certificates . . .
     <br>
 </div>
 
-<div id="user-listing-status" class="raw hidden">
+<div id="certificate-listing-status" class="raw hidden">
 <ul style="list-style-type: none;">
     <li class="message message-info" >
         <h4>
             <i class="icon fw fw-info"></i>
-            <a id="user-listing-status-msg"></a>
+            <a id="certificate-listing-status-msg"></a>
         </h4>
     </li>
 </ul>
@@ -65,64 +56,12 @@
 <br class="c-both"/>
 </tbody>
 </table>
-        </div>
+</div>
 <br class="c-both"/>
 <div id="content-filter-types" style="display: none">
 <div class="sort-title">Sort By</div>
 <div class="sort-options">
-    <a href="#">By Username</a>
-</div>
-</div>
-
-<div id="invite-user-modal-content" class="hide">
-<div class="content">
-    <div class="row">
-        <div class="col-lg-5 col-md-6 col-centered">
-            <h3>
-                An invitation mail will be sent to the selected user(s) to initiate an enrolment process.
-                Do you wish to continue ?
-            </h3>
-            <div class="buttons">
-                <a href="#" id="invite-user-yes-link" class="btn-operations">
-                    yes
-                </a>
-
-                <a href="#" id="invite-user-cancel-link" class="btn-operations">
-                    No
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-
-<div id="invite-user-success-content" class="hide">
-<div class="content">
-    <div class="row">
-        <div class="col-lg-5 col-md-6 col-centered">
-            <h3>User invitation email for enrollment was successfully sent.</h3>
-            <div class="buttons">
-                <a href="#" id="invite-user-success-link" class="btn-operations">
-                    Ok
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-
-<div id="invite-user-error-content" class="hide">
-<div class="content">
-    <div class="row">
-        <div class="col-lg-5 col-md-6 col-centered">
-            <h3>An unexpected error occurred. Try again later.</h3>
-            <div class="buttons">
-                <a href="#" id="invite-user-error-link" class="btn-operations">
-                    Ok
-                </a>
-            </div>
-        </div>
-    </div>
+    <a href="#">By Serial Number</a>
 </div>
 </div>
 
@@ -216,13 +155,14 @@
 </div>
 </div>
 
-        {{/zone}}
-        {{#zone "common-navigation"}}
-        <!--Later add the navigation menu from here-->
-        {{/zone}}
-        {{#zone "bottomJs"}}
-<script id="user-listing" data-current-user="{{currentUser.username}}"
-        src="{{self.publicURL}}/templates/certificate-listing.hbs"
-        type="text/x-handlebars-template"></script>
-<script src="{{self.publicURL}}/js/certificate-listing.js"></script>
-        {{/zone}}
+{{/zone}}
+{{#zone "common-navigation"}}
+<!--Later add the navigation menu from here-->
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script id="user-listing" data-current-user="{{currentUser.username}}"
+    src="{{self.publicURL}}/templates/certificate-listing.hbs"
+    type="text/x-handlebars-template"></script>
+
+    <script src="{{self.publicURL}}/js/certificate-listing.js"></script>
+{{/zone}}
