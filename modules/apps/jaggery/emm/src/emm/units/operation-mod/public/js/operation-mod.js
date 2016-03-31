@@ -43,7 +43,7 @@ var operationModule = function () {
         "WIPE_OPERATION_CODE": "WIPE_DATA",
         "NOTIFICATION_OPERATION_CODE": "NOTIFICATION",
         "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE",
-        "LOCK_OPERATION_CODE": "DEVICE_LOCK"
+        "LOCK_OPERATION_CODE": "DEVICE_LOCK",
         "DISALLOW_ADJUST_VOLUME": "DISALLOW_ADJUST_VOLUME",
         "DISALLOW_CONFIG_BLUETOOTH" : "DISALLOW_CONFIG_BLUETOOTH",
         "DISALLOW_CONFIG_CELL_BROADCASTS" : "DISALLOW_CONFIG_CELL_BROADCASTS",
@@ -725,7 +725,8 @@ var operationModule = function () {
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "message" : operationData["message"]
+                        "message" : operationData["lock-message"],
+                        "isHardLockEnabled" : operationData["hard-lock"]
                     }
                 };
                 break;
