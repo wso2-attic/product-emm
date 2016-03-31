@@ -62,7 +62,7 @@ $(document).ready(function () {
                             });
                         }
                     }, function (data) {
-                        if (data.statusCode == 400) {
+                        if (data.status == 400) {
                             $(errorMsg).text("Old password does not match with the provided value.");
                             $(errorMsgWrapper).removeClass("hidden");
                         } else {
