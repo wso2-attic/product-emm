@@ -849,6 +849,13 @@
     </Permission>
     <Permission>
         <name>get certificate in the database</name>
+        <path>/device-mgt/emm-admin/certificate/GetAll</path>
+        <url>/certificates</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get certificate in the database</name>
         <path>/device-mgt/emm-admin/certificate/Get</path>
         <url>/certificates/*</url>
         <method>DELETE</method>
