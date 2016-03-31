@@ -77,6 +77,18 @@
                                 </a>
                             </li>
                         {{/equal}}
+
+                        {{#equal pageTitle "Certificate Management"}}
+                        <li>
+                            <a href="{{appContext}}certificates/add-certificate">
+                                <span class="fw-stack">
+                                   <i class="fw fw-ring fw-stack-2x"></i>
+                                   <i class="fw fw-document fw-stack-1x"></i>
+                                </span>
+                                Add Certificate
+                            </a>
+                        </li>
+                        {{/equal}}
                     </ul>
                     <ul id="notification-bubble-wrapper" class="nav navbar-nav navbar-right">
                         <li class="visible-inline-block">
