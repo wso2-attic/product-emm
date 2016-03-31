@@ -127,18 +127,13 @@ function loadCertificates(searchParam) {
             data = JSON.parse(data);
 
             var viewModel = {};
-
-
-            if(searchParam !=null && searchParam != undefined && searchParam.trim() != '') {
-                viewModel.certificates = new Array(data);
-            } else {
-                viewModel.certificates = data;
-            }
+            viewModel.certificates = data;
 
             for (var i = 0; i < viewModel.certificates.length; i++) {
                 viewModel.certificates[i].removePermitted = true;
                 viewModel.certificates[i].viewPermitted = true;
             }
+
             if (viewModel.certificates.length > 0) {
                 $('#ast-container').removeClass('hidden');
                 $('#certificate-listing-status-msg').text("");
@@ -148,11 +143,14 @@ function loadCertificates(searchParam) {
                 $('#ast-container').addClass('hidden');
                 $('#certificate-listing-status-msg').text('No certificates are available to be displayed.');
             }
+
             $("#loading-content").hide();
+
             if (isInit) {
                 $('#certificate-grid').datatables_extended();
                 isInit = false;
             }
+            
             $(".icon .text").res_text(0.2);
         };
         invokerUtil.get(serviceURL,
