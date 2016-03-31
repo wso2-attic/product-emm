@@ -18,10 +18,7 @@
 
 package org.wso2.carbon.mdm.services.android.util;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
@@ -49,6 +46,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * AndroidAPIUtil class provides utility functions used by Android REST-API classes.
@@ -243,6 +242,9 @@ public class AndroidAPIUtils {
             if (element.getAsJsonObject().get(AndroidConstants.ApplicationProperties.USS) != null) {
                 app.setMemoryUsage(element.getAsJsonObject().get(AndroidConstants.ApplicationProperties.USS).getAsInt());
             }
+            if (element.getAsJsonObject().get(AndroidConstants.ApplicationProperties.VERSION) != null) {
+                app.setVersion(element.getAsJsonObject().get(AndroidConstants.ApplicationProperties.VERSION).getAsString());
+            }
             applications.add(app);
         }
         getApplicationManagerService().updateApplicationListInstalledInDevice(deviceIdentifier, applications);
@@ -279,11 +281,7 @@ public class AndroidAPIUtils {
 
         for (Device.Property prop : props) {
             if (Utils.getDeviceDetailsColumnNames().containsValue(prop.getName())) {
-                if (prop.getName().equalsIgnoreCase("IMEI")) {
-                    deviceInfo.setIMEI(prop.getValue());
-                } else if (prop.getName().equalsIgnoreCase("IMSI")) {
-                    deviceInfo.setIMSI(prop.getValue());
-                } else if (prop.getName().equalsIgnoreCase("DEVICE_MODEL")) {
+                if (prop.getName().equalsIgnoreCase("DEVICE_MODEL")) {
                     deviceInfo.setDeviceModel(prop.getValue());
                 } else if (prop.getName().equalsIgnoreCase("VENDOR")) {
                     deviceInfo.setVendor(prop.getValue());
@@ -299,27 +297,42 @@ public class AndroidAPIUtils {
                     deviceInfo.setExternalTotalMemory(Double.parseDouble(prop.getValue()));
                 } else if (prop.getName().equalsIgnoreCase("EXTERNAL_AVAILABLE_MEMORY")) {
                     deviceInfo.setExternalAvailableMemory(Double.parseDouble(prop.getValue()));
-                } else if (prop.getName().equalsIgnoreCase("OPERATOR")) {
-                    deviceInfo.setOperator(prop.getValue());
-                } else if (prop.getName().equalsIgnoreCase("CONNECTION_TYPE")) {
-                    deviceInfo.setConnectionType(prop.getValue());
-                } else if (prop.getName().equalsIgnoreCase("MOBILE_SIGNAL_STRENGTH")) {
-                    deviceInfo.setMobileSignalStrength(Double.parseDouble(prop.getValue()));
-                } else if (prop.getName().equalsIgnoreCase("SSID")) {
-                    deviceInfo.setSsid(prop.getValue());
-                } else if (prop.getName().equalsIgnoreCase("CPU_USAGE")) {
-                    deviceInfo.setCpuUsage(Double.parseDouble(prop.getValue()));
-                } else if (prop.getName().equalsIgnoreCase("TOTAL_RAM_MEMORY")) {
-                    deviceInfo.setTotalRAMMemory(Double.parseDouble(prop.getValue()));
-                } else if (prop.getName().equalsIgnoreCase("AVAILABLE_RAM_MEMORY")) {
-                    deviceInfo.setAvailableRAMMemory(Double.parseDouble(prop.getValue()));
-                } else if (prop.getName().equalsIgnoreCase("PLUGGED_IN")) {
-                    deviceInfo.setPluggedIn(Boolean.parseBoolean(prop.getValue()));
                 }
 
+            } else {
+                if (prop.getName().equalsIgnoreCase("CPU_INFO")) {
+                    deviceInfo.setTotalRAMMemory(Double.parseDouble(getProperty(prop.getValue(), "User")));
+                } else if (prop.getName().equalsIgnoreCase("RAM_INFO")) {
+                    deviceInfo.setTotalRAMMemory(Double.parseDouble(getProperty(prop.getValue(), "TOTAL_MEMORY")));
+                    deviceInfo.setAvailableRAMMemory(Double.parseDouble(getProperty(prop.getValue(), "AVAILABLE_MEMORY")));
+                } else if (prop.getName().equalsIgnoreCase("BATTERY_INFO")) {
+                    deviceInfo.setPluggedIn(Boolean.parseBoolean(getProperty(prop.getValue(), "PLUGGED")));
+                } else if (prop.getName().equalsIgnoreCase("NETWORK_INFO")) {
+                    deviceInfo.setSsid(getProperty(prop.getValue(), "WIFI_SSID"));
+                    deviceInfo.setConnectionType(getProperty(prop.getValue(), "CONNECTION_TYPE"));
+                }
             }
         }
-
         return deviceInfo;
+    }
+
+    private static String getProperty(String a, String needed) {
+
+        JsonElement jsonElement = new JsonParser().parse(a);
+        JsonArray jsonArray = jsonElement.getAsJsonArray();
+
+        boolean exist = false;
+        for (JsonElement element : jsonArray) {
+          //  if (((JsonObject) element).entrySet().iterator().next().getValue().getAsString().equalsIgnoreCase(needed));
+            for (Map.Entry<String, JsonElement> ob : ((JsonObject) element).entrySet()){
+                if(exist){
+                    return ob.getValue().getAsString().replace("%", "");
+                }
+                if(ob.getValue().getAsString().equalsIgnoreCase(needed)){
+                    exist = true;
+                }
+            }
+        }
+        return "";
     }
 }
