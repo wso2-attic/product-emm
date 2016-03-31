@@ -1,11 +1,11 @@
 
 
         {{#each devices}}
-            {{deviceMap this}}
+
             <tr data-type="selectable" data-deviceid="{{deviceIdentifier}}" data-devicetype="{{type}}">
                 <td class="remove-padding icon-only content-fill viewEnabledIcon"
                 {{#unequal enrolmentInfo.status "REMOVED"}}
-                    data-url="device?type={{type}}&id={{deviceIdentifier}}"
+                    data-url="view?type={{type}}&id={{deviceIdentifier}}"
                 {{/unequal}}
                     >
                     <div class="thumbnail icon">
