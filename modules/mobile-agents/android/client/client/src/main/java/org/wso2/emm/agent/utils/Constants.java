@@ -107,6 +107,7 @@ public class Constants {
 	public static final String LOCK_MESSAGE = "lockMessage";
 	public static final String OPERATION_ID = "operationId";
 	public static final boolean HIDE_UNREGISTER_BUTTON = false;
+	public static final String IS_HARD_LOCK_ENABLED = "isHardLockEnabled";
 
 	public static final String SERVICE_PACKAGE_NAME = "org.wso2.emm.system.service";
 

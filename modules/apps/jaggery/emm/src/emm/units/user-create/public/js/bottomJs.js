@@ -258,7 +258,7 @@ $(document).ready(function () {
                     if (data["status"] == 409) {
                         $(errorMsg).text("User : " + username + " already exists. Pick another username.");
                     } else if (data["status"] == 500) {
-                        $(errorMsg).text("An unexpected error occurred @ backend server. Please try again later.");
+                        $(errorMsg).text("An unexpected error occurred at backend server. Please try again later.");
                     } else {
                         $(errorMsg).text(data.errorMessage);
                     }

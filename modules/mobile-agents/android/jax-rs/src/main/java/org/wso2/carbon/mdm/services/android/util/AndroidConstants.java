@@ -112,6 +112,8 @@ public final class AndroidConstants {
         }
         public static final String NAME = "name";
         public static final String IDENTIFIER = "package";
+        public static final String USS = "USS";
+        public static final String VERSION = "version";
         public static final String ICON = "icon";
     }
 }

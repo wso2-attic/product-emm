@@ -1,0 +1,143 @@
+{{#zone "main"}}
+
+<!-- content -->
+<div id="loading-content" class="col-centered">
+    {{#if removePermitted}}
+    <input type="hidden" id="can-remove" value="true"/>
+    {{/if}}
+    {{#if viewPermitted}}
+    <input type="hidden" id="can-view" value="true"/>
+    {{/if}}
+    <i class="fw fw-settings fw-spin fw-2x"></i>
+        Loading Certificates . . .
+    <br>
+</div>
+
+<div id="certificate-listing-status" class="raw hidden">
+<ul style="list-style-type: none;">
+    <li class="message message-info" >
+        <h4>
+            <i class="icon fw fw-info"></i>
+            <a id="certificate-listing-status-msg"></a>
+        </h4>
+    </li>
+</ul>
+</div>
+
+<div id="certificate-table" data-user={{adminUser}}>
+<table class="table table-striped table-hover list-table display responsive nowrap data-table grid-view"
+       id="certificate-grid">
+<thead>
+<tr class="sort-row">
+    <th class="no-sort"></th>
+    <th>By Serial Number</th>
+    <th class="no-sort"></th>
+    <th class="no-sort"></th>
+</tr>
+<tr class="filter-row filter-box">
+    <th colspan="3">
+        <label class="wr-input-label" for="search-by-certificate">
+            By Serial Number
+        </label>
+        <input id="search-by-certificate" type="text" class="form-control"
+               placeholder="Search By Serial Number">
+    </th>
+    <th style="vertical-align:bottom;">
+        <button id="search-btn" class="wr-btn">
+            Search
+        </button>
+    </th>
+</tr>
+
+</thead>
+<tbody id="ast-container">
+
+<br class="c-both"/>
+</tbody>
+</table>
+</div>
+<br class="c-both"/>
+<div id="content-filter-types" style="display: none">
+<div class="sort-title">Sort By</div>
+<div class="sort-options">
+    <a href="#">By Serial Number</a>
+</div>
+</div>
+
+<div id="remove-certificate-modal-content" class="hide">
+<div class="content">
+    <div class="row">
+        <div class="col-lg-5 col-md-6 col-centered">
+            <h3>Do you really want to remove this certificate ?</h3>
+
+            <div class="buttons">
+                <a href="#" id="remove-certificate-yes-link" class="btn-operations">
+                    Remove
+                </a>
+                <a href="#" id="remove-certificate-cancel-link" class="btn-operations">
+                    Cancel
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div id="remove-certificate-success-content" class="hide">
+<div class="content">
+    <div class="row">
+        <div class="col-lg-5 col-md-6 col-centered">
+            <h3>Done. Certificate was successfully removed.</h3>
+            <div class="buttons">
+                <a href="#" id="remove-certificate-success-link" class="btn-operations">
+                    Ok
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div id="remove-certificate-error-content" class="hide">
+<div class="content">
+    <div class="row">
+        <div class="col-lg-5 col-md-6 col-centered">
+            <h3>An unexpected error occurred. Please try again later.</h3>
+
+            <div class="buttons">
+                <a href="#" id="remove-certificate-error-link" class="btn-operations">
+                    Ok
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div id="errorCertificateView" class="hide">
+<div class="content">
+    <div class="row">
+        <div class="col-lg-5 col-md-6 col-centered">
+            <h3>
+                <span class="fw-stack">
+                    <i class="fw fw-ring fw-stack-2x"></i>
+                    <i class="fw fw-error fw-stack-1x"></i>
+                </span>
+                Unauthorized action!
+            </h3>
+        </div>
+    </div>
+</div>
+</div>
+
+{{/zone}}
+{{#zone "common-navigation"}}
+<!--Later add the navigation menu from here-->
+{{/zone}}
+{{#zone "bottomJs"}}
+    <script id="certificate-listing" data-current-user="{{currentUser.username}}"
+    src="{{self.publicURL}}/templates/certificate-listing.hbs"
+    type="text/x-handlebars-template"></script>
+
+    <script src="{{self.publicURL}}/js/certificate-listing.js"></script>
+{{/zone}}

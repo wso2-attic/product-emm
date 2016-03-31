@@ -327,30 +327,36 @@ public class Operation implements APIResultCallBack {
 		resultBuilder.build(operation);
 		JSONObject inputData;
 		String message = null;
+		boolean isHardLockEnabled = false;
 		try {
 			if (operation.getPayLoad() != null) {
 				inputData = new JSONObject(operation.getPayLoad().toString());
-				message = inputData.getString(resources.getString(R.string.intent_extra_message));
+				message = inputData.getString(Constants.ADMIN_MESSAGE);
+				isHardLockEnabled = inputData.getBoolean(Constants.IS_HARD_LOCK_ENABLED);
 			}
 		} catch (JSONException e) {
 			operation.setStatus(resources.getString(R.string.operation_value_error));
 			resultBuilder.build(operation);
 			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
-
-		if (message == null || message.isEmpty()) {
-			message = resources.getString(R.string.txt_lock_activity);
+		if (isHardLockEnabled) {
+			if (message == null || message.isEmpty()) {
+				message = resources.getString(R.string.txt_lock_activity);
+			}
+			Preference.putBoolean(context, Constants.IS_LOCKED, true);
+			Preference.putString(context, Constants.LOCK_MESSAGE, message);
+			enableHardLock(message);
+		} else {
+			devicePolicyManager.lockNow();
 		}
-		Preference.putBoolean(context, Constants.IS_LOCKED, true);
-		Preference.putString(context, Constants.LOCK_MESSAGE, message);
-		enableLock(message);
+
 		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.d(TAG, "Device locked");
 		}
 	}
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-	public void enableLock(String message) {
+	public void enableHardLock(String message) {
 		if (isDeviceOwner()) {
 			devicePolicyManager.setLockTaskPackages(cdmDeviceAdmin, AUTHORIZED_PINNING_APPS);
 			Intent intent = new Intent(context, LockActivity.class);

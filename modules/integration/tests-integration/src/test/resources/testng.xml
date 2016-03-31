@@ -131,4 +131,11 @@
             <class name="org.wso2.mdm.integration.certificate.CertificateManagement"/>
         </classes>
     </test>
+    <test name="seach-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.search.AddDeviceInfoOperationResponse"/>
+            <class name="org.wso2.mdm.integration.search.AddDeviceLocationInfo"/>
+            <class name="org.wso2.mdm.integration.search.SearchDevices"/>
+        </classes>
+    </test>
 </suite>
