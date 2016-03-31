@@ -128,7 +128,7 @@ public class OperationMgtService {
             if (lock == null) {
                 throw new OperationManagementException("Lock bean is empty");
             }
-            CommandOperation operation = new CommandOperation();
+            ProfileOperation operation = new ProfileOperation();
             operation.setCode(AndroidConstants.OperationCodes.DEVICE_LOCK);
             operation.setType(Operation.Type.PROFILE);
             operation.setEnabled(true);

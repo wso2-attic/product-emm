@@ -67,7 +67,8 @@
   },
   "lock" : {
     "operation": {
-      "message": "message"
+      "message": "message",
+      "isHardLockEnabled": true
     },
     "deviceIDs": []
   }
