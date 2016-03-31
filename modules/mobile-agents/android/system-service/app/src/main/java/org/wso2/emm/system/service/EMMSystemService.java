@@ -19,11 +19,14 @@
 package org.wso2.emm.system.service;
 
 import android.app.IntentService;
+import android.app.PackageInstallObserver;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.IPackageDeleteObserver;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;

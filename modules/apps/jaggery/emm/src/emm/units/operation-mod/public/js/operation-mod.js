@@ -725,7 +725,8 @@ var operationModule = function () {
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "message" : operationData["message"]
+                        "message" : operationData["lock-message"],
+                        "isHardLockEnabled" : operationData["hard-lock"]
                     }
                 };
                 break;
