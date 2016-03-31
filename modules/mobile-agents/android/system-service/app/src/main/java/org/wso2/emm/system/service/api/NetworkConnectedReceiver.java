@@ -42,6 +42,7 @@ public class NetworkConnectedReceiver extends BroadcastReceiver {
 
     /**
      * Returns the network connectivity status the device.
+     *
      * @return - Connection status.
      */
     private static boolean isConnected(Context context) {
