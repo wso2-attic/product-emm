@@ -28,7 +28,6 @@ import org.wso2.emm.agent.beans.Application;
 import org.wso2.emm.agent.beans.ComplianceFeature;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.beans.Notification;
-import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.dao.NotificationDAO;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.utils.Constants;
@@ -61,13 +60,10 @@ public class Operation implements APIResultCallBack {
 	private GPSTracker gps;
 	private NotificationDAO notificationDAO;
 	private NotificationManager notifyManager;
-	private int currentNotificationId;
 	private ApplicationManager applicationManager;
 
 	private static final String TAG = "Operation Handler";
 
-	private static final String LOCATION_INFO_TAG_LONGITUDE = "longitude";
-	private static final String LOCATION_INFO_TAG_LATITUDE = "latitude";
 	private static final String APP_INFO_TAG_NAME = "name";
 	private static final String APP_INFO_TAG_PACKAGE = "package";
 	private static final String APP_INFO_TAG_VERSION = "version";
@@ -211,19 +207,7 @@ public class Operation implements APIResultCallBack {
 	public void getDeviceInfo(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
 		DeviceInfoPayload deviceInfoPayload = new DeviceInfoPayload(context);
 		deviceInfoPayload.build();
-
 		String replyPayload = deviceInfoPayload.getDeviceInfoPayload();
-
-//		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.IP);
-//		ServerConfig utils = new ServerConfig();
-//		utils.setServerIP(ipSaved);
-//
-//		String url = utils.getAPIServerURL(context) + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
-//
-//		CommonUtils.callSecuredAPI(context, url,
-//				org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.PUT, replyPayload,
-//				Operation.this,
-//				Constants.DEVICE_INFO_REQUEST_CODE);
 
 		operation.setOperationResponse(replyPayload);
 		operation.setStatus(resources.getString(R.string.operation_value_completed));

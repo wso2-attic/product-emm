@@ -32,7 +32,7 @@ public class Constants {
 	public static final int DEFAULT_OTA_SERVER_PORT = 80;
 	public static final String DEFAULT_OTA_BUILD_PROP_FILE = "build.prop";
 	public static final String DEFAULT_OTA_ZIP_FILE = ".ota.zip";
-	public static final String DEFAULT_UPDATE_PACKAGE_LOCATION = "/cache/update.zip";
+	public static final String UPDATE_PACKAGE_NAME = "update.zip";
 
 	/**
 	 * Operation IDs

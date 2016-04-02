@@ -50,8 +50,9 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
 
     /**
      * Returns the byte count in a human readable format.
+     *
      * @param bytes - Bytes to be converted.
-     * @param isSI - True if the input is in SI units and False if the input is in binary units.
+     * @param isSI  - True if the input is in SI units and False if the input is in binary units.
      * @return - Byte count string.
      */
     public String byteCountToDisplaySize(long bytes, boolean isSI) {
@@ -94,7 +95,7 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
         if (error == 0) {
             if (!otaServerManager.compareLocalVersionToServer()) {
                 Log.i(TAG, "Software is up to date:" + Build.VERSION.RELEASE + ", " + Build.ID);
-            } else if (otaServerManager.compareLocalVersionToServer()) {
+            } else {
                 final long bytes = otaServerManager.getUpgradePackageSize();
                 Log.i(TAG, "New release found " + Build.VERSION.RELEASE + ", " + Build.ID);
                 String length = "Unknown";

@@ -4007,6 +4007,18 @@ span.ico-sort-desc {
     float: right;
 }
 
+.wr-btn-search, a.wr-btn-search {
+  background: #333 none repeat scroll 0 0;
+  border: medium none;
+  color: #fff;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: normal;
+  margin-right: 5px;
+  padding: 8px 24px;
+  text-decoration: none;
+}
+
 @media (max-width:500px) {
     .btn-search { display: none; }
 }
