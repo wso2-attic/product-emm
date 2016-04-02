@@ -17,6 +17,7 @@
  */
 package org.wso2.emm.agent.services;
 
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.util.Log;
 
@@ -36,13 +37,15 @@ import org.wso2.emm.agent.utils.Preference;
 import java.io.IOException;
 import java.util.List;
 
-public class OperationManagerWorkProfile extends OperationManager{
+public class OperationManagerWorkProfile extends OperationManager {
     private static final String TAG = "OperationWorkProfile";
     private OperationProcessor operationProcessor;
-    public OperationManagerWorkProfile(Context context, OperationProcessor operationProcessor){
+
+    public OperationManagerWorkProfile(Context context, OperationProcessor operationProcessor) {
         super(context);
         this.operationProcessor = operationProcessor;
     }
+
     @Override
     public void wipeDevice(Operation operation) throws AndroidAgentException {
         operation.setStatus(getContextResources().getString(R.string.operation_value_error));
@@ -80,7 +83,8 @@ public class OperationManagerWorkProfile extends OperationManager{
         }
     }
 
-    private void installApplication(JSONObject data, org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+    private void installApplication(JSONObject data, org.wso2.emm.agent.beans.Operation operation)
+            throws AndroidAgentException {
         String appUrl;
         String type;
         String name;
@@ -137,7 +141,8 @@ public class OperationManagerWorkProfile extends OperationManager{
 
     @Override
     public void setPasswordPolicy(Operation operation) throws AndroidAgentException {
-        Log.d(TAG, "Operation not supported.");
+        operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+        getResultBuilder().build(operation);
     }
 
     @Override
@@ -157,8 +162,9 @@ public class OperationManagerWorkProfile extends OperationManager{
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
         try {
-            if(payload != null){
-                Preference.putString(getContext(), getContextResources().getString(R.string.shared_pref_policy_applied), payload);
+            if (payload != null) {
+                Preference.putString(getContext(),
+                        getContextResources().getString(R.string.shared_pref_policy_applied), payload);
             }
 
             List<Operation> operations = mapper.readValue(
@@ -197,17 +203,130 @@ public class OperationManagerWorkProfile extends OperationManager{
     }
 
     @Override
-    public void hideApps(Operation operation) throws AndroidAgentException {
+    public void hideApp(Operation operation) throws AndroidAgentException {
+        String packageName = null;
+        try {
+            JSONObject hideAppData = new JSONObject(operation.getPayLoad().toString());
+            if (!hideAppData.isNull(getContextResources().getString(R.string.intent_extra_package))) {
+                packageName = (String) hideAppData
+                        .get(getContextResources().getString(R.string.intent_extra_package));
+            }
 
+            operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+            getResultBuilder().build(operation);
+
+            if (packageName != null && !packageName.isEmpty()) {
+                getDevicePolicyManager().setApplicationHidden(getCdmDeviceAdmin(), packageName, true);
+            }
+
+            if (Constants.DEBUG_MODE_ENABLED) {
+                Log.d(TAG, "App-Hide successful.");
+            }
+        } catch (JSONException e) {
+            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            getResultBuilder().build(operation);
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
     }
 
     @Override
-    public void unhideApps(Operation operation) throws AndroidAgentException {
+    public void unhideApp(Operation operation) throws AndroidAgentException {
+        String packageName = null;
+        try {
+            JSONObject hideAppData = new JSONObject(operation.getPayLoad().toString());
+            if (!hideAppData.isNull(getContextResources().getString(R.string.intent_extra_package))) {
+                packageName = (String) hideAppData
+                        .get(getContextResources().getString(R.string.intent_extra_package));
+            }
 
+            operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+            getResultBuilder().build(operation);
+
+            if (packageName != null && !packageName.isEmpty()) {
+                getDevicePolicyManager().setApplicationHidden(getCdmDeviceAdmin(), packageName, false);
+            }
+
+            if (Constants.DEBUG_MODE_ENABLED) {
+                Log.d(TAG, "App-unhide successful.");
+            }
+        } catch (JSONException e) {
+            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            getResultBuilder().build(operation);
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
     }
 
     @Override
     public void blockUninstallByPackageName(Operation operation) throws AndroidAgentException {
+        String packageName = null;
+        try {
+            JSONObject hideAppData = new JSONObject(operation.getPayLoad().toString());
+            if (!hideAppData.isNull(getContextResources().getString(R.string.intent_extra_package))) {
+                packageName = (String) hideAppData
+                        .get(getContextResources().getString(R.string.intent_extra_package));
+            }
 
+            operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+            getResultBuilder().build(operation);
+
+            if (packageName != null && !packageName.isEmpty()) {
+                getDevicePolicyManager().setUninstallBlocked(getCdmDeviceAdmin(), packageName, true);
+            }
+
+            if (Constants.DEBUG_MODE_ENABLED) {
+                Log.d(TAG, "App-Uninstall-Block successful.");
+            }
+        } catch (JSONException e) {
+            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            getResultBuilder().build(operation);
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
     }
+
+    @Override
+    public void setProfileName(Operation operation) throws AndroidAgentException {
+        String profileName = null;
+        try {
+            JSONObject setProfileNameData = new JSONObject(operation.getPayLoad().toString());
+            if (!setProfileNameData.isNull(getContextResources().getString(R.string.intent_extra_profile_name))) {
+                profileName = (String) setProfileNameData
+                        .get(getContextResources().getString(R.string.intent_extra_profile_name));
+            }
+
+            operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+            getResultBuilder().build(operation);
+
+            if (profileName != null && !profileName.isEmpty()) {
+                getDevicePolicyManager().setProfileName(getCdmDeviceAdmin(), profileName);
+            }
+
+            if (Constants.DEBUG_MODE_ENABLED) {
+                Log.d(TAG, "Profile Name is set");
+            }
+        } catch (JSONException e) {
+            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            getResultBuilder().build(operation);
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
+    }
+
+    @Override
+    public void handleUserRestriction(Operation operation) {
+        boolean isEnable = operation.isEnabled();
+        String key = operation.getCode();
+        operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+        getResultBuilder().build(operation);
+        if (isEnable) {
+            getDevicePolicyManager().addUserRestriction(getCdmDeviceAdmin(), key);
+            if (Constants.DEBUG_MODE_ENABLED) {
+                Log.d(TAG, "Restriction added: " + key);
+            }
+        } else {
+            getDevicePolicyManager().clearUserRestriction(getCdmDeviceAdmin(),key);
+            if (Constants.DEBUG_MODE_ENABLED) {
+                Log.d(TAG, "Restriction cleared: " + key);
+            }
+        }
+    }
+
 }

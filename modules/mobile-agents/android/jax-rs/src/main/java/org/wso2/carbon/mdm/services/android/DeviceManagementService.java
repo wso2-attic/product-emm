@@ -137,30 +137,6 @@ public class DeviceManagementService {
 		return responseMessage;
 	}
 
-	@POST
-	@Path("appList/{id}")
-	public Message updateApplicationList(@PathParam("id") String id, List<Application> applications)
-			throws
-			AndroidAgentException {
-
-		Message responseMessage = new Message();
-		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
-		deviceIdentifier.setId(id);
-		deviceIdentifier.setType(DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID);
-		try {
-			AndroidAPIUtils.getApplicationManagerService().
-			               updateApplicationListInstalledInDevice(deviceIdentifier, applications);
-			Response.status(Response.Status.ACCEPTED);
-			responseMessage.setResponseMessage("Device information has modified successfully.");
-
-		} catch (ApplicationManagementException e) {
-			String msg = "Error occurred while modifying the application list.";
-			log.error(msg, e);
-			throw new AndroidAgentException(msg, e);
-		}
-		return responseMessage;
-	}
-
 	@GET
 	@Path("license")
 	@Produces("text/html")

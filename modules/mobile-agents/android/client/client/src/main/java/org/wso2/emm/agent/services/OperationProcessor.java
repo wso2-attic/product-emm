@@ -200,6 +200,12 @@ public class OperationProcessor {
 			case Constants.Operation.EXECUTE_SHELL_COMMAND:
 				operationManager.executeShellCommand(operation);
 				break;
+			case Constants.Operation.ALLOW_PARENT_PROFILE_APP_LINKING:
+				operationManager.handleUserRestriction(operation);
+			case Constants.Operation.DISALLOW_CONFIG_VPN:
+				operationManager.handleUserRestriction(operation);
+			case Constants.Operation.DISALLOW_INSTALL_APPS:
+				operationManager.handleUserRestriction(operation);
 			default:
 				if(applicationManager.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
 					CommonUtils.callSystemApp(context,operation.getCode(),

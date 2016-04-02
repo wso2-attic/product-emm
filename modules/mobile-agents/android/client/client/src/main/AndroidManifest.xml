@@ -49,6 +49,10 @@
         android:name="org.wso2.emm.agent.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -103,9 +107,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
-
+        <receiver android:name=".services.NotificationReceiver"
+                       android:exported="false">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
         <service
-            android:name="org.wso2.emm.agent.GCMIntentService"
+            android:name=".GCMIntentService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -113,12 +122,12 @@
         </service>
 
         <activity
-            android:name="org.wso2.emm.agent.AlreadyRegisteredActivity"
+            android:name=".AlreadyRegisteredActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Sherlock" >
         </activity>
         <activity
-            android:name="org.wso2.emm.agent.AuthenticationActivity"
+            android:name=".AuthenticationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Sherlock"
             android:windowSoftInputMode="stateUnchanged|adjustPan" >
@@ -149,6 +158,11 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
+        <activity
+            android:name=".LockActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_lock">
+        </activity>
         <!-- Managed Profile Manifest items -->
         <activity
             android:name=".services.managedProfileServices.EnableProfileActivity"
@@ -160,7 +174,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="org.wso2.emm.agent.services.managedProfileServices.AlreadyEnabledActivity"
+            android:name=".services.managedProfileServices.AlreadyEnabledActivity"
             android:label="@string/title_activity_notify"
             android:screenOrientation="portrait" >
         </activity>
@@ -172,11 +186,6 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         </activity>
-        <activity
-            android:name=".LockActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_lock">
-        </activity>
     </application>
-
 </manifest>
+

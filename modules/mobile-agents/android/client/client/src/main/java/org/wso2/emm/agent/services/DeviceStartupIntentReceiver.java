@@ -70,7 +70,7 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 		}
 
 		if (isLocked) {
-            org.wso2.emm.agent.beans.Operation lockOperation = new Operation();
+       /*     org.wso2.emm.agent.beans.Operation lockOperation = new Operation();
 			lockOperation.setCode(Constants.Operation.DEVICE_LOCK);
             OperationProcessor operationProcessor = new OperationProcessor(context);
             try {
@@ -79,6 +79,10 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
                 Log.d(TAG, "Operation not supported.");
             }
         }
+			Operation operation = new Operation(context);
+			operation.enableHardLock(lockMessage);
+	 */
+			}
 
 		int interval = Preference.getInt(context, context.getResources().getString(R.string.shared_pref_frequency));
 		if(interval == DEFAULT_INDEX){

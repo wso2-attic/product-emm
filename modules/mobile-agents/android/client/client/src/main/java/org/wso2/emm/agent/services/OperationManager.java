@@ -41,6 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AlertActivity;
 import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.LockActivity;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.ServerDetails;
 import org.wso2.emm.agent.api.ApplicationManager;
@@ -643,12 +644,51 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      *
      * @param operation - Operation object.
      */
-    public void lockDevice(Operation operation) {
-        operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
-        getResultBuilder().build(operation);
-        getDevicePolicyManager().lockNow();
+    public void lockDevice(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+        operation.setStatus(resources.getString(R.string.operation_value_completed));
+        resultBuilder.build(operation);
+        JSONObject inputData;
+        String message = null;
+        boolean isHardLockEnabled = false;
+        try {
+            if (operation.getPayLoad() != null) {
+                inputData = new JSONObject(operation.getPayLoad().toString());
+                message = inputData.getString(Constants.ADMIN_MESSAGE);
+                isHardLockEnabled = inputData.getBoolean(Constants.IS_HARD_LOCK_ENABLED);
+            }
+        } catch (JSONException e) {
+            operation.setStatus(resources.getString(R.string.operation_value_error));
+            resultBuilder.build(operation);
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
+        if (isHardLockEnabled) {
+            if (message == null || message.isEmpty()) {
+                message = resources.getString(R.string.txt_lock_activity);
+            }
+            Preference.putBoolean(context, Constants.IS_LOCKED, true);
+            Preference.putString(context, Constants.LOCK_MESSAGE, message);
+            enableLock(message);
+        } else {
+            devicePolicyManager.lockNow();
+        }
+
         if (Constants.DEBUG_MODE_ENABLED) {
             Log.d(TAG, "Device locked");
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void enableLock(String message) {
+        if (isDeviceOwner()) {
+            devicePolicyManager.setLockTaskPackages(cdmDeviceAdmin, AUTHORIZED_PINNING_APPS);
+            Intent intent = new Intent(context, LockActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Constants.ADMIN_MESSAGE, message);
+            intent.putExtra(Constants.IS_LOCKED, true);
+            context.startActivity(intent);
+        } else {
+            devicePolicyManager.lockNow();
         }
     }
 

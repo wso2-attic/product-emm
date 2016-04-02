@@ -492,12 +492,12 @@ public class OperationManagerOlderSdk extends OperationManager{
     }
 
     @Override
-    public void hideApps(Operation operation) throws AndroidAgentException {
+    public void hideApp(Operation operation) throws AndroidAgentException {
         Log.d(TAG, "Operation not supported.");
     }
 
     @Override
-    public void unhideApps(Operation operation) throws AndroidAgentException {
+    public void unhideApp(Operation operation) throws AndroidAgentException {
         Log.d(TAG, "Operation not supported.");
     }
 
@@ -505,4 +505,15 @@ public class OperationManagerOlderSdk extends OperationManager{
     public void blockUninstallByPackageName(Operation operation) throws AndroidAgentException {
         Log.d(TAG, "Operation not supported.");
     }
+
+    @Override
+    public void setProfileName(Operation operation) throws AndroidAgentException {
+
+    }
+
+    @Override
+    public void handleUserRestriction(Operation operation) throws AndroidAgentException {
+        Log.d(TAG, "Adding User Restriction is not supported");
+    }
+
 }

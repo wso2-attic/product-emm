@@ -18,6 +18,7 @@
 package org.wso2.emm.agent.interfaces;
 
 import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.beans.Operation;
 
 /**
  * This interface represents all the Operations that can be done through EMM Agent
@@ -113,22 +114,40 @@ public interface VersionBasedOperations {
      */
     void executeShellCommand(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
+    //Specific methods for AndroidForWork
+
     /**
      * Hide apps by package name
+     *
      * @param operation - Operation object
      */
-    void hideApps(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void hideApp(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
     /**
      * Unhide apps by package name
+     *
      * @param operation - Operation object
      */
-    void unhideApps(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void unhideApp(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
     /**
      * Block uninstall by package name
+     *
      * @param operation - Operation object
      */
     void blockUninstallByPackageName(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
+    /**
+     * Set Profile Name (User name will be changed if agent is the device owner).
+     *
+     * @param operation - Operation object
+     */
+    void setProfileName(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+
+    /**
+     * Handle User Restriction related to Device Policy Manager.
+     *
+     * @param operation - Operation object
+     */
+    void handleUserRestriction(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 }

@@ -140,6 +140,7 @@
     <string name="intent_extra_alert">alert</string>
     <string name="intent_extra_ring">ring</string>
     <string name="intent_extra_password_setting">lock_settings</string>
+    <string name="intent_extra_profile_name">profileName</string>
 
     <!-- POLICY CONFIGURATION FIELDS -->
     <string name="policy_password_max_failed_attempts">maxFailedAttempts</string>
@@ -344,5 +345,8 @@
 
     <string name="title_activity_lock">LockActivity</string>
     <string name="txt_lock_activity">Device is locked. Please contact administrator</string>
+
+    <!-- Android For Work User Restrictions -->
+    <string name="allow_parent_profile_app_linking">ALLOW_PARENT_PROFILE_APP_LINKING</string>
 
 </resources>
