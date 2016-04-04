@@ -13,9 +13,7 @@
                     Please select a device or a list of devices to perform an operation.
                 </h4>
                 <div class="buttons">
-                    <a href="javascript:hidePopup()" class="btn-operations">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </a>
+                    <a href="javascript:hidePopup()" class="btn-operations">Ok</a>
                 </div>
             </div>
         </div>
@@ -36,9 +34,7 @@
                     Unexpected error occurred. Please Try again later.
                 </h4>
                 <div class="buttons">
-                    <a href="javascript:hidePopup()" class="btn-operations">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </a>
+                    <a href="javascript:hidePopup()" class="btn-operations">Ok</a>
                 </div>
             </div>
         </div>
@@ -59,9 +55,7 @@
                     Operation has been queued successfully to be sent to the device.
                 </h4>
                 <div class="buttons">
-                    <a href="javascript:hidePopup()" class="btn-operations">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </a>
+                    <a href="javascript:hidePopup()" class="btn-operations">Ok</a>
                 </div>
             </div>
         </div>
@@ -83,9 +77,7 @@
                     Message has been queued to be sent to the device.
                 </h4>
                 <div class="buttons">
-                    <a href="javascript:hidePopup()" class="btn-operations">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </a>
+                    <a href="javascript:hidePopup()" class="btn-operations">Ok</a>
                 </div>
             </div>
         </div>
@@ -136,17 +128,30 @@
                             <input type="password" class="form-control modal-input operationDataKeys" id="lockcode" data-key="lockCode" placeholder="Enter Lockcode" />
                             <br>
                         {{/equal}}
+                        {{#equal code "DEVICE_LOCK"}}
+                            {{#equal type "android"}}
+                                Type your message to be shown in the lock screen (Optional).
+                                <br><br>
+                                <div>
+                                    <textarea class="form-control modal-input operationDataKeys" id="lock-message" data-key="lock-message"></textarea>
+                                </div>
+                                <br>
+                                <label class="wr-input-control checkbox">
+                                    <input id="hard-lock" type="checkbox" class="form-control operationDataKeys" data-key="hard-lock"/>
+                                        <span class="helper" title="Once it enables, device will be blocked permanently.">
+                                            &nbsp;&nbsp;&nbsp;Enable Permanent Lock
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                        </span>
+                                </label>
+                            {{/equal}}
+                        {{/equal}}
+                        <br><br>
                         Do you want to perform this operation on selected device(s) ?
                         <br>
                     </h4>
                     <div class="buttons">
-                        <a href="javascript:runOperation('{{code}}')" class="btn-operations">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        </a>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <a href="javascript:hidePopup()" class="btn-operations">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        </a>
+                        <a href="javascript:runOperation('{{code}}')" class="btn-operations">Yes</a>
+                        <a href="javascript:hidePopup()" class="btn-operations">No</a>
                     </div>
                 </div>
             </div>

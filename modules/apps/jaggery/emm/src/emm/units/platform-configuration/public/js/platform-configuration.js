@@ -117,10 +117,20 @@ var configParams = {
     "PRIVATE_KEY_PASSWORD": "privateKeyPassword",
     "BEFORE_EXPIRE": "beforeExpire",
     "AFTER_EXPIRE": "afterExpire",
-    "WINDOWS_EULA": "windowsLicense"
+    "WINDOWS_EULA": "windowsLicense",
+    "IOS_CONFIG_MDM_MODE": "iOSConfigMDMMode",
+    "IOS_CONFIG_APNS_MODE": "iOSConfigAPNSMode"
 };
 
+function promptErrorPolicyPlatform(errorMsg) {
+    var mainErrorMsgWrapper = "#platform-config-main-error-msg";
+    var mainErrorMsg = mainErrorMsgWrapper + " span";
+    $(mainErrorMsg).text(errorMsg);
+    $(mainErrorMsgWrapper).show();
+}
+
 $(document).ready(function () {
+
     var platformsSupported = $("#typeDiv").attr("typeData");
     $("#gcm-inputs").hide();
     tinymce.init({
@@ -133,7 +143,8 @@ $(document).ready(function () {
             "searchreplace visualblocks code fullscreen",
             "insertdatetime image table contextmenu paste"
         ],
-        toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+        toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | " +
+                 "bullist numlist outdent indent | link image"
     });
 
     var getAndroidConfigAPI = "/mdm-android-agent/configuration";
@@ -147,6 +158,24 @@ $(document).ready(function () {
      * Upon receiving the response, the parameters will be set to the fields,
      * in case those configurations are already set.
      */
+    var defaultNotifierFrequency = 60;
+    invokerUtil.get(
+            getGeneralConfigAPI,
+            function (data) {
+                data = JSON.parse(data);
+                if (data && data.configuration) {
+                    for (var i = 0; i < data.configuration.length; i++) {
+                        var config = data.configuration[i];
+                        if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
+                            defaultNotifierFrequency = config.value / 1000;
+                            $("input#android-config-notifier-frequency").val(defaultNotifierFrequency);
+                            $("input#windows-config-notifier-frequency").val(defaultNotifierFrequency);
+                        }
+                    }
+                }
+            }, function (data) {
+                promptErrorPolicyPlatform("Unexpected Error Occurred While Retrieving Configurations. Please Try again");
+            });
 
     if (platformsSupported.indexOf('android') != -1) {
         invokerUtil.get(
@@ -166,7 +195,11 @@ $(document).ready(function () {
                                 $("#local-inputs").hide();
                             }
                         } else if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
-                            $("input#android-config-notifier-frequency").val(config.value / 1000);
+                            if (config.value) {
+                                $("input#android-config-notifier-frequency").val(config.value / 1000);
+                            } else {
+                                $("input#android-config-notifier-frequency").val(defaultNotifierFrequency);
+                            }
                         } else if (config.name == configParams["GCM_API_KEY"]) {
                             $("input#android-config-gcm-api-key").val(config.value);
                         } else if (config.name == configParams["GCM_SENDER_ID"]) {
@@ -181,22 +214,6 @@ $(document).ready(function () {
             });
     }
 
-    invokerUtil.get(
-        getGeneralConfigAPI,
-        function (data) {
-            data = JSON.parse(data);
-            if (data && data.configuration) {
-                for (var i = 0; i < data.configuration.length; i++) {
-                    var config = data.configuration[i];
-                    if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
-                        $("input#monitoring-config-frequency").val(config.value / 1000);
-                    }
-                }
-            }
-        }, function (data) {
-            console.log(data);
-        });
-
     if (platformsSupported.indexOf('windows') != -1) {
         invokerUtil.get(
             getWindowsConfigAPI,
@@ -206,7 +223,11 @@ $(document).ready(function () {
                     for (var i = 0; i < data.configuration.length; i++) {
                         var config = data.configuration[i];
                         if (config.name == configParams["NOTIFIER_FREQUENCY"]) {
-                            $("input#windows-config-notifier-frequency").val(config.value / 1000);
+                            if (config.value) {
+                                $("input#windows-config-notifier-frequency").val(config.value / 1000);
+                            } else {
+                                $("input#windows-config-notifier-frequency").val(defaultNotifierFrequency);
+                            }
                         } else if (config.name == configParams["WINDOWS_EULA"]) {
                             $("#windows-eula").val(config.value);
                         }
@@ -256,6 +277,18 @@ $(document).ready(function () {
                             $("input#ios-org-display-name").val(config.value);
                         } else if (config.name == configParams["IOS_EULA"]) {
                             $("#ios-eula").val(config.value);
+                        } else if (config.name == configParams["IOS_CONFIG_MDM_MODE"]) {
+                            if(config.value == 2) {
+                                $('#ios-config-mdm-mode option:eq(1)').prop('selected', true);
+                            } else {
+                                $('#ios-config-mdm-mode option:eq(0)').prop('selected', true);
+                            }
+                        } else if (config.name == configParams["IOS_CONFIG_APNS_MODE"]) {
+                            if(config.value == 2) {
+                                $('#ios-config-apns-mode option:eq(1)').prop('selected', true);
+                            } else {
+                                $('#ios-config-apns-mode option:eq(0)').prop('selected', true);
+                            }
                         }
                     }
                 }
@@ -532,6 +565,8 @@ $(document).ready(function () {
         var APNSCertPassword = $("#ios-config-apns-certificate-password").val();
         var configOrgDisplayName = $("#ios-org-display-name").val();
         var iosLicense = tinymce.get('ios-eula').getContent();
+        var iOSConfigMDMMode = $("#ios-config-mdm-mode").val();;
+        var iOSConfigAPNSMode = $("#ios-config-apns-mode").val();;
 
         fileNameMDMCert = validateCertificateParams(fileNameMDMCert, iOSMDMCertificateName);
         fileNameAPNSCert = validateCertificateParams(fileNameAPNSCert, iOSAPNSCertificateName);
@@ -668,6 +703,18 @@ $(document).ready(function () {
                 "contentType": "text"
             };
 
+            var iosMDMMode = {
+                "name": configParams["IOS_CONFIG_MDM_MODE"],
+                "value": iOSConfigMDMMode,
+                "contentType": "text"
+            };
+
+            var iosAPNSMode = {
+                "name": configParams["IOS_CONFIG_APNS_MODE"],
+                "value": iOSConfigAPNSMode,
+                "contentType": "text"
+            };
+
             configList.push(configCountry);
             configList.push(configState);
             configList.push(configLocality);
@@ -682,6 +729,8 @@ $(document).ready(function () {
             configList.push(APNSCertName);
             configList.push(paramOrganizationDisplayName);
             configList.push(iosEula);
+            configList.push(iosMDMMode);
+            configList.push(iosAPNSMode);
 
             addConfigFormData.type = platformTypeConstants["IOS"];
             addConfigFormData.configuration = configList;
@@ -834,7 +883,34 @@ $(document).ready(function () {
 var showAdvanceOperation = function (operation, button) {
     $(button).addClass('selected');
     $(button).siblings().removeClass('selected');
-    var hiddenOperation = ".wr-hidden-operations-content > div";
-    $(hiddenOperation + '[data-operation="' + operation + '"]').show();
-    $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
+    var enabledPlatforms = $("#supportedPlatforms");
+    var isPluginEnabled = false;
+    switch (operation) {
+        case 'ios':
+            if (enabledPlatforms.data("ios")) {
+                isPluginEnabled = true;
+            }
+            break;
+        case 'windows':
+            if (enabledPlatforms.data("windows")) {
+                isPluginEnabled = true;
+            }
+            break;
+        case 'android':
+            if (enabledPlatforms.data("android")) {
+                isPluginEnabled = true;
+            }
+            break;
+    }
+    if (isPluginEnabled) {
+        var hiddenOperation = ".wr-hidden-operations-content > div";
+        $(hiddenOperation + '[data-operation="' + operation + '"]').show();
+        $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
+    } else {
+        var hiddenOperation = ".wr-hidden-operations-content > div";
+        $(hiddenOperation + '[data-operation="error"]').show();
+        $(hiddenOperation + '[data-operation="error"]').siblings().hide();
+        promptErrorPolicyPlatform("To use " + operation + " related functionality you need to configure the server " +
+                                 "accordingly. Please refer to the documentation.");
+    }
 };

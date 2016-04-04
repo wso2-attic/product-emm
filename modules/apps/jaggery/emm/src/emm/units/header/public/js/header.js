@@ -48,7 +48,7 @@ $(document).ready(function () {
                 changePasswordFormData.oldPassword = window.btoa(unescape(encodeURIComponent(oldPassword)));
                 changePasswordFormData.newPassword = window.btoa(unescape(encodeURIComponent(confirmedPassword)));
 
-                var changePasswordAPI = "/mdm-admin/users/reset-password";
+                var changePasswordAPI = "/mdm-admin/users/change-password";
 
                 invokerUtil.post(
                     changePasswordAPI,
@@ -60,9 +60,6 @@ $(document).ready(function () {
                             $("a#change-password-success-link").click(function () {
                                 hidePopup();
                             });
-                        } else if (data.statusCode == 400) {
-                            $(errorMsg).text("Old password does not match with the provided value.");
-                            $(errorMsgWrapper).removeClass("hidden");
                         }
                     }, function (data) {
                         if (data.status == 400) {

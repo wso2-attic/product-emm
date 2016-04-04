@@ -27,6 +27,7 @@ import android.os.PowerManager.WakeLock;
 import android.os.RecoverySystem;
 import android.util.Log;
 import org.wso2.emm.system.service.utils.Constants;
+import org.wso2.emm.system.service.utils.FileUtils;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,9 +36,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.GeneralSecurityException;
@@ -49,6 +48,12 @@ import java.security.GeneralSecurityException;
 public class OTAServerManager {
     private static final String TAG = "OTA_SM";
     private static final String BUILD_DATE_UTC_PROPERTY = "ro.build.date.utc";
+    private static final int DEFAULT_STATE_ERROR_CODE = 0;
+    private static final int DEFAULT_STATE_INFO_CODE = 0;
+    private static final int DEFAULT_CONNECTION_TIMEOUT = 10000;
+    private static final int DEFAULT_BYTES = 100 * 1024;
+    private static final int DEFAULT_STREAM_LENGTH = 153600;
+    private static final int DEFAULT_OFFSET = 0;
     private OTAStateChangeListener stateChangeListener;
     private OTAServerConfig serverConfig;
     private BuildPropParser parser = null;
@@ -61,7 +66,7 @@ public class OTAServerManager {
             Log.d(TAG, "Verify progress " + progress);
             if (stateChangeListener != null) {
                 stateChangeListener.onStateOrProgress(OTAStateChangeListener.MESSAGE_VERIFY_PROGRESS,
-                                            0, null, progress);
+                                                      DEFAULT_STATE_ERROR_CODE, null, progress);
             }
         }
     };
@@ -106,7 +111,7 @@ public class OTAServerManager {
         if (parser != null) {
             if (this.stateChangeListener != null) {
                 this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_CHECKED,
-                                                 OTAStateChangeListener.NO_ERROR, parser, 0);
+                                                           OTAStateChangeListener.NO_ERROR, parser, DEFAULT_STATE_INFO_CODE);
             }
         } else {
             reportCheckingError(OTAStateChangeListener.ERROR_WRITE_FILE_ERROR);
@@ -115,6 +120,7 @@ public class OTAServerManager {
 
     /**
      * Compares device firmware version with the latest upgrade file from the server.
+     *
      * @return - Returns true if rhe firmware needs to be upgraded.
      */
     public boolean compareLocalVersionToServer() {
@@ -144,26 +150,29 @@ public class OTAServerManager {
         Long progress = (downloaded * 100) / total;
         if (this.stateChangeListener != null && progress != cacheProgress) {
             this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.MESSAGE_DOWNLOAD_PROGRESS,
-                                             0, null, progress);
+                                                       DEFAULT_STATE_INFO_CODE, null, progress);
             cacheProgress = progress;
         }
     }
 
     void reportCheckingError(int error) {
         if (this.stateChangeListener != null) {
-            this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_CHECKED, error, null, 0);
+            this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_CHECKED,
+                                                       error, null, DEFAULT_STATE_INFO_CODE);
         }
     }
 
     void reportDownloadError(int error) {
         if (this.stateChangeListener != null) {
-            this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_DOWNLOADING, error, null, 0);
+            this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_DOWNLOADING,
+                                                       error, null, DEFAULT_STATE_INFO_CODE);
         }
     }
 
     void reportInstallError(int error) {
         if (this.stateChangeListener != null) {
-            this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_UPGRADING, error, null, 0);
+            this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_UPGRADING,
+                                                       error, null, DEFAULT_STATE_INFO_CODE);
         }
     }
 
@@ -193,10 +202,10 @@ public class OTAServerManager {
             return;
         }
 
-        File targetFile = new File(Constants.DEFAULT_UPDATE_PACKAGE_LOCATION);
+        File targetFile = new File(FileUtils.getUpgradePackageFilePath());
         try {
             boolean fileStatus = targetFile.createNewFile();
-            if(!fileStatus) {
+            if (!fileStatus) {
                 Log.e(TAG, "Update package file creation failed.");
             }
         } catch (IOException e) {
@@ -211,7 +220,7 @@ public class OTAServerManager {
             URL url = serverConfig.getPackageURL();
             Log.d(TAG, "Start downloading package:" + url.toString());
             URLConnection connection = url.openConnection();
-            connection.setReadTimeout(10000);
+            connection.setReadTimeout(DEFAULT_CONNECTION_TIMEOUT);
 
             int lengthOfFile;
             lengthOfFile = connection.getContentLength();
@@ -219,19 +228,20 @@ public class OTAServerManager {
             OutputStream output = new FileOutputStream(targetFile);
 
             Log.d(TAG, "Update package file size:" + lengthOfFile);
-            byte data[] = new byte[100 * 1024];
+            byte data[] = new byte[DEFAULT_BYTES];
             long total = 0, count;
             while ((count = input.read(data)) >= 0) {
                 total += count;
                 publishDownloadProgress(lengthOfFile, total);
-                output.write(data, 0, (int) count);
+                output.write(data, DEFAULT_OFFSET, (int) count);
             }
 
             output.flush();
             output.close();
             input.close();
             if (this.stateChangeListener != null) {
-                this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_DOWNLOADING, 0, null, 0);
+                this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_DOWNLOADING,
+                                                           DEFAULT_STATE_ERROR_CODE, null, DEFAULT_STATE_INFO_CODE);
             }
         } catch (IOException e) {
             Log.e(TAG, "Connection failure when downloading update package." + e);
@@ -243,10 +253,11 @@ public class OTAServerManager {
     }
 
     public void startVerifyUpgradePackage() {
-        File recoveryFile = new File(Constants.DEFAULT_UPDATE_PACKAGE_LOCATION);
+        File recoveryFile = new File(FileUtils.getUpgradePackageFilePath());
 
         try {
             wakeLock.acquire();
+            Log.d(TAG, "Verifying upgrade package");
             RecoverySystem.verifyPackage(recoveryFile, recoveryVerifyListener, null);
         } catch (IOException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_VERIFY_FAILED);
@@ -260,10 +271,11 @@ public class OTAServerManager {
     }
 
     public void startInstallUpgradePackage() {
-        File recoveryFile = new File(Constants.DEFAULT_UPDATE_PACKAGE_LOCATION);
+        File recoveryFile = new File(FileUtils.getUpgradePackageFilePath());
 
         try {
             wakeLock.acquire();
+            Log.d(TAG, "Installing upgrade package");
             RecoverySystem.installPackage(context, recoveryFile);
         } catch (IOException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_INSTALL_FAILED);
@@ -278,23 +290,14 @@ public class OTAServerManager {
     }
 
     private boolean checkURL(URL url) {
-        try {
-            HttpURLConnection.setFollowRedirects(false);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("HEAD");
-            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
-        } catch (ProtocolException e) {
-            Log.e(TAG, "Invalid URL due to protocol failure." + e);
-            return false;
-        } catch (IOException e) {
-            Log.e(TAG, "Invalid URL due to connection failure." + e);
-            return false;
-        }
+        // Returns true since this is a static URL case
+        return true;
     }
 
     /**
      * Downloads the property list from remote site, and parse it to property list.
      * The caller can parse this list and get information.
+     *
      * @return - Returns true if rhe firmware needs to be upgraded.
      */
     public BuildPropParser getTargetPackagePropertyList(URL url) {
@@ -309,7 +312,7 @@ public class OTAServerManager {
             URLConnection urlConnection;
 
 			/* Use the URL configuration to open a connection
-			   to the OTA server */
+               to the OTA server */
             urlConnection = url.openConnection();
 
 			/* Since you get a URLConnection, use it to get the
@@ -324,7 +327,7 @@ public class OTAServerManager {
             if (contentLength != -1) {
                 writer = new ByteArrayOutputStream(contentLength);
             } else {
-                writer = new ByteArrayOutputStream(153600);
+                writer = new ByteArrayOutputStream(DEFAULT_STREAM_LENGTH);
             }
 
             int totalBufRead = 0;

@@ -4,148 +4,54 @@
             <!-- content -->
             <div id="config-save-form" class="container col-centered">
                 <br>
-                General and Platform Specific Server Settings for the Tenant
+                <h4>Platform Specific Server Settings for the Tenant</h4>
                 <br>
                 <br>
                 <div class="wr-advance-operations">
                     <div class="row no-gutter" id="typeDiv" typeData="{{#each types}}{{name}},{{/each}}">
                         <div class="wr-hidden-operations-nav col-lg-4">
-                            <a id="generalConfigLink" href="javascript:void(0)" onclick="showAdvanceOperation('general', this)" class="selected">
-                                <span class="wr-hidden-operations-icon fw-stack">
-                                    <i class="fw fw-settings fw-stack-2x"></i>
-                                </span>
-                                General Configurations
-                            </a>
-                            {{#each types}}
-                                {{#equal name "android"}}
-                                    <a id="androidConfigLink" href="javascript:void(0)" onclick="showAdvanceOperation('android', this)">
+                            <div id="supportedPlatforms" class="hidden"
+                                {{#each types}}
+                                    {{#equal name "android"}} data-android-id={{id}}
+                                         data-android="true"
+                                    {{/equal}}
+                                    {{#equal name "ios"}} data-ios-id={{id}}
+                                         data-ios="true"
+                                    {{/equal}}
+                                    {{#equal name "windows"}}
+                                 data-windows="true" data-windows-id={{id}}
+                                    {{/equal}}
+                                {{/each}}
+                                    ></div>
+                                    <a id="androidConfigLink" href="javascript:void(0)" class="selected" onclick="showAdvanceOperation('android', this)">
                                         <span class="wr-hidden-operations-icon fw-stack">
                                             <i class="fw fw-android fw-stack-2x"></i>
                                         </span>
                                         Android Configurations
                                     </a>
-                                {{/equal}}
-                                {{#equal name "ios"}}
                                     <a id="iosConfigLink" href="javascript:void(0)" onclick="showAdvanceOperation('ios', this)">
                                         <span class="wr-hidden-operations-icon fw-stack">
                                             <i class="fw fw-apple fw-stack-2x"></i>
                                         </span>
                                         iOS Configurations
                                     </a>
-                                {{/equal}}
-                                {{#equal name "windows"}}
                                     <a id="windowsConfigLink" href="javascript:void(0)" onclick="showAdvanceOperation('windows', this)">
                                         <span class="wr-hidden-operations-icon fw-stack">
                                             <i class="fw fw-windows fw-stack-2x"></i>
                                         </span>
                                         Windows Configurations
                                     </a>
-                                {{/equal}}
-                            {{/each}}
                         </div>
 
                         <div class="wr-hidden-operations-content col-lg-8">
-                            <!-- general -->
-                            <div class="wr-hidden-operation" data-operation="general" style="display: block">
-                                <div class="panel panel-default">
-                                    <div id="email-config-body" class="panel-collapse panel-body" role="tabpanel">
-                                        <div id="email-config-error-msg" class="alert alert-danger hidden" role="alert">
-                                            <i class="icon fw fw-error"></i><span></span>
-                                        </div>
-                                        <h4>
-                                            Policy Compliance Monitoring
-                                            <hr>
-                                        </h4>
-                                        <div class="wr-input-control">
-                                            <label class="wr-input-label" for="config-frequency">
-                                                Compliance Monitoring Time Interval*
-                                                <span class="helper" title="Time Interval after which EMM server will contact devices and monitor the compliance of policies applied to them">
-                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                </span>
-                                                <br>
-                                                ( Should be in seconds )
-                                            </label>
-                                            <input id="monitoring-config-frequency" type="text" class="form-control" >
-                                        </div>
-                                        <div class="wr-input-control wr-btn-grp">
-                                            <button id="save-general-btn" class="wr-btn">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <!--<div id="general-config-heading" class="panel-heading" role="tab">
-                                        <h2 class="sub-title panel-title">
-                                            Email Configurations
-                                            <hr>
-                                        </h2>
-                                    </div>-->
-                                    <!--<div id="email-config-body" class="panel-collapse panel-body" role="tabpanel">
-                                        <div class="wr-input-control">
-                                            <label class="wr-input-label" for="email-config-host">
-                                                Host
-                                                <span class="helper" title="SMTP Server Host">
-                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                </span>
-                                            </label>
-                                            <input id="email-config-host" type="text" class="form-control" placeholder="[ Required Field ]">
-                                        </div>
-
-                                        <div class="wr-input-control">
-                                            <label class="wr-input-label" for="email-config-port">
-                                                Port
-                                                <span class="helper" title="SMTP Server Port">
-                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                </span>
-                                            </label>
-                                            <input id="email-config-port" type="text" class="form-control" placeholder="[ Required Field ]">
-                                        </div>
-
-                                        <div class="wr-input-control">
-                                            <label class="wr-input-label" for="email-config-username">
-                                                Username
-                                                <span class="helper" title="Email Username">
-                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                </span>
-                                            </label>
-                                            <input id="email-config-username" type="text" class="form-control" placeholder="[ Required Field ]">
-                                        </div>
-
-                                        <div class="wr-input-control">
-                                            <label class="wr-input-label" for="email-config-password">
-                                                Password
-                                                <span class="helper" title="Email Password">
-                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                </span>
-                                            </label>
-                                            <input id="email-config-password" type="password" class="form-control" placeholder="[ Required Field ]">
-                                        </div>
-
-                                        <div class="wr-input-control">
-                                            <label class="wr-input-label" for="email-config-sender-email">
-                                                Sender Email Address
-                                                <span class="helper" title="Sender Email Address to be appeared on the email">
-                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                </span>
-                                            </label>
-                                            <input id="email-config-sender-email" type="text" class="form-control" placeholder="[ Required Field ]">
-                                        </div>
-
-                                        <div class="wr-input-control">
-                                            <label class="wr-input-label" for="email-config-template">
-                                                Email Template
-                                                <span class="helper" title="Email Template to be used in invitation email">
-                                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                                </span>
-                                            </label>
-                                            <textarea id="email-config-template" type="textarea" class="form-control"></textarea>
-                                        </div>
-                                    </div>-->
+                            <!-- error -->
+                            <div data-operation="error" class="wr-hidden-operation alert alert-danger" role="alert">
+                                <div id="platform-config-main-error-msg" class="panel panel-default">
+                                    <i class="icon fw fw-error"></i><span></span>
                                 </div>
                             </div>
-                            <!-- general-->
-
                             <!-- android -->
-                            <div class="wr-hidden-operation" data-operation="android">
+                            <div class="wr-hidden-operation" data-operation="android" style="display: block">
                                 <div class="panel panel-default">
                                     <div id="android-config-body" class="panel-collapse panel-body" role="tabpanel">
                                         <div id="android-config-error-msg" class="alert alert-danger hidden" role="alert">

@@ -21,8 +21,10 @@
  * when a user clicks on the list item
  * initial mode and with out select mode.
  */
-function InitiateViewOption() {
-    $(location).attr('href', $(this).data("url"));
+function InitiateViewOption(url) {
+    if ($(".select-enable-btn").text() == "Select") {
+        $(location).attr('href', url);
+    }
 }
 
 (function () {
@@ -157,9 +159,7 @@ function toTitleCase(str) {
 
 function loadDevices(searchType, searchParam){
     var deviceListing = $("#device-listing");
-    var deviceListingSrc = deviceListing.attr("src");
     var currentUser = deviceListing.data("currentUser");
-    var frontEndPagination = false;
 
     var serviceURL;
     if ($.hasPermission("LIST_DEVICES")) {
@@ -171,6 +171,7 @@ function loadDevices(searchType, searchParam){
         $("#loading-content").remove();
         $('#device-table').addClass('hidden');
         $('#device-listing-status-msg').text('Permission denied.');
+        $("#device-listing-status").removeClass(' hidden');
         return;
     }
 
@@ -204,8 +205,14 @@ function loadDevices(searchType, searchParam){
                 }
         },
         columnDefs: [
-            { targets: 0, data: 'name', className: 'remove-padding icon-only content-fill' , render: function ( data, type, row, meta ) {
-                return '<div class="thumbnail icon"><i class="square-element text fw fw-mobile"></i></div>';
+            { targets: 0, data: 'name', className: 'remove-padding icon-only content-fill viewEnabledIcon' , render: function ( data, type, row, meta ) {
+                var deviceType = row.type;
+                var deviceIdentifier = row.deviceIdentifier;
+                var url = "#";
+                if (status != 'REMOVED') {
+                    url = "devices/view?type=" + deviceType + "&id=" + deviceIdentifier;
+                }
+                return '<div onclick="javascript:InitiateViewOption(\'' + url + '\')" class="thumbnail icon"><i class="square-element text fw fw-mobile"></i></div>';
             }},
             { targets: 1, data: 'name', className: 'fade-edge' , render: function ( name, type, row, meta ) {
                 var model = getPropertyValue(row.properties, 'DEVICE_MODEL');
@@ -243,11 +250,6 @@ function loadDevices(searchType, searchParam){
                 var deviceType = row.type;
                 var deviceIdentifier = row.deviceIdentifier;
                 var html = '<span></span>';
-                if (status != 'REMOVED') {
-                    html = '<a href="device?type=' + deviceType + '&id=' + deviceIdentifier + '" data-click-event="remove-form"' +
-                    ' class="btn padding-reduce-on-grid-view"><span class="fw-stack"><i class="fw fw-ring fw-stack-2x"></i>' +
-                        '<i class="fw fw-view fw-stack-1x"></i></span><span class="hidden-xs hidden-on-grid-view">View</span></a>';
-                }
                 return html;
             }}
         ],
@@ -315,16 +317,25 @@ function openCollapsedNav(){
 }
 
 function initPage() {
+    var currentUser = $("#device-listing").data("currentUser");
+    var serviceURL;
+    if ($.hasPermission("LIST_DEVICES")) {
+        serviceURL = "/mdm-admin/devices";
+    } else if ($.hasPermission("LIST_OWN_DEVICES")) {
+        //Get authenticated users devices
+        serviceURL = "/mdm-admin/users/devices?username=" + currentUser;
+    }
     invokerUtil.get(
-        "/mdm-admin/devices/count",
+        serviceURL,
         function (data) {
             if (data) {
                 data = JSON.parse(data);
-                if (Number(data) > 0) {
+                if (data.length > 0) {
                     loadDevices();
                 } else {
                     $("#loading-content").remove();
                     $("#device-listing-status-msg").text("No enrolled devices found.");
+                    $("#device-listing-status").removeClass(' hidden');
                 }
             }
         }, function (message) {
@@ -337,7 +348,6 @@ function initPage() {
  * DOM ready functions.
  */
 $(document).ready(function () {
-
     initPage();
 
     /* Adding selected class for selected devices */

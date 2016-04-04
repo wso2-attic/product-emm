@@ -20,6 +20,7 @@ package org.wso2.emm.agent;
 import java.util.Map;
 
 import android.app.Activity;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.beans.ServerConfig;
@@ -74,6 +75,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	private DevicePolicyManager devicePolicyManager;
 	private ComponentName cdmDeviceAdmin;
 	private DeviceInfo info;
+	private RelativeLayout unregisterLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +97,6 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				freshRegFlag = extras.getBoolean(
 						getResources().getString(R.string.intent_extra_fresh_reg_flag));
 			}
-
 		}
 
 		String registrationId =
@@ -114,6 +115,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			if (!devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
 				startDeviceAdminPrompt(cdmDeviceAdmin);
 			}
+
 			freshRegFlag = false;
 		}
 
@@ -121,6 +123,10 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		btnUnregister = (Button) findViewById(R.id.btnUnreg);
 		btnUnregister.setTag(TAG_BTN_UNREGISTER);
 		btnUnregister.setOnClickListener(onClickListenerButtonClicked);
+		unregisterLayout = (RelativeLayout) findViewById(R.id.unregisterLayout);
+		if(Constants.HIDE_UNREGISTER_BUTTON){
+			unregisterLayout.setVisibility(View.GONE);
+		}
 	}
 
 	private DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -479,6 +485,19 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	private void stopProgressDialog() {
 		if (progressDialog != null && progressDialog.isShowing()) {
 			progressDialog.dismiss();
+		}
+	}
+
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == ACTIVATION_REQUEST) {
+			if (resultCode == Activity.RESULT_OK) {
+				CommonUtils.callSystemApp(context, null, null, null);
+				Log.i("onActivityResult", "Administration enabled!");
+			} else {
+				Log.i("onActivityResult", "Administration enable FAILED!");
+			}
 		}
 	}
 

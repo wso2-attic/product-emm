@@ -7,13 +7,33 @@
         {{#if editPermitted}}
             <input type="hidden" id="can-edit" value="true"/>
         {{/if}}
+        {{#if viewPermitted}}
+            <input type="hidden" id="can-view" value="true"/>
+        {{/if}}
+        {{#if invitePermitted}}
+            <input type="hidden" id="can-invite" value="true"/>
+        {{/if}}
+        {{#if resetPasswordPermitted}}
+            <input type="hidden" id="can-reset-password" value="true"/>
+        {{/if}}
         <i class="fw fw-settings fw-spin fw-2x"></i>
-        &nbsp;&nbsp;&nbsp;
+
         Loading users . . .
         <br>
     </div>
-    <span id="user-listing-status-msg"></span>
-    <div id="user-table">
+
+    <div id="user-listing-status" class="raw hidden">
+        <ul style="list-style-type: none;">
+            <li class="message message-info" >
+                <h4>
+                    <i class="icon fw fw-info"></i>
+                    <a id="user-listing-status-msg"></a>
+                </h4>
+            </li>
+        </ul>
+    </div>
+
+    <div id="user-table" data-user={{adminUser}}>
         <table class="table table-striped table-hover list-table display responsive nowrap data-table grid-view"
                id="user-grid">
             <thead>
@@ -38,7 +58,7 @@
                     </button>
                 </th>
             </tr>
-            <tr class="bulk-action-row">
+            <tr class="bulk-action-row" id="invite-user-button">
                 <th colspan="5">
                     <ul class="tiles">
                         <li class="square">
@@ -77,14 +97,13 @@
                         An invitation mail will be sent to the selected user(s) to initiate an enrolment process.
                         Do you wish to continue ?
                     </h3>
-
                     <div class="buttons">
                         <a href="#" id="invite-user-yes-link" class="btn-operations">
-                            &nbsp;&nbsp;&nbsp;&nbsp;yes&nbsp;&nbsp;&nbsp;&nbsp;
+                            yes
                         </a>
-                        &nbsp;&nbsp;
+
                         <a href="#" id="invite-user-cancel-link" class="btn-operations">
-                            &nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;&nbsp;&nbsp;&nbsp;
+                            No
                         </a>
                     </div>
                 </div>
@@ -97,10 +116,9 @@
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
                     <h3>User invitation email for enrollment was successfully sent.</h3>
-
                     <div class="buttons">
                         <a href="#" id="invite-user-success-link" class="btn-operations">
-                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                            Ok
                         </a>
                     </div>
                 </div>
@@ -113,10 +131,9 @@
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
                     <h3>An unexpected error occurred. Try again later.</h3>
-
                     <div class="buttons">
                         <a href="#" id="invite-user-error-link" class="btn-operations">
-                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                            Ok
                         </a>
                     </div>
                 </div>
@@ -132,11 +149,10 @@
 
                     <div class="buttons">
                         <a href="#" id="remove-user-yes-link" class="btn-operations">
-                            &nbsp;&nbsp;&nbsp;&nbsp;Remove&nbsp;&nbsp;&nbsp;&nbsp;
+                            Remove
                         </a>
-                        &nbsp;&nbsp;
                         <a href="#" id="remove-user-cancel-link" class="btn-operations">
-                            &nbsp;&nbsp;&nbsp;&nbsp;Cancel&nbsp;&nbsp;&nbsp;&nbsp;
+                            Cancel
                         </a>
                     </div>
                 </div>
@@ -149,10 +165,9 @@
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
                     <h3>Done. User was successfully removed.</h3>
-
                     <div class="buttons">
                         <a href="#" id="remove-user-success-link" class="btn-operations">
-                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                            Ok
                         </a>
                     </div>
                 </div>
@@ -168,7 +183,7 @@
 
                     <div class="buttons">
                         <a href="#" id="remove-user-error-link" class="btn-operations">
-                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                            Ok
                         </a>
                     </div>
                 </div>
@@ -190,10 +205,84 @@
                     <h4>
                         Please select a user or a list of users to send invitation emails.
                     </h4>
-
                     <div class="buttons">
                         <a href="javascript:hidePopup()" class="btn-operations">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            Ok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="errorUserView" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>
+                        <span class="fw-stack">
+                            <i class="fw fw-ring fw-stack-2x"></i>
+                            <i class="fw fw-error fw-stack-1x"></i>
+                        </span>
+                        Unauthorized action!
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="reset-password-window" class="hide">
+        <input type="hidden" id="user" value="{{user.username}}">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>
+                        <span class="fw-stack">
+                            <i class="fw fw-ring fw-stack-2x"></i>
+                            <i class="fw fw-key fw-stack-1x"></i>
+                        </span>
+                        Reset Password
+                        <br>
+                    </h3>
+                    <div id="notification-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+                    <h4>
+                        Enter new password
+                        <br><br>
+                        <div>
+                            <input type="password" class="form-control modal-input operationDataKeys" id="new-password" data-key="message"/>
+                        </div>
+                        <br>
+                        Retype new password
+                        <br><br>
+                        <div>
+                            <input type="password" class="form-control modal-input operationDataKeys" id="confirmed-password" data-key="message"/>
+                        </div>
+                        <br>
+                    </h4>
+                    <div class="buttons">
+                        <a href="#" id="reset-password-yes-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                        &nbsp;&nbsp;
+                        <a href="#" id="reset-password-cancel-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Cancel&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="reset-password-success-content" class="hide">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered">
+                    <h3>Password reset is successful.</h3>
+                    <div class="buttons">
+                        <a href="#" id="reset-password-success-link" class="btn-operations">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
                         </a>
                     </div>
                 </div>

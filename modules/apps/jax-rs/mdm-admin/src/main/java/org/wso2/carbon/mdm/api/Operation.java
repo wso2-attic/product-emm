@@ -54,7 +54,7 @@ import java.util.List;
 public class Operation {
 
     private static Log log = LogFactory.getLog(Operation.class);
-
+    /* @deprecated */
     @GET
     public List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getAllOperations()
             throws MDMAPIException {
@@ -115,6 +115,7 @@ public class Operation {
 		return operations;
 	}
 
+    /* @deprecated */
     @POST
     public ResponsePayload addOperation(DeviceOperationContext operationContext) throws MDMAPIException {
         DeviceManagementProviderService dmService;
@@ -182,6 +183,8 @@ public class Operation {
                 }
                 appManagerConnector.installApplicationForDevices(operation, applicationWrapper.getDeviceIdentifiers());
             }
+            Response.status(HttpStatus.SC_CREATED);
+            responseMsg.setMessageFromServer("Application installation request has been sent to the device.");
             return responseMsg;
         } catch (ApplicationManagementException e) {
             String msg = "Error occurred while saving the operation";
@@ -215,6 +218,8 @@ public class Operation {
                 }
                 appManagerConnector.installApplicationForDevices(operation, applicationWrapper.getDeviceIdentifiers());
             }
+            Response.status(HttpStatus.SC_CREATED);
+            responseMsg.setMessageFromServer("Application removal request has been sent to the device.");
             return responseMsg;
         } catch (ApplicationManagementException e) {
             String msg = "Error occurred while saving the operation";

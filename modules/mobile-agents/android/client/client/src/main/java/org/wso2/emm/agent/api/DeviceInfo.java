@@ -132,8 +132,8 @@ public class DeviceInfo {
 	 * @return - Device owner email address.
 	 */
 	public String getEmail() {
-		return Preference.getString(context, 
-	                                    resources.getString(R.string.shared_pref_username));
+		return Preference.getString(context,
+		                            resources.getString(R.string.shared_pref_username));
 	}
 
 	/**
@@ -151,6 +151,14 @@ public class DeviceInfo {
 	 */
 	public String getSimSerialNumber() {
 		return telephonyManager.getSimSerialNumber();
+	}
+
+	/**
+	 * Returns the hardware serial number.
+	 * @return - Hardware serial number.
+	 */
+	public String getDeviceSerialNumber() {
+		return Build.SERIAL;
 	}
 
 	/**

@@ -4,8 +4,14 @@ function onRequest(context){
     var permissions = [];
     if(userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list")){
         permissions.push("LIST_DEVICES");
+        if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/view")) {
+            permissions.push("VIEW_DEVICES");
+        }
     }else if(userModule.isAuthorized("/permission/admin/device-mgt/user/devices/list")){
         permissions.push("LIST_OWN_DEVICES");
+        if (userModule.isAuthorized("/permission/admin/device-mgt/user/devices/view")) {
+            permissions.push("VIEW_OWN_DEVICES");
+        }
     }else if(userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/policies/list")){
         permissions.push("LIST_POLICIES");
     }

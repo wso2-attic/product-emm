@@ -11,16 +11,61 @@ function inputIsValid(regExp, inputString) {
 }
 
 var validateInline = {};
+var clearInline = {};
+
+var enableInlineError = function (inputField, errorMsg, errorSign) {
+    var fieldIdentifier = "#" + inputField;
+    var errorMsgIdentifier = "#" + inputField + " ." + errorMsg;
+    var errorSignIdentifier = "#" + inputField + " ." + errorSign;
+
+    if (inputField) {
+        $(fieldIdentifier).addClass(" has-error has-feedback");
+    }
+
+    if (errorMsg) {
+        $(errorMsgIdentifier).removeClass(" hidden");
+    }
+
+    if (errorSign) {
+        $(errorSignIdentifier).removeClass(" hidden");
+    }
+};
+
+var disableInlineError = function (inputField, errorMsg, errorSign) {
+    var fieldIdentifier = "#" + inputField;
+    var errorMsgIdentifier = "#" + inputField + " ." + errorMsg;
+    var errorSignIdentifier = "#" + inputField + " ." + errorSign;
+
+    if (inputField) {
+        $(fieldIdentifier).removeClass(" has-error has-feedback");
+    }
+
+    if (errorMsg) {
+        $(errorMsgIdentifier).addClass(" hidden");
+    }
+
+    if (errorSign) {
+        $(errorSignIdentifier).addClass(" hidden");
+    }
+};
 
 /**
- * Validate if provided username is valid against RegEx configures.
+ *clear inline validation messages.
+ */
+clearInline["role-name"] = function () {
+    disableInlineError("roleNameField", "rolenameEmpty", "rolenameError");
+};
+
+
+/**
+ * Validate if provided rolename is valid against RegEx configures.
  */
 validateInline["role-name"] = function () {
     var rolenameinput = $("input#rolename");
     if (inputIsValid( rolenameinput.data("regex"), rolenameinput.val())) {
-        $("#roleNameValidationText").removeClass("inline-warning");
+        disableInlineError("roleNameField", "rolenameEmpty", "rolenameError");
     } else {
-        $("#roleNameValidationText").addClass("inline-warning");
+        enableInlineError("roleNameField", "rolenameEmpty", "rolenameError");
     }
 };
 
@@ -109,7 +154,7 @@ $(document).ready(function () {
         } else if (!domain) {
             $(errorMsg).text("Domain is a required field. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
-        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"]{1,30}$/, domain)) {
+        } else if (!inputIsValid(/^[^~?!#$:;%^*`+={}\[\]\\()|<>,'"]/, domain)) {
             $(errorMsg).text("Provided domain is invalid.");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
@@ -137,11 +182,12 @@ $(document).ready(function () {
                         $(errorMsgWrapper).removeClass("hidden");
                     } else {
                         // Clearing user input fields.
-                        $("input#rolename").val("");
-                        $("#domain").val("");
-                        // Refreshing with success message
-                        $("#role-create-form").addClass("hidden");
-                        $("#role-created-msg").removeClass("hidden");
+                        //$("input#rolename").val("");
+                        //$("#domain").val("");
+                        //// Refreshing with success message
+                        //$("#role-create-form").addClass("hidden");
+                        //$("#role-created-msg").removeClass("hidden");
+                        window.location.href = '/emm/roles/edit-role-permission?wizard=true&rolename=' + roleName;
                     }
                 }, function (data) {
                     if (JSON.parse(data.responseText).errorMessage.indexOf("RoleExisting") > -1) {
@@ -156,7 +202,7 @@ $(document).ready(function () {
     });
 
     $("#rolename").focus(function() {
-        $("#roleNameValidationText").removeClass("inline-warning");
+        clearInline["role-name"]();
     });
 
     $("#rolename").blur(function() {

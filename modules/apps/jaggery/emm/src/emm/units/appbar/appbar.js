@@ -75,10 +75,11 @@ function onRequest(context) {
     context["currentActions"] = links[context["pageLink"]];
     context["enrollmentURL"] = mdmProps.generalConfig.host + mdmProps.enrollmentDir;
     var  isAuthorizedForNotifications =
-        userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/notifications/list");
+        userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/notifications/view");
     var currentUser = session.get(constants.USER_SESSION_KEY);
     context.isAuthorizedForNotifications = isAuthorizedForNotifications;
     context.currentUser = currentUser;
+    context.appContext = mdmProps.appContext;
     return context;
 }
 

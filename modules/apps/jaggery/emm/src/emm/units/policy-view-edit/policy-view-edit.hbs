@@ -24,7 +24,7 @@
                     <b>"View policy list"</b> to complete the process and go back to the policy list.
                     <hr>
                     <button class="wr-btn wizard-stepper" data-current="policy-message" data-direct="/emm/policies/">
-                        &nbsp;&nbsp;&nbsp;&nbsp;View policy list&nbsp;&nbsp;&nbsp;&nbsp;
+                        View policy list
                     </button>
                     <a href="/emm/policies/add-policy" class="cu-btn-inner">
                         <span class="fw-stack">
@@ -44,7 +44,7 @@
                     <hr>
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Step 3: Republish to devices</h4>
+                            <h4 class="visible-xs">Step 3: Republish to devices</h4>
                             <br>
                             <div id="policy-naming-main-error-msg" class="alert alert-danger hidden" role="alert">
                                 <i class="icon fw fw-error"></i><span></span>
@@ -54,11 +54,13 @@
                                     Set a name * to your policy<br>
                                     ( should be 1-to-30 characters long )
                                 </label>
-                                <div class="wr-input-control">
+                                <div id="plicynameField" class="form-group wr-input-control">
                                     <div class="cus-col-50">
                                         <input id="policy-name-input" class="form-control" type="text" value="" placeholder="[ Required field ]"/>
                                     </div>
-                                    <br class="c-both" />
+                                    <br class="c-both"/>
+                                    <span class=" nameError hidden glyphicon glyphicon-remove form-control-feedback"></span>
+                                    <label class="error nameEmpty hidden" for="summary">Policy name is required & Should be be 1-to-30 characters long.</label>
                                 </div>
                                 <label class="wr-input-label">
                                     Add a description
@@ -72,13 +74,13 @@
                             </div>
                             <div class="wr-input-control wr-btn-grp">
                                 <a href="#" class="wr-btn wizard-stepper" data-is-back-btn="true" data-current="policy-naming" data-next="policy-criteria">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;Back&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Back
                                 </a>
                                 <a href="#" class="wr-btn wizard-stepper" data-current="policy-naming-publish" data-next="policy-message" data-validate="true">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;Save & Publish&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Save & Publish
                                 </a>
                                 <a href="#" class="wr-btn wizard-stepper" data-current="policy-naming" data-next="policy-message" data-validate="true">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Save
                                 </a>
 
                             </div>
@@ -95,7 +97,7 @@
                     <hr>
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Step 2: Edit assignment groups</h4>
+                            <h4 class="visible-xs">Step 2: Edit assignment groups</h4>
                             <br>
                             <div id="policy-criteria-main-error-msg" class="alert alert-danger hidden" role="alert">
                                 <i class="icon fw fw-error"></i><span></span>
@@ -167,10 +169,10 @@
                             </div>
                             <div class="wr-input-control wr-btn-grp">
                                 <a href="#" class="wr-btn wizard-stepper" data-is-back-btn="true" data-current="policy-criteria" data-next="policy-profile">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;Back&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Back
                                 </a>
                                 <a href="#" class="wr-btn wizard-stepper" data-current="policy-criteria" data-next="policy-naming" data-validate="true">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;Continue&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Continue
                                 </a>
                             </div>
                         </div>
@@ -186,7 +188,7 @@
                     <hr>
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Step 1: Edit current profile</h4>
+                            <h4 class="visible-xs">Step 1: Edit current profile</h4>
                             <br>
                             <div id="policy-profile-main-error-msg" class="alert alert-danger hidden" role="alert">
                                 <i class="icon fw fw-error"></i><span></span>
@@ -194,9 +196,7 @@
                             <div class="wr-advance-operations">
                                 <div class="wr-advance-operations-init">
                                     <br>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <i class="fw fw-settings fw-spin fw-2x"></i>
-                                    &nbsp;&nbsp;&nbsp;
                                     Loading platform features . . .
                                     <br>
                                     <br>
@@ -204,7 +204,7 @@
                             </div>
                             <div class="wr-input-control wr-btn-grp">
                                 <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile" data-next="policy-criteria" data-validate="true">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;Continue&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Continue
                                 </a>
                             </div>
                         </div>

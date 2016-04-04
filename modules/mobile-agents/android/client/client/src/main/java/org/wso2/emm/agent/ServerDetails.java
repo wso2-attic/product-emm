@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.api.DeviceState;
+import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.Response;
@@ -72,10 +73,15 @@ public class ServerDetails extends Activity {
 			txtSeverAddress.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.GONE);
 		} else {
+
 			btnStartRegistration.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.VISIBLE);
 			String ipSaved =
 					Preference.getString(context.getApplicationContext(), Constants.IP);
+			if (Constants.DEFAULT_HOST != null){
+				ipSaved = Constants.DEFAULT_HOST;
+				saveHostDeatils(ipSaved);
+			}
 
 			// check if we have the IP saved previously.
 			if (ipSaved != null && !ipSaved.isEmpty()) {
@@ -84,7 +90,6 @@ public class ServerDetails extends Activity {
 			} else {
 				evServerIP.setText(ipSaved);
 			}
-
 			String deviceActive = Preference.getString(context, context.getResources().
 					getString(R.string.shared_pref_device_active));
 
@@ -165,28 +170,7 @@ public class ServerDetails extends Activity {
 				case DialogInterface.BUTTON_POSITIVE:
 					if (!evServerIP.getText().toString().trim().isEmpty()) {
 						String host = evServerIP.getText().toString().trim();
-                        if (host.indexOf(PROTOCOL_HTTP) > -1) {
-	                        String hostWithPort = host.substring(PROTOCOL_HTTP.length(), host.length());
-	                        Preference.putString(context.getApplicationContext(), Constants.IP,
-	                                             getHostFromUrl(hostWithPort));
-	                        Preference.putString(context.getApplicationContext(), Constants.PROTOCOL, PROTOCOL_HTTP);
-	                        Preference.putString(context.getApplicationContext(), Constants.PORT,
-	                                             getPortFromUrl(hostWithPort));
-                        } else if (host.indexOf(PROTOCOL_HTTPS) > -1) {
-	                        String hostWithPort = host.substring(PROTOCOL_HTTPS.length(), host.length());
-	                        Preference.putString(context.getApplicationContext(), Constants.IP,
-	                                             getHostFromUrl(hostWithPort));
-	                        Preference.putString(context.getApplicationContext(), Constants.PROTOCOL, PROTOCOL_HTTPS);
-	                        Preference.putString(context.getApplicationContext(), Constants.PORT,
-	                                             getPortFromUrl(hostWithPort));
-                        } else if (host.indexOf(COLON) > -1) {
-	                        Preference.putString(context.getApplicationContext(), Constants.IP,
-	                                             getHostFromUrl(host));
-	                        Preference.putString(context.getApplicationContext(), Constants.PORT,
-	                                             getPortFromUrl(host));
-                        } else {
-	                        Preference.putString(context.getApplicationContext(), Constants.IP, host);
-                        }
+						saveHostDeatils(host);
 
 						startAuthenticationActivity();
 					} else {
@@ -206,6 +190,31 @@ public class ServerDetails extends Activity {
 			}
 		}
 	};
+
+	private void saveHostDeatils(String host){
+		if (host.indexOf(PROTOCOL_HTTP) > -1) {
+			String hostWithPort = host.substring(PROTOCOL_HTTP.length(), host.length());
+			Preference.putString(context.getApplicationContext(), Constants.IP,
+			                     getHostFromUrl(hostWithPort));
+			Preference.putString(context.getApplicationContext(), Constants.PROTOCOL, PROTOCOL_HTTP);
+			Preference.putString(context.getApplicationContext(), Constants.PORT,
+			                     getPortFromUrl(hostWithPort));
+		} else if (host.indexOf(PROTOCOL_HTTPS) > -1) {
+			String hostWithPort = host.substring(PROTOCOL_HTTPS.length(), host.length());
+			Preference.putString(context.getApplicationContext(), Constants.IP,
+			                     getHostFromUrl(hostWithPort));
+			Preference.putString(context.getApplicationContext(), Constants.PROTOCOL, PROTOCOL_HTTPS);
+			Preference.putString(context.getApplicationContext(), Constants.PORT,
+			                     getPortFromUrl(hostWithPort));
+		} else if (host.indexOf(COLON) > -1) {
+			Preference.putString(context.getApplicationContext(), Constants.IP,
+			                     getHostFromUrl(host));
+			Preference.putString(context.getApplicationContext(), Constants.PORT,
+			                     getPortFromUrl(host));
+		} else {
+			Preference.putString(context.getApplicationContext(), Constants.IP, host);
+		}
+	}
 
 	private String getHostFromUrl (String url) {
 		if (url.indexOf(COLON) > -1) {

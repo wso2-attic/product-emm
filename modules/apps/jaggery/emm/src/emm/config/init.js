@@ -26,4 +26,3 @@ application.put("carbonServer", carbonServer);
 
 var userModule = require("/modules/user.js")["userModule"];
 var utility = require("/modules/utility.js")["utility"];
-utility.insertAppPermissions(userModule, "init");

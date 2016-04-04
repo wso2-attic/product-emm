@@ -2,50 +2,71 @@
     <!-- content/body -->
     <div class="row">
         <div class="col-md-12">
-            <div class="wr-form">
-                <p class="page-sub-title">Add Role</p>
 
-                <p>Please note that * sign represents required fields of data.</p>
-                <hr/>
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div id="role-create-error-msg" class="alert alert-danger hidden" role="alert">
-                            <i class="icon fw fw-error"></i><span></span>
-                        </div>
-                        <label class="wr-input-label">Domain</label>
+            <!-- content -->
+            <div id="role-create-form" class="container col-centered wr-content">
+                <div class="wr-form">
+                    <p class="page-sub-title">Add Role</p>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="wr-steps">
+                                <div class="col-md-6 col-xs-6">
+                                    <div class="itm-wiz itm-wiz-current" data-step="policy-platform">
+                                        <div class="wiz-no">1</div>
+                                        <div class="wiz-lbl hidden-xs"><span>Add a role</span></div>
+                                    </div>
+                                    <br class="c-both"/>
+                                </div>
+                                <div class="col-md-6 col-xs-6">
+                                    <div class="itm-wiz" data-step="policy-profile">
+                                        <div class="wiz-no">2</div>
+                                        <div class="wiz-lbl hidden-xs"><span>Assign permissions</span></div>
+                                    </div>
+                                    <br class="c-both"/>
+                                </div>
+                            </div>
+                            <br/><br/><hr/>
+                            <div id="role-create-error-msg" class="alert alert-danger hidden" role="alert">
+                                <i class="icon fw fw-error"></i><span></span>
+                            </div>
+                            <label class="wr-input-label">Domain</label>
 
-                        <div class="wr-input-control">
-                            <select id="domain" class="form-control select">
-                                <option>PRIMARY</option>
-                                {{#each userStores}}
-                                    <option>{{this}}</option>
-                                {{/each}}
-                            </select>
-                        </div>
-                        <label class="wr-input-label">
-                            Role Name *
-                        </label>
-                        <br>
-                        <label class="wr-input-label" id="roleNameValidationText">
-                            ( {{roleNameHelpText}} )
-                        </label>
+                            <div class="wr-input-control">
+                                <select id="domain" class="form-control select">
+                                    <option>PRIMARY</option>
+                                    {{#each userStores}}
+                                        <option>{{this}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <label class="wr-input-label">
+                                Role Name *
+                            </label>
+                            <br>
+                            <label class="wr-input-label">
+                                ( {{roleNameHelpText}} )
+                            </label>
 
-                        <div class="wr-input-control">
-                            <input type="text" id="rolename" data-regex="{{roleNameJSRegEx}}"
-                                   data-errormsg="{{roleNameRegExViolationErrorMsg}}" class="form-control"/>
-                        </div>
-                        <label class="wr-input-label">
-                            User list
-                        </label>
+                            <div id="roleNameField" class="form-group wr-input-control">
+                                <input type="text" id="rolename" data-regex="{{roleNameJSRegEx}}"
+                                       data-errormsg="{{roleNameRegExViolationErrorMsg}}" class="form-control"/>
+                                <span class=" rolenameError hidden glyphicon glyphicon-remove form-control-feedback"></span>
+                                <label class="error rolenameEmpty hidden" for="summary">Role name is required & Should be in minimum 3 characters long and do not include any whitespaces. </label>
+                            </div>
+                            <label class="wr-input-label">
+                                User list
+                            </label>
 
-                        <div class="wr-input-control">
-                            <select id="users" class="form-control select2" multiple="multiple">
-                            </select>
+                            <div class="wr-input-control">
+                                <select id="users" class="form-control select2" multiple="multiple">
+                                </select>
+                            </div>
                         </div>
                     </div>
+                    <br>
+                    <button id="add-role-btn" class="wr-btn">Add Role</button>
                 </div>
-                <br>
-                <button id="add-role-btn" class="wr-btn">Add Role</button>
             </div>
             <div id="role-created-msg" class="container col-centered wr-content hidden">
                 <div class="wr-form">

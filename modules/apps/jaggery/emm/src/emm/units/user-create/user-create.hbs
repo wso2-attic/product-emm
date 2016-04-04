@@ -13,8 +13,8 @@
                             <div id="user-create-error-msg" class="alert alert-danger hidden" role="alert">
                                 <i class="icon fw fw-error"></i><span></span>
                             </div>
-                            <label class="wr-input-label" title="List of available secondary user stores">
-                            User Stores
+                            <label class="wr-input-label" title="Select the user store from the drop down list given below. The default user store is PRIMARY">
+                            User Store
                             <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </label>
                             <div class="wr-input-control">
@@ -25,34 +25,40 @@
                                     {{/each}}
                                 </select>
                             </div>
-                            <label class="wr-input-label">
+
+                            <label class="wr-input-label ">
                                 User Name *
                             </label>
                             <br>
-                            <label class="wr-input-label" id="userNameValidationText">
+                            <label class="wr-input-label">
                                 ( {{usernameHelpText}} )
                             </label>
-                            <div class="wr-input-control">
+                            <div id="usernameInputField" class="form-group wr-input-control">
                                 <input limit="{{charLimit}}" type="text" id="username" data-regex="{{usernameJSRegEx}}" data-errormsg="{{usernameRegExViolationErrorMsg}}" class="form-control"/>
+                                <span class=" usernameError hidden glyphicon glyphicon-remove form-control-feedback"></span>
+                                <label class="error usernameEmpty hidden" for="summary">This field is required. Username should be in minimum 3 characters long and do not include any whitespaces.</label>
                             </div>
                             <label class="wr-input-label">First Name *</label>
-                            <div class="wr-input-control">
+                            <div id="firstNameField" class="form-group wr-input-control">
                                 <input type="text" id="firstname" data-regex="{{firstnameJSRegEx}}" data-errormsg="{{firstnameRegExViolationErrorMsg}}" class="form-control"/>
+                                <span class="glyphicon glyphicon-remove form-control-feedback hidden fnError"></span>
+                                <label class=" hidden error fnError" for="summary">This field is required.</label>
                             </div>
                             <label class="wr-input-label">Last Name *</label>
-                            <div class="wr-input-control">
+                            <div id="lastNameField" class="form-group wr-input-control">
                                 <input type="text" id="lastname" data-regex="{{lastnameJSRegEx}}" data-errormsg="{{lastnameRegExViolationErrorMsg}}" class="form-control"/>
+                                <span class="glyphicon glyphicon-remove form-control-feedback hidden lnError"></span>
+                                <label class=" hidden error lnError" for="summary">This field is required.</label>
                             </div>
                             <label class="wr-input-label">
                                 Email Address * <br>
                                 ( ex: sam@gmail.com )
                             </label>
-                            <br>
-                            <label class="wr-input-label" id="emailValidationText">
-                                Invalid Email Address.
-                            </label>
-                            <div class="wr-input-control">
+                            <div id="emailField" class=" form-group wr-input-control">
                                 <input type="email" id="emailAddress" class="form-control"/>
+                                <span class="glyphicon glyphicon-remove form-control-feedback hidden emailError"></span>
+                                <label class=" hidden error email-required" for="summary">This field is required.</label>
+                                <label class=" hidden error email-invalid" for="summary">Invalid Email Address.</label>
                             </div>
                             <label class="wr-input-label" title="Optional field that can have 0-to-many roles for the user">
                                 User Roles

@@ -42,13 +42,12 @@ if (uriMatcher.match("/{context}/api/user/login/")) {
             if (log.isDebugEnabled()) {
                 log.debug("User Logged In : " + user);
             }
-            utility.insertAppPermissions(userModule, "login");
             apiWrapperUtil.setupAccessTokenPair("password", {"username": username, "password": password});
             var permissions = userModule.getUIPermissions();
             if (permissions.VIEW_DASHBOARD) {
                 response.sendRedirect(constants.WEB_APP_CONTEXT);
             } else {
-                response.sendRedirect(constants.WEB_APP_CONTEXT + "/device-mgt");
+                response.sendRedirect(constants.WEB_APP_CONTEXT + "/devices");
             }
         }, function (failureCotext) {
             if (failureCotext == "authentication") {

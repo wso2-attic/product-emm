@@ -88,7 +88,7 @@ public class BuildPropParser {
                 out.writeTo(fileOutputStream);
                 setFile(tmpFile);
                 boolean isDeleted = tmpFile.delete();
-                if(!isDeleted) {
+                if (!isDeleted) {
                     Log.e(TAG, "Temp file " + tmpFile.getName() + " failed to delete.");
                 }
             }
@@ -96,7 +96,7 @@ public class BuildPropParser {
             Log.e(TAG, "Writing to file failed." + e);
         } finally {
             try {
-                if(fileOutputStream != null) {
+                if (fileOutputStream != null) {
                     fileOutputStream.close();
                 }
             } catch (IOException e) {

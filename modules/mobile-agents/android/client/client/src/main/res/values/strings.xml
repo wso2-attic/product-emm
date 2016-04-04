@@ -333,7 +333,11 @@
     <string name="operation_value_null">null</string>
     <string name="operation_value_completed">COMPLETED</string>
     <string name="operation_value_error">ERROR</string>
+    <string name="operation_value_progress">IN_PROGRESS</string>
     <string name="operation_install">install</string>
     <string name="operation_uninstall">uninstall</string>
+
+    <string name="title_activity_lock">LockActivity</string>
+    <string name="txt_lock_activity">Device is locked. Please contact administrator</string>
 
 </resources>
