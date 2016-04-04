@@ -260,7 +260,9 @@ public class Constants {
 		private Device() {
 			throw new AssertionError();
 		}
+		public static final String SERIAL = "SERIAL";
 		public static final String IMEI = "IMEI";
+		public static final String MAC = "MAC";
 		public static final String IMSI = "IMSI";
 		public static final String MODEL = "DEVICE_MODEL";
 		public static final String VENDOR = "VENDOR";
