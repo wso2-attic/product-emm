@@ -67,8 +67,6 @@ public class ServerDetails extends Activity {
 		btnStartRegistration.setTextColor(getResources().getColor(R.color.black));
 		Response compatibility = state.evaluateCompatibility();
 
-		CommonUtils.callSystemApp(this,"sd","werwe");
-
 		if (!compatibility.getCode()) {
 			txtSeverAddress.setText(compatibility.getDescriptionResourceID());
 			btnStartRegistration.setVisibility(View.GONE);
@@ -92,7 +90,6 @@ public class ServerDetails extends Activity {
 			} else {
 				evServerIP.setText(ipSaved);
 			}
-
 			String deviceActive = Preference.getString(context, context.getResources().
 					getString(R.string.shared_pref_device_active));
 

@@ -148,4 +148,12 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 			Log.d(TAG, "Unregistered." + arg0.toString());
 		}
 	}
+
+	public void onLockTaskModeEntering(Context context, Intent intent, String pkg) {
+		Toast.makeText(context, "Device is locked", Toast.LENGTH_LONG).show();
+	}
+
+	public void onLockTaskModeExiting(Context context, Intent intent) {
+		Toast.makeText(context, "Device is unlocked", Toast.LENGTH_SHORT).show();
+	}
 }

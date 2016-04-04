@@ -5,7 +5,7 @@
  * @returns {*} A context object that returns the dynamic state of this page to be presented
  */
 function onRequest(context) {
-    var log = new Log("units/user-create/user-create.js");
+    var log = new Log("units/user-create/certificate-create.js");
     var userModule = require("/modules/user.js")["userModule"];
     var response = userModule.getRolesByUserStore("PRIMARY");
     var mdmProps = require('/config/mdm-props.js').config();

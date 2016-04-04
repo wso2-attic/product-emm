@@ -379,7 +379,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 
 		}
 
-		if (Constants.OWNERSHIP_BYOD.equals(deviceType.trim())) {
+		if (deviceType != null && Constants.OWNERSHIP_BYOD.equals(deviceType.trim())) {
 			if (licenseAgreedResponse == null) {
 
 				OnCancelListener cancelListener = new OnCancelListener() {
@@ -412,7 +412,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			} else {
 				getConfigurationsFromServer();
 			}
-		} else {
+		} else if (deviceType != null){
 			getConfigurationsFromServer();
 		}
 

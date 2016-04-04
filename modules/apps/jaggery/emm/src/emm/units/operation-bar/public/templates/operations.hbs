@@ -128,6 +128,24 @@
                             <input type="password" class="form-control modal-input operationDataKeys" id="lockcode" data-key="lockCode" placeholder="Enter Lockcode" />
                             <br>
                         {{/equal}}
+                        {{#equal code "DEVICE_LOCK"}}
+                            {{#equal type "android"}}
+                                Type your message to be shown in the lock screen (Optional).
+                                <br><br>
+                                <div>
+                                    <textarea class="form-control modal-input operationDataKeys" id="lock-message" data-key="lock-message"></textarea>
+                                </div>
+                                <br>
+                                <label class="wr-input-control checkbox">
+                                    <input id="hard-lock" type="checkbox" class="form-control operationDataKeys" data-key="hard-lock"/>
+                                        <span class="helper" title="Once it enables, device will be blocked permanently.">
+                                            &nbsp;&nbsp;&nbsp;Enable Permanent Lock
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                        </span>
+                                </label>
+                            {{/equal}}
+                        {{/equal}}
+                        <br><br>
                         Do you want to perform this operation on selected device(s) ?
                         <br>
                     </h4>

@@ -1025,8 +1025,8 @@ header .dropdown[aria-expanded=true], header .dropdown:hover {
 
 .nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
   color: #ffffff;
-  background: #2c313b;
-  border-color: #2c313b;
+  background: #11375B;
+  border-color: #11375B;
 }
 
 /* ========================================================================
@@ -2738,13 +2738,19 @@ a.list-group-item:hover {
 
 .list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover, .active > .list-group-item, .active > .list-group-item:focus, .active > .list-group-item:hover {
   color: #ffffff;
-  background: #2c313b;
-  border-color: #2c313b;
+  background: #11375B;
+  border-color: #11375B;
 }
 
 .list-group-item.active a {
   color: #fff;
   text-decoration: none;
+}
+
+.list-group-item .icon {
+  font-size: 25px;
+  margin-right: 10px;
+  margin-bottom: 5px;
 }
 
 .list-group.nav > .list-group-item {
@@ -4001,6 +4007,18 @@ span.ico-sort-desc {
     float: right;
 }
 
+.wr-btn-search, a.wr-btn-search {
+  background: #333 none repeat scroll 0 0;
+  border: medium none;
+  color: #fff;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: normal;
+  margin-right: 5px;
+  padding: 8px 24px;
+  text-decoration: none;
+}
+
 @media (max-width:500px) {
     .btn-search { display: none; }
 }
@@ -4581,7 +4599,6 @@ a.wr-side-panel-toggle-btn.selected {
 }
 
 .wr-app-listing > div {
-    float:left;
     margin-right:10px;
     margin-bottom:10px;
 }
@@ -6913,9 +6930,15 @@ ul.tiles .icon {
  * ======================================================================== */
 
 .wr-applist {
-    clear:both;
     margin-bottom:15px;
     border-bottom:1px solid #f0f0f0;
+}
+
+.wr-applist:after {
+  clear: both;
+  content: " ";
+  display: block;
+  height: 0;
 }
 
 .wr-applist a {
@@ -7186,3 +7209,25 @@ ul.tiles .icon {
   color: #E74C3C;
   font-weight: 400;
 }
+
+select > option:hover {
+  color: #1B517E;
+  cursor: pointer;
+}
+
+.dynamic-search-param {
+  background-color: lightgrey;
+  padding: 25px;
+  border: 5px solid navy;
+  margin: 25px;
+}
+
+.close-button-div
+{
+  display:block;
+  float:right;
+  width:27px;
+  height:27px;
+  /*background:url('http://cdn-sg1.pgimgs.com/images/pg/close-button.png') no-repeat center center;*/
+}
+

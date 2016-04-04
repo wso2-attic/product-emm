@@ -772,6 +772,25 @@
     </Permission>
     <!-- End of Profile related APIs -->
 
+    <!--Start of the device search and information -->
+
+    <Permission>
+        <name>Device Information</name>
+        <path>/device-mgt/emm-admin/information/get</path>
+        <url>/information/*/*</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>Device Search</name>
+        <path>/device-mgt/emm-admin/search</path>
+        <url>/search</url>
+        <method>POST</method>
+    </Permission>
+
+    <!--End of the device search and information -->
+
+
     <!-- License related APIs -->
     <!--<Permission>-->
     <!--<name>Get license</name>-->
@@ -816,21 +835,28 @@
     <!-- Certificate related APIs -->
     <Permission>
         <name>Save certificate in the database</name>
-        <path>/device-mgt/android/certificate/save</path>
-        <url>/certificates/saveCertificate</url>
+        <path>/device-mgt/emm-admin/certificate/save</path>
+        <url>/certificates</url>
         <method>POST</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>get certificate in the database</name>
-        <path>/device-mgt/android/certificate/Get</path>
+        <path>/device-mgt/emm-admin/certificate/Get</path>
         <url>/certificates/*</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
     <Permission>
         <name>get certificate in the database</name>
-        <path>/device-mgt/android/certificate/Get</path>
+        <path>/device-mgt/emm-admin/certificate/GetAll</path>
+        <url>/certificates</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get certificate in the database</name>
+        <path>/device-mgt/emm-admin/certificate/Get</path>
         <url>/certificates/*</url>
         <method>DELETE</method>
         <scope>emm_admin</scope>

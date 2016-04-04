@@ -30,6 +30,8 @@ import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfiguration;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfigurationManagementService;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
 import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
+import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
+import org.wso2.carbon.device.mgt.core.search.mgt.SearchManagerService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.ntask.core.TaskManager;
@@ -281,5 +283,31 @@ public class MDMAPIUtils {
         }
 
         return responseMediaType;
+    }
+
+    public static DeviceInformationManager getDeviceInformationManagerService() {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        DeviceInformationManager deviceInformationManager =
+                (DeviceInformationManager) ctx.getOSGiService(DeviceInformationManager.class, null);
+        if (deviceInformationManager == null) {
+            String msg = "Device information Manager service has not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return deviceInformationManager;
+    }
+
+
+
+    public static SearchManagerService getSearchManagerService() {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        SearchManagerService searchManagerService =
+                (SearchManagerService) ctx.getOSGiService(SearchManagerService.class, null);
+        if (searchManagerService == null) {
+            String msg = "Device search manager service has not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return searchManagerService;
     }
 }

@@ -15,6 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.wso2.emm.agent.api;
 
 import java.io.ByteArrayOutputStream;
@@ -22,16 +23,21 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.content.pm.ApplicationInfo;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
+import org.wso2.emm.agent.proxy.IDPTokenManagerException;
+import org.wso2.emm.agent.proxy.utils.ServerUtilities;
+import org.wso2.emm.agent.utils.CommonUtils;
+import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.StreamHandler;
 
 import android.content.Context;
@@ -114,6 +120,19 @@ public class ApplicationManager {
 		return appName;
 	}
 
+	public boolean isPackageInstalled(String packagename) {
+		try {
+			PackageInfo packageInfo = packageManager.
+					getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
+			if(packageInfo != null) {
+				return true;
+			}
+		} catch (PackageManager.NameNotFoundException e) {
+			return false;
+		}
+		return false;
+	}
+
 	/**
 	 * Returns whether the app is a system app.
 	 * @param packageInfo - Package of the app which you need the status.
@@ -158,11 +177,15 @@ public class ApplicationManager {
 		    !packageName.contains(resources.getString(R.string.application_package_prefix))) {
 			packageName = resources.getString(R.string.application_package_prefix) + packageName;
 		}
-		
-		Uri packageURI = Uri.parse(packageName);
-		Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
-		uninstallIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		context.startActivity(uninstallIntent);
+
+		if (Constants.SYSTEM_APP_ENABLED) {
+			CommonUtils.callSystemApp(context, Constants.Operation.SILENT_UNINSTALL_APPLICATION, null, packageName);
+		} else {
+			Uri packageURI = Uri.parse(packageName);
+			Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
+			uninstallIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			context.startActivity(uninstallIntent);
+		}
 	}
 
 	/**
@@ -203,7 +226,7 @@ public class ApplicationManager {
 
 	/**
 	 * Installs or updates an application to the device.
-	 * @param url - APK Url should be passed in as a String.
+	 * @param - APK Url should be passed in as a String.
 	 */
 	public class AppUpdater extends AsyncTask<String, Void, Void> {
 		private Context context;
@@ -217,12 +240,9 @@ public class ApplicationManager {
 			FileOutputStream outStream=null;
 			InputStream inStream=null;
 			try {
-				URL url = new URL(inputData[BUFFER_OFFSET]);
-				HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-				urlConnection
-						.setRequestMethod(resources.getString(R.string.server_util_req_type_get));
-				urlConnection.setDoOutput(true);
-				urlConnection.connect();
+				HttpGet httpGet = new HttpGet(inputData[BUFFER_OFFSET]);
+				HttpClient httpClient = ServerUtilities.getCertifiedHttpClient();
+				HttpResponse response = httpClient.execute(httpGet);
 				
 				String directory = Environment.getExternalStorageDirectory().getPath() +
 										resources.getString(R.string.application_mgr_download_location);
@@ -237,7 +257,7 @@ public class ApplicationManager {
 				
 				outStream = new FileOutputStream(outputFile);
 
-				inStream = urlConnection.getInputStream();
+				inStream = response.getEntity().getContent();
 
 				byte[] buffer = new byte[BUFFER_SIZE];
 				int lengthFile;
@@ -247,16 +267,21 @@ public class ApplicationManager {
 				}
 
 				String filePath = directory + resources.getString(R.string.application_mgr_download_file_name);
-				Intent intent = new Intent(Intent.ACTION_VIEW);
-				intent.setDataAndType(
-			                      Uri.fromFile(new File(filePath)),
-				                      resources.getString(R.string.application_mgr_mime)
-				);
-				
-				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				context.startActivity(intent);
+				Uri fileUri =  Uri.fromFile(new File(filePath));
+				if (Constants.SYSTEM_APP_ENABLED) {
+					CommonUtils.callSystemApp(context, Constants.Operation.SILENT_INSTALL_APPLICATION, null, fileUri.toString());
+				} else {
+					Intent intent = new Intent(Intent.ACTION_VIEW);
+					intent.setDataAndType(fileUri, resources.getString(R.string.application_mgr_mime));
+					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					context.startActivity(intent);
+				}
+			} catch (IDPTokenManagerException e) {
+				Log.e(TAG, "Error occurred while sending 'Get' request due to IDP proxy initialization issue.");
 			} catch (IOException e) {
 				Log.e(TAG, "File download/save failure in AppUpdator.", e);
+			} catch (IllegalArgumentException e) {
+				Log.e(TAG, "Error occurred while sending 'Get' request due to empty host name");
 			} finally {
 				StreamHandler.closeOutputStream(outStream, TAG);
 				StreamHandler.closeInputStream(inStream, TAG);

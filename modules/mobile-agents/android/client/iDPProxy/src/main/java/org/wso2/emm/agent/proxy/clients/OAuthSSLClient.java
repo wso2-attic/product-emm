@@ -56,7 +56,7 @@ public class OAuthSSLClient implements CommunicationClient {
             if (Constants.SERVER_PROTOCOL.equalsIgnoreCase("https://")) {
                 KeyStore localTrustStore = KeyStore.getInstance("BKS");
                 inStream = IdentityProxy.getInstance().getContext().getResources().
-                        openRawResource(R.raw.trust);
+                        openRawResource(R.raw.truststore);
                 localTrustStore.load(inStream, Constants.TRUSTSTORE_PASSWORD.toCharArray());
 
                 SchemeRegistry schemeRegistry = new SchemeRegistry();
