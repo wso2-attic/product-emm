@@ -44,6 +44,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <permission
         android:name="org.wso2.emm.agent.permission.C2D_MESSAGE"
@@ -122,27 +123,27 @@
         </service>
 
         <activity
-            android:name=".AlreadyRegisteredActivity"
+            android:name="org.wso2.emm.agent.AlreadyRegisteredActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Sherlock" >
         </activity>
         <activity
-            android:name=".AuthenticationActivity"
+            android:name="org.wso2.emm.agent.AuthenticationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Sherlock"
             android:windowSoftInputMode="stateUnchanged|adjustPan" >
         </activity>
         <activity
-            android:name=".AuthenticationErrorActivity"
+            android:name="org.wso2.emm.agent.AuthenticationErrorActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".NotifyActivity"
+            android:name="org.wso2.emm.agent.NotifyActivity"
             android:label="@string/title_activity_notify"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".ServerDetails"
+            android:name="org.wso2.emm.agent.ServerDetails"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateUnchanged|adjustPan" >
@@ -153,12 +154,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PinCodeActivity"
+            android:name="org.wso2.emm.agent.PinCodeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateUnchanged|adjustPan" >
         </activity>
         <activity
-            android:name=".AlertActivity"
+            android:name="org.wso2.emm.agent.AlertActivity"
             android:label="@string/title_activity_alert"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Dialog" >
@@ -168,6 +169,15 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_lock">
         </activity>
+        <activity
+            android:name="org.wso2.emm.agent.AppLockActivity"
+            android:label="@string/title_activity_alert"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        </activity>
+        <service
+            android:name=".services.AppLockService"
+            android:exported="false" />
     </application>
 
 </manifest>

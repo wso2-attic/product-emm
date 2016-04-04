@@ -114,7 +114,9 @@ var androidOperationConstants = {
     "ENCRYPT_STORAGE_OPERATION": "encrypt-storage",
     "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
     "WIFI_OPERATION": "wifi",
-    "WIFI_OPERATION_CODE": "WIFI"
+    "WIFI_OPERATION_CODE": "WIFI",
+    "APPLICATION_OPERATION":"app-restriction",
+    "APPLICATION_OPERATION_CODE":"APP-RESTRICTION"
 };
 
 // Constants to define Android Operation Constants
@@ -388,9 +390,40 @@ validateStep["policy-profile"] = function () {
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
             }
+            if ($.inArray(androidOperationConstants["APPLICATION_OPERATION_CODE"], configuredOperations) != -1){
+                operation = androidOperationConstants["APPLICATION_OPERATION"];
+
+                var whiteListEnabled = $("#white-list-enabled").is(":checked");
+                var whiteListStoreLoc = $("#app-store-location").val();
+
+                if($("button.dropdown-toggle").text().trim() == "Black List" && $('table.black-list tbody tr').length > 0){
+                    continueToCheckNextInputs = true;
+                }
+                else if($("button.dropdown-toggle").text().trim() == "White List" && whiteListEnabled && whiteListStoreLoc){
+                    continueToCheckNextInputs = true;
+                }
+                else{
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Application list is not provided. You cannot proceed.",
+                        "erroneousFeature": operation
+                    }
+                    continueToCheckNextInputs = false;
+                }
+
+                if(continueToCheckNextInputs){
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
+
+            }
         }
-    }
-    if (policy["platform"] == platformTypeConstants["WINDOWS"]) {
+    }if (policy["platform"] == platformTypeConstants["WINDOWS"]) {
         if (configuredOperations.length == 0) {
             // updating validationStatus
             validationStatus = {
@@ -2125,6 +2158,18 @@ function formatRepoSelection(user) {
     return user.username || user.text;
 }
 
+var addDeleteButton = function(){
+     return "<td>"+
+        "<a class='row-delete'>"+
+        "<span class='fw-stack'>"+
+        "<i class='fw fw-ring fw-stack-2x'></i>"+
+        "<i class='fw fw-delete fw-stack-1x'></i>"+
+        "</span>"+
+        "<span class='hidden-xs hidden-on-grid-view'>Delete</span>"+
+        "</a>"+
+        "</td>";
+
+}
 $(document).ready(function () {
 
     // Adding initial state of wizard-steps.
@@ -2269,6 +2314,156 @@ $(document).ready(function () {
             }
         }
     });
+
+    $(advanceOperations).on("click", ".wr-input-control.switch", function (event) {
+        $(".dropdown-menu li a").on("click", function(){
+            var selText = $(this).text();
+            $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+            $("#app-list-add-widget").removeClass("hidden");
+            if(selText == "Black List"){
+                $("#searchable-container_black_list").removeClass("hidden");
+                $("#search-on-app-store").removeClass("hidden");
+                $("#app-list-add-widget").children().show();
+                $("#white-list-options").addClass("hidden");
+                $("#white-list-enabled").removeAttr("checked");
+                $("#app-store-location").val("");
+            }
+            else if(selText == "White List"){
+                $("#searchable-container_black_list").addClass("hidden");
+                $("#search-on-app-store").addClass("hidden");
+                $("#white-list-options").removeClass("hidden");
+                $(".black-list > tbody").html("");
+                $("#white-list-options").children().show();
+
+            }
+
+            $("#application-add").unbind("click").on('click', function(){
+                var packageName = $("#app-select").val();
+                if(packageName == "" | packageName == null){
+                    return;
+                }
+
+                var application_index = $('th:contains("Application")').index();
+                var has_duplicate = false;
+                if(selText == "Black List"){
+                    check_for_duplicates("black-list");
+                }
+
+
+                function check_for_duplicates (class_name){
+                    $("table."+class_name+" tr td:nth-child("+(application_index+1)+")").each(function () {
+                        if($(this).text() == $("#app-select").val()){
+                            alert("There is a duplicate entry for this application name. " +
+                                "Remove it first to create new entry");
+                            has_duplicate = true;
+                        }
+                    });
+                }
+
+                if(has_duplicate) {
+                    return;
+                }
+
+                //var deleteButton = "<td>"+
+                //    "<a class='row-delete'>"+
+                //    "<span class='fw-stack'>"+
+                //    "<i class='fw fw-ring fw-stack-2x'></i>"+
+                //    "<i class='fw fw-delete fw-stack-1x'></i>"+
+                //    "</span>"+
+                //    "<span class='hidden-xs hidden-on-grid-view'>Delete</span>"+
+                //    "</a>"+
+                //    "</td>";
+
+                if(selText == "Black List"){
+                    var new_table_row = "<tr>"+
+                        "<td>"+packageName+"</td>"+addDeleteButton()+"</tr>";
+                    $('#searchable-container_black_list > table > tbody').append(new_table_row);
+                }
+
+                $("#app-select").select2("val", "");
+
+            });
+        });
+
+        $(".app-list").on('click','.row-delete',function(event) {
+            $(this).parent().parent().remove();
+        });
+
+        $("#app-select").select2({
+            ajax: {
+                url: "https://api.github.com/search/repositories",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+                    // parse the results into the format expected by Select2
+                    // since we are using custom formatting functions we do not need to
+                    // alter the remote JSON data, except to indicate that infinite
+                    // scrolling can be used
+                    params.page = params.page || 1;
+
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; },
+            minimumInputLength: 1,
+            multiple: true,
+            templateResult: formatRepo,
+            templateSelection: formatRepoSelection
+        });
+
+        $("#app-select").on('select2:select', function (e) {
+            //clear the input box after a selection is made
+            $(this).val([]).trigger('change');
+            $(this).val([e.params.data.id]).trigger("change");
+            $("#userStore").prop("disabled", false);
+            $("#roles").prop("disabled", false);
+
+        });
+
+
+        function formatRepo (repo) {
+            if (repo.loading) return repo.text;
+
+            var markup = '<div class="clearfix">' +
+                '<div class="col-sm-10">' +
+                '<img src="' + repo.owner.avatar_url + '" style="max-width: 100%" />' +
+                '</div>' +
+                '<div clas="col-sm-1">' +
+                '<div class="clearfix">' +
+                '<div class="col-sm-6">' + repo.full_name + '</div>' +
+                '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + repo.forks_count + '</div>' +
+                '<div class="col-sm-2"><i class="fa fa-star"></i> ' + repo.stargazers_count + '</div>' +
+                '</div>';
+
+            //if (repo.description) {
+            //    markup += '<div>' + repo.description + '</div>';
+            //}
+
+            markup += '</div></div>';
+
+            return markup;
+        }
+
+        function formatRepoSelection (repo) {
+            return repo.full_name || repo.text;
+        }
+
+
+    });
+
 
     // adding support for cloning multiple profiles per feature with cloneable class definitions
     $(advanceOperations).on("click", ".multi-view.add.enabled", function () {
