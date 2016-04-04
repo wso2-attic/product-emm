@@ -44,7 +44,7 @@ public class CertificateManagement extends TestBase {
     public void testAddCertificate() throws Exception {
         MDMResponse response = client.post(Constants.CertificateManagement.CERTIFICATE_ADD_ENDPOINT,
                                            Constants.CertificateManagement.CERTIFICATE_ADD_PAYLOAD);
-        Assert.assertEquals(HttpStatus.SC_CREATED , response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_CREATED ,response.getStatus());
     }
 
     @Test(description = "Test get certificate.")

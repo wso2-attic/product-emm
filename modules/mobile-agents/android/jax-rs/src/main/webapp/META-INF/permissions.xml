@@ -80,6 +80,13 @@
     </Permission>
 
     <Permission>
+        <name>Unlock</name>
+        <path>/device-mgt/emm-admin/operations/android/unlock</path>
+        <url>/operation/unlock</url>
+        <method>POST</method>
+    </Permission>
+
+    <Permission>
         <name>Mute</name>
         <path>/device-mgt/emm-admin/operations/android/mute</path>
         <url>/operation/mute</url>

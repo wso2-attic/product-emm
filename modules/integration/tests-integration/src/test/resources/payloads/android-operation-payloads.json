@@ -64,5 +64,12 @@
       "type": "install"
     },
     "deviceIDs": []
+  },
+  "lock" : {
+    "operation": {
+      "message": "message",
+      "isHardLockEnabled": true
+    },
+    "deviceIDs": []
   }
 }

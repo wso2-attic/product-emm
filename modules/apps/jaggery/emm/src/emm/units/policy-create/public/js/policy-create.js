@@ -1911,7 +1911,8 @@ var savePolicy = function (policy, serviceURL) {
 
     $.each(profilePayloads, function (i, item) {
         $.each(item.content, function (key, value) {
-            if (!value) {
+            //cannot add a thruthy check since it will catch value = false as well
+            if (value === null || value === undefined || value === "") {
                 item.content[key] = null;
             }
         });

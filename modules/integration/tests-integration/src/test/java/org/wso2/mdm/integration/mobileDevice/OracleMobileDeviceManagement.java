@@ -30,6 +30,9 @@ import org.wso2.carbon.automation.engine.annotations.SetEnvironment;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.mdm.integration.common.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * This class contains integration tests for Device Management on Oracle Platform
  */
@@ -96,8 +99,20 @@ public class OracleMobileDeviceManagement extends TestBase {
     public void testViewDeviceTypes() throws Exception {
         MDMResponse response = client.get(Constants.MobileDeviceManagement.VIEW_DEVICE_TYPES_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-        Assert.assertEquals(PayloadGenerator.getJsonPayloadToString
-                (Constants.MobileDeviceManagement.VIEW_DEVICE_RESPONSE_PAYLOAD_FILE_NAME),response.getBody());
+        //Assert.assertEquals(PayloadGenerator.getJsonPayloadToString
+          //      (Constants.MobileDeviceManagement.VIEW_DEVICE_RESPONSE_PAYLOAD_FILE_NAME),response.getBody());
+        JsonArray responseDeviceTypes = parser.parse(response.getBody()).getAsJsonArray();
+        Set<String> deviceTypesSet = new HashSet<>();
+        for (int i = 0; i < responseDeviceTypes.size(); i++) {
+            deviceTypesSet.add(responseDeviceTypes.get(i).getAsJsonObject().get("name").getAsString());
+        }
+        JsonArray deviceTypes = PayloadGenerator.getJsonPayload(
+                Constants.MobileDeviceManagement.VIEW_DEVICE_RESPONSE_PAYLOAD_FILE_NAME);
+        for (int i = 0; i < deviceTypes.size(); i++) {
+            String type = deviceTypes.get(i).getAsJsonObject().get("name").getAsString();
+            Assert.assertTrue(deviceTypesSet.contains(type));
+
+        }
         //Response has two device types, because in windows enrollment a windows device is previously enrolled.
     }
 

@@ -15,31 +15,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.emm.agent.beans;
 
-import java.util.ArrayList;
-import java.util.List;
+package org.wso2.emm.system.service.utils;
 
-/**
- * Represents application data.
- */
-public class AppData {
+import android.os.Environment;
+import android.util.Log;
 
-    public AppData() {
-        this.apps =  new ArrayList<>();
+import java.io.File;
+
+public class FileUtils {
+    public static String getUpgradePackageFilePath() {
+        Log.d(FileUtils.class.getName(), "FilePath: " + Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOWNLOADS).getPath() + File.separator + Constants.UPDATE_PACKAGE_NAME);
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() +
+               File.separator + Constants.UPDATE_PACKAGE_NAME;
     }
-
-    public List<Device.Property> getApps() {
-        return apps;
-    }
-
-    public void setApps(List<Device.Property> apps) {
-        this.apps = apps;
-    }
-
-    public void addApps(Device.Property apps) {
-        this.apps.add(apps);
-    }
-
-    List<Device.Property> apps;
 }

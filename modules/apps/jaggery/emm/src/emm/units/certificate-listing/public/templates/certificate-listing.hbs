@@ -1,0 +1,30 @@
+{{#each certificates}}
+
+    <tr data-type="selectable" id="{{serialNumber}}" data-username="{{serialNumber}}">
+        <td class="remove-padding icon-only content-fill viewEnabledIcon" data-username="{{serialNumber}}">
+            <div class="thumbnail icon">
+                <i class="square-element text fw fw-document"></i>
+            </div>
+        </td>
+        <td class="fade-edge remove-padding-top" data-search="{{serialNumber}}" data-display="{{serialNumber}}"><i
+                class="fw-mobile"></i> {{serialNumber}}</td>
+        <td class="fade-edge remove-padding-top" data-search="{{subject}}" data-display="{{subject}}"><i
+                class="fw-policy"></i> {{subject}}</td>
+        <td class="text-right content-fill text-left-on-grid-view no-wrap">
+            {{#unequal adminUser serialNumber }}
+            {{#if removePermitted}}
+                <a href="#" data-username="{{serialNumber}}" data-userid="{{userid}}"
+                   data-click-event="remove-form" onclick="javascript:removeCertificate('{{serialNumber}}')"
+                   class="btn padding-reduce-on-grid-view remove-user-link">
+                    <span class="fw-stack">
+                        <i class="fw fw-ring fw-stack-2x"></i>
+                        <i class="fw fw-delete fw-stack-1x"></i>
+                    </span>
+                    <span class="hidden-xs hidden-on-grid-view">Remove</span>
+                </a>
+            {{/if}}
+            {{/unequal}}
+        </td>
+    </tr>
+
+{{/each}}

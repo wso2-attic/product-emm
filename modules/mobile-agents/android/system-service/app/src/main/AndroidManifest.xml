@@ -15,7 +15,8 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.wso2.emm.system.service">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.wso2.emm.system.service"
+    android:sharedUserId="android.uid.system">
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -25,9 +26,11 @@
     <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <permission android:name="android.permission.REBOOT" />
     <permission android:name="android.permission.READ_LOGS" />
-    <!--<permission android:name="org.wso2.emm.system.service.EMMSystemService.permission.Access" android:protectionLevel="signature"/>-->
     <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
 
@@ -39,5 +42,26 @@
                 <action android:name="org.wso2.emm.system.service.START_SERVICE" />
             </intent-filter>
         </service>
+
+        <activity
+                android:name=".MainActivity"
+                android:exported="true"
+                android:screenOrientation="portrait">
+        </activity>
+
+        <receiver
+                android:name="org.wso2.emm.system.service.ServiceDeviceAdminReceiver"
+                android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <intent-filter>
+
+                <!-- This action is required -->
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED"/>
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.app.device_admin"
+                    android:resource="@xml/agent_device_admin">
+            </meta-data>
+        </receiver>
     </application>
 </manifest>

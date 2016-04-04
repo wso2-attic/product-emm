@@ -4,13 +4,15 @@
         <nav class="navbar navbar-default" data-spy="affix" data-offset-top="80" data-offset-bottom="40">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                            aria-expanded="false" aria-controls="navbar">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-menu-toggle collapsed" data-toggle="collapse" data-target="#navbar2"  aria-expanded="false" aria-controls="navbar2">
+                    <a class="navbar-menu-toggle collapsed" data-toggle="collapse" data-target="#navbar2"
+                       aria-expanded="false" aria-controls="navbar2">
                         <span class="icon fw-stack">
                             <i class="fw fw-tiles fw-stack-1x toggle-icon-up"></i>
                         </span>
@@ -22,32 +24,32 @@
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
                         {{#if enableBack}}
-                        <li>
-                            <a href="javascript:history.back()">
+                            <li>
+                                <a href="javascript:history.back()">
                                 <span class="icon fw-stack">
                                     <i class="fw fw-ring fw-stack-2x"></i>
                                     <i class="fw fw-left-arrow fw-stack-1x"></i>
                                 </span>
-                                Go Back
-                            </a>
-                        </li>
+                                    Go Back
+                                </a>
+                            </li>
                         {{/if}}
 
                         {{#each currentActions}}
-                        <li>
-                            <a href="{{url}}" id="appbar-btn-{{id}}" title="{{tooltip}}">
+                            <li>
+                                <a href="{{url}}" id="appbar-btn-{{id}}" title="{{tooltip}}">
                                 <span class="fw-stack">
                                     <i class="fw fw-ring fw-stack-2x"></i>
                                     <i class="fw {{icon}} fw-stack-1x"></i>
                                 </span>
-                                {{title}}
-                            </a>
-                        </li>
+                                    {{title}}
+                                </a>
+                            </li>
                         {{/each}}
 
                         {{#equal pageTitle "Device Management"}}
-                        <li>
-                            <a href="javascript:toggleEnrollment()">
+                            <li>
+                                <a href="javascript:toggleEnrollment()">
                                 <span class="fw-stack">
                                    <i class="fw fw-ring fw-stack-2x"></i>
                                    <i class="fw fw-mobile fw-stack-1x"></i>
@@ -57,15 +59,42 @@
                                       <i class="fw fw-add fw-stack-1x"></i>
                                    </span>
                                 </span>
-                                Enroll Device
+                                    Enroll Device
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{appContext}}devices/search">
+                                <span class="fw-stack">
+                                   <i class="fw fw-ring fw-stack-2x"></i>
+                                   <i class="fw fw-mobile fw-stack-1x"></i>
+                                   <span class="fw-stack fw-move-right fw-move-bottom">
+                                      <i class="fw fw-circle fw-stack-2x fw-stroke fw-inverse"></i>
+                                       <i class="fw fw-circle fw-stack-2x"></i>
+                                      <i class="fw fw-search fw-stack-1x"></i>
+                                   </span>
+                                </span>
+                                   Advanced Search
+                                </a>
+                            </li>
+                        {{/equal}}
+
+                        {{#equal pageTitle "Certificate Management"}}
+                        <li>
+                            <a href="{{appContext}}certificates/add-certificate">
+                                <span class="fw-stack">
+                                   <i class="fw fw-ring fw-stack-2x"></i>
+                                   <i class="fw fw-document fw-stack-1x"></i>
+                                </span>
+                                Add Certificate
                             </a>
                         </li>
                         {{/equal}}
                     </ul>
                     <ul id="notification-bubble-wrapper" class="nav navbar-nav navbar-right">
                         <li class="visible-inline-block">
-                            <!--<a href="/emm/notification-listing" title="Failures of operations on the device side will be listed here">-->
-                            <a data-toggle="sidebar" data-target="#right-sidebar" data-container=".page-content" aria-expanded="false" rel="notifications-sidebar">
+                            <!--<a href="{{appContext}}notification-listing" title="Failures of operations on the device side will be listed here">-->
+                            <a data-toggle="sidebar" data-target="#right-sidebar" data-container=".page-content"
+                               aria-expanded="false" rel="notifications-sidebar">
                                 <span class="icon fw-stack">
                                     <i class="fw fw-notification fw-stack-1x"></i>
                                 </span>
@@ -82,26 +111,45 @@
                     {{defineZone "common-navigation"}}
 
                     {{#if permissions.VIEW_DASHBOARD}}
-                        <li><a href="/emm"><i class="fw fw-dashboard"></i>Admin Dashboard</a></li>
+                        <li><a href="{{appContext}}"><i class="fw fw-dashboard"></i>Admin Dashboard</a></li>
                     {{/if}}
-                    {{#if permissions.LIST_DEVICES}}
-                        <li><a href="/emm/device-mgt"><i class="fw fw-mobile"></i>Device Management</a></li>
+                    {{#if permissions.LIST_DEVICES_ADMIN}}
+                        <li><a href="{{appContext}}devices"><i class="fw fw-mobile"></i>Device Management</a></li>
+                    {{else}}
+                        {{#if permissions.LIST_OWN_DEVICES}}
+                            <li><a href="{{appContext}}devices"><i class="fw fw-mobile"></i>Device Management</a></li>
+                        {{/if}}
                     {{/if}}
-                    {{#if permissions.LIST_USERS}}
-                        <li><a href="/emm/users"><i class="fw fw-user"></i>User Management</a></li>
-                    {{/if}}
+                    <li><a><i class="fw fw-user"></i>User Management</a>
+                        <ul>
+                            {{#if permissions.LIST_USERS}}
+                                <li><a href="{{appContext}}users"><i class="fw fw-user"></i>Users</a></li>
+                            {{/if}}
 
-                    {{#if permissions.LIST_ROLES}}
-                        <li><a href="/emm/roles"><i class="fw fw-bookmark"></i>Role Management</a></li>
-                    {{/if}}
+                            {{#if permissions.LIST_ROLES}}
+                                <li><a href="{{appContext}}roles"><i class="fw fw-bookmark"></i>Roles</a></li>
+                            {{/if}}
+                        </ul>
+                    </li>
                     {{#if permissions.LIST_POLICIES}}
-                        <li><a href="/emm/policies"><i class="fw fw-policy"></i>Policy Management</a></li>
+                        <li><a href="{{appContext}}policies"><i class="fw fw-policy"></i>Policy Management</a></li>
                     {{/if}}
-                    {{#if permissions.TENANT_CONFIGURATION}}
-                        <li><a href="/emm/platform-configuration"><i class="fw fw-settings"></i>Platform Configurations</a></li>
-                    {{/if}}
+                    <li><a><i class="fw fw-settings"></i>Configuration Management</a>
+                        <ul>
+                            {{#if permissions.TENANT_CONFIGURATION}}
+                                <li><a href="{{appContext}}platform-configuration"><i class="fw fw-service"></i>Platform Configurations</a>
+                                </li>
+                            {{/if}}
+                            <!-- todo change the permission and get the related permission -->
+                            {{#if permissions.TENANT_CONFIGURATION}}
+                                <li><a href="{{appContext}}certificates"><i class="fw fw-security-policy"></i>Certificate Configurations</a>
+                                </li>
+                            {{/if}}
+                        </ul>
+                    </li>
                 </ul>
-            </div><!--/ .nav-collapse -->
+            </div>
+            <!--/ .nav-collapse -->
         </nav>
     </div>
 
@@ -127,16 +175,21 @@
         </div>
     </div>
     <div class="page-content-wrapper">
-        <div class="sidebar-wrapper" id="right-sidebar" is-authorized="{{isAuthorizedForNotifications}}" data-side="right" data-width="320" data-sidebar-fixed="true" data-fixed-offset="50" data-spy="affix" data-offset-top="80">
+        <div class="sidebar-wrapper" id="right-sidebar" is-authorized="{{isAuthorizedForNotifications}}"
+             data-side="right" data-width="320" data-sidebar-fixed="true" data-fixed-offset="50" data-spy="affix"
+             data-offset-top="80">
             <ul class="sidebar-messages">
             </ul>
-            <h4 class="text-center" ><a href="/emm/notification-listing" class="text-center">Show all notifications</a></h4>
+            <h4 class="text-center"><a href="{{appContext}}notification-listing" class="text-center">Show all notifications</a>
+            </h4>
         </div>
-        <div class="container-fluid">
+    <div class="container-fluid">
 
 {{/zone}}
 {{#zone "bottomJs"}}
-    <script id="notifications" data-current-user="{{currentUser.username}}" data-image-resource="{{self.publicURL}}/images/" src="{{self.publicURL}}/templates/notifications.hbs" type="text/x-handlebars-template" ></script>
-    <script src="{{self.publicURL}}/js/appbar.js"></script>
-    <script src="{{self.publicURL}}/js/jquery.qrcode.min.js"></script>
+        <script id="notifications" data-current-user="{{currentUser.username}}"
+                data-image-resource="{{self.publicURL}}/images/" src="{{self.publicURL}}/templates/notifications.hbs"
+                type="text/x-handlebars-template"></script>
+        <script src="{{self.publicURL}}/js/appbar.js"></script>
+        <script src="{{self.publicURL}}/js/jquery.qrcode.min.js"></script>
 {{/zone}}

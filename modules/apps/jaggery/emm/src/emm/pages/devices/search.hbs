@@ -1,4 +1,4 @@
-{{!-- Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+{{!-- Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 
 WSO2 Inc. licenses this file to you under the Apache License,
 Version 2.0 (the "License"); you may not use this file except
@@ -19,9 +19,13 @@ under the License. --}}
 {{layout "fluid"}}
 {{!-- Inputting content into defined zones in fluid layout --}}
 {{#zone "title"}}
-    WSO2 EMM | Edit User
+    {{
+    unit "title"
+    pageTitle = "Advanced Device Search"
+    }}
 {{/zone}}
 {{#zone "body"}}
-    {{unit "appbar" pageTitle="Edit User" enableBack=true}}
-    {{unit "user-update"}}
+    {{unit "appbar" pageTitle="Device Search" pageLink="devices" enableBack=true}}
+    {{unit "datatables"}}
+    {{unit "device-search"}}
 {{/zone}}

@@ -171,7 +171,7 @@ function loadDevices(searchType, searchParam){
         $("#loading-content").remove();
         $('#device-table').addClass('hidden');
         $('#device-listing-status-msg').text('Permission denied.');
-        $("#device-listing-status").show();
+        $("#device-listing-status").removeClass(' hidden');
         return;
     }
 
@@ -210,7 +210,7 @@ function loadDevices(searchType, searchParam){
                 var deviceIdentifier = row.deviceIdentifier;
                 var url = "#";
                 if (status != 'REMOVED') {
-                    url = "device?type=" + deviceType + "&id=" + deviceIdentifier;
+                    url = "devices/view?type=" + deviceType + "&id=" + deviceIdentifier;
                 }
                 return '<div onclick="javascript:InitiateViewOption(\'' + url + '\')" class="thumbnail icon"><i class="square-element text fw fw-mobile"></i></div>';
             }},
@@ -335,7 +335,7 @@ function initPage() {
                 } else {
                     $("#loading-content").remove();
                     $("#device-listing-status-msg").text("No enrolled devices found.");
-                    $("#device-listing-status").show();
+                    $("#device-listing-status").removeClass(' hidden');
                 }
             }
         }, function (message) {
@@ -348,7 +348,6 @@ function initPage() {
  * DOM ready functions.
  */
 $(document).ready(function () {
-    $("#device-listing-status").hide();
     initPage();
 
     /* Adding selected class for selected devices */

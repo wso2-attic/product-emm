@@ -20,5 +20,8 @@
 package org.wso2.carbon.mdm.services.android.bean.property;
 
 public class DeviceInfo {
+
+    private String description;
+    private String deviceIdentifier;
 }
 

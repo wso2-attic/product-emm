@@ -43,6 +43,41 @@ var operationModule = function () {
         "WIPE_OPERATION_CODE": "WIPE_DATA",
         "NOTIFICATION_OPERATION_CODE": "NOTIFICATION",
         "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE",
+        "LOCK_OPERATION_CODE": "DEVICE_LOCK",
+        "DISALLOW_ADJUST_VOLUME": "DISALLOW_ADJUST_VOLUME",
+        "DISALLOW_CONFIG_BLUETOOTH" : "DISALLOW_CONFIG_BLUETOOTH",
+        "DISALLOW_CONFIG_CELL_BROADCASTS" : "DISALLOW_CONFIG_CELL_BROADCASTS",
+        "DISALLOW_CONFIG_CREDENTIALS" : "DISALLOW_CONFIG_CREDENTIALS",
+        "DISALLOW_CONFIG_MOBILE_NETWORKS" : "DISALLOW_CONFIG_MOBILE_NETWORKS",
+        "DISALLOW_CONFIG_TETHERING" : "DISALLOW_CONFIG_TETHERING",
+        "DISALLOW_CONFIG_VPN" : "DISALLOW_CONFIG_VPN",
+        "DISALLOW_CONFIG_WIFI" : "DISALLOW_CONFIG_WIFI",
+        "DISALLOW_APPS_CONTROL" : "DISALLOW_APPS_CONTROL",
+        "DISALLOW_CREATE_WINDOWS" : "DISALLOW_CREATE_WINDOWS",
+        "DISALLOW_CROSS_PROFILE_COPY_PASTE" : "DISALLOW_CROSS_PROFILE_COPY_PASTE",
+        "DISALLOW_DEBUGGING_FEATURES" : "DISALLOW_DEBUGGING_FEATURES",
+        "DISALLOW_FACTORY_RESET" : "DISALLOW_FACTORY_RESET",
+        "DISALLOW_ADD_USER" : "DISALLOW_ADD_USER",
+        "DISALLOW_INSTALL_APPS" : "DISALLOW_INSTALL_APPS",
+        "DISALLOW_INSTALL_UNKNOWN_SOURCES" : "DISALLOW_INSTALL_UNKNOWN_SOURCES",
+        "DISALLOW_MODIFY_ACCOUNTS" : "DISALLOW_MODIFY_ACCOUNTS",
+        "DISALLOW_MOUNT_PHYSICAL_MEDIA" : "DISALLOW_MOUNT_PHYSICAL_MEDIA",
+        "DISALLOW_NETWORK_RESET" : "DISALLOW_NETWORK_RESET",
+        "DISALLOW_OUTGOING_BEAM" : "DISALLOW_OUTGOING_BEAM",
+        "DISALLOW_OUTGOING_CALLS" : "DISALLOW_OUTGOING_CALLS",
+        "DISALLOW_REMOVE_USER" : "DISALLOW_REMOVE_USER",
+        "DISALLOW_SAFE_BOOT" : "DISALLOW_SAFE_BOOT",
+        "DISALLOW_SHARE_LOCATION" : "DISALLOW_SHARE_LOCATION",
+        "DISALLOW_SMS" : "DISALLOW_SMS",
+        "DISALLOW_UNINSTALL_APPS" : "DISALLOW_UNINSTALL_APPS",
+        "DISALLOW_UNMUTE_MICROPHONE" : "DISALLOW_UNMUTE_MICROPHONE",
+        "DISALLOW_USB_FILE_TRANSFER" : "DISALLOW_USB_FILE_TRANSFER",
+        "ALLOW_PARENT_PROFILE_APP_LINKING" : "ALLOW_PARENT_PROFILE_APP_LINKING",
+        "ENSURE_VERIFY_APPS" : "ENSURE_VERIFY_APPS",
+        "AUTO_TIME" : "AUTO_TIME",
+        "SET_SCREEN_CAPTURE_DISABLED" : "SET_SCREEN_CAPTURE_DISABLED",
+        "SET_STATUS_BAR_DISABLED" : "SET_STATUS_BAR_DISABLED"
+        "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE",
         "APPLICATION_OPERATION_CODE":"APP-RESTRICTION"
     };
 
@@ -585,9 +620,7 @@ var operationModule = function () {
                 };
                 break;
             case androidOperationConstants["CAMERA_OPERATION_CODE"]:
-                payload = {
-                    "cameraEnabled": operationPayload["enabled"]
-                };
+                payload = operationPayload;
                 break;
             case androidOperationConstants["ENCRYPT_STORAGE_OPERATION_CODE"]:
                 payload = {
@@ -620,7 +653,40 @@ var operationModule = function () {
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "enabled" : operationData["cameraEnabled"]
+                        "CAMERA" : operationData["cameraEnabled"],
+                        "DISALLOW_ADJUST_VOLUME" : operationData["disallowAdjustVolumeEnabled"],
+                        "DISALLOW_CONFIG_BLUETOOTH" : operationData["disallowConfigBluetooth"],
+                        "DISALLOW_CONFIG_CELL_BROADCASTS" : operationData["disallowConfigCellBroadcasts"],
+                        "DISALLOW_CONFIG_CREDENTIALS" : operationData["disallowConfigCredentials"],
+                        "DISALLOW_CONFIG_MOBILE_NETWORKS" : operationData["disallowConfigMobileNetworks"],
+                        "DISALLOW_CONFIG_TETHERING" : operationData["disallowConfigTethering"],
+                        "DISALLOW_CONFIG_VPN" : operationData["disallowConfigVpn"],
+                        "DISALLOW_CONFIG_WIFI" : operationData["disallowConfigWifi"],
+                        "DISALLOW_APPS_CONTROL" : operationData["disallowAppControl"],
+                        "DISALLOW_CREATE_WINDOWS" : operationData["disallowCreateWindows"],
+                        "DISALLOW_CROSS_PROFILE_COPY_PASTE" : operationData["disallowCrossProfileCopyPaste"],
+                        "DISALLOW_DEBUGGING_FEATURES" : operationData["disallowDebugging"],
+                        "DISALLOW_FACTORY_RESET" : operationData["disallowFactoryReset"],
+                        "DISALLOW_ADD_USER" : operationData["disallowAddUser"],
+                        "DISALLOW_INSTALL_APPS" : operationData["disallowInstallApps"],
+                        "DISALLOW_INSTALL_UNKNOWN_SOURCES" : operationData["disallowInstallUnknownSources"],
+                        "DISALLOW_MODIFY_ACCOUNTS" : operationData["disallowModifyAccounts"],
+                        "DISALLOW_MOUNT_PHYSICAL_MEDIA" : operationData["disallowMountPhysicalMedia"],
+                        "DISALLOW_NETWORK_RESET" : operationData["disallowNetworkReset"],
+                        "DISALLOW_OUTGOING_BEAM" : operationData["disallowOutgoingBeam"],
+                        "DISALLOW_OUTGOING_CALLS" : operationData["disallowOutgoingCalls"],
+                        "DISALLOW_REMOVE_USER" : operationData["disallowRemoveUser"],
+                        "DISALLOW_SAFE_BOOT" : operationData["disallowSafeBoot"],
+                        "DISALLOW_SHARE_LOCATION" : operationData["disallowLocationSharing"],
+                        "DISALLOW_SMS" : operationData["disallowSMS"],
+                        "DISALLOW_UNINSTALL_APPS" : operationData["disallowUninstallApps"],
+                        "DISALLOW_UNMUTE_MICROPHONE" : operationData["disallowUnmuteMicrophone"],
+                        "DISALLOW_USB_FILE_TRANSFER" : operationData["disallowUSBFileTransfer"],
+                        "ALLOW_PARENT_PROFILE_APP_LINKING" : operationData["disallowParentProfileAppLinking"],
+                        "ENSURE_VERIFY_APPS" : operationData["ensureVerifyApps"],
+                        "AUTO_TIME" : operationData["enableAutoTime"],
+                        "SET_SCREEN_CAPTURE_DISABLED" : operationData["diableScreenCapture"],
+                        "SET_STATUS_BAR_DISABLED" : operationData["disableStatusBar"]
                     }
                 };
                 break;
@@ -662,6 +728,15 @@ var operationModule = function () {
                     "operation": {
                         "ssid": operationData["wifiSSID"],
                         "password": operationData["wifiPassword"]
+                    }
+                };
+                break;
+            case androidOperationConstants["LOCK_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "message" : operationData["lock-message"],
+                        "isHardLockEnabled" : operationData["hard-lock"]
                     }
                 };
                 break;
@@ -708,6 +783,7 @@ var operationModule = function () {
             "WIFI": "wifi",
             "CAMERA": "camera",
             "DEVICE_LOCK": "lock",
+            "DEVICE_UNLOCK": "unlock",
             "DEVICE_LOCATION": "location",
             "CLEAR_PASSWORD": "clear-password",
             "APPLICATION_LIST": "get-application-list",
@@ -871,9 +947,10 @@ var operationModule = function () {
             "DEVICE_RING": "fw-dial-up",
             "DEVICE_REBOOT": "fw-refresh",
             "UPGRADE_FIRMWARE": "fw-up-arrow",
-            "DEVICE_MUTE": "fw-incoming-call",
+            "DEVICE_MUTE": "fw-mute",
             "NOTIFICATION": "fw-message",
-            "CHANGE_LOCK_CODE": "fw-security"
+            "CHANGE_LOCK_CODE": "fw-security",
+            "DEVICE_UNLOCK": "fw-lock"
         };
         return featureMap[operationCode];
     };
@@ -938,7 +1015,6 @@ var operationModule = function () {
     publicMethods.generatePayload = function (platformType, operationCode, deviceList) {
         var payload;
         var operationData = {};
-        //var has_app_restriction_not_set = true;
         // capturing form input data designated by .operationDataKeys
         $(".operation-data").filterByData("operation-code", operationCode).find(".operationDataKeys").each(
             function () {
@@ -1289,7 +1365,27 @@ var operationModule = function () {
         for (var i = 0; i < operationCodes.length; ++i) {
             var operationCode = operationCodes[i];
             var payload = publicMethods.generatePayload(platformType, operationCode, null);
-            generatedProfile[operationCode] = payload["operation"];
+
+            if(platformType == platformTypeConstants["ANDROID"] &&
+                operationCodes[i] == androidOperationConstants["CAMERA_OPERATION_CODE"]){
+                var operations = payload["operation"];
+                for (var key in operations){
+                    operationCode = key;
+                    var restriction = false;
+                    if(operations[key]){
+                        restriction = true;
+                    }
+                    var payloadResult = {
+                        "operation": {
+                            "enabled" : restriction
+                        }
+                    };
+                    generatedProfile[operationCode] = payloadResult["operation"];
+                }
+
+            } else {
+                generatedProfile[operationCode] = payload["operation"];
+            }
         }
         return generatedProfile;
     };
@@ -1303,13 +1399,124 @@ var operationModule = function () {
      */
     publicMethods.populateProfile = function (platformType, payload) {
         var i, configuredOperations = [];
+        var restrictions = {};
         for (i = 0; i < payload.length; ++i) {
             var configuredFeature = payload[i];
             var featureCode = configuredFeature["featureCode"];
             var operationPayload = configuredFeature["content"];
+            if(platformType == platformTypeConstants["ANDROID"]){
+                var restriction  = JSON.parse(operationPayload);
+                if(featureCode == androidOperationConstants["CAMERA_OPERATION_CODE"]){
+                    restrictions["cameraEnabled"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_ADJUST_VOLUME"]){
+                    restrictions["disallowAdjustVolumeEnabled"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_CONFIG_BLUETOOTH"]){
+                    restrictions["disallowConfigBluetooth"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_CONFIG_CELL_BROADCASTS"]){
+                    restrictions["disallowConfigCellBroadcasts"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_CONFIG_CREDENTIALS"]){
+                    restrictions["disallowConfigCredentials"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_CONFIG_MOBILE_NETWORKS"]){
+                    restrictions["disallowConfigMobileNetworks"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_CONFIG_TETHERING"]){
+                    restrictions["disallowConfigTethering"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_CONFIG_VPN"]){
+                    restrictions["disallowConfigVpn"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_CONFIG_WIFI"]){
+                    restrictions["disallowConfigWifi"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_APPS_CONTROL"]){
+                    restrictions["disallowAppControl"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_CREATE_WINDOWS"]){
+                    restrictions["disallowCreateWindows"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_CROSS_PROFILE_COPY_PASTE"]){
+                    restrictions["disallowCrossProfileCopyPaste"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_DEBUGGING_FEATURES"]){
+                    restrictions["disallowDebugging"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_FACTORY_RESET"]){
+                    restrictions["disallowFactoryReset"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_ADD_USER"]){
+                    restrictions["disallowAddUser"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_INSTALL_APPS"]){
+                    restrictions["disallowInstallApps"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_INSTALL_UNKNOWN_SOURCES"]){
+                    restrictions["disallowInstallUnknownSources"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_MODIFY_ACCOUNTS"]){
+                    restrictions["disallowModifyAccounts"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_MOUNT_PHYSICAL_MEDIA"]){
+                    restrictions["disallowMountPhysicalMedia"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_NETWORK_RESET"]){
+                    restrictions["disallowNetworkReset"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_OUTGOING_BEAM"]){
+                    restrictions["disallowOutgoingBeam"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_OUTGOING_CALLS"]){
+                    restrictions["disallowOutgoingCalls"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_REMOVE_USER"]){
+                    restrictions["disallowRemoveUser"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_SAFE_BOOT"]){
+                    restrictions["disallowSafeBoot"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_SHARE_LOCATION"]){
+                    restrictions["disallowLocationSharing"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_SMS"]){
+                    restrictions["disallowSMS"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_UNINSTALL_APPS"]){
+                    restrictions["disallowUninstallApps"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_UNMUTE_MICROPHONE"]){
+                    restrictions["disallowUnmuteMicrophone"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["DISALLOW_USB_FILE_TRANSFER"]){
+                    restrictions["disallowUSBFileTransfer"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["ALLOW_PARENT_PROFILE_APP_LINKING"]){
+                    restrictions["disallowParentProfileAppLinking"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["ENSURE_VERIFY_APPS"]){
+                    restrictions["ensureVerifyApps"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["AUTO_TIME"]){
+                    restrictions["enableAutoTime"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["SET_SCREEN_CAPTURE_DISABLED"]){
+                    restrictions["diableScreenCapture"] = restriction["enabled"];
+                    continue;
+                } else if (featureCode == androidOperationConstants["SET_STATUS_BAR_DISABLED"]){
+                    restrictions["disableStatusBar"] = restriction["enabled"];
+                    continue;
+                }
+            }
             //push the feature-code to the configuration array
             configuredOperations.push(featureCode);
             publicMethods.populateUI(platformType, featureCode, operationPayload);
+        }
+        if(restrictions){
+            configuredOperations.push(androidOperationConstants["CAMERA_OPERATION_CODE"]);
+            publicMethods.populateUI(platformType, androidOperationConstants["CAMERA_OPERATION_CODE"], JSON.stringify(restrictions));
         }
         return configuredOperations;
     };
