@@ -31,6 +31,7 @@ import org.wso2.carbon.mdm.api.util.ResponsePayload;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,7 +71,7 @@ public class MobileDevice {
                 return service.getAllDevices(paginationRequest);
             }
 
-            List<Device> allDevices = null;
+            List<Device> allDevices;
             if ((type != null) && !type.isEmpty()) {
                 allDevices = service.getAllDevices(type);
             } else if ((user != null) && !user.isEmpty()) {
@@ -148,6 +149,52 @@ public class MobileDevice {
             return devices;
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while fetching the devices list of given user.";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+    }
+
+    @GET
+    @Path("users/{tenantDomain}")
+    public List<Device> getDeviceOfUsers(@QueryParam("user") List<String> users,
+                                        @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
+        List<Device> devicesOfUser;
+        List<Device> devicesOfUsers = new ArrayList<>();
+        try {
+            for(String user : users){
+                devicesOfUser = MDMAPIUtils.getDeviceManagementService().getDevicesOfUser(user);
+                devicesOfUsers.addAll(devicesOfUser);
+            }
+
+            if (devicesOfUsers.isEmpty()) {
+                Response.status(Response.Status.NOT_FOUND);
+            }
+            return devicesOfUsers;
+        } catch (DeviceManagementException e) {
+            String msg = "Error occurred while fetching the devices list for users.";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+    }
+
+    @GET
+    @Path("roles/{tenantDomain}")
+    public List<Device> getDeviceOfRoles(@QueryParam("role") List<String> roles,
+                                         @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
+        List<Device> devicesOfRole;
+        List<Device> devicesOfRoles = new ArrayList<>();
+        try {
+            for(String role : roles){
+                devicesOfRole = MDMAPIUtils.getDeviceManagementService().getAllDevicesOfRole(role);
+                devicesOfRoles.addAll(devicesOfRole);
+            }
+
+            if (devicesOfRoles.isEmpty()) {
+                Response.status(Response.Status.NOT_FOUND);
+            }
+            return devicesOfRoles;
+        } catch (DeviceManagementException e) {
+            String msg = "Error occurred while fetching the devices list for roles.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }

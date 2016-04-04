@@ -173,6 +173,20 @@
     </Permission>
 
     <Permission>
+        <name>View device</name>
+        <path>/device-mgt/emm-admin/devices/view</path>
+        <url>/devices/users/*</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>View device</name>
+        <path>/device-mgt/emm-admin/devices/view</path>
+        <url>/devices/roles/*</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
         <name>List devices</name>
         <path>/device-mgt/emm-admin/devices/list</path>
         <url>/devices/count</url>
