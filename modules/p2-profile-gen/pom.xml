@@ -435,7 +435,7 @@
                                 </featureArtifactDef>
 
                                 <featureArtifactDef>
-                                    org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mdm.wso2mdm.feature:${appmgt.feature.version}
+                                    org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mdm.restconnector.feature:${appmgt.feature.version}
                                 </featureArtifactDef>
 
                                 <featureArtifactDef>
@@ -479,6 +479,9 @@
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     caramel:caramel.feature:${caramel.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mdm.osgiconnector.feature:${appmgt.feature.version}
                                 </featureArtifactDef>
 
                             </featureArtifacts>
@@ -949,7 +952,7 @@
                                     <version>${appmgt.feature.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.appmgt.mdm.wso2mdm.feature.group</id>
+                                    <id>org.wso2.carbon.appmgt.mdm.restconnector.feature.group</id>
                                     <version>${appmgt.feature.version}</version>
                                 </feature>
                                 <feature>
@@ -1004,6 +1007,11 @@
                                 <feature>
                                     <id>org.wso2.carbon.core.common.feature.group</id>
                                     <version>${carbon.kernel.version}</version>
+                                </feature>
+
+                                <feature>
+                                    <id>org.wso2.carbon.appmgt.mdm.osgiconnector.feature.group</id>
+                                    <version>${appmgt.feature.version}</version>
                                 </feature>
                                 <!--<feature>-->
                                 <!--<id>org.wso2.carbon.core.server.feature.group</id>-->
@@ -1452,7 +1460,7 @@
                                     <version>${appmgt.feature.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.appmgt.mdm.wso2mdm.feature.group</id>
+                                    <id>org.wso2.carbon.appmgt.mdm.restconnector.feature.group</id>
                                     <version>${appmgt.feature.version}</version>
                                 </feature>
                                 <feature>
@@ -1506,6 +1514,10 @@
                                 <feature>
                                     <id>org.wso2.carbon.core.common.feature.group</id>
                                     <version>${carbon.kernel.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.appmgt.mdm.osgiconnector.feature.group</id>
+                                    <version>${appmgt.feature.version}</version>
                                 </feature>
                             </features>
                         </configuration>
