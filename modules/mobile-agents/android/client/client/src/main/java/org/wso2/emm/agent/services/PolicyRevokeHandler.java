@@ -30,7 +30,6 @@ import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.WiFiConfig;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.utils.CommonUtils;
-import org.wso2.emm.agent.beans.*;
 import org.wso2.emm.agent.utils.Constants;
 
 import java.util.ArrayList;
@@ -122,9 +121,6 @@ public class PolicyRevokeHandler {
                 } else {
                     throw new AndroidAgentException("Invalid operation code received");
                 }
-                break;
-            case Constants.Operation.APP_RESTRICTION:
-                revokeAppRestrictionPolicy(operation);
                 break;
             default:
                 throw new AndroidAgentException("Invalid operation code received");

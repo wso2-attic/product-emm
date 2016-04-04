@@ -52,8 +52,6 @@ public class PolicyOperationsMapper {
 				return buildPasswordPolicyOperation(operation);
 			case Constants.Operation.WIFI:
 				return buildWifiOperation(operation);
-			case Constants.Operation.APP_RESTRICTION:
-				return buildApplicationRestrictionOpearation(operation);
 			case Constants.Operation.DISALLOW_ADJUST_VOLUME:
 			case Constants.Operation.DISALLOW_CONFIG_BLUETOOTH:
 			case Constants.Operation.DISALLOW_CONFIG_CELL_BROADCASTS:
@@ -146,11 +144,6 @@ public class PolicyOperationsMapper {
 	}
 
 	private Operation buildWifiOperation(Operation operation) {
-		operation.setId(INVALID_FLAG);
-		return operation;
-	}
-
-	private Operation buildApplicationRestrictionOpearation(Operation operation){
 		operation.setId(INVALID_FLAG);
 		return operation;
 	}

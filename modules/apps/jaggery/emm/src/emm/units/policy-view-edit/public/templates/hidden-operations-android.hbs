@@ -36,16 +36,6 @@
             <span id="wifi-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="wifi-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
-        <a href="javascript:void(0)" onclick="showAdvanceOperation('app-restriction', this)">
-                <span class="fw-stack fw-lg">
-                    <i class="fw fw-application fw-stack-1x"></i>
-                    <i class="fw fw-block fw-stack-2x"></i>
-                </span>
-            Applications Restrictions
-            <span id="app-restriction-configured" class="has-configured status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="app-restriction-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="app-restriction-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
-        </a>
         <!--<a href="javascript:void(0)" onclick="showAdvanceOperation('install-apps', this)">-->
                 <!--<span class="wr-hidden-operations-icon fw-stack">-->
                     <!--<i class="fw fw-application fw-stack-2x"></i>-->
@@ -735,99 +725,6 @@
             </div>
         </div>
         <!-- /wi-fi -->
-        <!--app-restriction-->
-        <div class="wr-hidden-operation" data-operation="app-restriction">
-            <div class="panel panel-default operation-data" data-operation="app-restriction" data-operation-code="APP-RESTRICTION">
-                <div id="app-restriction-heading" class="panel-heading" role="tab">
-                    <h2 class="sub-title panel-title">
-                        Application Restriction Settings
-                        <label class="wr-input-control switch" data-toggle="collapse" data-target="#app-restriction-body">
-                            <input type="checkbox" />
-                            <span class="helper"></span>
-                            <span class="text"></span>
-                        </label>
-                        <hr>
-                        <div class="panel-title-description">
-                            This configurations can be used to create Application black list or white list.
-                        </div>
-                    </h2>
-                </div>
-                <div id="app-restriction-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="app-restriction-body">
-                    <div class="btn-group">
-                        <button class="btn btn-primary dropdown-toggle operationDataKeys" data-toggle="dropdown" data-key="restrictionList">
-                            Select List Criteria
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-                            <li><a tabindex="-1">Black List</a></li>
-                            <li><a tabindex="-1">White List</a></li>
-                        </ul>
-                    </div>
-
-                    <div id="app-list-add-widget" class="hidden">
-                        <div class="row">
-                            <div id="search-on-app-store" class="col-md-6 hidden">
-                                <label class="wr-input-label"
-                                       title="search for applications on app stores">
-                                    Search on App Stores
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </label>
-                                <div class="wr-input-control">
-                                    <select id="app-select" class="form-control select2">
-                                    </select>
-                                </div>
-                                <button id="application-add" type="button" class="btn btn-primary">Add</button>
-                            </div>
-                        </div>
-                        <div class="container hidden" id="searchable-container_black_list">
-                            <table class="operationDataKeys black-list" style="width: 50%" border="1" cellpadding="0" cellspacing="0" data-key="black_list">
-                                <thead>
-                                <tr>
-                                    <th>Application</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody class="app-list">
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="container hidden" id="white-list-options">
-                        <!--<div id="white-list-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="white-list-body">-->
-                            <div id="white-list-feature-error-msg" class="alert alert-danger hidden" role="alert">
-                                <i class="icon fw fw-error"></i><span></span>
-                            </div>
-                            <div class="description">
-                                Check following checkbox in case you need to enable white list.
-                            </div>
-                            <br>
-                            <br>
-                            <div class="wr-input-control">
-                                <label class="wr-input-control checkbox">
-                                    <input id="white-list-enabled" type="checkbox" class="operationDataKeys" data-key="whiteListEnabled" />
-                            <span class="helper" title="Having this checked would enable application white list in the device.">
-                                &nbsp;&nbsp;&nbsp;Enable White List
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                            </label>
-                        </div>
-                        <div class="wr-input-control">
-                            <label class="wr-input-control text">
-                            <span class="helper" title="Specify the location of the app store which white listed app are located">
-                                &nbsp;&nbsp;&nbsp;App store URL*
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                            </label>
-                            <input id="app-store-location" type="text" class="form-control operationDataKeys" data-key="appStoreLocation" style="width:60%"/>
-                        </div>
-                    </div>
-                    <!--</div>-->
-
-                </div>
-            </div>
-        </div>
-        <!--/app-restriction-->
 
         <!-- install-applications -->
         <!--<div class="wr-hidden-operation" data-operation="install-apps">-->

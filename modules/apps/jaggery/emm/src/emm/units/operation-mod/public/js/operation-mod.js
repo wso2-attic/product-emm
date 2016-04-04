@@ -77,8 +77,6 @@ var operationModule = function () {
         "AUTO_TIME" : "AUTO_TIME",
         "SET_SCREEN_CAPTURE_DISABLED" : "SET_SCREEN_CAPTURE_DISABLED",
         "SET_STATUS_BAR_DISABLED" : "SET_STATUS_BAR_DISABLED"
-        "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE",
-        "APPLICATION_OPERATION_CODE":"APP-RESTRICTION"
     };
 
     // Constants to define Windows Operation Constants
@@ -633,14 +631,6 @@ var operationModule = function () {
                     "wifiPassword": operationPayload["password"]
                 };
                 break;
-            case androidOperationConstants["APPLICATION_OPERATION_CODE"]:
-                payload = {
-                    "restrictionList":operationPayload["restrictionList"],
-                    "black_list": operationPayload["black_list"],
-                    "whiteListEnabled": operationPayload["whiteListEnabled"],
-                    "appStoreLocation": operationPayload["appStoreLocation"]
-                };
-                break;
         }
         return payload;
     };
@@ -751,16 +741,6 @@ var operationModule = function () {
                         "maxPINAgeInDays": operationData["passcodePolicyMaxPasscodeAgeInDays"],
                         "pinHistory": operationData["passcodePolicyPasscodeHistory"],
                         "maxFailedAttempts": operationData["passcodePolicyMaxFailedAttempts"]
-                    }
-                };
-                break;
-            case androidOperationConstants["APPLICATION_OPERATION_CODE"]:
-                payload = {
-                    "operation":{
-                        "restrictionList":operationData["restrictionList"],
-                        "black_list": operationData["black_list"],
-                        "whiteListEnabled": operationData["whiteListEnabled"],
-                        "appStoreLocation": operationData["appStoreLocation"]
                     }
                 };
                 break;
@@ -1028,8 +1008,6 @@ var operationModule = function () {
                     value = operationDataObj.is(":checked");
                 } else if (operationDataObj.is("select")) {
                     value = operationDataObj.find("option:selected").attr("value");
-                } else if (operationDataObj.is("button")) {
-                    value = operationDataObj.text();
                 } else if (operationDataObj.hasClass("grouped-array-input")) {
                     value = [];
                     var childInput;
@@ -1119,38 +1097,6 @@ var operationModule = function () {
                         });
                     }
                 }
-                if (operationDataObj.is("table")){
-                    //var is_white_list_enabled = $('#searchable-container_black_list').hasClass("hidden");
-                    //if(has_app_restriction_not_set){
-                        //if (!is_white_list_enabled && key == "blackList"){
-                            var application_list = [];
-                            var application_index = $('th:contains("Application")').index();
-                            $(".black-list tr td:nth-child("+(application_index+1)+")").each(function () {
-                                application_list.push($(this).text());
-                            });
-                            value = application_list;
-                            //has_app_restriction_not_set = false;
-                        //}
-                        //else if(is_white_list_enabled && key == "whiteList") {
-                        //    var white_list_enabled = $("#white-list-enabled").is(':checked');
-                        //    var white_list_store_location = $("#app-store-location").val();
-                        //    //var application_with_roles_list= [];
-                        //    //var application_index = $('th:contains("Application")').index();
-                        //    //var role_index = $('th:contains("Roles")').index();
-                        //    //$(".white-list tr td:nth-child("+(application_index+1)+")").each(function () {
-                        //    //    var application_entry = {};
-                        //    //    var application_name = $(this).text();
-                        //    //    var rolesList = $('.white-list tr:eq(' + ($(this).parent().index()+1) + ') td:eq(' + role_index + ')').text();
-                        //    //    application_entry[application_name] = rolesList;
-                        //    //    application_with_roles_list.push(application_entry);
-                        //    //});
-                        //    value = [white_list_enabled, white_list_store_location];
-                        //    has_app_restriction_not_set = false;
-                        //}
-
-                    //}
-
-                }
                 operationData[key] = value;
             }
         );
@@ -1205,20 +1151,11 @@ var operationModule = function () {
                     operationDataObj.val(value);
                 } else if (operationDataObj.is(":checkbox")) {
                     operationDataObj.prop("checked", value);
-                    operationDataObj.parents().removeClass("hidden");
                 } else if (operationDataObj.is("select")) {
                     operationDataObj.val(value);
                     /* trigger a change of value, so that if slidable panes exist,
                      make them slide-down or slide-up accordingly */
                     operationDataObj.trigger("change");
-                } else if (operationDataObj.is("button")) {
-                    if(value == "Black List "){
-                        $("#white-list-options").children().hide();
-                    }
-                    else{
-                        $("#app-list-add-widget").children().hide();
-                    }
-                    operationDataObj.text(value);
                 } else if (operationDataObj.hasClass("grouped-array-input")) {
                     // then value is complex
                     var i, childInput;
@@ -1319,39 +1256,10 @@ var operationModule = function () {
                             childInputIndex++;
                         });
                     }
-                } else if (operationDataObj.is("table")){
-                    var application_list = value;
-                    //add application list to table here
-
-                    //var i = 0;
-                    //var application_index = $('th:contains("Application")').index();
-                    for(var i = 0; i< application_list.length;i++){
-                        $('#searchable-container_black_list > table > tbody').append( "<tr>"+
-                            "<td>"+application_list[i]+"</td>"+addDeleteButton()+"</tr>");
-                    }
-                    operationDataObj.parents().removeClass("hidden");
-
-                    //$(".black-list tr td:nth-child("+(application_index+1)+")").each(function () {
-                    //    $(this).text(application_list[i]);
-                    //    i++;
-                    //});
                 }
             }
         );
     };
-
-    var addDeleteButton = function(){
-        return "<td>"+
-            "<a class='row-delete'>"+
-            "<span class='fw-stack'>"+
-            "<i class='fw fw-ring fw-stack-2x'></i>"+
-            "<i class='fw fw-delete fw-stack-1x'></i>"+
-            "</span>"+
-            "<span class='hidden-xs hidden-on-grid-view'>Delete</span>"+
-            "</a>"+
-            "</td>";
-
-    }
 
     /**
      * generateProfile method is only used for policy-creation UIs.

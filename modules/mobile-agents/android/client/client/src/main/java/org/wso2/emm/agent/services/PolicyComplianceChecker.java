@@ -21,7 +21,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.res.Resources;
-
+import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
@@ -128,8 +128,6 @@ public class PolicyComplianceChecker {
                 } else {
                     throw new AndroidAgentException("Invalid operation code received");
                 }
-            case Constants.Operation.APP_RESTRICTION:
-                return checkAppRestrictionPolicy(operation);
             default:
                 throw new AndroidAgentException("Invalid operation code received");
         }
@@ -307,12 +305,6 @@ public class PolicyComplianceChecker {
         } catch (JSONException e) {
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
-        return policy;
-    }
-
-    private ComplianceFeature checkAppRestrictionPolicy(org.wso2.emm.agent.beans.Operation operation){
-        //TODO implement policy compliance
-        policy.setCompliance(true);
         return policy;
     }
 }

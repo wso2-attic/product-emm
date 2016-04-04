@@ -51,8 +51,6 @@ import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.CommonUtils;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -210,8 +208,6 @@ public class Operation implements APIResultCallBack {
 			case Constants.Operation.EXECUTE_SHELL_COMMAND:
 				executeShellCommand(operation);
 				break;
-			case Constants.Operation.APP_RESTRICTION:
-				blockApplicationByPackageName(operation);
 			default:
 				if(applicationManager.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
 					CommonUtils.callSystemApp(context,operation.getCode(),
@@ -388,9 +384,9 @@ public class Operation implements APIResultCallBack {
 		intent.putExtra(resources.getString(R.string.intent_extra_type),
 				resources.getString(R.string.intent_extra_ring));
 		intent.putExtra(resources.getString(R.string.intent_extra_message),
-				resources.getString(R.string.intent_extra_stop_ringing));
+		                resources.getString(R.string.intent_extra_stop_ringing));
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
-				Intent.FLAG_ACTIVITY_NEW_TASK);
+		                Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(intent);
 
 		if (Constants.DEBUG_MODE_ENABLED) {
@@ -1306,55 +1302,6 @@ public class Operation implements APIResultCallBack {
 				}
 			}
 		}
-	}
-
-	public void blockApplicationByPackageName(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException{
-		JSONArray blacklistApps = new JSONArray();
-		try {
-			JSONObject resultAppList = new JSONObject(operation.getPayLoad().toString());
-			blacklistApps = resultAppList.getJSONArray("black_list");
-
-		} catch (JSONException e) {
-			operation.setStatus(resources.getString(R.string.operation_value_error));
-			resultBuilder.build(operation);
-			throw new AndroidAgentException("Invalid JSON format.", e);
-		}
-
-
-
-		Intent restrictionIntent = new Intent(context, AppLockService.class);
-		restrictionIntent.setAction("AppLockService");
-		ArrayList<String> appList = new ArrayList<String>();
-
-		if (blacklistApps != null) {
-			for (int i=0;i<blacklistApps.length();i++){
-				try {
-					appList.add(blacklistApps.get(i).toString());
-				} catch (JSONException e) {
-					operation.setStatus(resources.getString(R.string.operation_value_error));
-					resultBuilder.build(operation);
-					throw new AndroidAgentException("Invalid JSON format", e);
-				}
-			}
-		}
-
-		restrictionIntent.putStringArrayListExtra("appList", appList);
-
-		PendingIntent pendingIntent = PendingIntent.getService(context, 0, restrictionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-		AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(System.currentTimeMillis());
-		calendar.add(Calendar.SECOND, 1); // first time
-		long frequency= 1 * 1000; // in ms
-		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), frequency, pendingIntent);
-
-		context.startService(restrictionIntent);
-
-		operation.setStatus(resources.getString(R.string.operation_value_completed));
-		resultBuilder.build(operation);
-
-
 	}
 
 	/**
