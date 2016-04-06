@@ -26,13 +26,16 @@ import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
+import org.wso2.carbon.mdm.api.util.MDMAppConstants;
 import org.wso2.carbon.mdm.api.util.ResponsePayload;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Device related operations
@@ -154,47 +157,39 @@ public class MobileDevice {
         }
     }
 
+	/**
+     * Will return device list for user list or role list
+     *
+     * @param types Type list which for devices to be retrieved. ex: user list or role list
+     * @param typeName Type name which for devices to be retrieved ex: user or role
+     * @param tenantDomain Tenant domain
+     * @return Device list which retrieved for user set or role set
+     * @throws MDMAPIException
+     */
     @GET
-    @Path("users/{tenantDomain}")
-    public List<Device> getDeviceOfUsers(@QueryParam("user") List<String> users,
-                                        @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
-        List<Device> devicesOfUser;
-        List<Device> devicesOfUsers = new ArrayList<>();
+    @Path("{typeName}/{tenantDomain}")
+    public List<Device> getDevicesOfTypes(@QueryParam("types") List<String> types, @PathParam("typeName") String typeName,
+                                          @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
+        List<Device> devicesOfType;
+        Set<Device> devicesOfTypes = new HashSet<>();
         try {
-            for(String user : users){
-                devicesOfUser = MDMAPIUtils.getDeviceManagementService().getDevicesOfUser(user);
-                devicesOfUsers.addAll(devicesOfUser);
+            for(String type : types){
+                if(MDMAppConstants.USERS.equals(typeName)) {
+                    devicesOfType = MDMAPIUtils.getDeviceManagementService().getDevicesOfUser(type);
+                    devicesOfTypes.addAll(devicesOfType);
+                }
+                else if(MDMAppConstants.ROLES.equals(typeName)) {
+                    devicesOfType = MDMAPIUtils.getDeviceManagementService().getAllDevicesOfRole(type);
+                    devicesOfTypes.addAll(devicesOfType);
+                }
             }
 
-            if (devicesOfUsers.isEmpty()) {
+            if (devicesOfTypes.isEmpty()) {
                 Response.status(Response.Status.NOT_FOUND);
             }
-            return devicesOfUsers;
+            return new ArrayList<>(devicesOfTypes);
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while fetching the devices list for users.";
-            log.error(msg, e);
-            throw new MDMAPIException(msg, e);
-        }
-    }
-
-    @GET
-    @Path("roles/{tenantDomain}")
-    public List<Device> getDeviceOfRoles(@QueryParam("role") List<String> roles,
-                                         @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
-        List<Device> devicesOfRole;
-        List<Device> devicesOfRoles = new ArrayList<>();
-        try {
-            for(String role : roles){
-                devicesOfRole = MDMAPIUtils.getDeviceManagementService().getAllDevicesOfRole(role);
-                devicesOfRoles.addAll(devicesOfRole);
-            }
-
-            if (devicesOfRoles.isEmpty()) {
-                Response.status(Response.Status.NOT_FOUND);
-            }
-            return devicesOfRoles;
-        } catch (DeviceManagementException e) {
-            String msg = "Error occurred while fetching the devices list for roles.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
