@@ -260,7 +260,9 @@ public class Constants {
 		private Device() {
 			throw new AssertionError();
 		}
+		public static final String SERIAL = "SERIAL";
 		public static final String IMEI = "IMEI";
+		public static final String MAC = "MAC";
 		public static final String IMSI = "IMSI";
 		public static final String MODEL = "DEVICE_MODEL";
 		public static final String VENDOR = "VENDOR";
@@ -330,6 +332,7 @@ public class Constants {
 		public static final String LANGUAGE_CODE = "en-us";
 		public static final String ADDRESS = "address";
 		public static final String CITY = "city";
+		public static final String TOWN = "town";
 		public static final String COUNTRY = "country";
 		public static final String ZIP = "postcode";
 		public static final String STREET1 = "road";
