@@ -203,10 +203,13 @@ public class DeviceInfoPayload {
             telephonyManager.listen(deviceNetworkStatus, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
         }
 
-        property = new Device.Property();
-        property.setName(Constants.Device.NETWORK_INFO);
-        property.setValue(deviceNetworkStatus.getNetworkStatus());
-        properties.add(property);
+        String network = deviceNetworkStatus.getNetworkStatus();
+        if(network != null) {
+            property = new Device.Property();
+            property.setName(Constants.Device.NETWORK_INFO);
+            property.setValue(deviceNetworkStatus.getNetworkStatus());
+            properties.add(property);
+        }
 
         RuntimeInfo runtimeInfo = new RuntimeInfo(context);
         property = new Device.Property();
