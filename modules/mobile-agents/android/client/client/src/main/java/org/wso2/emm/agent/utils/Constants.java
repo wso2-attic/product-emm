@@ -333,6 +333,7 @@ public class Constants {
 		public static final String LANGUAGE_CODE = "en-us";
 		public static final String ADDRESS = "address";
 		public static final String CITY = "city";
+		public static final String TOWN = "town";
 		public static final String COUNTRY = "country";
 		public static final String ZIP = "postcode";
 		public static final String STREET1 = "road";
