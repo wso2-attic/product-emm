@@ -21,6 +21,9 @@ package org.wso2.carbon.mdm.api.util;
  */
 public class MDMAppConstants {
 
+	public static final String USERS = "users";
+	public static final String ROLES = "roles";
+
 	public class IOSConstants {
 
 		private IOSConstants() {
