@@ -2417,15 +2417,6 @@ $(document).ready(function () {
                     return;
                 }
 
-                //var deleteButton = "<td>"+
-                //    "<a class='row-delete'>"+
-                //    "<span class='fw-stack'>"+
-                //    "<i class='fw fw-ring fw-stack-2x'></i>"+
-                //    "<i class='fw fw-delete fw-stack-1x'></i>"+
-                //    "</span>"+
-                //    "<span class='hidden-xs hidden-on-grid-view'>Delete</span>"+
-                //    "</a>"+
-                //    "</td>";
 
                 if(selText == "Black List"){
                     var new_table_row = "<tr>"+

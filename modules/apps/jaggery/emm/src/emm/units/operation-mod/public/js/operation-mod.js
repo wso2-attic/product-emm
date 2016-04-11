@@ -76,7 +76,7 @@ var operationModule = function () {
         "ENSURE_VERIFY_APPS" : "ENSURE_VERIFY_APPS",
         "AUTO_TIME" : "AUTO_TIME",
         "SET_SCREEN_CAPTURE_DISABLED" : "SET_SCREEN_CAPTURE_DISABLED",
-        "SET_STATUS_BAR_DISABLED" : "SET_STATUS_BAR_DISABLED"
+        "SET_STATUS_BAR_DISABLED" : "SET_STATUS_BAR_DISABLED",
         "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE",
         "APPLICATION_OPERATION_CODE":"APP-RESTRICTION"
     };
@@ -1120,35 +1120,12 @@ var operationModule = function () {
                     }
                 }
                 if (operationDataObj.is("table")){
-                    //var is_white_list_enabled = $('#searchable-container_black_list').hasClass("hidden");
-                    //if(has_app_restriction_not_set){
-                        //if (!is_white_list_enabled && key == "blackList"){
                             var application_list = [];
                             var application_index = $('th:contains("Application")').index();
                             $(".black-list tr td:nth-child("+(application_index+1)+")").each(function () {
                                 application_list.push($(this).text());
                             });
                             value = application_list;
-                            //has_app_restriction_not_set = false;
-                        //}
-                        //else if(is_white_list_enabled && key == "whiteList") {
-                        //    var white_list_enabled = $("#white-list-enabled").is(':checked');
-                        //    var white_list_store_location = $("#app-store-location").val();
-                        //    //var application_with_roles_list= [];
-                        //    //var application_index = $('th:contains("Application")').index();
-                        //    //var role_index = $('th:contains("Roles")').index();
-                        //    //$(".white-list tr td:nth-child("+(application_index+1)+")").each(function () {
-                        //    //    var application_entry = {};
-                        //    //    var application_name = $(this).text();
-                        //    //    var rolesList = $('.white-list tr:eq(' + ($(this).parent().index()+1) + ') td:eq(' + role_index + ')').text();
-                        //    //    application_entry[application_name] = rolesList;
-                        //    //    application_with_roles_list.push(application_entry);
-                        //    //});
-                        //    value = [white_list_enabled, white_list_store_location];
-                        //    has_app_restriction_not_set = false;
-                        //}
-
-                    //}
 
                 }
                 operationData[key] = value;
@@ -1321,20 +1298,13 @@ var operationModule = function () {
                     }
                 } else if (operationDataObj.is("table")){
                     var application_list = value;
-                    //add application list to table here
 
-                    //var i = 0;
-                    //var application_index = $('th:contains("Application")').index();
                     for(var i = 0; i< application_list.length;i++){
                         $('#searchable-container_black_list > table > tbody').append( "<tr>"+
                             "<td>"+application_list[i]+"</td>"+addDeleteButton()+"</tr>");
                     }
                     operationDataObj.parents().removeClass("hidden");
 
-                    //$(".black-list tr td:nth-child("+(application_index+1)+")").each(function () {
-                    //    $(this).text(application_list[i]);
-                    //    i++;
-                    //});
                 }
             }
         );
