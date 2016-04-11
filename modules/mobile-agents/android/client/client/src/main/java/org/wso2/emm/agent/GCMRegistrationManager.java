@@ -86,7 +86,7 @@ public class GCMRegistrationManager implements APIResultCallBack {
 	 */
 	public String registerWithGoogle() {
 		if (isPlayServicesInstalled()) {
-			registrationId = Preference.getString(getContext(), Constants.REG_ID);
+			registrationId = Preference.getString(getContext(), Constants.GCM_REG_ID);
 			if (registrationId == null) {
 				try {
 					if (cloudMessaging == null) {
@@ -134,15 +134,19 @@ public class GCMRegistrationManager implements APIResultCallBack {
 		deviceInfoPayload.build();
 
 		String replyPayload = deviceInfoPayload.getDeviceInfoPayload();
-		String ipSaved = Preference.getString(getContext(), Constants.IP);
-		ServerConfig utils = new ServerConfig();
-		utils.setServerIP(ipSaved);
+		String ipSaved = Preference.getString(getContext(), Constants.PreferenceFlag.IP);
 
-		String url = utils.getAPIServerURL(getContext()) + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
+		if (ipSaved != null && !ipSaved.isEmpty()) {
+			ServerConfig utils = new ServerConfig();
+			utils.setServerIP(ipSaved);
 
-		CommonUtils.callSecuredAPI(getContext(), url, org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.PUT,
-		                           replyPayload, GCMRegistrationManager.this, Constants.GCM_REGISTRATION_ID_SEND_CODE);
+			String url = utils.getAPIServerURL(getContext()) + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
 
+			CommonUtils.callSecuredAPI(getContext(), url, org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.PUT,
+			                           replyPayload, GCMRegistrationManager.this, Constants.GCM_REGISTRATION_ID_SEND_CODE);
+		} else {
+			Log.e(TAG, "There is no valid IP to contact the server");
+		}
 	}
 
 	/**

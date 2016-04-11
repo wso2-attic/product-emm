@@ -23,13 +23,14 @@ package org.wso2.emm.agent.utils;
  */
 public class Constants {
 
-	public static final boolean DEBUG_MODE_ENABLED = false;
+	public static final boolean DEBUG_MODE_ENABLED = true;
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
 	public static final boolean SYSTEM_APP_ENABLED = false;
 	public static final String SYSTEM_APP_SERVICE_NAME = "org.wso2.emm.system.service.START_SERVICE";
 	public static final String GCM_PROJECT_NUMBER = "GOOGLE-API-PROJECT-NUMBER";
-	public static final String REG_ID = "gcm_reg_id";
+	public static final String GCM_REG_ID = "gcm_reg_id";
+	public static final String REG_ID = "regId";
 	public static final String NOTIFIER_LOCAL = "LOCAL";
 	public static final String NOTIFIER_GCM = "GCM";
 
@@ -94,9 +95,6 @@ public class Constants {
 	public static final String CLIENT_ID = "client_id";
 	public static final String CLIENT_SECRET = "client_secret";
 	public static final String CLIENT_NAME = "client_name";
-	public static final String IP = "ip";
-	public static final String PROTOCOL = "serverProtocol";
-	public static final String PORT = "serverPort";
 	public static final String GRANT_TYPE = "password refresh_token";
 	public static final String TOKEN_SCOPE = "production";
 	public static final String APPLICATION_TYPE = "device";
@@ -352,6 +350,21 @@ public class Constants {
 		public static final String STATE = "state";
 		public static final String LONGITUDE = "longitude";
 		public static final String LATITUDE = "latitude";
+	}
+
+	public final class PreferenceFlag {
+		private PreferenceFlag() {
+			throw new AssertionError();
+		}
+		public static final String REG_ID = "regId";
+		public static final String REGISTERED = "registered";
+		public static final String IP = "ip";
+		public static final String DEVICE_ACTIVE = "deviceActive";
+		public static final String PORT = "serverPort";
+		public static final String PROTOCOL = "serverProtocol";
+		public static final String APPLIED_POLICY = "appliedPolicy";
+		public static final String IS_AGREED = "isAgreed";
+		public static final String NOTIFIER_TYPE = "notifierType";
 	}
 
 }

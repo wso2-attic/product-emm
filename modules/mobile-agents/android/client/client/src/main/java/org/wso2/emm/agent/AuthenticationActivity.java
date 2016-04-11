@@ -109,13 +109,15 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		btnRegister = (Button) findViewById(R.id.btnRegister);
 		btnRegister.setOnClickListener(onClickAuthenticate);
 		btnRegister.setEnabled(false);
-		btnRegister.setOnClickListener(onClickAuthenticate);
+
 		// change button color background till user enters a valid input
 		btnRegister.setBackground(getResources().getDrawable(R.drawable.btn_grey));
 		btnRegister.setTextColor(getResources().getColor(R.color.black));
+
 		if(Constants.HIDE_LOGIN_UI) {
 			loginLayout.setVisibility(View.GONE);
 		}
+
 		etUsername.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -149,8 +151,8 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		});
 
 		if (org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE.
-				equals(org.wso2.emm.agent.proxy.utils.Constants.Authenticator.
-						       MUTUAL_SSL_AUTHENTICATOR)) {
+				equals(org.wso2.emm.agent.proxy.utils.Constants.Authenticator.MUTUAL_SSL_AUTHENTICATOR)) {
+
 			AuthenticatorFactory authenticatorFactory = new AuthenticatorFactory();
 			authenticator = authenticatorFactory.getClient(
 					org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE,
@@ -163,7 +165,6 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			deviceType = Constants.DEFAULT_OWNERSHIP;
 			Preference.putString(context, Constants.DEVICE_TYPE, deviceType);
 		}
-
 	}
 
 	private OnClickListener onClickAuthenticate = new OnClickListener() {
@@ -187,11 +188,9 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					deviceType = Constants.OWNERSHIP_COPE;
 				}
 
-				
 				showAuthenticationDialog();			
 			} else {
-				if (etUsername.getText() != null &&
-				    !etUsername.getText().toString().trim().isEmpty()) {
+				if (etUsername.getText() != null && !etUsername.getText().toString().trim().isEmpty()) {
 					Toast.makeText(context,
 					               getResources().getString(R.string.toast_error_password),
 					               Toast.LENGTH_LONG).show();
@@ -201,7 +200,6 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					               Toast.LENGTH_LONG).show();
 				}
 			}
-
 		}
 	};
 
@@ -228,8 +226,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * Start authentication process.
 	 */
 	private void startAuthentication() {
-		Preference.putString(context, Constants.DEVICE_TYPE,
-		                     deviceType);
+		Preference.putString(context, Constants.DEVICE_TYPE, deviceType);
 
 		// Check network connection availability before calling the API.
 		if (CommonUtils.isNetworkAvailable(context)) {
@@ -293,42 +290,43 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 */
 	private void initializeIDPLib(String clientKey, String clientSecret) {
 		
-		String serverIP =
-				Preference.getString(AuthenticationActivity.this, Constants.IP);
-		ServerConfig utils = new ServerConfig();
-		utils.setServerIP(serverIP);
-		String serverURL = utils.getServerURL(context) + Constants.OAUTH_ENDPOINT;
-		Editable tenantDomain = etDomain.getText();
+		String serverIP = Preference.getString(AuthenticationActivity.this, Constants.PreferenceFlag.IP);
+		if (serverIP != null && !serverIP.isEmpty()) {
+			ServerConfig utils = new ServerConfig();
+			utils.setServerIP(serverIP);
+			String serverURL = utils.getServerURL(context) + Constants.OAUTH_ENDPOINT;
+			Editable tenantDomain = etDomain.getText();
 
-		if (tenantDomain != null && !tenantDomain.toString().trim().isEmpty()) {
-			username =
-					etUsername.getText().toString().trim() +
-					context.getResources().getString(R.string.intent_extra_at) +
-					tenantDomain.toString().trim();
+			if (tenantDomain != null && !tenantDomain.toString().trim().isEmpty()) {
+				username =
+						etUsername.getText().toString().trim() +
+						context.getResources().getString(R.string.intent_extra_at) +
+						tenantDomain.toString().trim();
 
-		} else {
-			username = etUsername.getText().toString().trim();
-		}
+			} else {
+				username = etUsername.getText().toString().trim();
+			}
 
-		Preference.putString(context, Constants.CLIENT_ID, clientKey);
-		Preference.putString(context, Constants.CLIENT_SECRET, clientSecret);
-		
-		CredentialInfo info = new CredentialInfo();
-		info.setClientID(clientKey);
-		info.setClientSecret(clientSecret);
-		info.setUsername(username);
-		try {
-			info.setPassword(URLEncoder.encode(passwordVal, "UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			String msg = "error occurred while encoding password.";
-			Log.e(TAG, msg, e);
+			Preference.putString(context, Constants.CLIENT_ID, clientKey);
+			Preference.putString(context, Constants.CLIENT_SECRET, clientSecret);
+
+			CredentialInfo info = new CredentialInfo();
+			info.setClientID(clientKey);
+			info.setClientSecret(clientSecret);
+			info.setUsername(username);
+			try {
+				info.setPassword(URLEncoder.encode(passwordVal, "UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				String msg = "error occurred while encoding password.";
+				Log.e(TAG, msg, e);
+			}
+			info.setTokenEndPoint(serverURL);
+			if (tenantDomain != null && !tenantDomain.toString().trim().isEmpty()) {
+				info.setTenantDomain(tenantDomain.toString().trim());
+			}
+
+			IdentityProxy.getInstance().init(info, AuthenticationActivity.this, this.getApplicationContext());
 		}
-		info.setTokenEndPoint(serverURL);
-		if(tenantDomain != null && !tenantDomain.toString().trim().isEmpty()) {
-			info.setTenantDomain(tenantDomain.toString().trim());
-		}
-		
-		IdentityProxy.getInstance().init(info, AuthenticationActivity.this, this.getApplicationContext());
 	}
 
 	@Override
@@ -367,23 +365,19 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * agreed to license agreement
 	 */
 	private void getLicense() {
-		String licenseAgreedResponse =
-				Preference.getString(context,
-				                     getResources().getString(R.string.shared_pref_isagreed));
-		deviceType =
-				Preference.getString(context, Constants.DEVICE_TYPE);
+		boolean isAgreed = Preference.getBoolean(context, Constants.PreferenceFlag.IS_AGREED);
+		deviceType = Preference.getString(context, Constants.DEVICE_TYPE);
+
 		if(deviceType == null) {
 			deviceType = Constants.DEFAULT_OWNERSHIP;
 			Preference.putString(context, Constants.DEVICE_TYPE,
 			                     deviceType);
-
 		}
 
 		if (deviceType != null && Constants.OWNERSHIP_BYOD.equals(deviceType.trim())) {
-			if (licenseAgreedResponse == null) {
 
+			if (!isAgreed) {
 				OnCancelListener cancelListener = new OnCancelListener() {
-
 					@Override
 					public void onCancel(DialogInterface arg0) {
 						CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
@@ -422,16 +416,19 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * Retriever license agreement details from the server.
 	 */
 	private void getLicenseFromServer() {
-		String ipSaved =
-				Preference.getString(context.getApplicationContext(),Constants.IP);
+		String ipSaved = Preference.getString(context.getApplicationContext(),Constants.PreferenceFlag.IP);
 
-		ServerConfig utils = new ServerConfig();
-		utils.setServerIP(ipSaved);
-		CommonUtils.callSecuredAPI(AuthenticationActivity.this,
-				utils.getAPIServerURL(context) + Constants.LICENSE_ENDPOINT,
-				HTTP_METHODS.GET, null, AuthenticationActivity.this,
-				Constants.LICENSE_REQUEST_CODE
-		);
+		if (ipSaved != null && !ipSaved.isEmpty()) {
+			ServerConfig utils = new ServerConfig();
+			utils.setServerIP(ipSaved);
+			CommonUtils.callSecuredAPI(AuthenticationActivity.this,
+			                           utils.getAPIServerURL(context) + Constants.LICENSE_ENDPOINT,
+			                           HTTP_METHODS.GET, null, AuthenticationActivity.this,
+			                           Constants.LICENSE_REQUEST_CODE
+			);
+		} else {
+			Log.e(TAG, "There is no valid IP to contact the server");
+		}
 	}
 
 	/**
@@ -455,16 +452,19 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 				                                    getResources().getString(
 						                                    R.string.dialog_please_wait),
 				                                    cancelListener);
-		String ipSaved =
-				Preference.getString(context.getApplicationContext(),Constants.IP);
+		String ipSaved = Preference.getString(context.getApplicationContext(),Constants.PreferenceFlag.IP);
 
-		ServerConfig utils = new ServerConfig();
-		utils.setServerIP(ipSaved);
-		CommonUtils.callSecuredAPI(AuthenticationActivity.this,
-		                           utils.getAPIServerURL(context) + Constants.CONFIGURATION_ENDPOINT,
-		                           HTTP_METHODS.GET, null, AuthenticationActivity.this,
-		                           Constants.CONFIGURATION_REQUEST_CODE
-		);
+		if (ipSaved != null && !ipSaved.isEmpty()) {
+			ServerConfig utils = new ServerConfig();
+			utils.setServerIP(ipSaved);
+			CommonUtils.callSecuredAPI(AuthenticationActivity.this,
+			                           utils.getAPIServerURL(context) + Constants.CONFIGURATION_ENDPOINT,
+			                           HTTP_METHODS.GET, null, AuthenticationActivity.this,
+			                           Constants.CONFIGURATION_REQUEST_CODE
+			);
+		} else {
+			Log.e(TAG, "There is no valid IP to contact the server");
+		}
 	}
 
 	@Override
@@ -498,13 +498,13 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 							for (int i = 0; i < configList.length(); i++) {
 								JSONObject param = new JSONObject(configList.get(i).toString());
 								if(param.getString(context.getString(R.string.shared_pref_config_key)).trim().equals(
-										context.getString(R.string.shared_pref_notifier))){
+										Constants.PreferenceFlag.NOTIFIER_TYPE)){
 									String type = param.getString(context.getString(R.string.shared_pref_config_value)).trim();
 									if(type.equals(String.valueOf(Constants.NOTIFIER_CHECK))) {
-										Preference.putString(context, getResources().getString(R.string.shared_pref_notifier),
+										Preference.putString(context, Constants.PreferenceFlag.NOTIFIER_TYPE,
 										                     Constants.NOTIFIER_GCM);
 									}else{
-										Preference.putString(context, getResources().getString(R.string.shared_pref_notifier),
+										Preference.putString(context, Constants.PreferenceFlag.NOTIFIER_TYPE,
 										                     Constants.NOTIFIER_LOCAL);
 									}
 								} else if(param.getString(context.getString(R.string.shared_pref_config_key)).trim().
@@ -517,6 +517,10 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 										Preference.putString(context, getResources().getString(R.string.shared_pref_sender_id),
 									                     param.getString(context.getString(R.string.shared_pref_config_value)).trim());
 								}
+							}
+							String notifierType = Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE);
+							if (notifierType == null || notifierType.isEmpty()) {
+								setDefaultNotifier();
 							}
 						}
 
@@ -545,10 +549,9 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	}
 
 	private void setDefaultNotifier(){
-		Preference.putString(context, getResources().getString(R.string.shared_pref_notifier),
-		                     Constants.NOTIFIER_LOCAL);
+		Preference.putString(context, Constants.PreferenceFlag.NOTIFIER_TYPE, Constants.NOTIFIER_LOCAL);
 		Preference.putInt(context, getResources().getString(R.string.shared_pref_frequency),
-		                    Constants.DEFAULT_INTERVAL);
+		                  Constants.DEFAULT_INTERVAL);
 	}
 
 
@@ -601,11 +604,11 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		messageBuilder.append(getResources().getString(R.string.dialog_init_end));
 		AlertDialog.Builder alertDialog =
 				CommonDialogUtils.getAlertDialogWithTwoButtonAndTitle(context,
-						getResources().getString(R.string.dialog_init_device_type),
-						messageBuilder.toString(),
-						getResources().getString(R.string.yes),
-						getResources().getString(R.string.no),
-						dialogClickListener, dialogClickListener);
+				                                                      getResources().getString(R.string.dialog_init_device_type),
+				                                                      messageBuilder.toString(),
+				                                                      getResources().getString(R.string.yes),
+				                                                      getResources().getString(R.string.no),
+				                                                      dialogClickListener, dialogClickListener);
 		alertDialog.show();
 	}
 
@@ -615,12 +618,12 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		builder.setTitle(title);
 		builder.setCancelable(true);
 		builder.setPositiveButton(getResources().getString(R.string.button_ok),
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						cancelEntry();
-						dialog.dismiss();
-					}
-				}
+		                          new DialogInterface.OnClickListener() {
+			                          public void onClick(DialogInterface dialog, int id) {
+				                          cancelEntry();
+				                          dialog.dismiss();
+			                          }
+		                          }
 		);
 		AlertDialog alert = builder.create();
 		alert.show();
@@ -649,9 +652,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Preference.putString(context,
-						getResources().getString(R.string.shared_pref_isagreed),
-						getResources().getString(R.string.shared_pref_reg_success));
+				Preference.putBoolean(context, Constants.PreferenceFlag.IS_AGREED, true);
 				dialog.dismiss();
 				//load the next intent based on ownership type
 				getConfigurationsFromServer();
@@ -672,10 +673,10 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			@Override
 			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 				if (keyCode == KeyEvent.KEYCODE_SEARCH &&
-						event.getRepeatCount() == Constants.DEFAILT_REPEAT_COUNT) {
+				    event.getRepeatCount() == Constants.DEFAILT_REPEAT_COUNT) {
 					return true;
 				} else if (keyCode == KeyEvent.KEYCODE_BACK &&
-						event.getRepeatCount() == Constants.DEFAILT_REPEAT_COUNT) {
+				           event.getRepeatCount() == Constants.DEFAILT_REPEAT_COUNT) {
 					return true;
 				}
 				return false;
@@ -700,15 +701,9 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	}
 
 	private void cancelEntry() {
-
-		Preference.putString(context, getResources().getString(R.string.shared_pref_policy),
-		                     getResources().getString(R.string.shared_pref_default_string));
-		Preference.putString(context, getResources().getString(R.string.shared_pref_isagreed),
-		                     getResources().getString(R.string.shared_pref_reg_fail));
-		Preference.putString(context, getResources().getString(R.string.shared_pref_registered),
-		                     getResources().getString(R.string.shared_pref_reg_fail));
-		Preference.putString(context, getResources().getString(R.string.shared_pref_ip),
-		                     getResources().getString(R.string.shared_pref_default_string));
+		Preference.putBoolean(context, Constants.PreferenceFlag.IS_AGREED, false);
+		Preference.putBoolean(context, Constants.PreferenceFlag.REGISTERED, false);
+		Preference.putString(context, Constants.PreferenceFlag.IP, null);
 
 		Intent intentIP = new Intent(AuthenticationActivity.this, ServerDetails.class);
 		intentIP.putExtra(getResources().getString(R.string.intent_extra_from_activity),
@@ -752,8 +747,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.ip_setting:
-				Preference.putString(context, Constants.IP,Constants.EMPTY_STRING);
-
+				Preference.putString(context, Constants.PreferenceFlag.IP, null);
 				Intent intentIP = new Intent(AuthenticationActivity.this, ServerDetails.class);
 				intentIP.putExtra(getResources().getString(R.string.intent_extra_from_activity),
 				                  AuthenticationActivity.class.getSimpleName());
@@ -858,20 +852,24 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * @throws AndroidAgentException
 	 */
 	private String getClientCredentials() throws AndroidAgentException {
-		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.IP);
-		ServerConfig utils = new ServerConfig();
-		utils.setServerIP(ipSaved);
+		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
+		if (ipSaved != null && !ipSaved.isEmpty()) {
+			ServerConfig utils = new ServerConfig();
+			utils.setServerIP(ipSaved);
 
-		RegistrationProfile profile = new RegistrationProfile();
-		profile.setCallbackUrl(Constants.EMPTY_STRING);
-		profile.setClientName(deviceInfo.getDeviceId());
-		profile.setGrantType(Constants.GRANT_TYPE);
-		profile.setOwner(usernameVal);
-		profile.setTokenScope(Constants.TOKEN_SCOPE);
-		profile.setApplicationType(Constants.APPLICATION_TYPE);
+			RegistrationProfile profile = new RegistrationProfile();
+			profile.setCallbackUrl(Constants.EMPTY_STRING);
+			profile.setClientName(deviceInfo.getDeviceId());
+			profile.setGrantType(Constants.GRANT_TYPE);
+			profile.setOwner(usernameVal);
+			profile.setTokenScope(Constants.TOKEN_SCOPE);
+			profile.setApplicationType(Constants.APPLICATION_TYPE);
 
-		DynamicClientManager dynamicClientManager = new DynamicClientManager();
-		return dynamicClientManager.getClientCredentials(profile, utils, context);
+			DynamicClientManager dynamicClientManager = new DynamicClientManager();
+			return dynamicClientManager.getClientCredentials(profile, utils, context);
+		}
+		Log.e(TAG, "There is no valid IP to contact the server");
+		return null;
 	}
 
 	/**

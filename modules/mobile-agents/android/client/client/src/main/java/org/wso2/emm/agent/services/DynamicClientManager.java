@@ -114,7 +114,6 @@ public class DynamicClientManager {
             if(responseParams != null) {
                 statusCode = responseParams.get(Constants.STATUS);
             }
-
             return Constants.Status.ACCEPT.equalsIgnoreCase(statusCode);
         } catch (InterruptedException e) {
             throw new AndroidAgentException("Error occurred due to thread interruption", e);
@@ -142,19 +141,20 @@ public class DynamicClientManager {
 
             try {
                 responseParams = ServerUtilities.postData(endPointInfo, headers);
-                if (Constants.DEBUG_MODE_ENABLED) {
-                    Iterator<Map.Entry<String, String>> iterator = responseParams.entrySet().iterator();
-                    while (iterator.hasNext()) {
-                        Map.Entry<String, String> respParams = iterator.next();
-                        StringBuilder paras = new StringBuilder();
-                        paras.append("response-params: key:");
-                        paras.append(respParams.getKey());
-                        paras.append(", value:");
-                        paras.append(respParams.getValue());
-                        Log.d(TAG, paras.toString());
+                if (responseParams != null) {
+                    if (Constants.DEBUG_MODE_ENABLED) {
+                        Iterator<Map.Entry<String, String>> iterator = responseParams.entrySet().iterator();
+                        while (iterator.hasNext()) {
+                            Map.Entry<String, String> respParams = iterator.next();
+                            StringBuilder paras = new StringBuilder();
+                            paras.append("response-params: key:");
+                            paras.append(respParams.getKey());
+                            paras.append(", value:");
+                            paras.append(respParams.getValue());
+                            Log.d(TAG, paras.toString());
+                        }
                     }
                 }
-
             } catch (IDPTokenManagerException e) {
                 Log.e(TAG, "Failed to contact server", e);
             }
