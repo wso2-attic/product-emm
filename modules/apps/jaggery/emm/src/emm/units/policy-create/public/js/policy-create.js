@@ -1906,6 +1906,8 @@ var savePolicy = function (policy, serviceURL) {
         payload["roles"] = [];
     }
 
+    console.log(JSON.stringify(payload));
+
     invokerUtil.post(
         serviceURL,
         payload,
