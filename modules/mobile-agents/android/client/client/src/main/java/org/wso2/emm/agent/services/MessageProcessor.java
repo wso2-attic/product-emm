@@ -132,12 +132,12 @@ public class MessageProcessor implements APIResultCallBack {
 	 * Call the message retrieval end point of the server to get messages pending.
 	 */
 	public void getMessages() throws AndroidAgentException {
-		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.IP);
+		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
-
 		String url = utils.getAPIServerURL(context) + Constants.NOTIFICATION_ENDPOINT + deviceId;
-		Log.i(TAG, "getMessage: calling-endpoint: " + url);
+
+		Log.i(TAG, "getMessage: endpoint: " + url);
 
 		String requestParams;
 		try {
@@ -182,6 +182,8 @@ public class MessageProcessor implements APIResultCallBack {
 			                           HTTP_METHODS.PUT, requestParams, MessageProcessor.this,
 			                           Constants.NOTIFICATION_REQUEST_CODE
 			);
+		} else {
+			Log.e(TAG, "There is no valid IP to contact the server");
 		}
 	}
 

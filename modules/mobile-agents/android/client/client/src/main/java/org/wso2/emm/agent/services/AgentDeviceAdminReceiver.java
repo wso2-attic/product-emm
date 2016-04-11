@@ -46,6 +46,7 @@ import android.widget.Toast;
  * method onEnabled().
  */
 public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements APIResultCallBack {
+
 	private static final String TAG = AgentDeviceAdminReceiver.class.getName();
 	private String regId;
 
@@ -55,10 +56,9 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 	@Override
 	public void onEnabled(Context context, Intent intent) {
 		super.onEnabled(context, intent);
+
 		Resources resources = context.getResources();
-		Preference.putString(context,
-				context.getResources().getString(R.string.shared_pref_device_active),
-				resources.getString(R.string.shared_pref_reg_success));
+		Preference.putBoolean(context, Constants.PreferenceFlag.DEVICE_ACTIVE, true);
 
 		MessageProcessor processor = new MessageProcessor(context);
 		try {
@@ -69,10 +69,8 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 
 		Toast.makeText(context, R.string.device_admin_enabled,
 				Toast.LENGTH_LONG).show();
-		String notifier = Preference.getString(context, resources.getString(R.string.shared_pref_notifier));
+		String notifier = Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE);
 		if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
-			LocalNotification.startPolling(context);
-		} else if(notifier == null) {
 			LocalNotification.startPolling(context);
 		}
 	}
@@ -86,14 +84,13 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		Toast.makeText(context, R.string.device_admin_disabled,
 		               Toast.LENGTH_LONG).show();
 		regId = Preference
-				.getString(context, context.getResources().getString(R.string.shared_pref_regId));
+				.getString(context, Constants.PreferenceFlag.REG_ID);
 
 		if (regId != null && !regId.isEmpty()) {
 			startUnRegistration(context);
 		} else {
 			Log.e(TAG, "Registration ID is already null");
 		}
-
 	}
 
 	/**
@@ -101,24 +98,29 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 	 * @param context - Application context.
 	 */
 	public void startUnRegistration(Context context) {
-		String regId = Preference.getString(context, context
-				.getResources().getString(R.string.shared_pref_regId));
-		LocalNotification.stopPolling(context);
+		String regId = Preference.getString(context, Constants.PreferenceFlag.REG_ID);
+		if (regId != null && !regId.isEmpty()) {
+			String serverIP = Preference.getString(context, Constants.PreferenceFlag.IP);
 
-		String serverIP = Preference.getString(context, Constants.IP);
-		ServerConfig utils = new ServerConfig();
-		utils.setServerIP(serverIP);
+			if (serverIP != null && !serverIP.isEmpty()) {
+				ServerConfig utils = new ServerConfig();
+				utils.setServerIP(serverIP);
 
-		CommonUtils.callSecuredAPI(context,
-				utils.getAPIServerURL(context) + Constants.UNREGISTER_ENDPOINT + regId,
-				HTTP_METHODS.DELETE,
-				null, AgentDeviceAdminReceiver.this,
-				Constants.UNREGISTER_REQUEST_CODE);
-		try {
-			CommonUtils.unRegisterClientApp(context);
-			CommonUtils.clearAppData(context);
-		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Error occurred while removing Oauth application", e);
+				CommonUtils.callSecuredAPI(context,
+				                           utils.getAPIServerURL(context) + Constants.UNREGISTER_ENDPOINT + regId,
+				                           HTTP_METHODS.DELETE,
+				                           null, AgentDeviceAdminReceiver.this,
+				                           Constants.UNREGISTER_REQUEST_CODE);
+				try {
+					LocalNotification.stopPolling(context);
+					CommonUtils.unRegisterClientApp(context);
+					CommonUtils.clearAppData(context);
+				} catch (AndroidAgentException e) {
+					Log.e(TAG, "Error occurred while removing Oauth application", e);
+				}
+			} else {
+				Log.e(TAG, "There is no valid IP to contact the server");
+			}
 		}
 	}
 
@@ -181,5 +183,6 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 	public void onLockTaskModeExiting(Context context, Intent intent) {
 		Toast.makeText(context, "Device is unlocked", Toast.LENGTH_SHORT).show();
 	}
+
 }
 

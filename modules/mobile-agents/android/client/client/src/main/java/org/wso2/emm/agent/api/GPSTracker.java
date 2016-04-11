@@ -250,42 +250,44 @@ public class GPSTracker extends Service implements LocationListener {
 		@Override
 		protected void onPostExecute(Map<String, String> result) {
 
-			String responseCode = result.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_STATUS);
-			if (Constants.Status.SUCCESSFUL.equals(responseCode)) {
-				String resultPayload = result.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_BODY);
-				try {
-					JSONObject data = new JSONObject(resultPayload);
-					if (!data.isNull(Constants.Location.ADDRESS)) {
-						JSONObject address = data.getJSONObject(Constants.Location.ADDRESS);
-						if (!address.isNull(Constants.Location.CITY)) {
-							city = address.getString(Constants.Location.CITY);
-						} else if (!address.isNull(Constants.Location.TOWN)) {
-							city = address.getString(Constants.Location.TOWN);
+			if (result != null) {
+				String responseCode = result.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_STATUS);
+				if (Constants.Status.SUCCESSFUL.equals(responseCode)) {
+					String resultPayload = result.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_BODY);
+					try {
+						JSONObject data = new JSONObject(resultPayload);
+						if (!data.isNull(Constants.Location.ADDRESS)) {
+							JSONObject address = data.getJSONObject(Constants.Location.ADDRESS);
+							if (!address.isNull(Constants.Location.CITY)) {
+								city = address.getString(Constants.Location.CITY);
+							} else if (!address.isNull(Constants.Location.TOWN)) {
+								city = address.getString(Constants.Location.TOWN);
+							}
+
+							if (!address.isNull(Constants.Location.COUNTRY)) {
+								country = address.getString(Constants.Location.COUNTRY);
+							}
+							if (!address.isNull(Constants.Location.STREET1)) {
+								street1 = address.getString(Constants.Location.STREET1);
+							}
+							if (!address.isNull(Constants.Location.STREET2)) {
+								street2 = address.getString(Constants.Location.STREET2);
+							}
+							if (!address.isNull(Constants.Location.STATE)) {
+								state = address.getString(Constants.Location.STATE);
+							}
+							if (!address.isNull(Constants.Location.ZIP)) {
+								zip = address.getString(Constants.Location.ZIP);
+							}
 						}
 
-						if (!address.isNull(Constants.Location.COUNTRY)) {
-							country = address.getString(Constants.Location.COUNTRY);
+						if (Constants.DEBUG_MODE_ENABLED) {
+							Log.d(TAG, "Address: " + street1 + ", " + street2 + ", " + city + ", " + state + ", " + zip +
+							           ", " + country);
 						}
-						if (!address.isNull(Constants.Location.STREET1)) {
-							street1 = address.getString(Constants.Location.STREET1);
-						}
-						if (!address.isNull(Constants.Location.STREET2)) {
-							street2 = address.getString(Constants.Location.STREET2);
-						}
-						if (!address.isNull(Constants.Location.STATE)) {
-							state = address.getString(Constants.Location.STATE);
-						}
-						if (!address.isNull(Constants.Location.ZIP)) {
-							zip = address.getString(Constants.Location.ZIP);
-						}
+					} catch (JSONException e) {
+						Log.e(TAG, "Error occurred while parsing the result payload", e);
 					}
-
-					if (Constants.DEBUG_MODE_ENABLED) {
-						Log.d(TAG, "Address: " + street1 + ", " + street2 + ", " + city + ", " + state + ", " + zip +
-						           ", " + country);
-					}
-				} catch (JSONException e) {
-					Log.e(TAG, "Error occurred while parsing the result payload", e);
 				}
 			}
 		}

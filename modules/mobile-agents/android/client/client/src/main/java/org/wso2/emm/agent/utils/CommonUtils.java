@@ -27,7 +27,6 @@ import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.beans.UnregisterProfile;
 import org.wso2.emm.agent.proxy.APIController;
-import org.wso2.emm.agent.proxy.BuildConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 import org.wso2.emm.agent.proxy.beans.EndPointInfo;
@@ -114,22 +113,16 @@ public class CommonUtils {
 			Resources resources = context.getResources();
 			SharedPreferences mainPref = context.getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE);
 			Editor editor = mainPref.edit();
-			editor.putString(context.getResources().getString(R.string.shared_pref_policy),
-			                 resources.getString(R.string.shared_pref_default_string));
-			editor.putString(context.getResources().getString(R.string.shared_pref_isagreed),
-			                 resources.getString(R.string.shared_pref_reg_fail));
-			editor.putString(context.getResources().getString(R.string.shared_pref_regId),
-			                 resources.getString(R.string.shared_pref_default_string));
-			editor.putString(context.getResources().getString(R.string.shared_pref_registered),
-			                 resources.getString(R.string.shared_pref_reg_fail));
-			editor.putString(context.getResources().getString(R.string.shared_pref_ip),
-			                 resources.getString(R.string.shared_pref_default_string));
+			editor.putBoolean(Constants.PreferenceFlag.IS_AGREED, false);
+			editor.putString(Constants.PreferenceFlag.REG_ID, null);
+			editor.putBoolean(Constants.PreferenceFlag.REGISTERED, false);
+			editor.putString(Constants.PreferenceFlag.IP, null);
+			editor.putString(Constants.PreferenceFlag.NOTIFIER_TYPE, null);
 			editor.putString(context.getResources().getString(R.string.shared_pref_sender_id),
 			                 resources.getString(R.string.shared_pref_default_string));
 			editor.putString(context.getResources().getString(R.string.shared_pref_eula),
 			                 resources.getString(R.string.shared_pref_default_string));
-			editor.putString(resources.getString(R.string.shared_pref_device_active),
-			                 resources.getString(R.string.shared_pref_reg_fail));
+			editor.putBoolean(Constants.PreferenceFlag.DEVICE_ACTIVE, false);
 			editor.commit();
 			Preference.clearPreferences(context);
 			clearClientCredentials(context);
@@ -177,21 +170,37 @@ public class CommonUtils {
 	 * @throws AndroidAgentException
 	 */
 	public static void unRegisterClientApp(Context context) throws AndroidAgentException {
-		String applicationName = Preference.getString(context, Constants.CLIENT_NAME);
-		String consumerKey = Preference.getString(context, Constants.CLIENT_ID);
-		String userId = Preference.getString(context, Constants.USERNAME);
+		String serverIP = Preference.getString(context, Constants.PreferenceFlag.IP);
 
-		UnregisterProfile profile = new UnregisterProfile();
-		profile.setApplicationName(applicationName);
-		profile.setConsumerKey(consumerKey);
-		profile.setUserId(userId);
+		if (serverIP != null && !serverIP.isEmpty()) {
+			String applicationName = Preference.getString(context, Constants.CLIENT_NAME);
+			String consumerKey = Preference.getString(context, Constants.CLIENT_ID);
+			String userId = Preference.getString(context, Constants.USERNAME);
 
-		String serverIP = Preference.getString(context, Constants.IP);
-		ServerConfig utils = new ServerConfig();
-		utils.setServerIP(serverIP);
+			if (applicationName != null && !applicationName.isEmpty() &&
+			    consumerKey != null && !consumerKey.isEmpty() &&
+			    userId != null && !userId.isEmpty()) {
 
-		DynamicClientManager dynamicClientManager = new DynamicClientManager();
-		dynamicClientManager.unregisterClient(profile,utils, context);
+				UnregisterProfile profile = new UnregisterProfile();
+				profile.setApplicationName(applicationName);
+				profile.setConsumerKey(consumerKey);
+				profile.setUserId(userId);
+
+				ServerConfig utils = new ServerConfig();
+				utils.setServerIP(serverIP);
+
+				DynamicClientManager dynamicClientManager = new DynamicClientManager();
+				boolean isUnregistered = dynamicClientManager.unregisterClient(profile, utils, context);
+
+				if (!isUnregistered) {
+					Log.e(TAG, "Error occurred while removing the OAuth client app");
+				}
+			} else {
+				Log.e(TAG, "Client credential is not available");
+			}
+		} else {
+			Log.e(TAG, "There is no valid IP to contact the server");
+		}
 	}
 
 	/**
@@ -212,9 +221,7 @@ public class CommonUtils {
 	 * @param context - Application context.
 	 */
 	public static void revokePolicy(Context context) throws AndroidAgentException {
-		Resources resources = context.getResources();
-		String payload = Preference.getString(context, resources.getString(R.string.shared_pref_policy_applied));
-
+		String payload = Preference.getString(context, Constants.PreferenceFlag.APPLIED_POLICY);
 		PolicyOperationsMapper operationsMapper = new PolicyOperationsMapper();
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -232,8 +239,7 @@ public class CommonUtils {
 					op = operationsMapper.getOperation(op);
 					revokeHandler.revokeExistingPolicy(op);
 				}
-
-				Preference.putString(context, resources.getString(R.string.shared_pref_policy_applied), null);
+				Preference.putString(context, Constants.PreferenceFlag.APPLIED_POLICY, null);
 			}
 		} catch (IOException e) {
 			throw new AndroidAgentException("Error occurred while parsing stream", e);
