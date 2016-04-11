@@ -54,7 +54,7 @@ public class DeviceInfoPayload {
         deviceInfo = new DeviceInfo(context);
         mapper = new ObjectMapper();
         gps = new GPSTracker(context);
-        registrationId = Preference.getString(context, Constants.REG_ID);
+        registrationId = Preference.getString(context, Constants.GCM_REG_ID);
         phoneState = new DeviceState(context);
     }
 

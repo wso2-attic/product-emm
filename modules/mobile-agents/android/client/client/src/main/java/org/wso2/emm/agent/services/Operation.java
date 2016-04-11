@@ -95,6 +95,7 @@ public class Operation implements APIResultCallBack {
 	private static String[] AUTHORIZED_PINNING_APPS;
 	private static String AGENT_PACKAGE_NAME;
 
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	public Operation(Context context) {
 		this.context = context;
 		this.resources = context.getResources();
@@ -961,7 +962,7 @@ public class Operation implements APIResultCallBack {
 
 		try {
 			if(payload != null){
-				Preference.putString(context, resources.getString(R.string.shared_pref_policy_applied), payload);
+				Preference.putString(context, Constants.PreferenceFlag.APPLIED_POLICY, payload);
 			}
 
 			List<org.wso2.emm.agent.beans.Operation> operations = mapper.readValue(
@@ -992,8 +993,7 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void monitorPolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-		String payload = Preference.getString(context, resources.getString(R.string.shared_pref_policy_applied));
-
+		String payload = Preference.getString(context, Constants.PreferenceFlag.APPLIED_POLICY);
 		PolicyOperationsMapper operationsMapper = new PolicyOperationsMapper();
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

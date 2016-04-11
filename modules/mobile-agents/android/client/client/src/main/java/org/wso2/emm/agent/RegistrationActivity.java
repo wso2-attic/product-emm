@@ -59,21 +59,22 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		context = this;
+
+		progressDialog = CommonDialogUtils.showPrgressDialog(RegistrationActivity.this,
+		                                                     getResources().getString(R.string.dialog_enrolling),
+		                                                     getResources().getString(R.string.dialog_please_wait),
+		                                                     null);
+		progressDialog.show();
+
 		deviceInfoBuilder = new DeviceInfoPayload(context);
 		resources = context.getResources();
 		DeviceInfo deviceInfo = new DeviceInfo(context);
 		deviceIdentifier = deviceInfo.getDeviceId();
-		Preference.putString(context, resources.getString(R.string.shared_pref_regId), deviceIdentifier);
+		Preference.putString(context, Constants.PreferenceFlag.REG_ID, deviceIdentifier);
 		registerDevice();
 	}
 
 	private void registerDevice() {
-		progressDialog = CommonDialogUtils.showPrgressDialog(RegistrationActivity.this,
-                        getResources().getString(R.string.dialog_enrolling),
-                        getResources().getString(R.string.dialog_please_wait),
-                        null);
-		progressDialog.show();
-
 		String type = Preference.getString(context,
 		                                   context.getResources().getString(R.string.shared_pref_reg_type));
 		String username = Preference.getString(context,
@@ -87,17 +88,23 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		// Check network connection availability before calling the API.
 		if (CommonUtils.isNetworkAvailable(context)) {
 			// Call device registration API.
-			String ipSaved = Preference.getString(context.getApplicationContext(),Constants.IP);
-			ServerConfig utils = new ServerConfig();
-			utils.setServerIP(ipSaved);
+			String ipSaved = Preference.getString(context.getApplicationContext(),Constants.PreferenceFlag.IP);
 
-			CommonUtils.callSecuredAPI(RegistrationActivity.this,
-			                           utils.getAPIServerURL(context) + Constants.REGISTER_ENDPOINT,
-			                           HTTP_METHODS.POST,
-			                           deviceInfoBuilder.getDeviceInfoPayload(),
-			                           RegistrationActivity.this,
-			                           Constants.REGISTER_REQUEST_CODE);
+			if (ipSaved != null && !ipSaved.isEmpty()) {
+				ServerConfig utils = new ServerConfig();
+				utils.setServerIP(ipSaved);
 
+				CommonUtils.callSecuredAPI(RegistrationActivity.this,
+				                           utils.getAPIServerURL(context) + Constants.REGISTER_ENDPOINT,
+				                           HTTP_METHODS.POST,
+				                           deviceInfoBuilder.getDeviceInfoPayload(),
+				                           RegistrationActivity.this,
+				                           Constants.REGISTER_REQUEST_CODE);
+			} else {
+				Log.e(TAG, "There is no valid IP to contact the server");
+				CommonDialogUtils.stopProgressDialog(progressDialog);
+				CommonDialogUtils.showNetworkUnavailableMessage(RegistrationActivity.this);
+			}
 		} else {
 			CommonDialogUtils.stopProgressDialog(progressDialog);
 			CommonDialogUtils.showNetworkUnavailableMessage(RegistrationActivity.this);
@@ -181,10 +188,9 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			String responseStatus;
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS);
-				Preference.putString(context, resources.getString(R.string.shared_pref_regId), info.getDeviceId());
+				Preference.putString(context, Constants.PreferenceFlag.REG_ID, info.getDeviceId());
 				if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
-					if (Constants.NOTIFIER_GCM.equals(Preference.getString(context, context.getResources().
-							getString(R.string.shared_pref_notifier)))) {
+					if (Constants.NOTIFIER_GCM.equals(Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE))) {
 						registerGCM();
 					} else {
 						getEffectivePolicy();
@@ -228,7 +234,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 
 			@Override
 			protected void onPostExecute(String regId) {
-				Preference.putString(context, Constants.REG_ID, regId);
+				Preference.putString(context, Constants.GCM_REG_ID, regId);
 				if (regId != null) {
 					try {
 						sendRegistrationId();
@@ -260,22 +266,26 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		deviceInfoPayload.build();
 
 		String replyPayload = deviceInfoPayload.getDeviceInfoPayload();
-		String ipSaved = Preference.getString(context, Constants.IP);
-		ServerConfig utils = new ServerConfig();
-		utils.setServerIP(ipSaved);
+		String ipSaved = Preference.getString(context, Constants.PreferenceFlag.IP);
 
-		String url = utils.getAPIServerURL(context) + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
+		if (ipSaved != null && !ipSaved.isEmpty()) {
+			ServerConfig utils = new ServerConfig();
+			utils.setServerIP(ipSaved);
 
-		CommonUtils.callSecuredAPI(context, url, org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.PUT,
-		                           replyPayload, RegistrationActivity.this, Constants.GCM_REGISTRATION_ID_SEND_CODE);
+			String url = utils.getAPIServerURL(context) + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
 
+			CommonUtils.callSecuredAPI(context, url, org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.PUT,
+			                           replyPayload, RegistrationActivity.this, Constants.GCM_REGISTRATION_ID_SEND_CODE);
+		} else {
+			Log.e(TAG, "There is no valid IP to contact the server");
+		}
 	}
 
 	/**
 	 * Loads Authentication error activity.
 	 */
 	private void loadAuthenticationErrorActivity() {
-		Preference.putString(context, Constants.IP, Constants.EMPTY_STRING);
+		Preference.putString(context, Constants.PreferenceFlag.IP, null);
 		Intent intent = new Intent(
 				RegistrationActivity.this,
 				ServerDetails.class);
@@ -291,19 +301,23 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	 */
 	private void getEffectivePolicy() {
 		if (CommonUtils.isNetworkAvailable(context)) {
-			String ipSaved =
-					Preference.getString(context.getApplicationContext(), Constants.IP);
+			String ipSaved = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
 
-			ServerConfig utils = new ServerConfig();
-			utils.setServerIP(ipSaved);
+			if (ipSaved != null && !ipSaved.isEmpty()) {
+				ServerConfig utils = new ServerConfig();
+				utils.setServerIP(ipSaved);
 
-			CommonUtils.callSecuredAPI(RegistrationActivity.this,
-					utils.getAPIServerURL(context) + Constants.POLICY_ENDPOINT + deviceIdentifier,
-					HTTP_METHODS.GET,
-					null,
-					RegistrationActivity.this,
-					Constants.POLICY_REQUEST_CODE);
-
+				CommonUtils.callSecuredAPI(RegistrationActivity.this,
+				                           utils.getAPIServerURL(context) + Constants.POLICY_ENDPOINT + deviceIdentifier,
+				                           HTTP_METHODS.GET,
+				                           null,
+				                           RegistrationActivity.this,
+				                           Constants.POLICY_REQUEST_CODE);
+			} else {
+				Log.e(TAG, "There is no valid IP to contact the server");
+				CommonDialogUtils.stopProgressDialog(progressDialog);
+				CommonDialogUtils.showNetworkUnavailableMessage(RegistrationActivity.this);
+			}
 		} else {
 			CommonDialogUtils.stopProgressDialog(progressDialog);
 			CommonDialogUtils.showNetworkUnavailableMessage(RegistrationActivity.this);
