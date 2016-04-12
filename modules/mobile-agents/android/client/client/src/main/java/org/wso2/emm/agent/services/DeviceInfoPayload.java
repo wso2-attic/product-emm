@@ -202,20 +202,47 @@ public class DeviceInfoPayload {
             telephonyManager.listen(deviceNetworkStatus, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
         }
 
+        String networkStatusPayload;
+        try {
+            networkStatusPayload = mapper.writeValueAsString(deviceNetworkStatus.getNetworkStatus());
+        } catch (JsonProcessingException e) {
+            String errorMsg = "Error occurred while parsing property network info object to json.";
+            Log.e(TAG, errorMsg, e);
+            throw new AndroidAgentException(errorMsg, e);
+        }
+
         property = new Device.Property();
         property.setName(Constants.Device.NETWORK_INFO);
-        property.setValue(deviceNetworkStatus.getNetworkStatus());
+        property.setValue(networkStatusPayload);
         deviceInfoProperties.add(property);
 
         RuntimeInfo runtimeInfo = new RuntimeInfo(context);
+        String cpuInfoPayload;
+        try {
+            cpuInfoPayload = mapper.writeValueAsString(runtimeInfo.getCPUInfo());
+        } catch (JsonProcessingException e) {
+            String errorMsg = "Error occurred while parsing property CPU info object to json.";
+            Log.e(TAG, errorMsg, e);
+            throw new AndroidAgentException(errorMsg, e);
+        }
+
         property = new Device.Property();
         property.setName(Constants.Device.CPU_INFO);
-        property.setValue(runtimeInfo.getCPUInfo());
+        property.setValue(cpuInfoPayload);
         deviceInfoProperties.add(property);
+
+        String ramInfoPayload;
+        try {
+            ramInfoPayload = mapper.writeValueAsString(runtimeInfo.getRAMInfo());
+        } catch (JsonProcessingException e) {
+            String errorMsg = "Error occurred while parsing property RAM info object to json.";
+            Log.e(TAG, errorMsg, e);
+            throw new AndroidAgentException(errorMsg, e);
+        }
 
         property = new Device.Property();
         property.setName(Constants.Device.RAM_INFO);
-        property.setValue(runtimeInfo.getRAMInfo());
+        property.setValue(ramInfoPayload);
         deviceInfoProperties.add(property);
 
         List<Device.Property> batteryProperties = new ArrayList<>();

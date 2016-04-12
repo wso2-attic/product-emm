@@ -357,11 +357,6 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 					}
 					if (isDeviceAdminActive()) {
 						startPolling();
-					} else {
-						Log.e(TAG, "Device administrator is not active. Hence device is unregistering by itself");
-						stopPolling();
-						initiateUnregistration();
-						loadServerDetailsActivity();
 					}
 				} else {
 					stopPolling();
