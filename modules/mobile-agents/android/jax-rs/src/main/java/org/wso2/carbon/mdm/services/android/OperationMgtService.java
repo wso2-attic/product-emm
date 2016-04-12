@@ -788,7 +788,7 @@ public class OperationMgtService {
             throw new AndroidOperationException(message, responseMediaType);
         }
     }
-
+/*
     @POST
     @Path("wrok-profile")
     public Response configureWorkProfile(@HeaderParam(ACCEPT) String acceptHeader,
@@ -832,7 +832,7 @@ public class OperationMgtService {
             throw new AndroidOperationException(message, responseMediaType);
         }
     }
-
+*/
     @POST
     @Path("encrypt")
     public Response encryptStorage(@HeaderParam(ACCEPT) String acceptHeader,

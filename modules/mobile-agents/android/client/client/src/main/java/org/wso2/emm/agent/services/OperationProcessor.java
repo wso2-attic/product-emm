@@ -223,40 +223,40 @@ public class OperationProcessor {
      * @param operation - Operation object.
      */
     public void setPolicyBundle(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-        String payload = operation.getPayLoad().toString();
-        if (Constants.DEBUG_MODE_ENABLED) {
-            Log.d(TAG, "Policy payload: " + payload);
-        }
-        PolicyOperationsMapper operationsMapper = new PolicyOperationsMapper();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		String payload = operation.getPayLoad().toString();
+		if (Constants.DEBUG_MODE_ENABLED) {
+			Log.d(TAG, "Policy payload: " + payload);
+		}
+		PolicyOperationsMapper operationsMapper = new PolicyOperationsMapper();
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
-        try {
-            if(payload != null){
-                Preference.putString(context, resources.getString(R.string.shared_pref_policy_applied), payload);
-            }
+		try {
+			if(payload != null){
+				Preference.putString(context, Constants.PreferenceFlag.APPLIED_POLICY, payload);
+			}
 
-            List<org.wso2.emm.agent.beans.Operation> operations = mapper.readValue(
-                    payload,
-                    mapper.getTypeFactory().constructCollectionType(List.class,
-                            org.wso2.emm.agent.beans.Operation.class));
+			List<org.wso2.emm.agent.beans.Operation> operations = mapper.readValue(
+					payload,
+					mapper.getTypeFactory().constructCollectionType(List.class,
+							org.wso2.emm.agent.beans.Operation.class));
 
-            for (org.wso2.emm.agent.beans.Operation op : operations) {
-                op = operationsMapper.getOperation(op);
-                this.doTask(op);
-            }
-            operation.setStatus(resources.getString(R.string.operation_value_completed));
-            operationManager.getResultBuilder().build(operation);
+			for (org.wso2.emm.agent.beans.Operation op : operations) {
+				op = operationsMapper.getOperation(op);
+				this.doTask(op);
+			}
+			operation.setStatus(resources.getString(R.string.operation_value_completed));
+			resultBuilder.build(operation);
 
-            if (Constants.DEBUG_MODE_ENABLED) {
-                Log.d(TAG, "Policy applied");
-            }
-        } catch (IOException e) {
-            operation.setStatus(resources.getString(R.string.operation_value_error));
-            resultBuilder.build(operation);
-            throw new AndroidAgentException("Error occurred while parsing stream", e);
-        }
+			if (Constants.DEBUG_MODE_ENABLED) {
+				Log.d(TAG, "Policy applied");
+			}
+		} catch (IOException e) {
+			operation.setStatus(resources.getString(R.string.operation_value_error));
+			resultBuilder.build(operation);
+			throw new AndroidAgentException("Error occurred while parsing stream", e);
+		}
     }
 
 	public void checkPreviousNotifications() {

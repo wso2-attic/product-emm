@@ -47,7 +47,9 @@ import org.wso2.emm.agent.ServerDetails;
 import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.api.GPSTracker;
+import org.wso2.emm.agent.api.RuntimeInfo;
 import org.wso2.emm.agent.api.WiFiConfig;
+import org.wso2.emm.agent.beans.Application;
 import org.wso2.emm.agent.beans.ComplianceFeature;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.beans.Notification;
@@ -171,21 +173,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
     public void getDeviceInfo(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
         DeviceInfoPayload deviceInfoPayload = new DeviceInfoPayload(context);
         deviceInfoPayload.build();
-
         String replyPayload = deviceInfoPayload.getDeviceInfoPayload();
 
-        String ipSaved = Preference.getString(context.getApplicationContext(), Constants.IP);
-        ServerConfig utils = new ServerConfig();
-        utils.setServerIP(ipSaved);
-
-        String url = utils.getAPIServerURL(context) + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
-
-        CommonUtils.callSecuredAPI(context, url,
-                org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.PUT, replyPayload,
-                OperationManager.this,
-                Constants.DEVICE_INFO_REQUEST_CODE);
-
-        operation.setPayLoad(replyPayload);
+        operation.setOperationResponse(replyPayload);
         operation.setStatus(resources.getString(R.string.operation_value_completed));
         resultBuilder.build(operation);
     }
@@ -196,17 +186,19 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param operation - Operation object.
      */
     public void getLocationInfo(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-        double latitude;
-        double longitude;
         JSONObject result = new JSONObject();
 
         try {
-            latitude = gps.getLatitude();
-            longitude = gps.getLongitude();
-            result.put(LOCATION_INFO_TAG_LATITUDE, latitude);
-            result.put(LOCATION_INFO_TAG_LONGITUDE, longitude);
+            result.put(Constants.LocationInfo.LATITUDE, gps.getLatitude());
+            result.put(Constants.LocationInfo.LONGITUDE, gps.getLongitude());
+            result.put(Constants.LocationInfo.CITY, gps.getCity());
+            result.put(Constants.LocationInfo.COUNTRY, gps.getCountry());
+            result.put(Constants.LocationInfo.STATE, gps.getState());
+            result.put(Constants.LocationInfo.STREET1, gps.getStreet1());
+            result.put(Constants.LocationInfo.STREET2, gps.getStreet2());
+            result.put(Constants.LocationInfo.ZIP, gps.getZip());
 
-            operation.setPayLoad(result.toString());
+            operation.setOperationResponse(result.toString());
             operation.setStatus(resources.getString(R.string.operation_value_completed));
             resultBuilder.build(operation);
             if (Constants.DEBUG_MODE_ENABLED) {
@@ -227,12 +219,18 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
     public void getApplicationList(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
         ArrayList<DeviceAppInfo> apps = new ArrayList<>(appList.getInstalledApps().values());
         JSONArray result = new JSONArray();
+        RuntimeInfo runtimeInfo = new RuntimeInfo(context);
+        Map<String, Application> applications = runtimeInfo.getAppMemory();
         for (DeviceAppInfo infoApp : apps) {
             JSONObject app = new JSONObject();
             try {
+                Application application = applications.get(infoApp.getPackagename());
                 app.put(APP_INFO_TAG_NAME, Uri.encode(infoApp.getAppname()));
                 app.put(APP_INFO_TAG_PACKAGE, infoApp.getPackagename());
                 app.put(APP_INFO_TAG_VERSION, infoApp.getVersionCode());
+                if (application != null) {
+                    app.put(Constants.Device.USS, application.getUss());
+                }
                 result.put(app);
             } catch (JSONException e) {
                 operation.setStatus(resources.getString(R.string.operation_value_error));
@@ -402,8 +400,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param operation - Operation object.
      */
     public void monitorPolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-        String payload = Preference.getString(context, resources.getString(R.string.shared_pref_policy_applied));
-
+        String payload = Preference.getString(context, Constants.PreferenceFlag.APPLIED_POLICY);
         PolicyOperationsMapper operationsMapper = new PolicyOperationsMapper();
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -667,7 +664,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             }
             Preference.putBoolean(context, Constants.IS_LOCKED, true);
             Preference.putString(context, Constants.LOCK_MESSAGE, message);
-            enableLock(message);
+            enableHardLock(message);
         } else {
             devicePolicyManager.lockNow();
         }
@@ -678,7 +675,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void enableLock(String message) {
+    public void enableHardLock(String message) {
         if (isDeviceOwner()) {
             devicePolicyManager.setLockTaskPackages(cdmDeviceAdmin, AUTHORIZED_PINNING_APPS);
             Intent intent = new Intent(context, LockActivity.class);
@@ -775,6 +772,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                         .setOnlyAlertOnce(true)
                         .setTicker(resources.getString(R.string.txt_notification))
                         .addAction(R.drawable.abs__ic_clear, "Dismiss", dismiss);
+
         notifyManager.notify(operationId, mBuilder.build());
     }
     /**

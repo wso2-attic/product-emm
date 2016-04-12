@@ -63,7 +63,8 @@ public class OperationManagerOlderSdk extends OperationManager{
             JSONObject wipeKey = new JSONObject(operation.getPayLoad().toString());
             inputPin = (String) wipeKey.get(getContextResources().getString(R.string.shared_pref_pin));
             String status;
-            if (Constants.OWNERSHIP_COPE.equals(ownershipType.trim()) || (inputPin != null && inputPin.trim().equals(savedPin.trim()))) {
+            if (Constants.OWNERSHIP_BYOD.equals(ownershipType.trim()) ||
+                    (inputPin != null && inputPin.trim().equals(savedPin.trim()))) {
                 status = getContextResources().getString(R.string.shared_pref_default_status);
                 result.put(getContextResources().getString(R.string.operation_status), status);
             } else {

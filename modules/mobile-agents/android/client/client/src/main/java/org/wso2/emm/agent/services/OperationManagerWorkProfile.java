@@ -163,8 +163,7 @@ public class OperationManagerWorkProfile extends OperationManager {
 
         try {
             if (payload != null) {
-                Preference.putString(getContext(),
-                        getContextResources().getString(R.string.shared_pref_policy_applied), payload);
+                Preference.putString(getContext(), Constants.PreferenceFlag.APPLIED_POLICY, payload);
             }
 
             List<Operation> operations = mapper.readValue(
