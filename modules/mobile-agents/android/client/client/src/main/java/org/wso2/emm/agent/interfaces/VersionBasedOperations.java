@@ -68,13 +68,6 @@ public interface VersionBasedOperations {
     void changeLockCode(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
     /**
-     * Set policy bundle.
-     *
-     * @param operation - Operation object.
-     */
-    void setPolicyBundle(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
-
-    /**
      * Enterprise wipe the device.
      *
      * @param operation - Operation object.
@@ -150,4 +143,12 @@ public interface VersionBasedOperations {
      * @param operation - Operation object
      */
     void handleUserRestriction(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+
+    /**
+     * Configure work-profile
+     *
+     * @param operation - Operation object
+     */
+    void configureWorkProfile(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+
 }

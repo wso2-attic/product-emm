@@ -17,7 +17,9 @@
  */
 package org.wso2.emm.agent.services;
 
+import android.app.admin.DeviceAdminReceiver;
 import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.util.Log;
 
@@ -39,11 +41,9 @@ import java.util.List;
 
 public class OperationManagerWorkProfile extends OperationManager {
     private static final String TAG = "OperationWorkProfile";
-    private OperationProcessor operationProcessor;
 
-    public OperationManagerWorkProfile(Context context, OperationProcessor operationProcessor) {
+    public OperationManagerWorkProfile(Context context) {
         super(context);
-        this.operationProcessor = operationProcessor;
     }
 
     @Override
@@ -148,44 +148,6 @@ public class OperationManagerWorkProfile extends OperationManager {
     @Override
     public void changeLockCode(Operation operation) throws AndroidAgentException {
         Log.d(TAG, "Operation not supported.");
-    }
-
-    @Override
-    public void setPolicyBundle(Operation operation) throws AndroidAgentException {
-        String payload = operation.getPayLoad().toString();
-        if (Constants.DEBUG_MODE_ENABLED) {
-            Log.d(TAG, "Policy payload: " + payload);
-        }
-        PolicyOperationsMapper operationsMapper = new PolicyOperationsMapper();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-
-        try {
-            if (payload != null) {
-                Preference.putString(getContext(), Constants.PreferenceFlag.APPLIED_POLICY, payload);
-            }
-
-            List<Operation> operations = mapper.readValue(
-                    payload,
-                    mapper.getTypeFactory().constructCollectionType(List.class,
-                            org.wso2.emm.agent.beans.Operation.class));
-
-            for (org.wso2.emm.agent.beans.Operation op : operations) {
-                op = operationsMapper.getOperation(op);
-                operationProcessor.doTask(op);
-            }
-            operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
-            getResultBuilder().build(operation);
-
-            if (Constants.DEBUG_MODE_ENABLED) {
-                Log.d(TAG, "Policy applied");
-            }
-        } catch (IOException e) {
-            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
-            getResultBuilder().build(operation);
-            throw new AndroidAgentException("Error occurred while parsing stream", e);
-        }
     }
 
     @Override
@@ -328,6 +290,40 @@ public class OperationManagerWorkProfile extends OperationManager {
         }
     }
 
+    @Override
+    public void configureWorkProfile(Operation operation) throws AndroidAgentException{
+        String profileName;
+        String enableSystemApps;
+        String enableGooglePlayApps;
+        try {
+            JSONObject profileData = new JSONObject(operation.getPayLoad().toString());
+            if (!profileData.isNull(getContextResources().getString(R.string.intent_extra_profile_name))) {
+                profileName = (String) profileData.get(getContextResources().getString(R.string.intent_extra_profile_name));
+            }
+            if (!profileData.isNull(getContextResources().getString(R.string.intent_extra_enable_system_apps))) {
+                enableSystemApps = (String) profileData.get(getContextResources().getString(R.string.intent_extra_enable_system_apps));
+            }
+            if (!profileData.isNull(getContextResources().getString(R.string.intent_extra_enable_google_play_apps))) {
+                enableGooglePlayApps = (String) profileData.get(getContextResources().getString(R.string.intent_extra_enable_google_play_apps));
+            }
 
+
+        } catch (JSONException e) {
+            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            getResultBuilder().build(operation);
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
+
+    }
+
+    private void setProfileName(String name){
+        getDevicePolicyManager().setProfileName(getCdmDeviceAdmin(),name);
+    }
+
+    private void enableSystemApp(String packageName){
+        getDevicePolicyManager().enableSystemApp(getCdmDeviceAdmin(),packageName);
+
+
+    }
 
 }

@@ -141,6 +141,8 @@
     <string name="intent_extra_ring">ring</string>
     <string name="intent_extra_password_setting">lock_settings</string>
     <string name="intent_extra_profile_name">profileName</string>
+    <string name="intent_extra_enable_system_apps">enableSystemApps</string>
+    <string name="intent_extra_enable_google_play_apps">enableGooglePlayApps</string>
 
     <!-- POLICY CONFIGURATION FIELDS -->
     <string name="policy_password_max_failed_attempts">maxFailedAttempts</string>

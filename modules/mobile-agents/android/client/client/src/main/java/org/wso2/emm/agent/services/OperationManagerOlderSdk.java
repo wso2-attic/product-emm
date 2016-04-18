@@ -394,11 +394,6 @@ public class OperationManagerOlderSdk extends OperationManager{
     }
 
     @Override
-    public void setPolicyBundle(Operation operation) throws AndroidAgentException {
-
-    }
-
-    @Override
     public void monitorPolicy(Operation operation) throws AndroidAgentException {
 
     }
@@ -509,7 +504,7 @@ public class OperationManagerOlderSdk extends OperationManager{
 
     @Override
     public void setProfileName(Operation operation) throws AndroidAgentException {
-
+        Log.d(TAG, "Operation not supported.");
     }
 
     @Override
@@ -517,4 +512,29 @@ public class OperationManagerOlderSdk extends OperationManager{
         Log.d(TAG, "Adding User Restriction is not supported");
     }
 
+    @Override
+    public void configureWorkProfile(Operation operation) throws AndroidAgentException {
+        operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+        getResultBuilder().build(operation);
+        //Log.d(TAG, "Operation not supported.");
+        String profileName = "";
+        String enableSystemApps = "";
+        String enableGooglePlayApps;
+        try {
+            JSONObject profileData = new JSONObject(operation.getPayLoad().toString());
+            if (!profileData.isNull(getContextResources().getString(R.string.intent_extra_profile_name))) {
+                profileName = (String) profileData.get(getContextResources().getString(R.string.intent_extra_profile_name));
+            }
+            if (!profileData.isNull(getContextResources().getString(R.string.intent_extra_enable_system_apps))) {
+                enableSystemApps = (String) profileData.get(getContextResources().getString(R.string.intent_extra_enable_system_apps));
+            }
+            if (!profileData.isNull(getContextResources().getString(R.string.intent_extra_password))) {
+                enableGooglePlayApps = (String) profileData.get(getContextResources().getString(R.string.intent_extra_password));
+            }
+        } catch (JSONException e) {
+            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            getResultBuilder().build(operation);
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
+    }
 }

@@ -173,8 +173,11 @@ public class OperationProcessor {
 				break;
 			case Constants.Operation.POLICY_BUNDLE:
 				if(devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
-					operationManager.setPolicyBundle(operation);
+					this.setPolicyBundle(operation);
 				}
+				break;
+			case Constants.Operation.WORK_PROFILE:
+				operationManager.configureWorkProfile(operation);
 				break;
 			case Constants.Operation.POLICY_MONITOR:
 				operationManager.monitorPolicy(operation);
@@ -222,7 +225,7 @@ public class OperationProcessor {
      *
      * @param operation - Operation object.
      */
-    public void setPolicyBundle(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+	public void setPolicyBundle(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
 		String payload = operation.getPayLoad().toString();
 		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.d(TAG, "Policy payload: " + payload);
@@ -257,7 +260,7 @@ public class OperationProcessor {
 			resultBuilder.build(operation);
 			throw new AndroidAgentException("Error occurred while parsing stream", e);
 		}
-    }
+	}
 
 	public void checkPreviousNotifications() {
         operationManager.checkPreviousNotifications();

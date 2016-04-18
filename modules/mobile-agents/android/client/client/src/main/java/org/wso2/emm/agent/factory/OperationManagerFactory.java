@@ -41,7 +41,7 @@ public class OperationManagerFactory {
             return new OperationManagerOlderSdk(context);
         }
         else if ((info.getSdkVersion() >= Build.VERSION_CODES.LOLLIPOP))
-            return new OperationManagerWorkProfile(context,operationProcessor);
+            return new OperationManagerWorkProfile(context);
         return null;
     }
 }

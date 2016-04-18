@@ -788,51 +788,7 @@ public class OperationMgtService {
             throw new AndroidOperationException(message, responseMediaType);
         }
     }
-/*
-    @POST
-    @Path("wrok-profile")
-    public Response configureWorkProfile(@HeaderParam(ACCEPT) String acceptHeader,
-                                  WifiBeanWrapper wifiBeanWrapper) {
-        if (log.isDebugEnabled()) {
-            log.debug("Invoking 'configure work-profile' operation");
-        }
 
-        MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
-        Message message = new Message();
-
-        try {
-            Wifi wifi = wifiBeanWrapper.getOperation();
-
-            if (wifi == null) {
-                if (log.isDebugEnabled()) {
-                    log.debug("The payload of the wifi operation is incorrect");
-                }
-                throw new OperationManagementException("Issue in creating a new Wifi instance");
-            }
-
-            ProfileOperation operation = new ProfileOperation();
-            operation.setCode(AndroidConstants.OperationCodes.WORK_PROFILE);
-            operation.setType(Operation.Type.PROFILE);
-            operation.setPayLoad(wifi.toJSON());
-
-            return AndroidAPIUtils.getOperationResponse(wifiBeanWrapper.getDeviceIDs(),
-                    operation, message, responseMediaType);
-
-        } catch (OperationManagementException e) {
-            String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage).
-                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
-            log.error(errorMessage, e);
-            throw new AndroidOperationException(message, responseMediaType);
-        } catch (DeviceManagementException e) {
-            String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage).
-                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
-            log.error(errorMessage, e);
-            throw new AndroidOperationException(message, responseMediaType);
-        }
-    }
-*/
     @POST
     @Path("encrypt")
     public Response encryptStorage(@HeaderParam(ACCEPT) String acceptHeader,
