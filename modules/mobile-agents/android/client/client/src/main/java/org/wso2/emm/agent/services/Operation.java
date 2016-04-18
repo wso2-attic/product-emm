@@ -52,7 +52,6 @@ import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.CommonUtils;
 
 import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -211,7 +210,7 @@ public class Operation implements APIResultCallBack {
 				executeShellCommand(operation);
 				break;
 			case Constants.Operation.APP_RESTRICTION:
-				blockApplicationByPackageName(operation);
+				restrictAccessToApplications(operation);
 			default:
 				if(applicationManager.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
 					CommonUtils.callSystemApp(context,operation.getCode(),
@@ -1308,8 +1307,8 @@ public class Operation implements APIResultCallBack {
 		}
 	}
 
-	public void blockApplicationByPackageName(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException{
-		JSONArray blacklistApps = new JSONArray();
+	public void restrictAccessToApplications(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException{
+		JSONArray blacklistApps;
 		try {
 			JSONObject resultAppList = new JSONObject(operation.getPayLoad().toString());
 			blacklistApps = resultAppList.getJSONArray("black_list");
@@ -1320,37 +1319,42 @@ public class Operation implements APIResultCallBack {
 			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 
+		String ownershipType = Preference.getString(context, Constants.DEVICE_TYPE);
 
+		if(Constants.OWNERSHIP_BYOD.equals(ownershipType)) {
+			Intent restrictionIntent = new Intent(context, AppLockService.class);
+			restrictionIntent.setAction("AppLockService");
+			ArrayList<String> appList = new ArrayList<>();
 
-		Intent restrictionIntent = new Intent(context, AppLockService.class);
-		restrictionIntent.setAction("AppLockService");
-		ArrayList<String> appList = new ArrayList<String>();
-
-		if (blacklistApps != null) {
-			for (int i=0;i<blacklistApps.length();i++){
-				try {
-					appList.add(blacklistApps.get(i).toString());
-				} catch (JSONException e) {
-					operation.setStatus(resources.getString(R.string.operation_value_error));
-					resultBuilder.build(operation);
-					throw new AndroidAgentException("Invalid JSON format", e);
+			if (blacklistApps != null) {
+				for (int i=0;i<blacklistApps.length();i++){
+					try {
+						appList.add(blacklistApps.get(i).toString().split("<br>")[1]);
+					} catch (JSONException e) {
+						operation.setStatus(resources.getString(R.string.operation_value_error));
+						resultBuilder.build(operation);
+						throw new AndroidAgentException("Invalid JSON format", e);
+					}
 				}
 			}
+
+			restrictionIntent.putStringArrayListExtra("appList", appList);
+
+			PendingIntent pendingIntent = PendingIntent.getService(context, 0, restrictionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+			AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTimeInMillis(System.currentTimeMillis());
+			calendar.add(Calendar.SECOND, 1); // first time
+			long frequency= 1 * 1000; // in ms
+			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), frequency, pendingIntent);
+
+			context.startService(restrictionIntent);
 		}
 
-		restrictionIntent.putStringArrayListExtra("appList", appList);
-
-		PendingIntent pendingIntent = PendingIntent.getService(context, 0, restrictionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-		AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(System.currentTimeMillis());
-		calendar.add(Calendar.SECOND, 1); // first time
-		long frequency= 1 * 1000; // in ms
-		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), frequency, pendingIntent);
-
-		context.startService(restrictionIntent);
-
+		else if (Constants.OWNERSHIP_COPE.equals(ownershipType)) {
+			
+		}
 		operation.setStatus(resources.getString(R.string.operation_value_completed));
 		resultBuilder.build(operation);
 
