@@ -96,6 +96,7 @@ public class Operation implements APIResultCallBack {
 	private static String[] AUTHORIZED_PINNING_APPS;
 	private static String AGENT_PACKAGE_NAME;
 
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	public Operation(Context context) {
 		this.context = context;
 		this.resources = context.getResources();
@@ -105,7 +106,6 @@ public class Operation implements APIResultCallBack {
 		this.appList = new ApplicationManager(context.getApplicationContext());
 		this.resultBuilder = new ResultPayload();
 		deviceInfo = new DeviceInfo(context.getApplicationContext());
-		gps = new GPSTracker(context.getApplicationContext());
 		notificationDAO = new NotificationDAO(context);
 		AGENT_PACKAGE_NAME = context.getPackageName();
 		AUTHORIZED_PINNING_APPS = new String[]{AGENT_PACKAGE_NAME};
@@ -243,28 +243,34 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void getLocationInfo(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+		gps = new GPSTracker(context.getApplicationContext());
 		JSONObject result = new JSONObject();
+		if (gps != null) {
+			try {
+				result.put(Constants.LocationInfo.LATITUDE, gps.getLatitude());
+				result.put(Constants.LocationInfo.LONGITUDE, gps.getLongitude());
+				result.put(Constants.LocationInfo.CITY, gps.getCity());
+				result.put(Constants.LocationInfo.COUNTRY, gps.getCountry());
+				result.put(Constants.LocationInfo.STATE, gps.getState());
+				result.put(Constants.LocationInfo.STREET1, gps.getStreet1());
+				result.put(Constants.LocationInfo.STREET2, gps.getStreet2());
+				result.put(Constants.LocationInfo.ZIP, gps.getZip());
 
-		try {
-			result.put(Constants.LocationInfo.LATITUDE, gps.getLatitude());
-			result.put(Constants.LocationInfo.LONGITUDE, gps.getLongitude());
-			result.put(Constants.LocationInfo.CITY, gps.getCity());
-			result.put(Constants.LocationInfo.COUNTRY, gps.getCountry());
-			result.put(Constants.LocationInfo.STATE, gps.getState());
-			result.put(Constants.LocationInfo.STREET1, gps.getStreet1());
-			result.put(Constants.LocationInfo.STREET2, gps.getStreet2());
-			result.put(Constants.LocationInfo.ZIP, gps.getZip());
-
-			operation.setOperationResponse(result.toString());
-			operation.setStatus(resources.getString(R.string.operation_value_completed));
-			resultBuilder.build(operation);
-			if (Constants.DEBUG_MODE_ENABLED) {
-				Log.d(TAG, "Device location sent");
+				operation.setOperationResponse(result.toString());
+				operation.setStatus(resources.getString(R.string.operation_value_completed));
+				resultBuilder.build(operation);
+				if (Constants.DEBUG_MODE_ENABLED) {
+					Log.d(TAG, "Device location sent");
+				}
+			} catch (JSONException e) {
+				operation.setStatus(resources.getString(R.string.operation_value_error));
+				resultBuilder.build(operation);
+				throw new AndroidAgentException("Invalid JSON format.", e);
 			}
-		} catch (JSONException e) {
+		} else {
 			operation.setStatus(resources.getString(R.string.operation_value_error));
 			resultBuilder.build(operation);
-			throw new AndroidAgentException("Invalid JSON format.", e);
+			throw new AndroidAgentException("Error occurred while initiating location service");
 		}
 	}
 
@@ -964,7 +970,7 @@ public class Operation implements APIResultCallBack {
 
 		try {
 			if(payload != null){
-				Preference.putString(context, resources.getString(R.string.shared_pref_policy_applied), payload);
+				Preference.putString(context, Constants.PreferenceFlag.APPLIED_POLICY, payload);
 			}
 
 			List<org.wso2.emm.agent.beans.Operation> operations = mapper.readValue(
@@ -995,8 +1001,7 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void monitorPolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-		String payload = Preference.getString(context, resources.getString(R.string.shared_pref_policy_applied));
-
+		String payload = Preference.getString(context, Constants.PreferenceFlag.APPLIED_POLICY);
 		PolicyOperationsMapper operationsMapper = new PolicyOperationsMapper();
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

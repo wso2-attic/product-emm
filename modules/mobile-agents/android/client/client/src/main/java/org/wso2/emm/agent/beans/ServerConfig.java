@@ -55,24 +55,24 @@ public class ServerConfig {
 	}
 
 	public String getProtocolFromPreferences (Context context) {
-		if (Preference.getString(context, Constants.PROTOCOL) != null) {
-			return Preference.getString(context, Constants.PROTOCOL);
+		if (Preference.getString(context, Constants.PreferenceFlag.PROTOCOL) != null) {
+			return Preference.getString(context, Constants.PreferenceFlag.PROTOCOL);
 		} else {
 			return Constants.SERVER_PROTOCOL;
 		}
 	}
 
 	public String getPortFromPreferences (Context context) {
-		if (Preference.getString(context, Constants.PORT) != null) {
-			return Preference.getString(context, Constants.PORT);
+		if (Preference.getString(context, Constants.PreferenceFlag.PORT) != null) {
+			return Preference.getString(context, Constants.PreferenceFlag.PORT);
 		} else {
 			return Constants.API_SERVER_PORT;
 		}
 	}
 
 	public String getHostFromPreferences (Context context) {
-		if (Preference.getString(context, Constants.IP) != null) {
-			return Preference.getString(context, Constants.IP);
+		if (Preference.getString(context, Constants.PreferenceFlag.IP) != null) {
+			return Preference.getString(context, Constants.PreferenceFlag.IP);
 		} else {
 			return serverIP;
 		}
