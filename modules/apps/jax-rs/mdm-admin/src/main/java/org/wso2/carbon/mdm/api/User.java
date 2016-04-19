@@ -74,7 +74,6 @@ public class User {
     @Produces({MediaType.APPLICATION_JSON})
     public Response addUser(UserWrapper userWrapper) throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ResponsePayload responsePayload = new ResponsePayload();
         try {
             if (userStoreManager.isExistingUser(userWrapper.getUsername())) {
                 // if user already exists
@@ -83,11 +82,8 @@ public class User {
                             " already exists. Therefore, request made to add user was refused.");
                 }
                 // returning response with bad request state
-                responsePayload.setStatusCode(HttpStatus.SC_CONFLICT);
-                responsePayload.
-                        setMessageFromServer("User by username: " + userWrapper.getUsername() +
-                                " already exists. Therefore, request made to add user was refused.");
-                return Response.status(HttpStatus.SC_CONFLICT).entity(responsePayload).build();
+                return Response.status(HttpStatus.SC_CONFLICT).entity("User by username: " + userWrapper.getUsername() +
+                        " already exists. Therefore, request made to add user was refused.").build();
             } else {
                 String initialUserPassword = generateInitialUserPassword();
                 Map<String, String> defaultUserClaims =
@@ -102,11 +98,8 @@ public class User {
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + userWrapper.getUsername() + " was successfully added.");
                 }
-                // returning response with success state
-                responsePayload.setStatusCode(HttpStatus.SC_CREATED);
-                responsePayload.setMessageFromServer("User by username: " + userWrapper.getUsername() +
-                        " was successfully added.");
-                return Response.status(HttpStatus.SC_CREATED).entity(responsePayload).build();
+                return Response.status(HttpStatus.SC_CREATED).entity("User by username: " + userWrapper.getUsername() +
+                        " was successfully added.").build();
             }
         } catch (UserStoreException e) {
             String msg = "Exception in trying to add user by username: " + userWrapper.getUsername();
@@ -127,7 +120,6 @@ public class User {
     @Produces({MediaType.APPLICATION_JSON})
     public Response getUser(@QueryParam("username") String username) throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ResponsePayload responsePayload = new ResponsePayload();
         try {
             if (userStoreManager.isExistingUser(username)) {
                 UserWrapper user = new UserWrapper();
@@ -139,20 +131,15 @@ public class User {
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + username + " was found.");
                 }
-                responsePayload.setStatusCode(HttpStatus.SC_OK);
-                responsePayload.setMessageFromServer("User information was retrieved successfully.");
-                responsePayload.setResponseContent(user);
-                return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+                return Response.status(HttpStatus.SC_OK).entity("User: " + user + "information was retrieved" +
+                        " successfully.").build();
             } else {
                 // Outputting debug message upon trying to remove non-existing user
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + username + " does not exist.");
                 }
-                // returning response with bad request state
-                responsePayload.setStatusCode(HttpStatus.SC_BAD_REQUEST);
-                responsePayload.setMessageFromServer(
-                        "User by username: " + username + " does not exist.");
-                return Response.status(HttpStatus.SC_NOT_FOUND).entity(responsePayload).build();
+                return Response.status(HttpStatus.SC_NOT_FOUND).entity("User by username: " + username +
+                        " does not exist.").build();
             }
         } catch (UserStoreException e) {
             String msg = "Exception in trying to retrieve user by username: " + username;
@@ -174,7 +161,6 @@ public class User {
     public Response updateUser(UserWrapper userWrapper, @QueryParam("username") String username)
             throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ResponsePayload responsePayload = new ResponsePayload();
         try {
             if (userStoreManager.isExistingUser(userWrapper.getUsername())) {
                 Map<String, String> defaultUserClaims =
@@ -217,22 +203,15 @@ public class User {
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + userWrapper.getUsername() + " was successfully updated.");
                 }
-                // returning response with success state
-                responsePayload.setStatusCode(HttpStatus.SC_CREATED);
-                responsePayload.setMessageFromServer("User by username: " + userWrapper.getUsername() +
-                        " was successfully updated.");
-                return Response.status(HttpStatus.SC_CREATED).entity(responsePayload).build();
+                return Response.status(HttpStatus.SC_CREATED).entity("User by username: " + userWrapper.getUsername() +
+                        " was successfully updated.").build();
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + userWrapper.getUsername() +
                             " doesn't exists. Therefore, request made to update user was refused.");
                 }
-                // returning response with bad request state
-                responsePayload.setStatusCode(HttpStatus.SC_CONFLICT);
-                responsePayload.
-                        setMessageFromServer("User by username: " + userWrapper.getUsername() +
-                                " doesn't  exists. Therefore, request made to update user was refused.");
-                return Response.status(HttpStatus.SC_CONFLICT).entity(responsePayload).build();
+                return Response.status(HttpStatus.SC_CONFLICT).entity("User by username: " + userWrapper.getUsername() +
+                        " doesn't  exists. Therefore, request made to update user was refused.").build();
             }
         } catch (UserStoreException | UnsupportedEncodingException e) {
             String msg = "Exception in trying to update user by username: " + userWrapper.getUsername();
@@ -298,7 +277,6 @@ public class User {
     @Produces({MediaType.APPLICATION_JSON})
     public Response removeUser(@QueryParam("username") String username) throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
-        ResponsePayload responsePayload = new ResponsePayload();
         try {
             if (userStoreManager.isExistingUser(username)) {
                 // if user already exists, trying to remove user
@@ -307,21 +285,15 @@ public class User {
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + username + " was successfully removed.");
                 }
-                // returning response with success state
-                responsePayload.setStatusCode(HttpStatus.SC_OK);
-                responsePayload.setMessageFromServer(
-                        "User by username: " + username + " was successfully removed.");
-                return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+                return Response.status(HttpStatus.SC_OK).entity(
+                        "User by username: " + username + " was successfully removed.").build();
             } else {
                 // Outputting debug message upon trying to remove non-existing user
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + username + " does not exist for removal.");
                 }
-                // returning response with bad request state
-                responsePayload.setStatusCode(HttpStatus.SC_BAD_REQUEST);
-                responsePayload.setMessageFromServer(
-                        "User by username: " + username + " does not exist for removal.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(responsePayload).build();
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity("User by username: " + username +
+                        " does not exist for removal.").build();
             }
         } catch (UserStoreException e) {
             String msg = "Exception in trying to remove user by username: " + username;
@@ -370,11 +342,7 @@ public class User {
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + username + " was successfully removed.");
                 }
-                // returning response with success state
-                responsePayload.setStatusCode(HttpStatus.SC_OK);
-                responsePayload.setMessageFromServer(
-                        "User roles obtained for user " + username);
-                return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+                return Response.status(HttpStatus.SC_OK).entity("User roles obtained for user " + username).build();
             } else {
                 // Outputting debug message upon trying to remove non-existing user
                 if (log.isDebugEnabled()) {
@@ -428,10 +396,9 @@ public class User {
         responsePayload.setStatusCode(HttpStatus.SC_OK);
         int count;
         count = userList.size();
-        responsePayload.setMessageFromServer("All users were successfully retrieved. " +
-                "Obtained user count: " + count);
         responsePayload.setResponseContent(userList);
-        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+        return Response.status(HttpStatus.SC_OK).entity("All users were successfully retrieved. " +
+                "Obtained user count: " + count).build();
     }
 
     /**
@@ -470,10 +437,9 @@ public class User {
         responsePayload.setStatusCode(HttpStatus.SC_OK);
         int count;
         count = userList.size();
-        responsePayload.setMessageFromServer("All users were successfully retrieved. " +
-                "Obtained user count: " + count);
         responsePayload.setResponseContent(userList);
-        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+        return Response.status(HttpStatus.SC_OK).entity("All users were successfully retrieved. " +
+                "Obtained user count: " + count).build();
     }
 
     /**
