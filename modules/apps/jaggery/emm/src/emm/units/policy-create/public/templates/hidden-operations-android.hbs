@@ -755,7 +755,7 @@
                 </div>
                 <div id="app-restriction-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="app-restriction-body">
                     <div class="btn-group">
-                        <button class="btn btn-primary dropdown-toggle operationDataKeys" data-toggle="dropdown" data-key="restrictionList">
+                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                             Select List Criteria
                             <span class="caret"></span>
                         </button>
@@ -767,11 +767,15 @@
 
                     <div id="app-list-add-widget" class="hidden">
                         <div class="row">
-                            <div id="app_details">
-                                <label>Package Name :</label>
-                                <input type="text">
-                                <label>App Description :</label>
-                                <input type="text">
+                            <div id="app_details" style="margin-left: 25px">
+                                <div class="row">
+                                    <label>Package Name :</label>
+                                    <input id="packageName" type="text">
+                                </div>
+                                <div class="row">
+                                    <label>App Description :</label>
+                                    <input id="appDescription" type="text">
+                                </div>
                             </div>
                             <div id="search-on-app-store" class="col-md-6 hidden" style="display: none">
                                 <label class="wr-input-label"
@@ -787,7 +791,7 @@
                             <button id="application-add" type="button" class="btn btn-primary">Add</button>
                         </div>
                         <div class="container hidden" id="searchable-container_black_list">
-                            <table class="operationDataKeys black-list" style="width: 50%" border="1" cellpadding="0" cellspacing="0" data-key="black_list">
+                            <table class="black-list" style="width: 50%" border="1" cellpadding="0" cellspacing="0">
                                 <thead>
                                 <tr>
                                     <th>Application</th>

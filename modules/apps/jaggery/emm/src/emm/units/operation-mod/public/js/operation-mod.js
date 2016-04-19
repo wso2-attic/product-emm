@@ -635,7 +635,6 @@ var operationModule = function () {
                 break;
             case androidOperationConstants["APPLICATION_OPERATION_CODE"]:
                 payload = {
-                    "restrictionList":operationPayload["restrictionList"],
                     "black_list": operationPayload["black_list"],
                     "whiteListEnabled": operationPayload["whiteListEnabled"],
                     "appStoreLocation": operationPayload["appStoreLocation"]
@@ -757,12 +756,18 @@ var operationModule = function () {
             case androidOperationConstants["APPLICATION_OPERATION_CODE"]:
                 payload = {
                     "operation":{
-                        "restrictionList":operationData["restrictionList"],
-                        "black_list": operationData["black_list"],
+                        "black_list": [],
                         "whiteListEnabled": operationData["whiteListEnabled"],
                         "appStoreLocation": operationData["appStoreLocation"]
                     }
                 };
+
+                for(var key in operationData) {
+                    var item = operationData[key];
+                    if(key.indexOf("application") >= 0 ) {
+                        payload.operation.black_list.push(item);
+                    }
+                }
                 break;
             default:
                 // If the operation is neither of above, it is a command operation
@@ -1119,14 +1124,8 @@ var operationModule = function () {
                         });
                     }
                 }
-                if (operationDataObj.is("table")){
-                            var application_list = [];
-                            var application_index = $('th:contains("Application")').index();
-                            $(".black-list tr td:nth-child("+(application_index+1)+")").each(function () {
-                                application_list.push($(this).text());
-                            });
-                            value = application_list;
-
+                if (operationDataObj.is("td")){
+                    value = operationDataObj.html();
                 }
                 operationData[key] = value;
             }

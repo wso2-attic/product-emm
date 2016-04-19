@@ -1954,39 +1954,6 @@ var savePolicy = function (policy, serviceURL) {
     );
 };
 
-var appRestrictionInStoreByRole = function(policy){
-    var whiteList = policy["profile"]["APP-RESTRICTION"]["white-list"];
-    var appUUID = getUUIDForApp("admin", "sample", "1.0");
-    var serviceURL  = "/publisher/asset/mobileapp/id/"+appUUID+"/permissions";
-    var payload = '[{"role":"Internal/store-admin","permissions":["GET"]}]';
-    if(typeof whiteList != "undefined"){
-        invokerUtil.post(
-            serviceURL,
-            payload,
-            function () {
-                console.log("successfully ended...............!");
-            },
-            function (data) {
-                console.log("error occured.................!!!");
-            }
-        );
-    }
-};
-
-var getUUIDForApp = function(provider, name, version){
-
-    var serviceURL = "/publisher/api/asset/get/uuid/mobileapp/"+provider+"/"+name+"/"+version;
-    invokerUtil.get(
-        serviceURL,
-        function (data) {
-            console.log("call succeeded...............!");
-        },
-        function (data) {
-            console.log("error occured.................!!!");
-        }
-    );
-}
-
 // Start of HTML embedded invoke methods
 var showAdvanceOperation = function (operation, button) {
     $(button).addClass('selected');
@@ -2371,6 +2338,7 @@ $(document).ready(function () {
     });
 
     $(advanceOperations).on("click", ".wr-input-control.switch", function (event) {
+        var i = 0;
         $(".dropdown-menu li a").on("click", function(){
             var selText = $(this).text();
             $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
@@ -2391,7 +2359,16 @@ $(document).ready(function () {
             }
 
             $("#application-add").unbind("click").on('click', function(){
-                var packageName = $("#app-select").val();
+                var packageName;
+                var appDescription;
+                if($("#app-select").val()) {
+                    packageName = $("#app-select").val();
+                }
+                else {
+                    packageName = $("#packageName").val();
+                    appDescription = $("#appDescription").val();
+                }
+
                 if(packageName == "" | packageName == null){
                     return;
                 }
@@ -2420,8 +2397,9 @@ $(document).ready(function () {
 
                 if(selText == "Black List"){
                     var new_table_row = "<tr>"+
-                        "<td>"+packageName+"</td>"+addDeleteButton()+"</tr>";
+                        "<td class='operationDataKeys' data-key='application"+i+"'>"+packageName+"<br>"+appDescription+"</td>"+addDeleteButton()+"</tr>";
                     $('#searchable-container_black_list > table > tbody').append(new_table_row);
+                    i++;
                 }
 
                 $("#app-select").select2("val", "");

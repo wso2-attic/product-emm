@@ -41,6 +41,7 @@ public class Constants {
 		private Operation(){
 			throw new AssertionError();
 		}
+		public static final String APP_RESTRICTION = "APP-RESTRICTION";
 		public static final String UPGRADE_FIRMWARE = "UPGRADE_FIRMWARE";
 		public static final String REBOOT = "REBOOT";
 		public static final String EXECUTE_SHELL_COMMAND = "SHELL_COMMAND";
