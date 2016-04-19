@@ -128,22 +128,30 @@ public class AlertActivity extends SherlockActivity {
 	 */
 	@TargetApi(21)
 	private void startRing() {
-		audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-		audio.setStreamVolume(AudioManager.STREAM_RING, audio.getStreamMaxVolume(AudioManager.STREAM_RING),
-		                      AudioManager.FLAG_PLAY_SOUND);
-		defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(this, RingtoneManager.TYPE_RINGTONE);
-		defaultRingtone = RingtoneManager.getRingtone(this, defaultRingtoneUri);
+		if (audio != null) {
+			audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+			audio.setStreamVolume(AudioManager.STREAM_RING, audio.getStreamMaxVolume(AudioManager.STREAM_RING),
+			                      AudioManager.FLAG_PLAY_SOUND);
 
-		if (deviceInfo.getSdkVersion() >= Build.VERSION_CODES.LOLLIPOP) {
-			AudioAttributes attributes = new AudioAttributes.Builder().
-					setUsage(AudioAttributes.USAGE_NOTIFICATION).
-					setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).
-					build();
-			defaultRingtone.setAudioAttributes(attributes);
-		} else {
-			defaultRingtone.setStreamType(AudioManager.STREAM_NOTIFICATION);
+			defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(this, RingtoneManager.TYPE_RINGTONE);
+
+			if (defaultRingtoneUri != null) {
+				defaultRingtone = RingtoneManager.getRingtone(this, defaultRingtoneUri);
+
+				if (defaultRingtone != null) {
+					if (deviceInfo.getSdkVersion() >= Build.VERSION_CODES.LOLLIPOP) {
+						AudioAttributes attributes = new AudioAttributes.Builder().
+								setUsage(AudioAttributes.USAGE_NOTIFICATION).
+								setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).
+								build();
+						defaultRingtone.setAudioAttributes(attributes);
+					} else {
+						defaultRingtone.setStreamType(AudioManager.STREAM_NOTIFICATION);
+					}
+					defaultRingtone.play();
+				}
+			}
 		}
-		defaultRingtone.play();
 	}
 
 	/**

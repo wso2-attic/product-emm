@@ -50,7 +50,7 @@ public class RuntimeInfo {
         topCommandRows = resultOfTop.split("\n");
     }
 
-    public String getCPUInfo() throws AndroidAgentException {
+    public List<Device.Property> getCPUInfo() throws AndroidAgentException {
         List<Device.Property> properties = new ArrayList<>();
         Device.Property property;
 
@@ -67,15 +67,7 @@ public class RuntimeInfo {
                 break;
             }
         }
-        String payload;
-        try {
-            payload = mapper.writeValueAsString(properties);
-        } catch (JsonProcessingException e) {
-            String errorMsg = "Error occurred while parsing cpu info property object to json.";
-            Log.e(TAG, errorMsg, e);
-            throw new AndroidAgentException(errorMsg, e);
-        }
-        return payload;
+        return properties;
     }
 
     public Map<String, Application> getAppMemory() throws AndroidAgentException {
@@ -118,7 +110,7 @@ public class RuntimeInfo {
         return applications;
     }
 
-    public String getRAMInfo() throws AndroidAgentException {
+    public List<Device.Property> getRAMInfo() throws AndroidAgentException {
         List<Device.Property> properties = new ArrayList<>();
         Device.Property property;
 
@@ -152,17 +144,7 @@ public class RuntimeInfo {
         property.setValue(String.valueOf(lowMemory));
         properties.add(property);
 
-        String payload;
-        try {
-            payload = mapper.writeValueAsString(properties);
-        } catch (JsonProcessingException e) {
-            String errorMsg = "Error occurred while parsing RAM info property object to json.";
-            Log.e(TAG, errorMsg, e);
-            throw new AndroidAgentException(errorMsg, e);
-        }
-
-        return payload;
-
+        return properties;
     }
 
 

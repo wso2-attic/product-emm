@@ -97,7 +97,7 @@ public class DeviceNetworkStatus extends PhoneStateListener {
      * @return String representing network details.
      * @throws AndroidAgentException
      */
-    public String getNetworkStatus() throws AndroidAgentException {
+    public List<Device.Property> getNetworkStatus() throws AndroidAgentException {
         List<Device.Property> properties = new ArrayList<>();
         Device.Property property = new Device.Property();
         property.setName(Constants.Device.CONNECTION_TYPE);
@@ -129,16 +129,8 @@ public class DeviceNetworkStatus extends PhoneStateListener {
         property.setName(Constants.Device.MOBILE_SIGNAL_STRENGTH);
         property.setValue(String.valueOf(getCellSignalStrength()));
         properties.add(property);
-        String payload;
-        try {
-            payload = mapper.writeValueAsString(properties);
-        } catch (JsonProcessingException e) {
-            String errorMsg = "Error occurred while parsing " +
-                              "network property property object to json.";
-            Log.e(TAG, errorMsg, e);
-            throw new AndroidAgentException(errorMsg, e);
-        }
-        return payload;
+
+        return properties;
     }
 
 

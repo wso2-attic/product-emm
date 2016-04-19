@@ -72,51 +72,51 @@ public class GPSTracker extends Service implements LocationListener {
 	 * Function to get device location using GPS.
 	 * @return - Device location coordinates.
 	 */
-	private Location getLocation() {
-		try {
-			boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-			boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+	private void getLocation() {
+		if (locationManager != null) {
+			try {
+				boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+				boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-			if (isNetworkEnabled) {
-				locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-				                                       MIN_TIME_BW_UPDATES,
-				                                       MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-				if (locationManager != null) {
-					location = locationManager.getLastKnownLocation(
-									                          LocationManager.NETWORK_PROVIDER);
-					if (location != null) {
-						latitude = location.getLatitude();
-						longitude = location.getLongitude();
-					}
-				}
-			}
-
-			if (isGpsEnabled) {
-				if (location == null) {
-					locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+				if (isNetworkEnabled) {
+					locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
 					                                       MIN_TIME_BW_UPDATES,
-					                                       MIN_DISTANCE_CHANGE_FOR_UPDATES,
-					                                       this);
+					                                       MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 					if (locationManager != null) {
 						location = locationManager.getLastKnownLocation(
-									                          LocationManager.GPS_PROVIDER);
+								LocationManager.NETWORK_PROVIDER);
 						if (location != null) {
 							latitude = location.getLatitude();
 							longitude = location.getLongitude();
 						}
 					}
 				}
-			}
-			setReversGeoCoordinates();
-		} catch (RuntimeException e) {
-			Log.e(TAG, "No network/GPS Switched off.", e);
-		} catch (InterruptedException e) {
-			Log.e(TAG, "Error occured while calling reverse geo coordination API.", e);
-		} catch (ExecutionException e) {
-			Log.e(TAG, "Error occured while calling reverse geo coordination API.", e);
-		}
 
-		return location;
+				if (isGpsEnabled) {
+					if (location == null) {
+						locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+						                                       MIN_TIME_BW_UPDATES,
+						                                       MIN_DISTANCE_CHANGE_FOR_UPDATES,
+						                                       this);
+						if (locationManager != null) {
+							location = locationManager.getLastKnownLocation(
+									LocationManager.GPS_PROVIDER);
+							if (location != null) {
+								latitude = location.getLatitude();
+								longitude = location.getLongitude();
+							}
+						}
+					}
+				}
+				setReversGeoCoordinates();
+			} catch (RuntimeException e) {
+				Log.e(TAG, "No network/GPS Switched off.", e);
+			} catch (InterruptedException e) {
+				Log.e(TAG, "Error occured while calling reverse geo coordination API.", e);
+			} catch (ExecutionException e) {
+				Log.e(TAG, "Error occured while calling reverse geo coordination API.", e);
+			}
+		}
 	}
 
 	/**

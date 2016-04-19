@@ -99,8 +99,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			}
 		}
 
-		String registrationId =
-				Preference.getString(context, resources.getString(R.string.shared_pref_regId));
+		String registrationId = Preference.getString(context, Constants.PreferenceFlag.REG_ID);
 
 		if (registrationId != null && !registrationId.isEmpty()) {
 			regId = registrationId;
@@ -109,14 +108,16 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		}
 
 		if (freshRegFlag) {
-			Preference.putString(context, resources.getString(R.string.shared_pref_registered),
-					resources.getString(R.string.shared_pref_reg_success));
-
-			if (!devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
+			Preference.putBoolean(context, Constants.PreferenceFlag.REGISTERED, true);
+			if (!isDeviceAdminActive()) {
 				startDeviceAdminPrompt(cdmDeviceAdmin);
 			}
-
 			freshRegFlag = false;
+
+		} else if (Preference.getBoolean(context, Constants.PreferenceFlag.REGISTERED)) {
+			if (isDeviceAdminActive()) {
+				startPolling();
+			}
 		}
 
 		txtRegText = (TextView) findViewById(R.id.txtRegText);
@@ -184,17 +185,24 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		if (regId != null && !regId.isEmpty()) {
 			if (CommonUtils.isNetworkAvailable(context)) {
-				stopPolling();
-				String serverIP = Preference.getString(AlreadyRegisteredActivity.this, Constants.IP);
-				ServerConfig utils = new ServerConfig();
-				utils.setServerIP(serverIP);
+				String serverIP = Preference.getString(AlreadyRegisteredActivity.this, Constants.PreferenceFlag.IP);
+				if (serverIP != null && !serverIP.isEmpty()) {
+					stopPolling();
+					ServerConfig utils = new ServerConfig();
+					utils.setServerIP(serverIP);
 
-				CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-						utils.getAPIServerURL(context) + Constants.UNREGISTER_ENDPOINT + regId,
-						HTTP_METHODS.DELETE,
-						null, AlreadyRegisteredActivity.this,
-						Constants.UNREGISTER_REQUEST_CODE);
+					CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
+					                           utils.getAPIServerURL(context) + Constants.UNREGISTER_ENDPOINT + regId,
+					                           HTTP_METHODS.DELETE,
+					                           null, AlreadyRegisteredActivity.this,
+					                           Constants.UNREGISTER_REQUEST_CODE);
+				} else {
+					Log.e(TAG, "There is no valid IP to contact the server");
+					CommonDialogUtils.stopProgressDialog(progressDialog);
+					CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
+				}
 			} else {
+				Log.e(TAG, "Registration ID is not available");
 				CommonDialogUtils.stopProgressDialog(progressDialog);
 				CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
 			}
@@ -258,23 +266,21 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			Log.d(TAG, "Calling onResume");
 		}
 
-		String regFlag = Preference.getString(context, getResources().getString(R.string.shared_pref_registered));
+		boolean isRegistered = Preference.getBoolean(context, Constants.PreferenceFlag.REGISTERED);
 
-		if (getResources().getString(R.string.shared_pref_reg_success).equals(regFlag)) {
-
+		if (isRegistered) {
 			if (CommonUtils.isNetworkAvailable(context)) {
 
-				String serverIP = Preference.getString(context, Constants.IP);
-				regId = Preference.getString(context, resources.
-						getString(R.string.shared_pref_regId));
+				String serverIP = Preference.getString(context, Constants.PreferenceFlag.IP);
+				regId = Preference.getString(context, Constants.PreferenceFlag.REG_ID);
 
 				if (regId != null) {
 					if (regId.isEmpty() && isUnregisterBtnClicked) {
 						initiateUnregistration();
-					} else {
+					} else if (serverIP != null && !serverIP.isEmpty()) {
 						ServerConfig utils = new ServerConfig();
 						utils.setServerIP(serverIP);
-						if(utils.getHostFromPreferences(context) != null && !utils.getHostFromPreferences(context).isEmpty()) {
+						if (utils.getHostFromPreferences(context) != null && !utils.getHostFromPreferences(context).isEmpty()) {
 							CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
 							                           utils.getAPIServerURL(context) + Constants.IS_REGISTERED_ENDPOINT + regId,
 							                           HTTP_METHODS.GET,
@@ -289,6 +295,8 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 							}
 							loadServerDetailsActivity();
 						}
+					} else {
+						Log.e(TAG, "There is no valid IP to contact server");
 					}
 				}
 			} else {
@@ -345,7 +353,12 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
 					displayInternalServerError();
 				} else if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
-					Log.d(TAG, "Device has already enrolled");
+					if (Constants.DEBUG_MODE_ENABLED) {
+						Log.d(TAG, "Device has already enrolled");
+					}
+					if (isDeviceAdminActive()) {
+						startPolling();
+					}
 				} else {
 					stopPolling();
 					initiateUnregistration();
@@ -421,7 +434,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 * Load server details activity.
 	 */
 	private void loadServerDetailsActivity() {
-		Preference.putString(context, Constants.IP, Constants.EMPTY_STRING);
+		Preference.putString(context, Constants.PreferenceFlag.IP, null);
 		Intent intent = new Intent(
 				AlreadyRegisteredActivity.this,
 				ServerDetails.class);
@@ -462,10 +475,8 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 * Stops server polling task.
 	 */
 	private void stopPolling() {
-		String notifier = Preference.getString(context, resources.getString(R.string.shared_pref_notifier));
+		String notifier = Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE);
 		if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
-			LocalNotification.stopPolling(context);
-		} else if(notifier == null) {
 			LocalNotification.stopPolling(context);
 		}
 	}
@@ -474,10 +485,8 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 * Starts server polling task.
 	 */
 	private void startPolling() {
-		String notifier = Preference.getString(context, resources.getString(R.string.shared_pref_notifier));
+		String notifier = Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE);
 		if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
-			LocalNotification.startPolling(context);
-		} else if(notifier == null) {
 			LocalNotification.startPolling(context);
 		}
 	}
@@ -499,6 +508,10 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				Log.i("onActivityResult", "Administration enable FAILED!");
 			}
 		}
+	}
+
+	private boolean isDeviceAdminActive() {
+		return devicePolicyManager.isAdminActive(cdmDeviceAdmin);
 	}
 
 }
