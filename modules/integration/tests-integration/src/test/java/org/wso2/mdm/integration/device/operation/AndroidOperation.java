@@ -376,13 +376,6 @@ public class AndroidOperation extends TestBase {
 				Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD);
 		Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
 	}
-    
-	@Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android firmware upgrade operation.")
-	public void testUpgradeFirmware() throws Exception {
-		HttpResponse response = client.post(Constants.AndroidOperations.UPGRADE_FIRMWARE_ENDPOINT,
-				Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD);
-		Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-	}
 
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android mute operation.")
     public void testMute() throws Exception {
@@ -571,6 +564,20 @@ public class AndroidOperation extends TestBase {
         deviceIds.add(deviceID);
         operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
         HttpResponse response = client.post(Constants.AndroidOperations.NOTIFICATION_ENDPOINT,
+                                            operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+    }
+
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android firmware upgrade operation.")
+    public void testUpgradeFirmware() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.UPGRADE_FIRMWARE_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.UPGRADE_FIRMWARE_ENDPOINT,
                                             operationData.toString());
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
