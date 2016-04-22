@@ -18,9 +18,11 @@
 
 package org.wso2.emm.agent.events.publisher;
 
+import org.wso2.emm.agent.events.beans.EventPayload;
+
 /**
  * When data needs to be published, it can be done by implementing this interface.
  */
 public interface DataPublisher {
-    void publish(String payload);
+    void publish(EventPayload eventPayload);
 }

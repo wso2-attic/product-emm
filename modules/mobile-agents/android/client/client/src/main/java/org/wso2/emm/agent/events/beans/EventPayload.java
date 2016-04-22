@@ -24,7 +24,16 @@ package org.wso2.emm.agent.events.beans;
 public class EventPayload {
 
     private String deviceIdentifier;
+    private String type;
     private String payload;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getPayload() {
         return payload;

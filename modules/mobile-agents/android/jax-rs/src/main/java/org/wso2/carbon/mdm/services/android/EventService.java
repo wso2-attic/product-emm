@@ -49,7 +49,7 @@ public class EventService {
         Message message = new Message();
         Response response;
 
-        return Response.status(Response.Status.CREATED).entity("").
+        return Response.status(Response.Status.OK).entity("").
                 type(responseMediaType).build();
 
     }

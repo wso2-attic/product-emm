@@ -47,11 +47,9 @@ public class HttpDataPublisher implements APIResultCallBack, DataPublisher {
         }
     }
 
-    public void publish(String payload) {
+    public void publish(EventPayload eventPayload) {
         if (EventRegistry.context != null) {
-            EventPayload eventPayload = new EventPayload();
             eventPayload.setDeviceIdentifier(deviceIdentifier);
-            eventPayload.setPayload(payload);
             try {
                 String responsePayload = CommonUtils.toJSON(eventPayload);
                 CommonUtils.callSecuredAPI(EventRegistry.context,

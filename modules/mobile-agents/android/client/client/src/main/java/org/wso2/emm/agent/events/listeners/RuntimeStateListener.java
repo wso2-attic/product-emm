@@ -23,6 +23,7 @@ import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.api.RuntimeInfo;
 import org.wso2.emm.agent.beans.Application;
 import org.wso2.emm.agent.events.EventRegistry;
+import org.wso2.emm.agent.events.beans.EventPayload;
 import org.wso2.emm.agent.events.publisher.HttpDataPublisher;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
@@ -43,7 +44,7 @@ public class RuntimeStateListener implements AlertEventListener {
         if (application.getCpu() > CPU_THRESHOLD) {
             try {
                 String appState = CommonUtils.toJSON(application);
-                publishEvent(appState);
+                publishEvent(appState, Constants.EventListners.RUNTIME_STATE);
                 if (Constants.DEBUG_MODE_ENABLED) {
                     Log.d(TAG, appState);
                 }
@@ -58,8 +59,11 @@ public class RuntimeStateListener implements AlertEventListener {
     }
 
     @Override
-    public void publishEvent(String payload) {
+    public void publishEvent(String payload, String type) {
+        EventPayload eventPayload = new EventPayload();
+        eventPayload.setPayload(payload);
+        eventPayload.setType(type);
         HttpDataPublisher httpDataPublisher = new HttpDataPublisher();
-        httpDataPublisher.publish(payload);
+        httpDataPublisher.publish(eventPayload);
     }
 }

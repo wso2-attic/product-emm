@@ -26,6 +26,7 @@ import android.util.Log;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.events.EventRegistry;
 import org.wso2.emm.agent.events.beans.ApplicationStatus;
+import org.wso2.emm.agent.events.beans.EventPayload;
 import org.wso2.emm.agent.events.publisher.HttpDataPublisher;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
@@ -56,9 +57,12 @@ public class ApplicationStateListener extends BroadcastReceiver implements Alert
     }
 
     @Override
-    public void publishEvent(String payload) {
+    public void publishEvent(String payload, String type) {
+        EventPayload eventPayload = new EventPayload();
+        eventPayload.setPayload(payload);
+        eventPayload.setType(type);
         HttpDataPublisher httpDataPublisher = new HttpDataPublisher();
-        httpDataPublisher.publish(payload);
+        httpDataPublisher.publish(eventPayload);
     }
 
     @Override
@@ -88,7 +92,7 @@ public class ApplicationStateListener extends BroadcastReceiver implements Alert
             applicationState.setPackageName(packageName);
             try {
                 String appState = CommonUtils.toJSON(applicationState);
-                publishEvent(appState);
+                publishEvent(appState, Constants.EventListners.APPLICATION_STATE);
                 if (Constants.DEBUG_MODE_ENABLED) {
                     Log.d(TAG, appState);
                 }

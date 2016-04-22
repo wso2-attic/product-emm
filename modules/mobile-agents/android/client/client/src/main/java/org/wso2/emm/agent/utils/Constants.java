@@ -360,7 +360,9 @@ public class Constants {
 		}
 		public static final boolean EVENT_LISTENING_ENABLED = true;
 		public static final boolean APPLICATION_STATE_LISTENER = true;
-		public static final boolean RUNTIME_STATE_LISTENER = true;
+		public static final String APPLICATION_STATE = "APPLICATION_STATE";
+		public static final boolean RUNTIME_STATE_LISTENER = false;
+		public static final String RUNTIME_STATE = "RUNTIME_STATE";
 		public static final long DEFAULT_START_TIME = 1000;
 		public static final long DEFAULT_INTERVAL = 5000;
 		public static final int DEFAULT_LISTENER_CODE = 10001;

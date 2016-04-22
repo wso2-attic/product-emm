@@ -45,7 +45,8 @@ public interface AlertEventListener {
      * results of a polling.
      *
      * @param payload JSON string payload to be published.
+     * @param type type of the alert being published.
      */
-    void publishEvent(String payload);
+    void publishEvent(String payload, String type);
 
 }
