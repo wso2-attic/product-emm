@@ -224,6 +224,7 @@
     <string name="error_app_install_policy">\nFollowing apps must be installed on your device, please install them. \n</string>
     <string name="error_app_uninstall_policy">\nFollowing apps are blacklisted by your EMM Admin, please remove them. \n</string>
     <string name="error_wifi_policy">\nYou are not using company WIFI account, please change your WIFI configuration \n</string>
+    <string name="error_work_profile_policy">\nYour work-profile configurations are not adhering to the policy, please undo if any customizations have been done. \n</string>
 
     <!-- DIALOG TITLES AND MESSAGES -->
     <string name="dialog_authenticate">Authenticating</string>
@@ -346,6 +347,7 @@
     <string name="title_activity_lock">LockActivity</string>
     <string name="txt_lock_activity">Device is locked. Please contact administrator</string>
 
+    <string name="split_delimiter">,</string>
     <!-- Android For Work User Restrictions -->
     <string name="allow_parent_profile_app_linking">ALLOW_PARENT_PROFILE_APP_LINKING</string>
 

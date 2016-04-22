@@ -151,4 +151,10 @@ public interface VersionBasedOperations {
      */
     void configureWorkProfile(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
+    /**
+     * Pass Operation to System Service Package
+     *
+     * @param operation - Operation object
+     */
+    void passOperationToSystemApp(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 }

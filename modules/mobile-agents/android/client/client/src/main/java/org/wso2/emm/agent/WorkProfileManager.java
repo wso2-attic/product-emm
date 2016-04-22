@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.wso2.emm.agent.api.ApplicationManager;
@@ -34,41 +35,35 @@ import static android.app.admin.DevicePolicyManager.EXTRA_PROVISIONING_DEVICE_AD
 public class WorkProfileManager extends Activity {
 
     private static final int REQUEST_PROVISION_MANAGED_PROFILE = 1;
+    private static final String TAG = "WorkProfileManager";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         provisionManagedProfile();
-
     }
 
     private void provisionManagedProfile() {
         Activity activity = this;
-        if (null == activity) {
-            return;
-        }
+
         Intent intent = new Intent(ACTION_PROVISION_MANAGED_PROFILE);
-        intent.putExtra(EXTRA_PROVISIONING_DEVICE_ADMIN_PACKAGE_NAME, activity.getApplicationContext().getPackageName());
-        ApplicationManager am = new ApplicationManager(this.getApplicationContext());
-        am.uninstallApplication("org.wso2.emm.agent");
+        intent.putExtra(EXTRA_PROVISIONING_DEVICE_ADMIN_PACKAGE_NAME,
+                activity.getApplicationContext().getPackageName());
+        // Once the provisioning is done, user is prompted to uninstall the agent in personal profile.
+        ApplicationManager applicationManager = new ApplicationManager(this.getApplicationContext());
+        applicationManager.uninstallApplication("org.wso2.emm.agent");
+
         if (intent.resolveActivity(activity.getPackageManager()) != null) {
             startActivityForResult(intent, REQUEST_PROVISION_MANAGED_PROFILE);
             activity.finish();
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.e(TAG,"Thread is interrupted");
             }
-            // Two toasts to increase the duration
             Toast.makeText(this,
-                    "Only Agent in Work Profile is needed after this step. You can uninstall Agent in Personal Profile.",
+                    "When the work-profile is created, you can uninstall Agent in Personal Profile.",
                     Toast.LENGTH_LONG).show();
-            Toast.makeText(this,
-                    "Only Agent in Work Profile is needed after this step. You can uninstall Agent in Personal Profile now.",
-                    Toast.LENGTH_LONG).show();
-            Toast.makeText(this,
-                    "Only Agent in Work Profile is needed after this step. You can uninstall Agent in Personal Profile now.",
-                    Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(activity, "Device provisioning is not enabled. Stopping.", Toast.LENGTH_SHORT).show();
         }
@@ -80,9 +75,6 @@ public class WorkProfileManager extends Activity {
         if (requestCode == REQUEST_PROVISION_MANAGED_PROFILE) {
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(this, "Provisioning done.", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, ServerDetails.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
             } else {
                 Toast.makeText(this, "Provisioning failed.", Toast.LENGTH_SHORT).show();
             }
@@ -90,5 +82,4 @@ public class WorkProfileManager extends Activity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 }

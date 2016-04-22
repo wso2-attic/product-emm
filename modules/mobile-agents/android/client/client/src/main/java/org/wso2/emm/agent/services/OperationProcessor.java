@@ -56,31 +56,12 @@ public class OperationProcessor {
 	private Context context;
 	private DevicePolicyManager devicePolicyManager;
 	private ComponentName cdmDeviceAdmin;
-	private ApplicationManager appList;
 	private Resources resources;
 	private ResultPayload resultBuilder;
-	private DeviceInfo deviceInfo;
-	private GPSTracker gps;
-	private NotificationDAO notificationDAO;
-    private NotificationManager notifyManager;
-    private int currentNotificationId;
-    private ApplicationManager applicationManager;
     private OperationManager operationManager;
-
 
 	private static final String TAG = "Operation Handler";
 
-	private static final String LOCATION_INFO_TAG_LONGITUDE = "longitude";
-	private static final String LOCATION_INFO_TAG_LATITUDE = "latitude";
-	private static final String APP_INFO_TAG_NAME = "name";
-	private static final String APP_INFO_TAG_PACKAGE = "package";
-	private static final String APP_INFO_TAG_VERSION = "version";
-	private static final int DEFAULT_PASSWORD_LENGTH = 0;
-	private static final int DEFAULT_VOLUME = 0;
-	private static final int DEFAULT_FLAG = 0;
-	private static final int DEFAULT_PASSWORD_MIN_LENGTH = 4;
-	private static final long DAY_MILLISECONDS_MULTIPLIER = 24 * 60 * 60 * 1000;
-    private static String[] AUTHORIZED_PINNING_APPS;
     private static String AGENT_PACKAGE_NAME;
 
 	public OperationProcessor(Context context) {
@@ -92,15 +73,14 @@ public class OperationProcessor {
 		this.appList = new ApplicationManager(context.getApplicationContext());
 		this.resultBuilder = new ResultPayload();
 		deviceInfo = new DeviceInfo(context.getApplicationContext());
-		gps = new GPSTracker(context.getApplicationContext());
 		notificationDAO = new NotificationDAO(context);
         AGENT_PACKAGE_NAME = context.getPackageName();
         AUTHORIZED_PINNING_APPS = new String[]{AGENT_PACKAGE_NAME};
         notifyManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         applicationManager = new ApplicationManager(context);
         /* Get matching OperationManager from the Factory */
-        OperationManagerFactory operationManagerFactory = new OperationManagerFactory(context);
-        operationManager = operationManagerFactory.getOperationManager(this);
+        OperationManagerFactory operationManagerFactory = new OperationManagerFactory(context,devicePolicyManager);
+        operationManager = operationManagerFactory.getOperationManager();
 
 	}
 
@@ -172,7 +152,7 @@ public class OperationProcessor {
 				operationManager.changeLockCode(operation);
 				break;
 			case Constants.Operation.POLICY_BUNDLE:
-				if(devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
+				if (devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
 					this.setPolicyBundle(operation);
 				}
 				break;
@@ -210,12 +190,7 @@ public class OperationProcessor {
 			case Constants.Operation.DISALLOW_INSTALL_APPS:
 				operationManager.handleUserRestriction(operation);
 			default:
-				if(applicationManager.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
-					CommonUtils.callSystemApp(context,operation.getCode(),
-							                    Boolean.toString(operation.isEnabled()), null);
-				} else {
-					Log.e(TAG, "Invalid operation code received");
-				}
+				operationManager.passOperationToSystemApp(operation);
 				break;
 		}
 	}

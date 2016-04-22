@@ -32,7 +32,7 @@ import android.util.Log;
 public class AlarmReceiver extends BroadcastReceiver {
 
 	private static final String TAG = AlarmReceiver.class.getName();
-/*
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (Constants.DEBUG_MODE_ENABLED) {
@@ -55,20 +55,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 				}
 			}
 			return null;
-		}
-	}
-*/
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		if (Constants.DEBUG_MODE_ENABLED) {
-			Log.d(TAG, "Recurring alarm; requesting alarm service");
-		}
-
-		MessageProcessor messageProcessor = new MessageProcessor(context);
-		try {
-			messageProcessor.getMessages();
-		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Failed to perform operation",e);
 		}
 	}
 }

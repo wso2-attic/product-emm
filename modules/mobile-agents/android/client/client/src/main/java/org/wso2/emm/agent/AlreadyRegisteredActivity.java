@@ -254,7 +254,9 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			loadHomeScreen();
 			return true;
 		}
-		return super.onKeyDown(keyCode, event);
+		else {
+			return super.onKeyDown(keyCode, event);
+		}
 	}
 
 	@Override

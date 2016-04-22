@@ -18,30 +18,53 @@
 
 package org.wso2.emm.agent.factory;
 
+import android.annotation.TargetApi;
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.os.Build;
 
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.services.OperationManager;
+import org.wso2.emm.agent.services.OperationManagerDeviceOwner;
 import org.wso2.emm.agent.services.OperationManagerOlderSdk;
 import org.wso2.emm.agent.services.OperationManagerWorkProfile;
-import org.wso2.emm.agent.services.OperationProcessor;
+import org.wso2.emm.agent.utils.Constants;
 
+/**
+ * This class produce the matching Operation Manager according to the Device Configurations.
+ */
 public class OperationManagerFactory {
-    private DeviceInfo info;
-    Context context;
 
-    public OperationManagerFactory(Context context){
+    private DeviceInfo info;
+    private Context context;
+    private DevicePolicyManager manager;
+
+    public OperationManagerFactory(Context context, DevicePolicyManager devicePolicyManager) {
         this.context = context;
         this.info = new DeviceInfo(context);
+        this.manager = devicePolicyManager;
     }
 
-    public OperationManager getOperationManager(OperationProcessor operationProcessor) {
-        if ((info.getSdkVersion() >= Build.VERSION_CODES.JELLY_BEAN) && (info.getSdkVersion() <= Build.VERSION_CODES.LOLLIPOP)) {
+    public OperationManager getOperationManager() {
+        if ((info.getSdkVersion() >= Build.VERSION_CODES.JELLY_BEAN) &&
+                (info.getSdkVersion() <= Build.VERSION_CODES.LOLLIPOP)) {
+            return new OperationManagerOlderSdk(context);
+        } else {
+            return getLollipopUpwardsOperationManager();
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private OperationManager getLollipopUpwardsOperationManager() {
+        if (manager.isProfileOwnerApp(Constants.PACKAGE_NAME)) {
+            return new OperationManagerWorkProfile(context);
+        }
+        else if (manager.isDeviceOwnerApp(Constants.SERVICE_PACKAGE_NAME)) {
+            return new OperationManagerDeviceOwner(context);
+        }
+        else {
             return new OperationManagerOlderSdk(context);
         }
-        else if ((info.getSdkVersion() >= Build.VERSION_CODES.LOLLIPOP))
-            return new OperationManagerWorkProfile(context);
-        return null;
     }
+
 }

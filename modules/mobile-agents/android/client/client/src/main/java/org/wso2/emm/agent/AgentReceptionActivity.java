@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -18,17 +18,19 @@
 
 package org.wso2.emm.agent;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 
 import org.wso2.emm.agent.api.DeviceState;
+import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.Response;
 
 public class AgentReceptionActivity extends Activity {
@@ -38,6 +40,7 @@ public class AgentReceptionActivity extends Activity {
     private DeviceState state;
     private static final int TAG_BTN_ENABLE_PROFILE = 0;
     private static final int TAG_BTN_SKIP_PROFILE = 2;
+    DevicePolicyManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,39 +48,43 @@ public class AgentReceptionActivity extends Activity {
         context = this.getApplicationContext();
         state = new DeviceState(context);
         Response androidForWorkCompatibility = state.evaluateAndroidForWorkCompatibility();
-        DevicePolicyManager manager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        manager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        boolean isDeviceActive = Preference.getBoolean(context, Constants.PreferenceFlag.DEVICE_ACTIVE);
+        if (isDeviceActive) {
+            skipToEnrollment();
+        }
         if (androidForWorkCompatibility.getCode()) {
-            if (manager.isProfileOwnerApp(getApplicationContext().getPackageName())) {
-                /* If the managed profile is already set up, we show the enrollment screen. */
-                skipToEnrollment();
-            } else {
-               displayProfileProvisionPromptScreen();
-            }
+            manageAndroidForWorkReceiption();
         } else {
             skipToEnrollment();
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void manageAndroidForWorkReceiption() {
+        if (manager.isProfileOwnerApp(getApplicationContext().getPackageName())) {
+                /* If the managed profile is already set up, we show the enrollment screen. */
+            skipToEnrollment();
+        } else {
+            displayProfileProvisionPromptScreen();
+        }
+    }
     private View.OnClickListener onClickListenerButtonClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             int iTag = (Integer) view.getTag();
 
             switch (iTag) {
-
-            case TAG_BTN_ENABLE_PROFILE:
-                startManagedProfileManager();
-                finish();
-                break;
-
-            case TAG_BTN_SKIP_PROFILE:
-                skipToEnrollment();
-                break;
-
-            default:
-                break;
+                case TAG_BTN_ENABLE_PROFILE:
+                    startManagedProfileManager();
+                    finish();
+                    break;
+                case TAG_BTN_SKIP_PROFILE:
+                    skipToEnrollment();
+                    break;
+                default:
+                    break;
             }
-
         }
     };
 

@@ -17,16 +17,10 @@
  */
 package org.wso2.emm.agent.services;
 
-import android.app.admin.DeviceAdminReceiver;
-import android.app.admin.DevicePolicyManager;
-import android.content.ComponentName;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
-
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,9 +28,7 @@ import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.utils.Constants;
-import org.wso2.emm.agent.utils.Preference;
-
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public class OperationManagerWorkProfile extends OperationManager {
@@ -55,6 +47,8 @@ public class OperationManagerWorkProfile extends OperationManager {
 
     @Override
     public void clearPassword(Operation operation) {
+        operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+        getResultBuilder().build(operation);
         Log.d(TAG, "Operation not supported.");
     }
 
@@ -136,6 +130,8 @@ public class OperationManagerWorkProfile extends OperationManager {
 
     @Override
     public void encryptStorage(Operation operation) throws AndroidAgentException {
+        operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+        getResultBuilder().build(operation);
         Log.d(TAG, "Already encrypted.");
     }
 
@@ -147,6 +143,8 @@ public class OperationManagerWorkProfile extends OperationManager {
 
     @Override
     public void changeLockCode(Operation operation) throws AndroidAgentException {
+        operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+        getResultBuilder().build(operation);
         Log.d(TAG, "Operation not supported.");
     }
 
@@ -164,13 +162,13 @@ public class OperationManagerWorkProfile extends OperationManager {
     }
 
     @Override
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void hideApp(Operation operation) throws AndroidAgentException {
         String packageName = null;
         try {
             JSONObject hideAppData = new JSONObject(operation.getPayLoad().toString());
             if (!hideAppData.isNull(getContextResources().getString(R.string.intent_extra_package))) {
-                packageName = (String) hideAppData
-                        .get(getContextResources().getString(R.string.intent_extra_package));
+                packageName = (String) hideAppData.get(getContextResources().getString(R.string.intent_extra_package));
             }
 
             operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
@@ -191,13 +189,13 @@ public class OperationManagerWorkProfile extends OperationManager {
     }
 
     @Override
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void unhideApp(Operation operation) throws AndroidAgentException {
         String packageName = null;
         try {
             JSONObject hideAppData = new JSONObject(operation.getPayLoad().toString());
             if (!hideAppData.isNull(getContextResources().getString(R.string.intent_extra_package))) {
-                packageName = (String) hideAppData
-                        .get(getContextResources().getString(R.string.intent_extra_package));
+                packageName = (String) hideAppData.get(getContextResources().getString(R.string.intent_extra_package));
             }
 
             operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
@@ -218,13 +216,13 @@ public class OperationManagerWorkProfile extends OperationManager {
     }
 
     @Override
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void blockUninstallByPackageName(Operation operation) throws AndroidAgentException {
         String packageName = null;
         try {
             JSONObject hideAppData = new JSONObject(operation.getPayLoad().toString());
             if (!hideAppData.isNull(getContextResources().getString(R.string.intent_extra_package))) {
-                packageName = (String) hideAppData
-                        .get(getContextResources().getString(R.string.intent_extra_package));
+                packageName = (String) hideAppData.get(getContextResources().getString(R.string.intent_extra_package));
             }
 
             operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
@@ -245,13 +243,14 @@ public class OperationManagerWorkProfile extends OperationManager {
     }
 
     @Override
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void setProfileName(Operation operation) throws AndroidAgentException {
         String profileName = null;
         try {
             JSONObject setProfileNameData = new JSONObject(operation.getPayLoad().toString());
             if (!setProfileNameData.isNull(getContextResources().getString(R.string.intent_extra_profile_name))) {
-                profileName = (String) setProfileNameData
-                        .get(getContextResources().getString(R.string.intent_extra_profile_name));
+                profileName = (String) setProfileNameData.get(getContextResources().getString(
+                        R.string.intent_extra_profile_name));
             }
 
             operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
@@ -272,6 +271,7 @@ public class OperationManagerWorkProfile extends OperationManager {
     }
 
     @Override
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void handleUserRestriction(Operation operation) {
         boolean isEnable = operation.isEnabled();
         String key = operation.getCode();
@@ -283,7 +283,7 @@ public class OperationManagerWorkProfile extends OperationManager {
                 Log.d(TAG, "Restriction added: " + key);
             }
         } else {
-            getDevicePolicyManager().clearUserRestriction(getCdmDeviceAdmin(),key);
+            getDevicePolicyManager().clearUserRestriction(getCdmDeviceAdmin(), key);
             if (Constants.DEBUG_MODE_ENABLED) {
                 Log.d(TAG, "Restriction cleared: " + key);
             }
@@ -291,22 +291,37 @@ public class OperationManagerWorkProfile extends OperationManager {
     }
 
     @Override
-    public void configureWorkProfile(Operation operation) throws AndroidAgentException{
+    public void configureWorkProfile(Operation operation) throws AndroidAgentException {
         String profileName;
-        String enableSystemApps;
-        String enableGooglePlayApps;
+        String systemAppsData;
+        String googlePlayAppsData;
         try {
             JSONObject profileData = new JSONObject(operation.getPayLoad().toString());
             if (!profileData.isNull(getContextResources().getString(R.string.intent_extra_profile_name))) {
-                profileName = (String) profileData.get(getContextResources().getString(R.string.intent_extra_profile_name));
+                profileName = (String) profileData.get(getContextResources().getString(
+                        R.string.intent_extra_profile_name));
+                changeProfileName(profileName);
             }
             if (!profileData.isNull(getContextResources().getString(R.string.intent_extra_enable_system_apps))) {
-                enableSystemApps = (String) profileData.get(getContextResources().getString(R.string.intent_extra_enable_system_apps));
+                // generate the System app list which are configured by user and received to agent as a single String
+                // with packages separated by Commas.
+                systemAppsData = (String) profileData.get(getContextResources().getString(
+                        R.string.intent_extra_enable_system_apps));
+                List<String> systemAppList = Arrays.asList(systemAppsData.split(getContextResources().getString(
+                        R.string.split_delimiter)));
+                for (String packageName : systemAppList) {
+                    enableSystemApp(packageName);
+                }
             }
             if (!profileData.isNull(getContextResources().getString(R.string.intent_extra_enable_google_play_apps))) {
-                enableGooglePlayApps = (String) profileData.get(getContextResources().getString(R.string.intent_extra_enable_google_play_apps));
+                googlePlayAppsData = (String) profileData.get(getContextResources().getString(
+                        R.string.intent_extra_enable_google_play_apps));
+                List<String> systemAppList = Arrays.asList(googlePlayAppsData.split(getContextResources().getString(
+                        R.string.split_delimiter)));
+                for (String packageName : systemAppList) {
+                    enableGooglePlayApps(packageName);
+                }
             }
-
 
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
@@ -316,14 +331,24 @@ public class OperationManagerWorkProfile extends OperationManager {
 
     }
 
-    private void setProfileName(String name){
-        getDevicePolicyManager().setProfileName(getCdmDeviceAdmin(),name);
+    @Override
+    public void passOperationToSystemApp(Operation operation) throws AndroidAgentException {
+        operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+        getResultBuilder().build(operation);
+        Log.d(TAG, "Operation not supported.");
     }
 
-    private void enableSystemApp(String packageName){
-        getDevicePolicyManager().enableSystemApp(getCdmDeviceAdmin(),packageName);
-
-
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void changeProfileName(String name) {
+        getDevicePolicyManager().setProfileName(getCdmDeviceAdmin(), name);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void enableSystemApp(String packageName) {
+        getDevicePolicyManager().enableSystemApp(getCdmDeviceAdmin(), packageName);
+    }
+
+    private void enableGooglePlayApps(String packageName) {
+        triggerGooglePlayApp(packageName);
+    }
 }

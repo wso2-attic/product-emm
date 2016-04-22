@@ -162,6 +162,11 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
     public Context getContext(){
         return context;
     }
+
+    /* Retrive applicationManager */
+    public ApplicationManager getApplicationManager() {
+        return applicationManager;
+    }
     /* End of methods used by child classes to access private variables in Parent Class */
 
     /**

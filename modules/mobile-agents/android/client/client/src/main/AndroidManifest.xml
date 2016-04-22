@@ -174,11 +174,6 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".services.managedProfileServices.AlreadyEnabledActivity"
-            android:label="@string/title_activity_notify"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name=".AgentReceptionActivity"
             android:label="WSO2 Agent">
         <intent-filter>

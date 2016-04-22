@@ -22,16 +22,11 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
-import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.ServerDetails;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.utils.Constants;
 
 /**
  * This activity is started after the provisioning is complete in {@link AgentDeviceAdminReceiver}.
@@ -41,21 +36,10 @@ public class EnableProfileActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (null == savedInstanceState) {
-            // Important: After the profile has been created, the MDM must enable it for corporate
-            // apps to become visible in the launcher.
-            //uninstallPersonalProfileAgent();
+        if (savedInstanceState == null) {
             enableProfile();
-            //disablePersonalAgent();
-            finish();
             startEnrollment();
         }
-
-    }
-
-    private void disablePersonalAgent(){
-        PackageManager pm = this.getPackageManager();
-        pm.setApplicationEnabledSetting("org.wso2.emm.agent",2,0);
     }
 
     private void enableProfile() {
@@ -63,51 +47,9 @@ public class EnableProfileActivity extends Activity {
                 (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         ComponentName componentName = AgentDeviceAdminReceiver.getComponentName(this);
         // This is the name for the newly created managed profile.
-        manager.setProfileName(componentName, "WSO2-EMM");
-        // Enable the profile here.
+        manager.setProfileName(componentName, Constants.TAG);
+        // Enable the profile.
         manager.setProfileEnabled(componentName);
-        setAppEnabled("com.google.android.GoogleCamera", true);
-
-    }
-
-    /**
-     * Enables or disables the specified app in this profile.
-     *
-     * @param packageName The package name of the target app.
-     * @param enabled     Pass true to enable the app.
-     */
-    public void setAppEnabled(String packageName, boolean enabled) {
-        PackageManager packageManager = this.getPackageManager();
-        DevicePolicyManager devicePolicyManager =
-                (DevicePolicyManager) this.getSystemService(Context.DEVICE_POLICY_SERVICE);
-        try {
-            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName,
-                    PackageManager.GET_UNINSTALLED_PACKAGES);
-            /* Here, we check the ApplicationInfo of the target app, and see if the flags have
-            ApplicationInfo.FLAG_INSTALLED turned on using bitwise operation. */
-            if (0 == (applicationInfo.flags & ApplicationInfo.FLAG_INSTALLED)) {
-                /* If the app is not installed in this profile, we can enable it by
-                DPM.enableSystemApp */
-                if (enabled) {
-                    devicePolicyManager.enableSystemApp(
-                            AgentDeviceAdminReceiver.getComponentName(this), packageName);
-
-                } else {
-                    // But we cannot disable the app since it is already disabled
-                    //Log.e(TAG, "Cannot disable this app: " + packageName);
-                    return;
-                }
-            } else {
-                // If the app is already installed, we can enable or disable it by
-                // DPM.setApplicationHidden
-                devicePolicyManager.setApplicationHidden(
-                        AgentDeviceAdminReceiver.getComponentName(this), packageName, !enabled);
-            }
-            //Toast.makeText(this, enabled ? packageName + " enabled" : packageName + " disabled",
-              //      Toast.LENGTH_SHORT).show();
-        } catch (PackageManager.NameNotFoundException e) {
-            //Log.e(TAG, "The app cannot be found: " + packageName, e);
-        }
     }
 
     private void startEnrollment(){
