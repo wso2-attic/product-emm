@@ -133,6 +133,7 @@ public class EMMSystemService extends IntentService {
 
                 Log.i(TAG, "Will now executing the command ..." + operationCode);
                 if (Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
+                    Log.i(TAG, "Will now executing the command..._____________________intent.getPackage()" + intent.getPackage());
                     doTask(operationCode);
                 }
 
@@ -158,6 +159,7 @@ public class EMMSystemService extends IntentService {
      * @param code - Operation object.
      */
     public void doTask(String code) {
+        Log.d(TAG, " should be hidden : ******* in setVisibility______"+appUri);
         switch (code) {
             case Constants.Operation.ENABLE_ADMIN:
                 startAdmin();
@@ -281,6 +283,9 @@ public class EMMSystemService extends IntentService {
                 break;
             case Constants.Operation.SET_SCREEN_CAPTURE_DISABLED:
                 SettingsManager.setScreenCaptureDisabled(restrictionCode);
+                break;
+            case Constants.Operation.APP_RESTRICTION:
+                SettingsManager.setVisibilityOfApp(appUri, true);
                 break;
             //Only With Android M.
             case Constants.Operation.SET_STATUS_BAR_DISABLED:

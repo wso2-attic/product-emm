@@ -354,24 +354,90 @@ validateStep["policy-profile"] = function () {
                 validationStatusArray.push(validationStatus);
             }
             if ($.inArray(androidOperationConstants["APPLICATION_OPERATION_CODE"], configuredOperations) != -1){
+                //if application restriction configured
                 operation = androidOperationConstants["APPLICATION_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
 
-                var whiteListEnabled = $("#white-list-enabled").is(":checked");
-                var whiteListStoreLoc = $("#app-store-location").val();
+                var appRestrictionType = $("#app-restriction-type").val();
 
-                if($("button.dropdown-toggle").text().trim() == "Black List" && $('table.black-list tbody tr').length > 0){
-                    continueToCheckNextInputs = true;
-                }
-                else if($("button.dropdown-toggle").text().trim() == "White List" && whiteListEnabled && whiteListStoreLoc){
-                    continueToCheckNextInputs = true;
-                }
-                else{
+                var restrictedApplicationsGridChildInputs = "div#restricted-applications .child-input";
+
+                if (!appRestrictionType) {
                     validationStatus = {
                         "error": true,
-                        "subErrorMsg": "Application list is not provided. You cannot proceed.",
+                        "subErrorMsg": "Applications restriction type is not provided.",
                         "erroneousFeature": operation
-                    }
+                    };
                     continueToCheckNextInputs = false;
+                }
+
+                if (continueToCheckNextInputs) {
+                    if ($(restrictedApplicationsGridChildInputs).length == 0) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Applications are not provided in application restriction list.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                    else {
+                        childInputCount = 0;
+                        childInputArray = [];
+                        emptyChildInputCount = 0;
+                        duplicatesExist = false;
+                        // looping through each child input
+                        $(restrictedApplicationsGridChildInputs).each(function () {
+                            childInputCount++;
+                            if (childInputCount % 2 == 0) {
+                                // if child input is of second column
+                                childInput = $(this).val();
+                                childInputArray.push(childInput);
+                                // updating emptyChildInputCount
+                                if (!childInput) {
+                                    // if child input field is empty
+                                    emptyChildInputCount++;
+                                }
+                            }
+                        });
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
+                                        break;
+                                    }
+                                }
+                                if (duplicatesExist) {
+                                    break;
+                                }
+                            }
+                        }
+                        // updating validationStatus
+                        if (emptyChildInputCount > 0) {
+                            // if empty child inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more package names of " +
+                                "applications are empty.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (duplicatesExist) {
+                            // if duplicate input is present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Duplicate values exist with " +
+                                "for package names.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+
+                    }
                 }
 
                 if(continueToCheckNextInputs){
@@ -1881,7 +1947,6 @@ stepForwardFrom["policy-naming-publish"] = function () {
     policy["description"] = $("#policy-description-input").val();
     //All data is collected. Policy can now be updated.
     savePolicy(policy, "/mdm-admin/policies/active-policy");
-    //appRestrictionInStoreByRole(policy);
 
 };
 stepForwardFrom["policy-naming"] = function () {
@@ -2069,31 +2134,6 @@ var showHideHelpText = function (addFormContainer) {
     }
 };
 
-function formatRepo(user) {
-    if (user.loading) {
-        return user.text;
-    }
-    if (!user.username) {
-        return;
-    }
-    var markup = '<div class="clearfix">' +
-                 '<div clas="col-sm-8">' +
-                 '<div class="clearfix">' +
-                 '<div class="col-sm-3">' + user.username + '</div>';
-    if (user.firstname) {
-        markup += '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + user.firstname + '</div>';
-    }
-    if (user.emailAddress) {
-        markup += '<div class="col-sm-2"><i class="fa fa-star"></i> ' + user.emailAddress + '</div></div>';
-    }
-    markup += '</div></div>';
-    return markup;
-}
-
-function formatRepoSelection(user) {
-    return user.username || user.text;
-}
-
 function promptErrorPolicyPlatform(errorMsg) {
     var mainErrorMsgWrapper = "#policy-platform-main-error-msg";
     var mainErrorMsg = mainErrorMsgWrapper + " span";
@@ -2169,45 +2209,7 @@ $(document).ready(function () {
             promptErrorPolicyPlatform("You need to configure IOS plugging in order to use ios related feature.");
         });
     }
-
-    $("#users-input").select2({
-        multiple: true,
-        tags: false,
-        ajax: {
-            url: window.location.origin + "/emm/api/invoker/execute/",
-            method: "POST",
-            dataType: 'json',
-            delay: 250,
-            id: function (user) {
-                return user.username;
-            },
-            data: function (params) {
-                var postData = {};
-                postData.actionMethod = "GET";
-                postData.actionUrl = "/mdm-admin/users/view-users?username=" + params.term;
-                postData.actionPayload = null;
-                return JSON.stringify(postData);
-            },
-            processResults: function (data, page) {
-                var newData = [];
-                $.each(data.responseContent, function (index, value) {
-                    value.id = value.username;
-                    newData.push(value);
-                });
-                return {
-                    results: newData
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (markup) {
-            return markup;
-        }, // let our custom formatter work
-        minimumInputLength: 1,
-        templateResult: formatRepo, // omitted for brevity, see the source of this page
-        templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-    });
-
+    
     $("#loading-content").remove();
     $(".policy-platform").removeClass("hidden");
     // Adding initial state of wizard-steps.
@@ -2335,155 +2337,6 @@ $(document).ready(function () {
                 );
             }
         }
-    });
-
-    $(advanceOperations).on("click", ".wr-input-control.switch", function (event) {
-        var i = 0;
-        $(".dropdown-menu li a").on("click", function(){
-            var selText = $(this).text();
-            $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
-            $("#app-list-add-widget").removeClass("hidden");
-            if(selText == "Black List"){
-                $("#searchable-container_black_list").removeClass("hidden");
-                $("#search-on-app-store").removeClass("hidden");
-                $("#white-list-options").addClass("hidden");
-                $("#white-list-enabled").removeAttr("checked");
-                $("#app-store-location").val("");
-            }
-            else if(selText == "White List"){
-                $("#searchable-container_black_list").addClass("hidden");
-                $("#search-on-app-store").addClass("hidden");
-                $("#white-list-options").removeClass("hidden");
-                $(".black-list > tbody").html("");
-
-            }
-
-            $("#application-add").unbind("click").on('click', function(){
-                var packageName;
-                var appDescription;
-                if($("#app-select").val()) {
-                    packageName = $("#app-select").val();
-                }
-                else {
-                    packageName = $("#packageName").val();
-                    appDescription = $("#appDescription").val();
-                }
-
-                if(packageName == "" | packageName == null){
-                    return;
-                }
-
-                var application_index = $('th:contains("Application")').index();
-                var has_duplicate = false;
-                if(selText == "Black List"){
-                    check_for_duplicates("black-list");
-                }
-
-
-                function check_for_duplicates (class_name){
-                    $("table."+class_name+" tr td:nth-child("+(application_index+1)+")").each(function () {
-                        if($(this).text() == $("#app-select").val()){
-                            alert("There is a duplicate entry for this application name. " +
-                                "Remove it first to create new entry");
-                            has_duplicate = true;
-                        }
-                    });
-                }
-
-                if(has_duplicate) {
-                    return;
-                }
-
-
-                if(selText == "Black List"){
-                    var new_table_row = "<tr>"+
-                        "<td class='operationDataKeys' data-key='application"+i+"'>"+packageName+"<br>"+appDescription+"</td>"+addDeleteButton()+"</tr>";
-                    $('#searchable-container_black_list > table > tbody').append(new_table_row);
-                    i++;
-                }
-
-                $("#app-select").select2("val", "");
-
-            });
-        });
-
-        $(".app-list").on('click','.row-delete',function(event) {
-            $(this).parent().parent().remove();
-        });
-
-        $("#app-select").select2({
-            ajax: {
-                url: "https://api.github.com/search/repositories",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        q: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-                    // parse the results into the format expected by Select2
-                    // since we are using custom formatting functions we do not need to
-                    // alter the remote JSON data, except to indicate that infinite
-                    // scrolling can be used
-                    params.page = params.page || 1;
-
-                    return {
-                        results: data.items,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; },
-            minimumInputLength: 1,
-            multiple: true,
-            templateResult: formatRepo,
-            templateSelection: formatRepoSelection
-        });
-
-        $("#app-select").on('select2:select', function (e) {
-            //clear the input box after a selection is made
-            $(this).val([]).trigger('change');
-            $(this).val([e.params.data.id]).trigger("change");
-            $("#userStore").prop("disabled", false);
-            $("#roles").prop("disabled", false);
-
-        });
-
-
-        function formatRepo (repo) {
-            if (repo.loading) return repo.text;
-
-            var markup = '<div class="clearfix">' +
-                '<div class="col-sm-10">' +
-                '<img src="' + repo.owner.avatar_url + '" style="max-width: 100%" />' +
-                '</div>' +
-                '<div clas="col-sm-1">' +
-                '<div class="clearfix">' +
-                '<div class="col-sm-6">' + repo.full_name + '</div>' +
-                '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + repo.forks_count + '</div>' +
-                '<div class="col-sm-2"><i class="fa fa-star"></i> ' + repo.stargazers_count + '</div>' +
-                '</div>';
-
-            //if (repo.description) {
-            //    markup += '<div>' + repo.description + '</div>';
-            //}
-
-            markup += '</div></div>';
-
-            return markup;
-        }
-
-        function formatRepoSelection (repo) {
-            return repo.full_name || repo.text;
-        }
-
-
     });
 
 

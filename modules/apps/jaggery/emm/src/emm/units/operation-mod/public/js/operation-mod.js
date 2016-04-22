@@ -635,9 +635,8 @@ var operationModule = function () {
                 break;
             case androidOperationConstants["APPLICATION_OPERATION_CODE"]:
                 payload = {
-                    "black_list": operationPayload["black_list"],
-                    "whiteListEnabled": operationPayload["whiteListEnabled"],
-                    "appStoreLocation": operationPayload["appStoreLocation"]
+                    "restrictionType": operationPayload["restriction-type"],
+                    "restrictedApplications": operationPayload["restricted-applications"]
                 };
                 break;
         }
@@ -755,19 +754,11 @@ var operationModule = function () {
                 break;
             case androidOperationConstants["APPLICATION_OPERATION_CODE"]:
                 payload = {
-                    "operation":{
-                        "black_list": [],
-                        "whiteListEnabled": operationData["whiteListEnabled"],
-                        "appStoreLocation": operationData["appStoreLocation"]
+                    "operation": {
+                        "restriction-type": operationData["restrictionType"],
+                        "restricted-applications": operationData["restrictedApplications"]
                     }
                 };
-
-                for(var key in operationData) {
-                    var item = operationData[key];
-                    if(key.indexOf("application") >= 0 ) {
-                        payload.operation.black_list.push(item);
-                    }
-                }
                 break;
             default:
                 // If the operation is neither of above, it is a command operation
@@ -1187,14 +1178,6 @@ var operationModule = function () {
                     /* trigger a change of value, so that if slidable panes exist,
                      make them slide-down or slide-up accordingly */
                     operationDataObj.trigger("change");
-                } else if (operationDataObj.is("button")) {
-                    if(value == "Black List "){
-                        $("#white-list-options").children().hide();
-                    }
-                    else{
-                        $("#app-list-add-widget").children().hide();
-                    }
-                    operationDataObj.text(value);
                 } else if (operationDataObj.hasClass("grouped-array-input")) {
                     // then value is complex
                     var i, childInput;

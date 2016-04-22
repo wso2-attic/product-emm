@@ -77,4 +77,13 @@ public class SettingsManager {
         }
     }
 
+    public static void setVisibilityOfApp(String packageName, boolean visibility) {
+        Log.d(TAG, "packageName :" + packageName + " should be hidden:" + visibility+ "in setVisibility");
+        Log.d(TAG, "Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP----"+(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Log.d(TAG, "packageName :" + packageName + " should be hidden:" + visibility);
+            EMMSystemService.devicePolicyManager.setApplicationHidden(EMMSystemService.cdmDeviceAdmin, packageName, !visibility);
+        }
+    }
+
 }
