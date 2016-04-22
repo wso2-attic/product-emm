@@ -101,6 +101,7 @@ var operationModule = function () {
         "NOTIFICATION_OPERATION_CODE": "NOTIFICATION",
         "CALENDAR_SUBSCRIPTION_OPERATION_CODE": "CALENDAR_SUBSCRIPTION",
         "APN_OPERATION_CODE": "APN",
+        "DOMAIN_CODE": "DOMAIN",
         "CELLULAR_OPERATION_CODE": "CELLULAR"
     };
 
@@ -340,7 +341,7 @@ var operationModule = function () {
 
     privateMethods.generateIOSOperationPayload = function (operationCode, operationData, deviceList) {
         var payload;
-        var operationType;
+        var operationType;alert(iosOperationConstants["DOMAIN_CODE"]);alert(operationCode);
         switch (operationCode) {
             case iosOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
@@ -560,6 +561,15 @@ var operationModule = function () {
                 payload = {
                     "operation": {
                         "apnConfigurations": operationData["apnConfigurations"]
+                    }
+                };
+                break;
+            case iosOperationConstants["DOMAIN_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "emailDomains": operationData["emailDomains"],
+                        "webDomains": operationData["webDomains"]
                     }
                 };
                 break;
@@ -1103,6 +1113,7 @@ var operationModule = function () {
                                 // set key-value-pair
                                 keyValuePairJson[childInputKey] = childInputValue;
                             } else {
+                                keyValuePairJson = {};
                                 // set key-value-pair
                                 keyValuePairJson[childInputKey] = childInputValue;
                                 // push to value
@@ -1114,6 +1125,7 @@ var operationModule = function () {
                 operationData[key] = value;
             }
         );
+
         switch (platformType) {
             case platformTypeConstants["ANDROID"]:
                 payload = privateMethods.generateAndroidOperationPayload(operationCode, operationData, deviceList);

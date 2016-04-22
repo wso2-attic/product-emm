@@ -149,6 +149,7 @@ public final class Constants {
         public static final String WIPE_DATA_OPERATION = "wipe_data";
         public static final String INSTALL_APPS_OPERATION = "install_apps";
         public static final String NOTIFICATION_OPERATION = "notification";
+        public static final String UPGRADE_FIRMWARE_OPERATION = "upgrade-firmware";
         public static final String WIFI_OPERATION = "wifi";
         public static final String ENCRYPT_OPERATION = "encrypt";
         public static final String CHANGE_LOCK_OPERATION = "change_lock";
