@@ -96,6 +96,7 @@
             </meta-data>
         </receiver>
         <receiver android:name=".services.AlarmReceiver" />
+        <receiver android:name=".events.EventAlarmReceiver" />
         <receiver
             android:name=".services.DeviceStartupIntentReceiver"
             android:enabled="true"
@@ -111,6 +112,15 @@
                   android:exported="false">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".events.listeners.ApplicationStateListener">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_DATA_CLEARED" />
+                <data android:scheme="package"/>
             </intent-filter>
         </receiver>
         <service

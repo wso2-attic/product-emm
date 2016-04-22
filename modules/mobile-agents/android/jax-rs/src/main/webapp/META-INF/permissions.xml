@@ -348,5 +348,11 @@
         <url>/configuration</url>
         <method>PUT</method>
     </Permission>
+    <Permission>
+        <name>Event Addition</name>
+        <path>/device-mgt/emm-admin/events/add</path>
+        <url>/events</url>
+        <method>POST</method>
+    </Permission>
 
 </PermissionConfiguration>

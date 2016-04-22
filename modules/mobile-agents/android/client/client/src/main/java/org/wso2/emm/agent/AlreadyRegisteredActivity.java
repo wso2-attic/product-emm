@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.beans.ServerConfig;
+import org.wso2.emm.agent.events.EventRegistry;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
@@ -94,13 +95,14 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		if (extras != null) {
 			if (extras.containsKey(getResources().getString(R.string.intent_extra_fresh_reg_flag))) {
-				freshRegFlag = extras.getBoolean(
-						getResources().getString(R.string.intent_extra_fresh_reg_flag));
+				freshRegFlag = extras.getBoolean(getResources().getString(R.string.intent_extra_fresh_reg_flag));
 			}
 		}
-
-		String registrationId =
-				Preference.getString(context, resources.getString(R.string.shared_pref_regId));
+		if(!EventRegistry.eventListeningStarted) {
+			EventRegistry registerEvent = new EventRegistry(this);
+			registerEvent.register();
+		}
+		String registrationId = Preference.getString(context, resources.getString(R.string.shared_pref_regId));
 
 		if (registrationId != null && !registrationId.isEmpty()) {
 			regId = registrationId;
@@ -109,9 +111,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		}
 
 		if (freshRegFlag) {
-			Preference.putString(context, resources.getString(R.string.shared_pref_registered),
-					resources.getString(R.string.shared_pref_reg_success));
-
+			Preference.putString(context, resources.getString(R.string.shared_pref_registered), resources.getString(R.string.shared_pref_reg_success));
 			if (!devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
 				startDeviceAdminPrompt(cdmDeviceAdmin);
 			}
@@ -124,7 +124,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		btnUnregister.setTag(TAG_BTN_UNREGISTER);
 		btnUnregister.setOnClickListener(onClickListenerButtonClicked);
 		unregisterLayout = (RelativeLayout) findViewById(R.id.unregisterLayout);
-		if(Constants.HIDE_UNREGISTER_BUTTON){
+		if (Constants.HIDE_UNREGISTER_BUTTON) {
 			unregisterLayout.setVisibility(View.GONE);
 		}
 	}
