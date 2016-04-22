@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -322,13 +322,13 @@ public class PolicyComplianceChecker {
         String profileName;
         String systemAppsData;
         String googlePlayAppsData;
-        Boolean checkCompliance = false;
         try {
             JSONObject profileData = new JSONObject(operation.getPayLoad().toString());
             if (!profileData.isNull(resources.getString(R.string.intent_extra_profile_name))) {
                 profileName = (String) profileData.get(resources.getString(
                         R.string.intent_extra_profile_name));
                     //yet there is no method is given to get the current profile name.
+                    //add a method to test whether profile name is set correctly once introduced.
             }
             if (!profileData.isNull(resources.getString(R.string.intent_extra_enable_system_apps))) {
                 // generate the System app list which are configured by user and received to agent as a single String
@@ -357,13 +357,11 @@ public class PolicyComplianceChecker {
                         return policy;
                     }
                 }
-
             }
         } catch (JSONException e) {
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
         policy.setCompliance(true);
-        policy.setMessage(resources.getString(R.string.error_work_profile_policy));
         return policy;
     }
 }

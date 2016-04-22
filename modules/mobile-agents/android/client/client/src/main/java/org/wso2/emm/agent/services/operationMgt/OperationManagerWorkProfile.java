@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.emm.agent.services;
+package org.wso2.emm.agent.services.operationMgt;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.Operation;
+import org.wso2.emm.agent.services.operationMgt.OperationManager;
 import org.wso2.emm.agent.utils.Constants;
 import java.util.Arrays;
 import java.util.List;
@@ -293,7 +294,9 @@ public class OperationManagerWorkProfile extends OperationManager {
     @Override
     public void configureWorkProfile(Operation operation) throws AndroidAgentException {
         String profileName;
-        String systemAppsData;
+        String enableSystemAppsData;
+        String hideSystemAppsData;
+        String unhideSystemAppsData;
         String googlePlayAppsData;
         try {
             JSONObject profileData = new JSONObject(operation.getPayLoad().toString());
@@ -305,9 +308,31 @@ public class OperationManagerWorkProfile extends OperationManager {
             if (!profileData.isNull(getContextResources().getString(R.string.intent_extra_enable_system_apps))) {
                 // generate the System app list which are configured by user and received to agent as a single String
                 // with packages separated by Commas.
-                systemAppsData = (String) profileData.get(getContextResources().getString(
+                enableSystemAppsData = (String) profileData.get(getContextResources().getString(
                         R.string.intent_extra_enable_system_apps));
-                List<String> systemAppList = Arrays.asList(systemAppsData.split(getContextResources().getString(
+                List<String> systemAppList = Arrays.asList(enableSystemAppsData.split(getContextResources().getString(
+                        R.string.split_delimiter)));
+                for (String packageName : systemAppList) {
+                    enableSystemApp(packageName);
+                }
+            }
+            if (!profileData.isNull(getContextResources().getString(R.string.intent_extra_hide_system_apps))) {
+                // generate the System app list which are configured by user and received to agent as a single String
+                // with packages separated by Commas.
+                hideSystemAppsData = (String) profileData.get(getContextResources().getString(
+                        R.string.intent_extra_hide_system_apps));
+                List<String> systemAppList = Arrays.asList(hideSystemAppsData.split(getContextResources().getString(
+                        R.string.split_delimiter)));
+                for (String packageName : systemAppList) {
+                    hideSystemApp(packageName);
+                }
+            }
+            if (!profileData.isNull(getContextResources().getString(R.string.intent_extra_unhide_system_apps))) {
+                // generate the System app list which are configured by user and received to agent as a single String
+                // with packages separated by Commas.
+                unhideSystemAppsData = (String) profileData.get(getContextResources().getString(
+                        R.string.intent_extra_unhide_system_apps));
+                List<String> systemAppList = Arrays.asList(unhideSystemAppsData.split(getContextResources().getString(
                         R.string.split_delimiter)));
                 for (String packageName : systemAppList) {
                     enableSystemApp(packageName);
@@ -347,6 +372,13 @@ public class OperationManagerWorkProfile extends OperationManager {
     private void enableSystemApp(String packageName) {
         getDevicePolicyManager().enableSystemApp(getCdmDeviceAdmin(), packageName);
     }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void hideSystemApp(String packageName ) {
+        getDevicePolicyManager().setApplicationHidden(getCdmDeviceAdmin(), packageName, true);
+    }
+
+
 
     private void enableGooglePlayApps(String packageName) {
         triggerGooglePlayApp(packageName);

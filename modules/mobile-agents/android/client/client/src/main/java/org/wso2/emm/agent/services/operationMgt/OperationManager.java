@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.emm.agent.services;
+package org.wso2.emm.agent.services.operationMgt;
 
 import android.annotation.TargetApi;
 import android.app.NotificationManager;
@@ -54,10 +54,14 @@ import org.wso2.emm.agent.beans.ComplianceFeature;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.beans.Notification;
 import org.wso2.emm.agent.beans.Operation;
-import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.dao.NotificationDAO;
-import org.wso2.emm.agent.interfaces.VersionBasedOperations;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
+import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.services.DeviceInfoPayload;
+import org.wso2.emm.agent.services.NotificationReceiver;
+import org.wso2.emm.agent.services.PolicyComplianceChecker;
+import org.wso2.emm.agent.services.PolicyOperationsMapper;
+import org.wso2.emm.agent.services.ResultPayload;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;

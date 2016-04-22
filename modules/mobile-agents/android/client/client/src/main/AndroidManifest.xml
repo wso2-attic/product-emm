@@ -165,7 +165,7 @@
         </activity>
         <!-- Managed Profile Manifest items -->
         <activity
-            android:name=".services.managedProfileServices.EnableProfileActivity"
+            android:name=".services.EnableProfileActivity"
             android:label="@string/app_name">
         </activity>
         <activity

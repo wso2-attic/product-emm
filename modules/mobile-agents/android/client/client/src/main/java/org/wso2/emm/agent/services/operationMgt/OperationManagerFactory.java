@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.emm.agent.factory;
+package org.wso2.emm.agent.services.operationMgt;
 
 import android.annotation.TargetApi;
 import android.app.admin.DevicePolicyManager;
@@ -24,10 +24,10 @@ import android.content.Context;
 import android.os.Build;
 
 import org.wso2.emm.agent.api.DeviceInfo;
-import org.wso2.emm.agent.services.OperationManager;
-import org.wso2.emm.agent.services.OperationManagerDeviceOwner;
-import org.wso2.emm.agent.services.OperationManagerOlderSdk;
-import org.wso2.emm.agent.services.OperationManagerWorkProfile;
+import org.wso2.emm.agent.services.operationMgt.OperationManager;
+import org.wso2.emm.agent.services.operationMgt.OperationManagerDeviceOwner;
+import org.wso2.emm.agent.services.operationMgt.OperationManagerOlderSdk;
+import org.wso2.emm.agent.services.operationMgt.OperationManagerWorkProfile;
 import org.wso2.emm.agent.utils.Constants;
 
 /**

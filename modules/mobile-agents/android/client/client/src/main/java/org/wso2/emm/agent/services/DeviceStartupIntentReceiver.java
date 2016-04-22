@@ -19,11 +19,7 @@ package org.wso2.emm.agent.services;
 
 import java.util.Locale;
 
-import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
-import org.wso2.emm.agent.beans.*;
-import org.wso2.emm.agent.beans.Operation;
-import org.wso2.emm.agent.factory.OperationManagerFactory;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
@@ -34,7 +30,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.SystemClock;
-import android.util.Log;
 
 /**
  * Broadcast receiver for device boot action used to start agent local

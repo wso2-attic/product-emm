@@ -745,7 +745,6 @@ var operationModule = function () {
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "DISALLOW_CROSS_PROFILE_COPY_PASTE": operationData["workProfilePolicyAllowCopyPaste"],
                         "profileName": operationData["workProfilePolicyProfileName"],
                         "enableSystemApps": operationData["workProfilePolicyEnableSystemApps"],
                         "hideSystemApps": operationData["workProfilePolicyHideSystemApps"],

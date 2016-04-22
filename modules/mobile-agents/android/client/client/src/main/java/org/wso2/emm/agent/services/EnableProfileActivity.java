@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.emm.agent.services.managedProfileServices;
+package org.wso2.emm.agent.services;
 
 import android.app.Activity;
 import android.app.admin.DevicePolicyManager;

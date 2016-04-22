@@ -34,16 +34,16 @@ import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.Response;
 
 public class AgentReceptionActivity extends Activity {
+
     private Context context;
-    private Button btnEnableMngProfile;
-    private Button btnSkipProfile;
-    private DeviceState state;
     private static final int TAG_BTN_ENABLE_PROFILE = 0;
     private static final int TAG_BTN_SKIP_PROFILE = 2;
     DevicePolicyManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        DeviceState state;
+
         super.onCreate(savedInstanceState);
         context = this.getApplicationContext();
         state = new DeviceState(context);
@@ -109,6 +109,9 @@ public class AgentReceptionActivity extends Activity {
      * Display Manage-profile provisioning prompt
      */
     private void displayProfileProvisionPromptScreen(){
+        Button btnEnableMngProfile;
+        Button btnSkipProfile;
+
         setContentView(R.layout.activity_enable_work_profile);
         btnEnableMngProfile = (Button) findViewById(R.id.btnSetupWorkProfile);
         btnEnableMngProfile.setTag(TAG_BTN_ENABLE_PROFILE);
@@ -118,5 +121,4 @@ public class AgentReceptionActivity extends Activity {
         btnSkipProfile.setTag(TAG_BTN_SKIP_PROFILE);
         btnSkipProfile.setOnClickListener(onClickListenerButtonClicked);
     }
-
 }

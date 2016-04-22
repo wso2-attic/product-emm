@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.emm.agent.interfaces;
+package org.wso2.emm.agent.services.operationMgt;
 
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.beans.Operation;

@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.utils.Constants;
 
 import static android.app.admin.DevicePolicyManager.ACTION_PROVISION_MANAGED_PROFILE;
 import static android.app.admin.DevicePolicyManager.EXTRA_PROVISIONING_DEVICE_ADMIN_PACKAGE_NAME;
@@ -51,7 +52,7 @@ public class WorkProfileManager extends Activity {
                 activity.getApplicationContext().getPackageName());
         // Once the provisioning is done, user is prompted to uninstall the agent in personal profile.
         ApplicationManager applicationManager = new ApplicationManager(this.getApplicationContext());
-        applicationManager.uninstallApplication("org.wso2.emm.agent");
+        applicationManager.uninstallApplication(Constants.PACKAGE_NAME);
 
         if (intent.resolveActivity(activity.getPackageManager()) != null) {
             startActivityForResult(intent, REQUEST_PROVISION_MANAGED_PROFILE);

@@ -15,34 +15,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.emm.agent.services;
+package org.wso2.emm.agent.services.operationMgt;
 
 import java.io.IOException;
 import java.util.List;
 
 import org.wso2.emm.agent.AndroidAgentException;
-import org.wso2.emm.agent.LockActivity;
 import org.wso2.emm.agent.R;
-import org.wso2.emm.agent.ServerDetails;
 import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.DeviceInfo;
-import org.wso2.emm.agent.api.GPSTracker;
 import org.wso2.emm.agent.dao.NotificationDAO;
-import org.wso2.emm.agent.factory.OperationManagerFactory;
+import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.services.PolicyOperationsMapper;
+import org.wso2.emm.agent.services.ResultPayload;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
-import org.wso2.emm.agent.utils.CommonUtils;
 
-import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
-import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -62,22 +56,13 @@ public class OperationProcessor {
 
 	private static final String TAG = "Operation Handler";
 
-    private static String AGENT_PACKAGE_NAME;
-
 	public OperationProcessor(Context context) {
 		this.context = context;
 		this.resources = context.getResources();
 		this.devicePolicyManager =
 				(DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-		this.cdmDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
-		this.appList = new ApplicationManager(context.getApplicationContext());
 		this.resultBuilder = new ResultPayload();
-		deviceInfo = new DeviceInfo(context.getApplicationContext());
-		notificationDAO = new NotificationDAO(context);
-        AGENT_PACKAGE_NAME = context.getPackageName();
-        AUTHORIZED_PINNING_APPS = new String[]{AGENT_PACKAGE_NAME};
-        notifyManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        applicationManager = new ApplicationManager(context);
+		this.cdmDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
         /* Get matching OperationManager from the Factory */
         OperationManagerFactory operationManagerFactory = new OperationManagerFactory(context,devicePolicyManager);
         operationManager = operationManagerFactory.getOperationManager();

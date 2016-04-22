@@ -143,7 +143,8 @@
     <string name="intent_extra_profile_name">profileName</string>
     <string name="intent_extra_enable_system_apps">enableSystemApps</string>
     <string name="intent_extra_enable_google_play_apps">enableGooglePlayApps</string>
-
+    <string name="intent_extra_hide_system_apps">hideSystemApps</string>
+    <string name="intent_extra_unhide_system_apps">unhideSystemApps</string>
     <!-- POLICY CONFIGURATION FIELDS -->
     <string name="policy_password_max_failed_attempts">maxFailedAttempts</string>
     <string name="policy_password_min_length">minLength</string>
