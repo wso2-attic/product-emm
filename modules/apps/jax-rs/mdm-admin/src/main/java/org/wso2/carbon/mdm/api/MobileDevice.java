@@ -21,6 +21,7 @@ package org.wso2.carbon.mdm.api;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
@@ -143,8 +144,12 @@ public class MobileDevice {
     @Path("user/{user}/{tenantDomain}")
     public List<Device> getDeviceByUser(@PathParam("user") String user,
                                         @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
-        List<Device> devices;
         try {
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        privilegedCarbonContext.setTenantDomain(tenantDomain);
+        List<Device> devices;
+
             devices = MDMAPIUtils.getDeviceManagementService().getDevicesOfUser(user);
             if (devices == null) {
                 Response.status(Response.Status.NOT_FOUND);
@@ -154,6 +159,8 @@ public class MobileDevice {
             String msg = "Error occurred while fetching the devices list of given user.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
+        } finally {
+            PrivilegedCarbonContext.endTenantFlow();
         }
     }
 
