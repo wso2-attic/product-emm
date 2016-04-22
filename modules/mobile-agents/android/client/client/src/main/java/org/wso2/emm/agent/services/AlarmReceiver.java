@@ -17,6 +17,7 @@
  */
 package org.wso2.emm.agent.services;
 
+import android.os.AsyncTask;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.utils.Constants;
 
@@ -37,12 +38,23 @@ public class AlarmReceiver extends BroadcastReceiver {
 		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.d(TAG, "Recurring alarm; requesting alarm service.");
 		}
+		OperationTask operationTask = new OperationTask();
+		operationTask.execute(context);
+	}
 
-		MessageProcessor messageProcessor = new MessageProcessor(context);
-		try {
-			messageProcessor.getMessages();
-		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Failed to perform operation", e);
+	private class OperationTask extends AsyncTask<Context, Void, Void> {
+
+		@Override
+		protected Void doInBackground(Context... params) {
+			if (params != null) {
+				MessageProcessor messageProcessor = new MessageProcessor(params[0]);
+				try {
+					messageProcessor.getMessages();
+				} catch (AndroidAgentException e) {
+					Log.e(TAG, "Failed to perform operation", e);
+				}
+			}
+			return null;
 		}
 	}
 

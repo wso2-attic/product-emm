@@ -72,51 +72,51 @@ public class GPSTracker extends Service implements LocationListener {
 	 * Function to get device location using GPS.
 	 * @return - Device location coordinates.
 	 */
-	private Location getLocation() {
-		try {
-			boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-			boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+	private void getLocation() {
+		if (locationManager != null) {
+			try {
+				boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+				boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-			if (isNetworkEnabled) {
-				locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-				                                       MIN_TIME_BW_UPDATES,
-				                                       MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-				if (locationManager != null) {
-					location = locationManager.getLastKnownLocation(
-									                          LocationManager.NETWORK_PROVIDER);
-					if (location != null) {
-						latitude = location.getLatitude();
-						longitude = location.getLongitude();
-					}
-				}
-			}
-
-			if (isGpsEnabled) {
-				if (location == null) {
-					locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+				if (isNetworkEnabled) {
+					locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
 					                                       MIN_TIME_BW_UPDATES,
-					                                       MIN_DISTANCE_CHANGE_FOR_UPDATES,
-					                                       this);
+					                                       MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 					if (locationManager != null) {
 						location = locationManager.getLastKnownLocation(
-									                          LocationManager.GPS_PROVIDER);
+								LocationManager.NETWORK_PROVIDER);
 						if (location != null) {
 							latitude = location.getLatitude();
 							longitude = location.getLongitude();
 						}
 					}
 				}
-			}
-			setReversGeoCoordinates();
-		} catch (RuntimeException e) {
-			Log.e(TAG, "No network/GPS Switched off.", e);
-		} catch (InterruptedException e) {
-			Log.e(TAG, "Error occured while calling reverse geo coordination API.", e);
-		} catch (ExecutionException e) {
-			Log.e(TAG, "Error occured while calling reverse geo coordination API.", e);
-		}
 
-		return location;
+				if (isGpsEnabled) {
+					if (location == null) {
+						locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+						                                       MIN_TIME_BW_UPDATES,
+						                                       MIN_DISTANCE_CHANGE_FOR_UPDATES,
+						                                       this);
+						if (locationManager != null) {
+							location = locationManager.getLastKnownLocation(
+									LocationManager.GPS_PROVIDER);
+							if (location != null) {
+								latitude = location.getLatitude();
+								longitude = location.getLongitude();
+							}
+						}
+					}
+				}
+				setReversGeoCoordinates();
+			} catch (RuntimeException e) {
+				Log.e(TAG, "No network/GPS Switched off.", e);
+			} catch (InterruptedException e) {
+				Log.e(TAG, "Error occured while calling reverse geo coordination API.", e);
+			} catch (ExecutionException e) {
+				Log.e(TAG, "Error occured while calling reverse geo coordination API.", e);
+			}
+		}
 	}
 
 	/**
@@ -250,25 +250,44 @@ public class GPSTracker extends Service implements LocationListener {
 		@Override
 		protected void onPostExecute(Map<String, String> result) {
 
-			String responseCode = result.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_STATUS);
-			if (Constants.Status.SUCCESSFUL.equals(responseCode)) {
-				String resultPayload = result.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_BODY);
-				try {
-					JSONObject data = new JSONObject(resultPayload);
-					JSONObject address = data.getJSONObject(Constants.Location.ADDRESS);
-					city = address.getString(Constants.Location.CITY);
-					country = address.getString(Constants.Location.COUNTRY);
-					street1 = address.getString(Constants.Location.STREET1);
-					street2 = address.getString(Constants.Location.STREET2);
-					state = address.getString(Constants.Location.STATE);
-					zip = address.getString(Constants.Location.ZIP);
+			if (result != null) {
+				String responseCode = result.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_STATUS);
+				if (Constants.Status.SUCCESSFUL.equals(responseCode)) {
+					String resultPayload = result.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_BODY);
+					try {
+						JSONObject data = new JSONObject(resultPayload);
+						if (!data.isNull(Constants.Location.ADDRESS)) {
+							JSONObject address = data.getJSONObject(Constants.Location.ADDRESS);
+							if (!address.isNull(Constants.Location.CITY)) {
+								city = address.getString(Constants.Location.CITY);
+							} else if (!address.isNull(Constants.Location.TOWN)) {
+								city = address.getString(Constants.Location.TOWN);
+							}
 
-					if (Constants.DEBUG_MODE_ENABLED) {
-						Log.d(TAG, "Address: " + street1 + ", " + street2 + ", " + city + ", " + state + ", " + zip +
-						           ", " + country);
+							if (!address.isNull(Constants.Location.COUNTRY)) {
+								country = address.getString(Constants.Location.COUNTRY);
+							}
+							if (!address.isNull(Constants.Location.STREET1)) {
+								street1 = address.getString(Constants.Location.STREET1);
+							}
+							if (!address.isNull(Constants.Location.STREET2)) {
+								street2 = address.getString(Constants.Location.STREET2);
+							}
+							if (!address.isNull(Constants.Location.STATE)) {
+								state = address.getString(Constants.Location.STATE);
+							}
+							if (!address.isNull(Constants.Location.ZIP)) {
+								zip = address.getString(Constants.Location.ZIP);
+							}
+						}
+
+						if (Constants.DEBUG_MODE_ENABLED) {
+							Log.d(TAG, "Address: " + street1 + ", " + street2 + ", " + city + ", " + state + ", " + zip +
+							           ", " + country);
+						}
+					} catch (JSONException e) {
+						Log.e(TAG, "Error occurred while parsing the result payload", e);
 					}
-				} catch (JSONException e) {
-					Log.e(TAG, "Error occurred while parsing the result payload", e);
 				}
 			}
 		}

@@ -197,11 +197,11 @@
           class="org.wso2.carbon.mdm.mobileservices.windows.services.wstep.util.MessageHandler"/>
     <bean id="jsonProvider" class="org.wso2.carbon.mdm.mobileservices.windows.common.util.GsonMessageBodyHandler"/>
     <bean id="configurationServiceBean"
-          class="org.wso2.carbon.mdm.mobileservices.windows.services.configurationmgtservice.ConfigurationMgtService"/>
+          class="org.wso2.carbon.mdm.mobileservices.windows.services.ConfigurationMgtService"/>
     <bean id="policyServiceBean"
-          class="org.wso2.carbon.mdm.mobileservices.windows.services.policymgtservice.PolicyMgtService"/>
+          class="org.wso2.carbon.mdm.mobileservices.windows.services.PolicyMgtService"/>
     <bean id="errorHandler" class="org.wso2.carbon.mdm.mobileservices.windows.common.util.ErrorHandler"/>
     <bean id="deviceMgtServiceBean"
-          class="org.wso2.carbon.mdm.mobileservices.windows.services.devicemgtservice.DeviceManagementService"/>
+          class="org.wso2.carbon.mdm.mobileservices.windows.services.DeviceManagementService"/>
 </beans>
 

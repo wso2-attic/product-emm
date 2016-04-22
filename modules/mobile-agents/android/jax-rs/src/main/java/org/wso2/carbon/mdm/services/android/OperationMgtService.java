@@ -504,39 +504,6 @@ public class OperationMgtService {
     }
 
     @POST
-    @Path("upgrade-firmware")
-    public Response upgradeFirmware(@HeaderParam(ACCEPT) String acceptHeader,
-                               List<String> deviceIDs) {
-
-        if (log.isDebugEnabled()) {
-            log.debug("Invoking Android upgrade-firmware device operation");
-        }
-
-        MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
-        Message message = new Message();
-
-        try {
-            CommandOperation operation = new CommandOperation();
-            operation.setCode(AndroidConstants.OperationCodes.UPGRADE_FIRMWARE);
-            operation.setType(Operation.Type.COMMAND);
-            return AndroidAPIUtils.getOperationResponse(deviceIDs, operation, message,
-                    responseMediaType);
-        } catch (OperationManagementException e) {
-            String errorMessage = "Issue in retrieving operation management service instance";
-            message = Message.responseMessage(errorMessage).
-                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
-            log.error(errorMessage, e);
-            throw new AndroidOperationException(message, responseMediaType);
-        } catch (DeviceManagementException e) {
-            String errorMessage = "Issue in retrieving device management service instance";
-            message = Message.responseMessage(errorMessage).
-                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
-            log.error(errorMessage, e);
-            throw new AndroidOperationException(message, responseMediaType);
-        }
-    }
-
-    @POST
     @Path("mute")
     public Response muteDevice(@HeaderParam(ACCEPT) String acceptHeader,
                                List<String> deviceIDs) {
@@ -686,6 +653,49 @@ public class OperationMgtService {
             return AndroidAPIUtils.getOperationResponse(blacklistApplicationsBeanWrapper.getDeviceIDs(),
                     operation, message, responseMediaType);
 
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            log.error(errorMessage, e);
+            throw new AndroidOperationException(message, responseMediaType);
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Issue in retrieving device management service instance";
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            log.error(errorMessage, e);
+            throw new AndroidOperationException(message, responseMediaType);
+        }
+    }
+
+    @POST
+    @Path("upgrade-firmware")
+    public Response upgradeFirmware(@HeaderParam(ACCEPT) String acceptHeader,
+                                    UpgradeFirmwareBeanWrapper upgradeFirmwareBeanWrapper) {
+
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking Android upgrade-firmware device operation");
+        }
+
+        MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
+        Message message = new Message();
+
+        try {
+            UpgradeFirmware upgradeFirmware = upgradeFirmwareBeanWrapper.getOperation();
+
+            if (upgradeFirmware == null) {
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the upgrade firmware operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new upgrade firmware instance");
+            }
+
+            ProfileOperation operation = new ProfileOperation();
+            operation.setCode(AndroidConstants.OperationCodes.UPGRADE_FIRMWARE);
+            operation.setType(Operation.Type.PROFILE);
+            operation.setPayLoad(upgradeFirmware.toJSON());
+            return AndroidAPIUtils.getOperationResponse(upgradeFirmwareBeanWrapper.getDeviceIDs(),
+                                                        operation, message, responseMediaType);
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";
             message = Message.responseMessage(errorMessage).

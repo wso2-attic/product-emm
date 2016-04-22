@@ -26,6 +26,12 @@
     },
     "deviceIDs": []
   },
+  "upgrade-firmware" : {
+      "operation": {
+        "schedule": "schedule"
+      },
+      "deviceIDs": []
+    },
   "wifi" : {
     "operation": {
       "ssid": "ssid",

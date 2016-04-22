@@ -173,6 +173,20 @@
     </Permission>
 
     <Permission>
+        <name>View device</name>
+        <path>/device-mgt/emm-admin/devices/view</path>
+        <url>/devices/users/*</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
+        <name>View device</name>
+        <path>/device-mgt/emm-admin/devices/view</path>
+        <url>/devices/roles/*</url>
+        <method>GET</method>
+    </Permission>
+
+    <Permission>
         <name>List devices</name>
         <path>/device-mgt/emm-admin/devices/list</path>
         <url>/devices/count</url>
@@ -862,4 +876,35 @@
         <scope>emm_admin</scope>
     </Permission>
     <!-- End of Certificate related APIs -->
+
+    <!-- Dashboard related APIs -->
+    <!--<Permission>-->
+        <!--<name>Get non-compliant device count</name>-->
+        <!--<path>/device-mgt/emm-admin/dashboard/non-compliant-device-count/Get</path>-->
+        <!--<url>/dashboard/non-compliant</url>-->
+        <!--<method>GET</method>-->
+        <!--<scope>emm_admin</scope>-->
+    <!--</Permission>-->
+    <!--<Permission>-->
+        <!--<name>get un-monitored device count</name>-->
+        <!--<path>/device-mgt/emm-admin/dashboard/un-monitored-device-count/Get</path>-->
+        <!--<url>/dashboard/un-monitored</url>-->
+        <!--<method>GET</method>-->
+        <!--<scope>emm_admin</scope>-->
+    <!--</Permission>-->
+    <Permission>
+        <name>get overview of device counts</name>
+        <path>/device-mgt/emm-admin/dashboard/device-overview</path>
+        <url>/dashboard/device-overview</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get vulnerable device counts</name>
+        <path>/device-mgt/emm-admin/dashboard/potential-vulnerabilities</path>
+        <url>/dashboard/potential-vulnerabilities</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <!-- End of Dashboard related APIs -->
 </PermissionConfiguration>

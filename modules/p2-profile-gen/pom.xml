@@ -138,6 +138,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.devicemgt:org.wso2.carbon.email.sender.feature:${carbon.device.mgt.version}
                                 </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.analytics.dashboard.feature:${carbon.device.mgt.version}
+                                </featureArtifactDef>
                                 <!-- End of Device Management Features -->
 
                                 <!-- Mobile Device Management Features -->
@@ -415,10 +418,10 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.mediation:org.wso2.carbon.mediation.ui.feature:${carbon.mediation.version}
                                 </featureArtifactDef>
-				<featureArtifactDef>
+                                <featureArtifactDef>
                                     org.wso2.carbon.mediation:org.wso2.carbon.relay.server.feature:${carbon.mediation.version}
                                 </featureArtifactDef>
-				<!-- End of Mediation Features -->
+                                <!-- End of Mediation Features -->
 
                                 <!-- App Manager features-->
 
@@ -433,6 +436,10 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mdm.wso2emm.feature:${appmgt.feature.version}
                                 </featureArtifactDef>
+
+                                <!--featureArtifactDef>
+                                    org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mdm.restconnector.feature:${appmgt.feature.version}
+                                </featureArtifactDef-->
 
                                 <featureArtifactDef>
                                     org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mdm.wso2mdm.feature:${appmgt.feature.version}
@@ -480,6 +487,12 @@
                                 <featureArtifactDef>
                                     caramel:caramel.feature:${caramel.version}
                                 </featureArtifactDef>
+                                <!--featureArtifactDef>
+                                    org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mdm.osgiconnector.feature:${appmgt.feature.version}
+                                </featureArtifactDef-->
+                                <!--featureArtifactDef>
+                                    org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.internalconnector.mdm.wso2mdm.feature:${appmgt.feature.version}
+                                </featureArtifactDef-->
 
                             </featureArtifacts>
                         </configuration>
@@ -584,6 +597,10 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.email.sender.feature.group</id>
+                                    <version>${carbon.device.mgt.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.device.mgt.analytics.dashboard.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
                                 <!-- End of Device Management Features -->
@@ -948,10 +965,18 @@
                                     <id>org.wso2.carbon.appmgt.mdm.wso2emm.feature.group</id>
                                     <version>${appmgt.feature.version}</version>
                                 </feature>
+                                <!--feature>
+                                    <id>org.wso2.carbon.appmgt.mdm.restconnector.feature.group</id>
+                                    <version>${appmgt.feature.version}</version>
+                                </feature-->
+                                <!--feature>
+                                    org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.internalconnector.mdm.wso2mdm.feature:${appmgt.feature.version}
+                                    <version>${appmgt.feature.version}</version>
+                                </feature-->
                                 <feature>
                                     <id>org.wso2.carbon.appmgt.mdm.wso2mdm.feature.group</id>
                                     <version>${appmgt.feature.version}</version>
-                                </feature>
+                                </feature>git
                                 <feature>
                                     <id>org.wso2.carbon.appmgt.mobile.feature.group</id>
                                     <version>${appmgt.feature.version}</version>
@@ -1005,6 +1030,17 @@
                                     <id>org.wso2.carbon.core.common.feature.group</id>
                                     <version>${carbon.kernel.version}</version>
                                 </feature>
+
+                                <!--feature>
+                                    <id>org.wso2.carbon.appmgt.mdm.osgiconnector.feature.group</id>
+                                    <version>${appmgt.feature.version}</version>
+                                </feature-->
+
+                                <!--feature>
+                                    <id>org.wso2.carbon.appmgt.internalconnector.mdm.wso2mdm.feature.group</id>
+                                    <version>${appmgt.feature.version}</version>
+                                </feature-->
+
                                 <!--<feature>-->
                                 <!--<id>org.wso2.carbon.core.server.feature.group</id>-->
                                 <!--<version>${carbon.kernel.version}</version>-->
@@ -1073,6 +1109,10 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.device.mgt.oauth.extensions.feature.group</id>
+                                    <version>${carbon.device.mgt.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.device.mgt.analytics.dashboard.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
                                 <!-- End of Device Management Features -->
@@ -1451,6 +1491,10 @@
                                     <id>org.wso2.carbon.appmgt.mdm.wso2emm.feature.group</id>
                                     <version>${appmgt.feature.version}</version>
                                 </feature>
+                                <!--feature>
+                                    <id>org.wso2.carbon.appmgt.mdm.restconnector.feature.group</id>
+                                    <version>${appmgt.feature.version}</version>
+                                </feature-->
                                 <feature>
                                     <id>org.wso2.carbon.appmgt.mdm.wso2mdm.feature.group</id>
                                     <version>${appmgt.feature.version}</version>
@@ -1507,6 +1551,14 @@
                                     <id>org.wso2.carbon.core.common.feature.group</id>
                                     <version>${carbon.kernel.version}</version>
                                 </feature>
+                                <!--feature>
+                                    <id>org.wso2.carbon.appmgt.mdm.osgiconnector.feature.group</id>
+                                    <version>${appmgt.feature.version}</version>
+                                </feature-->
+                                <!--feature>
+                                    <id>org.wso2.carbon.appmgt.internalconnector.mdm.wso2mdm.feature.group</id>
+                                    <version>${appmgt.feature.version}</version>
+                                </feature-->
                             </features>
                         </configuration>
                     </execution>

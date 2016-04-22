@@ -80,7 +80,8 @@ var iosOperationConstants = {
     "APN_OPERATION": "apn",
     "APN_OPERATION_CODE": "APN",
     "CELLULAR_OPERATION": "cellular",
-    "CELLULAR_OPERATION_CODE": "CELLULAR"
+    "CELLULAR_OPERATION_CODE": "CELLULAR",
+    "DOMAIN": "DOMAIN"
 };
 
 /**
@@ -1251,6 +1252,154 @@ validateStep["policy-profile"] = function () {
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
             }
+
+            // Validating Domains
+            if ($.inArray(iosOperationConstants["DOMAIN"], configuredOperations) != -1) {
+                // if DOMAIN is configured
+                operation = iosOperationConstants["DOMAIN"];
+
+                continueToCheckNextInputs = true;
+
+                var airplayCredentialsGridChildInputs = "div#unmarked-email-domains .child-input";
+                var airplayDestinationsGridChildInputs = "div#safari-web-domains .child-input";
+                if ($(airplayCredentialsGridChildInputs).length == 0 &&
+                    $(airplayDestinationsGridChildInputs).length == 0) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Manage Domains have zero configurations attached.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
+
+                if (continueToCheckNextInputs) {
+                    if ($(airplayCredentialsGridChildInputs).length > 0) {
+                        childInputCount = 0;
+                        childInputArray = [];
+                        emptyChildInputCount = 0;
+                        duplicatesExist = false;
+                        // looping through each child input
+                        $(airplayCredentialsGridChildInputs).each(function () {
+                            childInputCount++;
+                            if (childInputCount % 2 == 1) {
+                                // if child input is of first column
+                                childInput = $(this).val();
+                                childInputArray.push(childInput);
+                                // updating emptyChildInputCount
+                                if (!childInput) {
+                                    // if child input field is empty
+                                    emptyChildInputCount++;
+                                }
+                            }
+                        });
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
+                                        break;
+                                    }
+                                }
+                                if (duplicatesExist) {
+                                    break;
+                                }
+                            }
+                        }
+                        // updating validationStatus
+                        if (emptyChildInputCount > 0) {
+                            // if empty child inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more email domains of " +
+                                "unmarked email domains are empty.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (duplicatesExist) {
+                            // if duplicate input is present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Duplicate values exist with " +
+                                "email domains of unmarked email domains.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+                    }
+                }
+
+                if (continueToCheckNextInputs) {
+                    if ($(airplayDestinationsGridChildInputs).length > 0) {
+                        childInputCount = 0;
+                        childInputArray = [];
+                        emptyChildInputCount = 0;
+                        duplicatesExist = false;
+                        // looping through each child input
+                        $(airplayDestinationsGridChildInputs).each(function () {
+                            childInputCount++;
+                            if (childInputCount % 2 == 1) {
+                                // if child input is of first column
+                                childInput = $(this).val();
+                                childInputArray.push(childInput);
+                                // updating emptyChildInputCount
+                                if (!childInput) {
+                                    // if child input field is empty
+                                    emptyChildInputCount++;
+                                }
+                            }
+                        });
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
+                                        break;
+                                    }
+                                }
+                                if (duplicatesExist) {
+                                    break;
+                                }
+                            }
+                        }
+                        // updating validationStatus
+                        if (emptyChildInputCount > 0) {
+                            // if empty child inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more managed safari web domains of " +
+                                "unmarked email domains are empty.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (duplicatesExist) {
+                            // if duplicate input is present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Duplicate values exist with " +
+                                "managed safari web domains of unmarked email domains.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+                    }
+                }
+
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+
+                validationStatusArray.push(validationStatus);
+            }
+
             // Validating LDAP
             if ($.inArray(iosOperationConstants["LDAP_OPERATION_CODE"], configuredOperations) != -1) {
                 // if LDAP is configured

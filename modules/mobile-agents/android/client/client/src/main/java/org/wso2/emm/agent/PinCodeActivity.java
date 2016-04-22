@@ -169,15 +169,9 @@ public class PinCodeActivity extends Activity {
 		alertDialog =
 				CommonDialogUtils
 						.getAlertDialogWithTwoButtonAndEditView(PinCodeActivity.this,
-                        getResources()
-                                .getString(
-                                        R.string.title_head_confirm_pin),
-                        getResources()
-                                .getString(
-                                        R.string.button_ok),
-                        getResources()
-                                .getString(
-                                        R.string.button_cancel),
+                        getResources().getString(R.string.title_head_confirm_pin),
+                        getResources().getString(R.string.button_ok),
+                        getResources().getString(R.string.button_cancel),
                         dialogClickListener,
                         dialogClickListener,
                         evInput);

@@ -50,7 +50,7 @@ function hidePopup() {
  */
 function getSelectedUsernames() {
     var usernameList = [];
-    var userList = $("#user-grid").find('> tbody > tr');
+    var userList = $("#user-grid").dataTable().fnGetNodes();
     userList.each(function () {
         if ($(this).hasClass('DTTT_selected')) {
             usernameList.push($(this).attr('data-username'));

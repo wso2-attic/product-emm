@@ -21,17 +21,22 @@ package org.wso2.carbon.mdm.api;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
+import org.wso2.carbon.mdm.api.util.MDMAppConstants;
 import org.wso2.carbon.mdm.api.util.ResponsePayload;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Device related operations
@@ -70,7 +75,7 @@ public class MobileDevice {
                 return service.getAllDevices(paginationRequest);
             }
 
-            List<Device> allDevices = null;
+            List<Device> allDevices;
             if ((type != null) && !type.isEmpty()) {
                 allDevices = service.getAllDevices(type);
             } else if ((user != null) && !user.isEmpty()) {
@@ -139,8 +144,12 @@ public class MobileDevice {
     @Path("user/{user}/{tenantDomain}")
     public List<Device> getDeviceByUser(@PathParam("user") String user,
                                         @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
-        List<Device> devices;
         try {
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        privilegedCarbonContext.setTenantDomain(tenantDomain);
+        List<Device> devices;
+
             devices = MDMAPIUtils.getDeviceManagementService().getDevicesOfUser(user);
             if (devices == null) {
                 Response.status(Response.Status.NOT_FOUND);
@@ -148,6 +157,46 @@ public class MobileDevice {
             return devices;
         } catch (DeviceManagementException e) {
             String msg = "Error occurred while fetching the devices list of given user.";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        } finally {
+            PrivilegedCarbonContext.endTenantFlow();
+        }
+    }
+
+	/**
+     * Will return device list for user list or role list
+     *
+     * @param types Type list which for devices to be retrieved. ex: user list or role list
+     * @param typeName Type name which for devices to be retrieved ex: user or role
+     * @param tenantDomain Tenant domain
+     * @return Device list which retrieved for user set or role set
+     * @throws MDMAPIException
+     */
+    @GET
+    @Path("{typeName}/{tenantDomain}")
+    public List<Device> getDevicesOfTypes(@QueryParam("types") List<String> types, @PathParam("typeName") String typeName,
+                                          @PathParam("tenantDomain") String tenantDomain) throws MDMAPIException {
+        List<Device> devicesOfType;
+        Set<Device> devicesOfTypes = new HashSet<>();
+        try {
+            for(String type : types){
+                if(MDMAppConstants.USERS.equals(typeName)) {
+                    devicesOfType = MDMAPIUtils.getDeviceManagementService().getDevicesOfUser(type);
+                    devicesOfTypes.addAll(devicesOfType);
+                }
+                else if(MDMAppConstants.ROLES.equals(typeName)) {
+                    devicesOfType = MDMAPIUtils.getDeviceManagementService().getAllDevicesOfRole(type);
+                    devicesOfTypes.addAll(devicesOfType);
+                }
+            }
+
+            if (devicesOfTypes.isEmpty()) {
+                Response.status(Response.Status.NOT_FOUND);
+            }
+            return new ArrayList<>(devicesOfTypes);
+        } catch (DeviceManagementException e) {
+            String msg = "Error occurred while fetching the devices list for users.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
