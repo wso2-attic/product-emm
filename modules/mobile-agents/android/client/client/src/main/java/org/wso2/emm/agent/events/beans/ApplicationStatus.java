@@ -15,26 +15,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.emm.agent.beans;
+
+package org.wso2.emm.agent.events.beans;
 
 /**
- * Represents application data.
+ * Represents application statues.
  */
-public class Application {
+public class ApplicationStatus {
 
     private String packageName;
-    private int pid;
-    private int pss;
-    private int uss;
-    private int sharedDirty;
-    private int cpu;
+    private String state;
 
-    public int getCpu() {
-        return cpu;
+    public String getState() {
+        return state;
     }
 
-    public void setCpu(int cpu) {
-        this.cpu = cpu;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getPackageName() {
@@ -43,38 +40,6 @@ public class Application {
 
     public void setPackageName(String packageName) {
         this.packageName = packageName;
-    }
-
-    public int getPid() {
-        return pid;
-    }
-
-    public void setPid(int pid) {
-        this.pid = pid;
-    }
-
-    public int getPss() {
-        return pss;
-    }
-
-    public void setPss(int pss) {
-        this.pss = pss;
-    }
-
-    public int getUss() {
-        return uss;
-    }
-
-    public void setUss(int uss) {
-        this.uss = uss;
-    }
-
-    public int getSharedDirty() {
-        return sharedDirty;
-    }
-
-    public void setSharedDirty(int sharedDirty) {
-        this.sharedDirty = sharedDirty;
     }
 
 }

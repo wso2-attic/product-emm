@@ -24,6 +24,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.telephony.PhoneStateListener;
+import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.util.Log;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -79,7 +80,8 @@ public class DeviceNetworkStatus extends PhoneStateListener {
     }
 
     public boolean isConnectedMobile() {
-        if (info.isConnected() && info.getType() == ConnectivityManager.TYPE_MOBILE) {
+        info = getNetworkInfo(this.context);
+        if (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_MOBILE) {
             return true;
         }
         return false;
@@ -97,40 +99,52 @@ public class DeviceNetworkStatus extends PhoneStateListener {
      * @return String representing network details.
      * @throws AndroidAgentException
      */
-    public List<Device.Property> getNetworkStatus() throws AndroidAgentException {
-        List<Device.Property> properties = new ArrayList<>();
-        Device.Property property = new Device.Property();
-        property.setName(Constants.Device.CONNECTION_TYPE);
-        property.setValue(info.getTypeName());
-        properties.add(property);
+    public String getNetworkStatus() throws AndroidAgentException {
+        info = getNetworkInfo(this.context);
+        String payload = null;
+        if(info != null) {
+            List<Device.Property> properties = new ArrayList<>();
+            Device.Property property = new Device.Property();
+            property.setName(Constants.Device.CONNECTION_TYPE);
+            property.setValue(info.getTypeName());
+            properties.add(property);
 
-        if ((info.isConnected())) {
-            if (info.getType() == ConnectivityManager.TYPE_MOBILE) {
-                property = new Device.Property();
-                property.setName(Constants.Device.MOBILE_CONNECTION_TYPE);
-                property.setValue(info.getSubtypeName());
-                properties.add(property);
+            if ((info.isConnected())) {
+                if (info.getType() == ConnectivityManager.TYPE_MOBILE) {
+                    property = new Device.Property();
+                    property.setName(Constants.Device.MOBILE_CONNECTION_TYPE);
+                    property.setValue(info.getSubtypeName());
+                    properties.add(property);
+                }
+                if (info.getType() == ConnectivityManager.TYPE_WIFI) {
+                    property = new Device.Property();
+                    property.setName(Constants.Device.WIFI_SSID);
+                    // NetworkInfo API of Android seem to add extra "" to SSID, therefore escaping it.
+                    property.setValue(String.valueOf(getWifiSSID()).replaceAll("\"", ""));
+                    properties.add(property);
+
+                    property = new Device.Property();
+                    property.setName(Constants.Device.WIFI_SIGNAL_STRENGTH);
+                    property.setValue(String.valueOf(getWifiSignalStrength()));
+                    properties.add(property);
+
+                }
             }
-            if (info.getType() == ConnectivityManager.TYPE_WIFI) {
-                property = new Device.Property();
-                property.setName(Constants.Device.WIFI_SSID);
-                // NetworkInfo API of Android seem to add extra "" to SSID, therefore escaping it.
-                property.setValue(String.valueOf(getWifiSSID()).replaceAll("\"", ""));
-                properties.add(property);
+            property = new Device.Property();
+            property.setName(Constants.Device.MOBILE_SIGNAL_STRENGTH);
+            property.setValue(String.valueOf(getCellSignalStrength()));
+            properties.add(property);
 
-                property = new Device.Property();
-                property.setName(Constants.Device.WIFI_SIGNAL_STRENGTH);
-                property.setValue(String.valueOf(getWifiSignalStrength()));
-                properties.add(property);
-
+            try {
+                payload = mapper.writeValueAsString(properties);
+            } catch (JsonProcessingException e) {
+                String errorMsg = "Error occurred while parsing " +
+                                  "network property property object to json.";
+                Log.e(TAG, errorMsg, e);
+                throw new AndroidAgentException(errorMsg, e);
             }
         }
-        property = new Device.Property();
-        property.setName(Constants.Device.MOBILE_SIGNAL_STRENGTH);
-        property.setValue(String.valueOf(getCellSignalStrength()));
-        properties.add(property);
-
-        return properties;
+        return payload;
     }
 
 

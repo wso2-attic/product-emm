@@ -202,19 +202,13 @@ public class DeviceInfoPayload {
             telephonyManager.listen(deviceNetworkStatus, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
         }
 
-        String networkStatusPayload;
-        try {
-            networkStatusPayload = mapper.writeValueAsString(deviceNetworkStatus.getNetworkStatus());
-        } catch (JsonProcessingException e) {
-            String errorMsg = "Error occurred while parsing property network info object to json.";
-            Log.e(TAG, errorMsg, e);
-            throw new AndroidAgentException(errorMsg, e);
+        String network = deviceNetworkStatus.getNetworkStatus();
+        if(network != null) {
+            property = new Device.Property();
+            property.setName(Constants.Device.NETWORK_INFO);
+            property.setValue(deviceNetworkStatus.getNetworkStatus());
+            deviceInfoProperties.add(property);
         }
-
-        property = new Device.Property();
-        property.setName(Constants.Device.NETWORK_INFO);
-        property.setValue(networkStatusPayload);
-        deviceInfoProperties.add(property);
 
         RuntimeInfo runtimeInfo = new RuntimeInfo(context);
         String cpuInfoPayload;

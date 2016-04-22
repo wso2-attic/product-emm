@@ -34,7 +34,6 @@ import android.widget.Toast;
 
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.api.DeviceState;
-import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.Response;
