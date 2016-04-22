@@ -45,6 +45,15 @@
             <span id="airplay-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="airplay-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('domain', this)">
+            <span class="wr-hidden-operations-icon fw-stack">
+                <i class="fw fw-mail fw-stack-2x"></i>
+            </span>
+            Manage Domains
+            <span id="domain-configured" class="has-configured status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="domain-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="domain-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('ldap', this)">
             <span class="wr-hidden-operations-icon fw-stack">
                 <i class="fw fw-ldap fw-stack-2x"></i>
@@ -1481,6 +1490,149 @@
             </div>
         </div>
         <!-- End of AirPlay -->
+
+        <!-- Domains -->
+        <div class="wr-hidden-operation" data-operation="domain">
+            <div class="panel panel-default operation-data" data-operation="domain" data-operation-code="DOMAIN">
+                <div id="domain-heading" class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        Manage Domains
+                        <label id="domain-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#domain-body">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr/>
+                        <div class="panel-title-description">
+                            This payload defines web domains that are under an enterprise’s management.
+                        </div>
+                    </h2>
+                </div>
+                <div id="domain-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="domain-body">
+
+                    <div id="DOMAIN-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="unmarked-email-domains">
+                            Unmarked Email Domains
+                            <span class="helper" title="If present, sets passwords for known AirPlay destinations.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            <a href="#unmarked-email-domains-grid" class="grid-input-add" data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                </span>
+                                &nbsp;
+                                Add Unmarked Email Domains
+                            </a>
+                        </label>
+                        <div id="unmarked-email-domains" class="operationDataKeys grouped-array-input one-column-input-array" data-key="emailDomains" data-column-count="1">
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                <tr>
+                                    <th>No:</th>
+                                    <th>Email Domain</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody data-add-form-container="#unmarked-email-domains-grid">
+                                <tr data-help-text="add-form">
+                                    <td colspan="4">
+                                        No entries added yet .
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#unmarked-email-domains-grid">
+                                <tr data-add-form-element="clone">
+                                    <td data-title="No:">
+                                        <span class="index"></span>
+                                    </td>
+                                    <td data-title="Email Domain">
+                                        <input type="text" class="form-control grid-input-text" data-child-key="emailDomain" maxlength="100" placeholder="[ Requires Unmarked Email Domain ]" />
+                                    </td>
+                                    <td>
+                                    <span class="list-group-item-actions">
+                                        <a href="#unmarked-email-domains-grid" class="grid-input-remove" data-click-event="remove-form">
+                                            <span class="fw-stack helper" title="Remove Entry">
+                                                <i class="fw fw-ring fw-stack-2x"></i>
+                                                <i class="fw fw-delete fw-stack-1x"></i>
+                                            </span>
+                                        </a>
+                                    </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="safari-web-domains">
+                            Managed Safari Web Domains
+                            <br>
+                            <a href="#safari-web-domains-grid" class="grid-input-add" data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                </span>
+                                &nbsp;
+                                Add Managed Safari Web Domains
+                            </a>
+                        </label>
+                        <div id="safari-web-domains" class="operationDataKeys grouped-array-input one-column-input-array" data-key="webDomains" data-column-count="1">
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                <tr>
+                                    <th>No:</th>
+                                    <th>Safari Web Domain</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody data-add-form-container="#safari-web-domains-grid">
+                                <tr data-help-text="add-form">
+                                    <td colspan="3">
+                                        No entries added yet .
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#safari-web-domains-grid">
+                                <tr data-add-form-element="clone">
+                                    <td data-title="No:">
+                                        <span class="index"></span>
+                                    </td>
+                                    <td data-title="Safari Web Domain">
+                                        <input type="text" class="form-control grid-input-text" data-child-key="webDomain" maxlength="100" placeholder="[ Requires Safari Web Domain ]" />
+                                    </td>
+                                    <td>
+                                        <span class="list-group-item-actions">
+                                            <a href="#safari-web-domains-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                <span class="fw-stack helper" title="Remove Entry">
+                                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                                    <i class="fw fw-delete fw-stack-1x"></i>
+                                                </span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- End of Domains -->
 
         <!-- LDAP -->
         <div class="wr-hidden-operation" data-operation="ldap">

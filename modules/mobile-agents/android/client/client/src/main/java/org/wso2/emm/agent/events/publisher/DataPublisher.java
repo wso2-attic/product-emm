@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -15,23 +15,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-buildscript {
-    repositories {
-        jcenter()
-    }
 
+package org.wso2.emm.agent.events.publisher;
 
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.2.3'
-    }
-}
+import org.wso2.emm.agent.events.beans.EventPayload;
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.2.3'
-}
-
-allprojects {
-    repositories {
-        jcenter()
-    }
+/**
+ * When data needs to be published, it can be done by implementing this interface.
+ */
+public interface DataPublisher {
+    void publish(EventPayload eventPayload);
 }

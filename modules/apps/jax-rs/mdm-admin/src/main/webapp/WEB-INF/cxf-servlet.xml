@@ -143,6 +143,16 @@
             <ref bean="errorHandler"/>
         </jaxrs:providers>
     </jaxrs:server>
+
+    <jaxrs:server id="dashboardService" address="/dashboard">
+        <jaxrs:serviceBeans>
+            <ref bean="dashboardServiceBean"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+            <ref bean="errorHandler"/>
+        </jaxrs:providers>
+    </jaxrs:server>
     <!--
     <jaxrs:server id="authenticationService" address="/authentication">
         <jaxrs:serviceBeans>
@@ -153,7 +163,7 @@
             <ref bean="errorHandler"/>
         </jaxrs:providers>
     </jaxrs:server>
--->
+    -->
     <bean id="operationServiceBean" class="org.wso2.carbon.mdm.api.Operation"/>
     <bean id="deviceServiceBean" class="org.wso2.carbon.mdm.api.MobileDevice"/>
     <bean id="userServiceBean" class="org.wso2.carbon.mdm.api.User"/>
@@ -164,14 +174,15 @@
     <bean id="licenseServiceBean" class="org.wso2.carbon.mdm.api.License"/>
     <bean id="certificateServiceBean" class="org.wso2.carbon.mdm.api.Certificate"/>
 
-
     <bean id="informationServiceBean" class="org.wso2.carbon.mdm.api.DeviceInformation"/>
     <bean id="searchingServiceBean" class="org.wso2.carbon.mdm.api.DeviceSearch"/>
+    <bean id="dashboardServiceBean" class="org.wso2.carbon.mdm.api.Dashboard"/>
     <!--
     <bean id="authenticationServiceBean" class="org.wso2.carbon.mdm.api.Authentication"/>
     -->
     <bean id="policyServiceBean" class="org.wso2.carbon.mdm.api.Policy"/>
     <bean id="profileServiceBean" class="org.wso2.carbon.mdm.api.Profile"/>
+
     <bean id="jsonProvider" class="org.wso2.mdm.common.GsonMessageBodyHandler"/>
     <bean id="errorHandler" class="org.wso2.carbon.mdm.api.common.ErrorHandler"/>
 

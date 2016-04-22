@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.beans.ServerConfig;
+import org.wso2.emm.agent.events.EventRegistry;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
@@ -94,11 +95,13 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		if (extras != null) {
 			if (extras.containsKey(getResources().getString(R.string.intent_extra_fresh_reg_flag))) {
-				freshRegFlag = extras.getBoolean(
-						getResources().getString(R.string.intent_extra_fresh_reg_flag));
+				freshRegFlag = extras.getBoolean(getResources().getString(R.string.intent_extra_fresh_reg_flag));
 			}
 		}
-
+		if(!EventRegistry.eventListeningStarted) {
+			EventRegistry registerEvent = new EventRegistry(this);
+			registerEvent.register();
+		}
 		String registrationId = Preference.getString(context, Constants.PreferenceFlag.REG_ID);
 
 		if (registrationId != null && !registrationId.isEmpty()) {
@@ -125,7 +128,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		btnUnregister.setTag(TAG_BTN_UNREGISTER);
 		btnUnregister.setOnClickListener(onClickListenerButtonClicked);
 		unregisterLayout = (RelativeLayout) findViewById(R.id.unregisterLayout);
-		if(Constants.HIDE_UNREGISTER_BUTTON){
+		if (Constants.HIDE_UNREGISTER_BUTTON) {
 			unregisterLayout.setVisibility(View.GONE);
 		}
 	}

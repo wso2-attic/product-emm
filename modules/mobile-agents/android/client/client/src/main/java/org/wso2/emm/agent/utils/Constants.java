@@ -68,6 +68,7 @@ public class Constants {
 	public static final String GOOGLE_PLAY_APP_URI = "market://details?id=";
 	public static final String DYNAMIC_CLIENT_REGISTER_ENDPOINT = "/dynamic-client-web/register";
 	public static final String POLICY_ENDPOINT = SERVER_APP_ENDPOINT + "policy/";
+	public static final String EVENT_ENDPOINT = SERVER_APP_ENDPOINT + "events/";
 
 	public static final String TRUSTSTORE_PASSWORD = "wso2carbon";
 	public static final String EULA_TITLE = "POLICY AGREEMENT";
@@ -123,6 +124,7 @@ public class Constants {
 	public static final int POLICY_REQUEST_CODE = 309;
 	public static final int CONFIGURATION_REQUEST_CODE = 310;
 	public static final int AUTHENTICATION_REQUEST_CODE = 311;
+	public static final int EVENT_REQUEST_CODE = 312;
 
 	/**
 	 * Google API project id registered to use GCM.
@@ -351,6 +353,21 @@ public class Constants {
 		public static final String STATE = "state";
 		public static final String LONGITUDE = "longitude";
 		public static final String LATITUDE = "latitude";
+	}
+
+	public final class EventListners {
+		private EventListners(){
+			throw new AssertionError();
+		}
+		public static final boolean EVENT_LISTENING_ENABLED = true;
+		public static final boolean APPLICATION_STATE_LISTENER = true;
+		public static final String APPLICATION_STATE = "APPLICATION_STATE";
+		public static final boolean RUNTIME_STATE_LISTENER = false;
+		public static final String RUNTIME_STATE = "RUNTIME_STATE";
+		public static final long DEFAULT_START_TIME = 1000;
+		public static final long DEFAULT_INTERVAL = 5000;
+		public static final int DEFAULT_LISTENER_CODE = 10001;
+		public static final String REQUEST_CODE = "requestCode";
 	}
 
 	public final class PreferenceFlag {
