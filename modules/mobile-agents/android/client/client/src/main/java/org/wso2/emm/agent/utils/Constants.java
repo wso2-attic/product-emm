@@ -23,7 +23,7 @@ package org.wso2.emm.agent.utils;
  */
 public class Constants {
 
-	public static final boolean DEBUG_MODE_ENABLED = true;
+	public static final boolean DEBUG_MODE_ENABLED = false;
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
 	public static final boolean SYSTEM_APP_ENABLED = false;
@@ -358,7 +358,7 @@ public class Constants {
 		private EventListners(){
 			throw new AssertionError();
 		}
-		public static final boolean EVENT_LISTENING_ENABLED = true;
+		public static final boolean EVENT_LISTENING_ENABLED = false;
 		public static final boolean APPLICATION_STATE_LISTENER = true;
 		public static final String APPLICATION_STATE = "APPLICATION_STATE";
 		public static final boolean RUNTIME_STATE_LISTENER = false;

@@ -38,8 +38,8 @@ public class EventService {
 
     //TODO: Passing data to DAS must be added
     @POST
-    public Response configureDeviceLock(@HeaderParam(ACCEPT) String acceptHeader,
-                                        EventPayload eventPayload) {
+    public Response publishEvents(@HeaderParam(ACCEPT) String acceptHeader,
+                                  EventPayload eventPayload) {
 
         if (log.isDebugEnabled()) {
             log.debug("Invoking Android device even logging.");

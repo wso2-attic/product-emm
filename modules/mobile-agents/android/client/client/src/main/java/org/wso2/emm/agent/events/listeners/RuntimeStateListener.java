@@ -29,7 +29,7 @@ import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 
 /**
- * This is to listen to Runtime information such as CPU, Memory and Disk usage.
+ * This is to listen to Runtime information such as CPU.
  */
 public class RuntimeStateListener implements AlertEventListener {
     private static final int CPU_THRESHOLD = 75;
