@@ -906,5 +906,12 @@
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
+    <Permission>
+        <name>get non-compliant device counts by features</name>
+        <path>/device-mgt/emm-admin/dashboard/non-compliant-by-feature</path>
+        <url>/dashboard/non-compliant-by-feature</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
     <!-- End of Dashboard related APIs -->
 </PermissionConfiguration>
