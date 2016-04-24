@@ -849,6 +849,14 @@ var operationModule = function () {
                     }
                 };
                 break;
+            case androidOperationConstants["UPGRADE_FIRMWARE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "schedule" : operationData["schedule"]
+                    }
+                };
+                break;
             case androidOperationConstants["WIPE_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
