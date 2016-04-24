@@ -177,4 +177,57 @@ public class Dashboard {
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
 
+    @GET
+    @Path("device-groupings")
+    public Response getDeviceGroupingCounts() {
+        GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
+        List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
+
+        // creating device-Counts-by-platforms Data Wrapper
+        Map<String, Integer> deviceCountsByPlatforms = gadgetDataService.getDeviceCountsByPlatforms(null);
+        if (deviceCountsByPlatforms == null) {
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+        }
+
+        Map<String, Object> deviceCountByPlatformDataWrapper;
+        List<Map<String, Object>> deviceCountsByPlatformsDataWrapper = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : deviceCountsByPlatforms.entrySet()) {
+            deviceCountByPlatformDataWrapper = new HashMap<>();
+            deviceCountByPlatformDataWrapper.put("group", entry.getKey());
+            deviceCountByPlatformDataWrapper.put("label", entry.getKey());
+            deviceCountByPlatformDataWrapper.put("count", entry.getValue());
+            deviceCountsByPlatformsDataWrapper.add(deviceCountByPlatformDataWrapper);
+        }
+
+        DashboardGadgetDataWrapper dashboardGadgetDataWrapper1 = new DashboardGadgetDataWrapper();
+        dashboardGadgetDataWrapper1.setContext("device-Counts-by-platforms");
+        dashboardGadgetDataWrapper1.setData(deviceCountsByPlatformsDataWrapper);
+
+        responsePayload.add(dashboardGadgetDataWrapper1);
+
+        // creating device-Counts-by-ownership-types Data Wrapper
+        Map<String, Integer> deviceCountsByOwnershipTypes = gadgetDataService.getDeviceCountsByOwnershipTypes(null);
+        if (deviceCountsByOwnershipTypes == null) {
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+        }
+
+        Map<String, Object> deviceCountByOwnershipTypeDataWrapper;
+        List<Map<String, Object>> deviceCountsByOwnershipTypesDataWrapper = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : deviceCountsByOwnershipTypes.entrySet()) {
+            deviceCountByOwnershipTypeDataWrapper = new HashMap<>();
+            deviceCountByOwnershipTypeDataWrapper.put("group", entry.getKey());
+            deviceCountByOwnershipTypeDataWrapper.put("label", entry.getKey());
+            deviceCountByOwnershipTypeDataWrapper.put("count", entry.getValue());
+            deviceCountsByOwnershipTypesDataWrapper.add(deviceCountByOwnershipTypeDataWrapper);
+        }
+
+        DashboardGadgetDataWrapper dashboardGadgetDataWrapper2 = new DashboardGadgetDataWrapper();
+        dashboardGadgetDataWrapper2.setContext("device-Counts-by-ownership-types");
+        dashboardGadgetDataWrapper2.setData(deviceCountsByOwnershipTypesDataWrapper);
+
+        responsePayload.add(dashboardGadgetDataWrapper2);
+
+        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+    }
+
 }
