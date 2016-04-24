@@ -22,7 +22,7 @@ import org.wso2.carbon.mdm.services.android.bean.Vpn;
 import java.util.List;
 
 /**
- * This class is used to wrap the Wifi bean with devices.
+ * This class is used to wrap the Vpn bean with devices.
  */
 public class VpnBeanWrapper {
 
