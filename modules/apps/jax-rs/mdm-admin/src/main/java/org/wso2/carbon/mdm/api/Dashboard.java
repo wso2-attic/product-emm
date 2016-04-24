@@ -31,10 +31,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @WebService
 @Produces({"application/json", "application/xml"})
@@ -56,7 +53,7 @@ public class Dashboard {
         if (totalDeviceCount == -1) {
             return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
-        Map<String, Object> totalDeviceCountDataWrapper = new HashMap<>();
+        Map<String, Object> totalDeviceCountDataWrapper = new LinkedHashMap<>();
         totalDeviceCountDataWrapper.put("group", "total");
         totalDeviceCountDataWrapper.put("label", "Total");
         totalDeviceCountDataWrapper.put("count", totalDeviceCount);
@@ -66,7 +63,7 @@ public class Dashboard {
         if (activeDeviceCount == -1) {
             return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
-        Map<String, Object> activeDeviceCountDataWrapper = new HashMap<>();
+        Map<String, Object> activeDeviceCountDataWrapper = new LinkedHashMap<>();
         activeDeviceCountDataWrapper.put("group", "active");
         activeDeviceCountDataWrapper.put("label", "Active");
         activeDeviceCountDataWrapper.put("count", activeDeviceCount);
@@ -76,7 +73,7 @@ public class Dashboard {
         if (inactiveDeviceCount == -1) {
             return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
-        Map<String, Object> inactiveDeviceCountDataWrapper = new HashMap<>();
+        Map<String, Object> inactiveDeviceCountDataWrapper = new LinkedHashMap<>();
         inactiveDeviceCountDataWrapper.put("group", "inactive");
         inactiveDeviceCountDataWrapper.put("label", "Inactive");
         inactiveDeviceCountDataWrapper.put("count", inactiveDeviceCount);
@@ -86,7 +83,7 @@ public class Dashboard {
         if (removedDeviceCount == -1) {
             return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
-        Map<String, Object> removedDeviceCountDataWrapper = new HashMap<>();
+        Map<String, Object> removedDeviceCountDataWrapper = new LinkedHashMap<>();
         removedDeviceCountDataWrapper.put("group", "removed");
         removedDeviceCountDataWrapper.put("label", "Removed");
         removedDeviceCountDataWrapper.put("count", removedDeviceCount);
@@ -97,7 +94,7 @@ public class Dashboard {
         overviewDeviceCountsDataWrapper.add(inactiveDeviceCountDataWrapper);
         overviewDeviceCountsDataWrapper.add(removedDeviceCountDataWrapper);
 
-        dashboardGadgetDataWrapper.setContext("overview");
+        dashboardGadgetDataWrapper.setContext("device-overview");
         dashboardGadgetDataWrapper.setData(overviewDeviceCountsDataWrapper);
 
         List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
@@ -117,7 +114,7 @@ public class Dashboard {
         if (nonCompliantDeviceCount == -1) {
             return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
-        Map<String, Object> nonCompliantDeviceCountDataWrapper = new HashMap<>();
+        Map<String, Object> nonCompliantDeviceCountDataWrapper = new LinkedHashMap<>();
         nonCompliantDeviceCountDataWrapper.put("group", "non-complaint");
         nonCompliantDeviceCountDataWrapper.put("label", "Non-Compliant");
         nonCompliantDeviceCountDataWrapper.put("count", nonCompliantDeviceCount);
@@ -127,7 +124,7 @@ public class Dashboard {
         if (unmonitoredDeviceCount == -1) {
             return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
-        Map<String, Object> unmonitoredDeviceCountDataWrapper = new HashMap<>();
+        Map<String, Object> unmonitoredDeviceCountDataWrapper = new LinkedHashMap<>();
         unmonitoredDeviceCountDataWrapper.put("group", "unmonitored");
         unmonitoredDeviceCountDataWrapper.put("label", "Unmonitored");
         unmonitoredDeviceCountDataWrapper.put("count", unmonitoredDeviceCount);
@@ -161,14 +158,14 @@ public class Dashboard {
         Map<String, Object> nonCompliantDeviceCountByFeatureDataWrapper;
         List<Map<String, Object>> nonCompliantDeviceCountsByFeaturesDataWrapper = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : nonCompliantDeviceCountsByFeatures.entrySet()) {
-            nonCompliantDeviceCountByFeatureDataWrapper = new HashMap<>();
+            nonCompliantDeviceCountByFeatureDataWrapper = new LinkedHashMap<>();
             nonCompliantDeviceCountByFeatureDataWrapper.put("group", entry.getKey());
             nonCompliantDeviceCountByFeatureDataWrapper.put("label", entry.getKey());
             nonCompliantDeviceCountByFeatureDataWrapper.put("count", entry.getValue());
             nonCompliantDeviceCountsByFeaturesDataWrapper.add(nonCompliantDeviceCountByFeatureDataWrapper);
         }
 
-        dashboardGadgetDataWrapper.setContext("non-compliant-device-counts-by-features");
+        dashboardGadgetDataWrapper.setContext("non-compliant-by-feature");
         dashboardGadgetDataWrapper.setData(nonCompliantDeviceCountsByFeaturesDataWrapper);
 
         List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
@@ -192,7 +189,7 @@ public class Dashboard {
         Map<String, Object> deviceCountByPlatformDataWrapper;
         List<Map<String, Object>> deviceCountsByPlatformsDataWrapper = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : deviceCountsByPlatforms.entrySet()) {
-            deviceCountByPlatformDataWrapper = new HashMap<>();
+            deviceCountByPlatformDataWrapper = new LinkedHashMap<>();
             deviceCountByPlatformDataWrapper.put("group", entry.getKey());
             deviceCountByPlatformDataWrapper.put("label", entry.getKey());
             deviceCountByPlatformDataWrapper.put("count", entry.getValue());
@@ -214,7 +211,7 @@ public class Dashboard {
         Map<String, Object> deviceCountByOwnershipTypeDataWrapper;
         List<Map<String, Object>> deviceCountsByOwnershipTypesDataWrapper = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : deviceCountsByOwnershipTypes.entrySet()) {
-            deviceCountByOwnershipTypeDataWrapper = new HashMap<>();
+            deviceCountByOwnershipTypeDataWrapper = new LinkedHashMap<>();
             deviceCountByOwnershipTypeDataWrapper.put("group", entry.getKey());
             deviceCountByOwnershipTypeDataWrapper.put("label", entry.getKey());
             deviceCountByOwnershipTypeDataWrapper.put("count", entry.getValue());
