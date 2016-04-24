@@ -582,6 +582,20 @@ public class AndroidOperation extends TestBase {
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android VPN configuration operation.")
+    public void testVPN() throws Exception {
+        JsonObject operationData = PayloadGenerator.getJsonPayload(
+                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                Constants.AndroidOperations.VPN_OPERATION);
+        JsonArray deviceIds = new JsonArray();
+        JsonPrimitive deviceID = new JsonPrimitive(Constants.DEVICE_ID);
+        deviceIds.add(deviceID);
+        operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
+        HttpResponse response = client.post(Constants.AndroidOperations.VPN_ENDPOINT,
+                                            operationData.toString());
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+    }
+
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android notification operation" +
                                                                                                 "for invalid device id")
     public void testNotificationWithInvalidDeviceId() throws Exception {

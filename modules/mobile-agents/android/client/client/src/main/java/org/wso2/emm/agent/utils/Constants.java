@@ -209,6 +209,7 @@ public class Constants {
 		public static final String DISENROLL = "DISENROLL";
 		public static final String UPGRADE_FIRMWARE = "UPGRADE_FIRMWARE";
 		public static final String REBOOT = "REBOOT";
+		public static final String VPN = "VPN";
 		public static final String EXECUTE_SHELL_COMMAND = "SHELL_COMMAND";
 		public static final String DISALLOW_ADJUST_VOLUME = "DISALLOW_ADJUST_VOLUME";
 		public static final String DISALLOW_CONFIG_BLUETOOTH = "DISALLOW_CONFIG_BLUETOOTH";

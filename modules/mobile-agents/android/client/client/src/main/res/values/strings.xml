@@ -88,6 +88,7 @@
     <string name="toast_error_password">Please enter password</string>
     <string name="toast_message_wipe">Device is being wiped</string>
     <string name="toast_message_reboot">Device is being rebooted</string>
+    <string name="toast_message_vpn">VPN profile recieved from the device administrator</string>
     <string name="toast_message_wipe_failed">Device wipe failed due to wrong PIN</string>
     <string name="toast_message_reboot_failed">Device reboot failed due to insufficient privileges</string>
     <string name="toast_message_disenroll">Device disenrolled</string>
@@ -102,6 +103,7 @@
     <string name="intent_extra_data">data</string>
     <string name="intent_extra_code">code</string>
     <string name="intent_extra_operation_id">id</string>
+    <string name="intent_extra_payload">payload</string>
     <string name="intent_extra_message_id">msgID</string>
     <string name="intent_extra_status">status</string>
     <string name="intent_extra_status_ok">200</string>
@@ -111,6 +113,10 @@
     <string name="intent_extra_fresh_reg_flag">freshRegFlag</string>
     <string name="intent_extra_username">username</string>
     <string name="intent_extra_ssid">ssid</string>
+    <string name="intent_extra_server">serverAddress</string>
+    <string name="intent_extra_server_port">serverPort</string>
+    <string name="intent_extra_shared_secret">sharedSecret</string>
+    <string name="intent_extra_dns">dnsServer</string>
     <string name="intent_extra_lock_code">lockCode</string>
     <string name="intent_extra_password">password</string>
     <string name="intent_extra_function">function</string>
@@ -337,5 +343,14 @@
 
     <string name="title_activity_lock">LockActivity</string>
     <string name="txt_lock_activity">Device is locked. Please contact administrator</string>
+
+    <string name="address">.ADDRESS</string>
+    <string name="port">.PORT</string>
+    <string name="secret">.SECRET</string>
+    <string name="dns">.DNS</string>
+    <string name="connect">Connect!</string>
+    <string name="connecting">VPN is connecting...</string>
+    <string name="connected">VPN is connected</string>
+    <string name="disconnected">VPN is disconnected</string>
 
 </resources>
