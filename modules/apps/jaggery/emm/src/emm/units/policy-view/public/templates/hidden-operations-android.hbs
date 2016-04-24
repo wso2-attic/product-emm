@@ -36,6 +36,15 @@
             <span id="wifi-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="wifi-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('vpn', this)">
+                <span class="wr-hidden-operations-icon fw-stack">
+                    <i class="fw fw-vpn fw-stack-2x"></i>
+                </span>
+            Virtual Private Network
+            <span id="wifi-configured" class="has-configured status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="wifi-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="wifi-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
     </div>
 
     <div class="wr-hidden-operations-content col-lg-8">
@@ -741,6 +750,73 @@
             </div>
         </div>
         <!-- /wi-fi -->
+
+        <!-- VPN -->
+        <div class="wr-hidden-operation" data-operation="vpn">
+            <div class="panel panel-default operation-data" data-operation="vpn" data-operation-code="VPN">
+                <div id="vpn-heading" class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        VPN Settings
+                        <label class="wr-input-control switch hidden" data-toggle="collapse" data-target="#vpn-body">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr>
+                        <div class="panel-title-description">
+                            This configurations can be used to configure VPN settings on an Android device.
+                            Once this configuration profile is installed on a device, corresponding users will not be able
+                            to modify these settings on their devices.
+                        </div>
+                    </h2>
+                </div>
+                <div id="vpn-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="vpn-body">
+                    Please note that * sign represents required fields of data.
+                    <br>
+                    <br>
+                    <div id="vpn-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="vpn-server-address">
+                            VPN Server Address*
+                                <span class="helper" title="Address of the VPN server to be configured.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <input id="vpn-server-address" type="text" class="form-control operationDataKeys" data-key="serverAddress" maxlength="200" placeholder="[ Should be a valid hostname ]" disabled/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="vpn-server-port">
+                            VPN Server Port
+                                <span class="helper" title="Port of the VPN server to be configured.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <input id="vpn-server-port" type="text" class="form-control operationDataKeys" data-key="serverPort" maxlength="100" placeholder="[ Optional field ]" disabled/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="vpn-shared-secret">
+                            Shared Secret
+                                <span class="helper" title="Shared secret.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <input id="vpn-shared-secret" type="password" class="form-control operationDataKeys" data-key="sharedSecret" maxlength="100" placeholder="[ Optional field ]" disabled/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="vpn-dns">
+                            DNS Server
+                                <span class="helper" title="DNS Server.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <input id="vpn-dns" type="text" class="form-control operationDataKeys" data-key="dnsServer" maxlength="100" placeholder="[ Optional field ]" disabled/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /VPN -->
 
         <!-- install-applications -->
         <!--<div class="wr-hidden-operation" data-operation="install-apps">-->

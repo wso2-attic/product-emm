@@ -46,7 +46,9 @@ var androidOperationConstants = {
     "ENCRYPT_STORAGE_OPERATION": "encrypt-storage",
     "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
     "WIFI_OPERATION": "wifi",
-    "WIFI_OPERATION_CODE": "WIFI"
+    "WIFI_OPERATION_CODE": "WIFI",
+    "VPN_OPERATION": "vpn",
+    "VPN_OPERATION_CODE": "VPN"
 };
 
 // Constants to define Android Operation Constants
@@ -81,7 +83,8 @@ var iosOperationConstants = {
     "APN_OPERATION_CODE": "APN",
     "CELLULAR_OPERATION": "cellular",
     "CELLULAR_OPERATION_CODE": "CELLULAR",
-    "DOMAIN": "DOMAIN"
+    "VPN_OPERATION_CODE": "VPN",
+    "VPN_OPERATION": "vpn"
 };
 
 /**
@@ -338,6 +341,62 @@ validateStep["policy-profile"] = function () {
                         "erroneousFeature": operation
                     };
                     continueToCheckNextInputs = false;
+                }
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
+            }
+
+            if ($.inArray(androidOperationConstants["VPN_OPERATION_CODE"], configuredOperations) != -1) {
+                // if WIFI is configured
+                operation = androidOperationConstants["VPN_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
+
+                var serverAddress = $("input#vpn-server-address").val();
+                if (!serverAddress) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Server address is required. You cannot proceed.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
+
+                if (continueToCheckNextInputs) {
+                    var serverPort = $("input#vpn-server-port").val();
+                    if (!serverPort) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "VPN server port is required. You cannot proceed.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    } else if (!$.isNumeric(serverPort)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "VPN server port requires a number input.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    } else if (!inputIsValidAgainstRange(serverPort, 0, 65535)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "VPN server port is not within the range " +
+                            "of valid port numbers.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
                 }
 
                 // at-last, if the value of continueToCheckNextInputs is still true
@@ -987,6 +1046,34 @@ validateStep["policy-profile"] = function () {
                     }
                 }
 
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
+            }
+
+            if ($.inArray(iosOperationConstants["VPN_OPERATION_CODE"], configuredOperations) != -1) {
+                // if WIFI is configured
+                operation = iosOperationConstants["VPN_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
+
+                var connectionName = $("input#vpn-connection-name").val();
+                if (!connectionName) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Connection Name is required. You cannot proceed.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
                 // at-last, if the value of continueToCheckNextInputs is still true
                 // this means that no error is found
                 if (continueToCheckNextInputs) {
