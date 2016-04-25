@@ -93,6 +93,7 @@ public class DeviceInfoPayload {
         if (device == null) {
             device = new Device();
         }
+
         Power power = phoneState.getBatteryDetails();
         device.setDeviceIdentifier(deviceInfo.getDeviceId());
         device.setDescription(deviceInfo.getDeviceName());
@@ -165,6 +166,16 @@ public class DeviceInfoPayload {
         List<Device.Property> deviceInfoProperties = new ArrayList<>();
 
         property = new Device.Property();
+        property.setName(Constants.Device.ENCRYPTION_STATUS);
+        property.setValue(String.valueOf(deviceInfo.isEncryptionEnabled()));
+        deviceInfoProperties.add(property);
+
+        property = new Device.Property();
+        property.setName(Constants.Device.PASSCODE_STATUS);
+        property.setValue(String.valueOf(deviceInfo.isPasscodeEnabled()));
+        deviceInfoProperties.add(property);
+
+        property = new Device.Property();
         property.setName(Constants.Device.BATTERY_LEVEL);
         int batteryLevel = Math.round(power.getLevel());
         property.setValue(String.valueOf(batteryLevel));
@@ -214,6 +225,12 @@ public class DeviceInfoPayload {
         property = new Device.Property();
         property.setName(Constants.Device.NETWORK_INFO);
         property.setValue(networkStatusPayload);
+        deviceInfoProperties.add(property);
+
+        // adding wifi scan results..
+        property = new Device.Property();
+        property.setName(Constants.Device.WIFI_SCAN_RESULT);
+        property.setValue(deviceNetworkStatus.getWifiScanResult());
         deviceInfoProperties.add(property);
 
         RuntimeInfo runtimeInfo = new RuntimeInfo(context);

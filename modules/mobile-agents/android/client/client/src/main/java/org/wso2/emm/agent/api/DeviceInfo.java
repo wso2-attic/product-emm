@@ -19,6 +19,7 @@ package org.wso2.emm.agent.api;
 
 import java.util.List;
 
+import android.app.admin.DevicePolicyManager;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.utils.Preference;
 import android.content.Context;
@@ -39,12 +40,13 @@ public class DeviceInfo {
 	private Context context;
 	private Resources resources;
 	private TelephonyManager telephonyManager;
+	private DevicePolicyManager devicePolicyManager;
 
 	public DeviceInfo(Context context) {
 		this.context = context;
 		this.resources = context.getResources();
-		this.telephonyManager = (TelephonyManager) context.
-									getSystemService(Context.TELEPHONY_SERVICE);
+		this.telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+		this.devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
 	}
 
 	/**
@@ -170,6 +172,31 @@ public class DeviceInfo {
                               (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 		
 		return sensorManager.getSensorList(Sensor.TYPE_ALL);
+	}
+
+	/**
+	 * This method is used to check the status of storage encryption.
+	 * @return Returns the current status.
+	 */
+	public String getEncryptionStatus() {
+		switch (devicePolicyManager.getStorageEncryptionStatus()) {
+			case DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE:
+				return "enabled";
+			case DevicePolicyManager.ENCRYPTION_STATUS_INACTIVE:
+				return "disabled";
+			case DevicePolicyManager.ENCRYPTION_STATUS_ACTIVATING:
+				return "activating";
+			default:
+				return "not supported";
+		}
+	}
+
+	/**
+	 * This method is used to get the status of the current activated passcode.
+	 * @return Returns true if sufficient.
+	 */
+	public boolean isPasscodeEnabled() {
+		return devicePolicyManager.isActivePasswordSufficient();
 	}
 
 }
