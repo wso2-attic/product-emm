@@ -20,7 +20,9 @@ package org.wso2.emm.agent.api;
 import java.util.List;
 
 import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 import org.wso2.emm.agent.utils.Preference;
 import android.content.Context;
 import android.content.res.Resources;
@@ -41,12 +43,14 @@ public class DeviceInfo {
 	private Resources resources;
 	private TelephonyManager telephonyManager;
 	private DevicePolicyManager devicePolicyManager;
+	private ComponentName cdmDeviceAdmin;
 
 	public DeviceInfo(Context context) {
 		this.context = context;
 		this.resources = context.getResources();
 		this.telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 		this.devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+		cdmDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
 	}
 
 	/**
@@ -178,17 +182,20 @@ public class DeviceInfo {
 	 * This method is used to check the status of storage encryption.
 	 * @return Returns the current status.
 	 */
-	public String getEncryptionStatus() {
-		switch (devicePolicyManager.getStorageEncryptionStatus()) {
-			case DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE:
-				return "enabled";
-			case DevicePolicyManager.ENCRYPTION_STATUS_INACTIVE:
-				return "disabled";
-			case DevicePolicyManager.ENCRYPTION_STATUS_ACTIVATING:
-				return "activating";
-			default:
-				return "not supported";
+	public boolean isEncryptionEnabled() {
+		if (isDeviceAdminActive()) {
+			switch (devicePolicyManager.getStorageEncryptionStatus()) {
+				case DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE:
+					return true;
+				case DevicePolicyManager.ENCRYPTION_STATUS_INACTIVE:
+					return false;
+				case DevicePolicyManager.ENCRYPTION_STATUS_ACTIVATING:
+					return false;
+				default:
+					return false;
+			}
 		}
+		return false;
 	}
 
 	/**
@@ -196,7 +203,14 @@ public class DeviceInfo {
 	 * @return Returns true if sufficient.
 	 */
 	public boolean isPasscodeEnabled() {
-		return devicePolicyManager.isActivePasswordSufficient();
+		if (isDeviceAdminActive()) {
+			return devicePolicyManager.isActivePasswordSufficient();
+		}
+		return false;
+	}
+
+	private boolean isDeviceAdminActive() {
+		return devicePolicyManager.isAdminActive(cdmDeviceAdmin);
 	}
 
 }
