@@ -30,8 +30,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.api.DeviceState;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
@@ -45,7 +43,6 @@ public class ServerDetails extends Activity {
 	private TextView evServerIP;
 	private Button btnStartRegistration;
 	private Context context;
-	private DeviceInfo deviceInfo;
 	private DeviceState state;
 	private TextView txtSeverAddress;
 	private static final String PROTOCOL_HTTPS = "https://";
@@ -57,7 +54,6 @@ public class ServerDetails extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 		context = this.getApplicationContext();
-		deviceInfo = new DeviceInfo(context);
 		state = new DeviceState(context);
 		evServerIP = (TextView) findViewById(R.id.evServerIP);
 		txtSeverAddress = (TextView) findViewById(R.id.tvSeverAddress);
@@ -65,8 +61,6 @@ public class ServerDetails extends Activity {
 		btnStartRegistration.setBackground(getResources().getDrawable(R.drawable.btn_grey));
 		btnStartRegistration.setTextColor(getResources().getColor(R.color.black));
 		Response compatibility = state.evaluateCompatibility();
-
-
 
 		if (!compatibility.getCode()) {
 			txtSeverAddress.setText(compatibility.getDescriptionResourceID());

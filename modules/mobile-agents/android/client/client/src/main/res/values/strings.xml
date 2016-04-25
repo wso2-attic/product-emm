@@ -114,6 +114,8 @@
     <string name="intent_extra_username">username</string>
     <string name="intent_extra_ssid">ssid</string>
     <string name="intent_extra_server">serverAddress</string>
+    <string name="intent_extra_schedule">schedule</string>
+    <string name="pref_key_schedule">firmware_upgrade_schedule</string>
     <string name="intent_extra_server_port">serverPort</string>
     <string name="intent_extra_shared_secret">sharedSecret</string>
     <string name="intent_extra_dns">dnsServer</string>

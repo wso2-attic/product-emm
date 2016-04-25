@@ -1262,6 +1262,20 @@ public class Operation implements APIResultCallBack {
 	 */
 	public void upgradeFirmware(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
 		JSONObject result = new JSONObject();
+		String schedule = null;
+
+		try {
+			JSONObject upgradeData = new JSONObject(operation.getPayLoad().toString());
+			if (upgradeData != null && !upgradeData.isNull(resources.getString(R.string.intent_extra_schedule))) {
+				schedule = (String) upgradeData.get(resources.getString(R.string.intent_extra_schedule));
+				Preference.putString(context, resources.getString(R.string.pref_key_schedule), schedule);
+			}
+
+		} catch (JSONException e) {
+			operation.setStatus(resources.getString(R.string.operation_value_error));
+			resultBuilder.build(operation);
+			throw new AndroidAgentException("Invalid JSON format.", e);
+		}
 
 		try {
 			String status = resources.getString(R.string.shared_pref_default_status);

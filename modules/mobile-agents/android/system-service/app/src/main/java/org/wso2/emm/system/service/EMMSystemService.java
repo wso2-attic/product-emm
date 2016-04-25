@@ -37,10 +37,13 @@ import android.util.Log;
 import android.widget.Toast;
 import org.wso2.emm.system.service.api.OTADownload;
 import org.wso2.emm.system.service.api.SettingsManager;
+import org.wso2.emm.system.service.utils.AlarmUtils;
 import org.wso2.emm.system.service.utils.Constants;
+import org.wso2.emm.system.service.utils.Preference;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 
 import static android.os.UserManager.ALLOW_PARENT_PROFILE_APP_LINKING;
 import static android.os.UserManager.DISALLOW_ADD_USER;
@@ -296,11 +299,22 @@ public class EMMSystemService extends IntentService {
      */
     public void upgradeFirmware() {
         Log.i(TAG, "An upgrade has been requested");
-        Toast.makeText(this, "Upgrade request initiated by admin.",
-                       Toast.LENGTH_SHORT).show();
-        //Prepare for upgrade
-        OTADownload otaDownload = new OTADownload(this.getApplicationContext());
-        otaDownload.startOTA();
+        Context context = this.getApplicationContext();
+        if (command != null && !command.trim().isEmpty()) {
+            Log.i(TAG, "Upgrade has been scheduled to " + command);
+            Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), command);
+            try {
+                AlarmUtils.setOneTimeAlarm(context, command, Constants.Operation.UPGRADE_FIRMWARE);
+            } catch (ParseException e) {
+                Log.e(TAG, "One time alarm time string parsing failed." + e);
+            }
+        } else {
+            Toast.makeText(context, "Upgrade request initiated by admin.",
+                           Toast.LENGTH_SHORT).show();
+            //Prepare for upgrade
+            OTADownload otaDownload = new OTADownload(context);
+            otaDownload.startOTA();
+        }
     }
 
     /**

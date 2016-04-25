@@ -180,6 +180,18 @@ function runOperation(operationName) {
             $(modalPopupContent).removeData();
             hidePopup();
         }
+    } else if (operationName == "UPGRADE_FIRMWARE") {
+        var errorMsgWrapper = "#firmware-error-msg";
+        var errorMsg = "#firmware-error-msg span";
+        var schedule = $("#schedule").val();
+        if (!schedule) {
+            $(errorMsg).text("Enter schedule information. It cannot be empty.");
+            $(errorMsgWrapper).removeClass("hidden");
+        } else {
+            invokerUtil.post(serviceEndPoint, payload, successCallback, errorCallback);
+            $(modalPopupContent).removeData();
+            hidePopup();
+        }
     } else {
         invokerUtil.post(serviceEndPoint, payload, successCallback, errorCallback);
         $(modalPopupContent).removeData();

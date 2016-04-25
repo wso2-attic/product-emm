@@ -23,6 +23,9 @@ import android.util.Log;
 
 import java.io.File;
 
+/**
+ * Utility class to hold file manipulation methods.
+ */
 public class FileUtils {
     public static String getUpgradePackageFilePath() {
         Log.d(FileUtils.class.getName(), "FilePath: " + Environment.getExternalStoragePublicDirectory(

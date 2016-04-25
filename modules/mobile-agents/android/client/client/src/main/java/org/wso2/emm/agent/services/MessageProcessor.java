@@ -202,7 +202,8 @@ public class MessageProcessor implements APIResultCallBack {
 			}
 
 			if (isUpgradeTriggered) {
-				CommonUtils.callSystemApp(context, Constants.Operation.UPGRADE_FIRMWARE, null, null);
+				String schedule = Preference.getString(context, context.getResources().getString(R.string.pref_key_schedule));
+				CommonUtils.callSystemApp(context, Constants.Operation.UPGRADE_FIRMWARE, schedule, null);
 			}
 
 			if (isShellCommandTriggered && shellCommand != null) {

@@ -149,9 +149,6 @@
                             {{#equal type "android"}}
                                 Enter firmware upgrade scheduling information.
                                 <br><br>
-                                <div id="firmware-error-msg" class="alert alert-danger hidden" role="alert">
-                                    <i class="icon fw fw-error"></i><span></span>
-                                </div>
                                 <label class="wr-input-control checkbox">
                                     <input id="instant-upgrade" type="checkbox" class="form-control operationDataKeys" data-key="instant-upgrade"/>
                                         <span class="helper" title="Once enabled, device firmware upgrade process will start instantly.">
@@ -160,9 +157,12 @@
                                         </span>
                                 </label>
                                 <br><br>
-                                Enter the date and time to schedule firmware upgrade.
-                                <br><br>
                                 <div class='input-group date' id='dateTimePicker'>
+                                    Enter the date and time to schedule firmware upgrade.
+                                    <br><br>
+                                    <div id="firmware-error-msg" class="alert alert-danger hidden" role="alert">
+                                        <i class="icon fw fw-error"></i><span></span>
+                                    </div>
                                     <input type='text' class="form-control modal-input operationDataKeys" style="z-index : 900;" name="daterange" id="schedule" data-key="schedule" />
                                 </div>
                                 <script type="text/javascript">
@@ -176,7 +176,7 @@
                                             showDropdowns: true,
                                             timePickerIncrement: 1,
                                             locale: {
-                                                format: 'MM/DD/YYYY hh:mm A'
+                                                format: 'MM-DD-YYYY hh:mm a'
                                             }
                                         });
                                     });
