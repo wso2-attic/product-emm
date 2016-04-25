@@ -174,6 +174,9 @@ public class OperationProcessor {
 				operationManager.handleUserRestriction(operation);
 			case Constants.Operation.DISALLOW_INSTALL_APPS:
 				operationManager.handleUserRestriction(operation);
+			case Constants.Operation.VPN:
+				operationManager.configureVPN(operation);
+				break;
 			default:
 				operationManager.passOperationToSystemApp(operation);
 				break;

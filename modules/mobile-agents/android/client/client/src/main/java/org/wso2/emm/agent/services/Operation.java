@@ -553,7 +553,7 @@ public class Operation implements APIResultCallBack {
 	}
 
 	/**
-	 * Configure device WIFI profile.
+	 * Configure device VPN profile.
 	 *
 	 * @param operation - Operation object.
 	 */

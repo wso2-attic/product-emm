@@ -273,9 +273,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         intent.putExtra(resources.getString(R.string.intent_extra_type),
                 resources.getString(R.string.intent_extra_ring));
         intent.putExtra(resources.getString(R.string.intent_extra_message),
-                resources.getString(R.string.intent_extra_stop_ringing));
+                        resources.getString(R.string.intent_extra_stop_ringing));
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
 
         if (Constants.DEBUG_MODE_ENABLED) {
@@ -545,6 +545,20 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      */
     public void upgradeFirmware(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
         JSONObject result = new JSONObject();
+        String schedule = null;
+
+        try {
+            JSONObject upgradeData = new JSONObject(operation.getPayLoad().toString());
+            if (upgradeData != null && !upgradeData.isNull(resources.getString(R.string.intent_extra_schedule))) {
+                schedule = (String) upgradeData.get(resources.getString(R.string.intent_extra_schedule));
+                Preference.putString(context, resources.getString(R.string.pref_key_schedule), schedule);
+            }
+
+        } catch (JSONException e) {
+            operation.setStatus(resources.getString(R.string.operation_value_error));
+            resultBuilder.build(operation);
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
 
         try {
             String status = resources.getString(R.string.shared_pref_default_status);
@@ -835,6 +849,58 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             operation.setStatus(resources.getString(R.string.operation_value_error));
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
+        }
+    }
+
+    /**
+     * Configure device VPN profile.
+     *
+     * @param operation - Operation object.
+     */
+    public void configureVPN(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+        String serverAddress = null;
+        JSONObject result = new JSONObject();
+
+        try {
+            JSONObject vpnData = new JSONObject(operation.getPayLoad().toString());
+            if (!vpnData.isNull(resources.getString(R.string.intent_extra_server))) {
+                serverAddress = (String) vpnData.get(resources.getString(R.string.intent_extra_server));
+            }
+
+        } catch (JSONException e) {
+            operation.setStatus(resources.getString(R.string.operation_value_error));
+            resultBuilder.build(operation);
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
+
+        if(serverAddress != null) {
+            Intent intent = new Intent(context, AlertActivity.class);
+            intent.putExtra(resources.getString(R.string.intent_extra_message), resources.getString(R.string.toast_message_vpn));
+            intent.putExtra(resources.getString(R.string.intent_extra_operation_id), operation.getId());
+            intent.putExtra(resources.getString(R.string.intent_extra_payload), operation.getPayLoad().toString());
+            intent.putExtra(resources.getString(R.string.intent_extra_type),
+                            Constants.Operation.VPN);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                            Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            context.startActivity(intent);
+        }
+
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "VPN configured");
+        }
+        operation.setStatus(resources.getString(R.string.operation_value_completed));
+        operation.setPayLoad(result.toString());
+        resultBuilder.build(operation);
+    }
+
+    @Override
+    public void passOperationToSystemApp(Operation operation) throws AndroidAgentException {
+        if(getApplicationManager().isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
+            CommonUtils.callSystemApp(getContext(),operation.getCode(),
+                                      Boolean.toString(operation.isEnabled()), null);
+        } else {
+            Log.e(TAG, "Invalid operation code received");
         }
     }
 
