@@ -45,6 +45,15 @@
             <span id="wifi-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="wifi-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('work-profile', this)">
+             <span class="wr-hidden-operations-icon fw-stack">
+                 <i class="fw fw-service fw-stack-2x"></i>
+             </span>
+             Work-Profile Configurations
+             <span id="work-profile-configured" class="has-configured status-icon hidden"><i class="fw fw-ok"></i></span>
+             <span id="work-profile-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="work-profile-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+         </a>
     </div>
 
     <div class="wr-hidden-operations-content col-lg-8">
@@ -223,7 +232,7 @@
             </label>
         </div>
         <br><b>
-            Bellow restrictions will be applied on devices with Android version 5.0 Lollipop onwards only
+            Below restrictions will be applied on devices with Android version 5.0 Lollipop onwards only
         </b>
         <br><br>
         <div class="wr-input-control">
@@ -890,5 +899,95 @@
             <!--</div>-->
         <!--</div>-->
         <!-- /web-clips -->
+
+        <!--Work-profile-->
+        <div class="wr-hidden-operation" data-operation="work-profile">
+            <div class="panel panel-default operation-data" data-operation="work-profile" data-operation-code="WORK_PROFILE">
+                <div id="work-profile-policy-heading" class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        Work-Profile Configurations
+                        <label id="work-profile-policy-lbl" class="wr-input-control switch" data-toggle="collapse" data-target="#work-profile-policy-body">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr>
+                        <div class="panel-title-description">
+                            The configurations below can be applied to the devices where the agent is running in Android Work-Profile.
+                        </div>
+                    </h2>
+                </div>
+                <div id="work-profile-policy-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="work-profile-policy-body">
+
+                    <div id="work-profile-policy-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <!--<div class="wr-input-control">
+                     <label class="wr-input-control checkbox">
+                         <input id="work-profile-policy-allow-cross-profile" type="checkbox" class="form-control operationDataKeys" data-key="workProfilePolicyAllowCopyPaste" checked="checked" />
+                             <span class="helper" title="Permit the use of repeating, ascending and descending character sequences">
+                                 &nbsp;&nbsp;&nbsp;Allow cross profile copy-paste
+                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                             </span>
+                     </label>
+                    </div> -->
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="work-profile-policy-max-passcode-age-in-days">
+                            Profile Name
+                            <span class="helper" title="Name of the Work-Profile created by EMM Agent">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                        </label>
+                        <input id="work-profile-policy-profile-name" type="text" class="form-control operationDataKeys" data-key="workProfilePolicyProfileName" maxlength="20">
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="work-profile-policy-enable-system-apps">
+                            Enable System Apps
+                            <span class="helper" title="The set of system apps needed to be added to the work-profile">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            ( Should be exact package names seperated by commas. Ex: com.google.android.apps.maps, com.google.android.calculator )
+                        </label>
+                        <textarea id="workProfilePolicyEnableSystemApps" type ="text" class="form-control operationDataKeys" rows="4" data-key="workProfilePolicyEnableSystemApps"></textarea>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="work-profile-policy-hide-system-apps">
+                            Hide System Apps
+                            <span class="helper" title="The set of system apps needed to be hide in the work-profile">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            ( Should be exact package names seperated by commas. Ex: com.google.android.apps.maps, com.google.android.calculator )
+                        </label>
+                        <textarea id="work-profile-policy-hide-system-apps" class="form-control operationDataKeys" rows="4" data-key="workProfilePolicyHideSystemApps" placeholder=""></textarea>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="work-profile-policy-unhide-system-apps">
+                            Unhide System Apps
+                            <span class="helper" title="The set of system apps needed to be unhide in the work-profile">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            ( Should be exact package names seperated by commas. Ex: com.google.android.apps.maps, com.google.android.calculator )
+                        </label>
+                        <textarea id="work-profile-policy-unhide-system-apps" class="form-control operationDataKeys" rows="4" data-key="workProfilePolicyUnhideSystemApps" placeholder=""></textarea>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="passcode-policy-max-passcode-age-in-days">
+                            Enable Google Play Store Apps
+                            <span class="helper" title="The set of apps needed to be installed from Google Playstore to work-profile">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            ( Should be exact package names seperated by commas. Ex: com.google.android.apps.maps, com.google.android.calculator )
+                        </label>
+                        <textarea id="work-profile-policy-install-playstore-apps" class="form-control operationDataKeys" rows="4" data-key="workProfilePolicyEnablePlaystoreApps" placeholder=""></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

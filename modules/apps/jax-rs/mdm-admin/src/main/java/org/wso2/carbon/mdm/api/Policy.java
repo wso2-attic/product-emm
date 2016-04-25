@@ -60,7 +60,6 @@ public class Policy {
         policy.setUsers(policyWrapper.getUsers());
         policy.setTenantId(policyWrapper.getTenantId());
         policy.setCompliance(policyWrapper.getCompliance());
-
         try {
             PolicyAdministratorPoint pap = policyManagementService.getPAP();
             pap.addPolicy(policy);

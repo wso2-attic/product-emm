@@ -43,6 +43,7 @@ var operationModule = function () {
         "WIFI_OPERATION_CODE": "WIFI",
         "WIPE_OPERATION_CODE": "WIPE_DATA",
         "NOTIFICATION_OPERATION_CODE": "NOTIFICATION",
+        "WORK_PROFILE_CODE": "WORK_PROFILE",
         "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE",
         "LOCK_OPERATION_CODE": "DEVICE_LOCK",
         "UPGRADE_FIRMWARE": "UPGRADE_FIRMWARE",
@@ -894,6 +895,18 @@ var operationModule = function () {
                     }
                 };
                 break;
+            case androidOperationConstants["WORK_PROFILE_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "profileName": operationData["workProfilePolicyProfileName"],
+                        "enableSystemApps": operationData["workProfilePolicyEnableSystemApps"],
+                        "hideSystemApps": operationData["workProfilePolicyHideSystemApps"],
+                        "unhideSystemApps": operationData["workProfilePolicyUnhideSystemApps"],
+                        "enablePlaystoreApps": operationData["workProfilePolicyEnablePlaystoreApps"]
+                    }
+                };
+                break;
             case androidOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
@@ -1462,6 +1475,7 @@ var operationModule = function () {
                 generatedProfile[operationCode] = payload["operation"];
             }
         }
+        console.log(generatedProfile);
         return generatedProfile;
     };
 

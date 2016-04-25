@@ -19,6 +19,7 @@ package org.wso2.emm.agent;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -60,15 +61,14 @@ public class ServerDetails extends Activity {
 		btnStartRegistration = (Button) findViewById(R.id.btnStartRegistration);
 		btnStartRegistration.setBackground(getResources().getDrawable(R.drawable.btn_grey));
 		btnStartRegistration.setTextColor(getResources().getColor(R.color.black));
-		Response compatibility = state.evaluateCompatibility();
+		Response deviceCompatibility = state.evaluateCompatibility();
 
-		if (!compatibility.getCode()) {
-			txtSeverAddress.setText(compatibility.getDescriptionResourceID());
+		if (!deviceCompatibility.getCode()) {
+			txtSeverAddress.setText(deviceCompatibility.getDescriptionResourceID());
 			btnStartRegistration.setVisibility(View.GONE);
 			txtSeverAddress.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.GONE);
 		} else {
-
 			btnStartRegistration.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.VISIBLE);
 			String ipSaved = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
@@ -166,9 +166,9 @@ public class ServerDetails extends Activity {
 						startAuthenticationActivity();
 					} else {
 						Toast.makeText(context.getApplicationContext(),
-						               getResources().getString(
-								               R.string.toast_message_enter_server_address),
-						               Toast.LENGTH_LONG).show();
+								getResources().getString(
+										R.string.toast_message_enter_server_address),
+								Toast.LENGTH_LONG).show();
 					}
 					break;
 
