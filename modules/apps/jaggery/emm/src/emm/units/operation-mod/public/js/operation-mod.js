@@ -37,6 +37,7 @@ var operationModule = function () {
     // Constants to define Android Operation Constants
     var androidOperationConstants = {
         "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
+        "VPN_OPERATION_CODE": "VPN",
         "CAMERA_OPERATION_CODE": "CAMERA",
         "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
         "WIFI_OPERATION_CODE": "WIFI",
@@ -44,6 +45,7 @@ var operationModule = function () {
         "NOTIFICATION_OPERATION_CODE": "NOTIFICATION",
         "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE",
         "LOCK_OPERATION_CODE": "DEVICE_LOCK",
+        "UPGRADE_FIRMWARE": "UPGRADE_FIRMWARE",
         "DISALLOW_ADJUST_VOLUME": "DISALLOW_ADJUST_VOLUME",
         "DISALLOW_CONFIG_BLUETOOTH" : "DISALLOW_CONFIG_BLUETOOTH",
         "DISALLOW_CONFIG_CELL_BROADCASTS" : "DISALLOW_CONFIG_CELL_BROADCASTS",
@@ -94,6 +96,7 @@ var operationModule = function () {
     var iosOperationConstants = {
         "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
         "RESTRICTIONS_OPERATION_CODE": "RESTRICTION",
+        "VPN_OPERATION_CODE": "VPN",
         "WIFI_OPERATION_CODE": "WIFI",
         "EMAIL_OPERATION_CODE": "EMAIL",
         "AIRPLAY_OPERATION_CODE": "AIR_PLAY",
@@ -109,6 +112,7 @@ var operationModule = function () {
     publicMethods.getIOSServiceEndpoint = function (operationCode) {
         var featureMap = {
             "DEVICE_LOCK": "lock",
+            "VPN": "vpn",
             "RING": "ring",
             "LOCATION": "location",
             "NOTIFICATION": "notification",
@@ -217,6 +221,60 @@ var operationModule = function () {
                     "restrictionsAllowSpellCheck": operationPayload["allowSpellCheck"],
                     "restrictionsSafariAcceptCookies": operationPayload["safariAcceptCookies"],
                     "restrictionsAutonomousSingleAppModePermittedAppIDs": operationPayload["autonomousSingleAppModePermittedAppIDs"]
+                };
+                break;
+            case iosOperationConstants["VPN_OPERATION_CODE"]:
+                var pptp = false;
+                var l2tp = false;
+                if (operationPayload["vpnType"] == "PPTP") {
+                    pptp = true;
+                } else if (operationPayload["vpnType"] == "L2TP") {
+                    l2tp = true;
+                }
+
+                payload = {
+                    "userDefinedName": operationPayload["userDefinedName"],
+                    "overridePrimary": operationPayload["overridePrimary"],
+                    "onDemandEnabled": operationPayload["onDemandEnabled"],
+                    "onDemandMatchDomainsAlways": operationPayload["onDemandMatchDomainsAlways"],
+                    "onDemandMatchDomainsNever": operationPayload["onDemandMatchDomainsNever"],
+                    "onDemandMatchDomainsOnRetry": operationPayload["onDemandMatchDomainsOnRetry"],
+                    "onDemandRules": operationPayload["onDemandRules"],
+                    "vendorConfigs": operationPayload["vendorConfigs"],
+                    "vpnType": operationPayload["vpnType"],
+                    "pptpAuthName": pptp ? operationPayload.ppp["authName"] : "",
+                    "pptpTokenCard": pptp ? operationPayload.ppp["tokenCard"] : "",
+                    "pptpAuthPassword": pptp ? operationPayload.ppp["authPassword"] : "",
+                    "pptpCommRemoteAddress": pptp ? operationPayload.ppp["commRemoteAddress"] : "",
+                    "pptpRSASecureID": pptp ? operationPayload.ppp["RSASecureID"] : "",
+                    "pptpCCPEnabled": pptp ? operationPayload.ppp["CCPEnabled"] : "",
+                    "pptpCCPMPPE40Enabled": pptp ? operationPayload.ppp["CCPMPPE40Enabled"] : "",
+                    "pptpCCPMPPE128Enabled": pptp ? operationPayload.ppp["CCPMPPE128Enabled"] : "",
+                    "l2tpAuthName": l2tp ? operationPayload.ppp["authName"] : "",
+                    "l2tpTokenCard": l2tp ? operationPayload.ppp["tokenCard"] : "",
+                    "l2tpAuthPassword": l2tp ? operationPayload.ppp["authPassword"] : "",
+                    "l2tpCommRemoteAddress": l2tp ? operationPayload.ppp["commRemoteAddress"] : "",
+                    "l2tpRSASecureID": l2tp ? operationPayload.ppp["RSASecureID"] : "",
+                    "ipsecRemoteAddress": operationPayload.ipSec["remoteAddress"],
+                    "ipsecAuthenticationMethod": operationPayload.ipSec["authenticationMethod"],
+                    "ipsecLocalIdentifier": operationPayload.ipSec["localIdentifier"],
+                    "ipsecSharedSecret": operationPayload.ipSec["sharedSecret"],
+                    "ipsecPayloadCertificateUUID": operationPayload.ipSec["payloadCertificateUUID"],
+                    "ipsecXAuthEnabled": operationPayload.ipSec["XAuthEnabled"],
+                    "ipsecXAuthName": operationPayload.ipSec["XAuthName"],
+                    "ipsecPromptForVPNPIN": operationPayload.ipSec["promptForVPNPIN"],
+                    "ikev2RemoteAddress": operationPayload.ikEv2["remoteAddress"],
+                    "ikev2LocalIdentifier": operationPayload.ikEv2["localIdentifier"],
+                    "ikev2RemoteIdentifier": operationPayload.ikEv2["remoteIdentifier"],
+                    "ikev2AuthenticationMethod": operationPayload.ikEv2["authenticationMethod"],
+                    "ikev2SharedSecret": operationPayload.ikEv2["sharedSecret"],
+                    "ikev2PayloadCertificateUUID": operationPayload.ikEv2["payloadCertificateUUID"],
+                    "ikev2ExtendedAuthEnabled": operationPayload.ikEv2["extendedAuthEnabled"],
+                    "ikev2AuthName": operationPayload.ikEv2["authName"],
+                    "ikev2AuthPassword": operationPayload.ikEv2["authPassword"],
+                    "ikev2DeadPeerDetectionInterval": operationPayload.ikEv2["deadPeerDetectionInterval"],
+                    "ikev2ServerCertificateIssuerCommonName": operationPayload.ikEv2["serverCertificateIssuerCommonName"],
+                    "ikev2ServerCertificateCommonName": operationPayload.ikEv2["serverCertificateCommonName"]
                 };
                 break;
             case iosOperationConstants["WIFI_OPERATION_CODE"]:
@@ -342,7 +400,7 @@ var operationModule = function () {
 
     privateMethods.generateIOSOperationPayload = function (operationCode, operationData, deviceList) {
         var payload;
-        var operationType;alert(iosOperationConstants["DOMAIN_CODE"]);alert(operationCode);
+        var operationType;
         switch (operationCode) {
             case iosOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
@@ -401,6 +459,75 @@ var operationModule = function () {
                         "proxyPACFallbackAllowed": operationData["wifiProxyPACFallbackAllowed"],
                         "nairealmNames": operationData["wifiNAIRealmNames"],
                         "mccandMNCs": operationData["wifiMCCAndMNCs"]
+                    }
+                };
+                break;
+            case iosOperationConstants["VPN_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                var ppp = {};
+                var ipSec = {};
+                var ikev2 = {};
+                if (operationData["vpnType"] == "PPTP") {
+                    ppp = {
+                        "authName": operationData["pptpAuthName"],
+                        "tokenCard": operationData["pptpTokenCard"],
+                        "authPassword": operationData["pptpAuthPassword"],
+                        "commRemoteAddress": operationData["pptpCommRemoteAddress"],
+                        "RSASecureID": operationData["pptpRSASecureID"],
+                        "CCPEnabled": operationData["pptpCCPEnabled"],
+                        "CCPMPPE40Enabled": operationData["pptpCCPMPPE40Enabled"],
+                        "CCPMPPE128Enabled": operationData["pptpCCPMPPE128Enabled"]
+                    };
+                } else if (operationData["vpnType"] == "L2TP") {
+                    ppp = {
+                        "authName": operationData["l2tpAuthName"],
+                        "tokenCard": operationData["l2tpTokenCard"],
+                        "authPassword": operationData["l2tpAuthPassword"],
+                        "commRemoteAddress": operationData["l2tpCommRemoteAddress"],
+                        "RSASecureID": operationData["l2tpRSASecureID"]
+                    };
+                } else if (operationData["vpnType"] == "IPSec") {
+                    ipSec = {
+                        "remoteAddress" : operationData["ipsecRemoteAddress"],
+                        "authenticationMethod" : operationData["ipsecAuthenticationMethod"],
+                        "localIdentifier" : operationData["ipsecLocalIdentifier"],
+                        "sharedSecret" : operationData["ipsecSharedSecret"],
+                        "payloadCertificateUUID" : operationData["ipsecPayloadCertificateUUID"],
+                        "XAuthEnabled" : operationData["ipsecXAuthEnabled"],
+                        "XAuthName" : operationData["ipsecXAuthName"],
+                        "promptForVPNPIN" : operationData["ipsecPromptForVPNPIN"]
+                    };
+                } else if (operationData["vpnType"] == "IKEv2") {
+                    ikev2 = {
+                        "remoteAddress" : operationData["ikev2RemoteAddress"],
+                        "localIdentifier" : operationData["ikev2LocalIdentifier"],
+                        "remoteIdentifier" : operationData["ikev2RemoteIdentifier"],
+                        "authenticationMethod" : operationData["ikev2AuthenticationMethod"],
+                        "sharedSecret" : operationData["ikev2SharedSecret"],
+                        "payloadCertificateUUID" : operationData["ikev2PayloadCertificateUUID"],
+                        "extendedAuthEnabled" : operationData["ikev2ExtendedAuthEnabled"],
+                        "authName" : operationData["ikev2AuthName"],
+                        "authPassword" : operationData["ikev2AuthPassword"],
+                        "deadPeerDetectionInterval" : operationData["ikev2DeadPeerDetectionInterval"],
+                        "serverCertificateIssuerCommonName" : operationData["ikev2ServerCertificateIssuerCommonName"],
+                        "serverCertificateCommonName" : operationData["ikev2ServerCertificateCommonName"]
+                    };
+                }
+
+                payload = {
+                    "operation": {
+                        "userDefinedName": operationData["userDefinedName"],
+                        "overridePrimary": operationData["overridePrimary"],
+                        "onDemandEnabled": operationData["onDemandEnabled"],
+                        "onDemandMatchDomainsAlways": operationData["onDemandMatchDomainsAlways"],
+                        "onDemandMatchDomainsNever": operationData["onDemandMatchDomainsNever"],
+                        "onDemandMatchDomainsOnRetry": operationData["onDemandMatchDomainsOnRetry"],
+                        "onDemandRules" : operationData["onDemandRules"],
+                        "vendorConfigs" : operationData["vendorConfigs"],
+                        "vpnType" : operationData["vpnType"],
+                        "ppp": ppp,
+                        "ipSec": ipSec,
+                        "ikEv2": ikev2
                     }
                 };
                 break;
@@ -643,6 +770,14 @@ var operationModule = function () {
                     "wifiPassword": operationPayload["password"]
                 };
                 break;
+            case androidOperationConstants["VPN_OPERATION_CODE"]:
+                payload = {
+                    "serverAddress": operationPayload["serverAddress"],
+                    "serverPort": operationPayload["serverPort"],
+                    "sharedSecret": operationPayload["sharedSecret"],
+                    "dnsServer": operationPayload["dnsServer"]
+                };
+                break;
             case androidOperationConstants["APPLICATION_OPERATION_CODE"]:
                 payload = {
                     "restrictionType": operationPayload["restriction-type"],
@@ -722,6 +857,14 @@ var operationModule = function () {
                     }
                 };
                 break;
+            case androidOperationConstants["UPGRADE_FIRMWARE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "schedule" : operationData["schedule"]
+                    }
+                };
+                break;
             case androidOperationConstants["WIPE_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
@@ -736,6 +879,17 @@ var operationModule = function () {
                     "operation": {
                         "ssid": operationData["wifiSSID"],
                         "password": operationData["wifiPassword"]
+                    }
+                };
+                break;
+            case androidOperationConstants["VPN_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "serverAddress": operationData["serverAddress"],
+                        "serverPort": operationData["serverPort"],
+                        "sharedSecret": operationData["sharedSecret"],
+                        "dnsServer": operationData["dnsServer"]
                     }
                 };
                 break;
@@ -788,6 +942,7 @@ var operationModule = function () {
         var featureMap = {
             "WIFI": "wifi",
             "CAMERA": "camera",
+            "VPN": "vpn",
             "DEVICE_LOCK": "lock",
             "DEVICE_UNLOCK": "unlock",
             "DEVICE_LOCATION": "location",
@@ -1034,8 +1189,6 @@ var operationModule = function () {
                     value = operationDataObj.is(":checked");
                 } else if (operationDataObj.is("select")) {
                     value = operationDataObj.find("option:selected").attr("value");
-                } else if (operationDataObj.is("button")) {
-                    value = operationDataObj.text();
                 } else if (operationDataObj.hasClass("grouped-array-input")) {
                     value = [];
                     var childInput;
@@ -1126,9 +1279,6 @@ var operationModule = function () {
                         });
                     }
                 }
-                if (operationDataObj.is("td")){
-                    value = operationDataObj.html();
-                }
                 operationData[key] = value;
             }
         );
@@ -1184,7 +1334,6 @@ var operationModule = function () {
                     operationDataObj.val(value);
                 } else if (operationDataObj.is(":checkbox")) {
                     operationDataObj.prop("checked", value);
-                    operationDataObj.parents().removeClass("hidden");
                 } else if (operationDataObj.is("select")) {
                     operationDataObj.val(value);
                     /* trigger a change of value, so that if slidable panes exist,
@@ -1290,32 +1439,10 @@ var operationModule = function () {
                             childInputIndex++;
                         });
                     }
-                } else if (operationDataObj.is("table")){
-                    var application_list = value;
-
-                    for(var i = 0; i< application_list.length;i++){
-                        $('#searchable-container_black_list > table > tbody').append( "<tr>"+
-                            "<td>"+application_list[i]+"</td>"+addDeleteButton()+"</tr>");
-                    }
-                    operationDataObj.parents().removeClass("hidden");
-
                 }
             }
         );
     };
-
-    var addDeleteButton = function(){
-        return "<td>"+
-            "<a class='row-delete'>"+
-            "<span class='fw-stack'>"+
-            "<i class='fw fw-ring fw-stack-2x'></i>"+
-            "<i class='fw fw-delete fw-stack-1x'></i>"+
-            "</span>"+
-            "<span class='hidden-xs hidden-on-grid-view'>Delete</span>"+
-            "</a>"+
-            "</td>";
-
-    }
 
     /**
      * generateProfile method is only used for policy-creation UIs.

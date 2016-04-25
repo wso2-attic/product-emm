@@ -99,7 +99,6 @@
             <span id="cellular-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="cellular-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
-        <!--
         <a href="javascript:void(0)" onclick="showAdvanceOperation('vpn', this)">
             <span class="wr-hidden-operations-icon fw-stack">
                 <i class="fw fw-vpn fw-stack-2x"></i>
@@ -109,7 +108,6 @@
             <span id="vpn-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="vpn-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
-        -->
     </div>
 
     <div class="wr-hidden-operations-content col-lg-8">
@@ -303,6 +301,465 @@
             </div>
         </div>
         <!-- End of Passcode policy -->
+
+        <!-- VPN -->
+        <div class="wr-hidden-operation" data-operation="vpn">
+            <div class="panel panel-default operation-data" data-operation="vpn" data-operation-code="VPN">
+                <div id="vpn-heading" class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        VPN Settings
+                        <label class="wr-input-control switch hidden" data-toggle="collapse" data-target="#vpn-body">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr>
+                        <div class="panel-title-description">
+                            This configurations can be used to configure VPN settings on an iOS device.
+                            Once this configuration profile is installed on a device, corresponding users will not be able
+                            to modify these settings on their devices.
+                        </div>
+                    </h2>
+                </div>
+                <div id="vpn-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="vpn-body">
+                    Please note that * sign represents required fields of data.
+                    <br>
+                    <br>
+                    <div id="vpn-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="vpn-connection-name">
+                            Connection Name*
+                                <span class="helper" title="Display name of the connection.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <input id="vpn-connection-name" type="text" class="form-control operationDataKeys" data-key="userDefinedName" maxlength="200" disabled/>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="vpn-override-primary" type="checkbox" class="form-control operationDataKeys" data-key="overridePrimary" data-default="true" disabled/>
+                            <span class="helper" title="Specifies whether to send all traffic through the VPN interface. If true, all network traffic is sent over VPN.">
+                                &nbsp;&nbsp;&nbsp;Override Primary
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-control checkbox">
+                            <input id="vpn-ondemand-enabled" type="checkbox" class="form-control operationDataKeys" data-key="onDemandEnabled" data-default="false" onchange="slideDownPaneAgainstValueSet(this, 'vpn-ondemand-config', ['true'])" disabled/>
+                            <span class="helper" title="Check if the VPN connection should be brought up on demand, else leave un-checked.">
+                                &nbsp;&nbsp;&nbsp;On-demand Enabled
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                    </div>
+                    <div id="vpn-ondemand-config" class="slidable-pane" style="display:none;">
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="vpn-ondemand-domains-always">
+                                On-demand match domains (Always)
+                                    <span class="helper" title="A list of domain names. In versions of iOS prior to iOS 7, if the hostname ends with one of these domain names, the VPN is started automatically.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                            </label>
+                            <input id="vpn-ondemand-domains-always" type="text" class="form-control operationDataKeys" data-key="onDemandMatchDomainsAlways" maxlength="200" disabled/>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="vpn-ondemand-domains-never">
+                                On-demand match domains (Never)
+                                    <span class="helper" title="A list of domain names. In versions of iOS prior to iOS 7, if the hostname ends with one of these domain names, the VPN is not started automatically. This might be used to exclude a subdomain within an included domain.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                            </label>
+                            <input id="vpn-ondemand-domains-never" type="text" class="form-control operationDataKeys" data-key="onDemandMatchDomainsNever" maxlength="200" disabled/>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="vpn-ondemand-domains-retry">
+                                On-demand match domains (On Retry)
+                                    <span class="helper" title="A list of domain names. In versions of iOS prior to iOS 7, if the hostname ends with one of these domain names, if a DNS query for that domain name fails, the VPN is started automatically">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                            </label>
+                            <input id="vpn-ondemand-domains-retry" type="text" class="form-control operationDataKeys" data-key="onDemandMatchDomainsOnRetry" maxlength="200" disabled/>
+                            <input id="vpn-ondemand-rules" type="hidden" class="form-control operationDataKeys" data-key="onDemandRules" disabled/>
+                            <input id="vpn-vendor-configs" type="hidden" class="form-control operationDataKeys" data-key="vendorConfigs" disabled/>
+                        </div>
+                    </div>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="vpn-type">
+                            VPN Type*
+                            <span class="helper" title="Type of the VPN connection enabled.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                        </label>
+                        <select id="vpn-type" class="form-control operationDataKeys" data-key="vpnType" data-default="0" onchange="slideDownPaneAgainstValueSet(this, 'pptp-config', ['PPTP']); slideDownPaneAgainstValueSet(this, 'l2tp-config', ['L2TP']); slideDownPaneAgainstValueSet(this, 'ipsec-config', ['IPSec']); slideDownPaneAgainstValueSet(this, 'ikev2-config', ['IKEv2']);" disabled>
+                            <option value="PPTP" selected="selected">PPTP</option>
+                            <option value="L2TP">L2TP</option>
+                            <option value="IPSec">IPSec</option>
+                            <option value="IKEv2">IKEv2</option>
+                        </select>
+                    </div>
+                    <div id="pptp-config" class="slidable-pane" style="display:none;">
+                        For PPTP Configuration :
+                        <br>
+                        <br>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="vpn-pptp-username">
+                                VPN Account Username*
+                                <span class="helper" title="The VPN account username.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                            </label>
+                            <input id="vpn-pptp-username" type="text" class="form-control operationDataKeys" data-key="pptpAuthName" maxlength="100" data-default="" disabled/>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-control checkbox">
+                                <input id="vpn-pptp-token-card" type="checkbox" class="form-control operationDataKeys" data-key="pptpTokenCard" data-default="false" onchange="slideDownPaneAgainstValueSet(this, 'pptp-card-config', ['false'])" disabled/>
+                            <span class="helper" title="Whether to use a token card such as an RSA SecurID card for connecting.">
+                                &nbsp;&nbsp;&nbsp;Token Card Enabled
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                        </div>
+                        <div id="pptp-card-config" class="slidable-pane" style="display:none;">
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="vpn-pptp-password">
+                                    VPN Account Password
+                                    <span class="helper" title="The VPN account password.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                                </label>
+                                <input id="vpn-pptp-password" type="text" class="form-control operationDataKeys" data-key="pptpAuthPassword" maxlength="100" data-default="" disabled/>
+                            </div>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="vpn-pptp-comm-remote">
+                                Comm Remote Address*
+                                <span class="helper" title="IP address or host name of VPN server.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                            </label>
+                            <input id="vpn-pptp-comm-remote" type="text" class="form-control operationDataKeys" data-key="pptpCommRemoteAddress" maxlength="100" data-default="" disabled/>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-control checkbox">
+                                <input id="vpn-pptp-rsa" type="checkbox" class="form-control operationDataKeys" data-key="pptpRSASecureID" data-default="false" disabled/>
+                            <span class="helper" title="Whether RSA Secure ID is enabled.">
+                                &nbsp;&nbsp;&nbsp;RSA SecureID Enabled
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-control checkbox">
+                                <input id="vpn-pptp-ccp" type="checkbox" class="form-control operationDataKeys" data-key="pptpCCPEnabled" data-default="false" onchange="slideDownPaneAgainstValueSet(this, 'pptp-encryption-config', ['true'])" disabled/>
+                            <span class="helper" title="Enables encryption on the connection.">
+                                &nbsp;&nbsp;&nbsp;CCP Encryption Enabled
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                        </div>
+                        <div id="pptp-encryption-config" class="slidable-pane" style="display:none;">
+                            <div class="wr-input-control">
+                                <label class="wr-input-control checkbox">
+                                    <input id="vpn-pptp-ccpmppe-fourty" type="checkbox" class="form-control operationDataKeys" data-key="pptpCCPMPPE40Enabled" data-default="false" disabled/>
+                                <span class="helper" title="Enables encryption on the connection. Using automatic encryption level.">
+                                    &nbsp;&nbsp;&nbsp;Automatic (CCPMPPE40) Encryption Level Enabled
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                </label>
+                            </div>
+                            <div class="wr-input-control">
+                                <label class="wr-input-control checkbox">
+                                    <input id="vpn-pptp-ccpmppe-one-two-eight" type="checkbox" class="form-control operationDataKeys" data-key="pptpCCPMPPE128Enabled" data-default="false" disabled/>
+                                <span class="helper" title="Enables encryption on the connection. Using maximum encryption level.">
+                                    &nbsp;&nbsp;&nbsp;Maximum (CCPMPPE128) Encryption Level Enabled
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="l2tp-config" class="slidable-pane" style="display:none;">
+                        For L2TP Configuration :
+                        <br>
+                        <br>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="vpn-l2tp-username">
+                                VPN Account Username*
+                                <span class="helper" title="The VPN account username.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                            </label>
+                            <input id="vpn-l2tp-username" type="text" class="form-control operationDataKeys" data-key="l2tpAuthName" maxlength="100" data-default="" disabled/>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-control checkbox">
+                                <input id="vpn-l2tp-token-card" type="checkbox" class="form-control operationDataKeys" data-key="l2tpTokenCard" data-default="false" onchange="slideDownPaneAgainstValueSet(this, 'l2tp-card-config', ['false'])" disabled/>
+                            <span class="helper" title="Whether to use a token card such as an RSA SecurID card for connecting.">
+                                &nbsp;&nbsp;&nbsp;Token Card Enabled
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                        </div>
+                        <div id="l2tp-card-config" class="slidable-pane" style="display:none;">
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="vpn-l2tp-password">
+                                    VPN Account Password
+                                    <span class="helper" title="The VPN account password.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                                </label>
+                                <input id="vpn-l2tp-password" type="text" class="form-control operationDataKeys" data-key="l2tpAuthPassword" maxlength="100" data-default="" disabled/>
+                            </div>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="vpn-l2tp-comm-remote">
+                                Comm Remote Address*
+                                <span class="helper" title="IP address or host name of VPN server.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                            </label>
+                            <input id="vpn-l2tp-comm-remote" type="text" class="form-control operationDataKeys" data-key="l2tpCommRemoteAddress" maxlength="100" data-default="" disabled/>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-control checkbox">
+                                <input id="vpn-l2tp-rsa" type="checkbox" class="form-control operationDataKeys" data-key="l2tpRSASecureID" data-default="false" disabled/>
+                            <span class="helper" title="Whether RSA Secure ID is enabled.">
+                                &nbsp;&nbsp;&nbsp;RSA SecureID Enabled
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="ipsec-config" class="slidable-pane" style="display:none;">
+                        For IPSec Configuration :
+                        <br>
+                        <br>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="vpn-ipsec-address">
+                                Remote Address*
+                                <span class="helper" title="IP address or host name of the VPN server. Used for Cisco IPSec.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                            </label>
+                            <input id="vpn-ipsec-address" type="text" class="form-control operationDataKeys" data-key="ipsecRemoteAddress" maxlength="100" data-default="" disabled/>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="vpn-ipsec-auth-method">
+                                Authentication Method*
+                            <span class="helper" title="Authentication method.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                            <select id="vpn-ipsec-auth-method" class="form-control operationDataKeys" data-key="ipsecAuthenticationMethod" data-default="0" onchange="slideDownPaneAgainstValueSet(this, 'ipsec-auth-mode-config-secret', ['SharedSecret']); slideDownPaneAgainstValueSet(this, 'ipsec-auth-mode-config-certificate', ['Certificate']);" disabled>
+                                <option value="SharedSecret" selected="selected">Shared Secret</option>
+                                <option value="Certificate">Certificate</option>
+                            </select>
+                        </div>
+                        <div id="ipsec-auth-mode-config-secret" class="slidable-pane" style="display:none;">
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="vpn-ipsec-local-id">
+                                    Local Identifier*
+                                <span class="helper" title="The name of the group to use.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                </label>
+                                <input id="vpn-ipsec-local-id" type="text" class="form-control operationDataKeys" data-key="ipsecLocalIdentifier" maxlength="100" data-default="" disabled/>
+                            </div>
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="vpn-ipsec-secret">
+                                    Shared Secret*
+                                <span class="helper" title="The shared secret for this VPN account.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                </label>
+                                <input id="vpn-ipsec-secret" type="password" class="form-control operationDataKeys" data-key="ipsecSharedSecret" maxlength="100" data-default="" disabled/>
+                            </div>
+                        </div>
+                        <div id="ipsec-auth-mode-config-certificate" class="slidable-pane" style="display:none;">
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="vpn-ipsec-payload-uuid">
+                                    Payload Certificate UUID*
+                                <span class="helper" title="The UUID of the certificate to use for the account credentials.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                </label>
+                                <input id="vpn-ipsec-payload-uuid" type="text" class="form-control operationDataKeys" data-key="ipsecPayloadCertificateUUID" maxlength="100" data-default="" disabled/>
+                            </div>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-control checkbox">
+                                <input id="vpn-ipsec-xauth-enabled" type="checkbox" class="form-control operationDataKeys" data-key="ipsecXAuthEnabled" data-default="false"  onchange="slideDownPaneAgainstValueSet(this, 'ipsec-xauth', ['true'])" disabled/>
+                            <span class="helper" title="Whether XAuth is enabled.">
+                                &nbsp;&nbsp;&nbsp;XAuth Enabled
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                        </div>
+                        <div id="ipsec-xauth" class="slidable-pane" style="display:none;">
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="vpn-ipsec-xauth-name">
+                                    XAuth Name*
+                                    <span class="helper" title="User name for VPN account. Used for Cisco IPSec.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                                </label>
+                                <input id="vpn-ipsec-xauth-name" type="text" class="form-control operationDataKeys" data-key="ipsecXAuthName" maxlength="100" data-default="" disabled/>
+                            </div>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-control checkbox">
+                                <input id="vpn-ipsec-prompt-pin" type="checkbox" class="form-control operationDataKeys" data-key="ipsecPromptForVPNPIN" data-default="false" disabled/>
+                            <span class="helper" title="Tells whether to prompt for a PIN when connecting. Used for Cisco IPSec.">
+                                &nbsp;&nbsp;&nbsp;Prompt for VPN PIN
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="ikev2-config" class="slidable-pane" style="display:none;">
+                        For IKEv2 Configuration :
+                        <br>
+                        <br>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="vpn-ikev2-address">
+                                Remote Address*
+                                <span class="helper" title="IP address or host name of the VPN server.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                            </label>
+                            <input id="vpn-ikev2-address" type="text" class="form-control operationDataKeys" data-key="ikev2RemoteAddress" maxlength="100" data-default="" disabled/>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="vpn-ikev2-local-id">
+                                Local Identifier*
+                            <span class="helper" title="Identifier of the IKEv2 client.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                            <select id="vpn-ikev2-local-id" class="form-control operationDataKeys" data-key="ikev2LocalIdentifier" data-default="0" disabled>
+                                <option value="FQDN" selected="selected">FQDN</option>
+                                <option value="UserFQDN">User FQDN</option>
+                                <option value="Address">Address</option>
+                                <option value="ASN1DN">ASN1DN</option>
+                            </select>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="vpn-ikev2-remote-id">
+                                Remote Identifier*
+                            <span class="helper" title="Remote identifier.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                            <select id="vpn-ikev2-remote-id" class="form-control operationDataKeys" data-key="ikev2RemoteIdentifier" data-default="0" disabled>
+                                <option value="FQDN" selected="selected">FQDN</option>
+                                <option value="UserFQDN">User FQDN</option>
+                                <option value="Address">Address</option>
+                                <option value="ASN1DN">ASN1DN</option>
+                            </select>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="vpn-ikev2-auth-method">
+                                Authentication Method*
+                            <span class="helper" title="Authentication method.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                            <select id="vpn-ikev2-auth-method" class="form-control operationDataKeys" data-key="ikev2AuthenticationMethod" data-default="0" onchange="slideDownPaneAgainstValueSet(this, 'ikev2-auth-mode-config-secret', ['SharedSecret']); slideDownPaneAgainstValueSet(this, 'ikev2-auth-mode-config-certificate', ['Certificate']);" disabled>
+                                <option value="SharedSecret" selected="selected">Shared Secret</option>
+                                <option value="Certificate">Certificate</option>
+                            </select>
+                        </div>
+                        <div id="ikev2-auth-mode-config-secret" class="slidable-pane" style="display:none;">
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="vpn-ikev2-secret">
+                                    Shared Secret*
+                                <span class="helper" title="The shared secret for this VPN account.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                </label>
+                                <input id="vpn-ikev2-secret" type="password" class="form-control operationDataKeys" data-key="ikev2SharedSecret" maxlength="100" data-default="" disabled/>
+                            </div>
+                        </div>
+                        <div id="ikev2-auth-mode-config-certificate" class="slidable-pane" style="display:none;">
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="vpn-ikev2-payload-uuid">
+                                    Payload Certificate UUID*
+                                <span class="helper" title="The UUID of the certificate to use for the account credentials.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                </label>
+                                <input id="vpn-ikev2-payload-uuid" type="text" class="form-control operationDataKeys" data-key="ikev2PayloadCertificateUUID" maxlength="100" data-default="" disabled/>
+                            </div>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-control checkbox">
+                                <input id="vpn-ikev2-exauth-enabled" type="checkbox" class="form-control operationDataKeys" data-key="ikev2ExtendedAuthEnabled" data-default="false"  onchange="slideDownPaneAgainstValueSet(this, 'ikev2-exauth', ['true'])" disabled/>
+                            <span class="helper" title="Whether XAuth is enabled.">
+                                &nbsp;&nbsp;&nbsp;Extended Authentication Enabled
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                        </div>
+                        <div id="ikev2-exauth" class="slidable-pane" style="display:none;">
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="vpn-ikev2-ex-username">
+                                    Username*
+                                <span class="helper" title="Username used for authentication.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                </label>
+                                <input id="vpn-ikev2-ex-username" type="text" class="form-control operationDataKeys" data-key="ikev2AuthName" maxlength="100" data-default="" disabled/>
+                            </div>
+                            <div class="wr-input-control">
+                                <label class="wr-input-label" for="vpn-ikev2-ex-pass">
+                                    Password*
+                                <span class="helper" title="Password used for authentication.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                                </label>
+                                <input id="vpn-ikev2-ex-pass" type="password" class="form-control operationDataKeys" data-key="ikev2AuthPassword" maxlength="100" data-default="" disabled/>
+                            </div>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="vpn-ikev2-dead-peer">
+                                Dead Peer Detection Interval
+                            <span class="helper" title="Dead Peer Detection Interval.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            </label>
+                            <select id="vpn-ikev2-dead-peer" class="form-control operationDataKeys" data-key="ikev2DeadPeerDetectionInterval" data-default="0" disabled>
+                                <option value="None" selected="selected">None</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="vpn-ikev2-scicn">
+                                Server Certificate Issuer Common Name
+                                <span class="helper" title="Common Name of the server certificate issuer. If set, this will cause IKE to send a certificate request based on this certificate issuer to the server.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                            </label>
+                            <input id="vpn-ikev2-scicn" type="text" class="form-control operationDataKeys" data-key="ikev2ServerCertificateIssuerCommonName" maxlength="100" data-default="" disabled/>
+                        </div>
+                        <div class="wr-input-control">
+                            <label class="wr-input-label" for="vpn-ikev2-sccn">
+                                Server Certificate Common Name
+                                <span class="helper" title="Common Name of the server certificate. This name is used to validate the certificate sent by the IKE server. If not set, the Remote Identifier will be used to validate the certificate.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                            </label>
+                            <input id="vpn-ikev2-sccn" type="text" class="form-control operationDataKeys" data-key="ikev2ServerCertificateCommonName" maxlength="100" data-default="" disabled/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /VPN -->
 
         <!-- Wifi -->
         <div class="wr-hidden-operation" data-operation="wifi">

@@ -47,6 +47,8 @@ var androidOperationConstants = {
     "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
     "WIFI_OPERATION": "wifi",
     "WIFI_OPERATION_CODE": "WIFI",
+    "VPN_OPERATION": "vpn",
+    "VPN_OPERATION_CODE": "VPN",
     "APPLICATION_OPERATION":"app-restriction",
     "APPLICATION_OPERATION_CODE":"APP-RESTRICTION"
 };
@@ -83,7 +85,9 @@ var iosOperationConstants = {
     "APN_OPERATION_CODE": "APN",
     "CELLULAR_OPERATION": "cellular",
     "CELLULAR_OPERATION_CODE": "CELLULAR",
-    "DOMAIN": "DOMAIN"
+    "DOMAIN": "DOMAIN",
+    "VPN_OPERATION_CODE": "VPN",
+    "VPN_OPERATION": "vpn"
 };
 
 /**
@@ -340,6 +344,62 @@ validateStep["policy-profile"] = function () {
                         "erroneousFeature": operation
                     };
                     continueToCheckNextInputs = false;
+                }
+
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
+            }
+
+            if ($.inArray(androidOperationConstants["VPN_OPERATION_CODE"], configuredOperations) != -1) {
+                // if WIFI is configured
+                operation = androidOperationConstants["VPN_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
+
+                var serverAddress = $("input#vpn-server-address").val();
+                if (!serverAddress) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Server address is required. You cannot proceed.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
+
+                if (continueToCheckNextInputs) {
+                    var serverPort = $("input#vpn-server-port").val();
+                    if (!serverPort) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "VPN server port is required. You cannot proceed.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    } else if (!$.isNumeric(serverPort)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "VPN server port requires a number input.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    } else if (!inputIsValidAgainstRange(serverPort, 0, 65535)) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "VPN server port is not within the range " +
+                            "of valid port numbers.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
                 }
 
                 // at-last, if the value of continueToCheckNextInputs is still true
@@ -1086,6 +1146,34 @@ validateStep["policy-profile"] = function () {
                     }
                 }
 
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+
+                // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
+            }
+
+            if ($.inArray(iosOperationConstants["VPN_OPERATION_CODE"], configuredOperations) != -1) {
+                // if WIFI is configured
+                operation = iosOperationConstants["VPN_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
+
+                var connectionName = $("input#vpn-connection-name").val();
+                if (!connectionName) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Connection Name is required. You cannot proceed.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
                 // at-last, if the value of continueToCheckNextInputs is still true
                 // this means that no error is found
                 if (continueToCheckNextInputs) {
@@ -2096,7 +2184,6 @@ stepForwardFrom["policy-naming-publish"] = function () {
     policy["description"] = $("#policy-description-input").val();
     //All data is collected. Policy can now be updated.
     savePolicy(policy, "/mdm-admin/policies/active-policy");
-
 };
 stepForwardFrom["policy-naming"] = function () {
     policy["policyName"] = $("#policy-name-input").val();
@@ -2283,6 +2370,31 @@ var showHideHelpText = function (addFormContainer) {
     }
 };
 
+function formatRepo(user) {
+    if (user.loading) {
+        return user.text;
+    }
+    if (!user.username) {
+        return;
+    }
+    var markup = '<div class="clearfix">' +
+                 '<div clas="col-sm-8">' +
+                 '<div class="clearfix">' +
+                 '<div class="col-sm-3">' + user.username + '</div>';
+    if (user.firstname) {
+        markup += '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + user.firstname + '</div>';
+    }
+    if (user.emailAddress) {
+        markup += '<div class="col-sm-2"><i class="fa fa-star"></i> ' + user.emailAddress + '</div></div>';
+    }
+    markup += '</div></div>';
+    return markup;
+}
+
+function formatRepoSelection(user) {
+    return user.username || user.text;
+}
+
 function promptErrorPolicyPlatform(errorMsg) {
     var mainErrorMsgWrapper = "#policy-platform-main-error-msg";
     var mainErrorMsg = mainErrorMsgWrapper + " span";
@@ -2292,31 +2404,6 @@ function promptErrorPolicyPlatform(errorMsg) {
 
 // End of functions related to grid-input-view
 
-var searchAndFade = function(keyWord){
-    var application_index = $('th:contains("Application")').index();
-    $("table tr td:nth-child("+(application_index+1)+")").each(function () {
-        var application_name = $(this).text();
-        if(application_name.indexOf(keyWord) > -1){
-            $(this).parent().fadeIn("1000");
-        }
-        else{
-            $(this).parent().fadeOut("2000");
-        }
-    });
-}
-
-var addDeleteButton = function(){
-     return "<td>"+
-        "<a class='row-delete'>"+
-        "<span class='fw-stack'>"+
-        "<i class='fw fw-ring fw-stack-2x'></i>"+
-        "<i class='fw fw-delete fw-stack-1x'></i>"+
-        "</span>"+
-        "<span class='hidden-xs hidden-on-grid-view'>Delete</span>"+
-        "</a>"+
-        "</td>";
-
-}
 
 $(document).ready(function () {
     var enabledPlatforms = $("#supportedPlatforms");
@@ -2358,7 +2445,45 @@ $(document).ready(function () {
             promptErrorPolicyPlatform("You need to configure IOS plugging in order to use ios related feature.");
         });
     }
-    
+
+    $("#users-input").select2({
+        multiple: true,
+        tags: false,
+        ajax: {
+            url: window.location.origin + "/emm/api/invoker/execute/",
+            method: "POST",
+            dataType: 'json',
+            delay: 250,
+            id: function (user) {
+                return user.username;
+            },
+            data: function (params) {
+                var postData = {};
+                postData.actionMethod = "GET";
+                postData.actionUrl = "/mdm-admin/users/view-users?username=" + params.term;
+                postData.actionPayload = null;
+                return JSON.stringify(postData);
+            },
+            processResults: function (data, page) {
+                var newData = [];
+                $.each(data.responseContent, function (index, value) {
+                    value.id = value.username;
+                    newData.push(value);
+                });
+                return {
+                    results: newData
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (markup) {
+            return markup;
+        }, // let our custom formatter work
+        minimumInputLength: 1,
+        templateResult: formatRepo, // omitted for brevity, see the source of this page
+        templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+    });
+
     $("#loading-content").remove();
     $(".policy-platform").removeClass("hidden");
     // Adding initial state of wizard-steps.
@@ -2487,7 +2612,6 @@ $(document).ready(function () {
             }
         }
     });
-
 
     // adding support for cloning multiple profiles per feature with cloneable class definitions
     $(advanceOperations).on("click", ".multi-view.add.enabled", function () {

@@ -101,7 +101,6 @@ public class EMMSystemService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         cdmDeviceAdmin = new ComponentName(this, ServiceDeviceAdminReceiver.class);
-
         devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         mUserManager = (UserManager) getSystemService(Context.USER_SERVICE);
         if (!devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {

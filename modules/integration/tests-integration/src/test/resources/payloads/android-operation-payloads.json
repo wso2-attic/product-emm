@@ -32,6 +32,15 @@
       },
       "deviceIDs": []
     },
+  "vpn" : {
+    "operation": {
+      "serverAddress": "serverAddress",
+      "serverPort": "serverPort",
+      "sharedSecret": "sharedSecret",
+      "dnsServer": "dnsServer"
+    },
+    "deviceIDs": []
+  },
   "wifi" : {
     "operation": {
       "ssid": "ssid",
