@@ -61,6 +61,7 @@ public class OperationMgtService {
         Message message;
         MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
 
+
         if (id == null || id.isEmpty()) {
             String errorMessage = "Device identifier is null or empty, hence returning device not found";
             message = Message.responseMessage(errorMessage).

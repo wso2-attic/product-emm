@@ -252,6 +252,7 @@ public class Constants {
 		public static final String SET_STATUS_BAR_DISABLED = "SET_STATUS_BAR_DISABLED";
 		public static final String SILENT_INSTALL_APPLICATION = "SILENT_INSTALL_APPLICATION";
 		public static final String SILENT_UNINSTALL_APPLICATION = "SILENT_UNINSTALL_APPLICATION";
+		public static final String WORK_PROFILE= "WORK_PROFILE";
 	}
 
 	/**
