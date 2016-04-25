@@ -1322,6 +1322,61 @@ public class Operation implements APIResultCallBack {
 		}
 	}
 
+
+	public void restrictAccessToApplications(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException{
+		try {
+			JSONObject payload = new JSONObject(operation.getPayLoad().toString());
+			String restrictionType = (String) payload.get("restriction-type");
+
+		} catch (JSONException e) {
+			operation.setStatus(resources.getString(R.string.operation_value_error));
+			resultBuilder.build(operation);
+			throw new AndroidAgentException("Invalid JSON format.", e);
+		}
+
+		String ownershipType = Preference.getString(context, Constants.DEVICE_TYPE);
+		ArrayList<String> appList = new ArrayList<>();
+
+		if (blacklistApps != null) {
+			for (int i=0;i<blacklistApps.length();i++){
+				try {
+					appList.add(blacklistApps.get(i).toString().split("<br>")[0]);
+				} catch (JSONException e) {
+					operation.setStatus(resources.getString(R.string.operation_value_error));
+					resultBuilder.build(operation);
+					throw new AndroidAgentException("Invalid JSON format", e);
+				}
+			}
+		}
+
+		if (Constants.OWNERSHIP_BYOD.equals(ownershipType)) {
+			Intent restrictionIntent = new Intent(context, AppLockService.class);
+			restrictionIntent.setAction("AppLockService");
+
+			restrictionIntent.putStringArrayListExtra("appList", appList);
+
+			PendingIntent pendingIntent = PendingIntent.getService(context, 0, restrictionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+			AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTimeInMillis(System.currentTimeMillis());
+			calendar.add(Calendar.SECOND, 1); // first time
+			long frequency= 1 * 1000; // in ms
+			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), frequency, pendingIntent);
+
+			context.startService(restrictionIntent);
+		} else if (Constants.OWNERSHIP_COPE.equals(ownershipType)) {
+
+			for (String packageName : appList) {
+				CommonUtils.callSystemApp(context, operation.getCode(), null, packageName);
+			}
+		}
+		operation.setStatus(resources.getString(R.string.operation_value_completed));
+		resultBuilder.build(operation);
+
+
+	}
+
 	/**
 	 * This method returns the completed operations list.
 	 *
