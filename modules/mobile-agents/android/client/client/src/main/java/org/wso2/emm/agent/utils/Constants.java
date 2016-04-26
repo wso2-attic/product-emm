@@ -386,4 +386,16 @@ public class Constants {
 		public static final String NOTIFIER_TYPE = "notifierType";
 	}
 
+	public final class AppRestriction {
+		private AppRestriction() {
+			throw new AssertionError();
+		}
+
+		public static final String RESTRICTION_TYPE = "restriction-type";
+		public static final String RESTRICTED_APPLICATIONS = "restricted-applications";
+		public static final String WHITE_LIST = "white-list";
+		public static final String BLACK_LIST = "black-list";
+		public static final String PACKAGE_NAME = "packageName";
+	}
+
 }
