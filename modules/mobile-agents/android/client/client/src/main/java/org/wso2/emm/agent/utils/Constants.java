@@ -253,6 +253,7 @@ public class Constants {
 		public static final String SILENT_INSTALL_APPLICATION = "SILENT_INSTALL_APPLICATION";
 		public static final String SILENT_UNINSTALL_APPLICATION = "SILENT_UNINSTALL_APPLICATION";
 		public static final String APP_RESTRICTION = "APP-RESTRICTION";
+		public static final String WORK_PROFILE= "WORK_PROFILE";
 	}
 
 	/**

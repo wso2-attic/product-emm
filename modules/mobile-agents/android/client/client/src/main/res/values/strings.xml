@@ -17,7 +17,6 @@
  ~ under the License.
 -->
 <resources>
-
     <string name="client_id">or0WN8OXqpsBfLSQOShf14TeojEa</string>
     <string name="client_secret">WALHOjfXmMNjbjhZdIbQ5zTjDN0a</string>
     <string name="error_config">Please set the %1$s constant and recompile the app.</string>
@@ -56,6 +55,8 @@
     <string name="device_not_compatible_error">You are not allowed to enroll because your device is rooted and device OS version is older than 4.0.3</string>
     <string name="device_not_compatible_error_os">You are not allowed to enroll because your device OS version is older than 4.0.3</string>
     <string name="device_not_compatible_error_root">You are not allowed to enroll because your device is rooted</string>
+    <string name="device_not_compatible_with_android_for_work">Device is incompatible with Android For Work</string>
+    <string name="device_compatible_with_android_for_work">Device is compatible with Android For Work</string>
     <string name="device_compatible">Compatible device</string>
     <string name="title_activity_authentication_error">AuthenticationError</string>
     <string name="title_activity_notification">NotificationActivity</string>
@@ -114,6 +115,8 @@
     <string name="intent_extra_username">username</string>
     <string name="intent_extra_ssid">ssid</string>
     <string name="intent_extra_server">serverAddress</string>
+    <string name="intent_extra_schedule">schedule</string>
+    <string name="pref_key_schedule">firmware_upgrade_schedule</string>
     <string name="intent_extra_server_port">serverPort</string>
     <string name="intent_extra_shared_secret">sharedSecret</string>
     <string name="intent_extra_dns">dnsServer</string>
@@ -145,7 +148,11 @@
     <string name="intent_extra_alert">alert</string>
     <string name="intent_extra_ring">ring</string>
     <string name="intent_extra_password_setting">lock_settings</string>
-
+    <string name="intent_extra_profile_name">profileName</string>
+    <string name="intent_extra_enable_system_apps">enableSystemApps</string>
+    <string name="intent_extra_enable_google_play_apps">enableGooglePlayApps</string>
+    <string name="intent_extra_hide_system_apps">hideSystemApps</string>
+    <string name="intent_extra_unhide_system_apps">unhideSystemApps</string>
     <!-- POLICY CONFIGURATION FIELDS -->
     <string name="policy_password_max_failed_attempts">maxFailedAttempts</string>
     <string name="policy_password_min_length">minLength</string>
@@ -226,6 +233,7 @@
     <string name="error_app_install_policy">\nFollowing apps must be installed on your device, please install them. \n</string>
     <string name="error_app_uninstall_policy">\nFollowing apps are blacklisted by your EMM Admin, please remove them. \n</string>
     <string name="error_wifi_policy">\nYou are not using company WIFI account, please change your WIFI configuration \n</string>
+    <string name="error_work_profile_policy">\nYour work-profile configurations are not adhering to the policy, please undo if any customizations have been done. \n</string>
 
     <!-- DIALOG TITLES AND MESSAGES -->
     <string name="dialog_authenticate">Authenticating</string>
@@ -284,6 +292,7 @@
     <string name="authentication_failed">Authentication Failed</string>
     <string name="try_again">Try again</string>
     <string name="button_unregister">Unregister</string>
+    <string name="button_enable_managed_profile">Enable Managed Profile</string>
     <string name="txt_domain">Domain</string>
     <string name="txt_username">Username</string>
     <string name="txt_password">Password</string>
@@ -298,12 +307,14 @@
     <string name="txt_enter_pin">Enter PIN Code</string>
     <string name="txt_new_pin">Set PIN Code</string>
     <string name="txt_start_reg">Start Registration</string>
+    <string name="txt_start_enable_work_profile">Setup Work-Profile</string>
+    <string name="txt_skip_to_enrolling">Skip and go to Enrollment</string>
     <string name="txt_register_success">Device successfully registered, click to un-register from the EMM</string>
     <string name="txt_unregister">Unregister</string>
     <string name="txt_enroll">Please click to enroll the device</string>
     <string name="txt_lblpin">Please enter a PIN code to make your device safe from critical operations</string>
     <string name="button_unregister_text">Device successfully registered, click to unregister from the EMM</string>
-
+    <string name="txt_managed_profile_enable">Managed Profile is Enabled</string>
     <!-- APPLICATION MANAGER -->
     <string name="application_mgr_download_location">/Download/</string>
     <string name="application_mgr_download_file_name">update.apk</string>
@@ -319,6 +330,7 @@
 
     <!-- Headings -->
     <string name="registration_heading">Set your server address here to start registration, i.e : www.abc.com. If your server runs on a special port, server address should be in following format. i.e : www.abc.com:9763</string>
+    <string name="enable_work_profile_heading">Your device supports Android For Work. Set-up the work-profile first and let the Agent Control the Work Profile.</string>
 
     <!-- Validation Errors -->
     <string name="validation_pin_confirm">PINs don\'t match, Please re-enter</string>
@@ -352,5 +364,7 @@
     <string name="connecting">VPN is connecting...</string>
     <string name="connected">VPN is connected</string>
     <string name="disconnected">VPN is disconnected</string>
-
+    <string name="split_delimiter">,</string>
+    <!-- Android For Work User Restrictions -->
+    <string name="allow_parent_profile_app_linking">ALLOW_PARENT_PROFILE_APP_LINKING</string>
 </resources>

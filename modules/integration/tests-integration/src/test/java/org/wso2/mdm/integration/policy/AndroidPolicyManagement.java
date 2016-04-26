@@ -39,9 +39,19 @@ public class AndroidPolicyManagement extends TestBase {
     }
 
     @Test(description = "Test add policy.")
-    public void testAddPolicy() throws Exception  {
+    public void testAddPolicy() throws Exception {
         MDMResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
                 PayloadGenerator.getJsonPayload(Constants.PolicyManagement.ANDROID_POLICY_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_POST).toString());
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_POST).toString(),response.getBody());
+    }
+
+    @Test(description = "Test add policy for work-profile")
+    public void testAddWorkProfilePolicy() throws Exception{
+        MDMResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
+                PayloadGenerator.getJsonPayload(Constants.PolicyManagement.ANDROID_POLICY_WORK_PROFILE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         Assert.assertEquals(PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,

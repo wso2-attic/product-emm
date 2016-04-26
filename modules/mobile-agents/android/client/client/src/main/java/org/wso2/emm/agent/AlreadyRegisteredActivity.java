@@ -21,7 +21,6 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.events.EventRegistry;
@@ -258,7 +257,9 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			loadHomeScreen();
 			return true;
 		}
-		return super.onKeyDown(keyCode, event);
+		else {
+			return super.onKeyDown(keyCode, event);
+		}
 	}
 
 	@Override
@@ -499,7 +500,6 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			progressDialog.dismiss();
 		}
 	}
-
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

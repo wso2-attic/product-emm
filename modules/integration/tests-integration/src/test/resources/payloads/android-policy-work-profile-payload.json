@@ -1,0 +1,26 @@
+{"POST": {
+  "policyName": "Work-Profile",
+  "description": "",
+  "compliance": "enforce",
+  "ownershipType": "ANY",
+  "profile": {
+    "profileName": "Work-Profile",
+    "deviceType": {
+      "id": 1
+    },
+    "profileFeaturesList": [{
+      "featureCode": "WORK_PROFILE",
+      "deviceTypeId": 1,
+      "content": {
+        "DISALLOW_CROSS_PROFILE_COPY_PASTE": true,
+        "profileName": "WSO2 Profile",
+        "enableSystemApps": "com.google.android.apps.maps",
+        "hideSystemApps": "com.google.android.calculator",
+        "unhideSystemApps": null,
+        "enablePlaystoreApps": "com.google.android.whity"
+      }
+    }]
+  },
+  "roles": ["ANY"]
+}
+}

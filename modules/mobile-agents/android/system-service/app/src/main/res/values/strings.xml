@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">wso2-emm-system-service</string>
+    <string name="shared_pref_package">org.wso2.emm.system.service</string>
     <string name="device_admin_enable_alert">Please Press activate again.</string>
+    <string name="alarm_interval">interval</string>
+    <string name="alarm_schedule">schedule</string>
+    <string name="alarm_scheduled_operation">scheduledOperation</string>
 </resources>

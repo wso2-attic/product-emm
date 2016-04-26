@@ -1,20 +1,3 @@
-/*
- * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
- * 
- * WSO2 Inc. licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
 package org.wso2.emm.agent.services;
 
 import java.io.IOException;
@@ -66,9 +49,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-/**
- * This class handles all the functionalities related to device management operations.
- */
 public class Operation implements APIResultCallBack {
 
 	private Context context;
@@ -576,7 +556,7 @@ public class Operation implements APIResultCallBack {
 	}
 
 	/**
-	 * Configure device WIFI profile.
+	 * Configure device VPN profile.
 	 *
 	 * @param operation - Operation object.
 	 */
@@ -1265,6 +1245,20 @@ public class Operation implements APIResultCallBack {
 	 */
 	public void upgradeFirmware(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
 		JSONObject result = new JSONObject();
+		String schedule = null;
+
+		try {
+			JSONObject upgradeData = new JSONObject(operation.getPayLoad().toString());
+			if (upgradeData != null && !upgradeData.isNull(resources.getString(R.string.intent_extra_schedule))) {
+				schedule = (String) upgradeData.get(resources.getString(R.string.intent_extra_schedule));
+				Preference.putString(context, resources.getString(R.string.pref_key_schedule), schedule);
+			}
+
+		} catch (JSONException e) {
+			operation.setStatus(resources.getString(R.string.operation_value_error));
+			resultBuilder.build(operation);
+			throw new AndroidAgentException("Invalid JSON format.", e);
+		}
 
 		try {
 			String status = resources.getString(R.string.shared_pref_default_status);
@@ -1499,5 +1493,6 @@ public class Operation implements APIResultCallBack {
 
 		notifyManager.notify(operationId, mBuilder.build());
 	}
+
 
 }

@@ -289,6 +289,7 @@ public final class Constants {
         public static final String POLICY_PRIORITIES_ENDPOINT = "/mdm-admin/policies/priorities";
 
         public static final String ANDROID_POLICY_PAYLOAD_FILE_NAME = "android-policy-payloads.json";
+        public static final String ANDROID_POLICY_WORK_PROFILE_PAYLOAD_FILE_NAME = "android-policy-work-profile-payload.json";
         public static final String ANDROID_POLICY_ERRONEOUS_PAYLOAD_FILE_NAME = "policy-erroneous-payloads.json";
         public static final String WINDOWS_POLICY_PAYLOAD_FILE_NAME = "windows-policy-payloads.json";
         public static String WINDOWS_POLICY_DEVICE_ID = "";

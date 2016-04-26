@@ -50,7 +50,7 @@
         android:name="org.wso2.emm.agent.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <android:uses-permission
+    <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
 
@@ -110,7 +110,7 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".services.NotificationReceiver"
-                  android:exported="false">
+                       android:exported="false">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -139,43 +139,38 @@
         </service>
 
         <activity
-            android:name="org.wso2.emm.agent.AlreadyRegisteredActivity"
+            android:name=".AlreadyRegisteredActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Sherlock" >
         </activity>
         <activity
-            android:name="org.wso2.emm.agent.AuthenticationActivity"
+            android:name=".AuthenticationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Sherlock"
             android:windowSoftInputMode="stateUnchanged|adjustPan" >
         </activity>
         <activity
-            android:name="org.wso2.emm.agent.AuthenticationErrorActivity"
+            android:name=".AuthenticationErrorActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="org.wso2.emm.agent.NotifyActivity"
+            android:name=".NotifyActivity"
             android:label="@string/title_activity_notify"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="org.wso2.emm.agent.ServerDetails"
+            android:name=".ServerDetails"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateUnchanged|adjustPan" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
-            android:name="org.wso2.emm.agent.PinCodeActivity"
+            android:name=".PinCodeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateUnchanged|adjustPan" >
         </activity>
         <activity
-            android:name="org.wso2.emm.agent.AlertActivity"
+            android:name=".AlertActivity"
             android:label="@string/title_activity_alert"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Dialog" >
@@ -185,8 +180,26 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_lock">
         </activity>
+        <!-- Managed Profile Manifest items -->
         <activity
-            android:name="org.wso2.emm.agent.AppLockActivity"
+            android:name=".services.EnableProfileActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".WorkProfileManager"
+            android:label="@string/title_activity_notify"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".AgentReceptionActivity"
+            android:label="WSO2 Agent">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+        <activity
+            android:name=".AppLockActivity"
             android:label="@string/title_activity_alert"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
@@ -195,5 +208,5 @@
             android:name=".services.AppLockService"
             android:exported="false" />
     </application>
-
 </manifest>
+
