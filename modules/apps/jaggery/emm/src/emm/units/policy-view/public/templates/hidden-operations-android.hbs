@@ -787,77 +787,81 @@
                     </h2>
                 </div>
                 <div id="app-restriction-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="app-restriction-body">
-                    <div class="btn-group">
-                        <button class="btn btn-primary dropdown-toggle operationDataKeys" data-toggle="dropdown" data-key="restrictionList" disabled>
-                            Select List Criteria
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-                            <li><a tabindex="-1">Black List</a></li>
-                            <li><a tabindex="-1">White List</a></li>
-                        </ul>
+
+                    <div id="app-restriction-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
                     </div>
 
-                    <div id="app-list-add-widget" class="hidden">
-                        <div class="row">
-                            <div id="search-on-app-store" class="col-md-6 hidden">
-                                <label class="wr-input-label"
-                                       title="search for applications on app stores">
-                                    Search on App Stores
-                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                                </label>
-                                <div class="wr-input-control">
-                                    <select id="app-select" class="form-control select2">
-                                    </select>
-                                </div>
-                                <button id="application-add" type="button" class="btn btn-primary">Add</button>
-                            </div>
-                        </div>
-                        <div class="container hidden" id="searchable-container_black_list">
-                            <table class="operationDataKeys black-list" style="width: 50%" border="1" cellpadding="0" cellspacing="0" data-key="black_list" disabled>
+                    <select id="app-restriction-type" class="form-control operationDataKeys" data-key="restrictionType" disabled>
+                        <option value="" selected="selected">
+                            None
+                        </option>
+                        <option value="black-list">Black List</option>
+                        <option value="white-list">White List</option>
+                    </select>
+                    <br>
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="restricted-applications">
+                            Restricted Application List
+                            <span class="helper" title="Add an application to restrict.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            <br>
+                            <a href="#restricted-applications-grid" class="grid-input-add hidden" data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                </span>
+                                &nbsp;
+                                Add Application
+                            </a>
+                        </label>
+                        <div id="restricted-applications" class="operationDataKeys grouped-array-input multi-column-key-value-pair-array" data-key="restrictedApplications" data-column-count="2">
+                            <table class="table table-responsive table-striped">
                                 <thead>
                                 <tr>
-                                    <th>Application</th>
-                                    <th>Action</th>
+                                    <th>No:</th>
+                                    <th>App Name/Description</th>
+                                    <th>Package Name</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
-                                <tbody class="app-list">
-
+                                <tbody data-add-form-container="#restricted-applications-grid">
+                                <tr data-help-text="add-form">
+                                    <td colspan="4">
+                                        No entries added yet .
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#restricted-applications-grid">
+                                <tr data-add-form-element="clone">
+                                    <td data-title="No:">
+                                        <span class="index"></span>
+                                    </td>
+                                    <td data-title="App Name">
+                                        <input type="text" class="form-control grid-input-text" data-child-key="appName" maxlength="100" data-default="" placeholder="[ Application Name or Description ]" disabled/>
+                                    </td>
+                                    <td data-title="Package Name">
+                                        <input type="text" class="form-control grid-input-text" data-child-key="packageName" maxlength="100" data-default="" placeholder="[ Package Name of Application ]" disabled/>
+                                    </td>
+                                    <td>
+                                            <span class="list-group-item-actions hidden">
+                                                <a href="#restricted-applications-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                    <span class="fw-stack helper" title="Remove Entry">
+                                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                                    </span>
+                                                </a>
+                                            </span>
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <div class="container hidden" id="white-list-options">
-                        <!--<div id="white-list-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="white-list-body">-->
-                        <div id="white-list-feature-error-msg" class="alert alert-danger hidden" role="alert">
-                            <i class="icon fw fw-error"></i><span></span>
-                        </div>
-                        <div class="description">
-                            Check following checkbox in case you need to enable white list.
-                        </div>
-                        <br>
-                        <br>
-                        <div class="wr-input-control">
-                            <label class="wr-input-control checkbox">
-                                <input id="white-list-enabled" type="checkbox" class="operationDataKeys" data-key="whiteListEnabled" disabled/>
-                            <span class="helper" title="Having this checked would enable application white list in the device.">
-                                &nbsp;&nbsp;&nbsp;Enable White List
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                            </label>
-                        </div>
-                        <div class="wr-input-control">
-                            <label class="wr-input-control text">
-                            <span class="helper" title="Specify the location of the app store which white listed app are located">
-                                &nbsp;&nbsp;&nbsp;App store URL*
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </span>
-                            </label>
-                            <input id="app-store-location" type="text" class="form-control operationDataKeys" data-key="appStoreLocation" style="width:60%" disabled/>
-                        </div>
-                    </div>
-                    <!--</div>-->
-
                 </div>
             </div>
         </div>

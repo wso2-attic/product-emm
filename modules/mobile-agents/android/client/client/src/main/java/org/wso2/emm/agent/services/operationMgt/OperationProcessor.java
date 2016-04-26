@@ -177,6 +177,9 @@ public class OperationProcessor {
 			case Constants.Operation.VPN:
 				operationManager.configureVPN(operation);
 				break;
+			case Constants.Operation.APP_RESTRICTION:
+				operationManager.restrictAccessToApplications(operation);
+				break;
 			default:
 				operationManager.passOperationToSystemApp(operation);
 				break;

@@ -17,6 +17,8 @@
  */
 package org.wso2.emm.agent.services.operationMgt;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
@@ -32,12 +34,14 @@ import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.ServerDetails;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.beans.Operation;
+import org.wso2.emm.agent.services.AppLockService;
 import org.wso2.emm.agent.services.operationMgt.OperationManager;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Map;
 
 public class OperationManagerOlderSdk extends OperationManager {
@@ -538,5 +542,73 @@ public class OperationManagerOlderSdk extends OperationManager {
         } else {
             Log.e(TAG, "Invalid operation code received");
         }
+    }
+
+    @Override
+    public void restrictAccessToApplications(Operation operation) throws AndroidAgentException {
+        String restrictionType;
+        JSONArray restrictedApps;
+        try {
+            JSONObject payload = new JSONObject(operation.getPayLoad().toString());
+            restrictionType = (String) payload.get(Constants.AppRestriction.RESTRICTION_TYPE);
+            restrictedApps = payload.getJSONArray(Constants.AppRestriction.RESTRICTED_APPLICATIONS);
+
+        } catch (JSONException e) {
+            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            getResultBuilder().build(operation);
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
+
+        String ownershipType = Preference.getString(getContext(), Constants.DEVICE_TYPE);
+        ArrayList<String> restrictedApplications = new ArrayList<>();
+
+        if (restrictedApps != null) {
+            for (int i = 0; i < restrictedApps.length(); i++) {
+                try {
+                    restrictedApplications.add((String) ((JSONObject) restrictedApps.get(i)).get(Constants.AppRestriction.PACKAGE_NAME));
+                } catch (JSONException e) {
+                    operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+                    getResultBuilder().build(operation);
+                    throw new AndroidAgentException("Invalid JSON format", e);
+                }
+            }
+        }
+
+        if (Constants.AppRestriction.WHITE_LIST.equals(restrictionType)) {
+            if (Constants.OWNERSHIP_COPE.equals(ownershipType)) {
+                for (String packageName : restrictedApplications) {
+                    CommonUtils.callSystemApp(getContext(), operation.getCode(), Constants.AppRestriction.WHITE_LIST , packageName);
+                }
+            }
+        }
+        else if (Constants.AppRestriction.BLACK_LIST.equals(restrictionType)) {
+            if (Constants.OWNERSHIP_BYOD.equals(ownershipType)) {
+                Intent restrictionIntent = new Intent(getContext(), AppLockService.class);
+                restrictionIntent.setAction(Constants.APP_LOCK_SERVICE);
+
+                restrictionIntent.putStringArrayListExtra(Constants.AppRestriction.APP_LIST, restrictedApplications);
+
+                PendingIntent pendingIntent = PendingIntent.getService(getContext(), 0, restrictionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                calendar.add(Calendar.SECOND, 1); // first time
+                long frequency= 1 * 1000; // in ms
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), frequency, pendingIntent);
+
+                getContext().startService(restrictionIntent);
+            } else if (Constants.OWNERSHIP_COPE.equals(ownershipType)) {
+
+                for (String packageName : restrictedApplications) {
+                    CommonUtils.callSystemApp(getContext(), operation.getCode(), Constants.AppRestriction.BLACK_LIST , packageName);
+                }
+            }
+
+        }
+        operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+        getResultBuilder().build(operation);
+
+
     }
 }

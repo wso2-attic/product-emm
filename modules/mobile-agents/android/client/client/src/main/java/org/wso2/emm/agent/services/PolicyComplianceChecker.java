@@ -20,8 +20,10 @@ package org.wso2.emm.agent.services;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
-import android.util.Log;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
@@ -49,7 +51,7 @@ public class PolicyComplianceChecker {
     private Resources resources;
     private ComponentName deviceAdmin;
     private ComplianceFeature policy;
-    private ApplicationManager appList;
+    private ApplicationManager applicationManager;
 
     public PolicyComplianceChecker(Context context) {
         this.context = context;
@@ -57,7 +59,7 @@ public class PolicyComplianceChecker {
         this.devicePolicyManager =
                 (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
         this.deviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
-        this.appList = new ApplicationManager(context.getApplicationContext());
+        this.applicationManager = new ApplicationManager(context.getApplicationContext());
     }
 
     /**
@@ -122,7 +124,7 @@ public class PolicyComplianceChecker {
             case Constants.Operation.ENABLE_ADMIN:
             case Constants.Operation.SET_SCREEN_CAPTURE_DISABLED:
             case Constants.Operation.SET_STATUS_BAR_DISABLED:
-                if(appList.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
+                if(applicationManager.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
                     CommonUtils.callSystemApp(context,operation.getCode(),
                                               Boolean.toString(operation.isEnabled()), null);
                     // Since without rooting the device a policy set by the device owner cannot
@@ -238,7 +240,7 @@ public class PolicyComplianceChecker {
      */
     private boolean isAppInstalled(String appIdentifier){
         boolean appInstalled=false;
-        ArrayList<DeviceAppInfo> apps = new ArrayList<>(appList.getInstalledApps().values());
+        ArrayList<DeviceAppInfo> apps = new ArrayList<>(applicationManager.getInstalledApps().values());
         for (DeviceAppInfo appInfo : apps) {
             if(appIdentifier.trim().equals(appInfo.getPackagename())){
                 appInstalled = true;
@@ -314,8 +316,54 @@ public class PolicyComplianceChecker {
         return policy;
     }
 
-    private ComplianceFeature checkAppRestrictionPolicy(org.wso2.emm.agent.beans.Operation operation){
-        //TODO implement policy compliance
+    private ComplianceFeature checkAppRestrictionPolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+        String restrictionType;
+        JSONArray restrictedApps;
+        try {
+            JSONObject payload = new JSONObject(operation.getPayLoad().toString());
+            restrictionType = (String) payload.get(Constants.AppRestriction.RESTRICTION_TYPE);
+            restrictedApps = payload.getJSONArray(Constants.AppRestriction.RESTRICTED_APPLICATIONS);
+
+        } catch (JSONException e) {
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
+
+        ArrayList<String> restrictedApplications = new ArrayList<>();
+
+        if (restrictedApps != null) {
+            for (int i = 0; i < restrictedApps.length(); i++) {
+                try {
+                    restrictedApplications.add((String) ((JSONObject) restrictedApps.get(i)).get(Constants.AppRestriction.PACKAGE_NAME));
+                } catch (JSONException e) {
+                    throw new AndroidAgentException("Invalid JSON format", e);
+                }
+            }
+        }
+
+        List<ApplicationInfo> installedApplications = applicationManager.getInstalledApplications();
+        List<String> installedAppPackages = new ArrayList<>();
+        for(ApplicationInfo appInfo : installedApplications) {
+            installedAppPackages.add(appInfo.packageName);
+        }
+
+        if (Constants.AppRestriction.BLACK_LIST.equals(restrictionType)) {
+            List<String> common = new ArrayList<>(installedAppPackages);
+            if (common.retainAll(restrictedApplications)) {
+                policy.setCompliance(false);
+                policy.setMessage(common.toString());
+                return policy;
+            }
+        }
+        else if(Constants.AppRestriction.WHITE_LIST.equals(restrictionType)) {
+            List<String> remain = new ArrayList<>(installedAppPackages);
+            remain.removeAll(restrictedApplications);
+            if  (remain.size() > 0) {
+                policy.setCompliance(false);
+                policy.setMessage(remain.toString());
+                return policy;
+            }
+        }
+
         policy.setCompliance(true);
         return policy;
     }
@@ -346,7 +394,7 @@ public class PolicyComplianceChecker {
                 List<String> systemAppList = Arrays.asList(systemAppsData.split(resources.getString(
                         R.string.split_delimiter)));
                 for (String packageName : systemAppList) {
-                    if(!appList.isPackageInstalled(packageName)){
+                    if(!applicationManager.isPackageInstalled(packageName)){
                         policy.setCompliance(false);
                         policy.setMessage(resources.getString(R.string.error_work_profile_policy));
                         return policy;
@@ -359,7 +407,7 @@ public class PolicyComplianceChecker {
                 List<String> playStoreAppList = Arrays.asList(googlePlayAppsData.split(resources.getString(
                         R.string.split_delimiter)));
                 for (String packageName : playStoreAppList) {
-                    if(!appList.isPackageInstalled(packageName)){
+                    if(!applicationManager.isPackageInstalled(packageName)){
                         policy.setCompliance(false);
                         policy.setMessage(resources.getString(R.string.error_work_profile_policy));
                         return policy;

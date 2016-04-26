@@ -550,4 +550,9 @@ public class OperationManagerDeviceOwner extends OperationManager {
             Log.e(TAG, "Invalid operation code received");
         }
     }
+
+    @Override
+    public void restrictAccessToApplications(Operation operation) throws AndroidAgentException {
+
+    }
 }

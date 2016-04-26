@@ -224,6 +224,10 @@ public class ApplicationManager {
 		context.sendBroadcast(bookmarkIntent);
 	}
 
+	public List<ApplicationInfo> getInstalledApplications(){
+		return packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
+	}
+
 	/**
 	 * Installs or updates an application to the device.
 	 * @param - APK Url should be passed in as a String.
@@ -289,6 +293,6 @@ public class ApplicationManager {
 			
 			return null;
 		}
-	};
+	}
 
 }

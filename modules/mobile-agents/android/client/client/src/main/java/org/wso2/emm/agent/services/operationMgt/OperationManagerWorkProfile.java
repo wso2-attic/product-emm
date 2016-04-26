@@ -363,6 +363,11 @@ public class OperationManagerWorkProfile extends OperationManager {
         Log.d(TAG, "Operation not supported.");
     }
 
+    @Override
+    public void restrictAccessToApplications(Operation operation) throws AndroidAgentException {
+
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void changeProfileName(String name) {
         getDevicePolicyManager().setProfileName(getCdmDeviceAdmin(), name);

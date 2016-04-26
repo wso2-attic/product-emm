@@ -110,6 +110,8 @@ public class Constants {
 
 	public static final String SERVICE_PACKAGE_NAME = "org.wso2.emm.system.service";
 
+	public static final String APP_LOCK_SERVICE = "AppLockService";
+
 	/**
 	 * Request codes.
 	 */
@@ -397,6 +399,7 @@ public class Constants {
 		public static final String WHITE_LIST = "white-list";
 		public static final String BLACK_LIST = "black-list";
 		public static final String PACKAGE_NAME = "packageName";
+		public static final String APP_LIST = "appList";
 	}
 
 }
