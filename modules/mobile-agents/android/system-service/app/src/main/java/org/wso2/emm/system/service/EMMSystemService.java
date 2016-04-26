@@ -19,19 +19,14 @@
 package org.wso2.emm.system.service;
 
 import android.app.IntentService;
-import android.app.PackageInstallObserver;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.IPackageDeleteObserver;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.PowerManager;
-import android.os.RemoteException;
 import android.os.UserManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -43,6 +38,8 @@ import org.wso2.emm.system.service.utils.Preference;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.ParseException;
 
 import static android.os.UserManager.ALLOW_PARENT_PROFILE_APP_LINKING;
@@ -353,27 +350,52 @@ public class EMMSystemService extends IntentService {
      * Silently installs the app resides in the provided URI.
      */
     private void silentInstallApp(Context context, Uri packageUri) {
-        PackageManager packageManager = context.getPackageManager();
-        packageManager.installPackage(packageUri, new PackageInstallObserver(), INSTALL_ALL_USERS | INSTALL_FORWARD_LOCK |
-                                                                                INSTALL_ALLOW_DOWNGRADE | INSTALL_REPLACE_EXISTING, null);
-    }
+        PackageManager pm = context.getPackageManager();
+        Class<? extends PackageManager> packageManager = pm.getClass();
+        Method[] allMethods = packageManager.getMethods();
+        for (Method method : allMethods) {
+            if (method.getName().equals("installPackage")) {
+                Log.d(TAG, "Installing the app.");
+                try {
+                    method.invoke(
+                            pm,
+                            new Object[]{
+                                    packageUri,
+                                    null,
+                                    INSTALL_ALL_USERS | INSTALL_FORWARD_LOCK | INSTALL_ALLOW_DOWNGRADE |
+                                    INSTALL_REPLACE_EXISTING,
+                                    null});
+                } catch (IllegalAccessException e) {
+                    Log.e(TAG, "Access denied by PackageManager." + e);
+                } catch (InvocationTargetException e) {
+                    Log.e(TAG, "Installation method not found." + e);
+                }
 
+                break;
+            }
+        }
+    }
 
     /**
      * Silently uninstalls the app resides in the provided URI.
      */
     private void silentUninstallApp(Context context, final String packageName) {
-        PackageManager packageManager = context.getPackageManager();
-        packageManager.deletePackage(packageName, new IPackageDeleteObserver() {
-            @Override
-            public void packageDeleted(String s, int i) throws RemoteException {
-                Log.i(TAG, "Package " + packageName + " uninstalled successfully.");
-            }
+        PackageManager pm = context.getPackageManager();
+        Class<? extends PackageManager> packageManager = pm.getClass();
+        Method[] allMethods = packageManager.getMethods();
 
-            @Override
-            public IBinder asBinder() {
-                return null;
+        for (Method method : allMethods) {
+            if (method.getName().equals("deletePackage")) {
+                Log.d(TAG, "Removing the app.");
+                try {
+                    method.invoke(pm, new Object[]{packageName, null, DELETE_ALL_USERS});
+                } catch (IllegalAccessException e) {
+                    Log.e(TAG, "Access denied by PackageManager." + e);
+                } catch (InvocationTargetException e) {
+                    Log.e(TAG, "Installation method not found." + e);
+                }
+                break;
             }
-        }, DELETE_ALL_USERS);
+        }
     }
 }
