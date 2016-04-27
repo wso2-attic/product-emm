@@ -145,9 +145,9 @@ public class Dashboard {
     @Path("non-compliant-by-feature")
     public Response getNonCompliantDeviceCountsByFeatures(@QueryParam("start-index") int startIndex, @QueryParam("count") int count) {
         Message message = new Message();
-        if (startIndex < 1) {
+        if (startIndex < 0) {
             message.setErrorMessage("Invalid start index.");
-            message.setDescription("Start index cannot be less than 1.");
+            message.setDescription("Start index cannot be less than 0.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         }
 
