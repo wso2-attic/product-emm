@@ -894,7 +894,7 @@
     <!--</Permission>-->
     <Permission>
         <name>get overview of device counts</name>
-        <path>/device-mgt/emm-admin/dashboard/device-overview</path>
+        <path>/device-mgt/emm-admin/dashboard/devices-overview</path>
         <url>/dashboard/device-overview</url>
         <method>GET</method>
         <scope>emm_admin</scope>
@@ -917,6 +917,13 @@
         <name>get device counts by groupings</name>
         <path>/device-mgt/emm-admin/dashboard/device-groupings</path>
         <url>/dashboard/device-groupings</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get filtered device count over total</name>
+        <path>/device-mgt/emm-admin/dashboard/filtered-devices-over-total</path>
+        <url>/dashboard/filtered-devices-over-total</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>

@@ -42,7 +42,7 @@ public class Dashboard {
     private static Log log = LogFactory.getLog(Dashboard.class);
 
     @GET
-    @Path("device-overview")
+    @Path("devices-overview")
     public Response getOverviewDeviceCounts() {
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
         DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
@@ -190,11 +190,45 @@ public class Dashboard {
 
     @GET
     @Path("device-groupings")
-    public Response getDeviceGroupingCounts() {
+    public Response getDeviceGroupingCounts(@QueryParam("connectivity-status") String connectivityStatus,
+                                            @QueryParam("is-compliant") String isCompliant,
+                                            @QueryParam("is-monitored") String isMonitored,
+                                            @QueryParam("platform") String platform,
+                                            @QueryParam("ownership") String ownership) {
+
+        Map<String, Object> filters = new LinkedHashMap<>();
+        if (connectivityStatus != null &&
+            ("ACTIVE".equals(connectivityStatus) ||
+                "INACTIVE".equals(connectivityStatus) ||
+                    "REMOVED".equals(connectivityStatus))) {
+            filters.put("CONNECTIVITY_STATUS", connectivityStatus);
+        }
+
+        if (isCompliant != null && "false".equals(isCompliant)) {
+            filters.put("IS_COMPLIANT", 0);
+        }
+
+        if (isMonitored != null && "false".equals(isMonitored)) {
+            filters.put("POLICY_ID", -1);
+        }
+
+        if (platform != null &&
+            ("android".equals(platform) ||
+                "ios".equals(platform) ||
+                    "windows".equals(platform))) {
+            filters.put("PLATFORM", platform);
+        }
+
+        if (ownership != null &&
+                ("BYOD".equals(ownership) ||
+                        "COPE".equals(ownership))) {
+            filters.put("OWNERSHIP", ownership);
+        }
+
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
 
         // creating device-Counts-by-platforms Data Wrapper
-        Map<String, Integer> deviceCountsByPlatforms = gadgetDataService.getDeviceCountsByPlatforms(null);
+        Map<String, Integer> deviceCountsByPlatforms = gadgetDataService.getDeviceCountsByPlatforms(filters);
         if (deviceCountsByPlatforms == null) {
             return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
@@ -214,7 +248,7 @@ public class Dashboard {
         dashboardGadgetDataWrapper1.setData(deviceCountsByPlatformsDataWrapper);
 
         // creating device-Counts-by-ownership-types Data Wrapper
-        Map<String, Integer> deviceCountsByOwnershipTypes = gadgetDataService.getDeviceCountsByOwnershipTypes(null);
+        Map<String, Integer> deviceCountsByOwnershipTypes = gadgetDataService.getDeviceCountsByOwnershipTypes(filters);
         if (deviceCountsByOwnershipTypes == null) {
             return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
@@ -236,6 +270,79 @@ public class Dashboard {
         List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
         responsePayload.add(dashboardGadgetDataWrapper1);
         responsePayload.add(dashboardGadgetDataWrapper2);
+
+        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+    }
+
+    @GET
+    @Path("filtered-devices-over-total")
+    public Response getFilteredDeviceCountOverTotal(@QueryParam("connectivity-status") String connectivityStatus,
+                                                    @QueryParam("is-compliant") String isCompliant,
+                                                    @QueryParam("is-monitored") String isMonitored,
+                                                    @QueryParam("platform") String platform,
+                                                    @QueryParam("ownership") String ownership) {
+
+        Map<String, Object> filters = new LinkedHashMap<>();
+        if (connectivityStatus != null &&
+                ("ACTIVE".equals(connectivityStatus) ||
+                        "INACTIVE".equals(connectivityStatus) ||
+                        "REMOVED".equals(connectivityStatus))) {
+            filters.put("CONNECTIVITY_STATUS", connectivityStatus);
+        }
+
+        if (isCompliant != null && "false".equals(isCompliant)) {
+            filters.put("IS_COMPLIANT", 0);
+        }
+
+        if (isMonitored != null && "false".equals(isMonitored)) {
+            filters.put("POLICY_ID", -1);
+        }
+
+        if (platform != null &&
+                ("android".equals(platform) ||
+                        "ios".equals(platform) ||
+                        "windows".equals(platform))) {
+            filters.put("PLATFORM", platform);
+        }
+
+        if (ownership != null &&
+                ("BYOD".equals(ownership) ||
+                        "COPE".equals(ownership))) {
+            filters.put("OWNERSHIP", ownership);
+        }
+
+        GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
+        DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
+
+        // creating filteredDeviceCount Data Wrapper
+        int filteredDeviceCount = gadgetDataService.getDeviceCount(filters);
+        if (filteredDeviceCount == -1) {
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+        }
+        Map<String, Object> filteredDeviceCountDataWrapper = new LinkedHashMap<>();
+        filteredDeviceCountDataWrapper.put("group", "filtered");
+        filteredDeviceCountDataWrapper.put("label", "filtered");
+        filteredDeviceCountDataWrapper.put("count", filteredDeviceCount);
+
+        // creating TotalDeviceCount Data Wrapper
+        int totalDeviceCount = gadgetDataService.getTotalDeviceCount();
+        if (totalDeviceCount == -1) {
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+        }
+        Map<String, Object> totalDeviceCountDataWrapper = new LinkedHashMap<>();
+        totalDeviceCountDataWrapper.put("group", "total");
+        totalDeviceCountDataWrapper.put("label", "Total");
+        totalDeviceCountDataWrapper.put("count", totalDeviceCount);
+
+        List<Map<String, Object>> filteredDeviceCountOverTotalDataWrapper = new ArrayList<>();
+        filteredDeviceCountOverTotalDataWrapper.add(filteredDeviceCountDataWrapper);
+        filteredDeviceCountOverTotalDataWrapper.add(totalDeviceCountDataWrapper);
+
+        dashboardGadgetDataWrapper.setContext("filtered-device-count-over-total");
+        dashboardGadgetDataWrapper.setData(filteredDeviceCountOverTotalDataWrapper);
+
+        List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
+        responsePayload.add(dashboardGadgetDataWrapper);
 
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
