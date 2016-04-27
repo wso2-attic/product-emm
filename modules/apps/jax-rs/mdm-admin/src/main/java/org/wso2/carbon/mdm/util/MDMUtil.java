@@ -57,4 +57,8 @@ public class MDMUtil {
         return profileFeature;
 
     }
+
+    public static int convertActivityIdToInteger(String str){
+        return Integer.parseInt(str.replace(Constants.ACTIVITY+"_", ""));
+    }
 }
