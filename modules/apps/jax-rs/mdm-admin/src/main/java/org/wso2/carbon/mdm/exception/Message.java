@@ -3,7 +3,7 @@ package org.wso2.carbon.mdm.exception;
 public class Message {
 
     private String errorMessage;
-    private String discription;
+    private String description;
 
     public String getErrorMessage() {
         return errorMessage;
@@ -13,11 +13,11 @@ public class Message {
         this.errorMessage = errorMessage;
     }
 
-    public String getDiscription() {
-        return discription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDiscription(String discription) {
-        this.discription = discription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

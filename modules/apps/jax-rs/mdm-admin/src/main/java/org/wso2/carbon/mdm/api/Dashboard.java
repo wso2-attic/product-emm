@@ -22,20 +22,19 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.analytics.dashboard.GadgetDataService;
+import org.wso2.carbon.device.mgt.common.PaginationRequest;
+import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.beans.DashboardGadgetDataWrapper;
+import org.wso2.carbon.mdm.beans.DashboardPaginationGadgetDataWrapper;
+import org.wso2.carbon.mdm.exception.Message;
 
-import javax.jws.WebService;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.*;
 
-@WebService
-@Produces({"application/json", "application/xml"})
-@Consumes({"application/json", "application/xml"})
+@Produces({"application/json"})
+@Consumes({"application/json"})
 
 public class Dashboard {
 
@@ -49,7 +48,7 @@ public class Dashboard {
         DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
 
         // creating TotalDeviceCount Data Wrapper
-        int totalDeviceCount = gadgetDataService.getTotalDeviceCount(null);
+        int totalDeviceCount = gadgetDataService.getTotalDeviceCount();
         if (totalDeviceCount == -1) {
             return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
@@ -69,7 +68,7 @@ public class Dashboard {
         activeDeviceCountDataWrapper.put("count", activeDeviceCount);
 
         // creating inactiveDeviceCount Data Wrapper
-        int inactiveDeviceCount = gadgetDataService.getActiveDeviceCount();
+        int inactiveDeviceCount = gadgetDataService.getInactiveDeviceCount();
         if (inactiveDeviceCount == -1) {
             return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
@@ -144,32 +143,47 @@ public class Dashboard {
 
     @GET
     @Path("non-compliant-by-feature")
-    public Response getNonCompliantDeviceCountsByFeatures() {
+    public Response getNonCompliantDeviceCountsByFeatures(@QueryParam("start-index") int startIndex, @QueryParam("count") int count) {
+        Message message = new Message();
+        if (startIndex < 1) {
+            message.setErrorMessage("Invalid start index.");
+            message.setDescription("Start index cannot be less than 1.");
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+        }
+
+        if (count < 5) {
+            message.setErrorMessage("Invalid request count.");
+            message.setDescription("Row count should be more than 5.");
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+        }
+
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
-        DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
+        DashboardPaginationGadgetDataWrapper dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
 
-        Map<String, Integer> nonCompliantDeviceCountsByFeatures = gadgetDataService.
-                getNonCompliantDeviceCountsByFeatures();
+        PaginationResult paginationResult = gadgetDataService.
+            getNonCompliantDeviceCountsByFeatures(new PaginationRequest(startIndex, count));
 
-        if (nonCompliantDeviceCountsByFeatures == null) {
+        if (paginationResult == null) {
             return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
 
         Map<String, Object> nonCompliantDeviceCountByFeatureDataWrapper;
         List<Map<String, Object>> nonCompliantDeviceCountsByFeaturesDataWrapper = new ArrayList<>();
-        for (Map.Entry<String, Integer> entry : nonCompliantDeviceCountsByFeatures.entrySet()) {
+        for (Object listElement : paginationResult.getData()) {
+            Map entry = (Map<?, ?>) listElement;
             nonCompliantDeviceCountByFeatureDataWrapper = new LinkedHashMap<>();
-            nonCompliantDeviceCountByFeatureDataWrapper.put("group", entry.getKey());
-            nonCompliantDeviceCountByFeatureDataWrapper.put("label", entry.getKey());
-            nonCompliantDeviceCountByFeatureDataWrapper.put("count", entry.getValue());
+            nonCompliantDeviceCountByFeatureDataWrapper.put("group", entry.get("FEATURE_CODE"));
+            nonCompliantDeviceCountByFeatureDataWrapper.put("label", entry.get("FEATURE_CODE"));
+            nonCompliantDeviceCountByFeatureDataWrapper.put("count", entry.get("DEVICE_COUNT"));
             nonCompliantDeviceCountsByFeaturesDataWrapper.add(nonCompliantDeviceCountByFeatureDataWrapper);
         }
 
-        dashboardGadgetDataWrapper.setContext("non-compliant-by-feature");
-        dashboardGadgetDataWrapper.setData(nonCompliantDeviceCountsByFeaturesDataWrapper);
+        dashboardPaginationGadgetDataWrapper.setContext("non-compliant-by-feature");
+        dashboardPaginationGadgetDataWrapper.setData(nonCompliantDeviceCountsByFeaturesDataWrapper);
+        dashboardPaginationGadgetDataWrapper.setTotalRecordsCount(paginationResult.getRecordsTotal());
 
-        List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
-        responsePayload.add(dashboardGadgetDataWrapper);
+        List<DashboardPaginationGadgetDataWrapper> responsePayload = new ArrayList<>();
+        responsePayload.add(dashboardPaginationGadgetDataWrapper);
 
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
@@ -178,7 +192,6 @@ public class Dashboard {
     @Path("device-groupings")
     public Response getDeviceGroupingCounts() {
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
-        List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
 
         // creating device-Counts-by-platforms Data Wrapper
         Map<String, Integer> deviceCountsByPlatforms = gadgetDataService.getDeviceCountsByPlatforms(null);
@@ -200,8 +213,6 @@ public class Dashboard {
         dashboardGadgetDataWrapper1.setContext("device-Counts-by-platforms");
         dashboardGadgetDataWrapper1.setData(deviceCountsByPlatformsDataWrapper);
 
-        responsePayload.add(dashboardGadgetDataWrapper1);
-
         // creating device-Counts-by-ownership-types Data Wrapper
         Map<String, Integer> deviceCountsByOwnershipTypes = gadgetDataService.getDeviceCountsByOwnershipTypes(null);
         if (deviceCountsByOwnershipTypes == null) {
@@ -222,6 +233,8 @@ public class Dashboard {
         dashboardGadgetDataWrapper2.setContext("device-Counts-by-ownership-types");
         dashboardGadgetDataWrapper2.setData(deviceCountsByOwnershipTypesDataWrapper);
 
+        List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
+        responsePayload.add(dashboardGadgetDataWrapper1);
         responsePayload.add(dashboardGadgetDataWrapper2);
 
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
