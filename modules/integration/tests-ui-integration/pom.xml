@@ -60,7 +60,7 @@
                         <property>
                             <name>carbon.zip</name>
                             <value>
-                                ${basedir}/../../distribution/target/wso2mdm-${project.version}.zip
+                                ${basedir}/../../distribution/target/wso2emm-${project.version}.zip
                             </value>
                         </property>
                         <property>
@@ -129,7 +129,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>org.wso2.mdm</groupId>
-                                    <artifactId>wso2mdm</artifactId>
+                                    <artifactId>wso2emm</artifactId>
                                     <version>${project.version}</version>
                                     <type>zip</type>
                                     <overWrite>true</overWrite>
@@ -190,7 +190,7 @@
                             <resources>
                                 <resource>
                                     <directory>
-                                        ${basedir}/target/tobeCopied/wso2mdm-${project.version}/repository/resources/security/
+                                        ${basedir}/target/tobeCopied/wso2emm-${project.version}/repository/resources/security/
                                     </directory>
                                     <includes>
                                         <include>**/*.jks</include>
@@ -211,7 +211,7 @@
                             <resources>
                                 <resource>
                                     <directory>
-                                        ${basedir}/target/tobeCopied/wso2mdm-${project.version}/repository/conf/axis2/
+                                        ${basedir}/target/tobeCopied/wso2emm-${project.version}/repository/conf/axis2/
                                     </directory>
                                     <includes>
                                         <include>**/*.xml</include>
@@ -232,7 +232,7 @@
                             <resources>
                                 <resource>
                                     <directory>
-                                        ${basedir}/target/tobeCopied/wso2mdm-${project.version}/repository/deployment/client/modules
+                                        ${basedir}/target/tobeCopied/wso2emm-${project.version}/repository/deployment/client/modules
                                     </directory>
                                     <includes>
                                         <include>**/*.mar</include>
