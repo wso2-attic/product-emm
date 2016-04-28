@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -16,16 +16,17 @@
  * under the License.
  */
 
-package org.wso2.carbon.mdm.util;
+package org.wso2.carbon.mdm.beans;
 
-/**
- * Holds the constants used by MDM-Admin web application.
- */
-public class Constants {
+public class DashboardPaginationGadgetDataWrapper extends DashboardGadgetDataWrapper {
+    private int totalRecordsCount;
 
-	public static final String USER_CLAIM_EMAIL_ADDRESS = "http://wso2.org/claims/emailaddress";
-	public static final String USER_CLAIM_FIRST_NAME = "http://wso2.org/claims/givenname";
-	public static final String USER_CLAIM_LAST_NAME = "http://wso2.org/claims/lastname";
-	public static final String ACTIVITY = "ACTIVITY";
+    @SuppressWarnings("unused")
+    public int getTotalRecordsCount() {
+        return totalRecordsCount;
+    }
 
+    public void setTotalRecordsCount(int totalRecordsCount) {
+        this.totalRecordsCount = totalRecordsCount;
+    }
 }
