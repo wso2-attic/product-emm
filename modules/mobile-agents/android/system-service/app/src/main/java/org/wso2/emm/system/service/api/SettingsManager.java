@@ -77,12 +77,9 @@ public class SettingsManager {
         }
     }
 
-    public static void restrictApp(String packageName, String command, boolean visibility) {
-        Log.d(TAG, "packageName :" + packageName + " should be hidden:" + visibility+ "in setVisibility");
-        Log.d(TAG, "Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP----"+(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && "black_list".equals(command)) {
-            Log.d(TAG, "packageName :" + packageName + " should be hidden:" + visibility);
-            EMMSystemService.devicePolicyManager.setApplicationHidden(EMMSystemService.cdmDeviceAdmin, packageName, !visibility);
+    public static void hideApp(String packageName) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            EMMSystemService.devicePolicyManager.setApplicationHidden(EMMSystemService.cdmDeviceAdmin, packageName, true);
         }
     }
 

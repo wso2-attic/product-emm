@@ -26,7 +26,7 @@ public class Constants {
 	public static final boolean DEBUG_MODE_ENABLED = false;
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
-	public static final boolean SYSTEM_APP_ENABLED = false;
+	public static final boolean SYSTEM_APP_ENABLED = true;
 	public static final String SYSTEM_APP_SERVICE_NAME = "org.wso2.emm.system.service.START_SERVICE";
 	public static final String GCM_PROJECT_NUMBER = "GOOGLE-API-PROJECT-NUMBER";
 	public static final String GCM_REG_ID = "gcm_reg_id";

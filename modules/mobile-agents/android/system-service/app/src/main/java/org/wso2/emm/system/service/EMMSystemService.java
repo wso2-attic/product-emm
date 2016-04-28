@@ -284,7 +284,7 @@ public class EMMSystemService extends IntentService {
                 SettingsManager.setScreenCaptureDisabled(restrictionCode);
                 break;
             case Constants.Operation.APP_RESTRICTION:
-                SettingsManager.restrictApp(appUri, command, true);
+                SettingsManager.hideApp(appUri);
                 break;
             //Only With Android M.
             case Constants.Operation.SET_STATUS_BAR_DISABLED:

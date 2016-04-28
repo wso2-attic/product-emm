@@ -1283,7 +1283,6 @@ var operationModule = function () {
                                 // set key-value-pair
                                 keyValuePairJson[childInputKey] = childInputValue;
                             } else {
-                                keyValuePairJson = {};
                                 // set key-value-pair
                                 keyValuePairJson[childInputKey] = childInputValue;
                                 // push to value

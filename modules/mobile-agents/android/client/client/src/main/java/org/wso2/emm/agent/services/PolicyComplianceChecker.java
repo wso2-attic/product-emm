@@ -30,6 +30,7 @@ import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.WiFiConfig;
+import org.wso2.emm.agent.beans.AppRestriction;
 import org.wso2.emm.agent.beans.ComplianceFeature;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.utils.CommonUtils;
@@ -317,46 +318,22 @@ public class PolicyComplianceChecker {
     }
 
     private ComplianceFeature checkAppRestrictionPolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-        String restrictionType;
-        JSONArray restrictedApps;
-        try {
-            JSONObject payload = new JSONObject(operation.getPayLoad().toString());
-            restrictionType = (String) payload.get(Constants.AppRestriction.RESTRICTION_TYPE);
-            restrictedApps = payload.getJSONArray(Constants.AppRestriction.RESTRICTED_APPLICATIONS);
 
-        } catch (JSONException e) {
-            throw new AndroidAgentException("Invalid JSON format.", e);
-        }
+        AppRestriction appRestriction = CommonUtils.getAppRestrictionTypeAndList(operation, null, null);
 
-        ArrayList<String> restrictedApplications = new ArrayList<>();
+        List<String> installedAppPackages = CommonUtils.getInstalledAppPackages(context);
 
-        if (restrictedApps != null) {
-            for (int i = 0; i < restrictedApps.length(); i++) {
-                try {
-                    restrictedApplications.add((String) ((JSONObject) restrictedApps.get(i)).get(Constants.AppRestriction.PACKAGE_NAME));
-                } catch (JSONException e) {
-                    throw new AndroidAgentException("Invalid JSON format", e);
-                }
-            }
-        }
-
-        List<ApplicationInfo> installedApplications = applicationManager.getInstalledApplications();
-        List<String> installedAppPackages = new ArrayList<>();
-        for(ApplicationInfo appInfo : installedApplications) {
-            installedAppPackages.add(appInfo.packageName);
-        }
-
-        if (Constants.AppRestriction.BLACK_LIST.equals(restrictionType)) {
+        if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
             List<String> common = new ArrayList<>(installedAppPackages);
-            if (common.retainAll(restrictedApplications)) {
+            if (common.retainAll(appRestriction.getRestrictedList())) {
                 policy.setCompliance(false);
                 policy.setMessage(common.toString());
                 return policy;
             }
         }
-        else if(Constants.AppRestriction.WHITE_LIST.equals(restrictionType)) {
+        else if(Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
             List<String> remain = new ArrayList<>(installedAppPackages);
-            remain.removeAll(restrictedApplications);
+            remain.removeAll(appRestriction.getRestrictedList());
             if  (remain.size() > 0) {
                 policy.setCompliance(false);
                 policy.setMessage(remain.toString());
