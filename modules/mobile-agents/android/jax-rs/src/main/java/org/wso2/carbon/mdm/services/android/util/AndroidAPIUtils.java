@@ -207,18 +207,19 @@ public class AndroidAPIUtils {
         return analyticsDataAPI;
     }
 
-    public static void getAllEventsForDevice(String tableName, String query) throws AnalyticsException {
+    public static List<DeviceState> getAllEventsForDevice(String tableName, String query) throws AnalyticsException {
         int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
         AnalyticsDataAPI analyticsDataAPI = getAnalyticsDataAPI();
         int eventCount = analyticsDataAPI.searchCount(tenantId, tableName, query);
         if (eventCount == 0) {
-            // return null;
+            return null;
         }
         List<SearchResultEntry> resultEntries = analyticsDataAPI.search(tenantId, tableName, query, 0, eventCount);
         List<String> recordIds = getRecordIds(resultEntries);
         AnalyticsDataResponse response = analyticsDataAPI.get(tenantId, tableName, 1, null, recordIds);
         Map<String, DeviceState> deviceStateses = createDeviceStatusData(AnalyticsDataServiceUtils.listRecords(
                 analyticsDataAPI, response));
+        return getSortedDeviceStateData(deviceStateses, resultEntries);
     }
 
     private static List<String> getRecordIds(List<SearchResultEntry> searchResults) {
@@ -230,7 +231,7 @@ public class AndroidAPIUtils {
     }
 
     /*
-    overloaded method to stote events
+    overloaded method to store events
      */
     public static Map<String, DeviceState> createDeviceStatusData(List<Record> records) {
         Map<String, DeviceState> deviceStatuses = new HashMap();
@@ -247,7 +248,14 @@ public class AndroidAPIUtils {
         return deviceState;
     }
 
-
+    public static List<DeviceState> getSortedDeviceStateData(Map<String, DeviceState> sensorDatas,
+                                                         List<SearchResultEntry> searchResults) {
+        List<DeviceState> sortedRecords = new ArrayList();
+        for (SearchResultEntry searchResultEntry : searchResults) {
+            sortedRecords.add(sensorDatas.get(searchResultEntry.getId()));
+        }
+        return sortedRecords;
+    }
 
     public static void updateOperation(String deviceId, Operation operation)
             throws OperationManagementException, PolicyComplianceException, ApplicationManagementException {

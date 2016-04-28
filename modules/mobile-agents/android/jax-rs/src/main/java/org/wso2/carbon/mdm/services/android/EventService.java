@@ -22,14 +22,21 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.analytics.datasource.commons.exception.AnalyticsException;
 import org.wso2.carbon.device.mgt.analytics.data.publisher.exception.DataPublisherConfigurationException;
+import org.wso2.carbon.mdm.services.android.bean.DeviceState;
 import org.wso2.carbon.mdm.services.android.bean.EventPayload;
 import org.wso2.carbon.mdm.services.android.exception.AndroidAgentException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.Message;
 
-import javax.ws.rs.*;
+import javax.ws.rs.POST;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.GET;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * APIs related to events published from Android agent are implemented here.
@@ -76,7 +83,7 @@ public class EventService {
             log.debug("Retrieving events");
         }
         String query = "deviceIdentifier:" + deviceId;
-        AndroidAPIUtils.getAllEventsForDevice("EVENT_STREAM", query);
-        return Response.status(Response.Status.OK).build();
+        List<DeviceState> deviceStates = AndroidAPIUtils.getAllEventsForDevice("EVENT_STREAM", query);
+        return Response.status(Response.Status.OK).entity(deviceStates).build();
     }
 }
