@@ -93,7 +93,7 @@ public class Dashboard {
         overviewDeviceCountsDataWrapper.add(inactiveDeviceCountDataWrapper);
         overviewDeviceCountsDataWrapper.add(removedDeviceCountDataWrapper);
 
-        dashboardGadgetDataWrapper.setContext("device-overview");
+        dashboardGadgetDataWrapper.setContext("connectivity-status");
         dashboardGadgetDataWrapper.setData(overviewDeviceCountsDataWrapper);
 
         List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
@@ -132,7 +132,7 @@ public class Dashboard {
         vulnerableDeviceCountsDataWrapper.add(nonCompliantDeviceCountDataWrapper);
         vulnerableDeviceCountsDataWrapper.add(unmonitoredDeviceCountDataWrapper);
 
-        dashboardGadgetDataWrapper.setContext("potential-vulnerabilities");
+        dashboardGadgetDataWrapper.setContext("potential-vulnerability");
         dashboardGadgetDataWrapper.setData(vulnerableDeviceCountsDataWrapper);
 
         List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
@@ -178,7 +178,7 @@ public class Dashboard {
             nonCompliantDeviceCountsByFeaturesDataWrapper.add(nonCompliantDeviceCountByFeatureDataWrapper);
         }
 
-        dashboardPaginationGadgetDataWrapper.setContext("non-compliant-by-feature");
+        dashboardPaginationGadgetDataWrapper.setContext("non-compliant-feature");
         dashboardPaginationGadgetDataWrapper.setData(nonCompliantDeviceCountsByFeaturesDataWrapper);
         dashboardPaginationGadgetDataWrapper.setTotalRecordsCount(paginationResult.getRecordsTotal());
 
@@ -191,8 +191,7 @@ public class Dashboard {
     @GET
     @Path("device-groupings")
     public Response getDeviceGroupingCounts(@QueryParam("connectivity-status") String connectivityStatus,
-                                            @QueryParam("is-compliant") String isCompliant,
-                                            @QueryParam("is-monitored") String isMonitored,
+                                            @QueryParam("potential-vulnerability") String potentialVulnerability,
                                             @QueryParam("platform") String platform,
                                             @QueryParam("ownership") String ownership) {
 
@@ -204,11 +203,11 @@ public class Dashboard {
             filters.put("CONNECTIVITY_STATUS", connectivityStatus);
         }
 
-        if (isCompliant != null && "false".equals(isCompliant)) {
+        if (potentialVulnerability != null && "non-compliant".equals(potentialVulnerability)) {
             filters.put("IS_COMPLIANT", 0);
         }
 
-        if (isMonitored != null && "false".equals(isMonitored)) {
+        if (potentialVulnerability != null && "unmonitored".equals(potentialVulnerability)) {
             filters.put("POLICY_ID", -1);
         }
 
@@ -244,7 +243,7 @@ public class Dashboard {
         }
 
         DashboardGadgetDataWrapper dashboardGadgetDataWrapper1 = new DashboardGadgetDataWrapper();
-        dashboardGadgetDataWrapper1.setContext("device-Counts-by-platforms");
+        dashboardGadgetDataWrapper1.setContext("platform");
         dashboardGadgetDataWrapper1.setData(deviceCountsByPlatformsDataWrapper);
 
         // creating device-Counts-by-ownership-types Data Wrapper
@@ -264,7 +263,7 @@ public class Dashboard {
         }
 
         DashboardGadgetDataWrapper dashboardGadgetDataWrapper2 = new DashboardGadgetDataWrapper();
-        dashboardGadgetDataWrapper2.setContext("device-Counts-by-ownership-types");
+        dashboardGadgetDataWrapper2.setContext("ownership");
         dashboardGadgetDataWrapper2.setData(deviceCountsByOwnershipTypesDataWrapper);
 
         List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
@@ -276,7 +275,7 @@ public class Dashboard {
 
     @GET
     @Path("feature-non-compliant-device-groupings")
-    public Response getFeatureNonCompliantDeviceGroupingCounts(@QueryParam("feature-code") String featureCode,
+    public Response getFeatureNonCompliantDeviceGroupingCounts(@QueryParam("non-compliant-feature") String nonCompliantFeature,
                                                                @QueryParam("platform") String platform,
                                                                @QueryParam("ownership") String ownership) {
 
@@ -298,7 +297,7 @@ public class Dashboard {
 
         // creating feature-non-compliant-device-Counts-by-platforms Data Wrapper
         Map<String, Integer> featureNonCompliantDeviceCountsByPlatforms = gadgetDataService.
-            getFeatureNonCompliantDeviceCountsByPlatforms(featureCode, filters);
+            getFeatureNonCompliantDeviceCountsByPlatforms(nonCompliantFeature, filters);
         if (featureNonCompliantDeviceCountsByPlatforms == null) {
             return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
@@ -315,12 +314,12 @@ public class Dashboard {
         }
 
         DashboardGadgetDataWrapper dashboardGadgetDataWrapper1 = new DashboardGadgetDataWrapper();
-        dashboardGadgetDataWrapper1.setContext("feature-non-compliant-device-Counts-by-platforms");
+        dashboardGadgetDataWrapper1.setContext("platform");
         dashboardGadgetDataWrapper1.setData(featureNonCompliantDeviceCountsByPlatformsDataWrapper);
 
         // creating feature-non-compliant-device-Counts-by-ownership-types Data Wrapper
         Map<String, Integer> featureNonCompliantDeviceCountsByOwnershipTypes = gadgetDataService.
-            getFeatureNonCompliantDeviceCountsByOwnershipTypes(featureCode, filters);
+            getFeatureNonCompliantDeviceCountsByOwnershipTypes(nonCompliantFeature, filters);
         if (featureNonCompliantDeviceCountsByOwnershipTypes == null) {
             return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
@@ -337,7 +336,7 @@ public class Dashboard {
         }
 
         DashboardGadgetDataWrapper dashboardGadgetDataWrapper2 = new DashboardGadgetDataWrapper();
-        dashboardGadgetDataWrapper2.setContext("device-Counts-by-ownership-types");
+        dashboardGadgetDataWrapper2.setContext("ownership");
         dashboardGadgetDataWrapper2.setData(featureNonCompliantDeviceCountsByOwnershipTypesDataWrapper);
 
         List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
@@ -350,8 +349,7 @@ public class Dashboard {
     @GET
     @Path("filtered-devices-over-total")
     public Response getFilteredDeviceCountOverTotal(@QueryParam("connectivity-status") String connectivityStatus,
-                                                    @QueryParam("is-compliant") String isCompliant,
-                                                    @QueryParam("is-monitored") String isMonitored,
+                                                    @QueryParam("potential-vulnerability") String potentialVulnerability,
                                                     @QueryParam("platform") String platform,
                                                     @QueryParam("ownership") String ownership) {
 
@@ -363,11 +361,11 @@ public class Dashboard {
             filters.put("CONNECTIVITY_STATUS", connectivityStatus);
         }
 
-        if (isCompliant != null && "false".equals(isCompliant)) {
+        if (potentialVulnerability != null && "non-compliant".equals(potentialVulnerability)) {
             filters.put("IS_COMPLIANT", 0);
         }
 
-        if (isMonitored != null && "false".equals(isMonitored)) {
+        if (potentialVulnerability != null && "unmonitored".equals(potentialVulnerability)) {
             filters.put("POLICY_ID", -1);
         }
 
@@ -422,7 +420,7 @@ public class Dashboard {
 
     @GET
     @Path("feature-non-compliant-devices-over-total")
-    public Response getFeatureNonCompliantDeviceCountOverTotal(@QueryParam("feature-code") String featureCode,
+    public Response getFeatureNonCompliantDeviceCountOverTotal(@QueryParam("non-compliant-feature") String nonCompliantFeature,
                                                                @QueryParam("platform") String platform,
                                                                @QueryParam("ownership") String ownership) {
 
@@ -444,7 +442,7 @@ public class Dashboard {
         DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
 
         // creating featureNonCompliantDeviceCount Data Wrapper
-        int featureNonCompliantDeviceCount = gadgetDataService.getFeatureNonCompliantDeviceCount(featureCode, filters);
+        int featureNonCompliantDeviceCount = gadgetDataService.getFeatureNonCompliantDeviceCount(nonCompliantFeature, filters);
         if (featureNonCompliantDeviceCount == -1) {
             return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
@@ -474,6 +472,48 @@ public class Dashboard {
         responsePayload.add(dashboardGadgetDataWrapper);
 
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+    }
+
+    @GET
+    @Path("filtered-devices-with-details")
+    public Response getFilteredDevicesWithDetails(@QueryParam("connectivity-status") String connectivityStatus,
+                                                  @QueryParam("potential-vulnerability") String potentialVulnerability,
+                                                  @QueryParam("platform") String platform,
+                                                  @QueryParam("ownership") String ownership) {
+
+        Map<String, Object> filters = new LinkedHashMap<>();
+        if (connectivityStatus != null &&
+                ("ACTIVE".equals(connectivityStatus) ||
+                        "INACTIVE".equals(connectivityStatus) ||
+                        "REMOVED".equals(connectivityStatus))) {
+            filters.put("CONNECTIVITY_STATUS", connectivityStatus);
+        }
+
+        if (potentialVulnerability != null && "non-compliant".equals(potentialVulnerability)) {
+            filters.put("IS_COMPLIANT", 0);
+        }
+
+        if (potentialVulnerability != null && "unmonitored".equals(potentialVulnerability)) {
+            filters.put("POLICY_ID", -1);
+        }
+
+        if (platform != null &&
+                ("android".equals(platform) ||
+                        "ios".equals(platform) ||
+                        "windows".equals(platform))) {
+            filters.put("PLATFORM", platform);
+        }
+
+        if (ownership != null &&
+                ("BYOD".equals(ownership) ||
+                        "COPE".equals(ownership))) {
+            filters.put("OWNERSHIP", ownership);
+        }
+
+        GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
+        DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
+
+        return Response.status(HttpStatus.SC_OK).build();
     }
 
 }
