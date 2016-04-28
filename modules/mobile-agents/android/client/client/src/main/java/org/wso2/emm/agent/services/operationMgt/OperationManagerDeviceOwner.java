@@ -575,11 +575,11 @@ public class OperationManagerDeviceOwner extends OperationManager {
             List<String> toBeHideApps = new ArrayList<>(installedAppPackages);
             toBeHideApps.removeAll(appRestriction.getRestrictedList());
             for (String packageName : toBeHideApps) {
-                CommonUtils.callSystemApp(getContext(), operation.getCode(), null , packageName);
+                CommonUtils.callSystemApp(getContext(), operation.getCode(), "false" , packageName);
             }
         } else if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictedList())) {
             for (String packageName : appRestriction.getRestrictedList()) {
-                CommonUtils.callSystemApp(getContext(), operation.getCode(), Constants.AppRestriction.BLACK_LIST, packageName);
+                CommonUtils.callSystemApp(getContext(), operation.getCode(), "false", packageName);
             }
         }
         operation.setStatus(getContextResources().getString(R.string.operation_value_completed));

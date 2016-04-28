@@ -566,7 +566,7 @@ public class OperationManagerOlderSdk extends OperationManager {
                 List<String> toBeHideApps = new ArrayList<>(installedAppPackages);
                 toBeHideApps.removeAll(appRestriction.getRestrictedList());
                 for (String packageName : toBeHideApps) {
-                    CommonUtils.callSystemApp(getContext(), operation.getCode(), null , packageName);
+                    CommonUtils.callSystemApp(getContext(), operation.getCode(), "false" , packageName);
                 }
             }
         }
@@ -590,7 +590,7 @@ public class OperationManagerOlderSdk extends OperationManager {
             } else if (Constants.OWNERSHIP_COPE.equals(ownershipType)) {
 
                 for (String packageName : appRestriction.getRestrictedList()) {
-                    CommonUtils.callSystemApp(getContext(), operation.getCode(), null, packageName);
+                    CommonUtils.callSystemApp(getContext(), operation.getCode(), "false", packageName);
                 }
             }
 

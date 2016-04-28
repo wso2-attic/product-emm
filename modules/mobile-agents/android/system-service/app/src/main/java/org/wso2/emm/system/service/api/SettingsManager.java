@@ -77,9 +77,9 @@ public class SettingsManager {
         }
     }
 
-    public static void hideApp(String packageName) {
+    public static void setVisibilityOfApp(String packageName , boolean visibility) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            EMMSystemService.devicePolicyManager.setApplicationHidden(EMMSystemService.cdmDeviceAdmin, packageName, true);
+            EMMSystemService.devicePolicyManager.setApplicationHidden(EMMSystemService.cdmDeviceAdmin, packageName, !visibility);
         }
     }
 
