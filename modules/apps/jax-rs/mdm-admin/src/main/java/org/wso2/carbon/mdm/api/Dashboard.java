@@ -275,6 +275,79 @@ public class Dashboard {
     }
 
     @GET
+    @Path("feature-non-compliant-device-groupings")
+    public Response getFeatureNonCompliantDeviceGroupingCounts(@QueryParam("feature-code") String featureCode,
+                                                               @QueryParam("platform") String platform,
+                                                               @QueryParam("ownership") String ownership) {
+
+        Map<String, Object> filters = new LinkedHashMap<>();
+        if (platform != null &&
+                ("android".equals(platform) ||
+                        "ios".equals(platform) ||
+                        "windows".equals(platform))) {
+            filters.put("PLATFORM", platform);
+        }
+
+        if (ownership != null &&
+                ("BYOD".equals(ownership) ||
+                        "COPE".equals(ownership))) {
+            filters.put("OWNERSHIP", ownership);
+        }
+
+        GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
+
+        // creating feature-non-compliant-device-Counts-by-platforms Data Wrapper
+        Map<String, Integer> featureNonCompliantDeviceCountsByPlatforms = gadgetDataService.
+            getFeatureNonCompliantDeviceCountsByPlatforms(featureCode, filters);
+        if (featureNonCompliantDeviceCountsByPlatforms == null) {
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+        }
+
+        Map<String, Object> featureNonCompliantDeviceCountByPlatformDataWrapper;
+        List<Map<String, Object>> featureNonCompliantDeviceCountsByPlatformsDataWrapper = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : featureNonCompliantDeviceCountsByPlatforms.entrySet()) {
+            featureNonCompliantDeviceCountByPlatformDataWrapper = new LinkedHashMap<>();
+            featureNonCompliantDeviceCountByPlatformDataWrapper.put("group", entry.getKey());
+            featureNonCompliantDeviceCountByPlatformDataWrapper.put("label", entry.getKey());
+            featureNonCompliantDeviceCountByPlatformDataWrapper.put("count", entry.getValue());
+            featureNonCompliantDeviceCountsByPlatformsDataWrapper.
+                add(featureNonCompliantDeviceCountByPlatformDataWrapper);
+        }
+
+        DashboardGadgetDataWrapper dashboardGadgetDataWrapper1 = new DashboardGadgetDataWrapper();
+        dashboardGadgetDataWrapper1.setContext("feature-non-compliant-device-Counts-by-platforms");
+        dashboardGadgetDataWrapper1.setData(featureNonCompliantDeviceCountsByPlatformsDataWrapper);
+
+        // creating feature-non-compliant-device-Counts-by-ownership-types Data Wrapper
+        Map<String, Integer> featureNonCompliantDeviceCountsByOwnershipTypes = gadgetDataService.
+            getFeatureNonCompliantDeviceCountsByOwnershipTypes(featureCode, filters);
+        if (featureNonCompliantDeviceCountsByOwnershipTypes == null) {
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+        }
+
+        Map<String, Object> featureNonCompliantDeviceCountByOwnershipTypeDataWrapper;
+        List<Map<String, Object>> featureNonCompliantDeviceCountsByOwnershipTypesDataWrapper = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : featureNonCompliantDeviceCountsByOwnershipTypes.entrySet()) {
+            featureNonCompliantDeviceCountByOwnershipTypeDataWrapper = new LinkedHashMap<>();
+            featureNonCompliantDeviceCountByOwnershipTypeDataWrapper.put("group", entry.getKey());
+            featureNonCompliantDeviceCountByOwnershipTypeDataWrapper.put("label", entry.getKey());
+            featureNonCompliantDeviceCountByOwnershipTypeDataWrapper.put("count", entry.getValue());
+            featureNonCompliantDeviceCountsByOwnershipTypesDataWrapper.
+                add(featureNonCompliantDeviceCountByOwnershipTypeDataWrapper);
+        }
+
+        DashboardGadgetDataWrapper dashboardGadgetDataWrapper2 = new DashboardGadgetDataWrapper();
+        dashboardGadgetDataWrapper2.setContext("device-Counts-by-ownership-types");
+        dashboardGadgetDataWrapper2.setData(featureNonCompliantDeviceCountsByOwnershipTypesDataWrapper);
+
+        List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
+        responsePayload.add(dashboardGadgetDataWrapper1);
+        responsePayload.add(dashboardGadgetDataWrapper2);
+
+        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+    }
+
+    @GET
     @Path("filtered-devices-over-total")
     public Response getFilteredDeviceCountOverTotal(@QueryParam("connectivity-status") String connectivityStatus,
                                                     @QueryParam("is-compliant") String isCompliant,
@@ -340,6 +413,62 @@ public class Dashboard {
 
         dashboardGadgetDataWrapper.setContext("filtered-device-count-over-total");
         dashboardGadgetDataWrapper.setData(filteredDeviceCountOverTotalDataWrapper);
+
+        List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
+        responsePayload.add(dashboardGadgetDataWrapper);
+
+        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+    }
+
+    @GET
+    @Path("feature-non-compliant-devices-over-total")
+    public Response getFeatureNonCompliantDeviceCountOverTotal(@QueryParam("feature-code") String featureCode,
+                                                               @QueryParam("platform") String platform,
+                                                               @QueryParam("ownership") String ownership) {
+
+        Map<String, Object> filters = new LinkedHashMap<>();
+        if (platform != null &&
+                ("android".equals(platform) ||
+                        "ios".equals(platform) ||
+                        "windows".equals(platform))) {
+            filters.put("PLATFORM", platform);
+        }
+
+        if (ownership != null &&
+                ("BYOD".equals(ownership) ||
+                        "COPE".equals(ownership))) {
+            filters.put("OWNERSHIP", ownership);
+        }
+
+        GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
+        DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
+
+        // creating featureNonCompliantDeviceCount Data Wrapper
+        int featureNonCompliantDeviceCount = gadgetDataService.getFeatureNonCompliantDeviceCount(featureCode, filters);
+        if (featureNonCompliantDeviceCount == -1) {
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+        }
+        Map<String, Object> featureNonCompliantDeviceCountDataWrapper = new LinkedHashMap<>();
+        featureNonCompliantDeviceCountDataWrapper.put("group", "feature-non-compliant");
+        featureNonCompliantDeviceCountDataWrapper.put("label", "feature-non-compliant");
+        featureNonCompliantDeviceCountDataWrapper.put("count", featureNonCompliantDeviceCount);
+
+        // creating TotalDeviceCount Data Wrapper
+        int totalDeviceCount = gadgetDataService.getTotalDeviceCount();
+        if (totalDeviceCount == -1) {
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+        }
+        Map<String, Object> totalDeviceCountDataWrapper = new LinkedHashMap<>();
+        totalDeviceCountDataWrapper.put("group", "total");
+        totalDeviceCountDataWrapper.put("label", "Total");
+        totalDeviceCountDataWrapper.put("count", totalDeviceCount);
+
+        List<Map<String, Object>> featureNonCompliantDeviceCountOverTotalDataWrapper = new ArrayList<>();
+        featureNonCompliantDeviceCountOverTotalDataWrapper.add(featureNonCompliantDeviceCountDataWrapper);
+        featureNonCompliantDeviceCountOverTotalDataWrapper.add(totalDeviceCountDataWrapper);
+
+        dashboardGadgetDataWrapper.setContext("feature-non-compliant-device-count-over-total");
+        dashboardGadgetDataWrapper.setData(featureNonCompliantDeviceCountOverTotalDataWrapper);
 
         List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
         responsePayload.add(dashboardGadgetDataWrapper);
