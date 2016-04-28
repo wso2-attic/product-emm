@@ -895,7 +895,7 @@
     <Permission>
         <name>get overview of device counts</name>
         <path>/device-mgt/emm-admin/dashboard/devices-overview</path>
-        <url>/dashboard/device-overview</url>
+        <url>/dashboard/devices-overview</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
@@ -938,6 +938,20 @@
         <name>get feature-non-compliant device count over total</name>
         <path>/device-mgt/emm-admin/dashboard/feature-non-compliant-devices-over-total</path>
         <url>/dashboard/feature-non-compliant-devices-over-total</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get filtered devices with details</name>
+        <path>/device-mgt/emm-admin/dashboard/filtered-devices-with-details</path>
+        <url>/dashboard/filtered-devices-with-details</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get feature-non-compliant devices with details</name>
+        <path>/device-mgt/emm-admin/dashboard/feature-non-compliant-devices-with-details</path>
+        <url>/dashboard/feature-non-compliant-devices-with-details</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
