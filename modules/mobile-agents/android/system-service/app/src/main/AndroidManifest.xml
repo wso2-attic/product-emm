@@ -50,6 +50,20 @@
         </activity>
 
         <receiver
+            android:name=".services.DeviceStartupIntentReceiver"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".services.AlarmReceiver" />
+
+        <receiver
                 android:name="org.wso2.emm.system.service.ServiceDeviceAdminReceiver"
                 android:permission="android.permission.BIND_DEVICE_ADMIN">
             <intent-filter>

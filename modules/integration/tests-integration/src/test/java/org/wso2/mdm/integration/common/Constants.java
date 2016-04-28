@@ -151,6 +151,7 @@ public final class Constants {
         public static final String NOTIFICATION_OPERATION = "notification";
         public static final String UPGRADE_FIRMWARE_OPERATION = "upgrade-firmware";
         public static final String WIFI_OPERATION = "wifi";
+        public static final String VPN_OPERATION = "vpn";
         public static final String ENCRYPT_OPERATION = "encrypt";
         public static final String CHANGE_LOCK_OPERATION = "change_lock";
         public static final String PASSWORD_POLICY_OPERATION = "password_policy";
@@ -170,6 +171,7 @@ public final class Constants {
         public static final String RING_ENDPOINT = "/mdm-android-agent/operation/ring-device";
         public static final String REBOOT_ENDPOINT = "/mdm-android-agent/operation/reboot-device";
         public static final String UPGRADE_FIRMWARE_ENDPOINT = "/mdm-android-agent/operation/upgrade-firmware";
+        public static final String VPN_ENDPOINT = "/mdm-android-agent/operation/vpn";
         public static final String MUTE_ENDPOINT = "/mdm-android-agent/operation/mute";
         public static final String INSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/install-application";
         public static final String UNINSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/uninstall-application";
@@ -287,6 +289,7 @@ public final class Constants {
         public static final String POLICY_PRIORITIES_ENDPOINT = "/mdm-admin/policies/priorities";
 
         public static final String ANDROID_POLICY_PAYLOAD_FILE_NAME = "android-policy-payloads.json";
+        public static final String ANDROID_POLICY_WORK_PROFILE_PAYLOAD_FILE_NAME = "android-policy-work-profile-payload.json";
         public static final String ANDROID_POLICY_ERRONEOUS_PAYLOAD_FILE_NAME = "policy-erroneous-payloads.json";
         public static final String WINDOWS_POLICY_PAYLOAD_FILE_NAME = "windows-policy-payloads.json";
         public static String WINDOWS_POLICY_DEVICE_ID = "";

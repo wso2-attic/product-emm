@@ -40,8 +40,8 @@ public class EventService {
     private static final String EVENT_STREAM_DEFINITION = "event_stream";
 
     @POST
-    public Response configureDeviceLock(@HeaderParam(ACCEPT) String acceptHeader,
-                                        EventPayload eventPayload) throws AndroidAgentException {
+    public Response publishEvents(@HeaderParam(ACCEPT) String acceptHeader,
+                                  EventPayload eventPayload) throws AndroidAgentException {
 
         if (log.isDebugEnabled()) {
             log.debug("Invoking Android device even logging.");

@@ -98,7 +98,7 @@ public class Certificate {
 
         if (serialNumber == null || serialNumber.isEmpty()) {
             message.setErrorMessage("Invalid serial number");
-            message.setDiscription("Serial number is missing or invalid.");
+            message.setDescription("Serial number is missing or invalid.");
             throw new BadRequestException(message, responseMediaType);
         }
 
@@ -133,11 +133,11 @@ public class Certificate {
 
         if (startIndex < 0) {
             message.setErrorMessage("Invalid start index.");
-            message.setDiscription("Start index cannot be less that 0.");
+            message.setDescription("Start index cannot be less that 0.");
             throw new BadRequestException(message, responseMediaType);
         } else if (length <= 0) {
             message.setErrorMessage("Invalid length value.");
-            message.setDiscription("Length should be a positive integer.");
+            message.setDescription("Length should be a positive integer.");
             throw new BadRequestException(message, responseMediaType);
         }
 
@@ -184,7 +184,7 @@ public class Certificate {
 
         if (serialNumber == null || serialNumber.isEmpty()) {
             message.setErrorMessage("Invalid serial number");
-            message.setDiscription("Serial number is missing or invalid.");
+            message.setDescription("Serial number is missing or invalid.");
             throw new BadRequestException(message, responseMediaType);
         }
 

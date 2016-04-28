@@ -61,6 +61,7 @@ public class OperationMgtService {
         Message message;
         MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
 
+
         if (id == null || id.isEmpty()) {
             String errorMessage = "Device identifier is null or empty, hence returning device not found";
             message = Message.responseMessage(errorMessage).
@@ -695,6 +696,49 @@ public class OperationMgtService {
             operation.setType(Operation.Type.PROFILE);
             operation.setPayLoad(upgradeFirmware.toJSON());
             return AndroidAPIUtils.getOperationResponse(upgradeFirmwareBeanWrapper.getDeviceIDs(),
+                                                        operation, message, responseMediaType);
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            log.error(errorMessage, e);
+            throw new AndroidOperationException(message, responseMediaType);
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Issue in retrieving device management service instance";
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            log.error(errorMessage, e);
+            throw new AndroidOperationException(message, responseMediaType);
+        }
+    }
+
+    @POST
+    @Path("vpn")
+    public Response configureVPN(@HeaderParam(ACCEPT) String acceptHeader,
+                                    VpnBeanWrapper vpnBeanWrapper) {
+
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking Android VPN device operation");
+        }
+
+        MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
+        Message message = new Message();
+
+        try {
+            Vpn vpn = vpnBeanWrapper.getOperation();
+
+            if (vpn == null) {
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the VPN operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new VPN instance");
+            }
+
+            ProfileOperation operation = new ProfileOperation();
+            operation.setCode(AndroidConstants.OperationCodes.VPN);
+            operation.setType(Operation.Type.PROFILE);
+            operation.setPayLoad(vpn.toJSON());
+            return AndroidAPIUtils.getOperationResponse(vpnBeanWrapper.getDeviceIDs(),
                                                         operation, message, responseMediaType);
         } catch (OperationManagementException e) {
             String errorMessage = "Issue in retrieving operation management service instance";

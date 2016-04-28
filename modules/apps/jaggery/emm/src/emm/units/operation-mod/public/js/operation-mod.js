@@ -37,13 +37,16 @@ var operationModule = function () {
     // Constants to define Android Operation Constants
     var androidOperationConstants = {
         "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
+        "VPN_OPERATION_CODE": "VPN",
         "CAMERA_OPERATION_CODE": "CAMERA",
         "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE",
         "WIFI_OPERATION_CODE": "WIFI",
         "WIPE_OPERATION_CODE": "WIPE_DATA",
         "NOTIFICATION_OPERATION_CODE": "NOTIFICATION",
+        "WORK_PROFILE_CODE": "WORK_PROFILE",
         "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE",
         "LOCK_OPERATION_CODE": "DEVICE_LOCK",
+        "UPGRADE_FIRMWARE": "UPGRADE_FIRMWARE",
         "DISALLOW_ADJUST_VOLUME": "DISALLOW_ADJUST_VOLUME",
         "DISALLOW_CONFIG_BLUETOOTH" : "DISALLOW_CONFIG_BLUETOOTH",
         "DISALLOW_CONFIG_CELL_BROADCASTS" : "DISALLOW_CONFIG_CELL_BROADCASTS",
@@ -92,6 +95,7 @@ var operationModule = function () {
     var iosOperationConstants = {
         "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
         "RESTRICTIONS_OPERATION_CODE": "RESTRICTION",
+        "VPN_OPERATION_CODE": "VPN",
         "WIFI_OPERATION_CODE": "WIFI",
         "EMAIL_OPERATION_CODE": "EMAIL",
         "AIRPLAY_OPERATION_CODE": "AIR_PLAY",
@@ -107,6 +111,7 @@ var operationModule = function () {
     publicMethods.getIOSServiceEndpoint = function (operationCode) {
         var featureMap = {
             "DEVICE_LOCK": "lock",
+            "VPN": "vpn",
             "RING": "ring",
             "LOCATION": "location",
             "NOTIFICATION": "notification",
@@ -215,6 +220,60 @@ var operationModule = function () {
                     "restrictionsAllowSpellCheck": operationPayload["allowSpellCheck"],
                     "restrictionsSafariAcceptCookies": operationPayload["safariAcceptCookies"],
                     "restrictionsAutonomousSingleAppModePermittedAppIDs": operationPayload["autonomousSingleAppModePermittedAppIDs"]
+                };
+                break;
+            case iosOperationConstants["VPN_OPERATION_CODE"]:
+                var pptp = false;
+                var l2tp = false;
+                if (operationPayload["vpnType"] == "PPTP") {
+                    pptp = true;
+                } else if (operationPayload["vpnType"] == "L2TP") {
+                    l2tp = true;
+                }
+
+                payload = {
+                    "userDefinedName": operationPayload["userDefinedName"],
+                    "overridePrimary": operationPayload["overridePrimary"],
+                    "onDemandEnabled": operationPayload["onDemandEnabled"],
+                    "onDemandMatchDomainsAlways": operationPayload["onDemandMatchDomainsAlways"],
+                    "onDemandMatchDomainsNever": operationPayload["onDemandMatchDomainsNever"],
+                    "onDemandMatchDomainsOnRetry": operationPayload["onDemandMatchDomainsOnRetry"],
+                    "onDemandRules": operationPayload["onDemandRules"],
+                    "vendorConfigs": operationPayload["vendorConfigs"],
+                    "vpnType": operationPayload["vpnType"],
+                    "pptpAuthName": pptp ? operationPayload.ppp["authName"] : "",
+                    "pptpTokenCard": pptp ? operationPayload.ppp["tokenCard"] : "",
+                    "pptpAuthPassword": pptp ? operationPayload.ppp["authPassword"] : "",
+                    "pptpCommRemoteAddress": pptp ? operationPayload.ppp["commRemoteAddress"] : "",
+                    "pptpRSASecureID": pptp ? operationPayload.ppp["RSASecureID"] : "",
+                    "pptpCCPEnabled": pptp ? operationPayload.ppp["CCPEnabled"] : "",
+                    "pptpCCPMPPE40Enabled": pptp ? operationPayload.ppp["CCPMPPE40Enabled"] : "",
+                    "pptpCCPMPPE128Enabled": pptp ? operationPayload.ppp["CCPMPPE128Enabled"] : "",
+                    "l2tpAuthName": l2tp ? operationPayload.ppp["authName"] : "",
+                    "l2tpTokenCard": l2tp ? operationPayload.ppp["tokenCard"] : "",
+                    "l2tpAuthPassword": l2tp ? operationPayload.ppp["authPassword"] : "",
+                    "l2tpCommRemoteAddress": l2tp ? operationPayload.ppp["commRemoteAddress"] : "",
+                    "l2tpRSASecureID": l2tp ? operationPayload.ppp["RSASecureID"] : "",
+                    "ipsecRemoteAddress": operationPayload.ipSec["remoteAddress"],
+                    "ipsecAuthenticationMethod": operationPayload.ipSec["authenticationMethod"],
+                    "ipsecLocalIdentifier": operationPayload.ipSec["localIdentifier"],
+                    "ipsecSharedSecret": operationPayload.ipSec["sharedSecret"],
+                    "ipsecPayloadCertificateUUID": operationPayload.ipSec["payloadCertificateUUID"],
+                    "ipsecXAuthEnabled": operationPayload.ipSec["XAuthEnabled"],
+                    "ipsecXAuthName": operationPayload.ipSec["XAuthName"],
+                    "ipsecPromptForVPNPIN": operationPayload.ipSec["promptForVPNPIN"],
+                    "ikev2RemoteAddress": operationPayload.ikEv2["remoteAddress"],
+                    "ikev2LocalIdentifier": operationPayload.ikEv2["localIdentifier"],
+                    "ikev2RemoteIdentifier": operationPayload.ikEv2["remoteIdentifier"],
+                    "ikev2AuthenticationMethod": operationPayload.ikEv2["authenticationMethod"],
+                    "ikev2SharedSecret": operationPayload.ikEv2["sharedSecret"],
+                    "ikev2PayloadCertificateUUID": operationPayload.ikEv2["payloadCertificateUUID"],
+                    "ikev2ExtendedAuthEnabled": operationPayload.ikEv2["extendedAuthEnabled"],
+                    "ikev2AuthName": operationPayload.ikEv2["authName"],
+                    "ikev2AuthPassword": operationPayload.ikEv2["authPassword"],
+                    "ikev2DeadPeerDetectionInterval": operationPayload.ikEv2["deadPeerDetectionInterval"],
+                    "ikev2ServerCertificateIssuerCommonName": operationPayload.ikEv2["serverCertificateIssuerCommonName"],
+                    "ikev2ServerCertificateCommonName": operationPayload.ikEv2["serverCertificateCommonName"]
                 };
                 break;
             case iosOperationConstants["WIFI_OPERATION_CODE"]:
@@ -340,7 +399,7 @@ var operationModule = function () {
 
     privateMethods.generateIOSOperationPayload = function (operationCode, operationData, deviceList) {
         var payload;
-        var operationType;alert(iosOperationConstants["DOMAIN_CODE"]);alert(operationCode);
+        var operationType;
         switch (operationCode) {
             case iosOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
@@ -399,6 +458,75 @@ var operationModule = function () {
                         "proxyPACFallbackAllowed": operationData["wifiProxyPACFallbackAllowed"],
                         "nairealmNames": operationData["wifiNAIRealmNames"],
                         "mccandMNCs": operationData["wifiMCCAndMNCs"]
+                    }
+                };
+                break;
+            case iosOperationConstants["VPN_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                var ppp = {};
+                var ipSec = {};
+                var ikev2 = {};
+                if (operationData["vpnType"] == "PPTP") {
+                    ppp = {
+                        "authName": operationData["pptpAuthName"],
+                        "tokenCard": operationData["pptpTokenCard"],
+                        "authPassword": operationData["pptpAuthPassword"],
+                        "commRemoteAddress": operationData["pptpCommRemoteAddress"],
+                        "RSASecureID": operationData["pptpRSASecureID"],
+                        "CCPEnabled": operationData["pptpCCPEnabled"],
+                        "CCPMPPE40Enabled": operationData["pptpCCPMPPE40Enabled"],
+                        "CCPMPPE128Enabled": operationData["pptpCCPMPPE128Enabled"]
+                    };
+                } else if (operationData["vpnType"] == "L2TP") {
+                    ppp = {
+                        "authName": operationData["l2tpAuthName"],
+                        "tokenCard": operationData["l2tpTokenCard"],
+                        "authPassword": operationData["l2tpAuthPassword"],
+                        "commRemoteAddress": operationData["l2tpCommRemoteAddress"],
+                        "RSASecureID": operationData["l2tpRSASecureID"]
+                    };
+                } else if (operationData["vpnType"] == "IPSec") {
+                    ipSec = {
+                        "remoteAddress" : operationData["ipsecRemoteAddress"],
+                        "authenticationMethod" : operationData["ipsecAuthenticationMethod"],
+                        "localIdentifier" : operationData["ipsecLocalIdentifier"],
+                        "sharedSecret" : operationData["ipsecSharedSecret"],
+                        "payloadCertificateUUID" : operationData["ipsecPayloadCertificateUUID"],
+                        "XAuthEnabled" : operationData["ipsecXAuthEnabled"],
+                        "XAuthName" : operationData["ipsecXAuthName"],
+                        "promptForVPNPIN" : operationData["ipsecPromptForVPNPIN"]
+                    };
+                } else if (operationData["vpnType"] == "IKEv2") {
+                    ikev2 = {
+                        "remoteAddress" : operationData["ikev2RemoteAddress"],
+                        "localIdentifier" : operationData["ikev2LocalIdentifier"],
+                        "remoteIdentifier" : operationData["ikev2RemoteIdentifier"],
+                        "authenticationMethod" : operationData["ikev2AuthenticationMethod"],
+                        "sharedSecret" : operationData["ikev2SharedSecret"],
+                        "payloadCertificateUUID" : operationData["ikev2PayloadCertificateUUID"],
+                        "extendedAuthEnabled" : operationData["ikev2ExtendedAuthEnabled"],
+                        "authName" : operationData["ikev2AuthName"],
+                        "authPassword" : operationData["ikev2AuthPassword"],
+                        "deadPeerDetectionInterval" : operationData["ikev2DeadPeerDetectionInterval"],
+                        "serverCertificateIssuerCommonName" : operationData["ikev2ServerCertificateIssuerCommonName"],
+                        "serverCertificateCommonName" : operationData["ikev2ServerCertificateCommonName"]
+                    };
+                }
+
+                payload = {
+                    "operation": {
+                        "userDefinedName": operationData["userDefinedName"],
+                        "overridePrimary": operationData["overridePrimary"],
+                        "onDemandEnabled": operationData["onDemandEnabled"],
+                        "onDemandMatchDomainsAlways": operationData["onDemandMatchDomainsAlways"],
+                        "onDemandMatchDomainsNever": operationData["onDemandMatchDomainsNever"],
+                        "onDemandMatchDomainsOnRetry": operationData["onDemandMatchDomainsOnRetry"],
+                        "onDemandRules" : operationData["onDemandRules"],
+                        "vendorConfigs" : operationData["vendorConfigs"],
+                        "vpnType" : operationData["vpnType"],
+                        "ppp": ppp,
+                        "ipSec": ipSec,
+                        "ikEv2": ikev2
                     }
                 };
                 break;
@@ -641,6 +769,14 @@ var operationModule = function () {
                     "wifiPassword": operationPayload["password"]
                 };
                 break;
+            case androidOperationConstants["VPN_OPERATION_CODE"]:
+                payload = {
+                    "serverAddress": operationPayload["serverAddress"],
+                    "serverPort": operationPayload["serverPort"],
+                    "sharedSecret": operationPayload["sharedSecret"],
+                    "dnsServer": operationPayload["dnsServer"]
+                };
+                break;
         }
         return payload;
     };
@@ -714,6 +850,14 @@ var operationModule = function () {
                     }
                 };
                 break;
+            case androidOperationConstants["UPGRADE_FIRMWARE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "schedule" : operationData["schedule"]
+                    }
+                };
+                break;
             case androidOperationConstants["WIPE_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
@@ -731,12 +875,35 @@ var operationModule = function () {
                     }
                 };
                 break;
+            case androidOperationConstants["VPN_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "serverAddress": operationData["serverAddress"],
+                        "serverPort": operationData["serverPort"],
+                        "sharedSecret": operationData["sharedSecret"],
+                        "dnsServer": operationData["dnsServer"]
+                    }
+                };
+                break;
             case androidOperationConstants["LOCK_OPERATION_CODE"]:
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
                         "message" : operationData["lock-message"],
                         "isHardLockEnabled" : operationData["hard-lock"]
+                    }
+                };
+                break;
+            case androidOperationConstants["WORK_PROFILE_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "profileName": operationData["workProfilePolicyProfileName"],
+                        "enableSystemApps": operationData["workProfilePolicyEnableSystemApps"],
+                        "hideSystemApps": operationData["workProfilePolicyHideSystemApps"],
+                        "unhideSystemApps": operationData["workProfilePolicyUnhideSystemApps"],
+                        "enablePlaystoreApps": operationData["workProfilePolicyEnablePlaystoreApps"]
                     }
                 };
                 break;
@@ -772,6 +939,7 @@ var operationModule = function () {
         var featureMap = {
             "WIFI": "wifi",
             "CAMERA": "camera",
+            "VPN": "vpn",
             "DEVICE_LOCK": "lock",
             "DEVICE_UNLOCK": "unlock",
             "DEVICE_LOCATION": "location",
@@ -1307,6 +1475,7 @@ var operationModule = function () {
                 generatedProfile[operationCode] = payload["operation"];
             }
         }
+        console.log(generatedProfile);
         return generatedProfile;
     };
 

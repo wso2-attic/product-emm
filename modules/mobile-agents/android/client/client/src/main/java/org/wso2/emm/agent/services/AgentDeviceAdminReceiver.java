@@ -29,6 +29,7 @@ import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.CommonUtils;
 
 import android.app.admin.DeviceAdminReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -151,6 +152,27 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		}
 	}
 
+	@Override
+	public void onProfileProvisioningComplete(Context context, Intent intent) {
+		Intent launch = new Intent(context, EnableProfileActivity.class);
+		launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		context.startActivity(launch);
+
+	}
+
+	/**
+	 * Generates a {@link ComponentName} that is used throughout the app.
+	 * @return a {@link ComponentName}
+	 */
+	public static ComponentName getComponentName(Context context) {
+		return new ComponentName(context.getApplicationContext(), AgentDeviceAdminReceiver.class);
+	}
+
 	public void onLockTaskModeEntering(Context context, Intent intent, String pkg) {
 		Toast.makeText(context, "Device is locked", Toast.LENGTH_LONG).show();
 	}
@@ -160,3 +182,4 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 	}
 
 }
+

@@ -23,7 +23,7 @@ package org.wso2.emm.agent.utils;
  */
 public class Constants {
 
-	public static final boolean DEBUG_MODE_ENABLED = true;
+	public static final boolean DEBUG_MODE_ENABLED = false;
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
 	public static final boolean SYSTEM_APP_ENABLED = false;
@@ -209,6 +209,7 @@ public class Constants {
 		public static final String DISENROLL = "DISENROLL";
 		public static final String UPGRADE_FIRMWARE = "UPGRADE_FIRMWARE";
 		public static final String REBOOT = "REBOOT";
+		public static final String VPN = "VPN";
 		public static final String EXECUTE_SHELL_COMMAND = "SHELL_COMMAND";
 		public static final String DISALLOW_ADJUST_VOLUME = "DISALLOW_ADJUST_VOLUME";
 		public static final String DISALLOW_CONFIG_BLUETOOTH = "DISALLOW_CONFIG_BLUETOOTH";
@@ -251,6 +252,7 @@ public class Constants {
 		public static final String SET_STATUS_BAR_DISABLED = "SET_STATUS_BAR_DISABLED";
 		public static final String SILENT_INSTALL_APPLICATION = "SILENT_INSTALL_APPLICATION";
 		public static final String SILENT_UNINSTALL_APPLICATION = "SILENT_UNINSTALL_APPLICATION";
+		public static final String WORK_PROFILE= "WORK_PROFILE";
 	}
 
 	/**
@@ -358,7 +360,7 @@ public class Constants {
 		private EventListners(){
 			throw new AssertionError();
 		}
-		public static final boolean EVENT_LISTENING_ENABLED = true;
+		public static final boolean EVENT_LISTENING_ENABLED = false;
 		public static final boolean APPLICATION_STATE_LISTENER = true;
 		public static final String APPLICATION_STATE = "APPLICATION_STATE";
 		public static final boolean RUNTIME_STATE_LISTENER = false;

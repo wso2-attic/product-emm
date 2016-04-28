@@ -19,6 +19,7 @@ package org.wso2.emm.agent;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,8 +31,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.api.DeviceState;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
@@ -45,7 +44,6 @@ public class ServerDetails extends Activity {
 	private TextView evServerIP;
 	private Button btnStartRegistration;
 	private Context context;
-	private DeviceInfo deviceInfo;
 	private DeviceState state;
 	private TextView txtSeverAddress;
 	private static final String PROTOCOL_HTTPS = "https://";
@@ -57,24 +55,20 @@ public class ServerDetails extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 		context = this.getApplicationContext();
-		deviceInfo = new DeviceInfo(context);
 		state = new DeviceState(context);
 		evServerIP = (TextView) findViewById(R.id.evServerIP);
 		txtSeverAddress = (TextView) findViewById(R.id.tvSeverAddress);
 		btnStartRegistration = (Button) findViewById(R.id.btnStartRegistration);
 		btnStartRegistration.setBackground(getResources().getDrawable(R.drawable.btn_grey));
 		btnStartRegistration.setTextColor(getResources().getColor(R.color.black));
-		Response compatibility = state.evaluateCompatibility();
+		Response deviceCompatibility = state.evaluateCompatibility();
 
-
-
-		if (!compatibility.getCode()) {
-			txtSeverAddress.setText(compatibility.getDescriptionResourceID());
+		if (!deviceCompatibility.getCode()) {
+			txtSeverAddress.setText(deviceCompatibility.getDescriptionResourceID());
 			btnStartRegistration.setVisibility(View.GONE);
 			txtSeverAddress.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.GONE);
 		} else {
-
 			btnStartRegistration.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.VISIBLE);
 			String ipSaved = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
@@ -172,9 +166,9 @@ public class ServerDetails extends Activity {
 						startAuthenticationActivity();
 					} else {
 						Toast.makeText(context.getApplicationContext(),
-						               getResources().getString(
-								               R.string.toast_message_enter_server_address),
-						               Toast.LENGTH_LONG).show();
+								getResources().getString(
+										R.string.toast_message_enter_server_address),
+								Toast.LENGTH_LONG).show();
 					}
 					break;
 

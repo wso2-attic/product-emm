@@ -26,7 +26,9 @@ import org.wso2.emm.agent.R;
 public enum Response {
 	INCOMPATIBLE(false, R.string.device_not_compatible_error),
 	INCOMPATIBLE_OS(false, R.string.device_not_compatible_error_os),
-	INCOMPATIBLE_ROOT(false, R.string.device_not_compatible_error_root),
+	INCOMPATIBLE_ROOT(true, R.string.device_not_compatible_error_root),
+	ANDROID_FOR_WORK_INCOMPATIBLE(false, R.string.device_not_compatible_with_android_for_work),
+	ANDROID_FOR_WORK_COMPATIBLE(true, R.string.device_compatible_with_android_for_work),
 	COMPATIBLE(true, R.string.device_not_compatible_error_os);
 
 	private final boolean code;
