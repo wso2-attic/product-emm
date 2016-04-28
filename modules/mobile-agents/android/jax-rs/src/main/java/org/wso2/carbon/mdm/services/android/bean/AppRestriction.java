@@ -15,11 +15,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.emm.agent.beans;
+package org.wso2.carbon.mdm.services.android.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class AppRestriction {
+/**
+ * This class represents information of configuring App Restriction ex: White list and Black list
+ */
+
+public class AppRestriction extends AndroidOperation implements Serializable {
 
 	private String restrictionType;
 	private List<String> restrictedList;

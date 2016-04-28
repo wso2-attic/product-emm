@@ -15,29 +15,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.emm.agent.beans;
+package org.wso2.carbon.mdm.services.android.bean.wrapper;
+
+import org.wso2.carbon.mdm.services.android.bean.AppRestriction;
 
 import java.util.List;
 
-public class AppRestriction {
+/**
+ * This class is used to wrap AppRestriction bean with devices
+ */
 
-	private String restrictionType;
-	private List<String> restrictedList;
+public class AppRestrictionBeanWrapper {
 
-	public String getRestrictionType() {
-		return restrictionType;
+	private AppRestriction operation;
+	private List<String> deviceIDs;
+
+	public AppRestriction getOperation() {
+		return operation;
 	}
 
-	public void setRestrictionType(String restrictionType) {
-		this.restrictionType = restrictionType;
+	public void setOperation(AppRestriction operation) {
+		this.operation = operation;
 	}
 
-	public List<String> getRestrictedList() {
-		return restrictedList;
+	public List<String> getDeviceIDs() {
+		return deviceIDs;
 	}
 
-	public void setRestrictedList(List<String> restrictedList) {
-		this.restrictedList = restrictedList;
+	public void setDeviceIDs(List<String> deviceIDs) {
+		this.deviceIDs = deviceIDs;
 	}
-
 }

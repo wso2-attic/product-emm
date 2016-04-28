@@ -756,6 +756,49 @@ public class OperationMgtService {
     }
 
     @POST
+    @Path("app-restriction")
+    public Response configureAppRestriction(@HeaderParam(ACCEPT) String acceptHeader,
+                                 AppRestrictionBeanWrapper appRestrictionBeanWrapper) {
+
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking Android App restriction operation");
+        }
+
+        MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
+        Message message = new Message();
+
+        try {
+            AppRestriction appRestriction = appRestrictionBeanWrapper.getOperation();
+
+            if (appRestriction == null) {
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the App restriction operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new AppRestriction instance");
+            }
+
+            ProfileOperation operation = new ProfileOperation();
+            operation.setCode(AndroidConstants.OperationCodes.APP_RESTRICTION);
+            operation.setType(Operation.Type.PROFILE);
+            operation.setPayLoad(appRestriction.toJSON());
+            return AndroidAPIUtils.getOperationResponse(appRestrictionBeanWrapper.getDeviceIDs(),
+                                                        operation, message, responseMediaType);
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            log.error(errorMessage, e);
+            throw new AndroidOperationException(message, responseMediaType);
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Issue in retrieving device management service instance";
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            log.error(errorMessage, e);
+            throw new AndroidOperationException(message, responseMediaType);
+        }
+    }
+
+    @POST
     @Path("notification")
     public Response sendNotification(@HeaderParam(ACCEPT) String acceptHeader,
                                      NotificationBeanWrapper notificationBeanWrapper) {

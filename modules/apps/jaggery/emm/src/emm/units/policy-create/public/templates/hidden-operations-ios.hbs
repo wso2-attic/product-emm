@@ -108,6 +108,16 @@
             <span id="vpn-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
             <span id="vpn-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
+        <a href="javascript:void(0)" onclick="showAdvanceOperation('app-restriction', this)">
+                <span class="fw-stack fw-lg">
+                    <i class="fw fw-application fw-stack-1x"></i>
+                    <i class="fw fw-block fw-stack-2x"></i>
+                </span>
+            Applications Restrictions
+            <span id="app-restriction-configured" class="has-configured status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="app-restriction-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="app-restriction-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+        </a>
     </div>
 
     <div class="wr-hidden-operations-content col-lg-8">
@@ -3528,5 +3538,101 @@
             </div>
         </div>
         <!-- End of Restrictions -->
+        <!--app-restriction-->
+        <div class="wr-hidden-operation" data-operation="app-restriction">
+            <div class="panel panel-default operation-data" data-operation="app-restriction" data-operation-code="APP-RESTRICTION">
+                <div id="app-restriction-heading" class="panel-heading" role="tab">
+                    <h2 class="sub-title panel-title">
+                        Application Restriction Settings
+                        <label class="wr-input-control switch" data-toggle="collapse" data-target="#app-restriction-body">
+                            <input type="checkbox" />
+                            <span class="helper"></span>
+                            <span class="text"></span>
+                        </label>
+                        <hr>
+                        <div class="panel-title-description">
+                            This configurations can be used to create Application black list or white list.
+                        </div>
+                    </h2>
+                </div>
+                <div id="app-restriction-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="app-restriction-body">
+
+                    <div id="app-restriction-feature-error-msg" class="alert alert-danger hidden" role="alert">
+                        <i class="icon fw fw-error"></i><span></span>
+                    </div>
+
+                    <select id="app-restriction-type" class="form-control operationDataKeys" data-key="restrictionType">
+                        <option value="" selected="selected">
+                            None
+                        </option>
+                        <option value="black-list">Black List</option>
+                        <option value="white-list">White List</option>
+                    </select>
+
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="restricted-applications">
+                            Restricted Application List
+                            <span class="helper" title="Add an application to restrict.">
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </span>
+                            <br>
+                            <a href="#restricted-applications-grid" class="grid-input-add" data-click-event="add-form">
+                                <span class="icon fw-stack">
+                                    <i class="fw fw-add fw-stack-1x"></i>
+                                    <i class="fw fw-ring fw-stack-2x"></i>
+                                </span>
+                                &nbsp;
+                                Add Application
+                            </a>
+                        </label>
+                        <div id="restricted-applications" class="operationDataKeys grouped-array-input multi-column-key-value-pair-array" data-key="restrictedApplications" data-column-count="2">
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                <tr>
+                                    <th>No:</th>
+                                    <th>App Name/Description</th>
+                                    <th>Package Name</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody data-add-form-container="#restricted-applications-grid">
+                                <tr data-help-text="add-form">
+                                    <td colspan="4">
+                                        No entries added yet .
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <table class="template hidden">
+                                <tbody data-add-form="#restricted-applications-grid">
+                                <tr data-add-form-element="clone">
+                                    <td data-title="No:">
+                                        <span class="index"></span>
+                                    </td>
+                                    <td data-title="App Name">
+                                        <input type="text" class="form-control grid-input-text" data-child-key="appName" maxlength="100" data-default="" placeholder="[ Application Name or Description ]" />
+                                    </td>
+                                    <td data-title="Package Name">
+                                        <input type="text" class="form-control grid-input-text" data-child-key="packageName" maxlength="100" data-default="" placeholder="[ Package Name of Application ]" />
+                                    </td>
+                                    <td>
+                                            <span class="list-group-item-actions">
+                                                <a href="#restricted-applications-grid" class="grid-input-remove" data-click-event="remove-form">
+                                                    <span class="fw-stack helper" title="Remove Entry">
+                                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                                    </span>
+                                                </a>
+                                            </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/app-restriction-->
     </div>
 </div>

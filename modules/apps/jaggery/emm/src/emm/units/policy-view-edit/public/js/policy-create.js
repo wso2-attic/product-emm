@@ -391,24 +391,90 @@ validateStep["policy-profile"] = function () {
                 validationStatusArray.push(validationStatus);
             }
             if ($.inArray(androidOperationConstants["APPLICATION_OPERATION_CODE"], configuredOperations) != -1){
+                //if application restriction configured
                 operation = androidOperationConstants["APPLICATION_OPERATION"];
+                // initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
 
-                var whiteListEnabled = $("#white-list-enabled").is(":checked");
-                var whiteListStoreLoc = $("#app-store-location").val();
+                var appRestrictionType = $("#app-restriction-type").val();
 
-                if($("button.dropdown-toggle").text().trim() == "Black List" && $('table.black-list tbody tr').length > 0){
-                    continueToCheckNextInputs = true;
-                }
-                else if($("button.dropdown-toggle").text().trim() == "White List" && whiteListEnabled && whiteListStoreLoc){
-                    continueToCheckNextInputs = true;
-                }
-                else{
+                var restrictedApplicationsGridChildInputs = "div#restricted-applications .child-input";
+
+                if (!appRestrictionType) {
                     validationStatus = {
                         "error": true,
-                        "subErrorMsg": "Application list is not provided. You cannot proceed.",
+                        "subErrorMsg": "Applications restriction type is not provided.",
                         "erroneousFeature": operation
-                    }
+                    };
                     continueToCheckNextInputs = false;
+                }
+
+                if (continueToCheckNextInputs) {
+                    if ($(restrictedApplicationsGridChildInputs).length == 0) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Applications are not provided in application restriction list.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                    else {
+                        childInputCount = 0;
+                        childInputArray = [];
+                        emptyChildInputCount = 0;
+                        duplicatesExist = false;
+                        // looping through each child input
+                        $(restrictedApplicationsGridChildInputs).each(function () {
+                            childInputCount++;
+                            if (childInputCount % 2 == 0) {
+                                // if child input is of second column
+                                childInput = $(this).val();
+                                childInputArray.push(childInput);
+                                // updating emptyChildInputCount
+                                if (!childInput) {
+                                    // if child input field is empty
+                                    emptyChildInputCount++;
+                                }
+                            }
+                        });
+                        // checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
+                                        break;
+                                    }
+                                }
+                                if (duplicatesExist) {
+                                    break;
+                                }
+                            }
+                        }
+                        // updating validationStatus
+                        if (emptyChildInputCount > 0) {
+                            // if empty child inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more package names of " +
+                                "applications are empty.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (duplicatesExist) {
+                            // if duplicate input is present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Duplicate values exist with " +
+                                "for package names.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+
+                    }
                 }
 
                 if(continueToCheckNextInputs){
@@ -420,6 +486,7 @@ validateStep["policy-profile"] = function () {
 
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
+
 
             }
         }
