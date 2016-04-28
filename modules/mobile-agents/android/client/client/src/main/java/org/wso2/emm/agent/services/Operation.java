@@ -994,7 +994,12 @@ public class Operation implements APIResultCallBack {
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
 		try {
-			if(payload != null){
+
+			if (Preference.getString(context, Constants.PreferenceFlag.APPLIED_POLICY) != null) {
+				CommonUtils.revokePolicy(context);
+			}
+
+			if (payload != null) {
 				Preference.putString(context, Constants.PreferenceFlag.APPLIED_POLICY, payload);
 			}
 
