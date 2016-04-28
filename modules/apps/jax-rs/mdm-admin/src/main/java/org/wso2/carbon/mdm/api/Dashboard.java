@@ -53,7 +53,7 @@ public class Dashboard {
         Map<String, Object> totalDeviceCountDataWrapper = new HashMap<>();
         totalDeviceCountDataWrapper.put("group", "total");
         totalDeviceCountDataWrapper.put("label", "Total");
-        totalDeviceCountDataWrapper.put("count", gadgetDataService.getTotalDeviceCount(null));
+        //totalDeviceCountDataWrapper.put("count", gadgetDataService.getTotalDeviceCount(null));
         // creating ActiveDeviceCount Data Wrapper
         Map<String, Object> activeDeviceCountDataWrapper = new HashMap<>();
         activeDeviceCountDataWrapper.put("group", "active");
