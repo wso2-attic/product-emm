@@ -25,7 +25,24 @@ public class EventPayload {
 
     private String deviceIdentifier;
     private String type;
-    private String payload;
+    private String packageName;
+    private String state;
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
 
     public String getType() {
         return type;
@@ -33,14 +50,6 @@ public class EventPayload {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getPayload() {
-        return payload;
-    }
-
-    public void setPayload(String payload) {
-        this.payload = payload;
     }
 
     public String getDeviceIdentifier() {

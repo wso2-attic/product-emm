@@ -354,5 +354,11 @@
         <url>/events</url>
         <method>POST</method>
     </Permission>
+    <Permission>
+        <name>Event Retrieve</name>
+        <path>/device-mgt/emm-admin/events/view</path>
+        <url>/events/*</url>
+        <method>GET</method>
+    </Permission>
 
 </PermissionConfiguration>

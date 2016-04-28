@@ -21,7 +21,15 @@ package org.wso2.carbon.mdm.services.android.util;
 import com.google.gson.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.analytics.api.AnalyticsDataAPI;
+import org.wso2.carbon.analytics.dataservice.commons.AnalyticsDataResponse;
+import org.wso2.carbon.analytics.dataservice.commons.SearchResultEntry;
+import org.wso2.carbon.analytics.dataservice.core.AnalyticsDataServiceUtils;
+import org.wso2.carbon.analytics.datasource.commons.Record;
+import org.wso2.carbon.analytics.datasource.commons.exception.AnalyticsException;
+import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.device.mgt.analytics.data.publisher.service.EventsPublisherService;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
@@ -38,16 +46,16 @@ import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManag
 import org.wso2.carbon.device.mgt.core.search.mgt.impl.Utils;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 import org.wso2.carbon.device.mgt.mobile.impl.android.gcm.GCMService;
-import org.wso2.carbon.mdm.services.android.bean.property.DeviceInfo;
+import org.wso2.carbon.mdm.services.android.bean.DeviceState;
 import org.wso2.carbon.policy.mgt.common.monitor.PolicyComplianceException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * AndroidAPIUtil class provides utility functions used by Android REST-API classes.
@@ -174,6 +182,72 @@ public class AndroidAPIUtils {
         }
         return notificationManagementService;
     }
+
+    public static EventsPublisherService getEventPublisherService() {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        EventsPublisherService eventsPublisherService =
+                (EventsPublisherService) ctx.getOSGiService(EventsPublisherService.class, null);
+        if (eventsPublisherService == null) {
+            String msg = "Event Publisher service has not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return eventsPublisherService;
+    }
+
+    public static AnalyticsDataAPI getAnalyticsDataAPI() {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        AnalyticsDataAPI analyticsDataAPI =
+                (AnalyticsDataAPI) ctx.getOSGiService(AnalyticsDataAPI.class, null);
+        if (analyticsDataAPI == null) {
+            String msg = "Analytics api service has not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return analyticsDataAPI;
+    }
+
+    public static void getAllEventsForDevice(String tableName, String query) throws AnalyticsException {
+        int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
+        AnalyticsDataAPI analyticsDataAPI = getAnalyticsDataAPI();
+        int eventCount = analyticsDataAPI.searchCount(tenantId, tableName, query);
+        if (eventCount == 0) {
+            // return null;
+        }
+        List<SearchResultEntry> resultEntries = analyticsDataAPI.search(tenantId, tableName, query, 0, eventCount);
+        List<String> recordIds = getRecordIds(resultEntries);
+        AnalyticsDataResponse response = analyticsDataAPI.get(tenantId, tableName, 1, null, recordIds);
+        Map<String, DeviceState> deviceStateses = createDeviceStatusData(AnalyticsDataServiceUtils.listRecords(
+                analyticsDataAPI, response));
+    }
+
+    private static List<String> getRecordIds(List<SearchResultEntry> searchResults) {
+        List<String> ids = new ArrayList();
+        for (SearchResultEntry searchResult : searchResults) {
+            ids.add(searchResult.getId());
+        }
+        return ids;
+    }
+
+    /*
+    overloaded method to stote events
+     */
+    public static Map<String, DeviceState> createDeviceStatusData(List<Record> records) {
+        Map<String, DeviceState> deviceStatuses = new HashMap();
+        for (Record record : records) {
+            DeviceState deviceState = createDeviceStatusData(record);
+            deviceStatuses.put(deviceState.getId(), deviceState);
+        }
+        return deviceStatuses;
+    }
+    private static DeviceState createDeviceStatusData(Record record) {
+        DeviceState deviceState = new DeviceState();
+        deviceState.setId(record.getId());
+        deviceState.setValues(record.getValues());
+        return deviceState;
+    }
+
+
 
     public static void updateOperation(String deviceId, Operation operation)
             throws OperationManagementException, PolicyComplianceException, ApplicationManagementException {
@@ -323,12 +397,12 @@ public class AndroidAPIUtils {
 
         boolean exist = false;
         for (JsonElement element : jsonArray) {
-          //  if (((JsonObject) element).entrySet().iterator().next().getValue().getAsString().equalsIgnoreCase(needed));
-            for (Map.Entry<String, JsonElement> ob : ((JsonObject) element).entrySet()){
-                if(exist){
+            //  if (((JsonObject) element).entrySet().iterator().next().getValue().getAsString().equalsIgnoreCase(needed));
+            for (Map.Entry<String, JsonElement> ob : ((JsonObject) element).entrySet()) {
+                if (exist) {
                     return ob.getValue().getAsString().replace("%", "");
                 }
-                if(ob.getValue().getAsString().equalsIgnoreCase(needed)){
+                if (ob.getValue().getAsString().equalsIgnoreCase(needed)) {
                     exist = true;
                 }
             }

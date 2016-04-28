@@ -20,12 +20,14 @@ package org.wso2.carbon.mdm.services.android;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.analytics.datasource.commons.exception.AnalyticsException;
+import org.wso2.carbon.device.mgt.analytics.data.publisher.exception.DataPublisherConfigurationException;
 import org.wso2.carbon.mdm.services.android.bean.EventPayload;
+import org.wso2.carbon.mdm.services.android.exception.AndroidAgentException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.Message;
 
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -35,22 +37,46 @@ import javax.ws.rs.core.Response;
 public class EventService {
     private static final String ACCEPT = "Accept";
     private static Log log = LogFactory.getLog(EventService.class);
+    private static final String EVENT_STREAM_DEFINITION = "event_stream";
 
-    //TODO: Passing data to DAS must be added
     @POST
     public Response configureDeviceLock(@HeaderParam(ACCEPT) String acceptHeader,
-                                        EventPayload eventPayload) {
+                                        EventPayload eventPayload) throws AndroidAgentException {
 
         if (log.isDebugEnabled()) {
             log.debug("Invoking Android device even logging.");
         }
-
-        MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
-        Response response;
+        MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
 
-        return Response.status(Response.Status.OK).entity("").
-                type(responseMediaType).build();
+        Object payload[] = { eventPayload.getDeviceIdentifier(), eventPayload.getPackageName(), eventPayload.getState(),
+        eventPayload.getType() };
+        try {
+            if(AndroidAPIUtils.getEventPublisherService().publishEvent(
+                    EVENT_STREAM_DEFINITION, "1.0.0", new Object[0], new Object[0], payload)) {
+                message.setResponseCode("Event is published successfully.");
+                return Response.status(Response.Status.OK).entity(message).type(responseMediaType).build();
+            } else {
+                message.setResponseCode("Error occurred while publishing the event.");
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
+                        entity(message).type(responseMediaType).build();
+            }
+        } catch (DataPublisherConfigurationException e) {
+            String msg = "Error occurred while publishing the events from Android agent";
+            log.error(msg, e);
+            throw new AndroidAgentException(msg, e);
+        }
+    }
 
+    @Path("{deviceId}")
+    @Produces("application/json")
+    @GET
+    public Response retrieveAlert(@PathParam("deviceId")String deviceId) throws AnalyticsException {
+        if (log.isDebugEnabled()) {
+            log.debug("Retrieving events");
+        }
+        String query = "deviceIdentifier:" + deviceId;
+        AndroidAPIUtils.getAllEventsForDevice("EVENT_STREAM", query);
+        return Response.status(Response.Status.OK).build();
     }
 }
