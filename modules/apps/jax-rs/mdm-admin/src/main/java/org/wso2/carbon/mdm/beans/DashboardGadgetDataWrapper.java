@@ -25,6 +25,7 @@ public class DashboardGadgetDataWrapper {
     private String context;
     private List<Map<String, Object>> data;
 
+    @SuppressWarnings("unused")
     public String getContext() {
         return context;
     }
@@ -33,6 +34,7 @@ public class DashboardGadgetDataWrapper {
         this.context = context;
     }
 
+    @SuppressWarnings("unused")
     public List<Map<String, Object>> getData() {
         return data;
     }
