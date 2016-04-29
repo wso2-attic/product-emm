@@ -28,12 +28,7 @@ import org.wso2.carbon.mdm.services.android.exception.AndroidAgentException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.Message;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.GET;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -56,10 +51,10 @@ public class EventService {
         Message message = new Message();
         MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
 
-        Object payload[] = { eventPayload.getDeviceIdentifier(), eventPayload.getPackageName(), eventPayload.getState(),
-        eventPayload.getType() };
+        Object payload[] = {eventPayload.getDeviceIdentifier(), eventPayload.getPackageName(), eventPayload.getState(),
+                eventPayload.getType()};
         try {
-            if(AndroidAPIUtils.getEventPublisherService().publishEvent(
+            if (AndroidAPIUtils.getEventPublisherService().publishEvent(
                     EVENT_STREAM_DEFINITION, "1.0.0", new Object[0], new Object[0], payload)) {
                 message.setResponseCode("Event is published successfully.");
                 return Response.status(Response.Status.OK).entity(message).type(responseMediaType).build();
@@ -78,12 +73,38 @@ public class EventService {
     @Path("{deviceId}")
     @Produces("application/json")
     @GET
-    public Response retrieveAlert(@PathParam("deviceId")String deviceId) throws AnalyticsException {
+    public Response retrieveAlert(@PathParam("deviceId") String deviceId) throws AnalyticsException {
         if (log.isDebugEnabled()) {
             log.debug("Retrieving events");
         }
         String query = "deviceIdentifier:" + deviceId;
-        List<DeviceState> deviceStates = AndroidAPIUtils.getAllEventsForDevice("EVENT_STREAM", query);
+        List<DeviceState> deviceStates = AndroidAPIUtils.getAllEventsForDevice(EVENT_STREAM_DEFINITION, query);
+        return Response.status(Response.Status.OK).entity(deviceStates).build();
+    }
+
+    @Path("date/{deviceId}")
+    @Produces("application/json")
+    @GET
+    public Response retrieveAlertFromDate(@PathParam("deviceId") String deviceId, @QueryParam("fromDate") long from,
+                                          @QueryParam("toDate") long to) throws AnalyticsException {
+        if (log.isDebugEnabled()) {
+            log.debug("Retrieving events");
+        }
+        String query = "deviceIdentifier:" + deviceId + " AND _timestamp: [" + from + " TO " + to + "]";
+        List<DeviceState> deviceStates = AndroidAPIUtils.getAllEventsForDevice(EVENT_STREAM_DEFINITION, query);
+        return Response.status(Response.Status.OK).entity(deviceStates).build();
+    }
+
+    @Path("type/{deviceId}/{type}")
+    @GET
+    public Response retrieveTypeAlert(@PathParam("deviceId") String deviceId, @PathParam("type") String type)
+            throws AnalyticsException {
+        if (log.isDebugEnabled()) {
+            log.debug("Retrieving type based events");
+        }
+
+        String query = "deviceIdentifier:" + deviceId +  " AND type:" + type;
+        List<DeviceState> deviceStates = AndroidAPIUtils.getAllEventsForDevice(EVENT_STREAM_DEFINITION, query);
         return Response.status(Response.Status.OK).entity(deviceStates).build();
     }
 }
