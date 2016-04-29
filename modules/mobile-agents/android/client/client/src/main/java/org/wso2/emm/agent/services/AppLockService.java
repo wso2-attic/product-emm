@@ -38,7 +38,8 @@ public class AppLockService extends IntentService {
 
 	}
 
-	@Override protected void onHandleIntent(Intent lockIntent) {
+	@Override
+	protected void onHandleIntent(Intent lockIntent) {
 		Log.d(TAG, "Service started...!");
 
 		ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);

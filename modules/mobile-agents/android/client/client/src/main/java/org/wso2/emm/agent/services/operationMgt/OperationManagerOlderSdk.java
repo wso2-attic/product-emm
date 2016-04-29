@@ -592,6 +592,5 @@ public class OperationManagerOlderSdk extends OperationManager {
         operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
         getResultBuilder().build(operation);
 
-
     }
 }

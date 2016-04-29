@@ -156,7 +156,7 @@ public class PolicyOperationsMapper {
 		return operation;
 	}
 
-	private Operation buildApplicationRestrictionOpearation(Operation operation){
+	private Operation buildApplicationRestrictionOpearation(Operation operation) {
 		operation.setId(INVALID_FLAG);
 		return operation;
 	}
