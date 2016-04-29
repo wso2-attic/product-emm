@@ -195,6 +195,7 @@ public class Constants {
 		public static final String CHANGE_LOCK_CODE = "CHANGE_LOCK_CODE";
 		public static final String INSTALL_APPLICATION = "INSTALL_APPLICATION";
 		public static final String UNINSTALL_APPLICATION = "UNINSTALL_APPLICATION";
+		public static final String UPDATE_APPLICATION = "UPDATE_APPLICATION";
 		public static final String BLACKLIST_APPLICATIONS = "BLACKLIST_APPLICATIONS";
 		public static final String ENCRYPT_STORAGE = "ENCRYPT_STORAGE";
 		public static final String DEVICE_RING = "DEVICE_RING";
