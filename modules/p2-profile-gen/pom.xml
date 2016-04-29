@@ -486,6 +486,17 @@
                                     org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mdm.restconnector.feature:${appmgt.feature.version}
                                 </featureArtifactDef>
 
+                                <featureArtifactDef>
+                                    org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.oauth.feature:${appmgt.feature.version}
+                                </featureArtifactDef>
+
+                                <featureArtifactDef>
+                                    org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.rest.api.store.feature:${appmgt.feature.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.rest.api.publisher.feature:${appmgt.feature.version}
+                                </featureArtifactDef>
+
                             </featureArtifacts>
                         </configuration>
                     </execution>
@@ -1019,6 +1030,19 @@
                                     <version>${carbon.kernel.version}</version>
                                 </feature>
 
+                                <feature>
+                                    <id>org.wso2.carbon.appmgt.rest.api.store.feature.group</id>
+                                    <version>${appmgt.feature.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.appmgt.rest.api.publisher.feature.group</id>
+                                    <version>${appmgt.feature.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.appmgt.oauth.feature.group</id>
+                                    <version>${appmgt.feature.version}</version>
+                                </feature>
+
                                 <!--<feature>-->
                                 <!--<id>org.wso2.carbon.core.server.feature.group</id>-->
                                 <!--<version>${carbon.kernel.version}</version>-->
@@ -1527,6 +1551,19 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.appmgt.mdm.restconnector.feature.group</id>
+                                    <version>${appmgt.feature.version}</version>
+                                </feature>
+
+                                <feature>
+                                    <id>org.wso2.carbon.appmgt.rest.api.store.feature.group</id>
+                                    <version>${appmgt.feature.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.appmgt.rest.api.publisher.feature.group</id>
+                                    <version>${appmgt.feature.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.appmgt.oauth.feature.group</id>
                                     <version>${appmgt.feature.version}</version>
                                 </feature>
                             </features>

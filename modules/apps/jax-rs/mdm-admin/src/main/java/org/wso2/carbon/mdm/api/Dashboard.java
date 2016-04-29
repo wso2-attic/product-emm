@@ -490,7 +490,7 @@ public class Dashboard {
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         }
 
-        if (count < 5) {
+        if (count < 10) {
             message.setErrorMessage("Invalid request count.");
             message.setDescription("Row count should be more than 5.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
@@ -572,7 +572,7 @@ public class Dashboard {
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         }
 
-        if (count < 5) {
+        if (count < 10) {
             message.setErrorMessage("Invalid request count.");
             message.setDescription("Row count should be more than 5.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
@@ -623,4 +623,5 @@ public class Dashboard {
 
         return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
+
 }
