@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,10 +33,8 @@ import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.AppRestriction;
 import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.services.AppLockService;
-import org.wso2.emm.agent.services.operationMgt.OperationManager;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
-import org.wso2.emm.agent.utils.Preference;
 
 import java.util.ArrayList;
 import java.util.Arrays;

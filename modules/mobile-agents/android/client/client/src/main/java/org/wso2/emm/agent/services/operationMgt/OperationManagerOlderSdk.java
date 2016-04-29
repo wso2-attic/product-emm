@@ -22,7 +22,6 @@ import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -33,12 +32,10 @@ import org.wso2.emm.agent.AlertActivity;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.ServerDetails;
-import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.beans.AppRestriction;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.services.AppLockService;
-import org.wso2.emm.agent.services.operationMgt.OperationManager;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
@@ -52,11 +49,8 @@ public class OperationManagerOlderSdk extends OperationManager {
 
     private static final String TAG = "OperationManagerOldSdk";
 
-    private ApplicationManager applicationManager;
-
     public OperationManagerOlderSdk(Context context){
         super(context);
-        this.applicationManager = new ApplicationManager(context.getApplicationContext());
     }
 
     @Override

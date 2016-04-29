@@ -18,12 +18,9 @@
 
 package org.wso2.emm.agent.services.operationMgt;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -34,27 +31,21 @@ import org.wso2.emm.agent.AlertActivity;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.ServerDetails;
-import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.beans.AppRestriction;
 import org.wso2.emm.agent.beans.Operation;
-import org.wso2.emm.agent.services.AppLockService;
-import org.wso2.emm.agent.services.operationMgt.OperationManager;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class OperationManagerDeviceOwner extends OperationManager {
     private static final String TAG = "OpManagerDeviceOwner";
 
-    private ApplicationManager applicationManager;
 
     public OperationManagerDeviceOwner(Context context) {
         super(context);
-        this.applicationManager = new ApplicationManager(context.getApplicationContext());
     }
 
     @Override

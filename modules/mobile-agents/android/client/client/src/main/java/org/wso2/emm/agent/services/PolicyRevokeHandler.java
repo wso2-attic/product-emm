@@ -170,22 +170,30 @@ public class PolicyRevokeHandler {
         }
     }
 
-    private void revokeAppRestrictionPolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+    /**
+     * Revoke app restriction policy (black list or white list)
+     *
+     * @param operation - Operation object
+     * @throws AndroidAgentException
+     */
+    private void revokeAppRestrictionPolicy(org.wso2.emm.agent.beans.Operation operation)
+            throws AndroidAgentException {
 
-        AppRestriction appRestriction = CommonUtils.getAppRestrictionTypeAndList(operation, null, null);
+        AppRestriction appRestriction =
+                CommonUtils.getAppRestrictionTypeAndList(operation, null, null);
 
         if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
             for (String packageName : appRestriction.getRestrictedList()) {
                 CommonUtils.callSystemApp(context, operation.getCode(), "true", packageName);
             }
-        }
-        else if (Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
+        } else if (Constants.AppRestriction.WHITE_LIST
+                .equals(appRestriction.getRestrictionType())) {
             List<String> installedAppPackages = CommonUtils.getInstalledAppPackages(context);
 
             List<String> toBeUnHideApps = new ArrayList<>(installedAppPackages);
             toBeUnHideApps.removeAll(appRestriction.getRestrictedList());
             for (String packageName : toBeUnHideApps) {
-                CommonUtils.callSystemApp(context, operation.getCode(), "true" , packageName);
+                CommonUtils.callSystemApp(context, operation.getCode(), "true", packageName);
             }
         }
 

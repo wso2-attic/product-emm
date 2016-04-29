@@ -490,7 +490,7 @@ validateStep["policy-profile"] = function () {
 
             }
         }
-    }if (policy["platform"] == platformTypeConstants["WINDOWS"]) {
+    } if (policy["platform"] == platformTypeConstants["WINDOWS"]) {
         if (configuredOperations.length == 0) {
             // updating validationStatus
             validationStatus = {

@@ -317,9 +317,19 @@ public class PolicyComplianceChecker {
         return policy;
     }
 
-    private ComplianceFeature checkAppRestrictionPolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+	/**
+	 * Check the app restriction policy (black list or white list) for compliance
+     *
+     * @param operation - Operation object
+     * @return - Compliance feature object
+     * @throws AndroidAgentException
+     */
 
-        AppRestriction appRestriction = CommonUtils.getAppRestrictionTypeAndList(operation, null, null);
+    private ComplianceFeature checkAppRestrictionPolicy(
+            org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+
+        AppRestriction appRestriction =
+                CommonUtils.getAppRestrictionTypeAndList(operation, null, null);
 
         List<String> installedAppPackages = CommonUtils.getInstalledAppPackages(context);
 
@@ -330,11 +340,11 @@ public class PolicyComplianceChecker {
                 policy.setMessage(common.toString());
                 return policy;
             }
-        }
-        else if(Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
+        } else if (Constants.AppRestriction.WHITE_LIST
+                .equals(appRestriction.getRestrictionType())) {
             List<String> remain = new ArrayList<>(installedAppPackages);
             remain.removeAll(appRestriction.getRestrictedList());
-            if  (remain.size() > 0) {
+            if (remain.size() > 0) {
                 policy.setCompliance(false);
                 policy.setMessage(remain.toString());
                 return policy;

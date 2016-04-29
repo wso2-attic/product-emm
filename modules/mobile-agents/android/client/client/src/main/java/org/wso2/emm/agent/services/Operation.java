@@ -1321,8 +1321,8 @@ public class Operation implements APIResultCallBack {
 		}
 	}
 
-
-	public void restrictAccessToApplications(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException{
+	public void restrictAccessToApplications(org.wso2.emm.agent.beans.Operation operation)
+			throws AndroidAgentException {
 		String restrictionType;
 		JSONArray restrictedApps;
 		try {
@@ -1342,7 +1342,8 @@ public class Operation implements APIResultCallBack {
 		if (restrictedApps != null) {
 			for (int i = 0; i < restrictedApps.length(); i++) {
 				try {
-					restrictedApplications.add((String) ((JSONObject) restrictedApps.get(i)).get(Constants.AppRestriction.PACKAGE_NAME));
+					restrictedApplications.add((String) ((JSONObject) restrictedApps.get(i))
+							.get(Constants.AppRestriction.PACKAGE_NAME));
 				} catch (JSONException e) {
 					operation.setStatus(resources.getString(R.string.operation_value_error));
 					resultBuilder.build(operation);
@@ -1355,22 +1356,25 @@ public class Operation implements APIResultCallBack {
 			if (Constants.OWNERSHIP_COPE.equals(ownershipType)) {
 
 			}
-		}
-		else if (Constants.AppRestriction.BLACK_LIST.equals(restrictionType)) {
+		} else if (Constants.AppRestriction.BLACK_LIST.equals(restrictionType)) {
 			if (Constants.OWNERSHIP_BYOD.equals(ownershipType)) {
 				Intent restrictionIntent = new Intent(context, AppLockService.class);
 				restrictionIntent.setAction("AppLockService");
 
 				restrictionIntent.putStringArrayListExtra("appList", restrictedApplications);
 
-				PendingIntent pendingIntent = PendingIntent.getService(context, 0, restrictionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+				PendingIntent pendingIntent = PendingIntent
+						.getService(context, 0, restrictionIntent,
+						            PendingIntent.FLAG_UPDATE_CURRENT);
 
-				AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+				AlarmManager alarmManager =
+						(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTimeInMillis(System.currentTimeMillis());
 				calendar.add(Calendar.SECOND, 1); // first time
-				long frequency= 1 * 1000; // in ms
-				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), frequency, pendingIntent);
+				long frequency = 1 * 1000; // in ms
+				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+				                          frequency, pendingIntent);
 
 				context.startService(restrictionIntent);
 			} else if (Constants.OWNERSHIP_COPE.equals(ownershipType)) {
@@ -1383,7 +1387,6 @@ public class Operation implements APIResultCallBack {
 		}
 		operation.setStatus(resources.getString(R.string.operation_value_completed));
 		resultBuilder.build(operation);
-
 
 	}
 
