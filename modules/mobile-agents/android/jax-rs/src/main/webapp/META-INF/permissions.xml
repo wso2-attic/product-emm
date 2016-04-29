@@ -178,6 +178,13 @@
     </Permission>
 
     <Permission>
+        <name>Configure VPN</name>
+        <path>/device-mgt/emm-admin/operations/android/vpn</path>
+        <url>/operation/vpn</url>
+        <method>POST</method>
+    </Permission>
+
+    <Permission>
         <name>Install Application</name>
         <path>/device-mgt/emm-admin/operations/android/install-application</path>
         <url>/operation/install-application</url>
@@ -347,6 +354,12 @@
         <path>/device-mgt/emm-admin/platform-configs/modify</path>
         <url>/configuration</url>
         <method>PUT</method>
+    </Permission>
+    <Permission>
+        <name>Event Addition</name>
+        <path>/device-mgt/emm-admin/events/add</path>
+        <url>/events</url>
+        <method>POST</method>
     </Permission>
 
 </PermissionConfiguration>

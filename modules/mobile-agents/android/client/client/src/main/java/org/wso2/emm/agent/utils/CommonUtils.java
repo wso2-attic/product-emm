@@ -46,6 +46,7 @@ import android.util.Log;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.wso2.emm.agent.services.PolicyOperationsMapper;
 import org.wso2.emm.agent.services.PolicyRevokeHandler;
 
@@ -266,7 +267,10 @@ public class CommonUtils {
 	public static void callSystemApp(Context context, String operation, String command, String appUri) {
 		if(Constants.SYSTEM_APP_ENABLED) {
 			Intent intent =  new Intent(Constants.SYSTEM_APP_SERVICE_NAME);
-			intent = createExplicitFromImplicitIntent(context,intent);
+			Intent explicitIntent = createExplicitFromImplicitIntent(context, intent);
+			if (explicitIntent != null) {
+				intent = explicitIntent;
+			}
 			intent.putExtra("code", operation);
 			intent.setPackage(Constants.PACKAGE_NAME);
 			if (command != null) {

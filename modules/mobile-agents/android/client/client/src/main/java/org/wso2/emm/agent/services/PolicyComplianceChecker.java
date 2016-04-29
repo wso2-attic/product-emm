@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@ import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class is used to check device policy compliance by checking each policy
@@ -84,6 +86,8 @@ public class PolicyComplianceChecker {
                 return checkPasswordPolicy();
             case Constants.Operation.WIFI:
                 return checkWifiPolicy(operation);
+            case Constants.Operation.WORK_PROFILE:
+                return checkWorkProfilePolicy(operation);
             case Constants.Operation.DISALLOW_ADJUST_VOLUME:
             case Constants.Operation.DISALLOW_CONFIG_BLUETOOTH:
             case Constants.Operation.DISALLOW_CONFIG_CELL_BROADCASTS:
@@ -305,6 +309,59 @@ public class PolicyComplianceChecker {
         } catch (JSONException e) {
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
+        return policy;
+    }
+
+    /**
+     * Checks Work-Profile policy on the device (Particular work-profile configuration in the policy should be enforced).
+     *
+     * @param operation - Operation object.
+     * @return policy - ComplianceFeature object.
+     */
+    private ComplianceFeature checkWorkProfilePolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+        String profileName;
+        String systemAppsData;
+        String googlePlayAppsData;
+        try {
+            JSONObject profileData = new JSONObject(operation.getPayLoad().toString());
+            if (!profileData.isNull(resources.getString(R.string.intent_extra_profile_name))) {
+                profileName = (String) profileData.get(resources.getString(
+                        R.string.intent_extra_profile_name));
+                    //yet there is no method is given to get the current profile name.
+                    //add a method to test whether profile name is set correctly once introduced.
+            }
+            if (!profileData.isNull(resources.getString(R.string.intent_extra_enable_system_apps))) {
+                // generate the System app list which are configured by user and received to agent as a single String
+                // with packages separated by Commas.
+                systemAppsData = (String) profileData.get(resources.getString(
+                        R.string.intent_extra_enable_system_apps));
+                List<String> systemAppList = Arrays.asList(systemAppsData.split(resources.getString(
+                        R.string.split_delimiter)));
+                for (String packageName : systemAppList) {
+                    if(!appList.isPackageInstalled(packageName)){
+                        policy.setCompliance(false);
+                        policy.setMessage(resources.getString(R.string.error_work_profile_policy));
+                        return policy;
+                    }
+                }
+            }
+            if (!profileData.isNull(resources.getString(R.string.intent_extra_enable_google_play_apps))) {
+                googlePlayAppsData = (String) profileData.get(resources.getString(
+                        R.string.intent_extra_enable_google_play_apps));
+                List<String> playStoreAppList = Arrays.asList(googlePlayAppsData.split(resources.getString(
+                        R.string.split_delimiter)));
+                for (String packageName : playStoreAppList) {
+                    if(!appList.isPackageInstalled(packageName)){
+                        policy.setCompliance(false);
+                        policy.setMessage(resources.getString(R.string.error_work_profile_policy));
+                        return policy;
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
+        policy.setCompliance(true);
         return policy;
     }
 }

@@ -876,4 +876,84 @@
         <scope>emm_admin</scope>
     </Permission>
     <!-- End of Certificate related APIs -->
+
+    <!-- Dashboard related APIs -->
+    <!--<Permission>-->
+        <!--<name>Get non-compliant device count</name>-->
+        <!--<path>/device-mgt/emm-admin/dashboard/non-compliant-device-count/Get</path>-->
+        <!--<url>/dashboard/non-compliant</url>-->
+        <!--<method>GET</method>-->
+        <!--<scope>emm_admin</scope>-->
+    <!--</Permission>-->
+    <!--<Permission>-->
+        <!--<name>get un-monitored device count</name>-->
+        <!--<path>/device-mgt/emm-admin/dashboard/un-monitored-device-count/Get</path>-->
+        <!--<url>/dashboard/un-monitored</url>-->
+        <!--<method>GET</method>-->
+        <!--<scope>emm_admin</scope>-->
+    <!--</Permission>-->
+    <Permission>
+        <name>get overview of device counts</name>
+        <path>/device-mgt/emm-admin/dashboard/devices-overview</path>
+        <url>/dashboard/devices-overview</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get vulnerable device counts</name>
+        <path>/device-mgt/emm-admin/dashboard/potential-vulnerabilities</path>
+        <url>/dashboard/potential-vulnerabilities</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get non-compliant device counts by features</name>
+        <path>/device-mgt/emm-admin/dashboard/non-compliant-by-feature</path>
+        <url>/dashboard/non-compliant-by-feature</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get device counts by groupings</name>
+        <path>/device-mgt/emm-admin/dashboard/device-groupings</path>
+        <url>/dashboard/device-groupings</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get feature-non-compliant device counts by groupings</name>
+        <path>/device-mgt/emm-admin/dashboard/feature-non-compliant-device-groupings</path>
+        <url>/dashboard/feature-non-compliant-device-groupings</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get filtered device count over total</name>
+        <path>/device-mgt/emm-admin/dashboard/filtered-devices-over-total</path>
+        <url>/dashboard/filtered-devices-over-total</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get feature-non-compliant device count over total</name>
+        <path>/device-mgt/emm-admin/dashboard/feature-non-compliant-devices-over-total</path>
+        <url>/dashboard/feature-non-compliant-devices-over-total</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get filtered devices with details</name>
+        <path>/device-mgt/emm-admin/dashboard/filtered-devices-with-details</path>
+        <url>/dashboard/filtered-devices-with-details</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <Permission>
+        <name>get feature-non-compliant devices with details</name>
+        <path>/device-mgt/emm-admin/dashboard/feature-non-compliant-devices-with-details</path>
+        <url>/dashboard/feature-non-compliant-devices-with-details</url>
+        <method>GET</method>
+        <scope>emm_admin</scope>
+    </Permission>
+    <!-- End of Dashboard related APIs -->
 </PermissionConfiguration>

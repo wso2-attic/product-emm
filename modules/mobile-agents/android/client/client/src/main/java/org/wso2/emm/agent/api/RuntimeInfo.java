@@ -50,6 +50,13 @@ public class RuntimeInfo {
         topCommandRows = resultOfTop.split("\n");
     }
 
+    public RuntimeInfo(Context context, String[] command) {
+        this.context = context;
+        mapper = new ObjectMapper();
+        String resultOfTop = executeCommand(command);
+        topCommandRows = resultOfTop.split("\n");
+    }
+
     public List<Device.Property> getCPUInfo() throws AndroidAgentException {
         List<Device.Property> properties = new ArrayList<>();
         Device.Property property;
@@ -108,6 +115,39 @@ public class RuntimeInfo {
             }
         }
         return applications;
+    }
+
+    public Application getHighestCPU() {
+        Application appData = null;
+
+        for (String topCommandRow : topCommandRows) {
+            if (topCommandRow != null && !topCommandRow.isEmpty()
+                && !topCommandRow.contains(" root ")) {
+                String[] columns = topCommandRow.replaceFirst("^\\s*", "").split(" ");
+                String pidColumnValue = columns[0].trim();
+
+                if (!pidColumnValue.isEmpty() && TextUtils.isDigitsOnly(pidColumnValue)) {
+
+                    appData = new Application();
+                    appData.setPackageName(columns[columns.length - 1]);
+                    appData.setPid(Integer.parseInt(columns[0]));
+                    for (String column : columns) {
+                        if (column != null) {
+                            String columnValue = column.trim();
+                            if (columnValue.contains("%")) {
+                                String percentage = columnValue.replace("%", "");
+                                if (!percentage.isEmpty() && TextUtils.isDigitsOnly(percentage)) {
+                                    appData.setCpu(Integer.parseInt(percentage));
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+        return appData;
     }
 
     public List<Device.Property> getRAMInfo() throws AndroidAgentException {

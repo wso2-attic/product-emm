@@ -23,7 +23,7 @@ package org.wso2.emm.agent.utils;
  */
 public class Constants {
 
-	public static final boolean DEBUG_MODE_ENABLED = true;
+	public static final boolean DEBUG_MODE_ENABLED = false;
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
 	public static final boolean SYSTEM_APP_ENABLED = false;
@@ -68,6 +68,7 @@ public class Constants {
 	public static final String GOOGLE_PLAY_APP_URI = "market://details?id=";
 	public static final String DYNAMIC_CLIENT_REGISTER_ENDPOINT = "/dynamic-client-web/register";
 	public static final String POLICY_ENDPOINT = SERVER_APP_ENDPOINT + "policy/";
+	public static final String EVENT_ENDPOINT = SERVER_APP_ENDPOINT + "events/";
 
 	public static final String TRUSTSTORE_PASSWORD = "wso2carbon";
 	public static final String EULA_TITLE = "POLICY AGREEMENT";
@@ -123,6 +124,7 @@ public class Constants {
 	public static final int POLICY_REQUEST_CODE = 309;
 	public static final int CONFIGURATION_REQUEST_CODE = 310;
 	public static final int AUTHENTICATION_REQUEST_CODE = 311;
+	public static final int EVENT_REQUEST_CODE = 312;
 
 	/**
 	 * Google API project id registered to use GCM.
@@ -207,6 +209,7 @@ public class Constants {
 		public static final String DISENROLL = "DISENROLL";
 		public static final String UPGRADE_FIRMWARE = "UPGRADE_FIRMWARE";
 		public static final String REBOOT = "REBOOT";
+		public static final String VPN = "VPN";
 		public static final String EXECUTE_SHELL_COMMAND = "SHELL_COMMAND";
 		public static final String DISALLOW_ADJUST_VOLUME = "DISALLOW_ADJUST_VOLUME";
 		public static final String DISALLOW_CONFIG_BLUETOOTH = "DISALLOW_CONFIG_BLUETOOTH";
@@ -249,6 +252,7 @@ public class Constants {
 		public static final String SET_STATUS_BAR_DISABLED = "SET_STATUS_BAR_DISABLED";
 		public static final String SILENT_INSTALL_APPLICATION = "SILENT_INSTALL_APPLICATION";
 		public static final String SILENT_UNINSTALL_APPLICATION = "SILENT_UNINSTALL_APPLICATION";
+		public static final String WORK_PROFILE= "WORK_PROFILE";
 	}
 
 	/**
@@ -353,6 +357,21 @@ public class Constants {
 		public static final String STATE = "state";
 		public static final String LONGITUDE = "longitude";
 		public static final String LATITUDE = "latitude";
+	}
+
+	public final class EventListners {
+		private EventListners(){
+			throw new AssertionError();
+		}
+		public static final boolean EVENT_LISTENING_ENABLED = false;
+		public static final boolean APPLICATION_STATE_LISTENER = true;
+		public static final String APPLICATION_STATE = "APPLICATION_STATE";
+		public static final boolean RUNTIME_STATE_LISTENER = false;
+		public static final String RUNTIME_STATE = "RUNTIME_STATE";
+		public static final long DEFAULT_START_TIME = 1000;
+		public static final long DEFAULT_INTERVAL = 5000;
+		public static final int DEFAULT_LISTENER_CODE = 10001;
+		public static final String REQUEST_CODE = "requestCode";
 	}
 
 	public final class PreferenceFlag {

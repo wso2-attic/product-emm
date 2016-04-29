@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.certificate.mgt.core.service.CertificateManagementService;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.device.mgt.analytics.dashboard.GadgetDataService;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.device.mgt.common.configuration.mgt.ConfigurationEntry;
@@ -33,18 +34,16 @@ import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderServ
 import org.wso2.carbon.device.mgt.core.device.details.mgt.DeviceInformationManager;
 import org.wso2.carbon.device.mgt.core.search.mgt.SearchManagerService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
+import org.wso2.carbon.device.mgt.core.service.GroupManagementProviderService;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
-import org.wso2.carbon.ntask.core.TaskManager;
 import org.wso2.carbon.policy.mgt.common.PolicyMonitoringTaskException;
 import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 import org.wso2.carbon.policy.mgt.core.task.TaskScheduleService;
-import org.wso2.carbon.policy.mgt.core.util.PolicyManagementConstants;
 import org.wso2.carbon.user.api.AuthorizationManager;
 import org.wso2.carbon.user.api.UserRealm;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -297,8 +296,6 @@ public class MDMAPIUtils {
         return deviceInformationManager;
     }
 
-
-
     public static SearchManagerService getSearchManagerService() {
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         SearchManagerService searchManagerService =
@@ -309,5 +306,26 @@ public class MDMAPIUtils {
             throw new IllegalStateException(msg);
         }
         return searchManagerService;
+    }
+
+    public static GadgetDataService getGadgetDataService() {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        GadgetDataService gadgetDataService = (GadgetDataService) ctx.getOSGiService(GadgetDataService.class, null);
+        if (gadgetDataService == null) {
+            throw new IllegalStateException("Gadget Data Service has not been initialized.");
+        }
+        return gadgetDataService;
+    }
+
+    public static GroupManagementProviderService getGroupManagementProviderService() {
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        GroupManagementProviderService groupManagementProviderService =
+                (GroupManagementProviderService) ctx.getOSGiService(GroupManagementProviderService.class, null);
+        if (groupManagementProviderService == null) {
+            String msg = "Group Management service has not initialized.";
+            log.error(msg);
+            throw new IllegalStateException(msg);
+        }
+        return groupManagementProviderService;
     }
 }

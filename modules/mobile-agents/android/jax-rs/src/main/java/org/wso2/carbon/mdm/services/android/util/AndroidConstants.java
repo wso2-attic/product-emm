@@ -88,6 +88,8 @@ public final class AndroidConstants {
 		public static final String WEBCLIP = "WEBCLIP";
 		public static final String DISENROLL = "DISENROLL";
 		public static final String MONITOR = "MONITOR";
+		public static final String VPN = "VPN";
+		public static final String WORK_PROFILE = "WORK_PROFILE";
     }
 
 	public final class StatusCodes{
