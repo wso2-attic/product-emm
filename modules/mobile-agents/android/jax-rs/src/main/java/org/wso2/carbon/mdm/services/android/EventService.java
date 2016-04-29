@@ -85,12 +85,14 @@ public class EventService {
     @Path("date/{deviceId}")
     @Produces("application/json")
     @GET
-    public Response retrieveAlertFromDate(@PathParam("deviceId") String deviceId, @QueryParam("fromDate") long from,
-                                          @QueryParam("toDate") long to) throws AnalyticsException {
+    public Response retrieveAlertFromDate(@PathParam("deviceId") String deviceId, @QueryParam("from") long from,
+                                          @QueryParam("to") long to) throws AnalyticsException {
+        String fromDate = String.valueOf(from);
+        String toDate = String.valueOf(to);
         if (log.isDebugEnabled()) {
             log.debug("Retrieving events");
         }
-        String query = "deviceIdentifier:" + deviceId + " AND _timestamp: [" + from + " TO " + to + "]";
+        String query = "deviceIdentifier:" + deviceId + " AND _timestamp: [" + fromDate + " TO " + toDate + "]";
         List<DeviceState> deviceStates = AndroidAPIUtils.getAllEventsForDevice(EVENT_STREAM_DEFINITION, query);
         return Response.status(Response.Status.OK).entity(deviceStates).build();
     }

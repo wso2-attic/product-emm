@@ -392,6 +392,13 @@ public class AndroidAPIUtils {
                 } else if (prop.getName().equalsIgnoreCase("NETWORK_INFO")) {
                     deviceInfo.setSsid(getProperty(prop.getValue(), "WIFI_SSID"));
                     deviceInfo.setConnectionType(getProperty(prop.getValue(), "CONNECTION_TYPE"));
+                    if(deviceInfo.getDeviceDetailsMap() == null) {
+                        deviceInfo.setDeviceDetailsMap(new HashMap<String, String>());
+                    }
+                    deviceInfo.getDeviceDetailsMap().put("mobileSignalStrength",
+                            getProperty(prop.getValue(), "MOBILE_SIGNAL_STRENGTH"));
+                    deviceInfo.getDeviceDetailsMap().put("wifiSignalStrength",
+                            getProperty(prop.getValue(), "WIFI_SIGNAL_STRENGTH"));
                 }
             }
         }
