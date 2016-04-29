@@ -334,19 +334,19 @@ public class PolicyComplianceChecker {
         List<String> installedAppPackages = CommonUtils.getInstalledAppPackages(context);
 
         if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
-            List<String> common = new ArrayList<>(installedAppPackages);
-            if (common.retainAll(appRestriction.getRestrictedList())) {
+            List<String> commonApps = new ArrayList<>(installedAppPackages);
+            if (commonApps.retainAll(appRestriction.getRestrictedList())) {
                 policy.setCompliance(false);
-                policy.setMessage(common.toString());
+                policy.setMessage(commonApps.toString());
                 return policy;
             }
         } else if (Constants.AppRestriction.WHITE_LIST
                 .equals(appRestriction.getRestrictionType())) {
-            List<String> remain = new ArrayList<>(installedAppPackages);
-            remain.removeAll(appRestriction.getRestrictedList());
-            if (remain.size() > 0) {
+            List<String> remainApps = new ArrayList<>(installedAppPackages);
+            remainApps.removeAll(appRestriction.getRestrictedList());
+            if (remainApps.size() > 0) {
                 policy.setCompliance(false);
-                policy.setMessage(remain.toString());
+                policy.setMessage(remainApps.toString());
                 return policy;
             }
         }
