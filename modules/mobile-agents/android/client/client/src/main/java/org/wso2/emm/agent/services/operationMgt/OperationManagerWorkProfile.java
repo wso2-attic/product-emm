@@ -27,13 +27,15 @@ import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.Operation;
-import org.wso2.emm.agent.services.operationMgt.OperationManager;
 import org.wso2.emm.agent.utils.Constants;
+
 import java.util.Arrays;
 import java.util.List;
 
 public class OperationManagerWorkProfile extends OperationManager {
-    private static final String TAG = "OperationWorkProfile";
+
+    private static final String TAG = OperationManagerWorkProfile.class.getSimpleName();
+
 
     public OperationManagerWorkProfile(Context context) {
         super(context);
@@ -378,9 +380,13 @@ public class OperationManagerWorkProfile extends OperationManager {
         getDevicePolicyManager().setApplicationHidden(getCdmDeviceAdmin(), packageName, true);
     }
 
-
+    @Override
+    public void setPolicyBundle(Operation operation) throws AndroidAgentException {
+        getResultBuilder().build(operation);
+    }
 
     private void enableGooglePlayApps(String packageName) {
         triggerGooglePlayApp(packageName);
     }
+
 }
