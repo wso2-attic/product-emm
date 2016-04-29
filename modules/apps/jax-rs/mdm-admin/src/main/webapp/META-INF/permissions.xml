@@ -802,6 +802,13 @@
         <method>POST</method>
     </Permission>
 
+    <Permission>
+        <name>Device Updated</name>
+        <path>/device-mgt/emm-admin/search/after</path>
+        <url>/search/after/*</url>
+        <method>GET</method>
+    </Permission>
+
     <!--End of the device search and information -->
 
 
@@ -893,9 +900,9 @@
         <!--<scope>emm_admin</scope>-->
     <!--</Permission>-->
     <Permission>
-        <name>get overview of device counts</name>
-        <path>/device-mgt/emm-admin/dashboard/devices-overview</path>
-        <url>/dashboard/devices-overview</url>
+        <name>get overview of devices</name>
+        <path>/device-mgt/emm-admin/dashboard/overview-of-devices</path>
+        <url>/dashboard/overview-of-devices</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>

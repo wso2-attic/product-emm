@@ -42,7 +42,7 @@ public class Dashboard {
     private static Log log = LogFactory.getLog(Dashboard.class);
 
     @GET
-    @Path("devices-overview")
+    @Path("overview-of-devices")
     public Response getOverviewDeviceCounts() {
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
         DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
@@ -143,7 +143,8 @@ public class Dashboard {
 
     @GET
     @Path("non-compliant-by-feature")
-    public Response getNonCompliantDeviceCountsByFeatures(@QueryParam("start-index") int startIndex, @QueryParam("count") int count) {
+    public Response getNonCompliantDeviceCountsByFeatures(@QueryParam("start-index") int startIndex,
+                                                          @QueryParam("result-count") int resultCount) {
         Message message = new Message();
         if (startIndex < 0) {
             message.setErrorMessage("Invalid start index.");
@@ -151,9 +152,9 @@ public class Dashboard {
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         }
 
-        if (count < 5) {
+        if (resultCount < 5) {
             message.setErrorMessage("Invalid request count.");
-            message.setDescription("Row count should be more than 5.");
+            message.setDescription("Result count should be more than 5.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         }
 
@@ -161,7 +162,7 @@ public class Dashboard {
         DashboardPaginationGadgetDataWrapper dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
 
         PaginationResult paginationResult = gadgetDataService.
-            getNonCompliantDeviceCountsByFeatures(new PaginationRequest(startIndex, count));
+            getNonCompliantDeviceCountsByFeatures(new PaginationRequest(startIndex, resultCount));
 
         if (paginationResult == null) {
             return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
@@ -278,6 +279,13 @@ public class Dashboard {
     public Response getFeatureNonCompliantDeviceGroupingCounts(@QueryParam("non-compliant-feature") String nonCompliantFeature,
                                                                @QueryParam("platform") String platform,
                                                                @QueryParam("ownership") String ownership) {
+
+        if (nonCompliantFeature == null) {
+            Message message = new Message();
+            message.setErrorMessage("Missing required query parameters.");
+            message.setDescription("Query parameter non-compliant-feature with some text value is a required.");
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+        }
 
         Map<String, Object> filters = new LinkedHashMap<>();
         if (platform != null &&
@@ -424,6 +432,13 @@ public class Dashboard {
                                                                @QueryParam("platform") String platform,
                                                                @QueryParam("ownership") String ownership) {
 
+        if (nonCompliantFeature == null) {
+            Message message = new Message();
+            message.setErrorMessage("Missing required query parameters.");
+            message.setDescription("Query parameter non-compliant-feature with some text value is a required.");
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+        }
+
         Map<String, Object> filters = new LinkedHashMap<>();
         if (platform != null &&
                 ("android".equals(platform) ||
@@ -480,81 +495,147 @@ public class Dashboard {
                                                   @QueryParam("potential-vulnerability") String potentialVulnerability,
                                                   @QueryParam("platform") String platform,
                                                   @QueryParam("ownership") String ownership,
+                                                  @QueryParam("pagination-enabled") String paginationEnabled,
                                                   @QueryParam("start-index") int startIndex,
-                                                  @QueryParam("count") int count) {
+                                                  @QueryParam("result-count") int resultCount) {
 
         Message message = new Message();
-        if (startIndex < 0) {
-            message.setErrorMessage("Invalid start index.");
-            message.setDescription("Start index cannot be less than 0.");
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-        }
+        if (paginationEnabled == null) {
 
-        if (count < 10) {
-            message.setErrorMessage("Invalid request count.");
-            message.setDescription("Row count should be more than 5.");
+            message.setErrorMessage("Missing required query parameter.");
+            message.setDescription("Pagination-enabled with value true or false is a required query parameter value.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-        }
 
-        Map<String, Object> filters = new LinkedHashMap<>();
-        if (connectivityStatus != null &&
+        } else if ("true".equals(paginationEnabled)) {
+
+            if (startIndex < 0) {
+                message.setErrorMessage("Invalid start index.");
+                message.setDescription("Start index cannot be less than 0.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            }
+
+            if (resultCount < 10) {
+                message.setErrorMessage("Invalid request count.");
+                message.setDescription("Requested row count should be equal to 10 or more than that.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            }
+
+            Map<String, Object> filters = new LinkedHashMap<>();
+            if (connectivityStatus != null &&
                 ("ACTIVE".equals(connectivityStatus) ||
-                        "INACTIVE".equals(connectivityStatus) ||
+                    "INACTIVE".equals(connectivityStatus) ||
                         "REMOVED".equals(connectivityStatus))) {
-            filters.put("CONNECTIVITY_STATUS", connectivityStatus);
-        }
+                filters.put("CONNECTIVITY_STATUS", connectivityStatus);
+            }
 
-        if (potentialVulnerability != null && "non-compliant".equals(potentialVulnerability)) {
-            filters.put("IS_COMPLIANT", 0);
-        }
+            if (potentialVulnerability != null && "non-compliant".equals(potentialVulnerability)) {
+                filters.put("IS_COMPLIANT", 0);
+            }
 
-        if (potentialVulnerability != null && "unmonitored".equals(potentialVulnerability)) {
-            filters.put("POLICY_ID", -1);
-        }
+            if (potentialVulnerability != null && "unmonitored".equals(potentialVulnerability)) {
+                filters.put("POLICY_ID", -1);
+            }
 
-        if (platform != null &&
+            if (platform != null &&
                 ("android".equals(platform) ||
-                        "ios".equals(platform) ||
+                    "ios".equals(platform) ||
                         "windows".equals(platform))) {
-            filters.put("PLATFORM", platform);
-        }
+                filters.put("PLATFORM", platform);
+            }
 
-        if (ownership != null &&
+            if (ownership != null &&
                 ("BYOD".equals(ownership) ||
-                        "COPE".equals(ownership))) {
-            filters.put("OWNERSHIP", ownership);
+                    "COPE".equals(ownership))) {
+                filters.put("OWNERSHIP", ownership);
+            }
+
+            GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
+            DashboardPaginationGadgetDataWrapper dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
+
+            PaginationResult paginationResult = gadgetDataService.
+                    getDevicesWithDetails(filters, new PaginationRequest(startIndex, resultCount));
+
+            if (paginationResult == null) {
+                return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+            }
+
+            Map<String, Object> deviceDetailEntryDataWrapper;
+            List<Map<String, Object>> deviceDetailEntriesDataWrapper = new ArrayList<>();
+            for (Object listElement : paginationResult.getData()) {
+                Map entry = (Map<?, ?>) listElement;
+                deviceDetailEntryDataWrapper = new LinkedHashMap<>();
+                deviceDetailEntryDataWrapper.put("device-id", entry.get("device-id"));
+                deviceDetailEntryDataWrapper.put("platform", entry.get("platform"));
+                deviceDetailEntryDataWrapper.put("ownership", entry.get("ownership"));
+                deviceDetailEntryDataWrapper.put("connectivity-details", entry.get("connectivity-details"));
+                deviceDetailEntriesDataWrapper.add(deviceDetailEntryDataWrapper);
+            }
+
+            dashboardPaginationGadgetDataWrapper.setContext("filtered-device-details");
+            dashboardPaginationGadgetDataWrapper.setData(deviceDetailEntriesDataWrapper);
+            dashboardPaginationGadgetDataWrapper.setTotalRecordsCount(paginationResult.getRecordsTotal());
+
+            List<DashboardPaginationGadgetDataWrapper> responsePayload = new ArrayList<>();
+            responsePayload.add(dashboardPaginationGadgetDataWrapper);
+
+            return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+
+        } else if ("false".equals(paginationEnabled)) {
+
+            Map<String, Object> filters = new LinkedHashMap<>();
+            if (connectivityStatus != null &&
+                ("ACTIVE".equals(connectivityStatus) ||
+                    "INACTIVE".equals(connectivityStatus) ||
+                        "REMOVED".equals(connectivityStatus))) {
+                filters.put("CONNECTIVITY_STATUS", connectivityStatus);
+            }
+
+            if (potentialVulnerability != null && "non-compliant".equals(potentialVulnerability)) {
+                filters.put("IS_COMPLIANT", 0);
+            }
+
+            if (potentialVulnerability != null && "unmonitored".equals(potentialVulnerability)) {
+                filters.put("POLICY_ID", -1);
+            }
+
+            if (platform != null &&
+                ("android".equals(platform) ||
+                    "ios".equals(platform) ||
+                        "windows".equals(platform))) {
+                filters.put("PLATFORM", platform);
+            }
+
+            if (ownership != null &&
+                ("BYOD".equals(ownership) ||
+                    "COPE".equals(ownership))) {
+                filters.put("OWNERSHIP", ownership);
+            }
+
+            GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
+            DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
+
+            List<Map<String, Object>> devicesWithDetails = gadgetDataService.getDevicesWithDetails(filters);
+
+            if (devicesWithDetails == null) {
+                return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+            }
+
+            dashboardGadgetDataWrapper.setContext("device-details");
+            dashboardGadgetDataWrapper.setData(devicesWithDetails);
+
+            List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
+            responsePayload.add(dashboardGadgetDataWrapper);
+
+            return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+
+        } else {
+
+            message.setErrorMessage("Invalid query parameter value.");
+            message.setDescription("Invalid value for " +
+                    "query parameter pagination-enabled. Should be either true or false.");
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+
         }
-
-        GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
-        DashboardPaginationGadgetDataWrapper dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
-
-        PaginationResult paginationResult = gadgetDataService.
-            getDevicesWithDetails(filters, new PaginationRequest(startIndex, count));
-
-        if (paginationResult == null) {
-            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
-        }
-
-        Map<String, Object> deviceDetailEntryDataWrapper;
-        List<Map<String, Object>> deviceDetailEntriesDataWrapper = new ArrayList<>();
-        for (Object listElement : paginationResult.getData()) {
-            Map entry = (Map<?, ?>) listElement;
-            deviceDetailEntryDataWrapper = new LinkedHashMap<>();
-            deviceDetailEntryDataWrapper.put("device-id", entry.get("device-id"));
-            deviceDetailEntryDataWrapper.put("platform", entry.get("platform"));
-            deviceDetailEntryDataWrapper.put("ownership", entry.get("ownership"));
-            deviceDetailEntryDataWrapper.put("connectivity-details", entry.get("connectivity-details"));
-            deviceDetailEntriesDataWrapper.add(deviceDetailEntryDataWrapper);
-        }
-
-        dashboardPaginationGadgetDataWrapper.setContext("filtered-device-details");
-        dashboardPaginationGadgetDataWrapper.setData(deviceDetailEntriesDataWrapper);
-        dashboardPaginationGadgetDataWrapper.setTotalRecordsCount(paginationResult.getRecordsTotal());
-
-        List<DashboardPaginationGadgetDataWrapper> responsePayload = new ArrayList<>();
-        responsePayload.add(dashboardPaginationGadgetDataWrapper);
-
-        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
 
     @GET
@@ -562,66 +643,119 @@ public class Dashboard {
     public Response getFeatureNonCompliantDevicesWithDetails(@QueryParam("non-compliant-feature") String nonCompliantFeature,
                                                              @QueryParam("platform") String platform,
                                                              @QueryParam("ownership") String ownership,
+                                                             @QueryParam("pagination-enabled") String paginationEnabled,
                                                              @QueryParam("start-index") int startIndex,
-                                                             @QueryParam("count") int count) {
+                                                             @QueryParam("result-count") int resultCount) {
 
         Message message = new Message();
-        if (startIndex < 0) {
-            message.setErrorMessage("Invalid start index.");
-            message.setDescription("Start index cannot be less than 0.");
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-        }
+        if (nonCompliantFeature == null || paginationEnabled == null) {
 
-        if (count < 10) {
-            message.setErrorMessage("Invalid request count.");
-            message.setDescription("Row count should be more than 5.");
+            message.setErrorMessage("Missing required query parameters.");
+            message.setDescription("non-compliant-feature with some text value and pagination-enabled with " +
+            "value true or false are required query parameter values.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-        }
 
-        Map<String, Object> filters = new LinkedHashMap<>();
-        if (platform != null &&
+        } else if ("true".equals(paginationEnabled)) {
+
+            if (startIndex < 0) {
+                message.setErrorMessage("Invalid start index.");
+                message.setDescription("Start index cannot be less than 0.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            }
+
+            if (resultCount < 10) {
+                message.setErrorMessage("Invalid request count.");
+                message.setDescription("Requested row count should be equal to 10 or more than that.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            }
+
+            Map<String, Object> filters = new LinkedHashMap<>();
+            if (platform != null &&
                 ("android".equals(platform) ||
-                        "ios".equals(platform) ||
+                    "ios".equals(platform) ||
                         "windows".equals(platform))) {
-            filters.put("PLATFORM", platform);
-        }
+                filters.put("PLATFORM", platform);
+            }
 
-        if (ownership != null &&
+            if (ownership != null &&
                 ("BYOD".equals(ownership) ||
-                        "COPE".equals(ownership))) {
-            filters.put("OWNERSHIP", ownership);
+                    "COPE".equals(ownership))) {
+                filters.put("OWNERSHIP", ownership);
+            }
+
+            GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
+            DashboardPaginationGadgetDataWrapper dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
+
+            PaginationResult paginationResult = gadgetDataService.
+                getFeatureNonCompliantDevicesWithDetails(nonCompliantFeature, filters, new PaginationRequest(startIndex, resultCount));
+
+            if (paginationResult == null) {
+                return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+            }
+
+            Map<String, Object> featureNonCompliantDeviceDetailEntryDataWrapper;
+            List<Map<String, Object>> featureNonCompliantDeviceDetailEntriesDataWrapper = new ArrayList<>();
+            for (Object listElement : paginationResult.getData()) {
+                Map entry = (Map<?, ?>) listElement;
+                featureNonCompliantDeviceDetailEntryDataWrapper = new LinkedHashMap<>();
+                featureNonCompliantDeviceDetailEntryDataWrapper.put("device-id", entry.get("device-id"));
+                featureNonCompliantDeviceDetailEntryDataWrapper.put("platform", entry.get("platform"));
+                featureNonCompliantDeviceDetailEntryDataWrapper.put("ownership", entry.get("ownership"));
+                featureNonCompliantDeviceDetailEntryDataWrapper.put("connectivity-details", entry.get("connectivity-details"));
+                featureNonCompliantDeviceDetailEntriesDataWrapper.add(featureNonCompliantDeviceDetailEntryDataWrapper);
+            }
+
+            dashboardPaginationGadgetDataWrapper.setContext("feature-non-compliant-device-details");
+            dashboardPaginationGadgetDataWrapper.setData(featureNonCompliantDeviceDetailEntriesDataWrapper);
+            dashboardPaginationGadgetDataWrapper.setTotalRecordsCount(paginationResult.getRecordsTotal());
+
+            List<DashboardPaginationGadgetDataWrapper> responsePayload = new ArrayList<>();
+            responsePayload.add(dashboardPaginationGadgetDataWrapper);
+
+            return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+
+        } else if ("false".equals(paginationEnabled)) {
+
+            Map<String, Object> filters = new LinkedHashMap<>();
+            if (platform != null &&
+                ("android".equals(platform) ||
+                    "ios".equals(platform) ||
+                        "windows".equals(platform))) {
+                filters.put("PLATFORM", platform);
+            }
+
+            if (ownership != null &&
+                ("BYOD".equals(ownership) ||
+                    "COPE".equals(ownership))) {
+                filters.put("OWNERSHIP", ownership);
+            }
+
+            GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
+            DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
+
+            List<Map<String, Object>> featureNonCompliantDevicesWithDetails = gadgetDataService.
+                getFeatureNonCompliantDevicesWithDetails(nonCompliantFeature, filters);
+
+            if (featureNonCompliantDevicesWithDetails == null) {
+                return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+            }
+
+            dashboardGadgetDataWrapper.setContext("feature-non-compliant-device-details");
+            dashboardGadgetDataWrapper.setData(featureNonCompliantDevicesWithDetails);
+
+            List<DashboardGadgetDataWrapper> responsePayload = new ArrayList<>();
+            responsePayload.add(dashboardGadgetDataWrapper);
+
+            return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
+
+        } else {
+
+            message.setErrorMessage("Invalid query parameter value.");
+            message.setDescription("Invalid value for " +
+                    "query parameter pagination-enabled. Should be either true or false.");
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+
         }
-
-        GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
-        DashboardPaginationGadgetDataWrapper dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
-
-        PaginationResult paginationResult = gadgetDataService.
-                getFeatureNonCompliantDevicesWithDetails(nonCompliantFeature, filters, new PaginationRequest(startIndex, count));
-
-        if (paginationResult == null) {
-            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
-        }
-
-        Map<String, Object> featureNonCompliantDeviceDetailEntryDataWrapper;
-        List<Map<String, Object>> featureNonCompliantDeviceDetailEntriesDataWrapper = new ArrayList<>();
-        for (Object listElement : paginationResult.getData()) {
-            Map entry = (Map<?, ?>) listElement;
-            featureNonCompliantDeviceDetailEntryDataWrapper = new LinkedHashMap<>();
-            featureNonCompliantDeviceDetailEntryDataWrapper.put("device-id", entry.get("device-id"));
-            featureNonCompliantDeviceDetailEntryDataWrapper.put("platform", entry.get("platform"));
-            featureNonCompliantDeviceDetailEntryDataWrapper.put("ownership", entry.get("ownership"));
-            featureNonCompliantDeviceDetailEntryDataWrapper.put("connectivity-details", entry.get("connectivity-details"));
-            featureNonCompliantDeviceDetailEntriesDataWrapper.add(featureNonCompliantDeviceDetailEntryDataWrapper);
-        }
-
-        dashboardPaginationGadgetDataWrapper.setContext("feature-non-compliant-device-details");
-        dashboardPaginationGadgetDataWrapper.setData(featureNonCompliantDeviceDetailEntriesDataWrapper);
-        dashboardPaginationGadgetDataWrapper.setTotalRecordsCount(paginationResult.getRecordsTotal());
-
-        List<DashboardPaginationGadgetDataWrapper> responsePayload = new ArrayList<>();
-        responsePayload.add(dashboardPaginationGadgetDataWrapper);
-
-        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
 
 }
