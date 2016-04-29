@@ -123,6 +123,8 @@ public class EMMSystemService extends IntentService {
                             restrictionCode = true;
                         }
                     }
+                } else if (extras.containsKey("appUri")) {
+                    appUri = extras.getString("appUri");
                 }
             }
 
@@ -173,6 +175,11 @@ public class EMMSystemService extends IntentService {
                 }
                 break;
             case Constants.Operation.SILENT_INSTALL_APPLICATION:
+                if (appUri != null) {
+                    silentInstallApp(getApplicationContext(), Uri.parse(appUri));
+                }
+                break;
+            case Constants.Operation.SILENT_UPDATE_APPLICATION:
                 if (appUri != null) {
                     silentInstallApp(getApplicationContext(), Uri.parse(appUri));
                 }

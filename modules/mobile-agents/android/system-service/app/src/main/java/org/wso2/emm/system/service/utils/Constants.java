@@ -46,6 +46,7 @@ public class Constants {
 		public static final String EXECUTE_SHELL_COMMAND = "SHELL_COMMAND";
 		public static final String SILENT_INSTALL_APPLICATION = "SILENT_INSTALL_APPLICATION";
 		public static final String SILENT_UNINSTALL_APPLICATION = "SILENT_UNINSTALL_APPLICATION";
+		public static final String SILENT_UPDATE_APPLICATION = "SILENT_UPDATE_APPLICATION";
 		public static final String REMOVE_DEVICE_OWNER = "REMOVE_DEVICE_OWNER";
 		public static final String DISALLOW_ADJUST_VOLUME = "DISALLOW_ADJUST_VOLUME";
 		public static final String DISALLOW_CONFIG_BLUETOOTH = "DISALLOW_CONFIG_BLUETOOTH";
