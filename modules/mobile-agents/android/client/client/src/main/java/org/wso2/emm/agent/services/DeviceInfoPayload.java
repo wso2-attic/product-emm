@@ -53,7 +53,7 @@ public class DeviceInfoPayload {
         this.context = context.getApplicationContext();
         deviceInfo = new DeviceInfo(context);
         mapper = new ObjectMapper();
-        gps = new GPSTracker(context);
+        gps = GPSTracker.getInstance(context);
         registrationId = Preference.getString(context, Constants.GCM_REG_ID);
         phoneState = new DeviceState(context);
     }
@@ -206,7 +206,7 @@ public class DeviceInfoPayload {
         property.setValue(String.valueOf(deviceInfo.getNetworkOperatorName()));
         deviceInfoProperties.add(property);
 
-        DeviceNetworkStatus deviceNetworkStatus = new DeviceNetworkStatus(context);
+        DeviceNetworkStatus deviceNetworkStatus = DeviceNetworkStatus.getInstance(context);
         if(deviceNetworkStatus.isConnectedMobile()){
             TelephonyManager telephonyManager = (TelephonyManager)
                     context.getSystemService(Context.TELEPHONY_SERVICE);

@@ -18,7 +18,10 @@
 
 package org.wso2.emm.agent.services;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
@@ -50,6 +53,7 @@ public class DeviceNetworkStatus extends PhoneStateListener {
     private int cellSignalStrength = 99; // Invalid signal strength is represented with 99.
     Context context;
     WifiManager wifiManager;
+    WifiReceiver receiverWifi;
     private ObjectMapper mapper;
     NetworkInfo info;
     private List<ScanResult> wifiScanResults;
@@ -62,18 +66,33 @@ public class DeviceNetworkStatus extends PhoneStateListener {
     private static final String CHANNEL = "channel";
     private static final String SNR = "signalToNoiseRatio";
 
-    public DeviceNetworkStatus(Context context) {
+    private static DeviceNetworkStatus deviceNetworkStatus;
+
+    private DeviceNetworkStatus(Context context) {
         this.context = context;
         wifiManager = (WifiManager) this.context.getSystemService(Context.WIFI_SERVICE);
+        receiverWifi = new WifiReceiver();
+
+        // Register broadcast receiver
+        // Broacast receiver will automatically call when number of wifi connections changed
+        context.registerReceiver(receiverWifi, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        // start scanning wifi
+        startWifiScan();
+
         info = getNetworkInfo(this.context);
         mapper = new ObjectMapper();
-        try {
-            new ScanWifi().execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+
+    }
+
+    public static DeviceNetworkStatus getInstance(Context context) {
+        if (deviceNetworkStatus == null) {
+            synchronized (DeviceNetworkStatus.class) {
+                if (deviceNetworkStatus == null) {
+                    deviceNetworkStatus = new DeviceNetworkStatus(context);
+                }
+            }
         }
+        return deviceNetworkStatus;
     }
 
     @Override
@@ -182,6 +201,11 @@ public class DeviceNetworkStatus extends PhoneStateListener {
                     scanResult.put(SNR, result.level); // temporarily added
                     scanResults.put(scanResult);
                 }
+                if (Constants.DEBUG_MODE_ENABLED) {
+                    Log.d(TAG, "Wifi scan result: " + scanResults.toString());
+                }
+                // scanning for next round
+                startWifiScan();
                 return scanResults.toString();
             } catch (JSONException e) {
                 String msg = "Error occurred while retrieving wifi scan results";
@@ -208,24 +232,21 @@ public class DeviceNetworkStatus extends PhoneStateListener {
         return null;
     }
 
-    private class ScanWifi extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            if (Constants.DEBUG_MODE_ENABLED) {
-                Log.d(TAG, "Started wifi scanning...");
-            }
-            return wifiManager.startScan();
+    private void startWifiScan() {
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "Wifi scanning started...");
         }
+        wifiManager.startScan();
+    }
 
-        @Override
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-                if (Constants.DEBUG_MODE_ENABLED) {
-                    Log.d(TAG, "Wifi scan results were found");
-                }
-                wifiScanResults = wifiManager.getScanResults();
+    class WifiReceiver extends BroadcastReceiver {
+
+        // This method call when number of wifi connections changed
+        public void onReceive(Context c, Intent intent) {
+            if (Constants.DEBUG_MODE_ENABLED) {
+                Log.d(TAG, "Wifi scan result found");
             }
+            wifiScanResults = wifiManager.getScanResults();
         }
 
     }
