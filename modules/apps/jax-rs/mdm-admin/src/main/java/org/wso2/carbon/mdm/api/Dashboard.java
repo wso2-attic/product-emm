@@ -42,7 +42,7 @@ public class Dashboard {
     private static Log log = LogFactory.getLog(Dashboard.class);
 
     @GET
-    @Path("devices-overview")
+    @Path("overview-of-devices")
     public Response getOverviewDeviceCounts() {
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
         DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
@@ -154,7 +154,7 @@ public class Dashboard {
 
         if (resultCount < 5) {
             message.setErrorMessage("Invalid request count.");
-            message.setDescription("Row count should be more than 5.");
+            message.setDescription("Result count should be more than 5.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         }
 
