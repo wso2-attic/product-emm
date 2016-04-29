@@ -390,10 +390,10 @@ validateStep["policy-profile"] = function () {
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
             }
-            if ($.inArray(androidOperationConstants["APPLICATION_OPERATION_CODE"], configuredOperations) != -1){
-                //if application restriction configured
+            if ($.inArray(androidOperationConstants["APPLICATION_OPERATION_CODE"], configuredOperations) != -1) {
+                //If application restriction configured
                 operation = androidOperationConstants["APPLICATION_OPERATION"];
-                // initializing continueToCheckNextInputs to true
+                // Initializing continueToCheckNextInputs to true
                 continueToCheckNextInputs = true;
 
                 var appRestrictionType = $("#app-restriction-type").val();
@@ -423,21 +423,21 @@ validateStep["policy-profile"] = function () {
                         childInputArray = [];
                         emptyChildInputCount = 0;
                         duplicatesExist = false;
-                        // looping through each child input
+                        // Looping through each child input
                         $(restrictedApplicationsGridChildInputs).each(function () {
                             childInputCount++;
                             if (childInputCount % 2 == 0) {
-                                // if child input is of second column
+                                // If child input is of second column
                                 childInput = $(this).val();
                                 childInputArray.push(childInput);
-                                // updating emptyChildInputCount
+                                // Updating emptyChildInputCount
                                 if (!childInput) {
-                                    // if child input field is empty
+                                    // If child input field is empty
                                     emptyChildInputCount++;
                                 }
                             }
                         });
-                        // checking for duplicates
+                        // Checking for duplicates
                         initialChildInputArrayLength = childInputArray.length;
                         if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
                             for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
@@ -453,9 +453,9 @@ validateStep["policy-profile"] = function () {
                                 }
                             }
                         }
-                        // updating validationStatus
+                        // Updating validationStatus
                         if (emptyChildInputCount > 0) {
-                            // if empty child inputs are present
+                            // If empty child inputs are present
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "One or more package names of " +
@@ -464,7 +464,7 @@ validateStep["policy-profile"] = function () {
                             };
                             continueToCheckNextInputs = false;
                         } else if (duplicatesExist) {
-                            // if duplicate input is present
+                            // If duplicate input is present
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "Duplicate values exist with " +
@@ -477,14 +477,14 @@ validateStep["policy-profile"] = function () {
                     }
                 }
 
-                if(continueToCheckNextInputs){
+                if (continueToCheckNextInputs) {
                     validationStatus = {
                         "error": false,
                         "okFeature": operation
                     };
                 }
 
-                // updating validationStatusArray with validationStatus
+                // Updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
 
 

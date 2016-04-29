@@ -576,8 +576,8 @@ public class OperationManagerOlderSdk extends OperationManager {
                 AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.add(Calendar.SECOND, 1); // first time
-                long frequency= 1 * 1000; // in ms
+                calendar.add(Calendar.SECOND, 1); // First time
+                long frequency= 1 * 1000; // In ms
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), frequency, pendingIntent);
 
                 getContext().startService(restrictionIntent);

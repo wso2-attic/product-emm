@@ -353,7 +353,7 @@ public class CommonUtils {
 			throw new AndroidAgentException("Invalid JSON format.", e);
 		}
 
-		ArrayList<String> restrictedPackages = new ArrayList<>();
+		List<String> restrictedPackages = new ArrayList<>();
 
 		if (restrictedApps != null) {
 			for (int i = 0; i < restrictedApps.length(); i++) {

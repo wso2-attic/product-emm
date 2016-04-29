@@ -47,7 +47,7 @@ public class AppLockService extends IntentService {
 
 		String foregroundTaskPackageName = foregroundTaskInfo.topActivity.getPackageName();
 
-		ArrayList<String> appList = lockIntent.getStringArrayListExtra("appList");
+		List<String> appList = lockIntent.getStringArrayListExtra("appList");
 
 		lockIntent = new Intent(context, AppLockActivity.class);
 		lockIntent.putExtra("message", "this application is restricted by administration");

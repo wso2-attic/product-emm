@@ -17,11 +17,10 @@ public class AppLockActivity extends SherlockActivity {
     private TextView txtMessage;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_app_lock);
-
 
         btnOK = (Button) findViewById(R.id.btnOK);
         txtMessage = (TextView) findViewById(R.id.txtMessage);
@@ -42,8 +41,6 @@ public class AppLockActivity extends SherlockActivity {
                 loadHomeScreen();
             }
         });
-
-
     }
 
     @Override
@@ -70,4 +67,5 @@ public class AppLockActivity extends SherlockActivity {
         this.startActivity(i);
         AppLockActivity.this.finish();
     }
+
 }

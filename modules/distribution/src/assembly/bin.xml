@@ -329,17 +329,6 @@
             </includes>
         </fileSet>
 
-        <!--copy web app for OAuth feature-->
-        <fileSet>
-            <directory>
-                ../p2-profile/product/target/wso2carbon-core-${carbon.platform.version}/repository/deployment/server/webapps
-            </directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
-            <includes>
-                <include>api.war</include>
-            </includes>
-        </fileSet>
-
         <!-- Copying Authentication Endpoint webapp -->
         <fileSet>
             <directory>
