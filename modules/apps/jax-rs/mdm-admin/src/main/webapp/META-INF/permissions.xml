@@ -893,9 +893,9 @@
         <!--<scope>emm_admin</scope>-->
     <!--</Permission>-->
     <Permission>
-        <name>get overview of device counts</name>
-        <path>/device-mgt/emm-admin/dashboard/devices-overview</path>
-        <url>/dashboard/devices-overview</url>
+        <name>get overview of devices</name>
+        <path>/device-mgt/emm-admin/dashboard/overview-of-devices</path>
+        <url>/dashboard/overview-of-devices</url>
         <method>GET</method>
         <scope>emm_admin</scope>
     </Permission>
