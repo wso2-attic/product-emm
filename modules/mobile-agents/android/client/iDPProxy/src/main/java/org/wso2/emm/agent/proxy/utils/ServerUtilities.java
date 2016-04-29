@@ -166,19 +166,19 @@ public class ServerUtilities {
 			String errorMsg = "Error occurred while sending 'Get' request due to an invalid client protocol being used";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
-			Log.e(TAG, errorMsg);
+			Log.e(TAG, errorMsg, e);
 			throw new IDPTokenManagerException(errorMsg, e);
 		} catch (IOException e) {
 			String errorMsg = "Error occurred while sending 'Get' request due to failure of server connection";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
-			Log.e(TAG, errorMsg);
+			Log.e(TAG, errorMsg, e);
 			throw new IDPTokenManagerException(errorMsg, e);
 		} catch (IllegalArgumentException e) {
 			String errorMsg = "Error occurred while sending 'Get' request due to empty host name";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
-			Log.e(TAG, errorMsg);
+			Log.e(TAG, errorMsg, e);
 			throw new IDPTokenManagerException(errorMsg, e);
 		}
 		return responseParams;
@@ -220,20 +220,20 @@ public class ServerUtilities {
 			String errorMsg = "Error occurred while sending 'Delete' request due to an invalid client protocol being used";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
-			Log.e(TAG, errorMsg);
+			Log.e(TAG, errorMsg, e);
 			throw new IDPTokenManagerException(errorMsg, e);
         } catch (IOException e) {
 			String errorMsg =
 					"Error occurred while sending 'Delete' request due to failure of server connection";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
-			Log.e(TAG, errorMsg);
+			Log.e(TAG, errorMsg, e);
 			throw new IDPTokenManagerException(errorMsg, e);
         } catch (IllegalArgumentException e) {
-	        String errorMsg = "Error occurred while sending 'Get' request due to empty host name";
+	        String errorMsg = "Error occurred while sending 'Delete' request due to empty host name";
 	        responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 	        responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
-	        Log.e(TAG, errorMsg);
+	        Log.e(TAG, errorMsg, e);
 	        throw new IDPTokenManagerException(errorMsg, e);
         }
 
@@ -266,19 +266,19 @@ public class ServerUtilities {
 			String errorMsg = "Error occurred while sending 'Post' request due to an invalid client protocol being used";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
-			Log.e(TAG, errorMsg);
+			Log.e(TAG, errorMsg, e);
 			throw new IDPTokenManagerException(errorMsg, e);
         } catch (IOException e) {
 			String errorMsg = "Error occurred while sending 'Post' request due to failure of server connection";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
-			Log.e(TAG, errorMsg);
+			Log.e(TAG, errorMsg, e);
 			throw new IDPTokenManagerException(errorMsg, e);
         } catch (IllegalArgumentException e) {
-	        String errorMsg = "Error occurred while sending 'Get' request due to empty host name";
+	        String errorMsg = "Error occurred while sending 'Post' request due to empty host name";
 	        responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 	        responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
-	        Log.e(TAG, errorMsg);
+	        Log.e(TAG, errorMsg, e);
 	        throw new IDPTokenManagerException(errorMsg, e);
         }
 
@@ -310,19 +310,19 @@ public class ServerUtilities {
 			String errorMsg = "Error occurred while sending 'Put' request due to an invalid client protocol being used";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
-			Log.e(TAG, errorMsg);
+			Log.e(TAG, errorMsg, e);
 			throw new IDPTokenManagerException(errorMsg, e);
         } catch (IOException e) {
 			String errorMsg = "Error occurred while sending 'Put' request due to failure of server connection";
 			responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 			responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
-			Log.e(TAG, errorMsg);
+			Log.e(TAG, errorMsg, e);
 			throw new IDPTokenManagerException(errorMsg, e);
         } catch (IllegalArgumentException e) {
-	        String errorMsg = "Error occurred while sending 'Get' request due to empty host name";
+	        String errorMsg = "Error occurred while sending 'Put' request due to empty host name";
 	        responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 	        responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
-	        Log.e(TAG, errorMsg);
+	        Log.e(TAG, errorMsg, e);
 	        throw new IDPTokenManagerException(errorMsg, e);
         }
         return responseParams;
@@ -354,19 +354,19 @@ public class ServerUtilities {
 				String errorMsg = "Error occurred while sending 'Post' request due to an invalid client protocol being used";
 				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
-				Log.e(TAG, errorMsg);
+				Log.e(TAG, errorMsg, e);
 				throw new IDPTokenManagerException(errorMsg, e);
 			} catch (IOException e) {
 				String errorMsg = "Error occurred while sending 'Post' request due to failure of server connection";
 				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
-				Log.e(TAG, errorMsg);
+				Log.e(TAG, errorMsg, e);
 				throw new IDPTokenManagerException(errorMsg, e);
 			} catch (IllegalArgumentException e) {
-				String errorMsg = "Error occurred while sending 'Get' request due to empty host name";
+				String errorMsg = "Error occurred while sending 'Post' request due to empty host name";
 				responseParams.put(Constants.SERVER_RESPONSE_BODY, "Internal Server Error");
 				responseParams.put(Constants.SERVER_RESPONSE_STATUS, Constants.INTERNAL_SERVER_ERROR);
-				Log.e(TAG, errorMsg);
+				Log.e(TAG, errorMsg, e);
 				throw new IDPTokenManagerException(errorMsg, e);
 			}
 		}
@@ -383,7 +383,7 @@ public class ServerUtilities {
 			responseBody = getResponseBodyContent(entity);
 		} catch (ParseException e) {
 			String errorMsg = "Error occurred while parsing response body.";
-			Log.e(TAG, errorMsg);
+			Log.e(TAG, errorMsg, e);
 			throw new IDPTokenManagerException(errorMsg, e);
 		} catch (IOException e) {
 			if (entity != null) {
@@ -391,7 +391,7 @@ public class ServerUtilities {
 					entity.consumeContent();
 				} catch (IOException ex) {
 					String errorMsg = "Error occurred due to failure of HTTP response.";
-					Log.e(TAG, errorMsg);
+					Log.e(TAG, errorMsg, e);
 					throw new IDPTokenManagerException(errorMsg, e);
 				}
 			}
