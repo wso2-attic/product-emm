@@ -802,6 +802,13 @@
         <method>POST</method>
     </Permission>
 
+    <Permission>
+        <name>Device Updated</name>
+        <path>/device-mgt/emm-admin/search/after</path>
+        <url>/search/after/*</url>
+        <method>GET</method>
+    </Permission>
+
     <!--End of the device search and information -->
 
 
