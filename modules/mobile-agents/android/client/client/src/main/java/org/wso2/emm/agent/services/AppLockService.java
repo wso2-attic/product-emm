@@ -26,6 +26,7 @@ import android.util.Log;
 import org.wso2.emm.agent.AppLockActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AppLockService extends IntentService {
 
