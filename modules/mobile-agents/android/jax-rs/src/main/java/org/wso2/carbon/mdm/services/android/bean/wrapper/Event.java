@@ -24,17 +24,16 @@ package org.wso2.carbon.mdm.services.android.bean.wrapper;
 public class Event {
 
     private String deviceIdentifier;
-    private EventPayload payload;
+    private String payload;
     private String type;
 
-    public EventPayload getPayload() {
+    public String getPayload() {
         return payload;
     }
 
-    public void setPayload(EventPayload payload) {
+    public void setPayload(String payload) {
         this.payload = payload;
     }
-
 
     public String getDeviceIdentifier() {
         return deviceIdentifier;
