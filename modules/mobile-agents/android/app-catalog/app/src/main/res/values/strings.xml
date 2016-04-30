@@ -13,6 +13,8 @@
     <string name="txt_login">Login</string>
     <string name="app_type_mobile">Mobile Apps</string>
     <string name="app_type_web">Web Clips</string>
+    <string name="app_type_enterprise">Enterprise</string>
+    <string name="app_type_web_clip">WebClip</string>
     <string name="logout">SIGN OUT</string>
     <string name="action_install">INSTALL</string>
     <string name="action_uninstall">UNINSTALL</string>

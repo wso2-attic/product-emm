@@ -83,21 +83,21 @@ public class AppDetailsActivity extends Activity {
         if (application != null) {
             txtAppName.setText(application.getName());
             txtDescription.setText(application.getDescription());
-            txtProvider.setText(application.getProvider());
+            txtProvider.setText(application.getCategory());
             txtAppHeading.setText(application.getName());
             Picasso.with(context).load(application.getBanner()).into(imgBanner);
-            Picasso.with(context).load(application.getThumbnailUrl()).into(imgAppIcon);
+            Picasso.with(context).load(application.getIcon()).into(imgAppIcon);
 
             if (application.getScreenshots() != null) {
-                if (application.getScreenshots().get(0) != null) {
+                if (application.getScreenshots().size() > 0 && application.getScreenshots().get(0) != null) {
                     Picasso.with(context).load(application.getScreenshots().get(0)).into(imgScreenshot1);
                 }
 
-                if (application.getScreenshots().get(1) != null) {
+                if (application.getScreenshots().size() > 1 &&  application.getScreenshots().get(1) != null) {
                     Picasso.with(context).load(application.getScreenshots().get(1)).into(imgScreenshot2);
                 }
 
-                if (application.getScreenshots().get(2) != null) {
+                if (application.getScreenshots().size() > 2 && application.getScreenshots().get(2) != null) {
                     Picasso.with(context).load(application.getScreenshots().get(2)).into(imgScreenshot3);
                 }
             }

@@ -18,6 +18,7 @@
 package org.wso2.app.catalog.adapters;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -85,13 +86,17 @@ public class ApplicationAdapter extends ArrayAdapter<Application> implements Fil
 
         final Application data = applications.get(position);
 
-        if (data.getThumbnailUrl() != null) {
-            Picasso.with(activity).load(data.getThumbnailUrl()).into(holder.imgAppIcon);
+        if (data.getIcon() != null) {
+            Picasso.with(activity).load(data.getIcon()).placeholder(R.drawable.app_icon).into(holder.imgAppIcon);
         }
 
         holder.txtAppName.setText(data.getName());
-        holder.txtProvider.setText(data.getProvider());
-        holder.txtRating.setText(data.getAppType());
+        holder.txtProvider.setText(data.getCategory());
+        if (Constants.ApplicationPayload.TYPE_WEB_CLIP.equals(data.getAppType().trim())) {
+            holder.txtRating.setText(activity.getResources().getString(R.string.app_type_web_clip));
+        } else {
+            holder.txtRating.setText(activity.getResources().getString(R.string.app_type_enterprise));
+        }
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
 
@@ -149,8 +154,10 @@ public class ApplicationAdapter extends ArrayAdapter<Application> implements Fil
         Filter filter = new Filter() {
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                applications = (List<Application>) results.values;
-                notifyDataSetChanged();
+                applications = (ArrayList<Application>) results.values;
+                if (applications.size() > 0) {
+                    notifyDataSetChanged();
+                }
             }
 
             @Override

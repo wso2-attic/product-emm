@@ -62,10 +62,12 @@ public class AppListActivity extends Activity implements APIResultCallBack {
     private TextView btnWebApps;
     private TextView txtError;
     private EditText etSearch;
+    private TextView btnSignOut;
     private ArrayList<Application> mobileApps;
     private ArrayList<Application> webApps;
     private final int TAG_BTN_MOBILE_APPS = 0;
     private final int TAG_BTN_WEB_APPS = 1;
+    private final int TAG_BTN_SIGN_OUT = 2;
     private static final String ACTIVE_BUTTON_COLOR = "#060f34";
     private static final String INACTIVE_BUTTON_COLOR = "#11375B";
     private static final String TAG = AppListActivity.class.getName();
@@ -79,6 +81,7 @@ public class AppListActivity extends Activity implements APIResultCallBack {
         btnMobileApps = (TextView)findViewById(R.id.btnMobileApps);
         btnWebApps = (TextView)findViewById(R.id.btnWebApps);
         txtError = (TextView)findViewById(R.id.txtError);
+        btnSignOut = (TextView)findViewById(R.id.btnSignOut);
         etSearch = (EditText)findViewById(R.id.etSearch);
         mobileApps = new ArrayList<>();
         webApps = new ArrayList<>();
@@ -124,12 +127,16 @@ public class AppListActivity extends Activity implements APIResultCallBack {
         if (CommonUtils.isNetworkAvailable(context)) {
             ApplicationManager applicationManager = new ApplicationManager(context);
             if(applicationManager.isPackageInstalled(Constants.AGENT_PACKAGE_NAME)) {
+                btnSignOut.setVisibility(View.GONE);
                 IntentFilter filter = new IntentFilter(Constants.AGENT_APP_ACTION_RESPONSE);
                 filter.addCategory(Intent.CATEGORY_DEFAULT);
                 AgentServiceResponseReceiver receiver = new AgentServiceResponseReceiver();
                 registerReceiver(receiver, filter);
                 CommonUtils.callAgentApp(context, Constants.Operation.GET_APPLICATION_LIST, null, null);
             } else {
+                btnSignOut.setVisibility(View.VISIBLE);
+                btnSignOut.setTag(TAG_BTN_SIGN_OUT);
+                btnSignOut.setOnClickListener(onClickListener);
                 getAppListFromServer();
             }
         } else {
@@ -155,6 +162,13 @@ public class AppListActivity extends Activity implements APIResultCallBack {
                     initiateListView(webApps);
                     btnMobileApps.setBackgroundColor(Color.parseColor(INACTIVE_BUTTON_COLOR));
                     btnWebApps.setBackgroundColor(Color.parseColor(ACTIVE_BUTTON_COLOR));
+                    break;
+                case TAG_BTN_SIGN_OUT:
+                    try {
+                        CommonUtils.unRegisterClientApp(context);
+                    } catch (AppCatalogException e) {
+                        Log.e(TAG, "Dynamic client unregistration failed." + e);
+                    }
                     break;
             }
         }
@@ -260,7 +274,7 @@ public class AppListActivity extends Activity implements APIResultCallBack {
                 Application app = (Application) parent.getItemAtPosition(position);
                 intent.putExtra(context.getResources().
                         getString(R.string.intent_extra_application), app);
-                context.startActivity(intent);
+                startActivity(intent);
             }
         });
 

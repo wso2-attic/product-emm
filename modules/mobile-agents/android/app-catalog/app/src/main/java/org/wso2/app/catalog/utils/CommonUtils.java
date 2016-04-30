@@ -35,6 +35,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.wso2.app.catalog.AppCatalogException;
 import org.wso2.app.catalog.api.ApplicationManager;
 import org.wso2.app.catalog.beans.ServerConfig;
+import org.wso2.app.catalog.beans.UnregisterProfile;
+import org.wso2.app.catalog.services.DynamicClientManager;
 import org.wso2.emm.agent.proxy.APIController;
 import org.wso2.emm.agent.proxy.beans.EndPointInfo;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
@@ -173,6 +175,46 @@ public class CommonUtils {
 			intent.putExtra("appName", appName);
 		}
 		context.startService(intent);
+	}
+
+	/**
+	 * This method is used to initiate the oauth client app unregister process.
+	 *
+	 * @param context Application context
+	 * @throws AppCatalogException
+	 */
+	public static void unRegisterClientApp(Context context) throws AppCatalogException {
+		String serverIP = Preference.getString(context, Constants.PreferenceFlag.IP);
+
+		if (serverIP != null && !serverIP.isEmpty()) {
+			String applicationName = Preference.getString(context, Constants.CLIENT_NAME);
+			String consumerKey = Preference.getString(context, Constants.CLIENT_ID);
+			String userId = Preference.getString(context, Constants.USERNAME);
+
+			if (applicationName != null && !applicationName.isEmpty() &&
+			    consumerKey != null && !consumerKey.isEmpty() &&
+			    userId != null && !userId.isEmpty()) {
+
+				UnregisterProfile profile = new UnregisterProfile();
+				profile.setApplicationName(applicationName);
+				profile.setConsumerKey(consumerKey);
+				profile.setUserId(userId);
+
+				ServerConfig utils = new ServerConfig();
+				utils.setServerIP(serverIP);
+
+				DynamicClientManager dynamicClientManager = new DynamicClientManager();
+				boolean isUnregistered = dynamicClientManager.unregisterClient(profile, utils, context);
+
+				if (!isUnregistered) {
+					Log.e(TAG, "Error occurred while removing the OAuth client app");
+				}
+			} else {
+				Log.e(TAG, "Client credential is not available");
+			}
+		} else {
+			Log.e(TAG, "There is no valid IP to contact the server");
+		}
 	}
 
 	public static Intent createExplicitFromImplicitIntent(Context context, Intent implicitIntent) {
