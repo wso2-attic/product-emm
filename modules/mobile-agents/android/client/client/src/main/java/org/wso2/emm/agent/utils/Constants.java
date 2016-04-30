@@ -52,6 +52,8 @@ public class Constants {
 	// This is used to skip the license
 	public static final boolean SKIP_LICENSE = false;
 	public static final boolean HIDE_LOGIN_UI = false;
+	public static final boolean SKIP_WORK_PROFILE_CREATION = false;
+	public static final boolean HIDE_ERROR_DIALOG = false;
 
 	// TODO: Add API_VERSION to server endpoint
 	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";
@@ -162,6 +164,7 @@ public class Constants {
 		public static final String CREATED = "201";
 		public static final String ACCEPT = "202";
 		public static final String AUTHENTICATION_FAILED = "400";
+		public static final String UNAUTHORIZED = "401";
 		public static final String INTERNAL_SERVER_ERROR = "500";
 	}
 
@@ -356,8 +359,8 @@ public class Constants {
 		public static final String LATITUDE = "latitude";
 	}
 
-	public final class EventListners {
-		private EventListners(){
+	public final class EventListeners {
+		private EventListeners(){
 			throw new AssertionError();
 		}
 		public static final boolean EVENT_LISTENING_ENABLED = false;
@@ -366,7 +369,7 @@ public class Constants {
 		public static final boolean RUNTIME_STATE_LISTENER = false;
 		public static final String RUNTIME_STATE = "RUNTIME_STATE";
 		public static final long DEFAULT_START_TIME = 1000;
-		public static final long DEFAULT_INTERVAL = 5000;
+		public static final long DEFAULT_INTERVAL = 30000;
 		public static final int DEFAULT_LISTENER_CODE = 10001;
 		public static final String REQUEST_CODE = "requestCode";
 	}

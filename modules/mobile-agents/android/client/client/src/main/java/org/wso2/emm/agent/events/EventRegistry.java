@@ -49,28 +49,29 @@ public class EventRegistry {
         eventListeningStarted = true;
         // First, check if event listening is enabled. If so, check each event is enabled and
         // Start event listening.
-        if (Constants.EventListners.EVENT_LISTENING_ENABLED) {
-            if (Constants.EventListners.APPLICATION_STATE_LISTENER) {
+        if (Constants.EventListeners.EVENT_LISTENING_ENABLED) {
+            if (Constants.EventListeners.APPLICATION_STATE_LISTENER) {
                 // If the listener is implementing broadcast listener, calling start listener
                 // should start listening for events.
                 ApplicationStateListener applicationState = new ApplicationStateListener();
                 applicationState.startListening();
             }
-            if (Constants.EventListners.RUNTIME_STATE_LISTENER) {
+            if (Constants.EventListeners.RUNTIME_STATE_LISTENER) {
                 // If the event is running on a scheduled polling, it is only necessary to schedule
                 // the alarm manager. If the same DEFAULT_START_TIME and DEFAULT_INTERVAL
                 // can be used for any new event, there is no need to create a new
                 // scheduled alarm here.
-                EventRegistry.startDefaultAlarm(Constants.EventListners.DEFAULT_LISTENER_CODE,
-                                                Constants.EventListners.DEFAULT_START_TIME,
-                                                Constants.EventListners.DEFAULT_INTERVAL);
+                EventRegistry.startAlarm(Constants.EventListeners.DEFAULT_LISTENER_CODE,
+                                         Constants.EventListeners.DEFAULT_START_TIME,
+                                         Constants.EventListeners.DEFAULT_INTERVAL);
             }
+
         }
     }
 
-    private static void startDefaultAlarm(int requestCode, long startTime, long interval) {
+    private static void startAlarm(int requestCode, long startTime, long interval) {
         Intent alarmIntent = new Intent(context, EventAlarmReceiver.class);
-        alarmIntent.putExtra(Constants.EventListners.REQUEST_CODE, requestCode);
+        alarmIntent.putExtra(Constants.EventListeners.REQUEST_CODE, requestCode);
         PendingIntent recurringAlarmIntent =
                 PendingIntent.getBroadcast(context, requestCode, alarmIntent,
                                            PendingIntent.FLAG_CANCEL_CURRENT);

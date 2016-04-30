@@ -133,6 +133,10 @@ public class ServerUtilities {
         Map<String, String> responseParams = new HashMap<String, String>();
 		addHeaders(headers);
 
+		if (Constants.DEBUG_ENABLED) {
+			Log.d(TAG, httpMethod.toString() + " request to " + url);
+		}
+
 		switch (httpMethod) {
 			case GET:
 				responseParams = sendGetRequest(url, headers);

@@ -900,7 +900,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             CommonUtils.callSystemApp(getContext(),operation.getCode(),
                                       Boolean.toString(operation.isEnabled()), null);
         } else {
-            Log.e(TAG, "Invalid operation code received");
+            if(operation.isEnabled()) {
+                Log.e(TAG, "Invalid operation code received");
+            }
         }
     }
 
