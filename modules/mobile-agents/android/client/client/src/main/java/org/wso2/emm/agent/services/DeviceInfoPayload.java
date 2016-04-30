@@ -218,14 +218,14 @@ public class DeviceInfoPayload {
             property = new Device.Property();
             property.setName(Constants.Device.NETWORK_INFO);
             property.setValue(network);
-            deviceInfoProperties.add(property);
+            properties.add(property);
         }
 
         // adding wifi scan results..
         property = new Device.Property();
         property.setName(Constants.Device.WIFI_SCAN_RESULT);
         property.setValue(deviceNetworkStatus.getWifiScanResult());
-        deviceInfoProperties.add(property);
+        properties.add(property);
 
         RuntimeInfo runtimeInfo = new RuntimeInfo(context);
         String cpuInfoPayload;
@@ -240,7 +240,7 @@ public class DeviceInfoPayload {
         property = new Device.Property();
         property.setName(Constants.Device.CPU_INFO);
         property.setValue(cpuInfoPayload);
-        deviceInfoProperties.add(property);
+        properties.add(property);
 
         String ramInfoPayload;
         try {
@@ -254,7 +254,7 @@ public class DeviceInfoPayload {
         property = new Device.Property();
         property.setName(Constants.Device.RAM_INFO);
         property.setValue(ramInfoPayload);
-        deviceInfoProperties.add(property);
+        properties.add(property);
 
         List<Device.Property> batteryProperties = new ArrayList<>();
         property = new Device.Property();
@@ -314,7 +314,7 @@ public class DeviceInfoPayload {
         property = new Device.Property();
         property.setName(Constants.Device.BATTERY_INFO);
         property.setValue(batteryInfoPayload);
-        deviceInfoProperties.add(property);
+        properties.add(property);
 
         // building device info json payload
         String deviceInfoPayload;

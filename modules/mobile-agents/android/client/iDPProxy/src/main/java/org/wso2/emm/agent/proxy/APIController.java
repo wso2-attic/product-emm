@@ -132,7 +132,7 @@ public class APIController implements TokenCallBack {
 		protected void onPostExecute(Map<String, String> result) {
 			if(Constants.DEBUG_ENABLED) {
 				if(result != null && !result.isEmpty()) {
-					Log.e(TAG, "Result :" + Arrays.toString(result.entrySet().toArray()));
+					Log.d(TAG, "Result :" + Arrays.toString(result.entrySet().toArray()));
 				}
 			}
 			apiResultCallBack.onReceiveAPIResult(result, IdentityProxy.getInstance().getRequestCode());
