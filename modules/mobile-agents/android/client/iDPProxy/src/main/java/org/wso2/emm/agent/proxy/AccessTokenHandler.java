@@ -18,7 +18,6 @@
 package org.wso2.emm.agent.proxy;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -46,13 +45,14 @@ import java.util.Map;
  * After receiving authorization code client application can use this class to
  * obtain access token.
  */
-public class AccessTokenHandler extends Activity {
+public class AccessTokenHandler {
+
     private static final String TAG = "AccessTokenHandler";
     private static final String USERNAME_LABEL = "username";
     private static final String PASSWORD_LABEL = "password";
     private static final String TENANT_DOMAIN_LABEL = "tenantDomain";
     private static final String COLON = ":";
-    private static final String SCOPE = "default";
+    private static final String SCOPE = "default appm:read";
     private static final DateFormat dateFormat =
             new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
     private CredentialInfo info;

@@ -92,7 +92,7 @@ public class ApplicationStateListener extends BroadcastReceiver implements Alert
             applicationState.setPackageName(packageName);
             try {
                 String appState = CommonUtils.toJSON(applicationState);
-                publishEvent(appState, Constants.EventListners.APPLICATION_STATE);
+                publishEvent(appState, Constants.EventListeners.APPLICATION_STATE);
                 if (Constants.DEBUG_MODE_ENABLED) {
                     Log.d(TAG, appState);
                 }
