@@ -82,7 +82,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
                 break;
             case Constants.Operation.INSTALL_APPLICATION:
                 if (appUri != null) {
-                    applicationManager.installApp(appUri);
+                    applicationManager.installApp(appUri, null);
                 } else {
                     Toast.makeText(context, context.getResources().getString(R.string.toast_app_installation_failed),
                                    Toast.LENGTH_LONG).show();
@@ -90,7 +90,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
                 break;
             case Constants.Operation.UNINSTALL_APPLICATION:
                 if (appUri != null) {
-                    applicationManager.uninstallApplication(appUri);
+                    applicationManager.uninstallApplication(appUri, null);
                 } else {
                     Toast.makeText(context, context.getResources().getString(R.string.toast_app_removal_failed),
                                    Toast.LENGTH_LONG).show();
