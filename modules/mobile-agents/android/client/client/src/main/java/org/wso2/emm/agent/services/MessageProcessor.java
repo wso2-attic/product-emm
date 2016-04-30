@@ -194,7 +194,7 @@ public class MessageProcessor implements APIResultCallBack {
 		String responseStatus;
 		String response;
 		if (requestCode == Constants.NOTIFICATION_REQUEST_CODE) {
-			if(isWipeTriggered) {
+			if (isWipeTriggered) {
 				devicePolicyManager.wipeData(ACTIVATION_REQUEST);
 			}
 

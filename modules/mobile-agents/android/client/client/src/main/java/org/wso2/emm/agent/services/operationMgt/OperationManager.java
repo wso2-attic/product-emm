@@ -545,11 +545,11 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      */
     public void upgradeFirmware(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
         JSONObject result = new JSONObject();
-        String schedule = null;
+        String schedule;
 
         try {
             JSONObject upgradeData = new JSONObject(operation.getPayLoad().toString());
-            if (upgradeData != null && !upgradeData.isNull(resources.getString(R.string.intent_extra_schedule))) {
+            if (!upgradeData.isNull(resources.getString(R.string.intent_extra_schedule))) {
                 schedule = (String) upgradeData.get(resources.getString(R.string.intent_extra_schedule));
                 Preference.putString(context, resources.getString(R.string.pref_key_schedule), schedule);
             }

@@ -27,7 +27,7 @@ public class Constants {
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
 	public static final boolean SYSTEM_APP_ENABLED = false;
-	public static final String SYSTEM_APP_SERVICE_NAME = "org.wso2.emm.system.service.START_SERVICE";
+	public static final String SYSTEM_APP_SERVICE_START_ACTION = "org.wso2.emm.system.service.START_SERVICE";
 	public static final String GCM_PROJECT_NUMBER = "GOOGLE-API-PROJECT-NUMBER";
 	public static final String GCM_REG_ID = "gcm_reg_id";
 	public static final String REG_ID = "regId";
@@ -67,9 +67,11 @@ public class Constants {
 	public static final String NOTIFICATION_ENDPOINT = SERVER_APP_ENDPOINT + "operation/";
 	public static final String GOOGLE_PLAY_APP_URI = "market://details?id=";
 	public static final String DYNAMIC_CLIENT_REGISTER_ENDPOINT = "/dynamic-client-web/register";
+	public static final String APP_LIST_ENDPOINT = "/store/apis/v1.0/assets/mobileapp";
+	public static final String ACTION_RESPONSE = "org.wso2.emm.agent.MESSAGE_PROCESSED";
 	public static final String POLICY_ENDPOINT = SERVER_APP_ENDPOINT + "policy/";
 	public static final String EVENT_ENDPOINT = SERVER_APP_ENDPOINT + "events/";
-
+	public static final String CATALOG_APP_PACKAGE_NAME = "org.wso2.app.catalog";
 	public static final String TRUSTSTORE_PASSWORD = "wso2carbon";
 	public static final String EULA_TITLE = "POLICY AGREEMENT";
 	public static final String EULA_TEXT = "Test policy agreement.";
@@ -125,6 +127,7 @@ public class Constants {
 	public static final int CONFIGURATION_REQUEST_CODE = 310;
 	public static final int AUTHENTICATION_REQUEST_CODE = 311;
 	public static final int EVENT_REQUEST_CODE = 312;
+	public static final int APP_LIST_REQUEST_CODE = 300;
 
 	/**
 	 * Google API project id registered to use GCM.
@@ -253,6 +256,8 @@ public class Constants {
 		public static final String SILENT_INSTALL_APPLICATION = "SILENT_INSTALL_APPLICATION";
 		public static final String SILENT_UNINSTALL_APPLICATION = "SILENT_UNINSTALL_APPLICATION";
 		public static final String WORK_PROFILE= "WORK_PROFILE";
+		public static final String GET_APPLICATION_LIST = "GET_APP_LIST";
+		public static final String UNINSTALL_WEBCLIP = "UNINSTALL_WEBCLIP";
 	}
 
 	/**
