@@ -155,7 +155,7 @@ public class PolicyRevokeHandler {
             }
 
             if(isAppInstalled(appIdentifier)){
-                appList.uninstallApplication(appIdentifier);
+                appList.uninstallApplication(appIdentifier, null);
             }
 
         } catch (JSONException e) {
