@@ -468,6 +468,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
     public void uninstallApplication(Operation operation) throws AndroidAgentException {
         String packageName;
         String type;
+        String schedule = null;
         try {
             JSONObject appData = new JSONObject(operation.getPayLoad().toString());
             type = appData.getString(getContextResources().getString(R.string.app_type));
@@ -484,7 +485,10 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 manageWebClip(operation);
             } else {
                 packageName = appData.getString(getContextResources().getString(R.string.app_identifier));
-                getAppList().uninstallApplication(packageName);
+                if(appData.has(getContextResources().getString(R.string.app_schedule))) {
+                    schedule = appData.getString(getContextResources().getString(R.string.app_schedule));
+                }
+                getAppList().uninstallApplication(packageName, schedule);
                 operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
                 getResultBuilder().build(operation);
             }
