@@ -481,6 +481,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * @param result the result of the configuration request
 	 */
 	private void manipulateConfigurationResponse(Map<String, String> result) {
+		boolean proceedNext = true;
 		String responseStatus;
 		CommonDialogUtils.stopProgressDialog(progressDialog);
 
@@ -532,7 +533,11 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					Log.e(TAG, "Empty configuration response");
 					setDefaultNotifier();
 				}
-
+			} else if (Constants.Status.UNAUTHORIZED.equals(responseStatus)) {
+				String response = result.get(Constants.RESPONSE);
+				Log.e(TAG, "Unauthorized :" + response);
+				showEnrollementFailedErrorMessage();
+				proceedNext = false;
 			} else if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
 				Log.e(TAG, "Empty configuration response.");
 				setDefaultNotifier();
@@ -545,7 +550,9 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			Log.e(TAG, "Empty configuration response.");
 			setDefaultNotifier();
 		}
-		loadNextActivity();
+		if(proceedNext) {
+			loadNextActivity();
+		}
 	}
 
 	private void setDefaultNotifier(){
@@ -584,7 +591,12 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			} else if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
 				CommonUtils.clearClientCredentials(context);
 				showInternalServerErrorMessage();
-			} else {
+			} else if (Constants.Status.UNAUTHORIZED.equals(responseStatus)) {
+				String response = result.get(Constants.RESPONSE);
+				Log.e(TAG, "Unauthorized :" + response);
+				showEnrollementFailedErrorMessage();
+			}
+			else {
 				CommonUtils.clearClientCredentials(context);
 				showEnrollementFailedErrorMessage();
 			}

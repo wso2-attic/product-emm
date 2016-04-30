@@ -138,7 +138,7 @@ public class MessageProcessor implements APIResultCallBack {
 		utils.setServerIP(ipSaved);
 		String url = utils.getAPIServerURL(context) + Constants.NOTIFICATION_ENDPOINT + deviceId;
 
-		Log.i(TAG, "getMessage: endpoint: " + url);
+		Log.i(TAG, "Get pending operations from: " + url);
 
 		String requestParams;
 		try {
@@ -175,7 +175,7 @@ public class MessageProcessor implements APIResultCallBack {
 			throw new AndroidAgentException("Issue in parsing stream", e);
 		}
 		if (Constants.DEBUG_MODE_ENABLED) {
-			Log.d(TAG, "replay-payload: " + requestParams);
+			Log.d(TAG, "Reply Payload: " + requestParams);
 		}
 
 		if(ipSaved != null && !ipSaved.isEmpty()) {
@@ -194,7 +194,7 @@ public class MessageProcessor implements APIResultCallBack {
 		String responseStatus;
 		String response;
 		if (requestCode == Constants.NOTIFICATION_REQUEST_CODE) {
-			if(isWipeTriggered) {
+			if (isWipeTriggered) {
 				devicePolicyManager.wipeData(ACTIVATION_REQUEST);
 			}
 
@@ -217,7 +217,7 @@ public class MessageProcessor implements APIResultCallBack {
 					response = result.get(Constants.RESPONSE);
 					if (response != null && !response.isEmpty()) {
 						if (Constants.DEBUG_MODE_ENABLED) {
-							Log.d(TAG, "onReceiveAPIResult." + response);
+							Log.d(TAG, "Pending Operations List: " + response);
 						}
 						performOperation(response);
 					}

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+-->
+<resources>
+
+    <string name="app_name">IDPProxy</string>
+    <string name="shared_pref_package">org.wso2.emm.agent</string>
+    <string name="shared_pref_policy">policy</string>
+    <string name="shared_pref_configuration">configuration</string>
+    <string name="shared_pref_notifier">notifierType</string>
+    <string name="shared_pref_frequency">notifierFrequency</string>
+    <string name="shared_pref_gcm">gcmSenderId</string>
+    <string name="shared_pref_config_key">name</string>
+    <string name="shared_pref_config_value">value</string>
+    <string name="shared_pref_isagreed">isAgreed</string>
+    <string name="shared_pref_registered">registered</string>
+    <string name="shared_pref_ip">ip</string>
+    <string name="shared_pref_eula">eula</string>
+    <string name="shared_pref_regId">regId</string>
+    <string name="shared_pref_username">username</string>
+    <string name="shared_pref_pin">pin</string>
+    <string name="shared_pref_reg_success">1</string>
+    <string name="shared_pref_reg_fail">0</string>
+    <string name="shared_pref_reg_type">deviceType</string>
+    <string name="shared_pref_sender_id">senderID</string>
+    <string name="shared_pref_message_mode">mode</string>
+    <string name="shared_pref_interval">interval</string>
+    <string name="username">username</string>
+    <string name="shared_pref_device_active">deviceActive</string>
+    <string name="shared_pref_client_id">clientId</string>
+    <string name="shared_pref_client_secret">clientSecret</string>
+    <string name="shared_pref_operators">operators</string>
+    <string name="shared_pref_default_array">[]</string>
+    <string name="shared_pref_default_string"></string>
+    <string name="shared_pref_default_status">true</string>
+    <string name="shared_pref_false_status">false</string>
+</resources>

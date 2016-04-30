@@ -27,7 +27,7 @@ public class Constants {
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
 	public static final boolean SYSTEM_APP_ENABLED = false;
-	public static final String SYSTEM_APP_SERVICE_NAME = "org.wso2.emm.system.service.START_SERVICE";
+	public static final String SYSTEM_APP_SERVICE_START_ACTION = "org.wso2.emm.system.service.START_SERVICE";
 	public static final String GCM_PROJECT_NUMBER = "GOOGLE-API-PROJECT-NUMBER";
 	public static final String GCM_REG_ID = "gcm_reg_id";
 	public static final String REG_ID = "regId";
@@ -52,6 +52,8 @@ public class Constants {
 	// This is used to skip the license
 	public static final boolean SKIP_LICENSE = false;
 	public static final boolean HIDE_LOGIN_UI = false;
+	public static final boolean SKIP_WORK_PROFILE_CREATION = false;
+	public static final boolean HIDE_ERROR_DIALOG = false;
 
 	// TODO: Add API_VERSION to server endpoint
 	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";
@@ -67,9 +69,11 @@ public class Constants {
 	public static final String NOTIFICATION_ENDPOINT = SERVER_APP_ENDPOINT + "operation/";
 	public static final String GOOGLE_PLAY_APP_URI = "market://details?id=";
 	public static final String DYNAMIC_CLIENT_REGISTER_ENDPOINT = "/dynamic-client-web/register";
+	public static final String APP_LIST_ENDPOINT = "/api/appm/publisher/v1.0/apps/mobileapp?field-filter=all";
+	public static final String ACTION_RESPONSE = "org.wso2.emm.agent.MESSAGE_PROCESSED";
 	public static final String POLICY_ENDPOINT = SERVER_APP_ENDPOINT + "policy/";
 	public static final String EVENT_ENDPOINT = SERVER_APP_ENDPOINT + "events/";
-
+	public static final String CATALOG_APP_PACKAGE_NAME = "org.wso2.app.catalog";
 	public static final String TRUSTSTORE_PASSWORD = "wso2carbon";
 	public static final String EULA_TITLE = "POLICY AGREEMENT";
 	public static final String EULA_TEXT = "Test policy agreement.";
@@ -125,6 +129,7 @@ public class Constants {
 	public static final int CONFIGURATION_REQUEST_CODE = 310;
 	public static final int AUTHENTICATION_REQUEST_CODE = 311;
 	public static final int EVENT_REQUEST_CODE = 312;
+	public static final int APP_LIST_REQUEST_CODE = 300;
 
 	/**
 	 * Google API project id registered to use GCM.
@@ -162,6 +167,7 @@ public class Constants {
 		public static final String CREATED = "201";
 		public static final String ACCEPT = "202";
 		public static final String AUTHENTICATION_FAILED = "400";
+		public static final String UNAUTHORIZED = "401";
 		public static final String INTERNAL_SERVER_ERROR = "500";
 	}
 
@@ -254,6 +260,8 @@ public class Constants {
 		public static final String SILENT_INSTALL_APPLICATION = "SILENT_INSTALL_APPLICATION";
 		public static final String SILENT_UNINSTALL_APPLICATION = "SILENT_UNINSTALL_APPLICATION";
 		public static final String WORK_PROFILE= "WORK_PROFILE";
+		public static final String GET_APPLICATION_LIST = "GET_APP_LIST";
+		public static final String UNINSTALL_WEBCLIP = "UNINSTALL_WEBCLIP";
 	}
 
 	/**
@@ -272,6 +280,8 @@ public class Constants {
 		public static final String OS = "OS_VERSION";
 		public static final String NAME = "DEVICE_NAME";
 		public static final String BATTERY_LEVEL = "BATTERY_LEVEL";
+		public static final String ENCRYPTION_STATUS = "ENCRYPTION_ENABLED";
+		public static final String PASSCODE_STATUS = "PASSCODE_ENABLED";
 		public static final String MOBILE_DEVICE_LATITUDE = "LATITUDE";
 		public static final String MOBILE_DEVICE_LONGITUDE = "LONGITUDE";
 		public static final String MEMORY_INFO_INTERNAL_TOTAL = "INTERNAL_TOTAL_MEMORY";
@@ -284,6 +294,7 @@ public class Constants {
 		public static final String WIFI_SSID = "WIFI_SSID";
 		public static final String WIFI_SIGNAL_STRENGTH = "WIFI_SIGNAL_STRENGTH";
 		public static final String NETWORK_INFO = "NETWORK_INFO";
+		public static final String WIFI_SCAN_RESULT = "WIFI_SCAN_RESULT";
 		public static final String CONNECTION_TYPE = "CONNECTION_TYPE";
 		public static final String MOBILE_CONNECTION_TYPE = "MOBILE_CONNECTION_TYPE";
 		public static final String MOBILE_SIGNAL_STRENGTH = "MOBILE_SIGNAL_STRENGTH";
@@ -357,8 +368,8 @@ public class Constants {
 		public static final String LATITUDE = "latitude";
 	}
 
-	public final class EventListners {
-		private EventListners(){
+	public final class EventListeners {
+		private EventListeners(){
 			throw new AssertionError();
 		}
 		public static final boolean EVENT_LISTENING_ENABLED = false;
@@ -367,7 +378,7 @@ public class Constants {
 		public static final boolean RUNTIME_STATE_LISTENER = false;
 		public static final String RUNTIME_STATE = "RUNTIME_STATE";
 		public static final long DEFAULT_START_TIME = 1000;
-		public static final long DEFAULT_INTERVAL = 5000;
+		public static final long DEFAULT_INTERVAL = 30000;
 		public static final int DEFAULT_LISTENER_CODE = 10001;
 		public static final String REQUEST_CODE = "requestCode";
 	}

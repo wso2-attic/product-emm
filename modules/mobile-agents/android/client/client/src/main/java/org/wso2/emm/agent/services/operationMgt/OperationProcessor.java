@@ -17,56 +17,41 @@
  */
 package org.wso2.emm.agent.services.operationMgt;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.wso2.emm.agent.AndroidAgentException;
-import org.wso2.emm.agent.R;
-import org.wso2.emm.agent.api.ApplicationManager;
-import org.wso2.emm.agent.api.DeviceInfo;
-import org.wso2.emm.agent.dao.NotificationDAO;
-import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
-import org.wso2.emm.agent.services.PolicyOperationsMapper;
-import org.wso2.emm.agent.services.ResultPayload;
-import org.wso2.emm.agent.utils.Constants;
-import org.wso2.emm.agent.utils.Preference;
-
-import android.app.NotificationManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.res.Resources;
 import android.util.Log;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.beans.Operation;
+import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.services.PolicyOperationsMapper;
+import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * This class handles all the functionalities related to device management operations.
  */
 public class OperationProcessor {
 
+	private OperationManager operationManager;
 	private Context context;
-	private DevicePolicyManager devicePolicyManager;
-	private ComponentName cdmDeviceAdmin;
-	private Resources resources;
-	private ResultPayload resultBuilder;
-    private OperationManager operationManager;
 
-	private static final String TAG = "Operation Handler";
+	private static final String TAG = OperationProcessor.class.getSimpleName();
+
 
 	public OperationProcessor(Context context) {
 		this.context = context;
-		this.resources = context.getResources();
-		this.devicePolicyManager =
-				(DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-		this.resultBuilder = new ResultPayload();
-		this.cdmDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
-        /* Get matching OperationManager from the Factory */
-        OperationManagerFactory operationManagerFactory = new OperationManagerFactory(context,devicePolicyManager);
-        operationManager = operationManagerFactory.getOperationManager();
 
+        /* Get matching OperationManager from the Factory */
+		OperationManagerFactory operationManagerFactory = new OperationManagerFactory(context);
+		operationManager = operationManagerFactory.getOperationManager();
 	}
 
 	/**
@@ -88,9 +73,9 @@ public class OperationProcessor {
 			case Constants.Operation.DEVICE_LOCK:
 				operationManager.lockDevice(operation);
 				break;
-            case Constants.Operation.DEVICE_UNLOCK:
-                operationManager.unlockDevice(operation);
-                break;
+			case Constants.Operation.DEVICE_UNLOCK:
+				operationManager.unlockDevice(operation);
+				break;
 			case Constants.Operation.WIPE_DATA:
 				operationManager.wipeDevice(operation);
 				break;
@@ -140,9 +125,7 @@ public class OperationProcessor {
 				operationManager.changeLockCode(operation);
 				break;
 			case Constants.Operation.POLICY_BUNDLE:
-				if (devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
-					this.setPolicyBundle(operation);
-				}
+				this.setPolicyBundle(operation);
 				break;
 			case Constants.Operation.WORK_PROFILE:
 				operationManager.configureWorkProfile(operation);
@@ -186,54 +169,68 @@ public class OperationProcessor {
 		}
 	}
 
-    /**
-     * Set policy bundle.
-     *
-     * @param operation - Operation object.
-     */
+	public void checkPreviousNotifications() {
+		operationManager.checkPreviousNotifications();
+	}
+
+	public List<org.wso2.emm.agent.beans.Operation> getResultPayload() {
+		return operationManager.getResultPayload();
+	}
+
+	/**
+	 * Set policy bundle.
+	 *
+	 * @param operation - Operation object.
+	 */
 	public void setPolicyBundle(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-		String payload = operation.getPayLoad().toString();
-		if (Constants.DEBUG_MODE_ENABLED) {
-			Log.d(TAG, "Policy payload: " + payload);
-		}
-		PolicyOperationsMapper operationsMapper = new PolicyOperationsMapper();
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-
-		try {
-			if(payload != null){
-				Preference.putString(context, Constants.PreferenceFlag.APPLIED_POLICY, payload);
-			}
-
-			List<org.wso2.emm.agent.beans.Operation> operations = mapper.readValue(
-					payload,
-					mapper.getTypeFactory().constructCollectionType(List.class,
-							org.wso2.emm.agent.beans.Operation.class));
-
-			for (org.wso2.emm.agent.beans.Operation op : operations) {
-				op = operationsMapper.getOperation(op);
-				this.doTask(op);
-			}
-			operation.setStatus(resources.getString(R.string.operation_value_completed));
-			resultBuilder.build(operation);
-
+		if (isDeviceAdminActive()) {
+			String payload = operation.getPayLoad().toString();
 			if (Constants.DEBUG_MODE_ENABLED) {
-				Log.d(TAG, "Policy applied");
+				Log.d(TAG, "Policy payload: " + payload);
 			}
-		} catch (IOException e) {
-			operation.setStatus(resources.getString(R.string.operation_value_error));
-			resultBuilder.build(operation);
-			throw new AndroidAgentException("Error occurred while parsing stream", e);
+			PolicyOperationsMapper operationsMapper = new PolicyOperationsMapper();
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
+			try {
+				if (payload != null) {
+					Preference.putString(context, Constants.PreferenceFlag.APPLIED_POLICY, payload);
+				}
+
+				List<Operation> operations = mapper.readValue(
+						payload,
+						mapper.getTypeFactory().
+								constructCollectionType(List.class, org.wso2.emm.agent.beans.Operation.class));
+
+				for (org.wso2.emm.agent.beans.Operation op : operations) {
+					op = operationsMapper.getOperation(op);
+					this.doTask(op);
+				}
+				operation.setStatus(context.getResources().getString(R.string.operation_value_completed));
+				operationManager.setPolicyBundle(operation);
+
+				if (Constants.DEBUG_MODE_ENABLED) {
+					Log.d(TAG, "Policy applied");
+				}
+			} catch (IOException e) {
+				operation.setStatus(context.getResources().getString(R.string.operation_value_error));
+				operationManager.setPolicyBundle(operation);
+				throw new AndroidAgentException("Error occurred while parsing stream", e);
+			}
+		} else {
+			operation.setStatus(context.getResources().getString(R.string.operation_value_error));
+			operationManager.setPolicyBundle(operation);
+			throw new AndroidAgentException("Device administrator is not activated, hence cannot execute policies");
 		}
 	}
 
-	public void checkPreviousNotifications() {
-        operationManager.checkPreviousNotifications();
-    }
+	private boolean isDeviceAdminActive() {
+		DevicePolicyManager devicePolicyManager =
+				(DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+		ComponentName cdmDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
+		return devicePolicyManager.isAdminActive(cdmDeviceAdmin);
+	}
 
-    public List<org.wso2.emm.agent.beans.Operation> getResultPayload() {
-        return operationManager.getResultPayload();
-    }
 }
 
