@@ -226,7 +226,8 @@ public class Operation implements APIResultCallBack {
 	 * @param operation - Operation object.
 	 */
 	public void getLocationInfo(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-		gps = new GPSTracker(context.getApplicationContext());
+		gps = GPSTracker.getInstance(context);
+		gps.updateLocation();
 		JSONObject result = new JSONObject();
 		if (gps != null) {
 			try {

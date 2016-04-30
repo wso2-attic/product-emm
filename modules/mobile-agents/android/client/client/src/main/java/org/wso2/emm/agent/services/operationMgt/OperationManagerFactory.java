@@ -22,12 +22,7 @@ import android.annotation.TargetApi;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.os.Build;
-
 import org.wso2.emm.agent.api.DeviceInfo;
-import org.wso2.emm.agent.services.operationMgt.OperationManager;
-import org.wso2.emm.agent.services.operationMgt.OperationManagerDeviceOwner;
-import org.wso2.emm.agent.services.operationMgt.OperationManagerOlderSdk;
-import org.wso2.emm.agent.services.operationMgt.OperationManagerWorkProfile;
 import org.wso2.emm.agent.utils.Constants;
 
 /**
@@ -39,10 +34,10 @@ public class OperationManagerFactory {
     private Context context;
     private DevicePolicyManager manager;
 
-    public OperationManagerFactory(Context context, DevicePolicyManager devicePolicyManager) {
+    public OperationManagerFactory(Context context) {
         this.context = context;
         this.info = new DeviceInfo(context);
-        this.manager = devicePolicyManager;
+        this.manager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
     }
 
     public OperationManager getOperationManager() {

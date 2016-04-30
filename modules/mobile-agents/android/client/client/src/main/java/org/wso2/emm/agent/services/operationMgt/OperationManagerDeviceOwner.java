@@ -18,12 +18,13 @@
 
 package org.wso2.emm.agent.services.operationMgt;
 
+import android.annotation.TargetApi;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,8 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OperationManagerDeviceOwner extends OperationManager {
-    private static final String TAG = "OpManagerDeviceOwner";
-
+    private static final String TAG = OperationManagerDeviceOwner.class.getSimpleName();
 
     public OperationManagerDeviceOwner(Context context) {
         super(context);
@@ -375,7 +375,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
 
             if (password != null && !password.isEmpty()) {
                 getDevicePolicyManager().resetPassword(password,
-                        DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY);
+                                                       DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY);
                 getDevicePolicyManager().lockNow();
             }
 
@@ -413,6 +413,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void hideApp(Operation operation) throws AndroidAgentException {
         String packageName = null;
@@ -439,6 +440,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void unhideApp(Operation operation) throws AndroidAgentException {
         String packageName = null;
@@ -465,6 +467,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void blockUninstallByPackageName(Operation operation) throws AndroidAgentException {
         String packageName = null;
@@ -491,6 +494,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void setProfileName(Operation operation) throws AndroidAgentException {
         //sets the name of the user since the agent is the device owner.
@@ -519,6 +523,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void handleUserRestriction(Operation operation) throws AndroidAgentException {
         boolean isEnable = operation.isEnabled();
@@ -576,5 +581,10 @@ public class OperationManagerDeviceOwner extends OperationManager {
         operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
         getResultBuilder().build(operation);
 
+    }
+
+    @Override
+    public void setPolicyBundle(Operation operation) throws AndroidAgentException {
+        getResultBuilder().build(operation);
     }
 }

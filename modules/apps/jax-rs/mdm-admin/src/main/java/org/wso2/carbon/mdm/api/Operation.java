@@ -233,21 +233,16 @@ public class Operation {
     @Path("activity/{id}")
     public org.wso2.carbon.device.mgt.common.operation.mgt.Operation getActivity(@PathParam("id") String id)
             throws MDMAPIException {
-        org.wso2.carbon.device.mgt.common.operation.mgt.Operation operations;
+        org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation;
         DeviceManagementProviderService dmService;
-        int activityId = MDMUtil.convertActivityIdToInteger(id);
-
         try {
-            if (activityId == 0) {
-                throw new OperationManagementException("Activity id cannot be 0.");
-            }
             dmService = MDMAPIUtils.getDeviceManagementService();
-            operations = dmService.getOperation(activityId);
+            operation = dmService.getOperationByActivityId(id);
         } catch (OperationManagementException e) {
             String msg = "Error occurred while fetching the activity for the supplied id.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
-        return operations;
+        return operation;
     }
 }

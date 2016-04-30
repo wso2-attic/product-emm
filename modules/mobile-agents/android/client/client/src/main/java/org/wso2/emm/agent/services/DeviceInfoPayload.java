@@ -53,7 +53,7 @@ public class DeviceInfoPayload {
         this.context = context.getApplicationContext();
         deviceInfo = new DeviceInfo(context);
         mapper = new ObjectMapper();
-        gps = new GPSTracker(context);
+        gps = GPSTracker.getInstance(context);
         registrationId = Preference.getString(context, Constants.GCM_REG_ID);
         phoneState = new DeviceState(context);
     }
@@ -93,6 +93,7 @@ public class DeviceInfoPayload {
         if (device == null) {
             device = new Device();
         }
+
         Power power = phoneState.getBatteryDetails();
         device.setDeviceIdentifier(deviceInfo.getDeviceId());
         device.setDescription(deviceInfo.getDeviceName());
@@ -165,6 +166,16 @@ public class DeviceInfoPayload {
         List<Device.Property> deviceInfoProperties = new ArrayList<>();
 
         property = new Device.Property();
+        property.setName(Constants.Device.ENCRYPTION_STATUS);
+        property.setValue(String.valueOf(deviceInfo.isEncryptionEnabled()));
+        deviceInfoProperties.add(property);
+
+        property = new Device.Property();
+        property.setName(Constants.Device.PASSCODE_STATUS);
+        property.setValue(String.valueOf(deviceInfo.isPasscodeEnabled()));
+        deviceInfoProperties.add(property);
+
+        property = new Device.Property();
         property.setName(Constants.Device.BATTERY_LEVEL);
         int batteryLevel = Math.round(power.getLevel());
         property.setValue(String.valueOf(batteryLevel));
@@ -195,7 +206,7 @@ public class DeviceInfoPayload {
         property.setValue(String.valueOf(deviceInfo.getNetworkOperatorName()));
         deviceInfoProperties.add(property);
 
-        DeviceNetworkStatus deviceNetworkStatus = new DeviceNetworkStatus(context);
+        DeviceNetworkStatus deviceNetworkStatus = DeviceNetworkStatus.getInstance(context);
         if(deviceNetworkStatus.isConnectedMobile()){
             TelephonyManager telephonyManager = (TelephonyManager)
                     context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -206,9 +217,15 @@ public class DeviceInfoPayload {
         if(network != null) {
             property = new Device.Property();
             property.setName(Constants.Device.NETWORK_INFO);
-            property.setValue(deviceNetworkStatus.getNetworkStatus());
+            property.setValue(network);
             deviceInfoProperties.add(property);
         }
+
+        // adding wifi scan results..
+        property = new Device.Property();
+        property.setName(Constants.Device.WIFI_SCAN_RESULT);
+        property.setValue(deviceNetworkStatus.getWifiScanResult());
+        deviceInfoProperties.add(property);
 
         RuntimeInfo runtimeInfo = new RuntimeInfo(context);
         String cpuInfoPayload;

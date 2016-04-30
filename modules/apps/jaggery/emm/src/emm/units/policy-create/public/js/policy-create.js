@@ -2275,6 +2275,10 @@ var showAdvanceOperation = function (operation, button) {
  */
 var slideDownPaneAgainstValueSet = function (selectElement, paneID, valueSet) {
     var selectedValueOnChange = $(selectElement).find("option:selected").val();
+    if ($(selectElement).is("input:checkbox")) {
+        selectedValueOnChange = $(selectElement).is(":checked").toString();
+    }
+
     var i, slideDownVotes = 0;
     for (i = 0; i < valueSet.length; i++) {
         if (selectedValueOnChange == valueSet[i]) {

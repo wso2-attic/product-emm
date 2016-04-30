@@ -47,7 +47,7 @@ import java.util.Map;
 
 public class OperationManagerOlderSdk extends OperationManager {
 
-    private static final String TAG = "OperationManagerOldSdk";
+    private static final String TAG = OperationManagerOlderSdk.class.getSimpleName();
 
     public OperationManagerOlderSdk(Context context){
         super(context);
@@ -55,7 +55,7 @@ public class OperationManagerOlderSdk extends OperationManager {
 
     @Override
     public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
-
+        super.onReceiveAPIResult(result, requestCode);
     }
 
     @Override
@@ -354,7 +354,7 @@ public class OperationManagerOlderSdk extends OperationManager {
                 intent.putExtra(getContextResources().getString(R.string.intent_extra_message),
                         getContextResources().getString(R.string.policy_violation_password_tail));
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
+                                Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(intent);
             }
 
@@ -385,7 +385,7 @@ public class OperationManagerOlderSdk extends OperationManager {
 
             if (password != null && !password.isEmpty()) {
                 getDevicePolicyManager().resetPassword(password,
-                        DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY);
+                                                       DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY);
                 getDevicePolicyManager().lockNow();
             }
 
@@ -479,21 +479,6 @@ public class OperationManagerOlderSdk extends OperationManager {
     }
 
     @Override
-    public void upgradeFirmware(Operation operation) throws AndroidAgentException {
-
-    }
-
-    @Override
-    public void rebootDevice(Operation operation) throws AndroidAgentException {
-
-    }
-
-    @Override
-    public void executeShellCommand(Operation operation) throws AndroidAgentException {
-
-    }
-
-    @Override
     public void hideApp(Operation operation) throws AndroidAgentException {
         operation.setStatus(getContextResources().getString(R.string.operation_value_error));
         getResultBuilder().build(operation);
@@ -541,7 +526,9 @@ public class OperationManagerOlderSdk extends OperationManager {
             CommonUtils.callSystemApp(getContext(),operation.getCode(),
                     Boolean.toString(operation.isEnabled()), null);
         } else {
-            Log.e(TAG, "Invalid operation code received");
+            Log.e(TAG, "System app is not available. Hence operation '" + operation.getCode() + "' is not supported");
+            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            getResultBuilder().build(operation);
         }
     }
 
@@ -593,4 +580,10 @@ public class OperationManagerOlderSdk extends OperationManager {
         getResultBuilder().build(operation);
 
     }
+
+    @Override
+    public void setPolicyBundle(Operation operation) throws AndroidAgentException {
+        getResultBuilder().build(operation);
+    }
+
 }

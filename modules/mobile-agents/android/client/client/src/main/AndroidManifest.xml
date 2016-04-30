@@ -124,6 +124,13 @@
                 <data android:scheme="package"/>
             </intent-filter>
         </receiver>
+        <service android:name=".services.ApplicationManagementService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.wso2.emm.agent.START_SERVICE" />
+            </intent-filter>
+        </service>
         <service
             android:name=".GCMIntentService"
             android:exported="false" >

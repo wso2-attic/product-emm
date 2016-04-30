@@ -37,12 +37,15 @@ import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
 public class OperationManagerWorkProfile extends OperationManager {
-    private static final String TAG = "OperationWorkProfile";
+
+    private static final String TAG = OperationManagerWorkProfile.class.getSimpleName();
+
 
     public OperationManagerWorkProfile(Context context) {
         super(context);
@@ -413,9 +416,13 @@ public class OperationManagerWorkProfile extends OperationManager {
         getDevicePolicyManager().setApplicationHidden(getCdmDeviceAdmin(), packageName, true);
     }
 
-
+    @Override
+    public void setPolicyBundle(Operation operation) throws AndroidAgentException {
+        getResultBuilder().build(operation);
+    }
 
     private void enableGooglePlayApps(String packageName) {
         triggerGooglePlayApp(packageName);
     }
+
 }

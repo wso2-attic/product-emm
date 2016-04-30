@@ -271,10 +271,11 @@ public class CommonUtils {
 	 * @param context - Application context.
 	 * @param operation - Operation code.
 	 * @param command - Shell command to be executed.
+	 * @param appUri - App package/APK URI when an app operation executed.
 	 */
 	public static void callSystemApp(Context context, String operation, String command, String appUri) {
 		if(Constants.SYSTEM_APP_ENABLED) {
-			Intent intent =  new Intent(Constants.SYSTEM_APP_SERVICE_NAME);
+			Intent intent =  new Intent(Constants.SYSTEM_APP_SERVICE_START_ACTION);
 			Intent explicitIntent = createExplicitFromImplicitIntent(context, intent);
 			if (explicitIntent != null) {
 				intent = explicitIntent;
