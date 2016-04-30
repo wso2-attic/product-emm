@@ -276,6 +276,8 @@ public class Constants {
 		public static final String OS = "OS_VERSION";
 		public static final String NAME = "DEVICE_NAME";
 		public static final String BATTERY_LEVEL = "BATTERY_LEVEL";
+		public static final String ENCRYPTION_STATUS = "ENCRYPTION_ENABLED";
+		public static final String PASSCODE_STATUS = "PASSCODE_ENABLED";
 		public static final String MOBILE_DEVICE_LATITUDE = "LATITUDE";
 		public static final String MOBILE_DEVICE_LONGITUDE = "LONGITUDE";
 		public static final String MEMORY_INFO_INTERNAL_TOTAL = "INTERNAL_TOTAL_MEMORY";
@@ -288,6 +290,7 @@ public class Constants {
 		public static final String WIFI_SSID = "WIFI_SSID";
 		public static final String WIFI_SIGNAL_STRENGTH = "WIFI_SIGNAL_STRENGTH";
 		public static final String NETWORK_INFO = "NETWORK_INFO";
+		public static final String WIFI_SCAN_RESULT = "WIFI_SCAN_RESULT";
 		public static final String CONNECTION_TYPE = "CONNECTION_TYPE";
 		public static final String MOBILE_CONNECTION_TYPE = "MOBILE_CONNECTION_TYPE";
 		public static final String MOBILE_SIGNAL_STRENGTH = "MOBILE_SIGNAL_STRENGTH";

@@ -17,22 +17,7 @@
  */
 package org.wso2.emm.agent;
 
-import java.util.Map;
-
 import android.app.Activity;
-import android.widget.RelativeLayout;
-import org.wso2.emm.agent.api.DeviceInfo;
-import org.wso2.emm.agent.beans.ServerConfig;
-import org.wso2.emm.agent.events.EventRegistry;
-import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
-import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
-import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
-import org.wso2.emm.agent.services.LocalNotification;
-import org.wso2.emm.agent.utils.CommonDialogUtils;
-import org.wso2.emm.agent.utils.Constants;
-import org.wso2.emm.agent.utils.Preference;
-import org.wso2.emm.agent.utils.CommonUtils;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.admin.DevicePolicyManager;
@@ -47,11 +32,24 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import org.wso2.emm.agent.api.DeviceInfo;
+import org.wso2.emm.agent.beans.ServerConfig;
+import org.wso2.emm.agent.events.EventRegistry;
+import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
+import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
+import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.services.LocalNotification;
+import org.wso2.emm.agent.utils.CommonDialogUtils;
+import org.wso2.emm.agent.utils.CommonUtils;
+import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
+
+import java.util.Map;
 
 /**
  * Activity which handles user un-registration from the MDM server.
@@ -328,7 +326,6 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.d(TAG, "onReceiveAPIResult-requestcode: " + requestCode);
 		}
-
 
 		if (requestCode == Constants.UNREGISTER_REQUEST_CODE) {
 			stopProgressDialog();

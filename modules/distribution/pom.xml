@@ -27,7 +27,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>wso2mdm</artifactId>
+    <artifactId>wso2emm</artifactId>
     <version>2.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>WSO2 Mobile Device Manager (MDM) - Distribution</name>
@@ -331,16 +331,16 @@
                                 <!--<property name="shindig.version" value="2.5.0-beta5" />-->
 
                                 <mkdir dir="${tempdir}" />
-                                <mkdir dir="${tempdir}/wso2mdm-${project.version}/repository/components" />
-                                <mkdir dir="${tempdir}/wso2mdm-${project.version}/repository/deployment/server" />
-                                <mkdir dir="${tempdir}/wso2mdm-${project.version}/repository/deployment/server/webapps" />
+                                <mkdir dir="${tempdir}/wso2emm-${project.version}/repository/components" />
+                                <mkdir dir="${tempdir}/wso2emm-${project.version}/repository/deployment/server" />
+                                <mkdir dir="${tempdir}/wso2emm-${project.version}/repository/deployment/server/webapps" />
                                 <unzip dest="${tempdir}">
                                     <fileset dir="target">
-                                        <include name="wso2mdm-${project.version}.zip" />
+                                        <include name="wso2emm-${project.version}.zip" />
                                     </fileset>
                                 </unzip>
                                 <copy todir="target/wso2carbon-core-${carbon.kernel.version}/repository/components" overwrite="true">
-                                    <fileset dir="${tempdir}/wso2mdm-${project.version}/repository/components" />
+                                    <fileset dir="${tempdir}/wso2emm-${project.version}/repository/components" />
                                 </copy>
                                 <!--testing -->
                                 <!--<unzip src="target/shindig/WEB-INF/lib/shindig-common-${shindig.version}.jar" dest="${jardir}/shindig-common-${shindig.version}">
@@ -360,7 +360,7 @@
                                     og4j.logger.net.sf.ehcache=ERROR
                                 </concat>
 
-                                <delete file="target/wso2mdm-${project.version}.zip" />
+                                <delete file="target/wso2emm-${project.version}.zip" />
                                 <delete dir="${tempdir}" />
                             </tasks>
                         </configuration>
@@ -401,7 +401,7 @@
                                 <delete dir="target/maven-archiver" />
                                 <delete dir="target/wso2carbon-core-${carbon.kernel.version}" />
                                 <delete dir="target/wso2carbon-core-${carbon.kernel.version}" />
-                                <delete file="target/wso2mdm-${project.version}.jar" />
+                                <delete file="target/wso2emm-${project.version}.jar" />
                                 <delete dir="target/sources" />
                                 <delete dir="target/site" />
                                 <delete dir="target/antrun" />

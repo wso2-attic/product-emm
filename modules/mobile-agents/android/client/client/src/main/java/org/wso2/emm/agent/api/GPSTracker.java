@@ -60,19 +60,33 @@ public class GPSTracker extends Service implements LocationListener {
 	private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
 
 	protected LocationManager locationManager;
+	private Context context;
 
 	private static final String TAG = GPSTracker.class.getName();
 
-	public GPSTracker(Context context) {
+	private static GPSTracker gpsTracker;
+
+	private GPSTracker(Context context) {
 		locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
-		getLocation();
+		updateLocation();
+	}
+
+	public static synchronized GPSTracker getInstance(Context context) {
+		if (gpsTracker == null) {
+			synchronized (GPSTracker.class) {
+				if (gpsTracker == null) {
+					gpsTracker = new GPSTracker(context);
+				}
+			}
+		}
+		return gpsTracker;
 	}
 
 	/**
 	 * Function to get device location using GPS.
 	 * @return - Device location coordinates.
 	 */
-	private void getLocation() {
+	public void updateLocation() {
 		if (locationManager != null) {
 			try {
 				boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -213,7 +227,7 @@ public class GPSTracker extends Service implements LocationListener {
 		endPointInfo.setEndPoint(endPoint.toString());
 
 		SendRequest sendRequestTask = new SendRequest();
-		sendRequestTask.execute(endPointInfo).get();
+		sendRequestTask.execute(endPointInfo);
 	}
 
 

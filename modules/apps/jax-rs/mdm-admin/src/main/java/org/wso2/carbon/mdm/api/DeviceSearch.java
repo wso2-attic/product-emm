@@ -30,6 +30,8 @@ import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 
 import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -39,6 +41,7 @@ public class DeviceSearch {
 
     @POST
     public Response getDeviceInfo(SearchContext searchContext) throws MDMAPIException {
+
         SearchManagerService searchManagerService;
         List<DeviceWrapper> devices;
         try {
@@ -51,6 +54,25 @@ public class DeviceSearch {
             throw new MDMAPIException(msg, e);
         }
         return Response.status(HttpStatus.SC_OK).entity(devices).build();
+    }
+
+    @POST
+    @Path("after/{time}")
+    public Response getUpdatedDevices(@PathParam("time") String time) throws MDMAPIException {
+
+        SearchManagerService searchManagerService;
+        List<DeviceWrapper> devices;
+        try {
+            searchManagerService = MDMAPIUtils.getSearchManagerService();
+            devices = searchManagerService.getUpdated(Long.parseLong(time));
+
+        } catch (SearchMgtException e) {
+            String msg = "Error occurred while retrieving the updated device information after the given time.";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+        return Response.status(HttpStatus.SC_OK).entity(devices).build();
+
     }
 }
 

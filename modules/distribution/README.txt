@@ -1,6 +1,6 @@
 WSO2 Enterprise Mobility Manager (EMM)
 ----------------------
-Welcome to the WSO2 Enterprise Mobility Manager (EMM) 2.0.0-SNAPSHOT release
+Welcome to the WSO2 Enterprise Mobility Manager (EMM) 2.1.0-SNAPSHOT release
 =======
 
 Key Features
@@ -41,10 +41,12 @@ Installation & Running
         <parameter name="mail.smtp.auth">true</parameter>
     </transportSender>
 
-9. Install following features using carbon admin features.
-   EMM - iOS APNS Server 1.9.2.SNAPSHOT More Info.
-   EMM - iOS Device Management JAX-RS Web Application 1.9.2.SNAPSHOT More Info.
-   EMM - iOS Device Management Server.
+9. In case if you need to use iOS device management, please install following features using carbon admin features. This
+   features are not packed by default with the server. You will have to ask by contacting us by
+   http://wso2.com/products/enterprise-mobility-manager/csr/
+       EMM - iOS APNS Server.
+       EMM - iOS Device Management JAX-RS Web Application.
+       EMM - iOS Device Management Server.
 
 10. Change Urls and settings in ios-config.xml found in CARBON_HOME/repository/conf.
 
