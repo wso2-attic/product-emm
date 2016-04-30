@@ -370,13 +370,13 @@
     <Permission>
         <name>Event Retrieve</name>
         <path>/device-mgt/emm-admin/events/date</path>
-        <url>/events/date/*</url>
+        <url>/events/*/date</url>
         <method>GET</method>
     </Permission>
     <Permission>
         <name>Event Retrieve</name>
         <path>/device-mgt/emm-admin/events/type</path>
-        <url>/events/type/*/*</url>
+        <url>/events/*/type/*</url>
         <method>GET</method>
     </Permission>
 </PermissionConfiguration>

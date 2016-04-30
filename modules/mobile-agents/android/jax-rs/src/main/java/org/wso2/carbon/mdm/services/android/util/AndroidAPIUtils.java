@@ -230,9 +230,6 @@ public class AndroidAPIUtils {
         return ids;
     }
 
-    /*
-    overloaded method to store events
-     */
     public static Map<String, DeviceState> createDeviceStatusData(List<Record> records) {
         Map<String, DeviceState> deviceStatuses = new HashMap();
         for (Record record : records) {
@@ -241,6 +238,7 @@ public class AndroidAPIUtils {
         }
         return deviceStatuses;
     }
+
     private static DeviceState createDeviceStatusData(Record record) {
         DeviceState deviceState = new DeviceState();
         deviceState.setId(record.getId());
@@ -249,7 +247,7 @@ public class AndroidAPIUtils {
     }
 
     public static List<DeviceState> getSortedDeviceStateData(Map<String, DeviceState> sensorDatas,
-                                                         List<SearchResultEntry> searchResults) {
+                                                             List<SearchResultEntry> searchResults) {
         List<DeviceState> sortedRecords = new ArrayList();
         for (SearchResultEntry searchResultEntry : searchResults) {
             sortedRecords.add(sensorDatas.get(searchResultEntry.getId()));
@@ -392,7 +390,7 @@ public class AndroidAPIUtils {
                 } else if (prop.getName().equalsIgnoreCase("NETWORK_INFO")) {
                     deviceInfo.setSsid(getProperty(prop.getValue(), "WIFI_SSID"));
                     deviceInfo.setConnectionType(getProperty(prop.getValue(), "CONNECTION_TYPE"));
-                    if(deviceInfo.getDeviceDetailsMap() == null) {
+                    if (deviceInfo.getDeviceDetailsMap() == null) {
                         deviceInfo.setDeviceDetailsMap(new HashMap<String, String>());
                     }
                     deviceInfo.getDeviceDetailsMap().put("mobileSignalStrength",
