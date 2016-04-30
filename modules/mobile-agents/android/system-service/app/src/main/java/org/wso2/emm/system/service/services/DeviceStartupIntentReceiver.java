@@ -35,9 +35,14 @@ import java.text.ParseException;
 public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 	private Resources resources;
 	private static final String TAG = DeviceStartupIntentReceiver.class.getName();
+	private String operation = null;
 
 	@Override
 	public void onReceive(final Context context, Intent intent) {
+		if (intent.hasExtra(context.getResources().getString(R.string.alarm_scheduled_operation))) {
+			operation = intent.getStringExtra(context.getResources().getString(R.string.alarm_scheduled_operation));
+		}
+
 		this.resources = context.getApplicationContext().getResources();
 		int interval = Preference.getInt(context, resources.getString(R.string.alarm_interval));
 		String oneTimeAlarm = Preference.getString(context, resources.getString(R.string.alarm_schedule));
@@ -47,8 +52,16 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 		}
 
 		if(oneTimeAlarm != null && !oneTimeAlarm.trim().isEmpty()) {
-			try {
-				AlarmUtils.setOneTimeAlarm(context, oneTimeAlarm, Constants.Operation.UPGRADE_FIRMWARE);
+			try{
+				if (operation != null && operation.trim().equals(Constants.Operation.UPGRADE_FIRMWARE)) {
+					AlarmUtils.setOneTimeAlarm(context, oneTimeAlarm, Constants.Operation.UPGRADE_FIRMWARE, null);
+				}
+				// TODO:Pass the packageUri and packageName
+				/*} else if(operation != null && operation.trim().equals(Constants.Operation.SILENT_INSTALL_APPLICATION)) {
+					AlarmUtils.setOneTimeAlarm(context, oneTimeAlarm, Constants.Operation.SILENT_INSTALL_APPLICATION, null);
+				} else if(operation != null && operation.trim().equals(Constants.Operation.SILENT_UNINSTALL_APPLICATION)) {
+					AlarmUtils.setOneTimeAlarm(context, oneTimeAlarm, Constants.Operation.SILENT_UNINSTALL_APPLICATION, null);
+				}*/
 			} catch (ParseException e) {
 				Log.e(TAG, "One time alarm time string parsing failed." + e);
 			}
