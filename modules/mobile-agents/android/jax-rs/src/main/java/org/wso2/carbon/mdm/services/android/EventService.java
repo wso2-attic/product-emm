@@ -24,7 +24,6 @@ import org.wso2.carbon.analytics.datasource.commons.exception.AnalyticsException
 import org.wso2.carbon.device.mgt.analytics.data.publisher.exception.DataPublisherConfigurationException;
 import org.wso2.carbon.mdm.services.android.bean.DeviceState;
 import org.wso2.carbon.mdm.services.android.bean.wrapper.Event;
-import org.wso2.carbon.mdm.services.android.bean.wrapper.EventPayload;
 import org.wso2.carbon.mdm.services.android.exception.AndroidAgentException;
 import org.wso2.carbon.mdm.services.android.util.AndroidAPIUtils;
 import org.wso2.carbon.mdm.services.android.util.Message;
@@ -40,13 +39,11 @@ import java.util.List;
 public class EventService {
     private static final String ACCEPT = "Accept";
     private static Log log = LogFactory.getLog(EventService.class);
-    private static final String EVENT_STREAM_DEFINITION = "event_stream";
+    private static final String EVENT_STREAM_DEFINITION = "android_agent";
 
     @POST
     public Response publishEvents(@HeaderParam(ACCEPT) String acceptHeader,
                                   Event event) throws AndroidAgentException {
-
-        EventPayload eventPayload = event.getPayload();
 
         if (log.isDebugEnabled()) {
             log.debug("Invoking Android device even logging.");
@@ -54,8 +51,7 @@ public class EventService {
         Message message = new Message();
         MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
 
-        Object payload[] = {event.getDeviceIdentifier(), eventPayload.getPackageName(), eventPayload.getState(),
-                event.getType()};
+        Object payload[] = {event.getDeviceIdentifier(), event.getPayload(), event.getType()};
         try {
             if (AndroidAPIUtils.getEventPublisherService().publishEvent(
                     EVENT_STREAM_DEFINITION, "1.0.0", new Object[0], new Object[0], payload)) {
