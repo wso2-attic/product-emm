@@ -20,6 +20,7 @@ package org.wso2.emm.agent.services;
 import java.util.Locale;
 
 import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.events.EventRegistry;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
@@ -46,6 +47,10 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(final Context context, Intent intent) {
 		setRecurringAlarm(context.getApplicationContext());
+		if(!EventRegistry.eventListeningStarted) {
+			EventRegistry registerEvent = new EventRegistry(context);
+			registerEvent.register();
+		}
 	}
 
 	/**

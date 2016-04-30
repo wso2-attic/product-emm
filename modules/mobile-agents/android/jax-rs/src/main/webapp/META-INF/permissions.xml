@@ -192,6 +192,13 @@
     </Permission>
 
     <Permission>
+        <name>Update Application</name>
+        <path>/device-mgt/emm-admin/operations/android/update-application</path>
+        <url>/operation/update-application</url>
+        <method>POST</method>
+    </Permission>
+
+    <Permission>
         <name>Uninstall Application</name>
         <path>/device-mgt/emm-admin/operations/android/uninstall-application</path>
         <url>/operation/uninstall-application</url>
@@ -361,5 +368,22 @@
         <url>/events</url>
         <method>POST</method>
     </Permission>
-
+    <Permission>
+        <name>Event Retrieve</name>
+        <path>/device-mgt/emm-admin/events/view</path>
+        <url>/events/*</url>
+        <method>GET</method>
+    </Permission>
+    <Permission>
+        <name>Event Retrieve</name>
+        <path>/device-mgt/emm-admin/events/date</path>
+        <url>/events/*/date</url>
+        <method>GET</method>
+    </Permission>
+    <Permission>
+        <name>Event Retrieve</name>
+        <path>/device-mgt/emm-admin/events/type</path>
+        <url>/events/*/type/*</url>
+        <method>GET</method>
+    </Permission>
 </PermissionConfiguration>

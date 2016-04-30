@@ -504,6 +504,16 @@
                 <artifactId>org.wso2.carbon.device.mgt.analytics.dashboard</artifactId>
                 <version>${carbon.device.mgt.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.devicemgt</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.analytics.data.publisher</artifactId>
+                <version>${carbon.device.mgt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.analytics</groupId>
+                <artifactId>org.wso2.carbon.analytics.api</artifactId>
+                <version>${carbon.analytics.version}</version>
+            </dependency>
 
             <!--MDM dependencies-->
             <dependency>
@@ -1000,7 +1010,7 @@
         <carbon.mediation.version>4.5.1</carbon.mediation.version>
 
         <!-- Carbon Analytics Common -->
-        <carbon.analytics.common.version>5.0.5</carbon.analytics.common.version>
+        <carbon.analytics.common.version>5.0.12-alpha</carbon.analytics.common.version>
 
         <!-- Tomcat -->
         <orbit.tomcat.version>7.0.59.wso2v1</orbit.tomcat.version>
@@ -1042,6 +1052,11 @@
         <carbon.store.version>1.4.1</carbon.store.version>
         <!-- Cipher tool version-->
         <cipher.tool.version>1.0.0-wso2v3</cipher.tool.version>
+
+        <!-- Carbon-analytics version-->
+        <carbon.analytics.version>1.0.6-ALPHA</carbon.analytics.version>
+        <carbon.data.version>4.3.4</carbon.data.version>
+
 
 	<!-- Release plugin ID for github-->
         <project.scm.id>github-scm</project.scm.id>
