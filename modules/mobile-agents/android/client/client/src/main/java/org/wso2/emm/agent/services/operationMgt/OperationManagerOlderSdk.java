@@ -149,6 +149,7 @@ public class OperationManagerOlderSdk extends OperationManager {
         String type;
         String name;
         String operationType;
+        String schedule = null;
 
         try {
             if (!data.isNull(getContextResources().getString(R.string.app_type))) {
@@ -156,9 +157,12 @@ public class OperationManagerOlderSdk extends OperationManager {
 
                 if (type.equalsIgnoreCase(getContextResources().getString(R.string.intent_extra_enterprise))) {
                     appUrl = data.getString(getContextResources().getString(R.string.app_url));
+                    if(data.has(getContextResources().getString(R.string.app_schedule))){
+                        schedule = data.getString(getContextResources().getString(R.string.app_schedule));
+                    }
                     operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
                     getResultBuilder().build(operation);
-                    getAppList().installApp(appUrl);
+                    getAppList().installApp(appUrl, schedule);
 
                 } else if (type.equalsIgnoreCase(getContextResources().getString(R.string.intent_extra_public))) {
                     appUrl = data.getString(getContextResources().getString(R.string.app_identifier));
