@@ -50,7 +50,7 @@ public class Root {
 			if (Constants.DEBUG_MODE_ENABLED) {
 				Log.d(TAG, "Build tags are found in the device");
 			}
-			return true;
+			return false;
 		}
 		return false;
 	}
@@ -66,7 +66,7 @@ public class Root {
 			if (Constants.DEBUG_MODE_ENABLED) {
 				Log.d(TAG, "Super apk is found in the device");
 			}
-			return true;
+			return false;
 		}
 		return false;
 	}
@@ -81,7 +81,7 @@ public class Root {
 			if (Constants.DEBUG_MODE_ENABLED) {
 				Log.d(TAG, "su command is enabled");
 			}
-			return true;
+			return false;
 		} else {
 			return false;
 		}

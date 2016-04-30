@@ -78,6 +78,9 @@
     <string name="app_type">type</string>
     <string name="app_schedule">schedule</string>
     <string name="app_identifier">appIdentifier</string>
+    <string name="alarm_scheduled_operation">scheduledOperation</string>
+    <string name="app_uri">packageUri</string>
+    <string name="alarm_schedule">schedule</string>
 
     <!-- TEXT FIELD HINTS -->
     <string name="hint_new_pin">New PIN Code</string>
