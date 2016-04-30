@@ -30,82 +30,82 @@ public interface VersionBasedOperations {
      *
      * @param operation - Operation object.
      */
-    void wipeDevice(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void wipeDevice(Operation operation) throws AndroidAgentException;
 
     /**
      * Clear device password.
      *
      * @param operation - Operation object.
      */
-    void clearPassword(org.wso2.emm.agent.beans.Operation operation);
+    void clearPassword(Operation operation);
 
     /**
      * Install application/bundle.
      *
      * @param operation - Operation object.
      */
-    void installAppBundle(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void installAppBundle(Operation operation) throws AndroidAgentException;
 
     /**
      * Encrypt/Decrypt device storage.
      *
      * @param operation - Operation object.
      */
-    void encryptStorage(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void encryptStorage(Operation operation) throws AndroidAgentException;
 
     /**
      * Set device password policy.
      *
      * @param operation - Operation object.
      */
-    void setPasswordPolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void setPasswordPolicy(Operation operation) throws AndroidAgentException;
 
     /**
      * Change device lock code.
      *
      * @param operation - Operation object.
      */
-    void changeLockCode(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void changeLockCode(Operation operation) throws AndroidAgentException;
 
     /**
      * Enterprise wipe the device.
      *
      * @param operation - Operation object.
      */
-    void enterpriseWipe(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void enterpriseWipe(Operation operation) throws AndroidAgentException;
 
     /**
      * Blacklisting apps.
      *
      * @param operation - Operation object.
      */
-    void blacklistApps(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void blacklistApps(Operation operation) throws AndroidAgentException;
 
     /**
      * Disenroll the device from EMM.
      */
-    void disenrollDevice(org.wso2.emm.agent.beans.Operation operation);
+    void disenrollDevice(Operation operation);
 
     /**
      * Upgrading device firmware from the configured OTA server.
      *
      * @param operation - Operation object.
      */
-    void upgradeFirmware(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void upgradeFirmware(Operation operation) throws AndroidAgentException;
 
     /**
      * Reboot the device [System app required].
      *
      * @param operation - Operation object.
      */
-    void rebootDevice(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void rebootDevice(Operation operation) throws AndroidAgentException;
 
     /**
      * Execute shell commands as the super user.
      *
      * @param operation - Operation object.
      */
-    void executeShellCommand(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void executeShellCommand(Operation operation) throws AndroidAgentException;
 
     //Specific methods for AndroidForWork
 
@@ -114,47 +114,54 @@ public interface VersionBasedOperations {
      *
      * @param operation - Operation object
      */
-    void hideApp(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void hideApp(Operation operation) throws AndroidAgentException;
 
     /**
      * Unhide apps by package name
      *
      * @param operation - Operation object
      */
-    void unhideApp(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void unhideApp(Operation operation) throws AndroidAgentException;
 
     /**
      * Block uninstall by package name
      *
      * @param operation - Operation object
      */
-    void blockUninstallByPackageName(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void blockUninstallByPackageName(Operation operation) throws AndroidAgentException;
 
     /**
      * Set Profile Name (User name will be changed if agent is the device owner).
      *
      * @param operation - Operation object
      */
-    void setProfileName(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void setProfileName(Operation operation) throws AndroidAgentException;
 
     /**
      * Handle User Restriction related to Device Policy Manager.
      *
      * @param operation - Operation object
      */
-    void handleUserRestriction(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void handleUserRestriction(Operation operation) throws AndroidAgentException;
 
     /**
      * Configure work-profile
      *
      * @param operation - Operation object
      */
-    void configureWorkProfile(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void configureWorkProfile(Operation operation) throws AndroidAgentException;
 
     /**
      * Pass Operation to System Service Package
      *
      * @param operation - Operation object
      */
-    void passOperationToSystemApp(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+    void passOperationToSystemApp(Operation operation) throws AndroidAgentException;
+
+    /**
+     * Set policy bundle.
+     *
+     * @param operation - Operation object.
+     */
+    void setPolicyBundle(Operation operation) throws AndroidAgentException;
 }

@@ -31,11 +31,9 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,13 +82,10 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
     private GPSTracker gps;
     private NotificationDAO notificationDAO;
     private NotificationManager notifyManager;
-    private int currentNotificationId;
     private ApplicationManager applicationManager;
 
-    private static final String TAG = "Operation Handler";
+    private static final String TAG = OperationManager.class.getSimpleName();
 
-    private static final String LOCATION_INFO_TAG_LONGITUDE = "longitude";
-    private static final String LOCATION_INFO_TAG_LATITUDE = "latitude";
     private static final String APP_INFO_TAG_NAME = "name";
     private static final String APP_INFO_TAG_PACKAGE = "package";
     private static final String APP_INFO_TAG_VERSION = "version";
@@ -194,7 +189,8 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param operation - Operation object.
      */
     public void getLocationInfo(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-        gps = new GPSTracker(context.getApplicationContext());
+        gps = GPSTracker.getInstance(context);
+        gps.updateLocation();
         JSONObject result = new JSONObject();
         if (gps != null) {
             try {
@@ -545,11 +541,11 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      */
     public void upgradeFirmware(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
         JSONObject result = new JSONObject();
-        String schedule = null;
+        String schedule;
 
         try {
             JSONObject upgradeData = new JSONObject(operation.getPayLoad().toString());
-            if (upgradeData != null && !upgradeData.isNull(resources.getString(R.string.intent_extra_schedule))) {
+            if (!upgradeData.isNull(resources.getString(R.string.intent_extra_schedule))) {
                 schedule = (String) upgradeData.get(resources.getString(R.string.intent_extra_schedule));
                 Preference.putString(context, resources.getString(R.string.pref_key_schedule), schedule);
             }

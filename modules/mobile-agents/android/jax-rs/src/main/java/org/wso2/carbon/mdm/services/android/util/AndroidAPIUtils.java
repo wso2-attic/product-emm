@@ -44,10 +44,7 @@ import org.wso2.carbon.policy.mgt.core.PolicyManagerService;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * AndroidAPIUtil class provides utility functions used by Android REST-API classes.
@@ -310,6 +307,13 @@ public class AndroidAPIUtils {
                 } else if (prop.getName().equalsIgnoreCase("NETWORK_INFO")) {
                     deviceInfo.setSsid(getProperty(prop.getValue(), "WIFI_SSID"));
                     deviceInfo.setConnectionType(getProperty(prop.getValue(), "CONNECTION_TYPE"));
+                    if(deviceInfo.getDeviceDetailsMap() == null) {
+                        deviceInfo.setDeviceDetailsMap(new HashMap<String, String>());
+                    }
+                    deviceInfo.getDeviceDetailsMap().put("mobileSignalStrength",
+                            getProperty(prop.getValue(), "MOBILE_SIGNAL_STRENGTH"));
+                    deviceInfo.getDeviceDetailsMap().put("wifiSignalStrength",
+                            getProperty(prop.getValue(), "WIFI_SIGNAL_STRENGTH"));
                 }
             }
         }

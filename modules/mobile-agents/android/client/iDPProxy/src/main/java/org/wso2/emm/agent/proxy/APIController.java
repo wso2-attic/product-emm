@@ -185,7 +185,7 @@ public class APIController implements TokenCallBack {
 				}
 
 			} catch (IDPTokenManagerException e) {
-				Log.e(TAG, "Failed to contact server." + e);
+				Log.e(TAG, "Failed to contact server.", e);
 			}
 
 			return responseParams;
