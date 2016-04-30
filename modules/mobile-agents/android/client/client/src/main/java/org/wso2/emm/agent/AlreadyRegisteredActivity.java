@@ -95,10 +95,6 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				freshRegFlag = extras.getBoolean(getResources().getString(R.string.intent_extra_fresh_reg_flag));
 			}
 		}
-		if(!EventRegistry.eventListeningStarted) {
-			EventRegistry registerEvent = new EventRegistry(this);
-			registerEvent.register();
-		}
 		String registrationId = Preference.getString(context, Constants.PreferenceFlag.REG_ID);
 
 		if (registrationId != null && !registrationId.isEmpty()) {
@@ -116,6 +112,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		} else if (Preference.getBoolean(context, Constants.PreferenceFlag.REGISTERED)) {
 			if (isDeviceAdminActive()) {
+				startEvents();
 				startPolling();
 			}
 		}
@@ -127,6 +124,13 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		unregisterLayout = (RelativeLayout) findViewById(R.id.unregisterLayout);
 		if (Constants.HIDE_UNREGISTER_BUTTON) {
 			unregisterLayout.setVisibility(View.GONE);
+		}
+	}
+
+	private void startEvents() {
+		if(!EventRegistry.eventListeningStarted) {
+			EventRegistry registerEvent = new EventRegistry(this);
+			registerEvent.register();
 		}
 	}
 
@@ -302,7 +306,9 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 					}
 				}
 			} else {
-				CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
+				if(!Constants.HIDE_ERROR_DIALOG) {
+					CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
+				}
 			}
 		}
 	}
@@ -502,6 +508,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == ACTIVATION_REQUEST) {
 			if (resultCode == Activity.RESULT_OK) {
+				startEvents();
 				CommonUtils.callSystemApp(context, null, null, null);
 				Log.i("onActivityResult", "Administration enabled!");
 			} else {

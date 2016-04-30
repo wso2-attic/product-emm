@@ -503,7 +503,7 @@ public class OperationManagerOlderSdk extends OperationManager {
     public void handleUserRestriction(Operation operation) throws AndroidAgentException {
         operation.setStatus(getContextResources().getString(R.string.operation_value_error));
         getResultBuilder().build(operation);
-        Log.d(TAG, "Adding User Restriction is not supported");
+        //Log.d(TAG, "Adding User Restriction is not supported");
     }
 
     @Override
@@ -519,7 +519,6 @@ public class OperationManagerOlderSdk extends OperationManager {
             CommonUtils.callSystemApp(getContext(),operation.getCode(),
                     Boolean.toString(operation.isEnabled()), null);
         } else {
-            Log.e(TAG, "System app is not available. Hence operation '" + operation.getCode() + "' is not supported");
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
             getResultBuilder().build(operation);
         }

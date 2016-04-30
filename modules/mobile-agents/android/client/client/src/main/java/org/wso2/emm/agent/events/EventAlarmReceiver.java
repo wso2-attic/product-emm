@@ -39,7 +39,7 @@ public class EventAlarmReceiver extends BroadcastReceiver {
         if (Constants.DEBUG_MODE_ENABLED) {
             Log.d(TAG, "Recurring alarm; Event listener");
         }
-        final int requestCode = intent.getExtras().getInt(Constants.EventListners.REQUEST_CODE);
+        final int requestCode = intent.getExtras().getInt(Constants.EventListeners.REQUEST_CODE);
         // If the default listener is used, all event initialisation can be done in the bellow if
         // block.
 
@@ -47,7 +47,7 @@ public class EventAlarmReceiver extends BroadcastReceiver {
 
             @Override
             protected Integer doInBackground(Void... params) {
-                if (requestCode == Constants.EventListners.DEFAULT_LISTENER_CODE) {
+                if (requestCode == Constants.EventListeners.DEFAULT_LISTENER_CODE) {
                     RuntimeStateListener runtimeStateListener = new RuntimeStateListener();
                     runtimeStateListener.startListening();
                 }
