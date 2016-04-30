@@ -76,6 +76,7 @@
     <string name="title_head_confirm_pin">Re-type the PIN to Confirm</string>
     <string name="app_url">url</string>
     <string name="app_type">type</string>
+    <string name="app_schedule">schedule</string>
     <string name="app_identifier">appIdentifier</string>
 
     <!-- TEXT FIELD HINTS -->

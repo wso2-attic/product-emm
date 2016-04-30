@@ -72,6 +72,11 @@
                 <exclude>**/plugins/org.wso2.carbon.endpoint.ui*</exclude>
                 <exclude>**/plugins/org.wso2.carbon.inbound.ui*</exclude>
                 <exclude>**/plugins/org.wso2.carbon.rest.api.ui*</exclude>
+                <!-- resolving esb not starting issue -->
+                <exclude>**/asm-all_4.1.0.wso2v1.jar</exclude>
+                <exclude>**/json_1.0.0.wso2v1.jar</exclude>
+                <exclude>**/json_2.0.0.wso2v1.jar</exclude>
+
             </excludes>
         </fileSet>
 
@@ -442,6 +447,20 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/resources/email-templates
             </outputDirectory>
         </fileSet>
+
+
+	<!-- Copy APPM ReST APIs and OAuth artifacts-->
+        <fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps
+            </directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
+            <includes>
+                <include>oauth2.war</include>
+                <include>api#appm#oauth#v1.0.war</include>
+                <include>api#appm#store#v1.0.war</include>
+                <include>api#appm#publisher#v1.0.war</include>
+            </includes>
+        </fileSet>
     </fileSets>
 
     <dependencySets>
@@ -735,6 +754,91 @@
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
+
+        <!--analytics config file-->
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/data-bridge/data-agent-config.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/data-bridge</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/device-analytics-config.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <!--analytics config file-->
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/analytics/analytics-config.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/analytics</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/analytics/analytics-data-config.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/analytics</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/analytics/rdbms-config.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/analytics</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/datasources/analytics-datasources.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/datasources</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
+        <!--<file>-->
+            <!--<source>-->
+                <!--../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/analytics-backup.sh-->
+            <!--</source>-->
+            <!--<outputDirectory>${pom.artifactId}-${pom.version}/bin/analytics-backup.sh</outputDirectory>-->
+            <!--<filtered>true</filtered>-->
+            <!--<fileMode>644</fileMode>-->
+        <!--</file>-->
+        <!--<file>-->
+            <!--<source>-->
+                <!--../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/analytics-backup.bat-->
+            <!--</source>-->
+            <!--<outputDirectory>${pom.artifactId}-${pom.version}/bin/analytics-backup.bat</outputDirectory>-->
+            <!--<filtered>true</filtered>-->
+            <!--<fileMode>644</fileMode>-->
+        <!--</file>-->
+        <!--<file>-->
+            <!--<source>-->
+                <!--../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/analytics-migrate.sh-->
+            <!--</source>-->
+            <!--<outputDirectory>${pom.artifactId}-${pom.version}/bin/analytics-migrate.sh</outputDirectory>-->
+            <!--<filtered>true</filtered>-->
+            <!--<fileMode>644</fileMode>-->
+        <!--</file>-->
+        <!--<file>-->
+            <!--<source>-->
+                <!--../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/analytics-migrate.bat-->
+            <!--</source>-->
+            <!--<outputDirectory>${pom.artifactId}-${pom.version}/bin/analytics-migrate.bat</outputDirectory>-->
+            <!--<filtered>true</filtered>-->
+            <!--<fileMode>644</fileMode>-->
+        <!--</file>-->
+
 
         <!--License Config file-->
         <file>

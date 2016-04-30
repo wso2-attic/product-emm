@@ -163,9 +163,10 @@ public class ApplicationManager {
 	 * Installs an application to the device.
 	 * @param url - APK Url should be passed in as a String.
 	 */
-	public void installApp(String url) {
+	public void installApp(String url, String schedule) {
 		AppUpdater updator = new AppUpdater();
 		updator.setContext(context);
+		updator.setSchedule(schedule);
 		updator.execute(url);
 	}
 
@@ -173,14 +174,14 @@ public class ApplicationManager {
 	 * Removes an application from the device.
 	 * @param packageName - Application package name should be passed in as a String.
 	 */
-	public void uninstallApplication(String packageName) {
+	public void uninstallApplication(String packageName, String schedule) {
 		if (packageName != null &&
 		    !packageName.contains(resources.getString(R.string.application_package_prefix))) {
 			packageName = resources.getString(R.string.application_package_prefix) + packageName;
 		}
 
 		if (Constants.SYSTEM_APP_ENABLED) {
-			CommonUtils.callSystemApp(context, Constants.Operation.SILENT_UNINSTALL_APPLICATION, null, packageName);
+			CommonUtils.callSystemApp(context, Constants.Operation.SILENT_UNINSTALL_APPLICATION, schedule, packageName);
 		} else {
 			Uri packageURI = Uri.parse(packageName);
 			Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
@@ -231,9 +232,14 @@ public class ApplicationManager {
 	 */
 	public class AppUpdater extends AsyncTask<String, String, Void> {
 		private Context context;
+		private String schedule;
 
 		public void setContext(Context context) {
 			this.context = context;
+		}
+
+		public void setSchedule(String schedule) {
+			this.schedule = schedule;
 		}
 
 		@Override
@@ -276,7 +282,7 @@ public class ApplicationManager {
 				String filePath = directory + resources.getString(R.string.application_mgr_download_file_name);
 				Uri fileUri =  Uri.fromFile(new File(filePath));
 				if (Constants.SYSTEM_APP_ENABLED) {
-					CommonUtils.callSystemApp(context, Constants.Operation.SILENT_INSTALL_APPLICATION, null, fileUri.toString());
+					CommonUtils.callSystemApp(context, Constants.Operation.SILENT_INSTALL_APPLICATION, schedule, fileUri.toString());
 				} else {
 					Intent intent = new Intent(Intent.ACTION_VIEW);
 					intent.setDataAndType(fileUri, resources.getString(R.string.application_mgr_mime));
