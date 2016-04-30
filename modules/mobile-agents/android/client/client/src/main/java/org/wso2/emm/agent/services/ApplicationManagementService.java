@@ -122,6 +122,10 @@ public class ApplicationManagementService extends IntentService implements APIRe
                                    Toast.LENGTH_LONG).show();
                 }
                 break;
+            case Constants.Operation.GET_APP_DOWNLOAD_PROGRESS:
+                sendBroadcast(Constants.Status.SUCCESSFUL, Preference.getString(context, context.getResources().
+                        getString(R.string.app_download_progress)));
+                break;
             default:
                 Log.e(TAG, "Invalid operation code received");
                 break;

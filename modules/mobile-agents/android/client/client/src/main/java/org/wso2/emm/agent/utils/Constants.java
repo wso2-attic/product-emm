@@ -55,7 +55,6 @@ public class Constants {
 	public static final boolean SKIP_WORK_PROFILE_CREATION = false;
 	public static final boolean HIDE_ERROR_DIALOG = false;
 
-	// TODO: Add API_VERSION to server endpoint
 	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";
 	public static final String SERVER_AUTHENTICATION_ENDPOINT = "register/authenticate/device";
 	public static final String LICENSE_ENDPOINT = SERVER_APP_ENDPOINT + "device/license";
@@ -261,6 +260,7 @@ public class Constants {
 		public static final String WORK_PROFILE= "WORK_PROFILE";
 		public static final String GET_APPLICATION_LIST = "GET_APP_LIST";
 		public static final String UNINSTALL_WEBCLIP = "UNINSTALL_WEBCLIP";
+		public static final String GET_APP_DOWNLOAD_PROGRESS = "APP_DOWNLOAD_PROGRESS";
 	}
 
 	/**

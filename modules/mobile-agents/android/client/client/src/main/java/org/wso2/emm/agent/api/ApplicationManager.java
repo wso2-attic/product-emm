@@ -38,6 +38,7 @@ import org.wso2.emm.agent.proxy.IDPTokenManagerException;
 import org.wso2.emm.agent.proxy.utils.ServerUtilities;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.StreamHandler;
 
 import android.content.Context;
@@ -228,11 +229,17 @@ public class ApplicationManager {
 	 * Installs or updates an application to the device.
 	 * @param - APK Url should be passed in as a String.
 	 */
-	public class AppUpdater extends AsyncTask<String, Void, Void> {
+	public class AppUpdater extends AsyncTask<String, String, Void> {
 		private Context context;
 
 		public void setContext(Context context) {
 			this.context = context;
+		}
+
+		@Override
+		protected void onProgressUpdate(String... values) {
+			super.onProgressUpdate(values);
+			Preference.putString(context, resources.getString(R.string.app_download_progress), values[0]);
 		}
 
 		@Override

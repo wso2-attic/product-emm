@@ -343,6 +343,7 @@
     <string name="operation_type">type</string>
     <string name="operation_id">id</string>
     <string name="operation_status">status</string>
+    <string name="app_download_progress">app_progress</string>
     <string name="operation_receivedTimeStamp">receivedTimeStamp</string>
     <string name="operation_createdTimeStamp">createdTimeStamp</string>
     <string name="operation_payLoad">payLoad</string>
