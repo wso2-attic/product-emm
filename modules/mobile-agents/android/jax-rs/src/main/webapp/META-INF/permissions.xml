@@ -192,6 +192,13 @@
     </Permission>
 
     <Permission>
+        <name>Update Application</name>
+        <path>/device-mgt/emm-admin/operations/android/update-application</path>
+        <url>/operation/update-application</url>
+        <method>POST</method>
+    </Permission>
+
+    <Permission>
         <name>Uninstall Application</name>
         <path>/device-mgt/emm-admin/operations/android/uninstall-application</path>
         <url>/operation/uninstall-application</url>

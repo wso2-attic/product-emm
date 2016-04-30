@@ -61,17 +61,20 @@ public class AlarmUtils {
      * @param context - Application context.
      * @param  time - Time that alarm should trigger.
      */
-    public static void setOneTimeAlarm(Context context, String time, String operation) throws ParseException {
+    public static void setOneTimeAlarm(Context context, String time, String operation, String packageUri) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy hh:mm a", Locale.ENGLISH);
         Date date = formatter.parse(time);
         long startTime = date.getTime();
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
         alarmIntent.putExtra(context.getResources().getString(R.string.alarm_scheduled_operation), operation);
+        if(packageUri != null){
+            alarmIntent.putExtra(context.getResources().getString(R.string.app_uri), packageUri);
+        }
         PendingIntent pendingIntent =
                 PendingIntent.getBroadcast(context,
-                                           ONE_TIME_REQUEST_CODE,
-                                           alarmIntent,
-                                           PendingIntent.FLAG_CANCEL_CURRENT);
+                        ONE_TIME_REQUEST_CODE,
+                        alarmIntent,
+                        PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarmManager =
                 (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, startTime, pendingIntent);

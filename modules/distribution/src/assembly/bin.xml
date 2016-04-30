@@ -442,6 +442,20 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/resources/email-templates
             </outputDirectory>
         </fileSet>
+
+
+	<!-- Copy APPM ReST APIs and OAuth artifacts-->
+        <fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps
+            </directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
+            <includes>
+                <include>oauth2.war</include>
+                <include>api#appm#oauth#v1.0.war</include>
+                <include>api#appm#store#v1.0.war</include>
+                <include>api#appm#publisher#v1.0.war</include>
+            </includes>
+        </fileSet>
     </fileSets>
 
     <dependencySets>
