@@ -1,0 +1,99 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="org.wso2.app.catalog.AppListActivity"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#11375B">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="10dip"
+            android:layout_marginBottom="10dip"
+            android:background="@drawable/ic_logo"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:gravity="right|center_vertical"
+            android:layout_gravity="right|center_vertical"
+            android:layout_margin="10dip"
+            android:text="@string/logout"/>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/etSearch"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/txt_search"
+        android:layout_margin="5dip"
+        android:inputType="text"
+        android:singleLine="true"
+        android:textColor="@android:color/black" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:background="#ededed"
+        android:layout_height="match_parent">
+
+        <TextView android:id="@+id/txtError"
+            android:layout_width="match_parent"
+            android:textSize="14sp"
+            android:textColor="#535353"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:text="@string/app_list_error"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+        <ListView
+            android:id="@+id/appList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="#ededed"
+            android:dividerHeight="5dip"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="5dip"
+            android:layout_marginTop="5dip"
+            android:paddingBottom="43dip"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="bottom"
+            android:weightSum="2">
+            <TextView android:id="@+id/btnMobileApps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:paddingTop="10dip"
+                android:paddingBottom="10dip"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textAllCaps="true"
+                android:background="#060f34"
+                android:text="@string/app_type_mobile"/>
+
+            <TextView android:id="@+id/btnWebApps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:paddingTop="10dip"
+                android:paddingBottom="10dip"
+                android:textColor="@android:color/white"
+                android:textAllCaps="true"
+                android:background="#11375B"
+                android:layout_weight="1"
+                android:text="@string/app_type_web"/>
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>
