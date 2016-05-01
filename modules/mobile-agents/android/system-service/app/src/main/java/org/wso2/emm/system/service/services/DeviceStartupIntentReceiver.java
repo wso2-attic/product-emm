@@ -56,12 +56,8 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 				if (operation != null && operation.trim().equals(Constants.Operation.UPGRADE_FIRMWARE)) {
 					AlarmUtils.setOneTimeAlarm(context, oneTimeAlarm, Constants.Operation.UPGRADE_FIRMWARE, null);
 				}
-				// TODO:Pass the packageUri and packageName
-				/*} else if(operation != null && operation.trim().equals(Constants.Operation.SILENT_INSTALL_APPLICATION)) {
-					AlarmUtils.setOneTimeAlarm(context, oneTimeAlarm, Constants.Operation.SILENT_INSTALL_APPLICATION, null);
-				} else if(operation != null && operation.trim().equals(Constants.Operation.SILENT_UNINSTALL_APPLICATION)) {
-					AlarmUtils.setOneTimeAlarm(context, oneTimeAlarm, Constants.Operation.SILENT_UNINSTALL_APPLICATION, null);
-				}*/
+				// TODO:Pass the packageUri and packageName to the intent
+				// TODO:Check the operation code and execute SILENT_INSTALL_APPLICATION and SILENT_UNINSTALL_APPLICATION
 			} catch (ParseException e) {
 				Log.e(TAG, "One time alarm time string parsing failed." + e);
 			}
