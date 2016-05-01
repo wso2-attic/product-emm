@@ -373,7 +373,7 @@ public class Constants {
 			throw new AssertionError();
 		}
 		public static final boolean EVENT_LISTENING_ENABLED = false;
-		public static final boolean APPLICATION_STATE_LISTENER = true;
+		public static final boolean APPLICATION_STATE_LISTENER = false;
 		public static final String APPLICATION_STATE = "APPLICATION_STATE";
 		public static final boolean RUNTIME_STATE_LISTENER = false;
 		public static final String RUNTIME_STATE = "RUNTIME_STATE";

@@ -53,6 +53,7 @@ public class Constants {
 	public static final String SERVER_PROTOCOL = "http://";
 	public static final String TRUSTSTORE_PASSWORD = "wso2carbon";
 	public static final String KEYSTORE_PASSWORD = "wso2carbon";
+	public static final boolean DEBUG_ENABLED = false;
 	public final static int ACCESS_TOKEN_AGE = 3000;
 	public final static String GRANT_TYPE = "grant_type";
 	public final static String GRANT_TYPE_PASSWORD = "password";
@@ -85,7 +86,6 @@ public class Constants {
 	public static final String INTERNAL_SERVER_ERROR = "500";
 	public static final String ACCESS_FAILURE = "400";
 	public static final String REQUEST_SUCCESSFUL = "200";
-	public static final boolean DEBUG_ENABLED = true;
 	public static final int HTTP = 80;
 	public static final int HTTPS = 443;
 	public static final String BKS = "BKS";
