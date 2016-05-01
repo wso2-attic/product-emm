@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.proxy.IDPTokenManagerException;
 import org.wso2.emm.agent.proxy.utils.ServerUtilities;
+import org.wso2.emm.agent.utils.AlarmUtils;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
@@ -183,10 +185,18 @@ public class ApplicationManager {
 		if (Constants.SYSTEM_APP_ENABLED) {
 			CommonUtils.callSystemApp(context, Constants.Operation.SILENT_UNINSTALL_APPLICATION, schedule, packageName);
 		} else {
-			Uri packageURI = Uri.parse(packageName);
-			Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
-			uninstallIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			context.startActivity(uninstallIntent);
+			if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
+				try {
+					AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.UNINSTALL_APPLICATION, packageName);
+				} catch (ParseException e) {
+					Log.e(TAG, "One time alarm time string parsing failed." + e);
+				}
+			} else {
+				Uri packageURI = Uri.parse(packageName);
+				Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
+				uninstallIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(uninstallIntent);
+			}
 		}
 	}
 
@@ -224,6 +234,10 @@ public class ApplicationManager {
 					setAction(resources.getString(R.string.application_package_launcher_install_action));
 		}
 		context.sendBroadcast(bookmarkIntent);
+	}
+
+	public List<ApplicationInfo> getInstalledApplications(){
+		return packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
 	}
 
 	/**
@@ -284,11 +298,17 @@ public class ApplicationManager {
 				if (Constants.SYSTEM_APP_ENABLED) {
 					CommonUtils.callSystemApp(context, Constants.Operation.SILENT_INSTALL_APPLICATION, schedule, fileUri.toString());
 				} else {
-					Intent intent = new Intent(Intent.ACTION_VIEW);
-					intent.setDataAndType(fileUri, resources.getString(R.string.application_mgr_mime));
-					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					context.startActivity(intent);
+					if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
+						AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.INSTALL_APPLICATION, fileUri.toString());
+					} else {
+						Intent installIntent = new Intent(Intent.ACTION_VIEW);
+						installIntent.setDataAndType(fileUri, context.getResources().getString(R.string.application_mgr_mime));
+						installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						context.startActivity(installIntent);
+					}
 				}
+			} catch (ParseException e) {
+				Log.e(TAG, "One time alarm time string parsing failed." + e);
 			} catch (IDPTokenManagerException e) {
 				Log.e(TAG, "Error occurred while sending 'Get' request due to IDP proxy initialization issue.");
 			} catch (IOException e) {
@@ -302,6 +322,6 @@ public class ApplicationManager {
 			
 			return null;
 		}
-	};
+	}
 
 }

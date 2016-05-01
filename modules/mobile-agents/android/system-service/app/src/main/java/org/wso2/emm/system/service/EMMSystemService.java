@@ -124,7 +124,9 @@ public class EMMSystemService extends IntentService {
                             restrictionCode = true;
                         }
                     }
-                } else if (extras.containsKey("appUri")) {
+                }
+
+                if (extras.containsKey("appUri")) {
                     appUri = extras.getString("appUri");
                 }
             }
@@ -137,15 +139,8 @@ public class EMMSystemService extends IntentService {
                 if (Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
                     doTask(operationCode);
                 }
-
-                if (extras.containsKey("appUri")) {
-                    appUri = extras.getString("appUri");
-                }
             }
-
         }
-
-
     }
 
     private void startAdmin() {
@@ -289,6 +284,19 @@ public class EMMSystemService extends IntentService {
             case Constants.Operation.SET_SCREEN_CAPTURE_DISABLED:
                 SettingsManager.setScreenCaptureDisabled(restrictionCode);
                 break;
+            case Constants.Operation.APP_RESTRICTION:
+                if (command != null && (command.equals("true") || command.equals("false"))) {
+                    SettingsManager.setVisibilityOfApp(appUri, Boolean.parseBoolean(command));
+                }
+                else {
+                    Intent broadcastIntent = new Intent();
+                    broadcastIntent.setAction(Constants.SYSTEM_APP_ACTION_RESPONSE);
+                    broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                    broadcastIntent.putExtra(Constants.STATUS, SettingsManager.isAppHidden(appUri));
+                    broadcastIntent.putExtra(Constants.PAYLOAD, appUri);
+                    sendBroadcast(broadcastIntent);
+                }
+                break;
             //Only With Android M.
             case Constants.Operation.SET_STATUS_BAR_DISABLED:
                 SettingsManager.setStatusBarDisabled(restrictionCode);
@@ -358,7 +366,7 @@ public class EMMSystemService extends IntentService {
      * Silently installs the app resides in the provided URI.
      */
     private void silentInstallApp(Context context, String packageUri, String schedule) {
-        if (schedule != null && !schedule.trim().isEmpty()) {
+        if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
             Log.i(TAG, "Silent install has been scheduled to " + schedule);
             Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), schedule);
             Preference.putString(context, context.getResources().getString(R.string.app_uri), packageUri);
@@ -376,7 +384,7 @@ public class EMMSystemService extends IntentService {
      * Silently uninstalls the app resides in the provided URI.
      */
     private void silentUninstallApp(Context context, final String packageName, String schedule) {
-        if (schedule != null && !schedule.trim().isEmpty()) {
+        if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
             Log.i(TAG, "Silent install has been scheduled to " + schedule);
             Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), schedule);
             Preference.putString(context, context.getResources().getString(R.string.app_uri), packageName);
