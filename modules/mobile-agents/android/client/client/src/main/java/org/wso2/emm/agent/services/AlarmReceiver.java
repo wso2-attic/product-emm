@@ -17,14 +17,18 @@
  */
 package org.wso2.emm.agent.services;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * This class is a broadcast receiver which triggers on local notification timeouts.
@@ -32,14 +36,57 @@ import android.util.Log;
 public class AlarmReceiver extends BroadcastReceiver {
 
 	private static final String TAG = AlarmReceiver.class.getName();
+	private String operation = null;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (Constants.DEBUG_MODE_ENABLED) {
 			Log.d(TAG, "Recurring alarm; requesting alarm service.");
 		}
-		OperationTask operationTask = new OperationTask();
-		operationTask.execute(context);
+
+		if (intent.hasExtra(context.getResources().getString(R.string.alarm_scheduled_operation))) {
+			operation = intent.getStringExtra(context.getResources().getString(R.string.alarm_scheduled_operation));
+
+			if(operation != null && operation.trim().equals(Constants.Operation.INSTALL_APPLICATION)) {
+				Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), null);
+				Preference.putString(context, context.getResources().getString(R.string.app_uri), null);
+				Toast.makeText(context, "App install request initiated by admin.",
+						Toast.LENGTH_SHORT).show();
+				//Prepare for install
+				String packageUri;
+				if (intent.hasExtra(context.getResources().getString(R.string.app_uri))) {
+					packageUri = intent.getStringExtra(context.getResources().getString(R.string.app_uri));
+					Intent installIntent = new Intent(Intent.ACTION_VIEW);
+					installIntent.setDataAndType(Uri.parse(packageUri), context.getResources().getString(R.string.application_mgr_mime));
+					installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					context.startActivity(installIntent);
+				} else {
+					Toast.makeText(context, "App installation failed.",
+							Toast.LENGTH_SHORT).show();
+				}
+			} else if(operation != null && operation.trim().equals(Constants.Operation.UNINSTALL_APPLICATION)) {
+				Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), null);
+				Preference.putString(context, context.getResources().getString(R.string.app_uri), null);
+				Toast.makeText(context, "App uninstall request initiated by admin.",
+						Toast.LENGTH_SHORT).show();
+				//Prepare for uninstall
+				String packageName;
+				if (intent.hasExtra(context.getResources().getString(R.string.app_uri))) {
+					packageName = intent.getStringExtra(context.getResources().getString(R.string.app_uri));
+					Uri packageURI = Uri.parse(packageName);
+					Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
+					uninstallIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					context.startActivity(uninstallIntent);
+				} else {
+					Toast.makeText(context, "App uninstallation failed.",
+							Toast.LENGTH_SHORT).show();
+				}
+			}
+
+		} else {
+			OperationTask operationTask = new OperationTask();
+			operationTask.execute(context);
+		}
 	}
 
 	private class OperationTask extends AsyncTask<Context, Void, Void> {

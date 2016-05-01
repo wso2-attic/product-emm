@@ -358,7 +358,7 @@ public class EMMSystemService extends IntentService {
      * Silently installs the app resides in the provided URI.
      */
     private void silentInstallApp(Context context, String packageUri, String schedule) {
-        if (schedule != null && !schedule.trim().isEmpty()) {
+        if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
             Log.i(TAG, "Silent install has been scheduled to " + schedule);
             Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), schedule);
             Preference.putString(context, context.getResources().getString(R.string.app_uri), packageUri);
@@ -376,7 +376,7 @@ public class EMMSystemService extends IntentService {
      * Silently uninstalls the app resides in the provided URI.
      */
     private void silentUninstallApp(Context context, final String packageName, String schedule) {
-        if (schedule != null && !schedule.trim().isEmpty()) {
+        if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
             Log.i(TAG, "Silent install has been scheduled to " + schedule);
             Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), schedule);
             Preference.putString(context, context.getResources().getString(R.string.app_uri), packageName);
