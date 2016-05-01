@@ -29,7 +29,7 @@ public class ApplicationUpdate extends AndroidOperation implements Serializable 
 	private String appIdentifier;
 	private String type;
 	private String url;
-	private String scheduledTime;
+	private String schedule;
 
 	public String getAppIdentifier() {
 		return appIdentifier;
@@ -55,11 +55,11 @@ public class ApplicationUpdate extends AndroidOperation implements Serializable 
 		this.url = url;
 	}
 
-	public String getScheduledTime() {
-		return scheduledTime;
+	public String getSchedule() {
+		return schedule;
 	}
 
-	public void setScheduledTime(String scheduledTime) {
-		this.scheduledTime = scheduledTime;
+	public void setSchedule(String schedule) {
+		this.schedule = schedule;
 	}
 }
