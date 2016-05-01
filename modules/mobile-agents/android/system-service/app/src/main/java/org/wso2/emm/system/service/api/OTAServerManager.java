@@ -121,7 +121,7 @@ public class OTAServerManager {
     /**
      * Compares device firmware version with the latest upgrade file from the server.
      *
-     * @return - Returns true if rhe firmware needs to be upgraded.
+     * @return - Returns true if the firmware needs to be upgraded.
      */
     public boolean compareLocalVersionToServer() {
         if (parser == null) {
