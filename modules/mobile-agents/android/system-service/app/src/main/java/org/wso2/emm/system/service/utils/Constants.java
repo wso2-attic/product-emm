@@ -95,4 +95,18 @@ public class Constants {
 
 	}
 
+	/**
+	 * Status codes
+	 */
+	public final class Status {
+		private Status(){
+			throw new AssertionError();
+		}
+		public static final String SUCCESSFUL = "200";
+		public static final String CREATED = "201";
+		public static final String ACCEPT = "202";
+		public static final String AUTHENTICATION_FAILED = "400";
+		public static final String INTERNAL_SERVER_ERROR = "500";
+	}
+
 }

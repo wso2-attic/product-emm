@@ -86,6 +86,7 @@ public class EMMSystemService extends IntentService {
     private String operationCode = null;
     private String command = null;
     private String appUri = null;
+    private Context context;
 
     public EMMSystemService() {
         super("EMMSystemService");
@@ -93,6 +94,7 @@ public class EMMSystemService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        context = this.getApplicationContext();
         cdmDeviceAdmin = new ComponentName(this, ServiceDeviceAdminReceiver.class);
         devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         mUserManager = (UserManager) getSystemService(Context.USER_SERVICE);
@@ -294,6 +296,10 @@ public class EMMSystemService extends IntentService {
                 SettingsManager.setStatusBarDisabled(restrictionCode);
                 break;
             case Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS:
+                Preference.putBoolean(context, context.getResources().getString(R.string.
+                                                                                        firmware_status_check_in_progress), true);
+                OTADownload otaDownload = new OTADownload(context);
+                otaDownload.startOTA();
                 break;
             default:
                 Log.e(TAG, "Invalid operation code received");
@@ -307,6 +313,8 @@ public class EMMSystemService extends IntentService {
     public void upgradeFirmware() {
         Log.i(TAG, "An upgrade has been requested");
         Context context = this.getApplicationContext();
+        Preference.putBoolean(context, context.getResources().getString(R.string.
+                                                                                firmware_status_check_in_progress), false);
         if (command != null && !command.trim().isEmpty()) {
             Log.i(TAG, "Upgrade has been scheduled to " + command);
             Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), command);
