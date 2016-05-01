@@ -33,6 +33,9 @@ public class Constants {
 	public static final String DEFAULT_OTA_BUILD_PROP_FILE = "build.prop";
 	public static final String DEFAULT_OTA_ZIP_FILE = ".ota.zip";
 	public static final String UPDATE_PACKAGE_NAME = "update.zip";
+	public static final String STATUS = "status";
+	public static final String PAYLOAD = "payload";
+	public static final String SYSTEM_APP_ACTION_RESPONSE = "org.wso2.emm.system.service.MESSAGE_PROCESSED";
 
 	/**
 	 * Operation IDs
@@ -41,6 +44,7 @@ public class Constants {
 		private Operation(){
 			throw new AssertionError();
 		}
+		public static final String APP_RESTRICTION = "APP-RESTRICTION";
 		public static final String UPGRADE_FIRMWARE = "UPGRADE_FIRMWARE";
 		public static final String REBOOT = "REBOOT";
 		public static final String EXECUTE_SHELL_COMMAND = "SHELL_COMMAND";

@@ -48,7 +48,9 @@ var androidOperationConstants = {
     "WIFI_OPERATION": "wifi",
     "WIFI_OPERATION_CODE": "WIFI",
     "VPN_OPERATION": "vpn",
-    "VPN_OPERATION_CODE": "VPN"
+    "VPN_OPERATION_CODE": "VPN",
+    "APPLICATION_OPERATION":"app-restriction",
+    "APPLICATION_OPERATION_CODE":"APP-RESTRICTION"
 };
 
 // Constants to define Android Operation Constants
@@ -83,6 +85,7 @@ var iosOperationConstants = {
     "APN_OPERATION_CODE": "APN",
     "CELLULAR_OPERATION": "cellular",
     "CELLULAR_OPERATION_CODE": "CELLULAR",
+    "DOMAIN": "DOMAIN",
     "VPN_OPERATION_CODE": "VPN",
     "VPN_OPERATION": "vpn"
 };
@@ -411,9 +414,106 @@ validateStep["policy-profile"] = function () {
                 // updating validationStatusArray with validationStatus
                 validationStatusArray.push(validationStatus);
             }
+            if ($.inArray(androidOperationConstants["APPLICATION_OPERATION_CODE"], configuredOperations) != -1) {
+                //If application restriction configured
+                operation = androidOperationConstants["APPLICATION_OPERATION"];
+                // Initializing continueToCheckNextInputs to true
+                continueToCheckNextInputs = true;
+
+                var appRestrictionType = $("#app-restriction-type").val();
+
+                var restrictedApplicationsGridChildInputs = "div#restricted-applications .child-input";
+
+                if (!appRestrictionType) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "Applications restriction type is not provided.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
+
+                if (continueToCheckNextInputs) {
+                    if ($(restrictedApplicationsGridChildInputs).length == 0) {
+                        validationStatus = {
+                            "error": true,
+                            "subErrorMsg": "Applications are not provided in application restriction list.",
+                            "erroneousFeature": operation
+                        };
+                        continueToCheckNextInputs = false;
+                    }
+                    else {
+                        childInputCount = 0;
+                        childInputArray = [];
+                        emptyChildInputCount = 0;
+                        duplicatesExist = false;
+                        // Looping through each child input
+                        $(restrictedApplicationsGridChildInputs).each(function () {
+                            childInputCount++;
+                            if (childInputCount % 2 == 0) {
+                                // If child input is of second column
+                                childInput = $(this).val();
+                                childInputArray.push(childInput);
+                                // Updating emptyChildInputCount
+                                if (!childInput) {
+                                    // If child input field is empty
+                                    emptyChildInputCount++;
+                                }
+                            }
+                        });
+                        // Checking for duplicates
+                        initialChildInputArrayLength = childInputArray.length;
+                        if (emptyChildInputCount == 0 && initialChildInputArrayLength > 1) {
+                            for (m = 0; m < (initialChildInputArrayLength - 1); m++) {
+                                poppedChildInput = childInputArray.pop();
+                                for (n = 0; n < childInputArray.length; n++) {
+                                    if (poppedChildInput == childInputArray[n]) {
+                                        duplicatesExist = true;
+                                        break;
+                                    }
+                                }
+                                if (duplicatesExist) {
+                                    break;
+                                }
+                            }
+                        }
+                        // Updating validationStatus
+                        if (emptyChildInputCount > 0) {
+                            // If empty child inputs are present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "One or more package names of " +
+                                "applications are empty.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        } else if (duplicatesExist) {
+                            // If duplicate input is present
+                            validationStatus = {
+                                "error": true,
+                                "subErrorMsg": "Duplicate values exist with " +
+                                "for package names.",
+                                "erroneousFeature": operation
+                            };
+                            continueToCheckNextInputs = false;
+                        }
+
+                    }
+                }
+
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+
+                // Updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
+
+            }
         }
-    }
-    if (policy["platform"] == platformTypeConstants["WINDOWS"]) {
+    }if (policy["platform"] == platformTypeConstants["WINDOWS"]) {
         if (configuredOperations.length == 0) {
             // updating validationStatus
             validationStatus = {

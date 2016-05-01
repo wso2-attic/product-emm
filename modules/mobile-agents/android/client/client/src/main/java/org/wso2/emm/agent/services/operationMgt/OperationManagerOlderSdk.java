@@ -17,11 +17,14 @@
  */
 package org.wso2.emm.agent.services.operationMgt;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,13 +32,17 @@ import org.wso2.emm.agent.AlertActivity;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.ServerDetails;
+import org.wso2.emm.agent.beans.AppRestriction;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.beans.Operation;
+import org.wso2.emm.agent.services.AppLockService;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
 public class OperationManagerOlderSdk extends OperationManager {
@@ -527,6 +534,55 @@ public class OperationManagerOlderSdk extends OperationManager {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
             getResultBuilder().build(operation);
         }
+    }
+
+    @Override
+    public void restrictAccessToApplications(Operation operation) throws AndroidAgentException {
+
+        AppRestriction appRestriction = CommonUtils.getAppRestrictionTypeAndList(operation, getResultBuilder(), getContextResources());
+
+        String ownershipType = Preference.getString(getContext(), Constants.DEVICE_TYPE);
+
+        if (Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
+            if (Constants.OWNERSHIP_COPE.equals(ownershipType)) {
+
+                List<String> installedAppPackages = CommonUtils.getInstalledAppPackages(getContext());
+
+                List<String> toBeHideApps = new ArrayList<>(installedAppPackages);
+                toBeHideApps.removeAll(appRestriction.getRestrictedList());
+                for (String packageName : toBeHideApps) {
+                    CommonUtils.callSystemApp(getContext(), operation.getCode(), "false" , packageName);
+                }
+            }
+        }
+        else if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
+            if (Constants.OWNERSHIP_BYOD.equals(ownershipType)) {
+                Intent restrictionIntent = new Intent(getContext(), AppLockService.class);
+                restrictionIntent.setAction(Constants.APP_LOCK_SERVICE);
+
+                restrictionIntent.putStringArrayListExtra(Constants.AppRestriction.APP_LIST, (ArrayList) appRestriction.getRestrictedList());
+
+                PendingIntent pendingIntent = PendingIntent.getService(getContext(), 0, restrictionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                calendar.add(Calendar.SECOND, 1); // First time
+                long frequency= 1 * 1000; // In ms
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), frequency, pendingIntent);
+
+                getContext().startService(restrictionIntent);
+            } else if (Constants.OWNERSHIP_COPE.equals(ownershipType)) {
+
+                for (String packageName : appRestriction.getRestrictedList()) {
+                    CommonUtils.callSystemApp(getContext(), operation.getCode(), "false", packageName);
+                }
+            }
+
+        }
+        operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+        getResultBuilder().build(operation);
+
     }
 
     @Override

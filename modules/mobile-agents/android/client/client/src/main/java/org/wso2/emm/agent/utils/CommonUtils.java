@@ -17,40 +17,48 @@
  */
 package org.wso2.emm.agent.utils;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import org.wso2.emm.agent.AndroidAgentException;
-import org.wso2.emm.agent.R;
-import org.wso2.emm.agent.beans.ServerConfig;
-import org.wso2.emm.agent.beans.UnregisterProfile;
-import org.wso2.emm.agent.proxy.APIController;
-import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
-import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
-import org.wso2.emm.agent.proxy.beans.EndPointInfo;
-import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
-import org.wso2.emm.agent.services.DynamicClientManager;
-
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.api.ApplicationManager;
+import org.wso2.emm.agent.beans.AppRestriction;
+import org.wso2.emm.agent.beans.Operation;
+import org.wso2.emm.agent.beans.ServerConfig;
+import org.wso2.emm.agent.beans.UnregisterProfile;
+import org.wso2.emm.agent.proxy.APIController;
+import org.wso2.emm.agent.proxy.beans.EndPointInfo;
+import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
+import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
+import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.services.DynamicClientManager;
 import org.wso2.emm.agent.services.PolicyOperationsMapper;
 import org.wso2.emm.agent.services.PolicyRevokeHandler;
+import org.wso2.emm.agent.services.ResultPayload;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -309,5 +317,61 @@ public class CommonUtils {
 		explicitIntent.setComponent(component);
 
 		return explicitIntent;
+	}
+
+	/**
+	 *	Get installed package list of applications in device
+	 * @param context Context object
+	 * @return list of installed app packages
+	 */
+	public static List<String> getInstalledAppPackages(Context context) {
+		ApplicationManager applicationManager = new ApplicationManager(context.getApplicationContext());
+		List<ApplicationInfo> installedApplications = applicationManager.getInstalledApplications();
+		List<String> installedAppPackages = new ArrayList<>();
+		for(ApplicationInfo appInfo : installedApplications) {
+			installedAppPackages.add(appInfo.packageName);
+		}
+		return installedAppPackages;
+	}
+
+	public static AppRestriction getAppRestrictionTypeAndList(Operation operation,
+	                                                          ResultPayload resultBuilder,
+	                                                          Resources resources)
+			throws AndroidAgentException {
+		AppRestriction appRestriction = new AppRestriction();
+		JSONArray restrictedApps;
+		try {
+			JSONObject payload = new JSONObject(operation.getPayLoad().toString());
+			appRestriction.setRestrictionType(
+					(String) payload.get(Constants.AppRestriction.RESTRICTION_TYPE));
+			restrictedApps = payload.getJSONArray(Constants.AppRestriction.RESTRICTED_APPLICATIONS);
+
+		} catch (JSONException e) {
+			if (resources != null && resultBuilder != null) {
+				operation.setStatus(resources.getString(R.string.operation_value_error));
+				resultBuilder.build(operation);
+			}
+			throw new AndroidAgentException("Invalid JSON format.", e);
+		}
+
+		List<String> restrictedPackages = new ArrayList<>();
+
+		if (restrictedApps != null) {
+			for (int i = 0; i < restrictedApps.length(); i++) {
+				try {
+					restrictedPackages.add((String) ((JSONObject) restrictedApps.get(i))
+							.get(Constants.AppRestriction.PACKAGE_NAME));
+				} catch (JSONException e) {
+					if (resources != null && resultBuilder != null) {
+						operation.setStatus(resources.getString(R.string.operation_value_error));
+						resultBuilder.build(operation);
+					}
+					throw new AndroidAgentException("Invalid JSON format", e);
+				}
+			}
+		}
+
+		appRestriction.setRestrictedList(restrictedPackages);
+		return appRestriction;
 	}
 }

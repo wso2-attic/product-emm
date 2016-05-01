@@ -48,7 +48,7 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 	public void onReceive(final Context context, Intent intent) {
 		setRecurringAlarm(context.getApplicationContext());
 		if(!EventRegistry.eventListeningStarted) {
-			EventRegistry registerEvent = new EventRegistry(context);
+			EventRegistry registerEvent = new EventRegistry(context.getApplicationContext());
 			registerEvent.register();
 		}
 	}

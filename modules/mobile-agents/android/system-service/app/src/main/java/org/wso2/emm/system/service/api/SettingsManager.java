@@ -77,4 +77,18 @@ public class SettingsManager {
         }
     }
 
+    public static void setVisibilityOfApp(String packageName , boolean visibility) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Log.i(TAG, "visibility of package "+ packageName + " will be set to "+ visibility);
+            EMMSystemService.devicePolicyManager.setApplicationHidden(EMMSystemService.cdmDeviceAdmin, packageName, !visibility);
+        }
+    }
+
+    public static boolean isAppHidden(String packageName) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return EMMSystemService.devicePolicyManager.isApplicationHidden(EMMSystemService.cdmDeviceAdmin, packageName);
+        }
+        return false;
+    }
+
 }

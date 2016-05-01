@@ -32,10 +32,14 @@ import org.wso2.emm.agent.AlertActivity;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.ServerDetails;
+import org.wso2.emm.agent.beans.AppRestriction;
 import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OperationManagerDeviceOwner extends OperationManager {
     private static final String TAG = OperationManagerDeviceOwner.class.getSimpleName();
@@ -560,6 +564,29 @@ public class OperationManagerDeviceOwner extends OperationManager {
                 Log.e(TAG, "Invalid operation code received");
             }
         }
+    }
+
+    @Override
+    public void restrictAccessToApplications(Operation operation) throws AndroidAgentException {
+
+        AppRestriction appRestriction = CommonUtils.getAppRestrictionTypeAndList(operation, getResultBuilder(), getContextResources());
+
+        if (Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
+            List<String> installedAppPackages = CommonUtils.getInstalledAppPackages(getContext());
+
+            List<String> toBeHideApps = new ArrayList<>(installedAppPackages);
+            toBeHideApps.removeAll(appRestriction.getRestrictedList());
+            for (String packageName : toBeHideApps) {
+                CommonUtils.callSystemApp(getContext(), operation.getCode(), "false" , packageName);
+            }
+        } else if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
+            for (String packageName : appRestriction.getRestrictedList()) {
+                CommonUtils.callSystemApp(getContext(), operation.getCode(), "false", packageName);
+            }
+        }
+        operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+        getResultBuilder().build(operation);
+
     }
 
     @Override

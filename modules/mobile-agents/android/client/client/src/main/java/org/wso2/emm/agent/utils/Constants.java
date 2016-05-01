@@ -113,6 +113,8 @@ public class Constants {
 
 	public static final String SERVICE_PACKAGE_NAME = "org.wso2.emm.system.service";
 
+	public static final String APP_LOCK_SERVICE = "AppLockService";
+
 	/**
 	 * Request codes.
 	 */
@@ -258,6 +260,7 @@ public class Constants {
 		public static final String SET_STATUS_BAR_DISABLED = "SET_STATUS_BAR_DISABLED";
 		public static final String SILENT_INSTALL_APPLICATION = "SILENT_INSTALL_APPLICATION";
 		public static final String SILENT_UNINSTALL_APPLICATION = "SILENT_UNINSTALL_APPLICATION";
+		public static final String APP_RESTRICTION = "APP-RESTRICTION";
 		public static final String WORK_PROFILE= "WORK_PROFILE";
 		public static final String GET_APPLICATION_LIST = "GET_APP_LIST";
 		public static final String UNINSTALL_WEBCLIP = "UNINSTALL_WEBCLIP";
@@ -373,7 +376,7 @@ public class Constants {
 			throw new AssertionError();
 		}
 		public static final boolean EVENT_LISTENING_ENABLED = false;
-		public static final boolean APPLICATION_STATE_LISTENER = true;
+		public static final boolean APPLICATION_STATE_LISTENER = false;
 		public static final String APPLICATION_STATE = "APPLICATION_STATE";
 		public static final boolean RUNTIME_STATE_LISTENER = false;
 		public static final String RUNTIME_STATE = "RUNTIME_STATE";
@@ -396,6 +399,23 @@ public class Constants {
 		public static final String APPLIED_POLICY = "appliedPolicy";
 		public static final String IS_AGREED = "isAgreed";
 		public static final String NOTIFIER_TYPE = "notifierType";
+	}
+
+	public final class AppRestriction {
+		private AppRestriction() {
+			throw new AssertionError();
+		}
+
+		public static final String RESTRICTION_TYPE = "restriction-type";
+		public static final String RESTRICTED_APPLICATIONS = "restricted-applications";
+		public static final String WHITE_LIST = "white-list";
+		public static final String BLACK_LIST = "black-list";
+		public static final String PACKAGE_NAME = "packageName";
+		public static final String APP_LIST = "appList";
+		public static final String STATUS = "status";
+		public static final String PAYLOAD = "payload";
+		public static final String SYSTEM_APP_ACTION_RESPONSE = "org.wso2.emm.system.service.MESSAGE_PROCESSED";
+		public static final String IS_HIDDEN = "isHidden";
 	}
 
 }

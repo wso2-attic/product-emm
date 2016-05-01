@@ -79,7 +79,9 @@ var operationModule = function () {
         "ENSURE_VERIFY_APPS" : "ENSURE_VERIFY_APPS",
         "AUTO_TIME" : "AUTO_TIME",
         "SET_SCREEN_CAPTURE_DISABLED" : "SET_SCREEN_CAPTURE_DISABLED",
-        "SET_STATUS_BAR_DISABLED" : "SET_STATUS_BAR_DISABLED"
+        "SET_STATUS_BAR_DISABLED" : "SET_STATUS_BAR_DISABLED",
+        "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE",
+        "APPLICATION_OPERATION_CODE":"APP-RESTRICTION"
     };
 
     // Constants to define Windows Operation Constants
@@ -777,6 +779,12 @@ var operationModule = function () {
                     "dnsServer": operationPayload["dnsServer"]
                 };
                 break;
+            case androidOperationConstants["APPLICATION_OPERATION_CODE"]:
+                payload = {
+                    "restrictionType": operationPayload["restriction-type"],
+                    "restrictedApplications": operationPayload["restricted-applications"]
+                };
+                break;
         }
         return payload;
     };
@@ -918,6 +926,14 @@ var operationModule = function () {
                         "maxPINAgeInDays": operationData["passcodePolicyMaxPasscodeAgeInDays"],
                         "pinHistory": operationData["passcodePolicyPasscodeHistory"],
                         "maxFailedAttempts": operationData["passcodePolicyMaxFailedAttempts"]
+                    }
+                };
+                break;
+            case androidOperationConstants["APPLICATION_OPERATION_CODE"]:
+                payload = {
+                    "operation": {
+                        "restriction-type": operationData["restrictionType"],
+                        "restricted-applications": operationData["restrictedApplications"]
                     }
                 };
                 break;
@@ -1267,7 +1283,6 @@ var operationModule = function () {
                                 // set key-value-pair
                                 keyValuePairJson[childInputKey] = childInputValue;
                             } else {
-                                keyValuePairJson = {};
                                 // set key-value-pair
                                 keyValuePairJson[childInputKey] = childInputValue;
                                 // push to value
@@ -1603,7 +1618,7 @@ var operationModule = function () {
             configuredOperations.push(featureCode);
             publicMethods.populateUI(platformType, featureCode, operationPayload);
         }
-        if(restrictions){
+        if (restrictions) {
             configuredOperations.push(androidOperationConstants["CAMERA_OPERATION_CODE"]);
             publicMethods.populateUI(platformType, androidOperationConstants["CAMERA_OPERATION_CODE"], JSON.stringify(restrictions));
         }
