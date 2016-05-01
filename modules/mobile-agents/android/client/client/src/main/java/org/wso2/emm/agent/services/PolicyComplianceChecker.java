@@ -39,6 +39,7 @@ import org.wso2.emm.agent.beans.ComplianceFeature;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -334,40 +335,67 @@ public class PolicyComplianceChecker {
 
         AppRestriction appRestriction =
                 CommonUtils.getAppRestrictionTypeAndList(operation, null, null);
-
-        IntentFilter filter = new IntentFilter(Constants.AppRestriction.SYSTEM_APP_ACTION_RESPONSE);
-        filter.addCategory(Intent.CATEGORY_DEFAULT);
-        SystemServiceResponseReceiver receiver = new SystemServiceResponseReceiver();
-        context.registerReceiver(receiver, filter);
-
         List<String> installedAppPackages = CommonUtils.getInstalledAppPackages(context);
 
-        if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
-            List<String> commonApps = new ArrayList<>(installedAppPackages);
-            if (commonApps.retainAll(appRestriction.getRestrictedList())) {
-                if (commonApps.size() > 0) {
-                    for (String commonApp : commonApps) {
-                        CommonUtils.callSystemApp(context, operation.getCode(), Constants.AppRestriction.IS_HIDDEN, commonApp);
+        String ownershipType = Preference.getString(context, Constants.DEVICE_TYPE);
+
+        if (Constants.OWNERSHIP_COPE.equals(ownershipType)) {
+            IntentFilter filter = new IntentFilter(Constants.AppRestriction.SYSTEM_APP_ACTION_RESPONSE);
+            filter.addCategory(Intent.CATEGORY_DEFAULT);
+            SystemServiceResponseReceiver receiver = new SystemServiceResponseReceiver();
+            context.registerReceiver(receiver, filter);
+
+            if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
+                List<String> commonApps = new ArrayList<>(installedAppPackages);
+                if (commonApps.retainAll(appRestriction.getRestrictedList())) {
+                    if (commonApps.size() > 0) {
+                        for (String commonApp : commonApps) {
+                            CommonUtils.callSystemApp(context, operation.getCode(), Constants.AppRestriction.IS_HIDDEN, commonApp);
+                        }
+                        receiver.setCompliance(policy);
+                        return policy;
+                    }
+                }
+            } else if (Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
+                List<String> remainApps = new ArrayList<>(installedAppPackages);
+                remainApps.removeAll(appRestriction.getRestrictedList());
+                if (remainApps.size() >0) {
+                    for (String remainApp : remainApps) {
+                        CommonUtils.callSystemApp(context, operation.getCode(), Constants.AppRestriction.IS_HIDDEN, remainApp);
                     }
                     receiver.setCompliance(policy);
                     return policy;
                 }
             }
-        } else if (Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
-            List<String> remainApps = new ArrayList<>(installedAppPackages);
-            remainApps.removeAll(appRestriction.getRestrictedList());
-            if (remainApps.size() >0) {
-                for (String remainApp : remainApps) {
-                    CommonUtils.callSystemApp(context, operation.getCode(), Constants.AppRestriction.IS_HIDDEN, remainApp);
-                }
-                receiver.setCompliance(policy);
-                return policy;
-            }
-        }
 
+            policy.setCompliance(true);
+            return policy;
+
+        }
+        else if (Constants.OWNERSHIP_BYOD.equals(ownershipType)) {
+            if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
+                List<String> commonApps = new ArrayList<>(installedAppPackages);
+                if (commonApps.retainAll(appRestriction.getRestrictedList())) {
+                    if (commonApps.size() > 0) {
+                        policy.setCompliance(false);
+                        return policy;
+                    }
+                }
+            } else if (Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
+                List<String> remainApps = new ArrayList<>(installedAppPackages);
+                remainApps.removeAll(appRestriction.getRestrictedList());
+                if (remainApps.size() >0) {
+                    policy.setCompliance(false);
+                    return policy;
+                }
+            }
+            policy.setCompliance(true);
+            return policy;
+
+        }
         policy.setCompliance(true);
         return policy;
-    }
+     }
 
     /**
      * Checks Work-Profile policy on the device (Particular work-profile configuration in the policy should be enforced).
