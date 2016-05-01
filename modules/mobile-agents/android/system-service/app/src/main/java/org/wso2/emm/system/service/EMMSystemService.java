@@ -132,6 +132,8 @@ public class EMMSystemService extends IntentService {
                 Log.i(TAG, "Will now executing the command ..." + operationCode);
                 if (Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
                     doTask(operationCode);
+                } else if (Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS.equals(operationCode)) {
+                    doTask(operationCode);
                 }
             }
         }

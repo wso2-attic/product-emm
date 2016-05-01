@@ -17,12 +17,9 @@
  */
 package org.wso2.emm.system.service.api;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.UserHandle;
-import android.os.UserManager;
 import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -201,12 +198,7 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
         Intent intent = new Intent(Constants.AGENT_APP_PACKAGE_NAME + Constants.AGENT_APP_ALERT_ACTIVITY);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("message", message);
-
-        Log.i(TAG, "The serial Number for current user is:" + ActivityManager.getCurrentUser());
-
-        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-        UserHandle userHandle = userManager.getUserForSerialNumber(ActivityManager.getCurrentUser());
-        context.startActivityAsUser(intent, userHandle);
+        context.startActivity(intent);
     }
 
 }
