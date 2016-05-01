@@ -565,7 +565,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
 
         AppRestriction appRestriction = CommonUtils.getAppRestrictionTypeAndList(operation, getResultBuilder(), getContextResources());
 
-        if (Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictedList())) {
+        if (Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
             List<String> installedAppPackages = CommonUtils.getInstalledAppPackages(getContext());
 
             List<String> toBeHideApps = new ArrayList<>(installedAppPackages);
@@ -573,7 +573,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
             for (String packageName : toBeHideApps) {
                 CommonUtils.callSystemApp(getContext(), operation.getCode(), "false" , packageName);
             }
-        } else if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictedList())) {
+        } else if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
             for (String packageName : appRestriction.getRestrictedList()) {
                 CommonUtils.callSystemApp(getContext(), operation.getCode(), "false", packageName);
             }

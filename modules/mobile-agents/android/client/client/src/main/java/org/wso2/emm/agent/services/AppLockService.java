@@ -21,6 +21,7 @@ import android.app.ActivityManager;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 import org.wso2.emm.agent.AppLockActivity;
@@ -44,10 +45,6 @@ public class AppLockService extends IntentService {
 		Log.d(TAG, "Service started...!");
 
 		ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-		// The first in the list of RunningTasks is always the foreground task.
-		ActivityManager.RunningTaskInfo foregroundTaskInfo = am.getRunningTasks(1).get(0);
-
-		String foregroundTaskPackageName = foregroundTaskInfo.topActivity.getPackageName();
 
 		List<String> appList = lockIntent.getStringArrayListExtra("appList");
 
@@ -56,9 +53,24 @@ public class AppLockService extends IntentService {
 		lockIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
 		                    Intent.FLAG_ACTIVITY_NEW_TASK);
 
-		for (String app : appList) {
-			if (app.equals(foregroundTaskPackageName)) {
-				startActivity(lockIntent);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			String[] activePackages = am.getRunningAppProcesses().get(0).pkgList;
+			for (int i = 0; i < activePackages.length ; i++) {
+				for (String app : appList) {
+					if (app.equals(activePackages[i])) {
+						startActivity(lockIntent);
+					}
+				}
+			}
+		}
+		else {
+			// The first in the list of RunningTasks is always the foreground task.
+			ActivityManager.RunningTaskInfo foregroundTaskInfo = am.getRunningTasks(1).get(0);
+			String foregroundTaskPackageName = foregroundTaskInfo.topActivity.getPackageName();
+			for (String app : appList) {
+				if (app.equals(foregroundTaskPackageName)) {
+					startActivity(lockIntent);
+				}
 			}
 		}
 	}

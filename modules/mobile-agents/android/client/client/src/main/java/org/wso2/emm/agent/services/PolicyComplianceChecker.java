@@ -18,10 +18,14 @@
 package org.wso2.emm.agent.services;
 
 import android.app.admin.DevicePolicyManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -331,22 +335,37 @@ public class PolicyComplianceChecker {
         AppRestriction appRestriction =
                 CommonUtils.getAppRestrictionTypeAndList(operation, null, null);
 
+        IntentFilter filter = new IntentFilter(Constants.AppRestriction.SYSTEM_APP_ACTION_RESPONSE);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        SystemServiceResponseReceiver receiver = new SystemServiceResponseReceiver();
+        context.registerReceiver(receiver, filter);
+
         List<String> installedAppPackages = CommonUtils.getInstalledAppPackages(context);
 
         if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
             List<String> commonApps = new ArrayList<>(installedAppPackages);
             if (commonApps.retainAll(appRestriction.getRestrictedList())) {
-                policy.setCompliance(false);
-                policy.setMessage(commonApps.toString());
-                return policy;
+                int i = 0;
+                if (commonApps.size() > 0) {
+                    for (String commonApp : commonApps) {
+                        i++;
+                        CommonUtils.callSystemApp(context, operation.getCode(), Constants.AppRestriction.IS_HIDDEN, commonApp);
+                    }
+                    while (i > SystemServiceResponseReceiver.iterator) {
+                        //Wait until violent apps receiving.
+                    }
+                    receiver.setCompliance(policy);
+                    return policy;
+                }
             }
-        } else if (Constants.AppRestriction.WHITE_LIST
-                .equals(appRestriction.getRestrictionType())) {
+        } else if (Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
             List<String> remainApps = new ArrayList<>(installedAppPackages);
             remainApps.removeAll(appRestriction.getRestrictedList());
-            if (remainApps.size() > 0) {
-                policy.setCompliance(false);
-                policy.setMessage(remainApps.toString());
+            if (remainApps.size() >0) {
+                for (String remainApp : remainApps) {
+                    CommonUtils.callSystemApp(context, operation.getCode(), Constants.AppRestriction.IS_HIDDEN, remainApp);
+                }
+                receiver.setCompliance(policy);
                 return policy;
             }
         }
@@ -406,5 +425,37 @@ public class PolicyComplianceChecker {
         }
         policy.setCompliance(true);
         return policy;
+    }
+}
+
+class SystemServiceResponseReceiver extends BroadcastReceiver {
+
+    private static final String TAG = "SystemServiceResponseReceiver";
+    List<String> violatedApps = new ArrayList<>();
+    public static int iterator = 0;
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+
+        String status = intent.getStringExtra(Constants.AppRestriction.STATUS);
+        if (intent.hasExtra(Constants.AppRestriction.PAYLOAD) && intent.getStringExtra(Constants.AppRestriction.PAYLOAD) != null) {
+            try {
+                JSONObject packageName = new JSONObject(intent.getStringExtra(Constants.AppRestriction.PAYLOAD));
+                if(!Boolean.parseBoolean(status)) {
+                    violatedApps.add(packageName.toString());
+                    iterator++;
+                }
+
+            } catch (JSONException e) {
+                Log.e(TAG, "Failed parsing application response" + e);
+            }
+        }
+    }
+
+    public void setCompliance (ComplianceFeature policy) {
+        if (violatedApps.size() > 0) {
+            policy.setCompliance(false);
+            policy.setMessage(violatedApps.toString());
+        }
     }
 }

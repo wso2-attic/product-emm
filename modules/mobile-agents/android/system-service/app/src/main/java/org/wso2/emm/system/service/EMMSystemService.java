@@ -124,6 +124,10 @@ public class EMMSystemService extends IntentService {
                         }
                     }
                 }
+
+                if (extras.containsKey("appUri")) {
+                    appUri = extras.getString("appUri");
+                }
             }
 
             Log.d(TAG, "EMM agent has sent a command.");
@@ -134,15 +138,8 @@ public class EMMSystemService extends IntentService {
                 if (Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
                     doTask(operationCode);
                 }
-
-                if (extras.containsKey("appUri")) {
-                    appUri = extras.getString("appUri");
-                }
             }
-
         }
-
-
     }
 
     private void startAdmin() {
@@ -157,6 +154,7 @@ public class EMMSystemService extends IntentService {
      * @param code - Operation object.
      */
     public void doTask(String code) {
+        Log.d(TAG, "The operation code is: " + code + "");
         switch (code) {
             case Constants.Operation.ENABLE_ADMIN:
                 startAdmin();
@@ -282,7 +280,20 @@ public class EMMSystemService extends IntentService {
                 SettingsManager.setScreenCaptureDisabled(restrictionCode);
                 break;
             case Constants.Operation.APP_RESTRICTION:
-                SettingsManager.setVisibilityOfApp(appUri, restrictionCode);
+                Log.d(TAG, "The appUri is: " + appUri + "--command--is "+ command);
+                if (command != null && (command.equals("true") || command.equals("false"))) {
+                    Log.i(TAG, "I came to If");
+                    SettingsManager.setVisibilityOfApp(appUri, Boolean.parseBoolean(command));
+                }
+                else {
+                    Log.i(TAG, "I came to else");
+                    Intent broadcastIntent = new Intent();
+                    broadcastIntent.setAction(Constants.SYSTEM_APP_ACTION_RESPONSE);
+                    broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                    broadcastIntent.putExtra(Constants.STATUS, SettingsManager.isAppHidden(appUri));
+                    broadcastIntent.putExtra(Constants.PAYLOAD, appUri);
+                    sendBroadcast(broadcastIntent);
+                }
                 break;
             //Only With Android M.
             case Constants.Operation.SET_STATUS_BAR_DISABLED:
