@@ -133,7 +133,7 @@ public class AppDetailsActivity extends Activity {
                             Log.e(TAG, "Cannot create WebClip due to invalid operation type." + e);
                         }
                     } else {
-                        applicationManager.installApp(application.getAppUrl());
+                        applicationManager.installApp(application.getAppUrl(), application.getPackageName());
                     }
                     break;
                 case TAG_BTN_READ_MORE:

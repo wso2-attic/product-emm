@@ -115,7 +115,7 @@ public class ApplicationAdapter extends ArrayAdapter<Application> implements Fil
                                 Log.e(TAG, "Cannot create Webclip due to invalid operation type." + e);
                             }
                         } else {
-                            applicationManager.installApp(data.getAppUrl());
+                            applicationManager.installApp(data.getAppUrl(), data.getPackageName());
                         }
                         break;
                     case TAG_BTN_UNINSTALL:
