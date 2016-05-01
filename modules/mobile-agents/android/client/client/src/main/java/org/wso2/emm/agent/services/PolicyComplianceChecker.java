@@ -345,14 +345,9 @@ public class PolicyComplianceChecker {
         if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
             List<String> commonApps = new ArrayList<>(installedAppPackages);
             if (commonApps.retainAll(appRestriction.getRestrictedList())) {
-                int i = 0;
                 if (commonApps.size() > 0) {
                     for (String commonApp : commonApps) {
-                        i++;
                         CommonUtils.callSystemApp(context, operation.getCode(), Constants.AppRestriction.IS_HIDDEN, commonApp);
-                    }
-                    while (i > SystemServiceResponseReceiver.iterator) {
-                        //Wait until violent apps receiving.
                     }
                     receiver.setCompliance(policy);
                     return policy;
