@@ -31,7 +31,10 @@ import org.wso2.carbon.mdm.exception.Message;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Produces({"application/json"})
 @Consumes({"application/json"})
@@ -114,7 +117,7 @@ public class Dashboard {
             return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
         Map<String, Object> nonCompliantDeviceCountDataWrapper = new LinkedHashMap<>();
-        nonCompliantDeviceCountDataWrapper.put("group", "non-complaint");
+        nonCompliantDeviceCountDataWrapper.put("group", "non-compliant");
         nonCompliantDeviceCountDataWrapper.put("label", "Non-Compliant");
         nonCompliantDeviceCountDataWrapper.put("count", nonCompliantDeviceCount);
 
@@ -154,12 +157,13 @@ public class Dashboard {
 
         if (resultCount < 5) {
             message.setErrorMessage("Invalid request count.");
-            message.setDescription("Result count should be more than 5.");
+            message.setDescription("Requested result count should be 5 or more than that.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         }
 
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
-        DashboardPaginationGadgetDataWrapper dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
+        DashboardPaginationGadgetDataWrapper dashboardPaginationGadgetDataWrapper =
+            new DashboardPaginationGadgetDataWrapper();
 
         PaginationResult paginationResult = gadgetDataService.
             getNonCompliantDeviceCountsByFeatures(new PaginationRequest(startIndex, resultCount));
@@ -181,7 +185,7 @@ public class Dashboard {
 
         dashboardPaginationGadgetDataWrapper.setContext("non-compliant-feature");
         dashboardPaginationGadgetDataWrapper.setData(nonCompliantDeviceCountsByFeaturesDataWrapper);
-        dashboardPaginationGadgetDataWrapper.setTotalRecordsCount(paginationResult.getRecordsTotal());
+        dashboardPaginationGadgetDataWrapper.setTotalRecordCount(paginationResult.getRecordsTotal());
 
         List<DashboardPaginationGadgetDataWrapper> responsePayload = new ArrayList<>();
         responsePayload.add(dashboardPaginationGadgetDataWrapper);
@@ -197,32 +201,55 @@ public class Dashboard {
                                             @QueryParam("ownership") String ownership) {
 
         Map<String, Object> filters = new LinkedHashMap<>();
-        if (connectivityStatus != null &&
-            ("ACTIVE".equals(connectivityStatus) ||
+        Message message = new Message();
+        if (connectivityStatus != null) {
+            if ("ACTIVE".equals(connectivityStatus) ||
                 "INACTIVE".equals(connectivityStatus) ||
-                    "REMOVED".equals(connectivityStatus))) {
-            filters.put("CONNECTIVITY_STATUS", connectivityStatus);
+                    "REMOVED".equals(connectivityStatus)) {
+                filters.put("CONNECTIVITY_STATUS", connectivityStatus);
+            } else {
+                message.setErrorMessage("Invalid value for connectivity-status query parameter.");
+                message.setDescription("connectivity-status query parameter value could only be either ACTIVE, INACTIVE or REMOVED.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            }
         }
 
-        if (potentialVulnerability != null && "non-compliant".equals(potentialVulnerability)) {
-            filters.put("IS_COMPLIANT", 0);
+        if (potentialVulnerability != null) {
+            if ("non-compliant".equals(potentialVulnerability) ||
+                "unmonitored".equals(potentialVulnerability)) {
+                if ("non-compliant".equals(potentialVulnerability)) {
+                    filters.put("IS_COMPLIANT", 0);
+                } else {
+                    filters.put("POLICY_ID", -1);
+                }
+            } else {
+                message.setErrorMessage("Invalid value for potential-vulnerability query parameter.");
+                message.setDescription("potential-vulnerability query parameter value could only be either non-compliant or unmonitored.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            }
         }
 
-        if (potentialVulnerability != null && "unmonitored".equals(potentialVulnerability)) {
-            filters.put("POLICY_ID", -1);
-        }
-
-        if (platform != null &&
-            ("android".equals(platform) ||
+        if (platform != null) {
+            if ("android".equals(platform) ||
                 "ios".equals(platform) ||
-                    "windows".equals(platform))) {
-            filters.put("PLATFORM", platform);
+                    "windows".equals(platform)) {
+                filters.put("PLATFORM", platform);
+            } else {
+                message.setErrorMessage("Invalid value for platform query parameter.");
+                message.setDescription("platform query parameter value could only be either android, ios or windows.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            }
         }
 
-        if (ownership != null &&
-                ("BYOD".equals(ownership) ||
-                        "COPE".equals(ownership))) {
-            filters.put("OWNERSHIP", ownership);
+        if (ownership != null) {
+            if ("BYOD".equals(ownership) ||
+                "COPE".equals(ownership)) {
+                filters.put("OWNERSHIP", ownership);
+            } else {
+                message.setErrorMessage("Invalid value for ownership query parameter.");
+                message.setDescription("ownership query parameter value could only be either BYOD or COPE.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            }
         }
 
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
@@ -283,22 +310,33 @@ public class Dashboard {
         if (nonCompliantFeature == null) {
             Message message = new Message();
             message.setErrorMessage("Missing required query parameters.");
-            message.setDescription("Query parameter non-compliant-feature with some text value is a required.");
+            message.setDescription("non-compliant-feature query parameter value is required.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         }
 
         Map<String, Object> filters = new LinkedHashMap<>();
-        if (platform != null &&
-                ("android".equals(platform) ||
-                        "ios".equals(platform) ||
-                        "windows".equals(platform))) {
-            filters.put("PLATFORM", platform);
+        Message message = new Message();
+        if (platform != null) {
+            if ("android".equals(platform) ||
+                "ios".equals(platform) ||
+                    "windows".equals(platform)) {
+                filters.put("PLATFORM", platform);
+            } else {
+                message.setErrorMessage("Invalid value for platform query parameter.");
+                message.setDescription("platform query parameter value could only be either android, ios or windows.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            }
         }
 
-        if (ownership != null &&
-                ("BYOD".equals(ownership) ||
-                        "COPE".equals(ownership))) {
-            filters.put("OWNERSHIP", ownership);
+        if (ownership != null) {
+            if ("BYOD".equals(ownership) ||
+                "COPE".equals(ownership)) {
+                filters.put("OWNERSHIP", ownership);
+            } else {
+                message.setErrorMessage("Invalid value for ownership query parameter.");
+                message.setDescription("ownership query parameter value could only be either BYOD or COPE.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            }
         }
 
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
@@ -362,32 +400,55 @@ public class Dashboard {
                                                     @QueryParam("ownership") String ownership) {
 
         Map<String, Object> filters = new LinkedHashMap<>();
-        if (connectivityStatus != null &&
-                ("ACTIVE".equals(connectivityStatus) ||
-                        "INACTIVE".equals(connectivityStatus) ||
-                        "REMOVED".equals(connectivityStatus))) {
-            filters.put("CONNECTIVITY_STATUS", connectivityStatus);
+        Message message = new Message();
+        if (connectivityStatus != null) {
+            if ("ACTIVE".equals(connectivityStatus) ||
+                "INACTIVE".equals(connectivityStatus) ||
+                    "REMOVED".equals(connectivityStatus)) {
+                filters.put("CONNECTIVITY_STATUS", connectivityStatus);
+            } else {
+                message.setErrorMessage("Invalid value for connectivity-status query parameter.");
+                message.setDescription("connectivity-status query parameter value could only be either ACTIVE, INACTIVE or REMOVED.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            }
         }
 
-        if (potentialVulnerability != null && "non-compliant".equals(potentialVulnerability)) {
-            filters.put("IS_COMPLIANT", 0);
+        if (potentialVulnerability != null) {
+            if ("non-compliant".equals(potentialVulnerability) ||
+                "unmonitored".equals(potentialVulnerability)) {
+                if ("non-compliant".equals(potentialVulnerability)) {
+                    filters.put("IS_COMPLIANT", 0);
+                } else {
+                    filters.put("POLICY_ID", -1);
+                }
+            } else {
+                message.setErrorMessage("Invalid value for potential-vulnerability query parameter.");
+                message.setDescription("potential-vulnerability query parameter value could only be either non-compliant or unmonitored.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            }
         }
 
-        if (potentialVulnerability != null && "unmonitored".equals(potentialVulnerability)) {
-            filters.put("POLICY_ID", -1);
+        if (platform != null) {
+            if ("android".equals(platform) ||
+                "ios".equals(platform) ||
+                    "windows".equals(platform)) {
+                filters.put("PLATFORM", platform);
+            } else {
+                message.setErrorMessage("Invalid value for platform query parameter.");
+                message.setDescription("platform query parameter value could only be either android, ios or windows.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            }
         }
 
-        if (platform != null &&
-                ("android".equals(platform) ||
-                        "ios".equals(platform) ||
-                        "windows".equals(platform))) {
-            filters.put("PLATFORM", platform);
-        }
-
-        if (ownership != null &&
-                ("BYOD".equals(ownership) ||
-                        "COPE".equals(ownership))) {
-            filters.put("OWNERSHIP", ownership);
+        if (ownership != null) {
+            if ("BYOD".equals(ownership) ||
+                "COPE".equals(ownership)) {
+                filters.put("OWNERSHIP", ownership);
+            } else {
+                message.setErrorMessage("Invalid value for ownership query parameter.");
+                message.setDescription("ownership query parameter value could only be either BYOD or COPE.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            }
         }
 
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
@@ -435,22 +496,33 @@ public class Dashboard {
         if (nonCompliantFeature == null) {
             Message message = new Message();
             message.setErrorMessage("Missing required query parameters.");
-            message.setDescription("Query parameter non-compliant-feature with some text value is a required.");
+            message.setDescription("non-compliant-feature query parameter value is required.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         }
 
         Map<String, Object> filters = new LinkedHashMap<>();
-        if (platform != null &&
-                ("android".equals(platform) ||
-                        "ios".equals(platform) ||
-                        "windows".equals(platform))) {
-            filters.put("PLATFORM", platform);
+        Message message = new Message();
+        if (platform != null) {
+            if ("android".equals(platform) ||
+                "ios".equals(platform) ||
+                    "windows".equals(platform)) {
+                filters.put("PLATFORM", platform);
+            } else {
+                message.setErrorMessage("Invalid value for platform query parameter.");
+                message.setDescription("platform query parameter value could only be either android, ios or windows.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            }
         }
 
-        if (ownership != null &&
-                ("BYOD".equals(ownership) ||
-                        "COPE".equals(ownership))) {
-            filters.put("OWNERSHIP", ownership);
+        if (ownership != null) {
+            if ("BYOD".equals(ownership) ||
+                "COPE".equals(ownership)) {
+                filters.put("OWNERSHIP", ownership);
+            } else {
+                message.setErrorMessage("Invalid value for ownership query parameter.");
+                message.setDescription("ownership query parameter value could only be either BYOD or COPE.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            }
         }
 
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
@@ -503,7 +575,7 @@ public class Dashboard {
         if (paginationEnabled == null) {
 
             message.setErrorMessage("Missing required query parameter.");
-            message.setDescription("Pagination-enabled with value true or false is a required query parameter value.");
+            message.setDescription("Pagination-enabled query parameter with value true or false is required.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
 
         } else if ("true".equals(paginationEnabled)) {
@@ -516,37 +588,59 @@ public class Dashboard {
 
             if (resultCount < 10) {
                 message.setErrorMessage("Invalid request count.");
-                message.setDescription("Requested row count should be equal to 10 or more than that.");
+                message.setDescription("Requested result count should be equal to 10 or more than that.");
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
             }
 
             Map<String, Object> filters = new LinkedHashMap<>();
-            if (connectivityStatus != null &&
-                ("ACTIVE".equals(connectivityStatus) ||
+            if (connectivityStatus != null) {
+                if ("ACTIVE".equals(connectivityStatus) ||
                     "INACTIVE".equals(connectivityStatus) ||
-                        "REMOVED".equals(connectivityStatus))) {
-                filters.put("CONNECTIVITY_STATUS", connectivityStatus);
+                        "REMOVED".equals(connectivityStatus)) {
+                    filters.put("CONNECTIVITY_STATUS", connectivityStatus);
+                } else {
+                    message.setErrorMessage("Invalid value for connectivity-status query parameter.");
+                    message.setDescription("connectivity-status query parameter value could only be either ACTIVE, INACTIVE or REMOVED.");
+                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+                }
             }
 
-            if (potentialVulnerability != null && "non-compliant".equals(potentialVulnerability)) {
-                filters.put("IS_COMPLIANT", 0);
+            if (potentialVulnerability != null) {
+                if ("non-compliant".equals(potentialVulnerability) ||
+                    "unmonitored".equals(potentialVulnerability)) {
+                    if ("non-compliant".equals(potentialVulnerability)) {
+                        filters.put("IS_COMPLIANT", 0);
+                    } else {
+                        filters.put("POLICY_ID", -1);
+                    }
+                } else {
+                    message.setErrorMessage("Invalid value for potential-vulnerability query parameter.");
+                    message.setDescription("potential-vulnerability query parameter value could only be either non-compliant or unmonitored.");
+                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+                }
             }
 
-            if (potentialVulnerability != null && "unmonitored".equals(potentialVulnerability)) {
-                filters.put("POLICY_ID", -1);
-            }
-
-            if (platform != null &&
-                ("android".equals(platform) ||
+            if (platform != null) {
+                if ("android".equals(platform) ||
                     "ios".equals(platform) ||
-                        "windows".equals(platform))) {
-                filters.put("PLATFORM", platform);
+                        "windows".equals(platform)) {
+                    filters.put("PLATFORM", platform);
+                } else {
+                    message.setErrorMessage("Invalid value for platform query parameter.");
+                    message.setDescription("platform query parameter value could only be either android, ios or windows.");
+                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+                }
             }
 
-            if (ownership != null &&
-                ("BYOD".equals(ownership) ||
-                    "COPE".equals(ownership))) {
-                filters.put("OWNERSHIP", ownership);
+            if (ownership != null) {
+                if ("BYOD".equals(ownership) ||
+                    "COPE".equals(ownership)) {
+                    filters.put("OWNERSHIP", ownership);
+                } else {
+                    message.setErrorMessage("Invalid value for ownership query parameter.");
+                    message.setDescription("ownership query parameter value could only be either BYOD or COPE.");
+                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+                }
             }
 
             GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
@@ -573,7 +667,7 @@ public class Dashboard {
 
             dashboardPaginationGadgetDataWrapper.setContext("filtered-device-details");
             dashboardPaginationGadgetDataWrapper.setData(deviceDetailEntriesDataWrapper);
-            dashboardPaginationGadgetDataWrapper.setTotalRecordsCount(paginationResult.getRecordsTotal());
+            dashboardPaginationGadgetDataWrapper.setTotalRecordCount(paginationResult.getRecordsTotal());
 
             List<DashboardPaginationGadgetDataWrapper> responsePayload = new ArrayList<>();
             responsePayload.add(dashboardPaginationGadgetDataWrapper);
@@ -583,32 +677,54 @@ public class Dashboard {
         } else if ("false".equals(paginationEnabled)) {
 
             Map<String, Object> filters = new LinkedHashMap<>();
-            if (connectivityStatus != null &&
-                ("ACTIVE".equals(connectivityStatus) ||
+            if (connectivityStatus != null) {
+                if ("ACTIVE".equals(connectivityStatus) ||
                     "INACTIVE".equals(connectivityStatus) ||
-                        "REMOVED".equals(connectivityStatus))) {
-                filters.put("CONNECTIVITY_STATUS", connectivityStatus);
+                        "REMOVED".equals(connectivityStatus)) {
+                    filters.put("CONNECTIVITY_STATUS", connectivityStatus);
+                } else {
+                    message.setErrorMessage("Invalid value for connectivity-status query parameter.");
+                    message.setDescription("connectivity-status query parameter value could only be either ACTIVE, INACTIVE or REMOVED.");
+                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+                }
             }
 
-            if (potentialVulnerability != null && "non-compliant".equals(potentialVulnerability)) {
-                filters.put("IS_COMPLIANT", 0);
+            if (potentialVulnerability != null) {
+                if ("non-compliant".equals(potentialVulnerability) ||
+                    "unmonitored".equals(potentialVulnerability)) {
+                    if ("non-compliant".equals(potentialVulnerability)) {
+                        filters.put("IS_COMPLIANT", 0);
+                    } else {
+                        filters.put("POLICY_ID", -1);
+                    }
+                } else {
+                    message.setErrorMessage("Invalid value for potential-vulnerability query parameter.");
+                    message.setDescription("potential-vulnerability query parameter value could only be either non-compliant or unmonitored.");
+                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+                }
             }
 
-            if (potentialVulnerability != null && "unmonitored".equals(potentialVulnerability)) {
-                filters.put("POLICY_ID", -1);
-            }
-
-            if (platform != null &&
-                ("android".equals(platform) ||
+            if (platform != null) {
+                if ("android".equals(platform) ||
                     "ios".equals(platform) ||
-                        "windows".equals(platform))) {
-                filters.put("PLATFORM", platform);
+                        "windows".equals(platform)) {
+                    filters.put("PLATFORM", platform);
+                } else {
+                    message.setErrorMessage("Invalid value for platform query parameter.");
+                    message.setDescription("platform query parameter value could only be either android, ios or windows.");
+                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+                }
             }
 
-            if (ownership != null &&
-                ("BYOD".equals(ownership) ||
-                    "COPE".equals(ownership))) {
-                filters.put("OWNERSHIP", ownership);
+            if (ownership != null) {
+                if ("BYOD".equals(ownership) ||
+                    "COPE".equals(ownership)) {
+                    filters.put("OWNERSHIP", ownership);
+                } else {
+                    message.setErrorMessage("Invalid value for ownership query parameter.");
+                    message.setDescription("ownership query parameter value could only be either BYOD or COPE.");
+                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+                }
             }
 
             GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
@@ -651,8 +767,8 @@ public class Dashboard {
         if (nonCompliantFeature == null || paginationEnabled == null) {
 
             message.setErrorMessage("Missing required query parameters.");
-            message.setDescription("non-compliant-feature with some text value and pagination-enabled with " +
-            "value true or false are required query parameter values.");
+            message.setDescription("non-compliant-feature with some text value and " +
+                "pagination-enabled with value true or false are required.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
 
         } else if ("true".equals(paginationEnabled)) {
@@ -665,22 +781,32 @@ public class Dashboard {
 
             if (resultCount < 10) {
                 message.setErrorMessage("Invalid request count.");
-                message.setDescription("Requested row count should be equal to 10 or more than that.");
+                message.setDescription("Requested result count should be equal to 10 or more than that.");
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
             }
 
             Map<String, Object> filters = new LinkedHashMap<>();
-            if (platform != null &&
-                ("android".equals(platform) ||
+            if (platform != null) {
+                if ("android".equals(platform) ||
                     "ios".equals(platform) ||
-                        "windows".equals(platform))) {
-                filters.put("PLATFORM", platform);
+                        "windows".equals(platform)) {
+                    filters.put("PLATFORM", platform);
+                } else {
+                    message.setErrorMessage("Invalid value for platform query parameter.");
+                    message.setDescription("platform query parameter value could only be either android, ios or windows.");
+                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+                }
             }
 
-            if (ownership != null &&
-                ("BYOD".equals(ownership) ||
-                    "COPE".equals(ownership))) {
-                filters.put("OWNERSHIP", ownership);
+            if (ownership != null) {
+                if ("BYOD".equals(ownership) ||
+                    "COPE".equals(ownership)) {
+                    filters.put("OWNERSHIP", ownership);
+                } else {
+                    message.setErrorMessage("Invalid value for ownership query parameter.");
+                    message.setDescription("ownership query parameter value could only be either BYOD or COPE.");
+                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+                }
             }
 
             GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
@@ -707,7 +833,7 @@ public class Dashboard {
 
             dashboardPaginationGadgetDataWrapper.setContext("feature-non-compliant-device-details");
             dashboardPaginationGadgetDataWrapper.setData(featureNonCompliantDeviceDetailEntriesDataWrapper);
-            dashboardPaginationGadgetDataWrapper.setTotalRecordsCount(paginationResult.getRecordsTotal());
+            dashboardPaginationGadgetDataWrapper.setTotalRecordCount(paginationResult.getRecordsTotal());
 
             List<DashboardPaginationGadgetDataWrapper> responsePayload = new ArrayList<>();
             responsePayload.add(dashboardPaginationGadgetDataWrapper);
@@ -717,17 +843,27 @@ public class Dashboard {
         } else if ("false".equals(paginationEnabled)) {
 
             Map<String, Object> filters = new LinkedHashMap<>();
-            if (platform != null &&
-                ("android".equals(platform) ||
+            if (platform != null) {
+                if ("android".equals(platform) ||
                     "ios".equals(platform) ||
-                        "windows".equals(platform))) {
-                filters.put("PLATFORM", platform);
+                        "windows".equals(platform)) {
+                    filters.put("PLATFORM", platform);
+                } else {
+                    message.setErrorMessage("Invalid value for platform query parameter.");
+                    message.setDescription("platform query parameter value could only be either android, ios or windows.");
+                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+                }
             }
 
-            if (ownership != null &&
-                ("BYOD".equals(ownership) ||
-                    "COPE".equals(ownership))) {
-                filters.put("OWNERSHIP", ownership);
+            if (ownership != null) {
+                if ("BYOD".equals(ownership) ||
+                    "COPE".equals(ownership)) {
+                    filters.put("OWNERSHIP", ownership);
+                } else {
+                    message.setErrorMessage("Invalid value for ownership query parameter.");
+                    message.setDescription("ownership query parameter value could only be either BYOD or COPE.");
+                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+                }
             }
 
             GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
