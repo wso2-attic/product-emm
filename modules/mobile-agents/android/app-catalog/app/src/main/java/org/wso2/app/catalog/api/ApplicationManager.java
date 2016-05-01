@@ -196,7 +196,8 @@ public class ApplicationManager {
      *
      * @param url - APK Url should be passed in as a String.
      */
-    public void installApp(String url) {
+    public void installApp(String url, String packageName) {
+        Preference.putString(context, resources.getString(R.string.current_downloading_app), packageName);
         if (isPackageInstalled(Constants.AGENT_PACKAGE_NAME)) {
             CommonUtils.callAgentApp(context, Constants.Operation.INSTALL_APPLICATION,
                                      url, null);
