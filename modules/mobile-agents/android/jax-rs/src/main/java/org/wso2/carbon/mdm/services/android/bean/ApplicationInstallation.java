@@ -28,6 +28,7 @@ public class ApplicationInstallation extends AndroidOperation implements Seriali
 	private String appIdentifier;
 	private String type;
 	private String url;
+	private String schedule;
 
 	public String getAppIdentifier() {
 		return appIdentifier;
@@ -51,5 +52,13 @@ public class ApplicationInstallation extends AndroidOperation implements Seriali
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public String getSchedule() {
+		return schedule;
+	}
+
+	public void setSchedule(String schedule) {
+		this.schedule = schedule;
 	}
 }

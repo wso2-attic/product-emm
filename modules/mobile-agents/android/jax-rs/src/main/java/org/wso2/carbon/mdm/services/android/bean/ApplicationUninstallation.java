@@ -29,6 +29,7 @@ public class ApplicationUninstallation extends AndroidOperation implements Seria
 	private String type;
 	private String url;
 	private String name;
+	private String schedule;
 
 	public String getAppIdentifier() {
 		return appIdentifier;
@@ -60,5 +61,13 @@ public class ApplicationUninstallation extends AndroidOperation implements Seria
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getSchedule() {
+		return schedule;
+	}
+
+	public void setSchedule(String schedule) {
+		this.schedule = schedule;
 	}
 }
