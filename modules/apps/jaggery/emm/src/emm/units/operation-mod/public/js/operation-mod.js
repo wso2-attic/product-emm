@@ -1618,6 +1618,10 @@ var operationModule = function () {
             configuredOperations.push(featureCode);
             publicMethods.populateUI(platformType, featureCode, operationPayload);
         }
+        if (restrictions) {
+            configuredOperations.push(androidOperationConstants["CAMERA_OPERATION_CODE"]);
+            publicMethods.populateUI(platformType, androidOperationConstants["CAMERA_OPERATION_CODE"], JSON.stringify(restrictions));
+        }
         return configuredOperations;
     };
 
