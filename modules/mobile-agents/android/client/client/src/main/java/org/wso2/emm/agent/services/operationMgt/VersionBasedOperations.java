@@ -156,7 +156,15 @@ public interface VersionBasedOperations {
      *
      * @param operation - Operation object
      */
-    void passOperationToSystemApp(Operation operation) throws AndroidAgentException;
+    void passOperationToSystemApp(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
+
+    /**
+     * Restrict access to applications
+     *
+     * @param operation  - Operation object
+     * @throws AndroidAgentException
+     */
+    void restrictAccessToApplications(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException;
 
     /**
      * Set policy bundle.

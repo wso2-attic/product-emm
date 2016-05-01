@@ -20,19 +20,23 @@ package org.wso2.emm.agent.services;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
-import android.util.Log;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.WiFiConfig;
+import org.wso2.emm.agent.beans.AppRestriction;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is used to revoke the existing policy on the device.
@@ -44,7 +48,7 @@ public class PolicyRevokeHandler {
     private DevicePolicyManager devicePolicyManager;
     private Resources resources;
     private ComponentName deviceAdmin;
-    private ApplicationManager appList;
+    private ApplicationManager applicationManager;
 
     public PolicyRevokeHandler(Context context){
         this.context = context;
@@ -52,7 +56,7 @@ public class PolicyRevokeHandler {
         this.devicePolicyManager =
                 (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
         this.deviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
-        this.appList = new ApplicationManager(context.getApplicationContext());
+        this.applicationManager = new ApplicationManager(context.getApplicationContext());
     }
 
     /**
@@ -115,12 +119,15 @@ public class PolicyRevokeHandler {
             case Constants.Operation.ENABLE_ADMIN:
             case Constants.Operation.SET_SCREEN_CAPTURE_DISABLED:
             case Constants.Operation.SET_STATUS_BAR_DISABLED:
-                if(appList.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
+                if(applicationManager.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
                     CommonUtils.callSystemApp(context, operation.getCode(),
                                               Boolean.toString(false), null);
                 } else {
                     throw new AndroidAgentException("Invalid operation code received");
                 }
+                break;
+            case Constants.Operation.APP_RESTRICTION:
+                revokeAppRestrictionPolicy(operation);
                 break;
             default:
                 throw new AndroidAgentException("Invalid operation code received");
@@ -155,12 +162,41 @@ public class PolicyRevokeHandler {
             }
 
             if(isAppInstalled(appIdentifier)){
-                appList.uninstallApplication(appIdentifier, null);
+                applicationManager.uninstallApplication(appIdentifier, null);
             }
 
         } catch (JSONException e) {
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
+    }
+
+    /**
+     * Revoke app restriction policy (black list or white list)
+     *
+     * @param operation - Operation object
+     * @throws AndroidAgentException
+     */
+    private void revokeAppRestrictionPolicy(org.wso2.emm.agent.beans.Operation operation)
+            throws AndroidAgentException {
+
+        AppRestriction appRestriction =
+                CommonUtils.getAppRestrictionTypeAndList(operation, null, null);
+
+        if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
+            for (String packageName : appRestriction.getRestrictedList()) {
+                CommonUtils.callSystemApp(context, operation.getCode(), "true", packageName);
+            }
+        } else if (Constants.AppRestriction.WHITE_LIST
+                .equals(appRestriction.getRestrictionType())) {
+            List<String> installedAppPackages = CommonUtils.getInstalledAppPackages(context);
+
+            List<String> toBeUnHideApps = new ArrayList<>(installedAppPackages);
+            toBeUnHideApps.removeAll(appRestriction.getRestrictedList());
+            for (String packageName : toBeUnHideApps) {
+                CommonUtils.callSystemApp(context, operation.getCode(), "true", packageName);
+            }
+        }
+
     }
 
     /**
@@ -171,7 +207,7 @@ public class PolicyRevokeHandler {
      */
     private boolean isAppInstalled(String appIdentifier){
         boolean appInstalled=false;
-        ArrayList<DeviceAppInfo> apps = new ArrayList<>(appList.getInstalledApps().values());
+        ArrayList<DeviceAppInfo> apps = new ArrayList<>(applicationManager.getInstalledApps().values());
         for (DeviceAppInfo appInfo : apps) {
             if(appIdentifier.trim().equals(appInfo.getPackagename())){
                 appInstalled = true;

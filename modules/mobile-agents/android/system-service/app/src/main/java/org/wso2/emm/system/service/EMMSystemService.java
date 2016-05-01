@@ -124,7 +124,9 @@ public class EMMSystemService extends IntentService {
                             restrictionCode = true;
                         }
                     }
-                } else if (extras.containsKey("appUri")) {
+                }
+
+                if (extras.containsKey("appUri")) {
                     appUri = extras.getString("appUri");
                 }
             }
@@ -137,15 +139,8 @@ public class EMMSystemService extends IntentService {
                 if (Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
                     doTask(operationCode);
                 }
-
-                if (extras.containsKey("appUri")) {
-                    appUri = extras.getString("appUri");
-                }
             }
-
         }
-
-
     }
 
     private void startAdmin() {
@@ -288,6 +283,19 @@ public class EMMSystemService extends IntentService {
                 break;
             case Constants.Operation.SET_SCREEN_CAPTURE_DISABLED:
                 SettingsManager.setScreenCaptureDisabled(restrictionCode);
+                break;
+            case Constants.Operation.APP_RESTRICTION:
+                if (command != null && (command.equals("true") || command.equals("false"))) {
+                    SettingsManager.setVisibilityOfApp(appUri, Boolean.parseBoolean(command));
+                }
+                else {
+                    Intent broadcastIntent = new Intent();
+                    broadcastIntent.setAction(Constants.SYSTEM_APP_ACTION_RESPONSE);
+                    broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                    broadcastIntent.putExtra(Constants.STATUS, SettingsManager.isAppHidden(appUri));
+                    broadcastIntent.putExtra(Constants.PAYLOAD, appUri);
+                    sendBroadcast(broadcastIntent);
+                }
                 break;
             //Only With Android M.
             case Constants.Operation.SET_STATUS_BAR_DISABLED:

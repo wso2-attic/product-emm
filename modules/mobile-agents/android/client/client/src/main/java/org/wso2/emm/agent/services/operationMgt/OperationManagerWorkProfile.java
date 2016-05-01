@@ -18,18 +18,28 @@
 package org.wso2.emm.agent.services.operationMgt;
 
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.beans.AppRestriction;
 import org.wso2.emm.agent.beans.Operation;
+import org.wso2.emm.agent.services.AppLockService;
+import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 
+import java.util.ArrayList;
+
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 public class OperationManagerWorkProfile extends OperationManager {
@@ -367,6 +377,32 @@ public class OperationManagerWorkProfile extends OperationManager {
         operation.setStatus(getContextResources().getString(R.string.operation_value_error));
         getResultBuilder().build(operation);
         Log.d(TAG, "Operation not supported.");
+    }
+
+    @Override
+    public void restrictAccessToApplications(Operation operation) throws AndroidAgentException {
+        AppRestriction appRestriction = CommonUtils.getAppRestrictionTypeAndList(operation, getResultBuilder(), getContextResources());
+
+        if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
+            Intent restrictionIntent = new Intent(getContext(), AppLockService.class);
+            restrictionIntent.setAction(Constants.APP_LOCK_SERVICE);
+
+            restrictionIntent.putStringArrayListExtra(Constants.AppRestriction.APP_LIST, (ArrayList) appRestriction.getRestrictedList());
+
+            PendingIntent pendingIntent = PendingIntent.getService(getContext(), 0, restrictionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.add(Calendar.SECOND, 1); // First time
+            long frequency = 1 * 1000; // In ms
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), frequency, pendingIntent);
+
+            getContext().startService(restrictionIntent);
+
+        }
+        operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+        getResultBuilder().build(operation);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
