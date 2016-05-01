@@ -87,6 +87,7 @@ public class Constants {
 		public static final String ENABLE_ADMIN = "ENABLE_ADMIN";
 		public static final String SET_SCREEN_CAPTURE_DISABLED = "SET_SCREEN_CAPTURE_DISABLED";
 		public static final String SET_STATUS_BAR_DISABLED = "SET_STATUS_BAR_DISABLED";
+		public static final String GET_FIRMWARE_UPGRADE_PACKAGE_STATUS = "FIRMWARE_UPGRADE_PACKAGE_STATUS";
 
 	}
 
