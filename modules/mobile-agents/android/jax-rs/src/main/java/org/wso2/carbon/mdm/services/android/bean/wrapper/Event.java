@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2016, WSO2 Inc. (http:www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -11,29 +11,21 @@
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
+ * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
  */
 
-package org.wso2.carbon.mdm.services.android.bean;
+package org.wso2.carbon.mdm.services.android.bean.wrapper;
 
 /**
- * This class represents event details that  needs publishing.
+ * This class is used to wrap the events which receive from the agent application.
  */
-public class EventPayload {
+public class Event {
 
     private String deviceIdentifier;
-    private String type;
     private String payload;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
+    private String type;
 
     public String getPayload() {
         return payload;
@@ -51,5 +43,14 @@ public class EventPayload {
         this.deviceIdentifier = deviceIdentifier;
     }
 
-}
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+
+}

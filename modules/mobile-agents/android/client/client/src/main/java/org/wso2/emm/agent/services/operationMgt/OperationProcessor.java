@@ -97,6 +97,9 @@ public class OperationProcessor {
 			case Constants.Operation.INSTALL_APPLICATION_BUNDLE:
 				operationManager.installAppBundle(operation);
 				break;
+			case Constants.Operation.UPDATE_APPLICATION:
+				operationManager.installAppBundle(operation);
+				break;
 			case Constants.Operation.UNINSTALL_APPLICATION:
 				operationManager.uninstallApplication(operation);
 				break;

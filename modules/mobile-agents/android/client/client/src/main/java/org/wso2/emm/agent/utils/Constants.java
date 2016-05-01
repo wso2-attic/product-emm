@@ -52,8 +52,9 @@ public class Constants {
 	// This is used to skip the license
 	public static final boolean SKIP_LICENSE = false;
 	public static final boolean HIDE_LOGIN_UI = false;
+	public static final boolean SKIP_WORK_PROFILE_CREATION = false;
+	public static final boolean HIDE_ERROR_DIALOG = false;
 
-	// TODO: Add API_VERSION to server endpoint
 	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";
 	public static final String SERVER_AUTHENTICATION_ENDPOINT = "register/authenticate/device";
 	public static final String LICENSE_ENDPOINT = SERVER_APP_ENDPOINT + "device/license";
@@ -67,7 +68,7 @@ public class Constants {
 	public static final String NOTIFICATION_ENDPOINT = SERVER_APP_ENDPOINT + "operation/";
 	public static final String GOOGLE_PLAY_APP_URI = "market://details?id=";
 	public static final String DYNAMIC_CLIENT_REGISTER_ENDPOINT = "/dynamic-client-web/register";
-	public static final String APP_LIST_ENDPOINT = "/store/apis/v1.0/assets/mobileapp";
+	public static final String APP_LIST_ENDPOINT = "/api/appm/publisher/v1.0/apps/mobileapp?field-filter=all";
 	public static final String ACTION_RESPONSE = "org.wso2.emm.agent.MESSAGE_PROCESSED";
 	public static final String POLICY_ENDPOINT = SERVER_APP_ENDPOINT + "policy/";
 	public static final String EVENT_ENDPOINT = SERVER_APP_ENDPOINT + "events/";
@@ -167,6 +168,7 @@ public class Constants {
 		public static final String CREATED = "201";
 		public static final String ACCEPT = "202";
 		public static final String AUTHENTICATION_FAILED = "400";
+		public static final String UNAUTHORIZED = "401";
 		public static final String INTERNAL_SERVER_ERROR = "500";
 	}
 
@@ -200,6 +202,7 @@ public class Constants {
 		public static final String CHANGE_LOCK_CODE = "CHANGE_LOCK_CODE";
 		public static final String INSTALL_APPLICATION = "INSTALL_APPLICATION";
 		public static final String UNINSTALL_APPLICATION = "UNINSTALL_APPLICATION";
+		public static final String UPDATE_APPLICATION = "UPDATE_APPLICATION";
 		public static final String BLACKLIST_APPLICATIONS = "BLACKLIST_APPLICATIONS";
 		public static final String ENCRYPT_STORAGE = "ENCRYPT_STORAGE";
 		public static final String DEVICE_RING = "DEVICE_RING";
@@ -261,6 +264,7 @@ public class Constants {
 		public static final String WORK_PROFILE= "WORK_PROFILE";
 		public static final String GET_APPLICATION_LIST = "GET_APP_LIST";
 		public static final String UNINSTALL_WEBCLIP = "UNINSTALL_WEBCLIP";
+		public static final String GET_APP_DOWNLOAD_PROGRESS = "APP_DOWNLOAD_PROGRESS";
 	}
 
 	/**
@@ -367,8 +371,8 @@ public class Constants {
 		public static final String LATITUDE = "latitude";
 	}
 
-	public final class EventListners {
-		private EventListners(){
+	public final class EventListeners {
+		private EventListeners(){
 			throw new AssertionError();
 		}
 		public static final boolean EVENT_LISTENING_ENABLED = false;
@@ -377,7 +381,7 @@ public class Constants {
 		public static final boolean RUNTIME_STATE_LISTENER = false;
 		public static final String RUNTIME_STATE = "RUNTIME_STATE";
 		public static final long DEFAULT_START_TIME = 1000;
-		public static final long DEFAULT_INTERVAL = 5000;
+		public static final long DEFAULT_INTERVAL = 30000;
 		public static final int DEFAULT_LISTENER_CODE = 10001;
 		public static final String REQUEST_CODE = "requestCode";
 	}

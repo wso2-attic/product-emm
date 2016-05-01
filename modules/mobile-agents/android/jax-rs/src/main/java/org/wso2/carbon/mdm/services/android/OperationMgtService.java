@@ -583,6 +583,50 @@ public class OperationMgtService {
     }
 
     @POST
+    @Path("update-application")
+    public Response updateApplication(@HeaderParam(ACCEPT) String acceptHeader,
+                                       ApplicationUpdateBeanWrapper applicationUpdateBeanWrapper) {
+
+        if (log.isDebugEnabled()) {
+            log.debug("Invoking 'UpdateApplication' operation");
+        }
+
+        MediaType responseMediaType = AndroidAPIUtils.getResponseMediaType(acceptHeader);
+        Message message = new Message();
+
+        try {
+            ApplicationUpdate applicationUpdate = applicationUpdateBeanWrapper.getOperation();
+
+            if (applicationUpdate == null) {
+                if (log.isDebugEnabled()) {
+                    log.debug("The payload of the application update operation is incorrect");
+                }
+                throw new OperationManagementException("Issue in creating a new application update instance");
+            }
+
+            ProfileOperation operation = new ProfileOperation();
+            operation.setCode(AndroidConstants.OperationCodes.UPDATE_APPLICATION);
+            operation.setType(Operation.Type.PROFILE);
+            operation.setPayLoad(applicationUpdate.toJSON());
+
+            return AndroidAPIUtils.getOperationResponse(applicationUpdateBeanWrapper.getDeviceIDs(),
+                    operation, message, responseMediaType);
+        } catch (OperationManagementException e) {
+            String errorMessage = "Issue in retrieving operation management service instance";
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            log.error(errorMessage, e);
+            throw new AndroidOperationException(message, responseMediaType);
+        } catch (DeviceManagementException e) {
+            String errorMessage = "Issue in retrieving device management service instance";
+            message = Message.responseMessage(errorMessage).
+                    responseCode(Response.Status.INTERNAL_SERVER_ERROR.toString()).build();
+            log.error(errorMessage, e);
+            throw new AndroidOperationException(message, responseMediaType);
+        }
+    }
+
+    @POST
     @Path("uninstall-application")
     public Response uninstallApplication(@HeaderParam(ACCEPT) String acceptHeader,
                                          ApplicationUninstallationBeanWrapper applicationUninstallationBeanWrapper) {

@@ -27,6 +27,7 @@ import org.wso2.emm.agent.proxy.interfaces.TokenCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants;
 import org.wso2.emm.agent.proxy.utils.ServerUtilities;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -129,7 +130,12 @@ public class APIController implements TokenCallBack {
 
 		@Override
 		protected void onPostExecute(Map<String, String> result) {
-            apiResultCallBack.onReceiveAPIResult(result, IdentityProxy.getInstance().getRequestCode());
+			if(Constants.DEBUG_ENABLED) {
+				if(result != null && !result.isEmpty()) {
+					Log.d(TAG, "Result :" + Arrays.toString(result.entrySet().toArray()));
+				}
+			}
+			apiResultCallBack.onReceiveAPIResult(result, IdentityProxy.getInstance().getRequestCode());
 		}
 	}
 
@@ -187,6 +193,11 @@ public class APIController implements TokenCallBack {
 
 		@Override
 		protected void onPostExecute(Map<String, String> result) {
+			if(Constants.DEBUG_ENABLED) {
+				if(result != null && !result.isEmpty()) {
+					Log.e(TAG, "Result :" + Arrays.toString(result.entrySet().toArray()));
+				}
+			}
 			apiResultCallBack.onReceiveAPIResult(result, requestCode);
 		}
 	}

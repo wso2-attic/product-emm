@@ -666,7 +666,7 @@ public class Operation implements APIResultCallBack {
 				manageWebClip(operation);
 			} else {
 				packageName = appData.getString(resources.getString(R.string.app_identifier));
-				appList.uninstallApplication(packageName);
+				appList.uninstallApplication(packageName, null);
 				operation.setStatus(resources.getString(R.string.operation_value_completed));
 				resultBuilder.build(operation);
 			}
@@ -1166,7 +1166,7 @@ public class Operation implements APIResultCallBack {
 					appUrl = data.getString(resources.getString(R.string.app_url));
 					operation.setStatus(resources.getString(R.string.operation_value_completed));
 					resultBuilder.build(operation);
-					appList.installApp(appUrl);
+					appList.installApp(appUrl, null);
 
 				} else if (type.equalsIgnoreCase(resources.getString(R.string.intent_extra_public))) {
 					appUrl = data.getString(resources.getString(R.string.app_identifier));

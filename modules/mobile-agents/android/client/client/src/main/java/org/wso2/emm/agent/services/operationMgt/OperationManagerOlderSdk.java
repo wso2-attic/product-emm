@@ -123,7 +123,8 @@ public class OperationManagerOlderSdk extends OperationManager {
     @Override
     public void installAppBundle(Operation operation) throws AndroidAgentException {
         try {
-            if (operation.getCode().equals(Constants.Operation.INSTALL_APPLICATION)) {
+            if (operation.getCode().equals(Constants.Operation.INSTALL_APPLICATION) ||
+                    operation.getCode().equals(Constants.Operation.UPDATE_APPLICATION)) {
                 JSONObject appData = new JSONObject(operation.getPayLoad().toString());
                 installApplication(appData, operation);
             } else if (operation.getCode().equals(Constants.Operation.INSTALL_APPLICATION_BUNDLE)) {
@@ -155,6 +156,7 @@ public class OperationManagerOlderSdk extends OperationManager {
         String type;
         String name;
         String operationType;
+        String schedule = null;
 
         try {
             if (!data.isNull(getContextResources().getString(R.string.app_type))) {
@@ -162,9 +164,12 @@ public class OperationManagerOlderSdk extends OperationManager {
 
                 if (type.equalsIgnoreCase(getContextResources().getString(R.string.intent_extra_enterprise))) {
                     appUrl = data.getString(getContextResources().getString(R.string.app_url));
+                    if(data.has(getContextResources().getString(R.string.app_schedule))){
+                        schedule = data.getString(getContextResources().getString(R.string.app_schedule));
+                    }
                     operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
                     getResultBuilder().build(operation);
-                    getAppList().installApp(appUrl);
+                    getAppList().installApp(appUrl, schedule);
 
                 } else if (type.equalsIgnoreCase(getContextResources().getString(R.string.intent_extra_public))) {
                     appUrl = data.getString(getContextResources().getString(R.string.app_identifier));
@@ -510,7 +515,7 @@ public class OperationManagerOlderSdk extends OperationManager {
     public void handleUserRestriction(Operation operation) throws AndroidAgentException {
         operation.setStatus(getContextResources().getString(R.string.operation_value_error));
         getResultBuilder().build(operation);
-        Log.d(TAG, "Adding User Restriction is not supported");
+        //Log.d(TAG, "Adding User Restriction is not supported");
     }
 
     @Override
@@ -526,7 +531,6 @@ public class OperationManagerOlderSdk extends OperationManager {
             CommonUtils.callSystemApp(getContext(),operation.getCode(),
                     Boolean.toString(operation.isEnabled()), null);
         } else {
-            Log.e(TAG, "System app is not available. Hence operation '" + operation.getCode() + "' is not supported");
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
             getResultBuilder().build(operation);
         }

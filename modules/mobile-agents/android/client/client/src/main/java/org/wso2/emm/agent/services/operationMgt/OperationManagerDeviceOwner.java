@@ -145,6 +145,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
         String type;
         String name;
         String operationType;
+        String schedule = null;
 
         try {
             if (!data.isNull(getContextResources().getString(R.string.app_type))) {
@@ -152,9 +153,12 @@ public class OperationManagerDeviceOwner extends OperationManager {
 
                 if (type.equalsIgnoreCase(getContextResources().getString(R.string.intent_extra_enterprise))) {
                     appUrl = data.getString(getContextResources().getString(R.string.app_url));
+                    if(data.has(getContextResources().getString(R.string.app_schedule))){
+                        schedule = data.getString(getContextResources().getString(R.string.app_schedule));
+                    }
                     operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
                     getResultBuilder().build(operation);
-                    getAppList().installApp(appUrl);
+                    getAppList().installApp(appUrl, schedule);
 
                 } else if (type.equalsIgnoreCase(getContextResources().getString(R.string.intent_extra_public))) {
                     appUrl = data.getString(getContextResources().getString(R.string.app_identifier));
@@ -375,7 +379,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
 
             if (password != null && !password.isEmpty()) {
                 getDevicePolicyManager().resetPassword(password,
-                                                       DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY);
+                        DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY);
                 getDevicePolicyManager().lockNow();
             }
 
@@ -556,7 +560,9 @@ public class OperationManagerDeviceOwner extends OperationManager {
             CommonUtils.callSystemApp(getContext(),operation.getCode(),
                     Boolean.toString(operation.isEnabled()), null);
         } else {
-            Log.e(TAG, "Invalid operation code received");
+            if (operation.isEnabled()) {
+                Log.e(TAG, "Invalid operation code received");
+            }
         }
     }
 

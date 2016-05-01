@@ -33,6 +33,7 @@ import android.widget.Toast;
 import org.wso2.emm.system.service.api.OTADownload;
 import org.wso2.emm.system.service.api.SettingsManager;
 import org.wso2.emm.system.service.utils.AlarmUtils;
+import org.wso2.emm.system.service.utils.AppUtils;
 import org.wso2.emm.system.service.utils.Constants;
 import org.wso2.emm.system.service.utils.Preference;
 
@@ -123,6 +124,8 @@ public class EMMSystemService extends IntentService {
                             restrictionCode = true;
                         }
                     }
+                } else if (extras.containsKey("appUri")) {
+                    appUri = extras.getString("appUri");
                 }
 
                 if (extras.containsKey("appUri")) {
@@ -172,12 +175,17 @@ public class EMMSystemService extends IntentService {
                 break;
             case Constants.Operation.SILENT_INSTALL_APPLICATION:
                 if (appUri != null) {
-                    silentInstallApp(getApplicationContext(), Uri.parse(appUri));
+                    silentInstallApp(getApplicationContext(), appUri, command);
+                }
+                break;
+            case Constants.Operation.SILENT_UPDATE_APPLICATION:
+                if (appUri != null) {
+                    silentInstallApp(getApplicationContext(), appUri, command);
                 }
                 break;
             case Constants.Operation.SILENT_UNINSTALL_APPLICATION:
                 if (appUri != null) {
-                    silentUninstallApp(getApplicationContext(), appUri);
+                    silentUninstallApp(getApplicationContext(), appUri, command);
                 }
                 break;
             case Constants.Operation.REMOVE_DEVICE_OWNER:
@@ -315,7 +323,7 @@ public class EMMSystemService extends IntentService {
             Log.i(TAG, "Upgrade has been scheduled to " + command);
             Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), command);
             try {
-                AlarmUtils.setOneTimeAlarm(context, command, Constants.Operation.UPGRADE_FIRMWARE);
+                AlarmUtils.setOneTimeAlarm(context, command, Constants.Operation.UPGRADE_FIRMWARE, null);
             } catch (ParseException e) {
                 Log.e(TAG, "One time alarm time string parsing failed." + e);
             }
@@ -363,53 +371,36 @@ public class EMMSystemService extends IntentService {
     /**
      * Silently installs the app resides in the provided URI.
      */
-    private void silentInstallApp(Context context, Uri packageUri) {
-        PackageManager pm = context.getPackageManager();
-        Class<? extends PackageManager> packageManager = pm.getClass();
-        Method[] allMethods = packageManager.getMethods();
-        for (Method method : allMethods) {
-            if (method.getName().equals("installPackage")) {
-                Log.d(TAG, "Installing the app.");
-                try {
-                    method.invoke(
-                            pm,
-                            new Object[]{
-                                    packageUri,
-                                    null,
-                                    INSTALL_ALL_USERS | INSTALL_FORWARD_LOCK | INSTALL_ALLOW_DOWNGRADE |
-                                    INSTALL_REPLACE_EXISTING,
-                                    null});
-                } catch (IllegalAccessException e) {
-                    Log.e(TAG, "Access denied by PackageManager." + e);
-                } catch (InvocationTargetException e) {
-                    Log.e(TAG, "Installation method not found." + e);
-                }
-
-                break;
+    private void silentInstallApp(Context context, String packageUri, String schedule) {
+        if (schedule != null && !schedule.trim().isEmpty()) {
+            Log.i(TAG, "Silent install has been scheduled to " + schedule);
+            Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), schedule);
+            Preference.putString(context, context.getResources().getString(R.string.app_uri), packageUri);
+            try {
+                AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.SILENT_INSTALL_APPLICATION, packageUri);
+            } catch (ParseException e) {
+                Log.e(TAG, "One time alarm time string parsing failed." + e);
             }
+        } else {
+            AppUtils.silentInstallApp(context, Uri.parse(packageUri));
         }
     }
 
     /**
      * Silently uninstalls the app resides in the provided URI.
      */
-    private void silentUninstallApp(Context context, final String packageName) {
-        PackageManager pm = context.getPackageManager();
-        Class<? extends PackageManager> packageManager = pm.getClass();
-        Method[] allMethods = packageManager.getMethods();
-
-        for (Method method : allMethods) {
-            if (method.getName().equals("deletePackage")) {
-                Log.d(TAG, "Removing the app.");
-                try {
-                    method.invoke(pm, new Object[]{packageName, null, DELETE_ALL_USERS});
-                } catch (IllegalAccessException e) {
-                    Log.e(TAG, "Access denied by PackageManager." + e);
-                } catch (InvocationTargetException e) {
-                    Log.e(TAG, "Installation method not found." + e);
-                }
-                break;
+    private void silentUninstallApp(Context context, final String packageName, String schedule) {
+        if (schedule != null && !schedule.trim().isEmpty()) {
+            Log.i(TAG, "Silent install has been scheduled to " + schedule);
+            Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), schedule);
+            Preference.putString(context, context.getResources().getString(R.string.app_uri), packageName);
+            try {
+                AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.SILENT_UNINSTALL_APPLICATION, packageName);
+            } catch (ParseException e) {
+                Log.e(TAG, "One time alarm time string parsing failed." + e);
             }
+        } else {
+            AppUtils.silentUninstallApp(context, packageName);
         }
     }
 }

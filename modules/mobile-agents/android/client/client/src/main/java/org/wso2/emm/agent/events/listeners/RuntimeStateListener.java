@@ -44,7 +44,7 @@ public class RuntimeStateListener implements AlertEventListener {
         if (application.getCpu() > CPU_THRESHOLD) {
             try {
                 String appState = CommonUtils.toJSON(application);
-                publishEvent(appState, Constants.EventListners.RUNTIME_STATE);
+                publishEvent(appState, Constants.EventListeners.RUNTIME_STATE);
                 if (Constants.DEBUG_MODE_ENABLED) {
                     Log.d(TAG, appState);
                 }

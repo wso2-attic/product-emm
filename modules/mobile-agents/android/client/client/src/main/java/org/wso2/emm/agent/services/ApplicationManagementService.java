@@ -26,6 +26,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
     private static final String TAG = ApplicationManagementService.class.getName();
     private static final String INTENT_KEY_PAYLOAD = "payload";
     private static final String INTENT_KEY_STATUS = "status";
+    private static final String INTENT_KEY_SERVER = "server";
     private static final String INTENT_KEY_CODE = "code";
     private static final String INTENT_KEY_APP_URI = "appUri";
     private static final String INTENT_KEY_APP_NAME = "appName";
@@ -33,6 +34,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
     private String appUri = null;
     private String appName = null;
     private Context context;
+    private ServerConfig utils;
     public ApplicationManagementService() {
         super(TAG);
     }
@@ -41,6 +43,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
     protected void onHandleIntent(Intent intent) {
         Bundle extras = intent.getExtras();
         context = this.getApplicationContext();
+        utils = new ServerConfig();
         if (extras != null) {
             operationCode = extras.getString(INTENT_KEY_CODE);
             if (extras.containsKey(INTENT_KEY_APP_URI)) {
@@ -79,7 +82,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
                 break;
             case Constants.Operation.INSTALL_APPLICATION:
                 if (appUri != null) {
-                    applicationManager.installApp(appUri);
+                    applicationManager.installApp(appUri, null);
                 } else {
                     Toast.makeText(context, context.getResources().getString(R.string.toast_app_installation_failed),
                                    Toast.LENGTH_LONG).show();
@@ -87,7 +90,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
                 break;
             case Constants.Operation.UNINSTALL_APPLICATION:
                 if (appUri != null) {
-                    applicationManager.uninstallApplication(appUri);
+                    applicationManager.uninstallApplication(appUri, null);
                 } else {
                     Toast.makeText(context, context.getResources().getString(R.string.toast_app_removal_failed),
                                    Toast.LENGTH_LONG).show();
@@ -119,6 +122,10 @@ public class ApplicationManagementService extends IntentService implements APIRe
                                    Toast.LENGTH_LONG).show();
                 }
                 break;
+            case Constants.Operation.GET_APP_DOWNLOAD_PROGRESS:
+                sendBroadcast(Constants.Status.SUCCESSFUL, Preference.getString(context, context.getResources().
+                        getString(R.string.app_download_progress)));
+                break;
             default:
                 Log.e(TAG, "Invalid operation code received");
                 break;
@@ -133,7 +140,6 @@ public class ApplicationManagementService extends IntentService implements APIRe
         String ipSaved = Preference.getString(context, Constants.PreferenceFlag.IP);
 
         if (ipSaved != null && !ipSaved.isEmpty()) {
-            ServerConfig utils = new ServerConfig();
             utils.setServerIP(ipSaved);
             CommonUtils.callSecuredAPI(context, utils.getAPIServerURL(context) + Constants.APP_LIST_ENDPOINT,
                                        org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.GET, null,
@@ -150,6 +156,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
         broadcastIntent.putExtra(INTENT_KEY_STATUS, status);
         broadcastIntent.putExtra(INTENT_KEY_PAYLOAD, payload);
+        broadcastIntent.putExtra(INTENT_KEY_SERVER, utils.getAPIServerURL(context));
         sendBroadcast(broadcastIntent);
     }
 

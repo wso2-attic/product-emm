@@ -149,6 +149,9 @@ var InitiateViewOption = null;
                         case 'IN_PROGRESS' :
                             html = '<span><i class="fw fw-ok icon-warning"></i> In Progress</span>';
                             break;
+                        case 'REPEATED' :
+                            html = '<span><i class="fw fw-ok icon-warning"></i> Repeated</span>';
+                            break;
                     }
                     return html;
                 }},
