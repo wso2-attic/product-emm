@@ -369,15 +369,15 @@ public class AndroidAPIUtils {
                     deviceInfo.setVendor(prop.getValue());
                 } else if (prop.getName().equalsIgnoreCase("OS_VERSION")) {
                     deviceInfo.setOsVersion(prop.getValue());
+                } else if (prop.getName().equalsIgnoreCase("IMEI")) {
+                    deviceInfo.getDeviceDetailsMap().put("IMEI",prop.getValue());
+                } else if (prop.getName().equalsIgnoreCase("IMSI")) {
+                    deviceInfo.getDeviceDetailsMap().put("IMSI",prop.getValue());
+                } else if (prop.getName().equalsIgnoreCase("MAC")) {
+                    deviceInfo.getDeviceDetailsMap().put("mac",prop.getValue());
+                }else if (prop.getName().equalsIgnoreCase("SERIAL")) {
+                    deviceInfo.getDeviceDetailsMap().put("serial",prop.getValue());
                 }
-                deviceInfo.getDeviceDetailsMap().put("IMEI",
-                        getProperty(prop.getValue(), "IMEI"));
-                deviceInfo.getDeviceDetailsMap().put("IMSI",
-                        getProperty(prop.getValue(), "IMSI"));
-                deviceInfo.getDeviceDetailsMap().put("mac",
-                        getProperty(prop.getValue(), "MAC"));
-                deviceInfo.getDeviceDetailsMap().put("serial",
-                        getProperty(prop.getValue(), "SERIAL"));
             } else {
                 if (prop.getName().equalsIgnoreCase("CPU_INFO")) {
                     deviceInfo.setTotalRAMMemory(Double.parseDouble(getProperty(prop.getValue(), "User")));
