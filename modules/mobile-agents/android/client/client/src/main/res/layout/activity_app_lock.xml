@@ -28,23 +28,27 @@
     <LinearLayout
         android:id="@+id/linInner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/txtMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="20dp"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/btnOK"
             style="@style/ButtonText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
             android:background="@drawable/btn_orange"
             android:text="@string/button_ok" />
     </LinearLayout>
