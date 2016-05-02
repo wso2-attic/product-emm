@@ -56,6 +56,8 @@
     <string name="shared_pref_installed_app">appPackageName</string>
     <string name="shared_pref_installed_file">appFileName</string>
     <string name="emm_server_url">emm_server_url</string>
+    <string name="app_download_progress">app_progress</string>
+    <string name="current_downloading_app">current_app</string>
     <string name="android_download_manager_ui_resolver">com.android.providers.downloads.ui</string>
     <string name="android_download_manager_list_resolver">com.android.providers.downloads.ui.DownloadList</string>
     <string name="downloader_message_title">App catalog is installing an app for you</string>

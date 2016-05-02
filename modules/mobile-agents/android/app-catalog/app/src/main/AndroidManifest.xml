@@ -54,6 +54,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/TopBarTheme">
         </activity>
+        <service android:name=".services.AppCatalogService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.wso2.app.catalog.START_SERVICE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

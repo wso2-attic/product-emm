@@ -26,6 +26,7 @@ public class Constants {
 	public static final String AGENT_PACKAGE_NAME = "org.wso2.emm.agent";
 	public static final String AGENT_APP_SERVICE_NAME = "org.wso2.emm.agent.START_SERVICE";
 	public static final String AGENT_APP_ACTION_RESPONSE = "org.wso2.emm.agent.MESSAGE_PROCESSED";
+	public static final String ACTION_RESPONSE = "org.wso2.app.catalog.MESSAGE_PROCESSED";
 	public static final String SERVER_PORT = "9763";
 	public static final String SERVER_PROTOCOL = "http://";
 	public static final String SERVER_ADDRESS = "SERVER_ADDRESS";
@@ -72,6 +73,7 @@ public class Constants {
 		public static final String UNINSTALL_APPLICATION = "UNINSTALL_APPLICATION";
 		public static final String WEBCLIP = "WEBCLIP";
 		public static final String UNINSTALL_WEBCLIP = "UNINSTALL_WEBCLIP";
+		public static final String GET_APP_DOWNLOAD_PROGRESS = "APP_DOWNLOAD_PROGRESS";
 	}
 	/**
 	 * Status codes

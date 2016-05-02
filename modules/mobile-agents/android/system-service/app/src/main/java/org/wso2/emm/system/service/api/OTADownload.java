@@ -17,14 +17,15 @@
  */
 package org.wso2.emm.system.service.api;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.UserHandle;
-import android.os.UserManager;
 import android.util.Log;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.wso2.emm.system.service.R;
 import org.wso2.emm.system.service.utils.Constants;
+import org.wso2.emm.system.service.utils.Preference;
 
 import java.net.MalformedURLException;
 
@@ -34,6 +35,11 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
     private static final String TAG = "OTADownload";
     private static final String SI_UNITS_INDEX = "kMGTPE";
     private static final String BINARY_UNITS_INDEX = "KMGTPE";
+    private static final String UPGRADE_AVAILABLE = "upgradeAvailable";
+    private static final String UPGRADE_VERSION = "version";
+    private static final String UPGRADE_RELEASE = "release";
+    private static final String UPGRADE_SIZE = "size";
+    private static final String UPGRADE_DESCRIPTION = "description";
     private Context context;
     private OTAServerManager otaServerManager;
 
@@ -91,10 +97,28 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
         }
     }
 
+    private void sendBroadcast(String status, String payload) {
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(Constants.SYSTEM_APP_ACTION_RESPONSE);
+        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        broadcastIntent.putExtra(Constants.STATUS, status);
+        broadcastIntent.putExtra(Constants.PAYLOAD, payload);
+        context.sendBroadcast(broadcastIntent);
+    }
+
     public void onStateChecked(int error, BuildPropParser parser) {
         if (error == 0) {
             if (!otaServerManager.compareLocalVersionToServer()) {
                 Log.i(TAG, "Software is up to date:" + Build.VERSION.RELEASE + ", " + Build.ID);
+                JSONObject result = new JSONObject();
+                try {
+                    result.put(UPGRADE_AVAILABLE, false);
+                    result.put(UPGRADE_DESCRIPTION, parser.getProp("Software is up to date"));
+                    sendBroadcast(Constants.Status.SUCCESSFUL, result.toString());
+                } catch (JSONException e) {
+                    sendBroadcast(Constants.Status.INTERNAL_SERVER_ERROR, null);
+                    Log.e(TAG, "Result payload build failed." + e);
+                }
             } else {
                 final long bytes = otaServerManager.getUpgradePackageSize();
                 Log.i(TAG, "New release found " + Build.VERSION.RELEASE + ", " + Build.ID);
@@ -109,7 +133,24 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
                            parser.getProp("ro.build.description") + "\n" +
                            "size : " + length);
                 //Downloading the new update package if a new version is available.
-                otaServerManager.startDownloadUpgradePackage();
+                if (Preference.getBoolean(context, context.getResources().getString(R.string.
+                                                                                 firmware_status_check_in_progress))) {
+                    JSONObject result = new JSONObject();
+                    try {
+                        result.put(UPGRADE_AVAILABLE, true);
+                        result.put(UPGRADE_SIZE, length);
+                        result.put(UPGRADE_RELEASE, parser.getNumRelease());
+                        result.put(UPGRADE_VERSION, parser.getProp("ro.build.id"));
+                        result.put(UPGRADE_DESCRIPTION, parser.getProp("ro.build.description"));
+                        sendBroadcast(Constants.Status.SUCCESSFUL, result.toString());
+                    } catch (JSONException e) {
+                        sendBroadcast(Constants.Status.INTERNAL_SERVER_ERROR, null);
+                        Log.e(TAG, "Result payload build failed." + e);
+                    }
+
+                } else {
+                    otaServerManager.startDownloadUpgradePackage();
+                }
             }
         } else if (error == ERROR_WIFI_NOT_AVAILABLE) {
             Log.e(TAG, "OTA failed due to WIFI connection failure.");
@@ -157,12 +198,7 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
         Intent intent = new Intent(Constants.AGENT_APP_PACKAGE_NAME + Constants.AGENT_APP_ALERT_ACTIVITY);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("message", message);
-
-        Log.i(TAG, "The serial Number for current user is:" + ActivityManager.getCurrentUser());
-
-        UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-        UserHandle userHandle = userManager.getUserForSerialNumber(ActivityManager.getCurrentUser());
-        context.startActivityAsUser(intent, userHandle);
+        context.startActivity(intent);
     }
 
 }

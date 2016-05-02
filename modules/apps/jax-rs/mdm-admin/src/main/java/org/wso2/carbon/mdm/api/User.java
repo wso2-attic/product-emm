@@ -114,7 +114,6 @@ public class User {
         }
     }
 
-
     /**
      * Method to get user information from emm-user-store.
      *
@@ -174,6 +173,7 @@ public class User {
     public Response updateUser(UserWrapper userWrapper, @QueryParam("username") String username)
             throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
+        ResponsePayload responsePayload = new ResponsePayload();
         try {
             if (userStoreManager.isExistingUser(userWrapper.getUsername())) {
                 Map<String, String> defaultUserClaims =
@@ -216,15 +216,22 @@ public class User {
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + userWrapper.getUsername() + " was successfully updated.");
                 }
-                return Response.status(HttpStatus.SC_CREATED).entity("User by username: " + userWrapper.getUsername() +
-                        " was successfully updated.").build();
+                // returning response with success state
+                responsePayload.setStatusCode(HttpStatus.SC_CREATED);
+                responsePayload.setMessageFromServer("User by username: " + userWrapper.getUsername() +
+                        " was successfully updated.");
+                return Response.status(HttpStatus.SC_CREATED).entity(responsePayload).build();
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + userWrapper.getUsername() +
                             " doesn't exists. Therefore, request made to update user was refused.");
                 }
-                return Response.status(HttpStatus.SC_CONFLICT).entity("User by username: " + userWrapper.getUsername() +
-                        " doesn't  exists. Therefore, request made to update user was refused.").build();
+                // returning response with bad request state
+                responsePayload.setStatusCode(HttpStatus.SC_CONFLICT);
+                responsePayload.
+                        setMessageFromServer("User by username: " + userWrapper.getUsername() +
+                                " doesn't  exists. Therefore, request made to update user was refused.");
+                return Response.status(HttpStatus.SC_CONFLICT).entity(responsePayload).build();
             }
         } catch (UserStoreException | UnsupportedEncodingException e) {
             String msg = "Exception in trying to update user by username: " + userWrapper.getUsername();
@@ -290,6 +297,7 @@ public class User {
     @Produces({MediaType.APPLICATION_JSON})
     public Response removeUser(@QueryParam("username") String username) throws MDMAPIException {
         UserStoreManager userStoreManager = MDMAPIUtils.getUserStoreManager();
+        ResponsePayload responsePayload = new ResponsePayload();
         try {
             if (userStoreManager.isExistingUser(username)) {
                 // if user already exists, trying to remove user
@@ -298,15 +306,21 @@ public class User {
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + username + " was successfully removed.");
                 }
-                return Response.status(HttpStatus.SC_OK).entity(
-                        "User by username: " + username + " was successfully removed.").build();
+                // returning response with success state
+                responsePayload.setStatusCode(HttpStatus.SC_OK);
+                responsePayload.setMessageFromServer(
+                        "User by username: " + username + " was successfully removed.");
+                return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
             } else {
                 // Outputting debug message upon trying to remove non-existing user
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + username + " does not exist for removal.");
                 }
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity("User by username: " + username +
-                        " does not exist for removal.").build();
+                // returning response with bad request state
+                responsePayload.setStatusCode(HttpStatus.SC_BAD_REQUEST);
+                responsePayload.setMessageFromServer(
+                        "User by username: " + username + " does not exist for removal.");
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(responsePayload).build();
             }
         } catch (UserStoreException e) {
             String msg = "Exception in trying to remove user by username: " + username;
@@ -355,7 +369,11 @@ public class User {
                 if (log.isDebugEnabled()) {
                     log.debug("User by username: " + username + " was successfully removed.");
                 }
-                return Response.status(HttpStatus.SC_OK).entity("User roles obtained for user " + username).build();
+                // returning response with success state
+                responsePayload.setStatusCode(HttpStatus.SC_OK);
+                responsePayload.setMessageFromServer(
+                        "User roles obtained for user " + username);
+                return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
             } else {
                 // Outputting debug message upon trying to remove non-existing user
                 if (log.isDebugEnabled()) {
@@ -451,9 +469,10 @@ public class User {
         responsePayload.setStatusCode(HttpStatus.SC_OK);
         int count;
         count = userList.size();
+        responsePayload.setMessageFromServer("All users were successfully retrieved. " +
+                "Obtained user count: " + count);
         responsePayload.setResponseContent(userList);
-        return Response.status(HttpStatus.SC_OK).entity("All users were successfully retrieved. " +
-                "Obtained user count: " + count).build();
+        return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
     }
 
     /**

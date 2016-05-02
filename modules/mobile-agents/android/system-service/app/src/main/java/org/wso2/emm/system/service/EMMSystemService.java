@@ -23,7 +23,6 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -39,8 +38,6 @@ import org.wso2.emm.system.service.utils.Preference;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.ParseException;
 
 import static android.os.UserManager.ALLOW_PARENT_PROFILE_APP_LINKING;
@@ -82,11 +79,6 @@ import static android.os.UserManager.ENSURE_VERIFY_APPS;
 public class EMMSystemService extends IntentService {
 
     private static final String TAG = "EMMSystemService";
-    private static final int DELETE_ALL_USERS = 0x00000002;
-    private static final int INSTALL_ALL_USERS = 0x00000040;
-    private static final int INSTALL_FORWARD_LOCK = 0x00000001;
-    private static final int INSTALL_ALLOW_DOWNGRADE = 0x00000080;
-    private static final int INSTALL_REPLACE_EXISTING = 0x00000002;
     public static ComponentName cdmDeviceAdmin;
     public static DevicePolicyManager devicePolicyManager;
     public static UserManager mUserManager;
@@ -94,6 +86,7 @@ public class EMMSystemService extends IntentService {
     private String operationCode = null;
     private String command = null;
     private String appUri = null;
+    private Context context;
 
     public EMMSystemService() {
         super("EMMSystemService");
@@ -101,6 +94,7 @@ public class EMMSystemService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        context = this.getApplicationContext();
         cdmDeviceAdmin = new ComponentName(this, ServiceDeviceAdminReceiver.class);
         devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         mUserManager = (UserManager) getSystemService(Context.USER_SERVICE);
@@ -137,6 +131,8 @@ public class EMMSystemService extends IntentService {
 
                 Log.i(TAG, "Will now executing the command ..." + operationCode);
                 if (Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
+                    doTask(operationCode);
+                } else if (Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS.equals(operationCode)) {
                     doTask(operationCode);
                 }
             }
@@ -301,6 +297,12 @@ public class EMMSystemService extends IntentService {
             case Constants.Operation.SET_STATUS_BAR_DISABLED:
                 SettingsManager.setStatusBarDisabled(restrictionCode);
                 break;
+            case Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS:
+                Preference.putBoolean(context, context.getResources().getString(R.string.
+                                                                                        firmware_status_check_in_progress), true);
+                OTADownload otaDownload = new OTADownload(context);
+                otaDownload.startOTA();
+                break;
             default:
                 Log.e(TAG, "Invalid operation code received");
                 break;
@@ -313,6 +315,8 @@ public class EMMSystemService extends IntentService {
     public void upgradeFirmware() {
         Log.i(TAG, "An upgrade has been requested");
         Context context = this.getApplicationContext();
+        Preference.putBoolean(context, context.getResources().getString(R.string.
+                                                                                firmware_status_check_in_progress), false);
         if (command != null && !command.trim().isEmpty()) {
             Log.i(TAG, "Upgrade has been scheduled to " + command);
             Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), command);
