@@ -18,6 +18,7 @@
 package org.wso2.emm.agent.services;
 
 import android.content.Context;
+import android.os.Build;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -170,10 +171,12 @@ public class DeviceInfoPayload {
         property.setValue(String.valueOf(deviceInfo.isEncryptionEnabled()));
         deviceInfoProperties.add(property);
 
-        property = new Device.Property();
-        property.setName(Constants.Device.PASSCODE_STATUS);
-        property.setValue(String.valueOf(deviceInfo.isPasscodeEnabled()));
-        deviceInfoProperties.add(property);
+        if ((deviceInfo.getSdkVersion() >= Build.VERSION_CODES.LOLLIPOP)) {
+            property = new Device.Property();
+            property.setName(Constants.Device.PASSCODE_STATUS);
+            property.setValue(String.valueOf(deviceInfo.isPasscodeEnabled()));
+            deviceInfoProperties.add(property);
+        }
 
         property = new Device.Property();
         property.setName(Constants.Device.BATTERY_LEVEL);
