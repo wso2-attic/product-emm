@@ -36,6 +36,7 @@ import android.os.Environment;
 import android.provider.Browser;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -197,6 +198,7 @@ public class ApplicationManager {
      * @param url - APK Url should be passed in as a String.
      */
     public void installApp(String url, String packageName) {
+        Toast.makeText(context, "Please wait, Application is being installed.", Toast.LENGTH_LONG).show();
         Preference.putString(context, resources.getString(R.string.current_downloading_app), packageName);
         if (isPackageInstalled(Constants.AGENT_PACKAGE_NAME)) {
             CommonUtils.callAgentApp(context, Constants.Operation.INSTALL_APPLICATION,
@@ -230,6 +232,7 @@ public class ApplicationManager {
      * @param packageName - Application package name should be passed in as a String.
      */
     public void uninstallApplication(String packageName) {
+        Toast.makeText(context, "Please wait, Application is being uninstalled.", Toast.LENGTH_LONG).show();
         if (packageName != null &&
             !packageName.contains(resources.getString(R.string.application_package_prefix))) {
             packageName = resources.getString(R.string.application_package_prefix) + packageName;
@@ -254,6 +257,7 @@ public class ApplicationManager {
      */
     public void manageWebAppBookmark(String url, String title, String operationType)
             throws AppCatalogException {
+        Toast.makeText(context, "Please wait, WebClip is being installed.", Toast.LENGTH_LONG).show();
         final Intent bookmarkIntent = new Intent();
         final Intent actionIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         long urlHash = url.hashCode();
