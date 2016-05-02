@@ -359,6 +359,8 @@ public class PolicyComplianceChecker {
                 }
             } else if (Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
                 List<String> remainApps = new ArrayList<>(installedAppPackagesByUser);
+                remainApps.remove(Constants.AGENT_PACKAGE);
+                remainApps.remove(Constants.SYSTEM_SERVICE_PACKAGE);
                 remainApps.removeAll(appRestriction.getRestrictedList());
                 if (remainApps.size() > 0) {
                     for (String remainApp : remainApps) {

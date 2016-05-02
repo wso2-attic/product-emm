@@ -25,6 +25,7 @@ import android.os.Build;
 import android.util.Log;
 
 import org.wso2.emm.agent.AppLockActivity;
+import org.wso2.emm.agent.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ public class AppLockService extends IntentService {
 		ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
 		List<String> appList = lockIntent.getStringArrayListExtra("appList");
+		appList.remove(Constants.AGENT_PACKAGE);
 
 		lockIntent = new Intent(context, AppLockActivity.class);
 		lockIntent.putExtra("message", "this application is restricted by administration");
