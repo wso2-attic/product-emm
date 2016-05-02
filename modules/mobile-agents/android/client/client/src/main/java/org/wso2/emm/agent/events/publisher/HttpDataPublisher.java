@@ -37,14 +37,12 @@ public class HttpDataPublisher implements APIResultCallBack, DataPublisher {
     private static final String TAG = HttpDataPublisher.class.getName();
 
     static {
-        if (EventRegistry.context != null) {
-            DeviceInfo deviceInfo = new DeviceInfo(EventRegistry.context);
-            deviceIdentifier = deviceInfo.getDeviceId();
-            String serverIP = Preference.getString(EventRegistry.context,
+        DeviceInfo deviceInfo = new DeviceInfo(EventRegistry.context);
+        deviceIdentifier = deviceInfo.getDeviceId();
+        String serverIP = Preference.getString(EventRegistry.context,
                                                    Constants.PreferenceFlag.IP);
-            utils = new ServerConfig();
-            utils.setServerIP(serverIP);
-        }
+        utils = new ServerConfig();
+        utils.setServerIP(serverIP);
     }
 
     public void publish(EventPayload eventPayload) {
