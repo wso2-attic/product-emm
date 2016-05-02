@@ -58,11 +58,15 @@ public class ApplicationStateListener extends BroadcastReceiver implements Alert
 
     @Override
     public void publishEvent(String payload, String type) {
-        EventPayload eventPayload = new EventPayload();
-        eventPayload.setPayload(payload);
-        eventPayload.setType(type);
-        HttpDataPublisher httpDataPublisher = new HttpDataPublisher();
-        httpDataPublisher.publish(eventPayload);
+        if (Constants.EventListeners.EVENT_LISTENING_ENABLED) {
+            if (Constants.EventListeners.APPLICATION_STATE_LISTENER) {
+                EventPayload eventPayload = new EventPayload();
+                eventPayload.setPayload(payload);
+                eventPayload.setType(type);
+                HttpDataPublisher httpDataPublisher = new HttpDataPublisher();
+                httpDataPublisher.publish(eventPayload);
+            }
+        }
     }
 
     @Override
