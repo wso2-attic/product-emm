@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,6 +102,26 @@ public class ApplicationManager {
 			}
 		}
 		return appList;
+	}
+
+	/**
+	 * Returns a list of all the applications installed on the device by user.
+	 * @return - List of applications which installed on the device by user.
+	 */
+	public List<String> getInstalledAppsByUser() {
+		List<String> packagesInstalledByUser = new ArrayList<>();
+		int flags = PackageManager.GET_META_DATA |
+				PackageManager.GET_SHARED_LIBRARY_FILES |
+				PackageManager.GET_UNINSTALLED_PACKAGES;
+		List<ApplicationInfo> applications = packageManager.getInstalledApplications(flags);
+		for (ApplicationInfo appInfo : applications) {
+			if ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 1) {
+				// System application
+			} else {
+				packagesInstalledByUser.add(appInfo.packageName);
+			}
+		}
+		return packagesInstalledByUser;
 	}
 
 	/**

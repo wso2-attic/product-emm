@@ -47,6 +47,8 @@ public class Constants {
 	// This is set to override the server host name retrieving screen. If overriding is not
 	// needed, set this to null.
 	public static final String DEFAULT_HOST = null;
+	public static final String SYSTEM_SERVICE_PACKAGE = "org.wso2.emm.system.service";
+	public static final String AGENT_PACKAGE = "org.wso2.emm.agent";
 
 
 	// This is used to skip the license

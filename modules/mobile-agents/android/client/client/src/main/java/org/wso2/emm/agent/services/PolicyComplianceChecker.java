@@ -336,6 +336,7 @@ public class PolicyComplianceChecker {
         AppRestriction appRestriction =
                 CommonUtils.getAppRestrictionTypeAndList(operation, null, null);
         List<String> installedAppPackages = CommonUtils.getInstalledAppPackages(context);
+        List<String> installedAppPackagesByUser = CommonUtils.getInstalledAppPackagesByUser(context);
 
         String ownershipType = Preference.getString(context, Constants.DEVICE_TYPE);
 
@@ -357,9 +358,9 @@ public class PolicyComplianceChecker {
                     }
                 }
             } else if (Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
-                List<String> remainApps = new ArrayList<>(installedAppPackages);
+                List<String> remainApps = new ArrayList<>(installedAppPackagesByUser);
                 remainApps.removeAll(appRestriction.getRestrictedList());
-                if (remainApps.size() >0) {
+                if (remainApps.size() > 0) {
                     for (String remainApp : remainApps) {
                         CommonUtils.callSystemApp(context, operation.getCode(), Constants.AppRestriction.IS_HIDDEN, remainApp);
                     }
