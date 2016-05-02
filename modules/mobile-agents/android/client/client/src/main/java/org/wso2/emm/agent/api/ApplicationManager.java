@@ -110,9 +110,7 @@ public class ApplicationManager {
 	 */
 	public List<String> getInstalledAppsByUser() {
 		List<String> packagesInstalledByUser = new ArrayList<>();
-		int flags = PackageManager.GET_META_DATA |
-				PackageManager.GET_SHARED_LIBRARY_FILES |
-				PackageManager.GET_UNINSTALLED_PACKAGES;
+		int flags = PackageManager.GET_META_DATA ;
 		List<ApplicationInfo> applications = packageManager.getInstalledApplications(flags);
 		for (ApplicationInfo appInfo : applications) {
 			if ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 1) {
