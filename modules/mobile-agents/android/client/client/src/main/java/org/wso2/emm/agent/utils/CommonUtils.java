@@ -334,6 +334,15 @@ public class CommonUtils {
 		return installedAppPackages;
 	}
 
+	/**
+	 *	Get installed package list of applications in device by user
+	 * @param context Context object
+	 * @return list of installed app packages
+	 */
+	public static List<String> getInstalledAppPackagesByUser(Context context) {
+		return new ApplicationManager(context.getApplicationContext()).getInstalledAppsByUser();
+	}
+
 	public static AppRestriction getAppRestrictionTypeAndList(Operation operation,
 	                                                          ResultPayload resultBuilder,
 	                                                          Resources resources)
