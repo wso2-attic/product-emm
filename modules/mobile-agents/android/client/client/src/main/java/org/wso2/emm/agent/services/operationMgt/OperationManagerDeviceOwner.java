@@ -575,8 +575,8 @@ public class OperationManagerDeviceOwner extends OperationManager {
             List<String> installedAppPackagesByUser = CommonUtils.getInstalledAppPackagesByUser(getContext());
             List<String> toBeHideApps = new ArrayList<>(installedAppPackagesByUser);
             toBeHideApps.removeAll(appRestriction.getRestrictedList());
-            toBeHideApps.remove("org.wso2.emm.system.service");
-            toBeHideApps.remove("org.wso2.emm.agent");
+            toBeHideApps.remove(Constants.SYSTEM_SERVICE_PACKAGE);
+            toBeHideApps.remove(Constants.AGENT_PACKAGE);
             for (String packageName : toBeHideApps) {
                 CommonUtils.callSystemApp(getContext(), operation.getCode(), "false" , packageName);
             }
