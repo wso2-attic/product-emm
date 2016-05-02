@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DashboardGadgetDataWrapper {
+
     private String context;
     private List<Map<String, Object>> data;
 
@@ -42,4 +43,5 @@ public class DashboardGadgetDataWrapper {
     public void setData(List<Map<String, Object>> data) {
         this.data = data;
     }
+
 }

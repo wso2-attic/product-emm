@@ -19,6 +19,7 @@
 package org.wso2.carbon.mdm.beans;
 
 public class DashboardPaginationGadgetDataWrapper extends DashboardGadgetDataWrapper {
+
     private int totalRecordCount;
 
     @SuppressWarnings("unused")
@@ -29,4 +30,5 @@ public class DashboardPaginationGadgetDataWrapper extends DashboardGadgetDataWra
     public void setTotalRecordCount(int totalRecordCount) {
         this.totalRecordCount = totalRecordCount;
     }
+
 }
