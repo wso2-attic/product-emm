@@ -335,38 +335,31 @@ public class PolicyComplianceChecker {
 
         AppRestriction appRestriction =
                 CommonUtils.getAppRestrictionTypeAndList(operation, null, null);
+
         List<String> installedAppPackages = CommonUtils.getInstalledAppPackages(context);
-        List<String> installedAppPackagesByUser = CommonUtils.getInstalledAppPackagesByUser(context);
 
         String ownershipType = Preference.getString(context, Constants.DEVICE_TYPE);
 
         if (Constants.OWNERSHIP_COPE.equals(ownershipType)) {
-            IntentFilter filter = new IntentFilter(Constants.AppRestriction.SYSTEM_APP_ACTION_RESPONSE);
-            filter.addCategory(Intent.CATEGORY_DEFAULT);
-            SystemServiceResponseReceiver receiver = new SystemServiceResponseReceiver();
-            context.registerReceiver(receiver, filter);
 
             if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
                 List<String> commonApps = new ArrayList<>(installedAppPackages);
                 if (commonApps.retainAll(appRestriction.getRestrictedList())) {
                     if (commonApps.size() > 0) {
-                        for (String commonApp : commonApps) {
-                            CommonUtils.callSystemApp(context, operation.getCode(), Constants.AppRestriction.IS_HIDDEN, commonApp);
-                        }
-                        receiver.setCompliance(policy);
+                        policy.setCompliance(false);
+                        policy.setMessage(commonApps.toString());
                         return policy;
                     }
                 }
             } else if (Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
+                List<String> installedAppPackagesByUser = CommonUtils.getInstalledAppPackagesByUser(context);
                 List<String> remainApps = new ArrayList<>(installedAppPackagesByUser);
                 remainApps.remove(Constants.AGENT_PACKAGE);
                 remainApps.remove(Constants.SYSTEM_SERVICE_PACKAGE);
                 remainApps.removeAll(appRestriction.getRestrictedList());
                 if (remainApps.size() > 0) {
-                    for (String remainApp : remainApps) {
-                        CommonUtils.callSystemApp(context, operation.getCode(), Constants.AppRestriction.IS_HIDDEN, remainApp);
-                    }
-                    receiver.setCompliance(policy);
+                    policy.setCompliance(false);
+                    policy.setMessage(remainApps.toString());
                     return policy;
                 }
             }
@@ -451,37 +444,5 @@ public class PolicyComplianceChecker {
         }
         policy.setCompliance(true);
         return policy;
-    }
-}
-
-class SystemServiceResponseReceiver extends BroadcastReceiver {
-
-    private static final String TAG = "SystemServiceResponseReceiver";
-    List<String> violatedApps = new ArrayList<>();
-    public static int iterator = 0;
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-
-        String status = intent.getStringExtra(Constants.AppRestriction.STATUS);
-        if (intent.hasExtra(Constants.AppRestriction.PAYLOAD) && intent.getStringExtra(Constants.AppRestriction.PAYLOAD) != null) {
-            try {
-                JSONObject packageName = new JSONObject(intent.getStringExtra(Constants.AppRestriction.PAYLOAD));
-                if(!Boolean.parseBoolean(status)) {
-                    violatedApps.add(packageName.toString());
-                    iterator++;
-                }
-
-            } catch (JSONException e) {
-                Log.e(TAG, "Failed parsing application response" + e);
-            }
-        }
-    }
-
-    public void setCompliance (ComplianceFeature policy) {
-        if (violatedApps.size() > 0) {
-            policy.setCompliance(false);
-            policy.setMessage(violatedApps.toString());
-        }
     }
 }
