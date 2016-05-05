@@ -768,7 +768,13 @@ var operationModule = function () {
             case androidOperationConstants["WIFI_OPERATION_CODE"]:
                 payload = {
                     "wifiSSID": operationPayload["ssid"],
-                    "wifiPassword": operationPayload["password"]
+                    "wifiPassword": operationPayload["password"],
+                    "wifiType": operationPayload["type"],
+                    "wifiEAP": operationPayload["eap"],
+                    "wifiPhase2": operationPayload["phase2"],
+                    "wifiProvisioning": operationPayload["provisioning"],
+                    "wifiIdentity": operationPayload["identity"],
+                    "wifiAnoIdentity": operationPayload["anonymousIdentity"]
                 };
                 break;
             case androidOperationConstants["VPN_OPERATION_CODE"]:
@@ -879,7 +885,13 @@ var operationModule = function () {
                 payload = {
                     "operation": {
                         "ssid": operationData["wifiSSID"],
-                        "password": operationData["wifiPassword"]
+                        "type":  operationData["wifiType"],
+                        "password": operationData["wifiPassword"],
+                        "eap" : operationData["wifiEAP"],
+                        "phase2" : operationData["wifiPhase2"],
+                        "provisioning" : operationData["wifiProvisioning"],
+                        "identity" : operationData["wifiIdentity"],
+                        "anonymousIdentity" : operationData["wifiAnoIdentity"]
                     }
                 };
                 break;

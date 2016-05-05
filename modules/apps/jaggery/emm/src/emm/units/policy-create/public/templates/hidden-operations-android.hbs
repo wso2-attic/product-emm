@@ -762,7 +762,8 @@
                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                     </span>
                         </label>
-                        <select class="form-control" id="wifi-type" onchange="changeAndroidWifiPolicy(this)">
+                        <select class="form-control operationDataKeys" id="wifi-type"
+                                onchange="changeAndroidWifiPolicy(this)" data-key="wifiType">
                             <option value="none" selected>None</option>
                             <option value="wep">WEP</option>
                             <option value="wpa">WPA/WPA 2 PSK</option>
@@ -777,7 +778,8 @@
                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                     </span>
                         </label>
-                        <select class="form-control operationDataKeys" id="wifi-eap" onchange="changeAndroidWifiPolicyEAP(this)">
+                        <select class="form-control operationDataKeys" id="wifi-eap"
+                                onchange="changeAndroidWifiPolicyEAP(this)" data-key="wifiEAP">
                             <option value="peap">PEAP</option>
                             <option value="tls">TLS</option>
                             <option value="ttls">TTLS</option>
@@ -797,7 +799,7 @@
                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                     </span>
                         </label>
-                        <select class="form-control operationDataKeys" id="wifi-phase2">
+                        <select class="form-control operationDataKeys" id="wifi-phase2" data-key="wifiPhase2">
                             <option value="none">None</option>
                             <option value="mchapv2">MCHAPV2</option>
                             <option value="gtc">GTC</option>
@@ -810,7 +812,7 @@
                                         <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                     </span>
                         </label>
-                        <select class="form-control operationDataKeys" id="wifi-provisioning">
+                        <select class="form-control operationDataKeys" id="wifi-provisioning" data-key="wifiProvisioning">
                             <option value="0">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -842,7 +844,7 @@
                             Anonymous Identity should be 1-to-30 characters long
                         </label>
                         <input id="wifi-anoidentity" type="text" class="form-control operationDataKeys"
-                               data-key="wifiIdentity"
+                               data-key="wifiAnoIdentity"
                                maxlength="100" placeholder="[ Should be 1-to-30 characters long ]"/>
                     </div>
                     <div class="wr-input-control" id="control-wifi-password" style="display:none;">

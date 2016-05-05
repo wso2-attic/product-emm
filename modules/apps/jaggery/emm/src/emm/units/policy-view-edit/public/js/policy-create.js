@@ -2080,6 +2080,23 @@ var showAdvanceOperation = function (operation, button) {
     $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
 };
 
+var changeAndroidWifiPolicy = function (select) {
+    slideDownPaneAgainstValueSet(select, 'control-wifi-password', ['wep', 'wpa', '802eap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-eap', ['802eap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-phase2', ['802eap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-identity', ['802eap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-anoidentity', ['802eap']);
+}
+
+var changeAndroidWifiPolicyEAP = function (select) {
+    slideDownPaneAgainstValueSet(select, 'control-wifi-password', ['peap', 'ttls', 'pwd' ,'fast', 'leap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-phase2', ['peap', 'ttls', 'fast']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-provisioning', ['fast']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-identity', ['peap', 'ttls', 'pwd', 'fast', 'leap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-anoidentity', ['peap', 'ttls']);
+}
+
+
 /**
  * Method to slide down a provided pane upon provided value set.
  *
