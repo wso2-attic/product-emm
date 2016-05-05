@@ -23,7 +23,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.analytics.dashboard.GadgetDataService;
 import org.wso2.carbon.device.mgt.analytics.dashboard.dao.exception.InvalidParameterException;
-import org.wso2.carbon.device.mgt.common.PaginationRequest;
 import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
@@ -196,7 +195,7 @@ public class Dashboard {
         PaginationResult paginationResult;
         try {
             paginationResult = gadgetDataService.
-                getNonCompliantDeviceCountsByFeatures(new PaginationRequest(startIndex, resultCount));
+                getNonCompliantDeviceCountsByFeatures(startIndex, resultCount);
         } catch (InvalidParameterException e) {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
             Message message = new Message();
@@ -737,7 +736,7 @@ public class Dashboard {
             PaginationResult paginationResult;
             try {
                 paginationResult = gadgetDataService.
-                    getDevicesWithDetails(filters, new PaginationRequest(startIndex, resultCount));
+                    getDevicesWithDetails(filters, startIndex, resultCount);
             } catch (InvalidParameterException e) {
                 log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
                 message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
@@ -908,8 +907,7 @@ public class Dashboard {
             PaginationResult paginationResult;
             try {
                 paginationResult = gadgetDataService.
-                    getFeatureNonCompliantDevicesWithDetails(nonCompliantFeature, filters,
-                        new PaginationRequest(startIndex, resultCount));
+                    getFeatureNonCompliantDevicesWithDetails(nonCompliantFeature, filters, startIndex, resultCount);
             } catch (InvalidParameterException e) {
                 log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
                 message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
