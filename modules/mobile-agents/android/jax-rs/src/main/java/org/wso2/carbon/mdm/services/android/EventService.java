@@ -56,7 +56,7 @@ public class EventService {
             if (AndroidAPIUtils.getEventPublisherService().publishEvent(
                     EVENT_STREAM_DEFINITION, "1.0.0", new Object[0], new Object[0], payload)) {
                 message.setResponseCode("Event is published successfully.");
-                return Response.status(Response.Status.OK).entity(message).type(responseMediaType).build();
+                return Response.status(Response.Status.CREATED).entity(message).type(responseMediaType).build();
             } else {
                 message.setResponseCode("Error occurred while publishing the event.");
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
