@@ -202,7 +202,7 @@ public class Dashboard {
             Message message = new Message();
             message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
             message.setDescription("This was while trying to execute relevant service layer function " +
-                "@ Dashboard API layer to retrieve non compliant device counts by features." + e.getErrorMessage());
+                "@ Dashboard API layer to retrieve non compliant device counts by features. " + e.getErrorMessage());
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         } catch (SQLException e) {
             String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
@@ -395,7 +395,7 @@ public class Dashboard {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
             message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
             message.setDescription("This was while trying to execute relevant service layer function " +
-                "@ Dashboard API layer to retrieve non compliant device counts by platforms." + e.getErrorMessage());
+                "@ Dashboard API layer to retrieve non compliant device counts by platforms. " + e.getErrorMessage());
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         } catch (SQLException e) {
             String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
@@ -429,7 +429,7 @@ public class Dashboard {
             message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
             message.setDescription("This was while trying to execute relevant service layer function " +
                 "@ Dashboard API layer to retrieve non compliant device " +
-                    "counts by ownership types." + e.getErrorMessage());
+                    "counts by ownership types. " + e.getErrorMessage());
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         } catch (SQLException e) {
             String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
@@ -615,7 +615,7 @@ public class Dashboard {
             message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
             message.setDescription("This was while trying to execute relevant service layer function " +
                 "@ Dashboard API layer to retrieve a feature non-compliant " +
-                    "device count over the total." + e.getErrorMessage());
+                    "device count over the total. " + e.getErrorMessage());
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         } catch (SQLException e) {
             String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
@@ -743,7 +743,7 @@ public class Dashboard {
                 message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
                 message.setDescription("This was while trying to execute relevant service layer function " +
                     "@ Dashboard API layer to retrieve a filtered set of " +
-                        "devices with details." + e.getErrorMessage());
+                        "devices with details. " + e.getErrorMessage());
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
             } catch (SQLException e) {
                 String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
@@ -915,7 +915,7 @@ public class Dashboard {
                 message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
                 message.setDescription("This was while trying to execute relevant service layer function " +
                     "@ Dashboard API layer to retrieve a feature non-compliant " +
-                        "set of devices with details." + e.getErrorMessage());
+                        "set of devices with details. " + e.getErrorMessage());
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
             } catch (SQLException e) {
                 String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
@@ -983,7 +983,7 @@ public class Dashboard {
                 message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
                 message.setDescription("This was while trying to execute relevant service layer function " +
                     "@ Dashboard API layer to retrieve a feature non-compliant " +
-                        "set of devices with details." + e.getErrorMessage());
+                        "set of devices with details. " + e.getErrorMessage());
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
             } catch (SQLException e) {
                 String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
