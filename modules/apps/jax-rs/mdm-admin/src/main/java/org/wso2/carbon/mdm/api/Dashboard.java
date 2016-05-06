@@ -22,7 +22,8 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.analytics.dashboard.GadgetDataService;
-import org.wso2.carbon.device.mgt.analytics.dashboard.dao.exception.InvalidParameterException;
+import org.wso2.carbon.device.mgt.analytics.dashboard.dao.bean.FilterSet;
+import org.wso2.carbon.device.mgt.analytics.dashboard.dao.exception.InvalidParameterValueException;
 import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
@@ -196,16 +197,16 @@ public class Dashboard {
         try {
             paginationResult = gadgetDataService.
                 getNonCompliantDeviceCountsByFeatures(startIndex, resultCount);
-        } catch (InvalidParameterException e) {
-            log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
+        } catch (InvalidParameterValueException e) {
+            log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
             Message message = new Message();
-            message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
+            message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameter value.");
             message.setDescription("This was while trying to execute relevant service layer function " +
-                "@ Dashboard API layer to retrieve non compliant device counts by features. " + e.getErrorMessage());
+                "@ Dashboard API layer to retrieve a non-compliant set of device counts by features. " + e.getErrorMessage());
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         } catch (SQLException e) {
             String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
-                "@ Dashboard API layer to retrieve non-compliant device counts by features.";
+                "@ Dashboard API layer to retrieve a non-compliant set of device counts by features.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -238,66 +239,27 @@ public class Dashboard {
                                             @QueryParam("platform") String platform,
                                             @QueryParam("ownership") String ownership) throws MDMAPIException {
 
-        Map<String, Object> filters = new LinkedHashMap<>();
-        Message message = new Message();
-        if (connectivityStatus != null) {
-            if ("ACTIVE".equals(connectivityStatus) ||
-                "INACTIVE".equals(connectivityStatus) ||
-                    "REMOVED".equals(connectivityStatus)) {
-                filters.put("CONNECTIVITY_STATUS", connectivityStatus);
-            } else {
-                message.setErrorMessage("Invalid value for connectivity-status query parameter.");
-                message.setDescription("connectivity-status query parameter value could only be " +
-                    "either ACTIVE, INACTIVE or REMOVED.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            }
-        }
-
-        if (potentialVulnerability != null) {
-            if ("non-compliant".equals(potentialVulnerability) ||
-                "unmonitored".equals(potentialVulnerability)) {
-                if ("non-compliant".equals(potentialVulnerability)) {
-                    filters.put("IS_COMPLIANT", 0);
-                } else {
-                    filters.put("POLICY_ID", -1);
-                }
-            } else {
-                message.setErrorMessage("Invalid value for potential-vulnerability query parameter.");
-                message.setDescription("potential-vulnerability query parameter value could only be " +
-                    "either non-compliant or unmonitored.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            }
-        }
-
-        if (platform != null) {
-            if ("android".equals(platform) ||
-                "ios".equals(platform) ||
-                    "windows".equals(platform)) {
-                filters.put("PLATFORM", platform);
-            } else {
-                message.setErrorMessage("Invalid value for platform query parameter.");
-                message.setDescription("platform query parameter value could only be either android, ios or windows.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            }
-        }
-
-        if (ownership != null) {
-            if ("BYOD".equals(ownership) ||
-                "COPE".equals(ownership)) {
-                filters.put("OWNERSHIP", ownership);
-            } else {
-                message.setErrorMessage("Invalid value for ownership query parameter.");
-                message.setDescription("ownership query parameter value could only be either BYOD or COPE.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            }
-        }
-
+        // getting gadget data service
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
+
+        // constructing filter set
+        FilterSet filterSet = new FilterSet();
+        filterSet.setConnectivityStatus(connectivityStatus);
+        filterSet.setPotentialVulnerability(potentialVulnerability);
+        filterSet.setPlatform(platform);
+        filterSet.setOwnership(ownership);
 
         // creating device-Counts-by-platforms Data Wrapper
         Map<String, Integer> deviceCountsByPlatforms;
         try {
-            deviceCountsByPlatforms = gadgetDataService.getDeviceCountsByPlatforms(filters);
+            deviceCountsByPlatforms = gadgetDataService.getDeviceCountsByPlatforms(filterSet);
+        } catch (InvalidParameterValueException e) {
+            log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
+            Message message = new Message();
+            message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameter value.");
+            message.setDescription("This was while trying to execute relevant service layer function " +
+                "@ Dashboard API layer to retrieve a filtered set of device counts by platforms. " + e.getErrorMessage());
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         } catch (SQLException e) {
             String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
                 "@ Dashboard API layer to retrieve a filtered set of device counts by platforms.";
@@ -322,7 +284,15 @@ public class Dashboard {
         // creating device-Counts-by-ownership-types Data Wrapper
         Map<String, Integer> deviceCountsByOwnershipTypes;
         try {
-            deviceCountsByOwnershipTypes = gadgetDataService.getDeviceCountsByOwnershipTypes(filters);
+            deviceCountsByOwnershipTypes = gadgetDataService.getDeviceCountsByOwnershipTypes(filterSet);
+        } catch (InvalidParameterValueException e) {
+            log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
+            Message message = new Message();
+            message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameter value.");
+            message.setDescription("This was while trying to execute relevant service layer function " +
+                "@ Dashboard API layer to retrieve a filtered set of device " +
+                    "counts by ownership types. " + e.getErrorMessage());
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         } catch (SQLException e) {
             String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
                 "@ Dashboard API layer to retrieve a filtered set of device counts by ownership types.";
@@ -357,44 +327,26 @@ public class Dashboard {
                                                                @QueryParam("platform") String platform,
                                                                @QueryParam("ownership") String ownership)
                                                                throws MDMAPIException {
-
-        Map<String, Object> filters = new LinkedHashMap<>();
-        Message message = new Message();
-        if (platform != null) {
-            if ("android".equals(platform) ||
-                "ios".equals(platform) ||
-                    "windows".equals(platform)) {
-                filters.put("PLATFORM", platform);
-            } else {
-                message.setErrorMessage("Invalid value for platform query parameter.");
-                message.setDescription("platform query parameter value could only be either android, ios or windows.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            }
-        }
-
-        if (ownership != null) {
-            if ("BYOD".equals(ownership) ||
-                "COPE".equals(ownership)) {
-                filters.put("OWNERSHIP", ownership);
-            } else {
-                message.setErrorMessage("Invalid value for ownership query parameter.");
-                message.setDescription("ownership query parameter value could only be either BYOD or COPE.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            }
-        }
-
+        // getting gadget data service
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
+
+        // constructing filter set
+        FilterSet filterSet = new FilterSet();
+        filterSet.setPlatform(platform);
+        filterSet.setOwnership(ownership);
 
         // creating feature-non-compliant-device-Counts-by-platforms Data Wrapper
         Map<String, Integer> featureNonCompliantDeviceCountsByPlatforms;
         try {
             featureNonCompliantDeviceCountsByPlatforms = gadgetDataService.
-                getFeatureNonCompliantDeviceCountsByPlatforms(nonCompliantFeature, filters);
-        } catch (InvalidParameterException e) {
-            log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
-            message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
+                getFeatureNonCompliantDeviceCountsByPlatforms(nonCompliantFeature, filterSet);
+        } catch (InvalidParameterValueException e) {
+            log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
+            Message message = new Message();
+            message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameter value.");
             message.setDescription("This was while trying to execute relevant service layer function " +
-                "@ Dashboard API layer to retrieve non compliant device counts by platforms. " + e.getErrorMessage());
+                "@ Dashboard API layer to retrieve a filtered set of feature non-compliant device " +
+                    "counts by platforms. " + e.getErrorMessage());
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         } catch (SQLException e) {
             String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
@@ -422,12 +374,13 @@ public class Dashboard {
         Map<String, Integer> featureNonCompliantDeviceCountsByOwnershipTypes;
         try {
             featureNonCompliantDeviceCountsByOwnershipTypes = gadgetDataService.
-                getFeatureNonCompliantDeviceCountsByOwnershipTypes(nonCompliantFeature, filters);
-        } catch (InvalidParameterException e) {
-            log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
-            message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
+                getFeatureNonCompliantDeviceCountsByOwnershipTypes(nonCompliantFeature, filterSet);
+        } catch (InvalidParameterValueException e) {
+            log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
+            Message message = new Message();
+            message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameter value.");
             message.setDescription("This was while trying to execute relevant service layer function " +
-                "@ Dashboard API layer to retrieve non compliant device " +
+                "@ Dashboard API layer to retrieve a filtered set of feature non-compliant device " +
                     "counts by ownership types. " + e.getErrorMessage());
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         } catch (SQLException e) {
@@ -467,67 +420,27 @@ public class Dashboard {
                                                     @QueryParam("platform") String platform,
                                                     @QueryParam("ownership") String ownership) throws MDMAPIException {
 
-        Map<String, Object> filters = new LinkedHashMap<>();
-        Message message = new Message();
-        if (connectivityStatus != null) {
-            if ("ACTIVE".equals(connectivityStatus) ||
-                "INACTIVE".equals(connectivityStatus) ||
-                    "REMOVED".equals(connectivityStatus)) {
-                filters.put("CONNECTIVITY_STATUS", connectivityStatus);
-            } else {
-                message.setErrorMessage("Invalid value for connectivity-status query parameter.");
-                message.setDescription("connectivity-status query parameter value could " +
-                    "only be either ACTIVE, INACTIVE or REMOVED.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            }
-        }
-
-        if (potentialVulnerability != null) {
-            if ("non-compliant".equals(potentialVulnerability) ||
-                "unmonitored".equals(potentialVulnerability)) {
-                if ("non-compliant".equals(potentialVulnerability)) {
-                    filters.put("IS_COMPLIANT", 0);
-                } else {
-                    filters.put("POLICY_ID", -1);
-                }
-            } else {
-                message.setErrorMessage("Invalid value for potential-vulnerability query parameter.");
-                message.setDescription("potential-vulnerability query parameter value could " +
-                    "only be either non-compliant or unmonitored.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            }
-        }
-
-        if (platform != null) {
-            if ("android".equals(platform) ||
-                "ios".equals(platform) ||
-                    "windows".equals(platform)) {
-                filters.put("PLATFORM", platform);
-            } else {
-                message.setErrorMessage("Invalid value for platform query parameter.");
-                message.setDescription("platform query parameter value could only be either android, ios or windows.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            }
-        }
-
-        if (ownership != null) {
-            if ("BYOD".equals(ownership) ||
-                "COPE".equals(ownership)) {
-                filters.put("OWNERSHIP", ownership);
-            } else {
-                message.setErrorMessage("Invalid value for ownership query parameter.");
-                message.setDescription("ownership query parameter value could only be either BYOD or COPE.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            }
-        }
-
+        // getting gadget data service
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
-        DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
+
+        // constructing filter set
+        FilterSet filterSet = new FilterSet();
+        filterSet.setConnectivityStatus(connectivityStatus);
+        filterSet.setPotentialVulnerability(potentialVulnerability);
+        filterSet.setPlatform(platform);
+        filterSet.setOwnership(ownership);
 
         // creating filteredDeviceCount Data Wrapper
         int filteredDeviceCount;
         try {
-            filteredDeviceCount = gadgetDataService.getDeviceCount(filters);
+            filteredDeviceCount = gadgetDataService.getDeviceCount(filterSet);
+        } catch (InvalidParameterValueException e) {
+            log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
+            Message message = new Message();
+            message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameter value.");
+            message.setDescription("This was while trying to execute relevant service layer function " +
+                "@ Dashboard API layer to retrieve a filtered device count over the total. " + e.getErrorMessage());
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         } catch (SQLException e) {
             String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
                 "@ Dashboard API layer to retrieve a filtered device count over the total.";
@@ -560,6 +473,7 @@ public class Dashboard {
         filteredDeviceCountOverTotalDataWrapper.add(filteredDeviceCountDataWrapper);
         filteredDeviceCountOverTotalDataWrapper.add(totalDeviceCountDataWrapper);
 
+        DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
         dashboardGadgetDataWrapper.setContext("filtered-device-count-over-total");
         dashboardGadgetDataWrapper.setData(filteredDeviceCountOverTotalDataWrapper);
 
@@ -576,42 +490,23 @@ public class Dashboard {
                                                                @QueryParam("ownership") String ownership)
                                                                throws MDMAPIException {
 
-        Map<String, Object> filters = new LinkedHashMap<>();
-        Message message = new Message();
-        if (platform != null) {
-            if ("android".equals(platform) ||
-                "ios".equals(platform) ||
-                    "windows".equals(platform)) {
-                filters.put("PLATFORM", platform);
-            } else {
-                message.setErrorMessage("Invalid value for platform query parameter.");
-                message.setDescription("platform query parameter value could only be either android, ios or windows.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            }
-        }
-
-        if (ownership != null) {
-            if ("BYOD".equals(ownership) ||
-                "COPE".equals(ownership)) {
-                filters.put("OWNERSHIP", ownership);
-            } else {
-                message.setErrorMessage("Invalid value for ownership query parameter.");
-                message.setDescription("ownership query parameter value could only be either BYOD or COPE.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            }
-        }
-
+        // getting gadget data service
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
-        DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
+
+        // constructing filter set
+        FilterSet filterSet = new FilterSet();
+        filterSet.setPlatform(platform);
+        filterSet.setOwnership(ownership);
 
         // creating featureNonCompliantDeviceCount Data Wrapper
         int featureNonCompliantDeviceCount;
         try {
             featureNonCompliantDeviceCount = gadgetDataService.
-                getFeatureNonCompliantDeviceCount(nonCompliantFeature, filters);
-        } catch (InvalidParameterException e) {
-            log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
-            message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
+                getFeatureNonCompliantDeviceCount(nonCompliantFeature, filterSet);
+        } catch (InvalidParameterValueException e) {
+            log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
+            Message message = new Message();
+            message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameter value.");
             message.setDescription("This was while trying to execute relevant service layer function " +
                 "@ Dashboard API layer to retrieve a feature non-compliant " +
                     "device count over the total. " + e.getErrorMessage());
@@ -648,6 +543,7 @@ public class Dashboard {
         featureNonCompliantDeviceCountOverTotalDataWrapper.add(featureNonCompliantDeviceCountDataWrapper);
         featureNonCompliantDeviceCountOverTotalDataWrapper.add(totalDeviceCountDataWrapper);
 
+        DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
         dashboardGadgetDataWrapper.setContext("feature-non-compliant-device-count-over-total");
         dashboardGadgetDataWrapper.setData(featureNonCompliantDeviceCountOverTotalDataWrapper);
 
@@ -667,79 +563,33 @@ public class Dashboard {
                                                   @QueryParam("start-index") int startIndex,
                                                   @QueryParam("result-count") int resultCount) throws MDMAPIException {
 
-        Message message = new Message();
         if (paginationEnabled == null) {
 
+            Message message = new Message();
             message.setErrorMessage("Missing required query parameter.");
             message.setDescription("Pagination-enabled query parameter with value true or false is required.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
 
         } else if ("true".equals(paginationEnabled)) {
 
-            Map<String, Object> filters = new LinkedHashMap<>();
-            if (connectivityStatus != null) {
-                if ("ACTIVE".equals(connectivityStatus) ||
-                    "INACTIVE".equals(connectivityStatus) ||
-                        "REMOVED".equals(connectivityStatus)) {
-                    filters.put("CONNECTIVITY_STATUS", connectivityStatus);
-                } else {
-                    message.setErrorMessage("Invalid value for connectivity-status query parameter.");
-                    message.setDescription("connectivity-status query parameter value could only be " +
-                        "either ACTIVE, INACTIVE or REMOVED.");
-                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-                }
-            }
-
-            if (potentialVulnerability != null) {
-                if ("non-compliant".equals(potentialVulnerability) ||
-                    "unmonitored".equals(potentialVulnerability)) {
-                    if ("non-compliant".equals(potentialVulnerability)) {
-                        filters.put("IS_COMPLIANT", 0);
-                    } else {
-                        filters.put("POLICY_ID", -1);
-                    }
-                } else {
-                    message.setErrorMessage("Invalid value for potential-vulnerability query parameter.");
-                    message.setDescription("potential-vulnerability query parameter value could only be " +
-                        "either non-compliant or unmonitored.");
-                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-                }
-            }
-
-            if (platform != null) {
-                if ("android".equals(platform) ||
-                    "ios".equals(platform) ||
-                        "windows".equals(platform)) {
-                    filters.put("PLATFORM", platform);
-                } else {
-                    message.setErrorMessage("Invalid value for platform query parameter.");
-                    message.setDescription("platform query parameter value could only be either android, ios or windows.");
-                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-                }
-            }
-
-            if (ownership != null) {
-                if ("BYOD".equals(ownership) ||
-                    "COPE".equals(ownership)) {
-                    filters.put("OWNERSHIP", ownership);
-                } else {
-                    message.setErrorMessage("Invalid value for ownership query parameter.");
-                    message.setDescription("ownership query parameter value could only be either BYOD or COPE.");
-                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-                }
-            }
-
+            // getting gadget data service
             GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
-            DashboardPaginationGadgetDataWrapper
-                dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
+
+            // constructing filter set
+            FilterSet filterSet = new FilterSet();
+            filterSet.setConnectivityStatus(connectivityStatus);
+            filterSet.setPotentialVulnerability(potentialVulnerability);
+            filterSet.setPlatform(platform);
+            filterSet.setOwnership(ownership);
 
             PaginationResult paginationResult;
             try {
                 paginationResult = gadgetDataService.
-                    getDevicesWithDetails(filters, startIndex, resultCount);
-            } catch (InvalidParameterException e) {
-                log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
-                message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
+                    getDevicesWithDetails(filterSet, startIndex, resultCount);
+            } catch (InvalidParameterValueException e) {
+                log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
+                Message message = new Message();
+                message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameter value.");
                 message.setDescription("This was while trying to execute relevant service layer function " +
                     "@ Dashboard API layer to retrieve a filtered set of " +
                         "devices with details. " + e.getErrorMessage());
@@ -763,6 +613,8 @@ public class Dashboard {
                 deviceDetailEntriesDataWrapper.add(deviceDetailEntryDataWrapper);
             }
 
+            DashboardPaginationGadgetDataWrapper
+                    dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
             dashboardPaginationGadgetDataWrapper.setContext("filtered-device-details");
             dashboardPaginationGadgetDataWrapper.setData(deviceDetailEntriesDataWrapper);
             dashboardPaginationGadgetDataWrapper.setTotalRecordCount(paginationResult.getRecordsTotal());
@@ -774,65 +626,27 @@ public class Dashboard {
 
         } else if ("false".equals(paginationEnabled)) {
 
-            Map<String, Object> filters = new LinkedHashMap<>();
-            if (connectivityStatus != null) {
-                if ("ACTIVE".equals(connectivityStatus) ||
-                    "INACTIVE".equals(connectivityStatus) ||
-                        "REMOVED".equals(connectivityStatus)) {
-                    filters.put("CONNECTIVITY_STATUS", connectivityStatus);
-                } else {
-                    message.setErrorMessage("Invalid value for connectivity-status query parameter.");
-                    message.setDescription("connectivity-status query parameter value could only be " +
-                        "either ACTIVE, INACTIVE or REMOVED.");
-                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-                }
-            }
-
-            if (potentialVulnerability != null) {
-                if ("non-compliant".equals(potentialVulnerability) ||
-                    "unmonitored".equals(potentialVulnerability)) {
-                    if ("non-compliant".equals(potentialVulnerability)) {
-                        filters.put("IS_COMPLIANT", 0);
-                    } else {
-                        filters.put("POLICY_ID", -1);
-                    }
-                } else {
-                    message.setErrorMessage("Invalid value for potential-vulnerability query parameter.");
-                    message.setDescription("potential-vulnerability query parameter value could only be " +
-                        "either non-compliant or unmonitored.");
-                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-                }
-            }
-
-            if (platform != null) {
-                if ("android".equals(platform) ||
-                    "ios".equals(platform) ||
-                        "windows".equals(platform)) {
-                    filters.put("PLATFORM", platform);
-                } else {
-                    message.setErrorMessage("Invalid value for platform query parameter.");
-                    message.setDescription("platform query parameter value could only be either android, ios or windows.");
-                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-                }
-            }
-
-            if (ownership != null) {
-                if ("BYOD".equals(ownership) ||
-                    "COPE".equals(ownership)) {
-                    filters.put("OWNERSHIP", ownership);
-                } else {
-                    message.setErrorMessage("Invalid value for ownership query parameter.");
-                    message.setDescription("ownership query parameter value could only be either BYOD or COPE.");
-                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-                }
-            }
-
+            // getting gadget data service
             GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
-            DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
+
+            // constructing filter set
+            FilterSet filterSet = new FilterSet();
+            filterSet.setConnectivityStatus(connectivityStatus);
+            filterSet.setPotentialVulnerability(potentialVulnerability);
+            filterSet.setPlatform(platform);
+            filterSet.setOwnership(ownership);
 
             List<Map<String, Object>> devicesWithDetails;
             try {
-                devicesWithDetails = gadgetDataService.getDevicesWithDetails(filters);
+                devicesWithDetails = gadgetDataService.getDevicesWithDetails(filterSet);
+            } catch (InvalidParameterValueException e) {
+                log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
+                Message message = new Message();
+                message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameter value.");
+                message.setDescription("This was while trying to execute relevant service layer function " +
+                    "@ Dashboard API layer to retrieve a filtered set of " +
+                        "devices with details. " + e.getErrorMessage());
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
             } catch (SQLException e) {
                 String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
                     "@ Dashboard API layer to retrieve a filtered set of devices with details.";
@@ -840,6 +654,7 @@ public class Dashboard {
                 throw new MDMAPIException(msg, e);
             }
 
+            DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
             dashboardGadgetDataWrapper.setContext("device-details");
             dashboardGadgetDataWrapper.setData(devicesWithDetails);
 
@@ -850,6 +665,7 @@ public class Dashboard {
 
         } else {
 
+            Message message = new Message();
             message.setErrorMessage("Invalid query parameter value.");
             message.setDescription("Invalid value for query parameter pagination-enabled. " +
                 "Should be either true or false.");
@@ -867,57 +683,38 @@ public class Dashboard {
                                                              @QueryParam("start-index") int startIndex,
                                                              @QueryParam("result-count") int resultCount) throws MDMAPIException {
 
-        Message message = new Message();
         if (paginationEnabled == null) {
 
+            Message message = new Message();
             message.setErrorMessage("Missing required query parameters.");
             message.setDescription("Query parameter pagination-enabled with value true or false is required.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
 
         } else if ("true".equals(paginationEnabled)) {
 
-            Map<String, Object> filters = new LinkedHashMap<>();
-            if (platform != null) {
-                if ("android".equals(platform) ||
-                    "ios".equals(platform) ||
-                        "windows".equals(platform)) {
-                    filters.put("PLATFORM", platform);
-                } else {
-                    message.setErrorMessage("Invalid value for platform query parameter.");
-                    message.setDescription("platform query parameter value could only be either android, ios or windows.");
-                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-                }
-            }
-
-            if (ownership != null) {
-                if ("BYOD".equals(ownership) ||
-                    "COPE".equals(ownership)) {
-                    filters.put("OWNERSHIP", ownership);
-                } else {
-                    message.setErrorMessage("Invalid value for ownership query parameter.");
-                    message.setDescription("ownership query parameter value could only be either BYOD or COPE.");
-                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-                }
-            }
-
+            // getting gadget data service
             GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
-            DashboardPaginationGadgetDataWrapper
-                dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
+
+            // constructing filter set
+            FilterSet filterSet = new FilterSet();
+            filterSet.setPlatform(platform);
+            filterSet.setOwnership(ownership);
 
             PaginationResult paginationResult;
             try {
                 paginationResult = gadgetDataService.
-                    getFeatureNonCompliantDevicesWithDetails(nonCompliantFeature, filters, startIndex, resultCount);
-            } catch (InvalidParameterException e) {
-                log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
-                message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
+                    getFeatureNonCompliantDevicesWithDetails(nonCompliantFeature, filterSet, startIndex, resultCount);
+            } catch (InvalidParameterValueException e) {
+                log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
+                Message message = new Message();
+                message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameter value.");
                 message.setDescription("This was while trying to execute relevant service layer function " +
-                    "@ Dashboard API layer to retrieve a feature non-compliant " +
-                        "set of devices with details. " + e.getErrorMessage());
+                    "@ Dashboard API layer to retrieve a filtered set of feature non-compliant " +
+                        "devices with details. " + e.getErrorMessage());
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
             } catch (SQLException e) {
                 String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
-                    "@ Dashboard API layer to retrieve a feature non-compliant set of devices with details.";
+                    "@ Dashboard API layer to retrieve a filtered set of feature non-compliant devices with details.";
                 log.error(msg, e);
                 throw new MDMAPIException(msg, e);
             }
@@ -934,6 +731,8 @@ public class Dashboard {
                 featureNonCompliantDeviceDetailEntriesDataWrapper.add(featureNonCompliantDeviceDetailEntryDataWrapper);
             }
 
+            DashboardPaginationGadgetDataWrapper
+                    dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
             dashboardPaginationGadgetDataWrapper.setContext("feature-non-compliant-device-details");
             dashboardPaginationGadgetDataWrapper.setData(featureNonCompliantDeviceDetailEntriesDataWrapper);
             dashboardPaginationGadgetDataWrapper.setTotalRecordCount(paginationResult.getRecordsTotal());
@@ -945,51 +744,34 @@ public class Dashboard {
 
         } else if ("false".equals(paginationEnabled)) {
 
-            Map<String, Object> filters = new LinkedHashMap<>();
-            if (platform != null) {
-                if ("android".equals(platform) ||
-                    "ios".equals(platform) ||
-                        "windows".equals(platform)) {
-                    filters.put("PLATFORM", platform);
-                } else {
-                    message.setErrorMessage("Invalid value for platform query parameter.");
-                    message.setDescription("platform query parameter value could only be either android, ios or windows.");
-                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-                }
-            }
-
-            if (ownership != null) {
-                if ("BYOD".equals(ownership) ||
-                    "COPE".equals(ownership)) {
-                    filters.put("OWNERSHIP", ownership);
-                } else {
-                    message.setErrorMessage("Invalid value for ownership query parameter.");
-                    message.setDescription("ownership query parameter value could only be either BYOD or COPE.");
-                    return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-                }
-            }
-
+            // getting gadget data service
             GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
-            DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
+
+            // constructing filter set
+            FilterSet filterSet = new FilterSet();
+            filterSet.setPlatform(platform);
+            filterSet.setOwnership(ownership);
 
             List<Map<String, Object>> featureNonCompliantDevicesWithDetails;
             try {
                 featureNonCompliantDevicesWithDetails = gadgetDataService.
-                    getFeatureNonCompliantDevicesWithDetails(nonCompliantFeature, filters);
-            } catch (InvalidParameterException e) {
-                log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
-                message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
+                    getFeatureNonCompliantDevicesWithDetails(nonCompliantFeature, filterSet);
+            } catch (InvalidParameterValueException e) {
+                log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
+                Message message = new Message();
+                message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameter value.");
                 message.setDescription("This was while trying to execute relevant service layer function " +
-                    "@ Dashboard API layer to retrieve a feature non-compliant " +
-                        "set of devices with details. " + e.getErrorMessage());
+                    "@ Dashboard API layer to retrieve a filtered set of feature non-compliant " +
+                        "devices with details. " + e.getErrorMessage());
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
             } catch (SQLException e) {
                 String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
-                    "@ Dashboard API layer to retrieve a feature non-compliant set of devices with details.";
+                    "@ Dashboard API layer to retrieve a filtered set of feature non-compliant set of devices with details.";
                 log.error(msg, e);
                 throw new MDMAPIException(msg, e);
             }
 
+            DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
             dashboardGadgetDataWrapper.setContext("feature-non-compliant-device-details");
             dashboardGadgetDataWrapper.setData(featureNonCompliantDevicesWithDetails);
 
@@ -1000,6 +782,7 @@ public class Dashboard {
 
         } else {
 
+            Message message = new Message();
             message.setErrorMessage("Invalid query parameter value.");
             message.setDescription("Invalid value for " +
                 "query parameter pagination-enabled. Should be either true or false.");
