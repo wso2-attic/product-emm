@@ -22,8 +22,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.analytics.dashboard.GadgetDataService;
-import org.wso2.carbon.device.mgt.analytics.dashboard.GadgetDataServiceException;
-import org.wso2.carbon.device.mgt.common.PaginationRequest;
+import org.wso2.carbon.device.mgt.analytics.dashboard.dao.exception.InvalidParameterException;
 import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
@@ -32,7 +31,10 @@ import org.wso2.carbon.mdm.beans.DashboardPaginationGadgetDataWrapper;
 import org.wso2.carbon.mdm.exception.Message;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -55,9 +57,9 @@ public class Dashboard {
         int totalDeviceCount;
         try {
             totalDeviceCount = gadgetDataService.getTotalDeviceCount();
-        } catch (GadgetDataServiceException e) {
-            String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                "to retrieve total device count.";
+        } catch (SQLException e) {
+            String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                "@ Dashboard API layer to retrieve total device count.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -71,9 +73,9 @@ public class Dashboard {
         int activeDeviceCount;
         try {
             activeDeviceCount = gadgetDataService.getActiveDeviceCount();
-        } catch (GadgetDataServiceException e) {
-            String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                "to retrieve total device count.";
+        } catch (SQLException e) {
+            String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                "@ Dashboard API layer to retrieve active device count.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -87,9 +89,9 @@ public class Dashboard {
         int inactiveDeviceCount;
         try {
             inactiveDeviceCount = gadgetDataService.getInactiveDeviceCount();
-        } catch (GadgetDataServiceException e) {
-            String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                "to retrieve total device count.";
+        } catch (SQLException e) {
+            String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                "@ Dashboard API layer to retrieve inactive device count.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -103,9 +105,9 @@ public class Dashboard {
         int removedDeviceCount;
         try {
             removedDeviceCount = gadgetDataService.getRemovedDeviceCount();
-        } catch (GadgetDataServiceException e) {
-            String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                "to retrieve total device count.";
+        } catch (SQLException e) {
+            String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                "@ Dashboard API layer to retrieve removed device count.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -140,9 +142,9 @@ public class Dashboard {
         int nonCompliantDeviceCount;
         try {
             nonCompliantDeviceCount = gadgetDataService.getNonCompliantDeviceCount();
-        } catch (GadgetDataServiceException e) {
-            String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                "to retrieve non-compliant device count.";
+        } catch (SQLException e) {
+            String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                "@ Dashboard API layer to retrieve non-compliant device count.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -156,9 +158,9 @@ public class Dashboard {
         int unmonitoredDeviceCount;
         try {
             unmonitoredDeviceCount = gadgetDataService.getUnmonitoredDeviceCount();
-        } catch (GadgetDataServiceException e) {
-            String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                "to retrieve unmonitored device count.";
+        } catch (SQLException e) {
+            String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                "@ Dashboard API layer to retrieve unmonitored device count.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -184,31 +186,26 @@ public class Dashboard {
     @GET
     @Path("non-compliant-by-feature")
     public Response getNonCompliantDeviceCountsByFeatures(@QueryParam("start-index") int startIndex,
-                                                @QueryParam("result-count") int resultCount) throws MDMAPIException {
-        Message message = new Message();
-        if (startIndex < 0) {
-            message.setErrorMessage("Invalid start index.");
-            message.setDescription("Start index cannot be less than 0.");
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-        }
-
-        if (resultCount < 5) {
-            message.setErrorMessage("Invalid request count.");
-            message.setDescription("Requested result count should be 5 or more than that.");
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-        }
+                        @QueryParam("result-count") int resultCount, @Context UriInfo uriInfo) throws MDMAPIException {
 
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
-        DashboardPaginationGadgetDataWrapper dashboardPaginationGadgetDataWrapper =
-            new DashboardPaginationGadgetDataWrapper();
+        DashboardPaginationGadgetDataWrapper
+            dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
 
         PaginationResult paginationResult;
         try {
             paginationResult = gadgetDataService.
-                getNonCompliantDeviceCountsByFeatures(new PaginationRequest(startIndex, resultCount));
-        } catch (GadgetDataServiceException e) {
-            String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                "to retrieve paginated feature non-compliant device counts.";
+                getNonCompliantDeviceCountsByFeatures(startIndex, resultCount);
+        } catch (InvalidParameterException e) {
+            log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
+            Message message = new Message();
+            message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
+            message.setDescription("This was while trying to execute relevant service layer function " +
+                "@ Dashboard API layer to retrieve non compliant device counts by features. " + e.getErrorMessage());
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+        } catch (SQLException e) {
+            String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                "@ Dashboard API layer to retrieve non-compliant device counts by features.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -301,9 +298,9 @@ public class Dashboard {
         Map<String, Integer> deviceCountsByPlatforms;
         try {
             deviceCountsByPlatforms = gadgetDataService.getDeviceCountsByPlatforms(filters);
-        } catch (GadgetDataServiceException e) {
-            String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                "to retrieve a filtered set of device counts by platforms.";
+        } catch (SQLException e) {
+            String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                "@ Dashboard API layer to retrieve a filtered set of device counts by platforms.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -326,9 +323,9 @@ public class Dashboard {
         Map<String, Integer> deviceCountsByOwnershipTypes;
         try {
             deviceCountsByOwnershipTypes = gadgetDataService.getDeviceCountsByOwnershipTypes(filters);
-        } catch (GadgetDataServiceException e) {
-            String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-               "to retrieve a filtered set of device counts by ownership types.";
+        } catch (SQLException e) {
+            String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                "@ Dashboard API layer to retrieve a filtered set of device counts by ownership types.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -358,14 +355,8 @@ public class Dashboard {
     @Path("feature-non-compliant-device-groupings")
     public Response getFeatureNonCompliantDeviceGroupingCounts(@QueryParam("non-compliant-feature") String nonCompliantFeature,
                                                                @QueryParam("platform") String platform,
-                                                               @QueryParam("ownership") String ownership) throws MDMAPIException {
-
-        if (nonCompliantFeature == null) {
-            Message message = new Message();
-            message.setErrorMessage("Missing required query parameters.");
-            message.setDescription("non-compliant-feature query parameter value is required.");
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-        }
+                                                               @QueryParam("ownership") String ownership)
+                                                               throws MDMAPIException {
 
         Map<String, Object> filters = new LinkedHashMap<>();
         Message message = new Message();
@@ -399,9 +390,15 @@ public class Dashboard {
         try {
             featureNonCompliantDeviceCountsByPlatforms = gadgetDataService.
                 getFeatureNonCompliantDeviceCountsByPlatforms(nonCompliantFeature, filters);
-        } catch (GadgetDataServiceException e) {
-            String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                "to retrieve a filtered set of feature non-compliant device counts by platforms.";
+        } catch (InvalidParameterException e) {
+            log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
+            message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
+            message.setDescription("This was while trying to execute relevant service layer function " +
+                "@ Dashboard API layer to retrieve non compliant device counts by platforms. " + e.getErrorMessage());
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+        } catch (SQLException e) {
+            String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                "@ Dashboard API layer to retrieve a filtered set of feature non-compliant device counts by platforms.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -426,9 +423,17 @@ public class Dashboard {
         try {
             featureNonCompliantDeviceCountsByOwnershipTypes = gadgetDataService.
                 getFeatureNonCompliantDeviceCountsByOwnershipTypes(nonCompliantFeature, filters);
-        } catch (GadgetDataServiceException e) {
-            String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                "to retrieve a filtered set of feature non-compliant device counts by ownership types.";
+        } catch (InvalidParameterException e) {
+            log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
+            message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
+            message.setDescription("This was while trying to execute relevant service layer function " +
+                "@ Dashboard API layer to retrieve non compliant device " +
+                    "counts by ownership types. " + e.getErrorMessage());
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+        } catch (SQLException e) {
+            String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                "@ Dashboard API layer to retrieve a filtered set of feature non-compliant " +
+                    "device counts by ownership types.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -523,9 +528,9 @@ public class Dashboard {
         int filteredDeviceCount;
         try {
             filteredDeviceCount = gadgetDataService.getDeviceCount(filters);
-        } catch (GadgetDataServiceException e) {
-            String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                "to retrieve a filtered device count over the total.";
+        } catch (SQLException e) {
+            String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                "@ Dashboard API layer to retrieve a filtered device count over the total.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -539,9 +544,9 @@ public class Dashboard {
         int totalDeviceCount;
         try {
             totalDeviceCount = gadgetDataService.getTotalDeviceCount();
-        } catch (GadgetDataServiceException e) {
-            String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                "to retrieve total device count over the filtered.";
+        } catch (SQLException e) {
+            String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                "@ Dashboard API layer to retrieve the total device count over filtered.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -568,14 +573,8 @@ public class Dashboard {
     @Path("feature-non-compliant-devices-over-total")
     public Response getFeatureNonCompliantDeviceCountOverTotal(@QueryParam("non-compliant-feature") String nonCompliantFeature,
                                                                @QueryParam("platform") String platform,
-                                                               @QueryParam("ownership") String ownership) throws MDMAPIException {
-
-        if (nonCompliantFeature == null) {
-            Message message = new Message();
-            message.setErrorMessage("Missing required query parameters.");
-            message.setDescription("non-compliant-feature query parameter value is required.");
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-        }
+                                                               @QueryParam("ownership") String ownership)
+                                                               throws MDMAPIException {
 
         Map<String, Object> filters = new LinkedHashMap<>();
         Message message = new Message();
@@ -608,10 +607,18 @@ public class Dashboard {
         // creating featureNonCompliantDeviceCount Data Wrapper
         int featureNonCompliantDeviceCount;
         try {
-            featureNonCompliantDeviceCount = gadgetDataService.getFeatureNonCompliantDeviceCount(nonCompliantFeature, filters);
-        } catch (GadgetDataServiceException e) {
-            String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                "to retrieve a feature non-compliant, filtered device count over a total.";
+            featureNonCompliantDeviceCount = gadgetDataService.
+                getFeatureNonCompliantDeviceCount(nonCompliantFeature, filters);
+        } catch (InvalidParameterException e) {
+            log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
+            message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
+            message.setDescription("This was while trying to execute relevant service layer function " +
+                "@ Dashboard API layer to retrieve a feature non-compliant " +
+                    "device count over the total. " + e.getErrorMessage());
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+        } catch (SQLException e) {
+            String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                "@ Dashboard API layer to retrieve a feature non-compliant device count over the total.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -625,9 +632,9 @@ public class Dashboard {
         int totalDeviceCount;
         try {
             totalDeviceCount = gadgetDataService.getTotalDeviceCount();
-        } catch (GadgetDataServiceException e) {
-            String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                "to retrieve total device count over a feature non-compliant, filtered device count.";
+        } catch (SQLException e) {
+            String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                "@ Dashboard API layer to retrieve the total device count over filtered feature non-compliant.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
@@ -668,18 +675,6 @@ public class Dashboard {
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
 
         } else if ("true".equals(paginationEnabled)) {
-
-            if (startIndex < 0) {
-                message.setErrorMessage("Invalid start index.");
-                message.setDescription("Start index cannot be less than 0.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            }
-
-            if (resultCount < 10) {
-                message.setErrorMessage("Invalid request count.");
-                message.setDescription("Requested result count should be equal to 10 or more than that.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            }
 
             Map<String, Object> filters = new LinkedHashMap<>();
             if (connectivityStatus != null) {
@@ -735,15 +730,23 @@ public class Dashboard {
             }
 
             GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
-            DashboardPaginationGadgetDataWrapper dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
+            DashboardPaginationGadgetDataWrapper
+                dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
 
             PaginationResult paginationResult;
             try {
                 paginationResult = gadgetDataService.
-                    getDevicesWithDetails(filters, new PaginationRequest(startIndex, resultCount));
-            } catch (GadgetDataServiceException e) {
-                String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                    "to retrieve a filtered set of devices with details when pagination is enabled.";
+                    getDevicesWithDetails(filters, startIndex, resultCount);
+            } catch (InvalidParameterException e) {
+                log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
+                message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
+                message.setDescription("This was while trying to execute relevant service layer function " +
+                    "@ Dashboard API layer to retrieve a filtered set of " +
+                        "devices with details. " + e.getErrorMessage());
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            } catch (SQLException e) {
+                String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                    "@ Dashboard API layer to retrieve a filtered set of devices with details.";
                 log.error(msg, e);
                 throw new MDMAPIException(msg, e);
             }
@@ -830,9 +833,9 @@ public class Dashboard {
             List<Map<String, Object>> devicesWithDetails;
             try {
                 devicesWithDetails = gadgetDataService.getDevicesWithDetails(filters);
-            } catch (GadgetDataServiceException e) {
-                String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                    "to retrieve a filtered set of devices with details.";
+            } catch (SQLException e) {
+                String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                    "@ Dashboard API layer to retrieve a filtered set of devices with details.";
                 log.error(msg, e);
                 throw new MDMAPIException(msg, e);
             }
@@ -865,26 +868,13 @@ public class Dashboard {
                                                              @QueryParam("result-count") int resultCount) throws MDMAPIException {
 
         Message message = new Message();
-        if (nonCompliantFeature == null || paginationEnabled == null) {
+        if (paginationEnabled == null) {
 
             message.setErrorMessage("Missing required query parameters.");
-            message.setDescription("non-compliant-feature with some text value and " +
-                "pagination-enabled with value true or false are required.");
+            message.setDescription("Query parameter pagination-enabled with value true or false is required.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
 
         } else if ("true".equals(paginationEnabled)) {
-
-            if (startIndex < 0) {
-                message.setErrorMessage("Invalid start index.");
-                message.setDescription("Start index cannot be less than 0.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            }
-
-            if (resultCount < 10) {
-                message.setErrorMessage("Invalid request count.");
-                message.setDescription("Requested result count should be equal to 10 or more than that.");
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            }
 
             Map<String, Object> filters = new LinkedHashMap<>();
             if (platform != null) {
@@ -911,18 +901,23 @@ public class Dashboard {
             }
 
             GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
-            DashboardPaginationGadgetDataWrapper dashboardPaginationGadgetDataWrapper =
-                new DashboardPaginationGadgetDataWrapper();
+            DashboardPaginationGadgetDataWrapper
+                dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
 
             PaginationResult paginationResult;
             try {
                 paginationResult = gadgetDataService.
-                    getFeatureNonCompliantDevicesWithDetails(nonCompliantFeature, filters,
-                        new PaginationRequest(startIndex, resultCount));
-            } catch (GadgetDataServiceException e) {
-                String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                    "to retrieve a filtered set of feature non-compliant devices " +
-                        "with details when pagination is enabled.";
+                    getFeatureNonCompliantDevicesWithDetails(nonCompliantFeature, filters, startIndex, resultCount);
+            } catch (InvalidParameterException e) {
+                log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
+                message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
+                message.setDescription("This was while trying to execute relevant service layer function " +
+                    "@ Dashboard API layer to retrieve a feature non-compliant " +
+                        "set of devices with details. " + e.getErrorMessage());
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            } catch (SQLException e) {
+                String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                    "@ Dashboard API layer to retrieve a feature non-compliant set of devices with details.";
                 log.error(msg, e);
                 throw new MDMAPIException(msg, e);
             }
@@ -981,9 +976,16 @@ public class Dashboard {
             try {
                 featureNonCompliantDevicesWithDetails = gadgetDataService.
                     getFeatureNonCompliantDevicesWithDetails(nonCompliantFeature, filters);
-            } catch (GadgetDataServiceException e) {
-                String msg = "Error occurred @ Dashboard API layer while executing GadgetDataService function " +
-                    "to retrieve a filtered set of feature non-compliant devices with details.";
+            } catch (InvalidParameterException e) {
+                log.error("Error occurred @ Gadget Data Service layer due to invalid parameters.", e);
+                message.setErrorMessage("Error occurred @ Gadget Data Service layer due to invalid parameters.");
+                message.setDescription("This was while trying to execute relevant service layer function " +
+                    "@ Dashboard API layer to retrieve a feature non-compliant " +
+                        "set of devices with details. " + e.getErrorMessage());
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
+            } catch (SQLException e) {
+                String msg = "SQL error occurred @ Gadget Data Service layer while trying to execute relevant function " +
+                    "@ Dashboard API layer to retrieve a feature non-compliant set of devices with details.";
                 log.error(msg, e);
                 throw new MDMAPIException(msg, e);
             }
@@ -1000,7 +1002,7 @@ public class Dashboard {
 
             message.setErrorMessage("Invalid query parameter value.");
             message.setDescription("Invalid value for " +
-                    "query parameter pagination-enabled. Should be either true or false.");
+                "query parameter pagination-enabled. Should be either true or false.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
 
         }
