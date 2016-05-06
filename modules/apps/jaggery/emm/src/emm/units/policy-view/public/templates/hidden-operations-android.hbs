@@ -764,7 +764,7 @@
                                     </span>
                         </label>
                         <select class="form-control operationDataKeys" id="wifi-type"
-                                data-key="wifiType">
+                                onchange="changeAndroidWifiPolicy(this)" data-key="wifiType">
                             <option value="none" selected>None</option>
                             <option value="wep">WEP</option>
                             <option value="wpa">WPA/WPA 2 PSK</option>
@@ -780,7 +780,7 @@
                                     </span>
                         </label>
                         <select class="form-control operationDataKeys" id="wifi-eap"
-                                 data-key="wifiEAP">
+                                onchange="changeAndroidWifiPolicyEAP(this, document.getElementById('wifi-type'))" data-key="wifiEAP">
                             <option value="peap">PEAP</option>
                             <option value="tls">TLS</option>
                             <option value="ttls">TTLS</option>

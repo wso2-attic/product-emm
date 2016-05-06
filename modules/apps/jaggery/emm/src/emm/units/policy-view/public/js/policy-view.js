@@ -1983,6 +1983,32 @@ var showHideHelpText = function (addFormContainer) {
     }
 };
 
+/**
+ * This method will display appropriate fields based on wifi type
+ * @param {object} wifi type select object
+ */
+var changeAndroidWifiPolicy = function (select) {
+    slideDownPaneAgainstValueSet(select, 'control-wifi-password', ['wep', 'wpa', '802eap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-eap', ['802eap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-phase2', ['802eap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-identity', ['802eap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-anoidentity', ['802eap']);
+}
+
+/**
+ * This method will display appropriate fields based on wifi EAP type
+ * @param {object} wifi eap select object
+ * @param {object} wifi type select object
+ */
+var changeAndroidWifiPolicyEAP = function (select, superSelect) {
+    slideDownPaneAgainstValueSet(select, 'control-wifi-password', ['peap', 'ttls', 'pwd' ,'fast', 'leap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-phase2', ['peap', 'ttls', 'fast']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-provisioning', ['fast']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-identity', ['peap', 'ttls', 'pwd', 'fast', 'leap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-anoidentity', ['peap', 'ttls']);
+    changeAndroidWifiPolicy(superSelect);
+}
+
 // End of functions related to grid-input-view
 
 /**

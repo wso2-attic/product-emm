@@ -779,7 +779,7 @@
                                     </span>
                         </label>
                         <select class="form-control operationDataKeys" id="wifi-eap"
-                                onchange="changeAndroidWifiPolicyEAP(this)" data-key="wifiEAP">
+                                onchange="changeAndroidWifiPolicyEAP(this, document.getElementById('wifi-type'))" data-key="wifiEAP">
                             <option value="peap">PEAP</option>
                             <option value="tls">TLS</option>
                             <option value="ttls">TTLS</option>
