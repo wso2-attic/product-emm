@@ -42,6 +42,7 @@ import org.json.JSONObject;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.beans.Notification;
 import org.wso2.emm.agent.dao.NotificationDAO;
+import org.wso2.emm.agent.services.NotificationService;
 import org.wso2.emm.agent.services.VPNService;
 import org.wso2.emm.agent.utils.Constants;
 
@@ -250,10 +251,11 @@ public class AlertActivity extends SherlockActivity {
 	}
 
 	private void updateNotification (int id) {
-		NotificationDAO notificationDAO = new NotificationDAO(context);
-		notificationDAO.open();
-		notificationDAO.updateNotification(id, Notification.Status.DISMISSED);
-		notificationDAO.close();
+		NotificationService notificationService = NotificationService.getInstance(context);
+		if (notificationService == null) {
+			Log.e(TAG, "Cannot update notification status");
+		}
+		notificationService.updateNotification(id);
 	}
 
 }
