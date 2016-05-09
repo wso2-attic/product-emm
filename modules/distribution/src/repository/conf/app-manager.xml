@@ -429,6 +429,11 @@
             -->
         </MDMProperties>
 
+        <BinaryFileStorage>
+            <FilePreciseLocation>repository/resources/mobileapps/</FilePreciseLocation>
+            <FileAPILocation>/api/mobileapp/getfile/</FileAPILocation>
+        </BinaryFileStorage>
+
     </MobileAppsConfiguration>
 
     <!-- Configuration to secure mobile app services.-->
