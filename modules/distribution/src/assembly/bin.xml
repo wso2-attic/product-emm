@@ -769,7 +769,7 @@
         <!--app management config file-->
         <file>
             <source>
-                src/repository/conf/app-manager.xml
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/app-manager.xml
             </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
             <filtered>true</filtered>
