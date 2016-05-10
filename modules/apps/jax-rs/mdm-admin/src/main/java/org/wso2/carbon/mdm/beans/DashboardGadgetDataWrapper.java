@@ -23,7 +23,7 @@ import java.util.List;
 public class DashboardGadgetDataWrapper {
 
     private String context;
-    private String filteringAttribute;
+    private String groupingAttribute;
     private List<?> data;
 
     @SuppressWarnings("unused")
@@ -36,12 +36,12 @@ public class DashboardGadgetDataWrapper {
     }
 
     @SuppressWarnings("unused")
-    public String getFilteringAttribute() {
-        return filteringAttribute;
+    public String getGroupingAttribute() {
+        return groupingAttribute;
     }
 
-    public void setFilteringAttribute(String filteringAttribute) {
-        this.filteringAttribute = filteringAttribute;
+    public void setGroupingAttribute(String groupingAttribute) {
+        this.groupingAttribute = groupingAttribute;
     }
 
     @SuppressWarnings("unused")
