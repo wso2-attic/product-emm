@@ -114,7 +114,9 @@ public class WiFiConfig {
                     wifiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
                     wifiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
                     wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+                    wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
 
+                    wifiConfig.preSharedKey  ="\"" + profile.getPassword() + "\"";
                     break;
                 case EAP:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
