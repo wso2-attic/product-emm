@@ -19,7 +19,6 @@ package org.wso2.emm.agent.api;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiConfiguration;
@@ -33,9 +32,16 @@ import org.wso2.emm.agent.beans.WifiProfile;
 import org.wso2.emm.agent.utils.Constants;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -116,7 +122,7 @@ public class WiFiConfig {
                     wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
                     wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
 
-                    wifiConfig.preSharedKey  ="\"" + profile.getPassword() + "\"";
+                    wifiConfig.preSharedKey = "\"" + profile.getPassword() + "\"";
                     break;
                 case EAP:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -146,7 +152,7 @@ public class WiFiConfig {
                                 enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.TLS);
                                 enterpriseConfig.setIdentity(profile.getIdentity());
                                 enterpriseConfig.setCaCertificate(getCertifcate(profile));
-                                //User cert
+
                                 break;
                             case TTLS:
                                 enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.TTLS);
@@ -200,6 +206,7 @@ public class WiFiConfig {
 
     /**
      * get CA certificate for installation
+     *
      * @param profile - WIFI profile
      */
     private X509Certificate getCertifcate(WifiProfile profile) {
@@ -209,7 +216,7 @@ public class WiFiConfig {
             cert = (X509Certificate) certFactory.generateCertificate
                     (new ByteArrayInputStream(Base64.decode(profile.getCaCert(), Base64.DEFAULT)));
         } catch (CertificateException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
         }
         return cert;
     }
