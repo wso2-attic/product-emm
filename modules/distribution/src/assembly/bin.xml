@@ -269,6 +269,15 @@
                 <include>*/**</include>
             </includes>
         </fileSet>
+        <fileSet>
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/appmgt
+            </directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/appmgt</outputDirectory>
+            <includes>
+                <include>*/**</include>
+            </includes>
+        </fileSet>
 
         <!-- Copying Social plugin related dbscripts -->
         <fileSet>
@@ -768,9 +777,7 @@
 
         <!--app management config file-->
         <file>
-            <source>
-                src/repository/conf/app-manager.xml
-            </source>
+            <source>src/repository/conf/app-manager.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
@@ -826,41 +833,7 @@
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
-
-        <!--<file>-->
-            <!--<source>-->
-                <!--../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/analytics-backup.sh-->
-            <!--</source>-->
-            <!--<outputDirectory>${pom.artifactId}-${pom.version}/bin/analytics-backup.sh</outputDirectory>-->
-            <!--<filtered>true</filtered>-->
-            <!--<fileMode>644</fileMode>-->
-        <!--</file>-->
-        <!--<file>-->
-            <!--<source>-->
-                <!--../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/analytics-backup.bat-->
-            <!--</source>-->
-            <!--<outputDirectory>${pom.artifactId}-${pom.version}/bin/analytics-backup.bat</outputDirectory>-->
-            <!--<filtered>true</filtered>-->
-            <!--<fileMode>644</fileMode>-->
-        <!--</file>-->
-        <!--<file>-->
-            <!--<source>-->
-                <!--../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/analytics-migrate.sh-->
-            <!--</source>-->
-            <!--<outputDirectory>${pom.artifactId}-${pom.version}/bin/analytics-migrate.sh</outputDirectory>-->
-            <!--<filtered>true</filtered>-->
-            <!--<fileMode>644</fileMode>-->
-        <!--</file>-->
-        <!--<file>-->
-            <!--<source>-->
-                <!--../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/analytics-migrate.bat-->
-            <!--</source>-->
-            <!--<outputDirectory>${pom.artifactId}-${pom.version}/bin/analytics-migrate.bat</outputDirectory>-->
-            <!--<filtered>true</filtered>-->
-            <!--<fileMode>644</fileMode>-->
-        <!--</file>-->
-
-
+        
         <!--License Config file-->
         <file>
             <source>
@@ -1036,6 +1009,13 @@
             <source>
                 src/repository/conf/log4j.properties
             </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/social.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>

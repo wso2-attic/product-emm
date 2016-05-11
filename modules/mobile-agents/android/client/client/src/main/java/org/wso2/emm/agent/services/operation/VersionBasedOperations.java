@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.emm.agent.services.operationMgt;
+package org.wso2.emm.agent.services.operation;
 
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.beans.Operation;
@@ -172,4 +172,5 @@ public interface VersionBasedOperations {
      * @param operation - Operation object.
      */
     void setPolicyBundle(Operation operation) throws AndroidAgentException;
+
 }

@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.emm.agent.services.operationMgt;
+package org.wso2.emm.agent.services.operation;
 
 import android.annotation.TargetApi;
 import android.app.admin.DevicePolicyManager;
@@ -348,7 +348,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
                 intent.putExtra(getContextResources().getString(R.string.intent_extra_message),
                         getContextResources().getString(R.string.policy_violation_password_tail));
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
+                                Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(intent);
             }
 
@@ -379,7 +379,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
 
             if (password != null && !password.isEmpty()) {
                 getDevicePolicyManager().resetPassword(password,
-                        DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY);
+                                                       DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY);
                 getDevicePolicyManager().lockNow();
             }
 
@@ -595,4 +595,5 @@ public class OperationManagerDeviceOwner extends OperationManager {
     public void setPolicyBundle(Operation operation) throws AndroidAgentException {
         getResultBuilder().build(operation);
     }
+
 }

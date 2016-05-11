@@ -31,7 +31,7 @@ import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
-import org.wso2.emm.agent.services.operationMgt.OperationProcessor;
+import org.wso2.emm.agent.services.operation.OperationProcessor;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.CommonUtils;
@@ -110,13 +110,17 @@ public class MessageProcessor implements APIResultCallBack {
 								org.wso2.emm.agent.beans.Operation.class));
 			}
 
+
+		// check whether if there are any dismissed notifications to be sent
+		operationProcessor.checkPreviousNotifications();
+
 		} catch (JsonProcessingException e) {
 			Log.e(TAG,  "Issue in json parsing", e);
 		} catch (IOException e) {
 			Log.e(TAG, "Issue in stream parsing", e);
+		} catch (AndroidAgentException e) {
+			Log.e(TAG, "Error occurred while checking previous notification", e);
 		}
-		// check whether if there are any dismissed notifications to be sent
-		operationProcessor.checkPreviousNotifications();
 
 		for (org.wso2.emm.agent.beans.Operation op : operations) {
 			try {

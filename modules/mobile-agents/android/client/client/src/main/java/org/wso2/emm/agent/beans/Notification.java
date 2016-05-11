@@ -32,7 +32,7 @@ public class Notification {
     private Status status;
 
     public enum Status {
-        PENDING,        // when a notification is received but no action is taken
+        RECEIVED,        // when a notification is received but no action is taken
         DISMISSED,      // when user dismiss a notification
         SENT            // when a notification is sent back to server
     }

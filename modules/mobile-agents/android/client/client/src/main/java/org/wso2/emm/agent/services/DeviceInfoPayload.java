@@ -18,6 +18,7 @@
 package org.wso2.emm.agent.services;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Build;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -27,10 +28,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.api.DeviceState;
-import org.wso2.emm.agent.api.GPSTracker;
 import org.wso2.emm.agent.api.RuntimeInfo;
 import org.wso2.emm.agent.beans.Device;
 import org.wso2.emm.agent.beans.Power;
+import org.wso2.emm.agent.services.location.LocationService;
+import org.wso2.emm.agent.services.location.impl.LocationServiceImpl;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
@@ -47,16 +49,16 @@ public class DeviceInfoPayload {
     private static final String TAG = DeviceInfoPayload.class.getName();
     private ObjectMapper mapper;
     private DeviceState phoneState;
-    private GPSTracker gps;
     private String registrationId;
+    private LocationService locationService;
 
     public DeviceInfoPayload(Context context) {
         this.context = context.getApplicationContext();
         deviceInfo = new DeviceInfo(context);
         mapper = new ObjectMapper();
-        gps = GPSTracker.getInstance(context);
         registrationId = Preference.getString(context, Constants.GCM_REG_ID);
         phoneState = new DeviceState(context);
+        locationService = LocationServiceImpl.getInstance(context);
     }
 
     /**
@@ -91,6 +93,8 @@ public class DeviceInfoPayload {
      * @throws AndroidAgentException
      */
     private void getInfo() throws AndroidAgentException {
+
+        Location deviceLocation = locationService.getLocation();
         if (device == null) {
             device = new Device();
         }
@@ -142,19 +146,21 @@ public class DeviceInfoPayload {
         property.setValue(deviceInfo.getDeviceName());
         properties.add(property);
 
-        double latitude = gps.getLatitude();
-        double longitude = gps.getLongitude();
+        if (deviceLocation != null) {
+            double latitude = deviceLocation.getLatitude();
+            double longitude = deviceLocation.getLongitude();
 
-        if (latitude != 0 && longitude != 0) {
-            property = new Device.Property();
-            property.setName(Constants.Device.MOBILE_DEVICE_LATITUDE);
-            property.setValue(String.valueOf(latitude));
-            properties.add(property);
+            if (latitude != 0 && longitude != 0) {
+                property = new Device.Property();
+                property.setName(Constants.Device.MOBILE_DEVICE_LATITUDE);
+                property.setValue(String.valueOf(latitude));
+                properties.add(property);
 
-            property = new Device.Property();
-            property.setName(Constants.Device.MOBILE_DEVICE_LONGITUDE);
-            property.setValue(String.valueOf(longitude));
-            properties.add(property);
+                property = new Device.Property();
+                property.setName(Constants.Device.MOBILE_DEVICE_LONGITUDE);
+                property.setValue(String.valueOf(longitude));
+                properties.add(property);
+            }
         }
 
         if (registrationId != null) {

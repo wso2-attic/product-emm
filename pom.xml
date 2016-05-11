@@ -1250,10 +1250,5 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
-	<repository>
-	   <id>nexus-releases</id>
-	   <name>WSO2 Release Distribution Repository</name>
-	   <url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbondevicemgt-404/</url>
-	</repository>
     </repositories>
 </project>

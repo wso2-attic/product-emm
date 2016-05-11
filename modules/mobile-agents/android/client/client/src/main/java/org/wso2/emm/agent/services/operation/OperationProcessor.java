@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.emm.agent.services.operationMgt;
+package org.wso2.emm.agent.services.operation;
 
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
@@ -28,6 +28,7 @@ import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.services.NotificationService;
 import org.wso2.emm.agent.services.PolicyOperationsMapper;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
@@ -172,10 +173,6 @@ public class OperationProcessor {
 		}
 	}
 
-	public void checkPreviousNotifications() {
-		operationManager.checkPreviousNotifications();
-	}
-
 	public List<org.wso2.emm.agent.beans.Operation> getResultPayload() {
 		return operationManager.getResultPayload();
 	}
@@ -233,6 +230,17 @@ public class OperationProcessor {
 				(DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
 		ComponentName cdmDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
 		return devicePolicyManager.isAdminActive(cdmDeviceAdmin);
+	}
+
+	/**
+	 * This method checks whether there are any previous notifications which were not sent
+	 * and send if found any.
+	 */
+	public void checkPreviousNotifications() throws AndroidAgentException {
+		List<Operation> operations = NotificationService.getInstance(context).checkPreviousNotifications();
+		for (Operation operation : operations) {
+			operationManager.getResultBuilder().build(operation);
+		}
 	}
 
 }
