@@ -772,9 +772,6 @@
                             <option value="pwd">PWD</option>
                             <option value="sim">SIM</option>
                             <option value="aka">AKA</option>
-                            <option value="aka2">AKA'</option>
-                            <option value="fast">FAST</option>
-                            <option value="leap">LEAP</option>
                         </select>
                     </div>
                     <div class="wr-input-control" id="control-wifi-phase2" style="display:none;">
@@ -832,6 +829,20 @@
                         <input id="wifi-anoidentity" type="text" class="form-control operationDataKeys"
                                data-key="wifiAnoIdentity"
                                maxlength="100" placeholder="[ Should be 1-to-30 characters long ]"/>
+                    </div>
+                    <div class="wr-input-control" id="control-wifi-cacert" style="display:none;">
+                        <label class="wr-input-label" for="wifi-password">
+                            CA Certificate
+                                <span class="helper" title="CA Certificate for the wireless network.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <input id="wifi-cacert-upload" type="file" class="form-control"
+                               onchange="base64EncodeFile(this, document.getElementById('wifi-cacert'), document.getElementById('wifi-cacert-name'))"/>
+                        <input id="wifi-cacert" type="text" class="form-control operationDataKeys"
+                               data-key="wifiCaCert" style="display:none;"/>
+                        <input id="wifi-cacert-name" type="hidden" class="form-control operationDataKeys"
+                               data-key="wifiCaCertName" />
                     </div>
                     <div class="wr-input-control" id="control-wifi-password" style="display:none;">
                         <label class="wr-input-label" for="wifi-password">

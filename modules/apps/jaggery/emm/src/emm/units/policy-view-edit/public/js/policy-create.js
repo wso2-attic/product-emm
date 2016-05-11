@@ -2090,6 +2090,7 @@ var changeAndroidWifiPolicy = function (select) {
     slideDownPaneAgainstValueSet(select, 'control-wifi-phase2', ['802eap']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-identity', ['802eap']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-anoidentity', ['802eap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-cacert', ['802eap']);
 }
 
 /**
@@ -2103,7 +2104,27 @@ var changeAndroidWifiPolicyEAP = function (select, superSelect) {
     slideDownPaneAgainstValueSet(select, 'control-wifi-provisioning', ['fast']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-identity', ['peap', 'ttls', 'pwd', 'fast', 'leap']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-anoidentity', ['peap', 'ttls']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-cacert', ['peap', 'tls', 'ttls']);
     changeAndroidWifiPolicy(superSelect);
+}
+
+/**
+ * This method will encode the fileinput and enter the values to given input files
+ * @param {object} fileInput
+ * @param {object} fileHiddenInput
+ * @param {object} fileNameHiddenInput
+ */
+var base64EncodeFile = function (fileInput, fileHiddenInput, fileNameHiddenInput) {
+    var file = fileInput.files[0];
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(readerEvt) {
+            var binaryString = readerEvt.target.result;
+            fileHiddenInput.value = (btoa(binaryString));
+            fileNameHiddenInput.value =  file.name.substr(0,file.name.lastIndexOf("."));
+        };
+        reader.readAsBinaryString(file);
+    }
 }
 
 
