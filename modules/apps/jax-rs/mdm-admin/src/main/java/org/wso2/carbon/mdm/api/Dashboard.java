@@ -148,7 +148,7 @@ public class Dashboard {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
             Message message = new Message();
             message.setErrorMessage("Invalid query parameter value.");
-            message.setDescription(e.getErrorMessage() + " This was while trying to execute relevant data service " +
+            message.setDescription("This was while trying to execute relevant data service " +
                 "function @ Dashboard API layer to retrieve a non-compliant set of device counts by features.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         } catch (SQLException e) {
@@ -194,7 +194,7 @@ public class Dashboard {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
             Message message = new Message();
             message.setErrorMessage("Invalid query parameter value.");
-            message.setDescription(e.getErrorMessage() + " This was while trying to execute relevant data service " +
+            message.setDescription("This was while trying to execute relevant data service " +
                 "function @ Dashboard API layer to retrieve a filtered set of device counts by platforms.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         } catch (SQLException e) {
@@ -217,7 +217,7 @@ public class Dashboard {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
             Message message = new Message();
             message.setErrorMessage("Invalid query parameter value.");
-            message.setDescription(e.getErrorMessage() + " This was while trying to execute relevant data service " +
+            message.setDescription("This was while trying to execute relevant data service " +
                 "function @ Dashboard API layer to retrieve a filtered set of device counts by ownerships.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         } catch (SQLException e) {
@@ -262,7 +262,7 @@ public class Dashboard {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
             Message message = new Message();
             message.setErrorMessage("Invalid query parameter value.");
-            message.setDescription(e.getErrorMessage() + " This was while trying to execute relevant data service " +
+            message.setDescription("This was while trying to execute relevant data service " +
                 "function @ Dashboard API layer to retrieve a filtered set of " +
                     "feature non-compliant device counts by platforms.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
@@ -287,7 +287,7 @@ public class Dashboard {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
             Message message = new Message();
             message.setErrorMessage("Invalid query parameter value.");
-            message.setDescription(e.getErrorMessage() + "This was while trying to execute relevant data service " +
+            message.setDescription("This was while trying to execute relevant data service " +
                 "function @ Dashboard API layer to retrieve a filtered set of " +
                     "feature non-compliant device counts by ownerships.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
@@ -337,7 +337,7 @@ public class Dashboard {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
             Message message = new Message();
             message.setErrorMessage("Invalid query parameter value.");
-            message.setDescription(e.getErrorMessage() + " This was while trying to execute relevant data service " +
+            message.setDescription("This was while trying to execute relevant data service " +
                 "function @ Dashboard API layer to retrieve a filtered device count over the total.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         } catch (SQLException e) {
@@ -397,7 +397,7 @@ public class Dashboard {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
             Message message = new Message();
             message.setErrorMessage("Invalid query parameter value.");
-            message.setDescription(e.getErrorMessage() + " This was while trying to execute relevant data service " +
+            message.setDescription("This was while trying to execute relevant data service " +
                 "function @ Dashboard API layer to retrieve a feature non-compliant device count over the total.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
         } catch (SQLException e) {
@@ -470,7 +470,7 @@ public class Dashboard {
                 log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
                 Message message = new Message();
                 message.setErrorMessage("Invalid query parameter value.");
-                message.setDescription(e.getErrorMessage() + "This was while trying to execute relevant data service " +
+                message.setDescription("This was while trying to execute relevant data service " +
                     "function @ Dashboard API layer to retrieve a filtered set of devices with details.");
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
             } catch (SQLException e) {
@@ -511,7 +511,7 @@ public class Dashboard {
                 log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
                 Message message = new Message();
                 message.setErrorMessage("Invalid query parameter value.");
-                message.setDescription(e.getErrorMessage() + " This was while trying to execute relevant data service " +
+                message.setDescription("This was while trying to execute relevant data service " +
                     "function @ Dashboard API layer to retrieve a filtered set of devices with details.");
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
             } catch (SQLException e) {
@@ -576,7 +576,7 @@ public class Dashboard {
                 log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
                 Message message = new Message();
                 message.setErrorMessage("Invalid query parameter value.");
-                message.setDescription(e.getErrorMessage() + " This was while trying to execute relevant service layer " +
+                message.setDescription("This was while trying to execute relevant service layer " +
                     "function @ Dashboard API layer to retrieve a filtered set of " +
                         "feature non-compliant devices with details.");
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
@@ -617,7 +617,7 @@ public class Dashboard {
                 log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value.", e);
                 Message message = new Message();
                 message.setErrorMessage("Invalid query parameter value.");
-                message.setDescription(e.getErrorMessage() + "This was while trying to execute relevant data service " +
+                message.setDescription("This was while trying to execute relevant data service " +
                     "function @ Dashboard API layer to retrieve a filtered set of " +
                         "feature non-compliant devices with details.");
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
