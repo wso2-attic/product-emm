@@ -23,7 +23,7 @@ package org.wso2.emm.agent.utils;
  */
 public class Constants {
 
-	public static final boolean DEBUG_MODE_ENABLED = false;
+	public static final boolean DEBUG_MODE_ENABLED = true;
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
 	public static final boolean SYSTEM_APP_ENABLED = false;
@@ -414,10 +414,6 @@ public class Constants {
 		public static final String BLACK_LIST = "black-list";
 		public static final String PACKAGE_NAME = "packageName";
 		public static final String APP_LIST = "appList";
-		public static final String STATUS = "status";
-		public static final String PAYLOAD = "payload";
-		public static final String SYSTEM_APP_ACTION_RESPONSE = "org.wso2.emm.system.service.MESSAGE_PROCESSED";
-		public static final String IS_HIDDEN = "isHidden";
 	}
 
 }

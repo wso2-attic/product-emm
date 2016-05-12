@@ -15,23 +15,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-buildscript {
-    repositories {
-        jcenter()
-    }
 
+package org.wso2.emm.agent.services.location;
 
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
-    }
-}
+import android.location.Location;
+import org.wso2.emm.agent.beans.Address;
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.2.3'
-}
+/**
+ * This interface represents the functions related to retrieve address of a given location.
+ */
+public interface ReverseGeoCodingService {
 
-allprojects {
-    repositories {
-        jcenter()
-    }
+    /**
+     * This method is used to get the address details of a given location.
+     * @param location latitude and longitude.
+     * @return Returns an address object.
+     */
+    Address getReverseGeoCodes(Location location);
+
 }

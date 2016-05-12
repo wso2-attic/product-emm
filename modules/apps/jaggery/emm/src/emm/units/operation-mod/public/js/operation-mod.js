@@ -768,7 +768,15 @@ var operationModule = function () {
             case androidOperationConstants["WIFI_OPERATION_CODE"]:
                 payload = {
                     "wifiSSID": operationPayload["ssid"],
-                    "wifiPassword": operationPayload["password"]
+                    "wifiPassword": operationPayload["password"],
+                    "wifiType": operationPayload["type"],
+                    "wifiEAP": operationPayload["eap"],
+                    "wifiPhase2": operationPayload["phase2"],
+                    "wifiProvisioning": operationPayload["provisioning"],
+                    "wifiIdentity": operationPayload["identity"],
+                    "wifiAnoIdentity": operationPayload["anonymousIdentity"],
+                    "wifiCaCert" : operationPayload["cacert"],
+                    "wifiCaCertName" : operationPayload["cacertName"]
                 };
                 break;
             case androidOperationConstants["VPN_OPERATION_CODE"]:
@@ -879,7 +887,15 @@ var operationModule = function () {
                 payload = {
                     "operation": {
                         "ssid": operationData["wifiSSID"],
-                        "password": operationData["wifiPassword"]
+                        "type":  operationData["wifiType"],
+                        "password" : operationData["wifiPassword"],
+                        "eap" : operationData["wifiEAP"],
+                        "phase2" : operationData["wifiPhase2"],
+                        "provisioning" : operationData["wifiProvisioning"],
+                        "identity" : operationData["wifiIdentity"],
+                        "anonymousIdentity" : operationData["wifiAnoIdentity"],
+                        "cacert" : operationData["wifiCaCert"],
+                        "cacertName" : operationData["wifiCaCertName"]
                     }
                 };
                 break;
@@ -1196,7 +1212,7 @@ var operationModule = function () {
                 var key = operationDataObj.data("key");
                 var value;
                 if (operationDataObj.is(":text") || operationDataObj.is("textarea") ||
-                    operationDataObj.is(":password")) {
+                    operationDataObj.is(":password") || operationDataObj.is(":hidden")) {
                     value = operationDataObj.val();
                 } else if (operationDataObj.is(":checkbox")) {
                     value = operationDataObj.is(":checked");
@@ -1209,7 +1225,8 @@ var operationModule = function () {
                     if (operationDataObj.hasClass("one-column-input-array")) {
                         $(".child-input", this).each(function () {
                             childInput = $(this);
-                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
+                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")
+                                || childInput.is(":hidden")) {
                                 childInputValue = childInput.val();
                             } else if (childInput.is(":checkbox")) {
                                 childInputValue = childInput.is(":checked");
@@ -1235,7 +1252,8 @@ var operationModule = function () {
                         var joinedInput;
                         $(".child-input", this).each(function () {
                             childInput = $(this);
-                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
+                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")
+                                || childInput.is(":hidden")) {
                                 childInputValue = childInput.val();
                             } else if (childInput.is(":checkbox")) {
                                 childInputValue = childInput.is(":checked");
@@ -1266,7 +1284,8 @@ var operationModule = function () {
                         $(".child-input", this).each(function () {
                             childInput = $(this);
                             childInputKey = childInput.data("child-key");
-                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")) {
+                            if (childInput.is(":text") || childInput.is("textarea") || childInput.is(":password")
+                                || childInput.is(":hidden")) {
                                 childInputValue = childInput.val();
                             } else if (childInput.is(":checkbox")) {
                                 childInputValue = childInput.is(":checked");
@@ -1367,6 +1386,7 @@ var operationModule = function () {
                             var childInputValue = value[childInputIndex];
                             // populating extracted value in the UI according to the input type
                             if (childInput.is(":text") ||
+                                childInput.is(":hidden") ||
                                 childInput.is("textarea") ||
                                 childInput.is(":password") ||
                                 childInput.is("select")) {
@@ -1410,6 +1430,7 @@ var operationModule = function () {
                                 }
                                 // populating extracted value in the UI according to the input type
                                 if (childInput.is(":text") ||
+                                    childInput.is(":hidden") ||
                                     childInput.is("textarea") ||
                                     childInput.is(":password") ||
                                     childInput.is("select")) {
@@ -1436,6 +1457,7 @@ var operationModule = function () {
                             var childInputValue = multiColumnKeyValuePair[childInputKey];
                             // populating extracted value in the UI according to the input type
                             if (childInput.is(":text") ||
+                                childInput.is(":hidden") ||
                                 childInput.is("textarea") ||
                                 childInput.is(":password") ||
                                 childInput.is("select")) {
@@ -1618,7 +1640,7 @@ var operationModule = function () {
             configuredOperations.push(featureCode);
             publicMethods.populateUI(platformType, featureCode, operationPayload);
         }
-        if (restrictions) {
+        if (typeof restrictions.cameraEnabled !== 'undefined') {
             configuredOperations.push(androidOperationConstants["CAMERA_OPERATION_CODE"]);
             publicMethods.populateUI(platformType, androidOperationConstants["CAMERA_OPERATION_CODE"], JSON.stringify(restrictions));
         }

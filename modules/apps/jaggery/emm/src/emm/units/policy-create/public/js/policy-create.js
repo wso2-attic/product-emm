@@ -2266,6 +2266,55 @@ var showAdvanceOperation = function (operation, button) {
     $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
 };
 
+
+/**
+ * This method will display appropriate fields based on wifi type
+ * @param {object} wifi type select object
+ */
+var changeAndroidWifiPolicy = function (select) {
+    slideDownPaneAgainstValueSet(select, 'control-wifi-password', ['wep', 'wpa', '802eap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-eap', ['802eap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-phase2', ['802eap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-identity', ['802eap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-anoidentity', ['802eap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-cacert', ['802eap']);
+}
+
+/**
+ * This method will display appropriate fields based on wifi EAP type
+ * @param {object} wifi eap select object
+ * @param {object} wifi type select object
+ */
+var changeAndroidWifiPolicyEAP = function (select, superSelect) {
+    slideDownPaneAgainstValueSet(select, 'control-wifi-password', ['peap', 'ttls', 'pwd' ,'fast', 'leap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-phase2', ['peap', 'ttls', 'fast']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-provisioning', ['fast']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-identity', ['peap', 'ttls', 'pwd', 'fast', 'leap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-anoidentity', ['peap', 'ttls']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-cacert', ['peap', 'tls', 'ttls']);
+    changeAndroidWifiPolicy(superSelect);
+}
+
+/**
+ * This method will encode the fileinput and enter the values to given input files
+ * @param {object} fileInput
+ * @param {object} fileHiddenInput
+ * @param {object} fileNameHiddenInput
+ */
+var base64EncodeFile = function (fileInput, fileHiddenInput, fileNameHiddenInput) {
+    var file = fileInput.files[0];
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(readerEvt) {
+            var binaryString = readerEvt.target.result;
+            fileHiddenInput.value = (btoa(binaryString));
+            fileNameHiddenInput.value =  file.name.substr(0,file.name.lastIndexOf("."));
+        };
+        reader.readAsBinaryString(file);
+    }
+}
+
+
 /**
  * Method to slide down a provided pane upon provided value set.
  *
@@ -2733,4 +2782,5 @@ $(document).ready(function () {
             $("." + nextStep).removeClass("hidden");
         }
     });
+
 });

@@ -755,15 +755,106 @@
                             </label>
                             <input id="wifi-ssid" type="text" class="form-control operationDataKeys" data-key="wifiSSID" maxlength="100" placeholder="[ Required field ]" disabled/>
                         </div>
-                        <div class="wr-input-control">
-                            <label class="wr-input-label" for="wifi-password">
-                                Password
+                    <div class="wr-input-control">
+                        <label class="wr-input-label" for="wifi-type">
+                            Security*
+                                    <span class="helper"
+                                          title="Security type of the wireless network to be configured.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                        </label>
+                        <select class="form-control operationDataKeys" id="wifi-type"
+                                onchange="changeAndroidWifiPolicy(this)" data-key="wifiType">
+                            <option value="none" selected>None</option>
+                            <option value="wep">WEP</option>
+                            <option value="wpa">WPA/WPA 2 PSK</option>
+                            <option value="802eap">802.1x EAP</option>
+                        </select>
+                    </div>
+
+                    <div class="wr-input-control" id="control-wifi-eap" style="display:none;">
+                        <label class="wr-input-label" for="wifi-eap">
+                            EAP Method
+                                    <span class="helper" title="EAP Method of the wireless network to be configured.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                        </label>
+                        <select class="form-control operationDataKeys" id="wifi-eap"
+                                onchange="changeAndroidWifiPolicyEAP(this, document.getElementById('wifi-type'))" data-key="wifiEAP">
+                            <option value="peap">PEAP</option>
+                            <option value="tls">TLS</option>
+                            <option value="ttls">TTLS</option>
+                            <option value="pwd">PWD</option>
+                            <option value="sim">SIM</option>
+                            <option value="aka">AKA</option>
+                        </select>
+                    </div>
+                    <div class="wr-input-control" id="control-wifi-phase2" style="display:none;">
+                        <label class="wr-input-label" for="wifi-phase2">
+                            Phase 2 Authentication
+                                    <span class="helper"
+                                          title="Phase 2 authentication of the wireless network to be configured.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                        </label>
+                        <select class="form-control operationDataKeys" id="wifi-phase2" data-key="wifiPhase2">
+                            <option value="none">None</option>
+                            <option value="mchapv2">MCHAPV2</option>
+                            <option value="gtc">GTC</option>
+                        </select>
+                    </div>
+                    <div class="wr-input-control" id="control-wifi-provisioning" style="display:none;">
+                        <label class="wr-input-label" for="wifi-provisioning">
+                            Provisioning
+                                    <span class="helper" title="Provisioning of the wireless network to be configured.">
+                                        <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                        </label>
+                        <select class="form-control operationDataKeys" id="wifi-provisioning" data-key="wifiProvisioning">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+                    <div class="wr-input-control" id="control-wifi-identity" style="display:none;">
+                        <label class="wr-input-label" for="wifi-identity">
+                            Identity
+                                <span class="helper" title="Identity of the wireless network to be configured.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <label id="wifiIdentityValidationText" class="wr-input-label hidden">
+                            Identity should be 1-to-30 characters long
+                        </label>
+                        <input id="wifi-identity" type="text" class="form-control operationDataKeys"
+                               data-key="wifiIdentity"
+                               maxlength="100" placeholder="[ Should be 1-to-30 characters long ]"/>
+                    </div>
+                    <div class="wr-input-control" id="control-wifi-anoidentity" style="display:none;">
+                        <label class="wr-input-label" for="wifi-anoidentity">
+                            Anonymous Identity
+                                <span class="helper" title="Identity of the wireless network to be configured.">
+                                    <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                                </span>
+                        </label>
+                        <label id="wifiIdentityValidationText" class="wr-input-label hidden">
+                            Anonymous Identity should be 1-to-30 characters long
+                        </label>
+                        <input id="wifi-anoidentity" type="text" class="form-control operationDataKeys"
+                               data-key="wifiAnoIdentity"
+                               maxlength="100" placeholder="[ Should be 1-to-30 characters long ]"/>
+                    </div>
+                    <div class="wr-input-control" id="control-wifi-password" style="display:none;">
+                        <label class="wr-input-label" for="wifi-password">
+                            Password
                                 <span class="helper" title="Password for the wireless network.">
                                     <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                                 </span>
-                            </label>
-                            <input id="wifi-password" type="password" class="form-control operationDataKeys" data-key="wifiPassword" maxlength="100" placeholder="[ Optional field ]" disabled/>
-                        </div>
+                        </label>
+                        <input id="wifi-password" type="password" class="form-control operationDataKeys"
+                               data-key="wifiPassword" maxlength="100"/>
+                    </div>
                     <!--</div>-->
                 </div>
             </div>

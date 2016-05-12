@@ -15,23 +15,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-buildscript {
-    repositories {
-        jcenter()
-    }
 
+package org.wso2.emm.agent.services.location;
 
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
-    }
-}
+import android.location.Location;
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.2.3'
-}
+/**
+ * This interface represents the functions of location service.
+ */
+public interface LocationService {
 
-allprojects {
-    repositories {
-        jcenter()
-    }
+    /**
+     * This method is used to retrieve the location information
+     * of the device.
+     *
+     * @return Returns location details including latitude and longitude.
+     */
+    Location getLocation();
+
 }

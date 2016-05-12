@@ -84,11 +84,5 @@ public class SettingsManager {
         }
     }
 
-    public static boolean isAppHidden(String packageName) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return EMMSystemService.devicePolicyManager.isApplicationHidden(EMMSystemService.cdmDeviceAdmin, packageName);
-        }
-        return false;
-    }
 
 }

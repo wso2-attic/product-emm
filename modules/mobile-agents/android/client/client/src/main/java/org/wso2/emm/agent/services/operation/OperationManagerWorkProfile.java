@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.emm.agent.services.operationMgt;
+package org.wso2.emm.agent.services.operation;
 
 import android.annotation.TargetApi;
 import android.app.AlarmManager;

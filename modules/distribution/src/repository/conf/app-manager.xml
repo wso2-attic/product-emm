@@ -8,6 +8,20 @@
     -->
     <DataSourceName>jdbc/WSO2AM_DB</DataSourceName>
 
+    <APPStoreConfiguration>
+        <!--
+    This parameter specifies whether to display multiple versions of same
+    APP or only showing the latest version of an APP.
+        -->
+        <DisplayMultipleVersions>true</DisplayMultipleVersions>
+    </APPStoreConfiguration>
+
+    <!--subscription configuration is used by gateway,store,publisher-->
+    <SubscriptionConfiguration>
+        <EnableSelfSubscription>false</EnableSelfSubscription>
+        <EnableEnterpriseSubscription>false</EnableEnterpriseSubscription>
+    </SubscriptionConfiguration>
+
     <!-- The authorization manager configuration to be used by store / publisher components -->
     <AuthManager>
 
@@ -51,6 +65,12 @@
         Enable/Disable JWT generation. Default is false.
         -->
         <EnableTokenGeneration>true</EnableTokenGeneration>
+
+        <!--
+        This parameter specifies which implementation should be used for generating the Token.
+        JWTGenerator is the default implementation provided.
+        -->
+        <TokenGeneratorImpl>org.wso2.carbon.appmgt.impl.token.JWTGenerator</TokenGeneratorImpl>
 
         <!--
         Name of the HTTP header which contains the JWT to be sent to the web app, from the gateway.
@@ -205,7 +225,7 @@
 
             <!-- Used when publishing AppManager UI activities to BAM   -->
             <UIActivityStreamName>org.wso2.appmgt.bam.uiactivitypublish</UIActivityStreamName>
-            <UIActivityStreamVersion>1.0.0</UIActivityStreamVersion>
+            <UIActivityStreamVersion>1.1.0</UIActivityStreamVersion>
 
         </BAMEventStreams>
 
@@ -358,13 +378,13 @@
             Name of the MDM, which is currently active. You need to define the MDM within the <MDMProperties> element.
             For information on defining a MDM to integrate it with WSO2 AppM, see Integrating a Mobile Device Manager
             -->
-            <Config name="ActiveMDM">WSO2MDM_INTERNAL</Config>
+            <Config name="ActiveMDM">WSO2EMM</Config>
 
             <!-- Ability for users to self-unsubscribe from mobile apps -->
             <Config name="EnableSelfUnsubscription">false</Config>
 
             <!-- Ability for users to subscribe to mobile apps using mobile devices -->
-            <Config name="EnableSubscriptionFromDevices">true</Config>
+            <Config name="EnableSubscriptionFromDevices">false</Config>
 
             <!-- Enables the sample devices for testing purposes -->
             <Config name="EnableSampleDevices">false</Config>
@@ -394,7 +414,6 @@
             -->
             <MDM name="WSO2MDM" bundle="org.wso2.carbon.appmgt.mdm.restconnector">
                 <Property name="ImageURL">/store/extensions/assets/mobileapp/resources/models/%s.png</Property>
-                <Property name="IsRemote">true</Property>
                 <Property name="ServerURL">https://localhost:9450/mdm-admin</Property>
                 <Property name="TokenApiURL">https://localhost:9448/oauth2/token</Property>
                 <Property name="ClientKey">WjLm24IxBVLF0oz0VJfmtJbjJbka</Property>
@@ -417,7 +436,6 @@
             -->
             <MDM name="WSO2MDM_INTERNAL" bundle="org.wso2.carbon.appmgt.mdm.osgiconnector">
                 <Property name="ImageURL">/store/extensions/assets/mobileapp/resources/models/%s.png</Property>
-                <Property name="IsRemote">false</Property>
             </MDM>
 
             <!-- Please uncommnent the following block and define the name in ActiveMDM to activate this MDM -->
@@ -428,6 +446,10 @@
             </MDM>
             -->
         </MDMProperties>
+        <BinaryFileStorage>
+            <FilePreciseLocation>repository/resources/mobileapps/</FilePreciseLocation>
+            <FileAPILocation>/api/mobileapp/getfile/</FileAPILocation>
+        </BinaryFileStorage>
 
     </MobileAppsConfiguration>
 
@@ -437,11 +459,11 @@
     </ServicesAPI>
 
     <!--These types in the configuration provides a list of enabled types in the APP Manager.
-If web app is commented, it will be hidden from APP Manager. These type values can be read as artifact types in RXT template -->
+    If web app is commented, it will be hidden from APP Manager. These type values can be read as artifact types in RXT template -->
     <EnabledAssetTypeList>
-        <!--<Type>webapp</Type>-->
+        <!--Type>webapp</Type-->
         <Type>mobileapp</Type>
-        <!--<Type>site</Type>-->
+        <!--Type>site</Type-->
     </EnabledAssetTypeList>
 
 </AppManager>

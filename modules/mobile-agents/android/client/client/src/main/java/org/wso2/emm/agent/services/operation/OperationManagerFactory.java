@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.emm.agent.services.operationMgt;
+package org.wso2.emm.agent.services.operation;
 
 import android.annotation.TargetApi;
 import android.app.admin.DevicePolicyManager;
@@ -42,7 +42,7 @@ public class OperationManagerFactory {
 
     public OperationManager getOperationManager() {
         if ((info.getSdkVersion() >= Build.VERSION_CODES.JELLY_BEAN) &&
-                (info.getSdkVersion() <= Build.VERSION_CODES.LOLLIPOP)) {
+                (info.getSdkVersion() < Build.VERSION_CODES.LOLLIPOP)) {
             return new OperationManagerOlderSdk(context);
         } else {
             return getLollipopUpwardsOperationManager();

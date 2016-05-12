@@ -19,12 +19,12 @@
 package org.wso2.carbon.mdm.beans;
 
 import java.util.List;
-import java.util.Map;
 
 public class DashboardGadgetDataWrapper {
 
     private String context;
-    private List<Map<String, Object>> data;
+    private String groupingAttribute;
+    private List<?> data;
 
     @SuppressWarnings("unused")
     public String getContext() {
@@ -36,11 +36,20 @@ public class DashboardGadgetDataWrapper {
     }
 
     @SuppressWarnings("unused")
-    public List<Map<String, Object>> getData() {
+    public String getGroupingAttribute() {
+        return groupingAttribute;
+    }
+
+    public void setGroupingAttribute(String groupingAttribute) {
+        this.groupingAttribute = groupingAttribute;
+    }
+
+    @SuppressWarnings("unused")
+    public List<?> getData() {
         return data;
     }
 
-    public void setData(List<Map<String, Object>> data) {
+    public void setData(List<?> data) {
         this.data = data;
     }
 
