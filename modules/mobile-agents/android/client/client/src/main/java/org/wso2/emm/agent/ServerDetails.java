@@ -189,19 +189,19 @@ public class ServerDetails extends Activity {
 			                     getHostFromUrl(hostWithPort));
 			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.PROTOCOL, PROTOCOL_HTTP);
 			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.PORT,
-			                     getPortFromUrl(hostWithPort));
+			                     getPortFromUrl(hostWithPort, PROTOCOL_HTTP));
 		} else if (host.indexOf(PROTOCOL_HTTPS) > -1) {
 			String hostWithPort = host.substring(PROTOCOL_HTTPS.length(), host.length());
 			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.IP,
 			                     getHostFromUrl(hostWithPort));
 			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.PROTOCOL, PROTOCOL_HTTPS);
 			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.PORT,
-			                     getPortFromUrl(hostWithPort));
+			                     getPortFromUrl(hostWithPort, PROTOCOL_HTTPS));
 		} else if (host.indexOf(COLON) > -1) {
 			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.IP,
 			                     getHostFromUrl(host));
 			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.PORT,
-			                     getPortFromUrl(host));
+			                     getPortFromUrl(host, PROTOCOL_HTTP));
 		} else {
 			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.IP, host);
 		}
@@ -215,11 +215,15 @@ public class ServerDetails extends Activity {
 		}
 	}
 
-	private String getPortFromUrl (String url) {
+	private String getPortFromUrl (String url, String protocol) {
 		if (url.indexOf(COLON) > -1) {
 			return url.substring((url.indexOf(COLON) + 1), url.length());
 		} else {
-			return Constants.SERVER_PORT;
+			if(protocol.equals(PROTOCOL_HTTP)) {
+				return String.valueOf(org.wso2.emm.agent.proxy.utils.Constants.HTTP);
+			} else {
+				return String.valueOf(org.wso2.emm.agent.proxy.utils.Constants.HTTPS);
+			}
 		}
 	}
 
