@@ -210,6 +210,7 @@ public class APIController implements TokenCallBack {
 					String accessToken = token.getAccessToken();
 					headers.put("Authorization", "Bearer " + accessToken);
 				}
+				ServerUtilities.addHeaders(headers);
 				return headers;
 			}
 		};
@@ -270,6 +271,7 @@ public class APIController implements TokenCallBack {
                         String accessToken = token.getAccessToken();
                         headers.put("Authorization", "Bearer " + accessToken);
                     }
+	                ServerUtilities.addHeaders(headers);
                     return headers;
                 }
             };
@@ -333,6 +335,7 @@ public class APIController implements TokenCallBack {
 						String accessToken = token.getAccessToken();
 						headers.put("Authorization", "Bearer " + accessToken);
 					}
+					ServerUtilities.addHeaders(headers);
 					return headers;
 				}
 			};
