@@ -381,6 +381,19 @@ public class ApplicationManager implements TokenCallBack {
                                                                  PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
     }
 
+    private void removeExistingFile() {
+        String directory = Environment.getExternalStorageDirectory().getPath() +
+                           resources.getString(R.string.application_mgr_download_location);
+        File file = new File(directory);
+        file.mkdirs();
+        File outputFile = new File(file,
+                                   resources.getString(R.string.application_mgr_download_file_name));
+
+        if (outputFile.exists()) {
+            outputFile.delete();
+        }
+    }
+
     /**
      * Initiate downloading via DownloadManager API.
      *
@@ -527,6 +540,7 @@ public class ApplicationManager implements TokenCallBack {
             IntentFilter filter = new IntentFilter(
                     DownloadManager.ACTION_DOWNLOAD_COMPLETE);
             context.registerReceiver(downloadReceiver, filter);
+            removeExistingFile();
             downloadViaDownloadManager(this.appUrl, resources.getString(R.string.download_mgr_download_file_name));
         } else {
             downloadApp(this.appUrl);

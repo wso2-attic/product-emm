@@ -287,8 +287,10 @@ public class AndroidAPIUtils {
         } else if (AndroidConstants.OperationCodes.DEVICE_LOCATION.equals(operation.getCode())) {
             try {
                 DeviceLocation location = new Gson().fromJson(operation.getOperationResponse(), DeviceLocation.class);
-                location.setDeviceIdentifier(deviceIdentifier);
-                updateDeviceLocation(location);
+                if (location != null) {
+                    location.setDeviceIdentifier(deviceIdentifier);
+                    updateDeviceLocation(location);
+                }
             } catch (DeviceDetailsMgtException e) {
                 throw new OperationManagementException("Error occurred while updating the device location.", e);
             }
