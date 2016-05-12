@@ -19,8 +19,14 @@
 package org.wso2.emm.agent.services.location.impl;
 
 import android.location.Location;
-import android.os.AsyncTask;
 import android.util.Log;
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.beans.Address;
@@ -73,89 +79,112 @@ public class OpenStreetMapService implements ReverseGeoCodingService {
         endPointInfo.setHttpMethod(org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.GET);
         endPointInfo.setEndPoint(url);
 
-        SendRequest sendRequestTask = new SendRequest();
-        sendRequestTask.execute(endPointInfo);
+        sendRequest(endPointInfo);
         return currentAddress;
     }
 
     /**
-     * This class is used to send requests to reverse geo coordination API.
-     * The reason to use this private class because the function which is already
-     * available for sending requests is secured with token. Therefor this async task can be used
+     * This method is used to send requests to reverse geo coordination API.
+     * The reason to use this method because the function which is already
+     * available for sending requests is secured with token. Therefore this method can be used
      * to send requests without tokens.
      */
-    private class SendRequest extends AsyncTask<EndPointInfo, Void, Map<String, String>> {
-        @Override
-        protected Map<String, String> doInBackground(EndPointInfo... params) {
-            EndPointInfo endPointInfo = params[0];
-
-            Map<String, String> responseParams = null;
-            Map<String, String> headers = new HashMap<>();
-            headers.put("User-Agent", Constants.USER_AGENT);
-
-            try {
-                responseParams = ServerUtilities.postData(endPointInfo, headers);
-                if (Constants.DEBUG_MODE_ENABLED) {
-                    Log.d(TAG, "Response Code: " +
-                               responseParams.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_STATUS));
-                    Log.d(TAG, "Response Payload: " +
-                               responseParams.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_BODY));
-                }
-            } catch (IDPTokenManagerException e) {
-                Log.e(TAG, "Failed to contact server", e);
-            }
-            return responseParams;
+    private void sendRequest(EndPointInfo endPointInfo) {
+        RequestQueue queue =  null;
+        try {
+            queue = ServerUtilities.getCertifiedHttpClient();
+        } catch (IDPTokenManagerException e) {
+            Log.e(TAG, "Failed to retrieve HTTP client", e);
         }
 
-        @Override
-        protected void onPostExecute(Map<String, String> result) {
+        StringRequest request = new StringRequest(Request.Method.GET, endPointInfo.getEndPoint(),
+                                                  new Response.Listener<String>() {
+                                                      @Override
+                                                      public void onResponse(String response) {
+                                                          Log.d(TAG, response);
+                                                      }
+                                                  },
+                                                  new Response.ErrorListener() {
+                                                      @Override
+                                                      public void onErrorResponse(VolleyError error) {
+                                                          Log.e(TAG, error.toString());
+                                                      }
+                                                  })
 
-            if (result != null) {
-                String responseCode = result.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_STATUS);
-                if (Constants.Status.SUCCESSFUL.equals(responseCode)) {
-                    String resultPayload = result.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_BODY);
-                    try {
-                        JSONObject data = new JSONObject(resultPayload);
-                        if (!data.isNull(Constants.Location.ADDRESS)) {
-                            currentAddress = new Address();
-                            JSONObject address = data.getJSONObject(Constants.Location.ADDRESS);
-                            if (!address.isNull(Constants.Location.CITY)) {
-                                currentAddress.setCity(address.getString(Constants.Location.CITY));
-                            } else if (!address.isNull(Constants.Location.TOWN)) {
-                                currentAddress.setCity(address.getString(Constants.Location.TOWN));
-                            }
-
-                            if (!address.isNull(Constants.Location.COUNTRY)) {
-                                currentAddress.setCountry(address.getString(Constants.Location.COUNTRY));
-                            }
-                            if (!address.isNull(Constants.Location.STREET1)) {
-                                currentAddress.setStreet1(address.getString(Constants.Location.STREET1));
-                            }
-                            if (!address.isNull(Constants.Location.STREET2)) {
-                                currentAddress.setStreet2(address.getString(Constants.Location.STREET2));
-                            }
-                            if (!address.isNull(Constants.Location.STATE)) {
-                                currentAddress.setState(address.getString(Constants.Location.STATE));
-                            }
-                            if (!address.isNull(Constants.Location.ZIP)) {
-                                currentAddress.setZip(address.getString(Constants.Location.ZIP));
-                            }
-                        }
-
-                        if (Constants.DEBUG_MODE_ENABLED) {
-                            String addr = new StringBuilder().append("Address: ")
-                                    .append(currentAddress.getStreet1() + ", ")
-                                    .append(currentAddress.getStreet2() + ", ")
-                                    .append(currentAddress.getCity() + ", ")
-                                    .append(currentAddress.getState() + ", ")
-                                    .append(currentAddress.getZip() + ", ")
-                                    .append(currentAddress.getCountry())
-                                    .toString();
-                            Log.d(TAG, addr);
-                        }
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Error occurred while parsing the result payload", e);
+        {
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                String result = new String(response.data);
+                if(org.wso2.emm.agent.proxy.utils.Constants.DEBUG_ENABLED) {
+                    if(result != null && !result.isEmpty()) {
+                        Log.d(TAG, "Result :" + result);
                     }
+                }
+                Map<String, String> responseParams = new HashMap<>();
+                responseParams.put(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_BODY, result);
+                responseParams.put(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_STATUS, String.valueOf(response.statusCode));
+                processTokenResponse(responseParams);
+                return super.parseNetworkResponse(response);
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("User-Agent", Constants.USER_AGENT);
+                return headers;
+            }
+        };
+
+        queue.add(request);
+    }
+
+
+    private void processTokenResponse(Map<String, String> result) {
+        if (result != null) {
+            String responseCode = result.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_STATUS);
+            if (Constants.Status.SUCCESSFUL.equals(responseCode)) {
+                String resultPayload = result.get(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_BODY);
+                try {
+                    JSONObject data = new JSONObject(resultPayload);
+                    if (!data.isNull(Constants.Location.ADDRESS)) {
+                        currentAddress = new Address();
+                        JSONObject address = data.getJSONObject(Constants.Location.ADDRESS);
+                        if (!address.isNull(Constants.Location.CITY)) {
+                            currentAddress.setCity(address.getString(Constants.Location.CITY));
+                        } else if (!address.isNull(Constants.Location.TOWN)) {
+                            currentAddress.setCity(address.getString(Constants.Location.TOWN));
+                        }
+
+                        if (!address.isNull(Constants.Location.COUNTRY)) {
+                            currentAddress.setCountry(address.getString(Constants.Location.COUNTRY));
+                        }
+                        if (!address.isNull(Constants.Location.STREET1)) {
+                            currentAddress.setStreet1(address.getString(Constants.Location.STREET1));
+                        }
+                        if (!address.isNull(Constants.Location.STREET2)) {
+                            currentAddress.setStreet2(address.getString(Constants.Location.STREET2));
+                        }
+                        if (!address.isNull(Constants.Location.STATE)) {
+                            currentAddress.setState(address.getString(Constants.Location.STATE));
+                        }
+                        if (!address.isNull(Constants.Location.ZIP)) {
+                            currentAddress.setZip(address.getString(Constants.Location.ZIP));
+                        }
+                    }
+
+                    if (Constants.DEBUG_MODE_ENABLED) {
+                        String addr = new StringBuilder().append("Address: ")
+                                .append(currentAddress.getStreet1() + ", ")
+                                .append(currentAddress.getStreet2() + ", ")
+                                .append(currentAddress.getCity() + ", ")
+                                .append(currentAddress.getState() + ", ")
+                                .append(currentAddress.getZip() + ", ")
+                                .append(currentAddress.getCountry())
+                                .toString();
+                        Log.d(TAG, addr);
+                    }
+                } catch (JSONException e) {
+                    Log.e(TAG, "Error occurred while parsing the result payload", e);
                 }
             }
         }

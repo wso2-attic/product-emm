@@ -26,6 +26,7 @@ public class DeviceAppInfo {
 	private String versionName;
 	private int versionCode;
 	private String icon;
+	private boolean isSystemApp;
 
 	public String getAppname() {
 		return appName;
@@ -65,5 +66,13 @@ public class DeviceAppInfo {
 
 	public void setIcon(String icon) {
 		this.icon = icon;
+	}
+
+	public boolean isSystemApp() {
+		return isSystemApp;
+	}
+
+	public void setIsSystemApp(boolean isSystemApp) {
+		this.isSystemApp = isSystemApp;
 	}
 }

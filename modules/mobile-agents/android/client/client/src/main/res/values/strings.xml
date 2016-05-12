@@ -209,6 +209,7 @@
     <string name="shared_pref_device_active">deviceActive</string>
     <string name="shared_pref_client_id">clientId</string>
     <string name="shared_pref_client_secret">clientSecret</string>
+    <string name="shared_pref_client_credentials">clientCredentials</string>
     <string name="shared_pref_operators">operators</string>
     <string name="shared_pref_default_array">[]</string>
     <string name="shared_pref_default_string"></string>
@@ -324,10 +325,17 @@
     <!-- APPLICATION MANAGER -->
     <string name="application_mgr_download_location">/Download/</string>
     <string name="application_mgr_download_file_name">update.apk</string>
+    <string name="download_mgr_download_file_name">update.apk</string>
     <string name="application_mgr_mime">application/vnd.android.package-archive</string>
     <string name="application_package_prefix">package:</string>
+    <string name="shared_pref_installed_app">appPackageName</string>
+    <string name="shared_pref_installed_file">appFileName</string>
     <string name="application_package_launcher_install_action">com.android.launcher.action.INSTALL_SHORTCUT</string>
     <string name="application_package_launcher_uninstall_action">com.android.launcher.action.UNINSTALL_SHORTCUT</string>
+    <string name="android_download_manager_ui_resolver">com.android.providers.downloads.ui</string>
+    <string name="android_download_manager_list_resolver">com.android.providers.downloads.ui.DownloadList</string>
+    <string name="downloader_message_title">EMM Agent is installing an app for you</string>
+    <string name="downloader_message_description">EMM Agent is installing </string>
 
     <!-- SERVER UTILITIES -->
     <string name="server_util_req_type_post">POST</string>

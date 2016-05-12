@@ -19,23 +19,26 @@
 package org.wso2.emm.agent.proxy.clients;
 
 import android.util.Log;
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.Volley;
 import org.wso2.emm.agent.proxy.IDPTokenManagerException;
+import org.wso2.emm.agent.proxy.IdentityProxy;
 import org.wso2.emm.agent.proxy.R;
 import org.wso2.emm.agent.proxy.authenticators.AuthenticatorFactory;
 import org.wso2.emm.agent.proxy.authenticators.MutualSSLAuthenticator;
 import org.wso2.emm.agent.proxy.utils.Constants;
 import org.wso2.emm.agent.proxy.utils.Keystore;
-
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -57,35 +60,40 @@ public class MutualSSLClient implements CommunicationClient {
         }
     }
 
-    public HttpClient getHttpClient() throws IDPTokenManagerException {
-        HttpClient client;
+    public RequestQueue getHttpClient() throws IDPTokenManagerException {
+        RequestQueue client;
         try {
             if (Constants.SERVER_PROTOCOL.equalsIgnoreCase("https://")) {
-                SchemeRegistry schemeRegistry = new SchemeRegistry();
-                schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(),
-                                                   Constants.HTTP));
-                SSLSocketFactory sslSocketFactory;
-
                 AuthenticatorFactory authenticatorFactory = new AuthenticatorFactory();
                 MutualSSLAuthenticator mutualSSLAuthenticator = (MutualSSLAuthenticator)
                         authenticatorFactory.getClient(Constants.Authenticator.
-                                                       MUTUAL_SSL_AUTHENTICATOR, null,
+                                                               MUTUAL_SSL_AUTHENTICATOR, null,
                                                        Constants.ADD_HEADER_CALLBACK);
+                String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+                TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+                tmf.init(localTrustStore);
 
-                sslSocketFactory = new SSLSocketFactory(mutualSSLAuthenticator.
-                        getCredentialCertificate(), Constants.KEYSTORE_PASSWORD, localTrustStore);
 
-                sslSocketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-                schemeRegistry.register(new Scheme("https", sslSocketFactory, Constants.HTTPS));
-                HttpParams params = new BasicHttpParams();
-                ClientConnectionManager connectionManager =
-                        new ThreadSafeClientConnManager(params, schemeRegistry);
-                client = new DefaultHttpClient(connectionManager, params);
+                KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+                kmf.init(mutualSSLAuthenticator.
+                        getCredentialCertificate(), Constants.KEYSTORE_PASSWORD.toCharArray());
 
+                SSLContext context = SSLContext.getInstance("TLS");
+                context.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+                final SSLSocketFactory socketFactory = context.getSocketFactory();
+                HurlStack hurlStack = new HurlStack() {
+                    @Override
+                    protected HttpURLConnection createConnection(URL url) throws IOException {
+                        HttpsURLConnection httpsURLConnection = (HttpsURLConnection) super.createConnection(url);
+                        httpsURLConnection.setSSLSocketFactory(socketFactory);
+                        httpsURLConnection.setHostnameVerifier(getHostnameVerifier());
+                        return httpsURLConnection;
+                    }
+                };
+                client = Volley.newRequestQueue(IdentityProxy.getInstance().getContext(), hurlStack);
             } else {
-                client = new DefaultHttpClient();
+                client = Volley.newRequestQueue(IdentityProxy.getInstance().getContext());
             }
-
         } catch (KeyStoreException e) {
             String errorMsg = "Error occurred while accessing keystore.";
             Log.e(TAG, errorMsg);
@@ -104,6 +112,16 @@ public class MutualSSLClient implements CommunicationClient {
             throw new IDPTokenManagerException(errorMsg, e);
         }
         return client;
+    }
+
+    private HostnameVerifier getHostnameVerifier() {
+        return new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                HostnameVerifier hv = HttpsURLConnection.getDefaultHostnameVerifier();
+                return hv.verify(hostname, session);
+            }
+        };
     }
 
     @Override

@@ -148,8 +148,8 @@ public abstract class CommonDialogUtils {
 	 * @param cancelListener -The OnCancelListener.
 	 * @return - A progress dialog.
 	 */
-	public static ProgressDialog showPrgressDialog(Context context, String title, String message,
-	                                               OnCancelListener cancelListener) {
+	public static ProgressDialog showProgressDialog(Context context, String title, String message,
+	                                                OnCancelListener cancelListener) {
 		ProgressDialog progressDialog = ProgressDialog.show(context, title, message, true);
 		progressDialog.setCancelable(true);
 		progressDialog.setOnCancelListener(cancelListener);

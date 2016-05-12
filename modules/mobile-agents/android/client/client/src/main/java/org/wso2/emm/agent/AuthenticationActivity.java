@@ -208,7 +208,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		public void onClick(DialogInterface dialog, int which) {
 			switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
-					startAuthentication();
+					getClientCredentials();
 					dialog.dismiss();
 					break;
 
@@ -233,43 +233,35 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			String clientId = Preference.getString(context, Constants.CLIENT_ID);
 			String clientSecret = Preference.getString(context, Constants.CLIENT_SECRET);
 			String clientName;
-			progressDialog = ProgressDialog.show(context, getResources().getString(R.string.dialog_authenticate), getResources().
-					getString(R.string.dialog_message_please_wait), true);
-
 
 			if (clientId == null || clientSecret == null) {
-				try {
-					String clientCredentials = getClientCredentials();
-					if (clientCredentials != null) {
-						try {
-							JSONObject payload = new JSONObject(clientCredentials);
-							clientId = payload.getString(Constants.CLIENT_ID);
-							clientSecret = payload.getString(Constants.CLIENT_SECRET);
-							clientName = payload.getString(Constants.CLIENT_NAME);
+				String clientCredentials = Preference.getString(context, getResources().getString(R.string.shared_pref_client_credentials));
+				if (clientCredentials != null) {
+					try {
+						JSONObject payload = new JSONObject(clientCredentials);
+						clientId = payload.getString(Constants.CLIENT_ID);
+						clientSecret = payload.getString(Constants.CLIENT_SECRET);
+						clientName = payload.getString(Constants.CLIENT_NAME);
 
-							if (clientName != null && !clientName.isEmpty()) {
-								Preference.putString(context, Constants.CLIENT_NAME, clientName);
-							}
-							if (clientId != null && !clientId.isEmpty() &&
-							    clientSecret != null && !clientSecret.isEmpty()) {
-								initializeIDPLib(clientId, clientSecret);
-							}
-						} catch (JSONException e) {
-							String msg = "error occurred while parsing client credential payload";
-							Log.e(TAG, msg, e);
-							showInternalServerErrorMessage();
+						if (clientName != null && !clientName.isEmpty()) {
+							Preference.putString(context, Constants.CLIENT_NAME, clientName);
 						}
-					} else {
-						String msg = "error occurred while retrieving client credentials";
-						Log.e(TAG, msg);
+						if (clientId != null && !clientId.isEmpty() &&
+						    clientSecret != null && !clientSecret.isEmpty()) {
+							initializeIDPLib(clientId, clientSecret);
+						}
+					} catch (JSONException e) {
+						String msg = "error occurred while parsing client credential payload";
+						Log.e(TAG, msg, e);
+						CommonDialogUtils.stopProgressDialog(progressDialog);
 						showInternalServerErrorMessage();
 					}
-				} catch (AndroidAgentException e) {
+				} else {
 					String msg = "error occurred while retrieving client credentials";
-					Log.e(TAG, msg, e);
+					Log.e(TAG, msg);
+					CommonDialogUtils.stopProgressDialog(progressDialog);
 					showInternalServerErrorMessage();
 				}
-
 			} else {
 				initializeIDPLib(clientId, clientSecret);
 			}
@@ -377,7 +369,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		if (deviceType != null && Constants.OWNERSHIP_BYOD.equals(deviceType.trim())) {
 
 			if (!isAgreed) {
-				OnCancelListener cancelListener = new OnCancelListener() {
+				final OnCancelListener cancelListener = new OnCancelListener() {
 					@Override
 					public void onCancel(DialogInterface arg0) {
 						CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
@@ -387,13 +379,18 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					}
 				};
 
-				progressDialog =
-						CommonDialogUtils.showPrgressDialog(context,
-						                                    getResources().getString(
-								                                    R.string.dialog_license_agreement),
-						                                    getResources().getString(
-								                                    R.string.dialog_please_wait),
-						                                    cancelListener);
+				AuthenticationActivity.this.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						progressDialog =
+								CommonDialogUtils.showProgressDialog(context,
+								                                     getResources().getString(
+										                                     R.string.dialog_license_agreement),
+								                                     getResources().getString(
+										                                     R.string.dialog_please_wait),
+								                                     cancelListener);
+					}
+				});
 
 				// Check network connection availability before calling the API.
 				if (CommonUtils.isNetworkAvailable(context)) {
@@ -416,7 +413,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * Retriever license agreement details from the server.
 	 */
 	private void getLicenseFromServer() {
-		String ipSaved = Preference.getString(context.getApplicationContext(),Constants.PreferenceFlag.IP);
+		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
 
 		if (ipSaved != null && !ipSaved.isEmpty()) {
 			ServerConfig utils = new ServerConfig();
@@ -435,7 +432,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * Retriever configurations from the server.
 	 */
 	private void getConfigurationsFromServer() {
-		OnCancelListener cancelListener = new OnCancelListener() {
+		final OnCancelListener cancelListener = new OnCancelListener() {
 
 			@Override
 			public void onCancel(DialogInterface arg0) {
@@ -445,13 +442,19 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	                                          getResources().getString(R.string.button_ok), null);
 			}
 		};
-		progressDialog =
-				CommonDialogUtils.showPrgressDialog(context,
-				                                    getResources().getString(
-						                                    R.string.dialog_sender_id),
-				                                    getResources().getString(
-						                                    R.string.dialog_please_wait),
-				                                    cancelListener);
+		AuthenticationActivity.this.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				progressDialog =
+						CommonDialogUtils.showProgressDialog(context,
+						                                     getResources().getString(
+								                                     R.string.dialog_sender_id),
+						                                     getResources().getString(
+								                                     R.string.dialog_please_wait),
+						                                     cancelListener);
+			}
+		});
+
 		String ipSaved = Preference.getString(context.getApplicationContext(),Constants.PreferenceFlag.IP);
 
 		if (ipSaved != null && !ipSaved.isEmpty()) {
@@ -471,10 +474,39 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
 		if (requestCode == Constants.LICENSE_REQUEST_CODE) {
 			manipulateLicenseResponse(result);
-		} else if(requestCode == Constants.CONFIGURATION_REQUEST_CODE){
+		} else if (requestCode == Constants.CONFIGURATION_REQUEST_CODE){
 			manipulateConfigurationResponse(result);
+		} else if (requestCode == Constants.DYNAMIC_CLIENT_REGISTER_REQUEST_CODE) {
+			manipulateDynamicClientResponse(result);
 		}
 	}
+
+	/**
+	 * Manipulates the dynamic client registration response received from server.
+	 *
+	 * @param result the result of the dynamic client request
+	 */
+	private void manipulateDynamicClientResponse(Map<String, String> result) {
+		String responseStatus;
+		if (result != null) {
+			responseStatus = result.get(Constants.STATUS);
+			if (Constants.Status.CREATED.equals(responseStatus)) {
+				String dynamicClientResponse = result.get(Constants.RESPONSE);
+				if (dynamicClientResponse != null) {
+					Preference.putString(context, getResources().getString(R.string.shared_pref_client_credentials),
+					                     dynamicClientResponse);
+					startAuthentication();
+				}
+			} else {
+				CommonDialogUtils.stopProgressDialog(progressDialog);
+				showEnrollementFailedErrorMessage();
+			}
+		} else {
+			CommonDialogUtils.stopProgressDialog(progressDialog);
+			showEnrollementFailedErrorMessage();
+		}
+	}
+
 	/**
 	 * Manipulates the Configuration response received from server.
 	 *
@@ -492,7 +524,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 
 				if (configurationResponse != null) {
 					try {
-						JSONObject config = new JSONObject(configurationResponse.toString());
+						JSONObject config = new JSONObject(configurationResponse);
 						if (!config.isNull(context.getString(R.string.shared_pref_configuration))) {
 							JSONArray configList = new JSONArray(config.getString(context.getString(R.string.
 					                                                                      shared_pref_configuration)));
@@ -647,55 +679,60 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * @param message Message text to be shown as the license.
 	 * @param title   Title of the license.
 	 */
-	private void showAgreement(String message, String title) {
-		final Dialog dialog = new Dialog(context);
-		dialog.setContentView(R.layout.custom_terms_popup);
-		dialog.setTitle(Constants.EULA_TITLE);
-		dialog.setCancelable(false);
-
-		WebView webView = (WebView) dialog.findViewById(R.id.webview);
-
-		webView.loadDataWithBaseURL(null, message, Constants.MIME_TYPE,
-		                            Constants.ENCODING_METHOD, null);
-
-		Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-		Button cancelButton = (Button) dialog.findViewById(R.id.dialogButtonCancel);
-
-		dialogButton.setOnClickListener(new OnClickListener() {
+	private void showAgreement(final String message, String title) {
+		AuthenticationActivity.this.runOnUiThread(new Runnable() {
 			@Override
-			public void onClick(View v) {
-				Preference.putBoolean(context, Constants.PreferenceFlag.IS_AGREED, true);
-				dialog.dismiss();
-				//load the next intent based on ownership type
-				getConfigurationsFromServer();
+			public void run() {
+				final Dialog dialog = new Dialog(context);
+				dialog.setContentView(R.layout.custom_terms_popup);
+				dialog.setTitle(Constants.EULA_TITLE);
+				dialog.setCancelable(false);
+
+				WebView webView = (WebView) dialog.findViewById(R.id.webview);
+
+				webView.loadDataWithBaseURL(null, message, Constants.MIME_TYPE,
+				                            Constants.ENCODING_METHOD, null);
+
+				Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+				Button cancelButton = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+
+				dialogButton.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Preference.putBoolean(context, Constants.PreferenceFlag.IS_AGREED, true);
+						dialog.dismiss();
+						//load the next intent based on ownership type
+						getConfigurationsFromServer();
+					}
+				});
+
+				cancelButton.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						dialog.dismiss();
+						CommonUtils.clearClientCredentials(context);
+						cancelEntry();
+					}
+				});
+
+				dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+
+					@Override
+					public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+						if (keyCode == KeyEvent.KEYCODE_SEARCH &&
+						    event.getRepeatCount() == Constants.DEFAILT_REPEAT_COUNT) {
+							return true;
+						} else if (keyCode == KeyEvent.KEYCODE_BACK &&
+						           event.getRepeatCount() == Constants.DEFAILT_REPEAT_COUNT) {
+							return true;
+						}
+						return false;
+					}
+				});
+
+				dialog.show();
 			}
 		});
-
-		cancelButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				dialog.dismiss();
-				CommonUtils.clearClientCredentials(context);
-				cancelEntry();
-			}
-		});
-
-		dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-
-			@Override
-			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-				if (keyCode == KeyEvent.KEYCODE_SEARCH &&
-				    event.getRepeatCount() == Constants.DEFAILT_REPEAT_COUNT) {
-					return true;
-				} else if (keyCode == KeyEvent.KEYCODE_BACK &&
-				           event.getRepeatCount() == Constants.DEFAILT_REPEAT_COUNT) {
-					return true;
-				}
-				return false;
-			}
-		});
-
-		dialog.show();
 	}
 
 	private void loadPinCodeActivity() {
@@ -863,8 +900,10 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * @return JSON formatted string.
 	 * @throws AndroidAgentException
 	 */
-	private String getClientCredentials() throws AndroidAgentException {
+	private void getClientCredentials() {
 		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
+		progressDialog = ProgressDialog.show(context, getResources().getString(R.string.dialog_authenticate), getResources().
+				getString(R.string.dialog_message_please_wait), true);
 		if (ipSaved != null && !ipSaved.isEmpty()) {
 			ServerConfig utils = new ServerConfig();
 			utils.setServerIP(ipSaved);
@@ -878,10 +917,18 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			profile.setApplicationType(Constants.APPLICATION_TYPE);
 
 			DynamicClientManager dynamicClientManager = new DynamicClientManager();
-			return dynamicClientManager.getClientCredentials(profile, utils, context);
+			try {
+				dynamicClientManager.getClientCredentials(profile, utils, context, AuthenticationActivity.this);
+			} catch (AndroidAgentException e) {
+				Log.e(TAG, "Client credentials generation failed" + e);
+				CommonDialogUtils.stopProgressDialog(progressDialog);
+				showEnrollementFailedErrorMessage();
+			}
+		} else {
+			Log.e(TAG, "There is no valid IP to contact the server");
+			CommonDialogUtils.stopProgressDialog(progressDialog);
+			showEnrollementFailedErrorMessage();
 		}
-		Log.e(TAG, "There is no valid IP to contact the server");
-		return null;
 	}
 
 	/**
@@ -899,7 +946,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	@Override
 	public void onAuthenticated(boolean status, int requestCode) {
 		if (requestCode == Constants.AUTHENTICATION_REQUEST_CODE) {
-			if (status == true &&
+			if (status &&
 			    org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE.
 					    equals(org.wso2.emm.agent.proxy.utils.Constants.Authenticator.
 							           MUTUAL_SSL_AUTHENTICATOR)) {

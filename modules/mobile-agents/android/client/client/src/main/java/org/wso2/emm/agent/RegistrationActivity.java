@@ -60,12 +60,15 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		setContentView(R.layout.activity_main);
 		context = this;
 
-		progressDialog = CommonDialogUtils.showPrgressDialog(RegistrationActivity.this,
-		                                                     getResources().getString(R.string.dialog_enrolling),
-		                                                     getResources().getString(R.string.dialog_please_wait),
-		                                                     null);
-		progressDialog.show();
-
+		RegistrationActivity.this.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				progressDialog = CommonDialogUtils.showProgressDialog(RegistrationActivity.this,
+				                                                      getResources().getString(R.string.dialog_enrolling),
+				                                                      getResources().getString(R.string.dialog_please_wait),
+				                                                      null);
+			}
+		});
 		deviceInfoBuilder = new DeviceInfoPayload(context);
 		resources = context.getResources();
 		DeviceInfo deviceInfo = new DeviceInfo(context);

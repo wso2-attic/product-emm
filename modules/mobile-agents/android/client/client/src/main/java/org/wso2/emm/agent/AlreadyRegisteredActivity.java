@@ -391,11 +391,16 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 * Initiate unregistration.
 	 */
 	private void initiateUnregistration() {
-		txtRegText.setText(R.string.register_text_view_text_unregister);
-		btnUnregister.setText(R.string.register_button_text);
-		btnUnregister.setTag(TAG_BTN_RE_REGISTER);
-		btnUnregister.setOnClickListener(onClickListenerButtonClicked);
-		CommonUtils.disableAdmin(context);
+		AlreadyRegisteredActivity.this.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				txtRegText.setText(R.string.register_text_view_text_unregister);
+				btnUnregister.setText(R.string.register_button_text);
+				btnUnregister.setTag(TAG_BTN_RE_REGISTER);
+				btnUnregister.setOnClickListener(onClickListenerButtonClicked);
+				CommonUtils.disableAdmin(context);
+			}
+		});
 	}
 
 	/**
@@ -403,12 +408,17 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 *
 	 * @param cdmDeviceAdmin - Device admin component.
 	 */
-	private void startDeviceAdminPrompt(ComponentName cdmDeviceAdmin) {
-		Intent deviceAdminIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-		deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cdmDeviceAdmin);
-		deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-		                           getResources().getString(R.string.device_admin_enable_alert));
-		startActivityForResult(deviceAdminIntent, ACTIVATION_REQUEST);
+	private void startDeviceAdminPrompt(final ComponentName cdmDeviceAdmin) {
+		AlreadyRegisteredActivity.this.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Intent deviceAdminIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+				deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cdmDeviceAdmin);
+				deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+				                           getResources().getString(R.string.device_admin_enable_alert));
+				startActivityForResult(deviceAdminIntent, ACTIVATION_REQUEST);
+			}
+		});
 	}
 
 	/**

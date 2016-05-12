@@ -21,16 +21,20 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.AsyncTask;
 import android.util.Log;
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.wso2.emm.agent.proxy.beans.EndPointInfo;
 import org.wso2.emm.agent.proxy.beans.Token;
 import org.wso2.emm.agent.proxy.utils.Constants;
 import org.wso2.emm.agent.proxy.utils.ServerUtilities;
-import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -58,103 +62,114 @@ public class RefreshTokenHandler {
 	}
 
 	public void obtainNewAccessToken() {
-		new NetworkCallTask().execute();
-	}
-
-	private class NetworkCallTask extends AsyncTask<String, Void, String> {
-
-		private String responseCode = null;
-
-		@Override
-		protected String doInBackground(String... params) {
-			String response = null;
-
-			Map<String, String> requestParams = new HashMap<String, String>();
-			requestParams.put(Constants.GRANT_TYPE, Constants.REFRESH_TOKEN);
-			requestParams.put(Constants.REFRESH_TOKEN, token.getRefreshToken());
-			requestParams.put(SCOPE_LABEL, PRODUCTION_LABEL);
-			EndPointInfo endPointInfo = new EndPointInfo();
-			endPointInfo.setEndPoint(IdentityProxy.getInstance().getAccessTokenURL());
-			endPointInfo.setHttpMethod(HTTP_METHODS.POST);
-			endPointInfo.setRequestParamsMap(requestParams);
-
-			byte[] credentials = Base64.encodeBase64((IdentityProxy.clientID + COLON +
-			                                          IdentityProxy.clientSecret).getBytes());
-			String encodedCredentials = new String(credentials);
-
-			Map<String, String> headers = new HashMap<String, String>();
-
-			String authorizationString = Constants.AUTHORIZATION_MODE + encodedCredentials;
-			headers.put(Constants.AUTHORIZATION_HEADER, authorizationString);
-			headers.put(Constants.CONTENT_TYPE_HEADER, Constants.DEFAULT_CONTENT_TYPE);
-
-			Map<String, String> responseParams = null;
-			try {
-				responseParams = ServerUtilities.postDataAPI(endPointInfo, headers);
-			} catch (IDPTokenManagerException e) {
-				Log.e(TAG, "Failed to contact server." + e);
-			}
-
-			if (responseParams != null) {
-				response = responseParams.get(Constants.SERVER_RESPONSE_BODY);
-				responseCode = responseParams.get(Constants.SERVER_RESPONSE_STATUS);
-			} else {
-				responseCode = Constants.INTERNAL_SERVER_ERROR;
-			}
-			return response;
+		RequestQueue queue =  null;
+		try {
+			queue = ServerUtilities.getCertifiedHttpClient();
+		} catch (IDPTokenManagerException e) {
+			Log.e(TAG, "Failed to retrieve HTTP client", e);
 		}
 
-		@SuppressLint("SimpleDateFormat")
-		@Override
-		protected void onPostExecute(String result) {
+		StringRequest request = new StringRequest(Request.Method.POST, IdentityProxy.getInstance().getAccessTokenURL(),
+		                                          new Response.Listener<String>() {
+			                                          @Override
+			                                          public void onResponse(String response) {
+				                                          Log.d(TAG, response);
+			                                          }
+		                                          },
+		                                          new Response.ErrorListener() {
+			                                          @Override
+			                                          public void onErrorResponse(VolleyError error) {
+				                                          Log.d(TAG, error.toString());
+			                                          }
+		                                          })
 
-			String refreshToken = null;
-			String accessToken = null;
-			int timeToExpireSecond = 3000;
-			IdentityProxy identityProxy = IdentityProxy.getInstance();
-			try {
-				if (Constants.REQUEST_SUCCESSFUL.equals(responseCode)) {
-					JSONObject response = new JSONObject(result);
-					refreshToken = response.getString(Constants.REFRESH_TOKEN);
-					accessToken = response.getString(Constants.ACCESS_TOKEN);
-					timeToExpireSecond =
-							Integer.parseInt(response.getString(Constants.EXPIRE_LABEL));
-
-					token.setRefreshToken(refreshToken);
-					token.setAccessToken(accessToken);
-
-					SharedPreferences mainPref =
-							IdentityProxy.getInstance()
-							             .getContext()
-							             .getSharedPreferences(Constants.APPLICATION_PACKAGE,
-							                                   Context.MODE_PRIVATE);
-					Editor editor = mainPref.edit();
-					editor.putString(Constants.REFRESH_TOKEN, refreshToken);
-					editor.putString(Constants.ACCESS_TOKEN, accessToken);
-
-					Date date = new Date();
-					long expiresIN = date.getTime() + (timeToExpireSecond * 1000);
-					Date expireDate = new Date(expiresIN);
-					String strDate = dateFormat.format(expireDate);
-					token.setDate(strDate);
-					editor.putString(Constants.DATE_LABEL, strDate);
-					editor.commit();
-
-					identityProxy
-							.receiveNewAccessToken(responseCode, Constants.SUCCESS_RESPONSE, token);
-
-				} else if (responseCode != null) {
-					if (result != null) {
-						JSONObject responseBody = new JSONObject(result);
-						String errorDescription =
-								responseBody.getString(Constants.ERROR_DESCRIPTION_LABEL);
-						identityProxy.receiveNewAccessToken(responseCode, errorDescription, token);
-					}
-				}
-			} catch (JSONException e) {
-				identityProxy.receiveNewAccessToken(responseCode, null, token);
-				Log.e(TAG, "Invalid JSON." + e);
+		{
+			@Override
+			protected Response<String> parseNetworkResponse(NetworkResponse response) {
+				processTokenResponse(String.valueOf(response.statusCode), new String(response.data));
+				return super.parseNetworkResponse(response);
 			}
+
+			@Override
+			protected Map<String, String> getParams() throws AuthFailureError {
+				Map<String, String> requestParams = new HashMap<>();
+				requestParams.put(Constants.GRANT_TYPE, Constants.REFRESH_TOKEN);
+				requestParams.put(Constants.REFRESH_TOKEN, token.getRefreshToken());
+				requestParams.put(SCOPE_LABEL, PRODUCTION_LABEL);
+				return requestParams;
+			}
+
+			@Override
+			public Map<String, String> getHeaders() throws AuthFailureError {
+				byte[] credentials = Base64.encodeBase64((IdentityProxy.clientID + COLON +
+				                                          IdentityProxy.clientSecret).getBytes());
+				String encodedCredentials = new String(credentials);
+				Map<String, String> headers = new HashMap<>();
+
+				String authorizationString = Constants.AUTHORIZATION_MODE + encodedCredentials;
+				headers.put(Constants.AUTHORIZATION_HEADER, authorizationString);
+				headers.put(Constants.CONTENT_TYPE_HEADER, Constants.DEFAULT_CONTENT_TYPE);
+				return headers;
+			}
+		};
+
+		queue.add(request);
+	}
+
+	/**
+	 * Processing token response from the server.
+	 *
+	 * @param responseCode - HTTP Response code.
+	 * @param result       - Service result.
+	 */
+	@SuppressLint("SimpleDateFormat")
+	private void processTokenResponse(String responseCode, String result) {
+		String refreshToken;
+		String accessToken;
+		int timeToExpireSecond;
+		IdentityProxy identityProxy = IdentityProxy.getInstance();
+		try {
+			if (Constants.REQUEST_SUCCESSFUL.equals(responseCode)) {
+				JSONObject response = new JSONObject(result);
+				refreshToken = response.getString(Constants.REFRESH_TOKEN);
+				accessToken = response.getString(Constants.ACCESS_TOKEN);
+				timeToExpireSecond =
+						Integer.parseInt(response.getString(Constants.EXPIRE_LABEL));
+
+				token.setRefreshToken(refreshToken);
+				token.setAccessToken(accessToken);
+
+				SharedPreferences mainPref =
+						IdentityProxy.getInstance()
+								.getContext()
+								.getSharedPreferences(Constants.APPLICATION_PACKAGE,
+								                      Context.MODE_PRIVATE);
+				Editor editor = mainPref.edit();
+				editor.putString(Constants.REFRESH_TOKEN, refreshToken);
+				editor.putString(Constants.ACCESS_TOKEN, accessToken);
+
+				Date date = new Date();
+				long expiresIN = date.getTime() + (timeToExpireSecond * 1000);
+				Date expireDate = new Date(expiresIN);
+				String strDate = dateFormat.format(expireDate);
+				token.setDate(strDate);
+				editor.putString(Constants.DATE_LABEL, strDate);
+				editor.commit();
+
+				identityProxy
+						.receiveNewAccessToken(responseCode, Constants.SUCCESS_RESPONSE, token);
+
+			} else if (responseCode != null) {
+				if (result != null) {
+					JSONObject responseBody = new JSONObject(result);
+					String errorDescription =
+							responseBody.getString(Constants.ERROR_DESCRIPTION_LABEL);
+					identityProxy.receiveNewAccessToken(responseCode, errorDescription, token);
+				}
+			}
+		} catch (JSONException e) {
+			identityProxy.receiveNewAccessToken(responseCode, null, token);
+			Log.e(TAG, "Invalid JSON." + e);
 		}
 	}
 }
