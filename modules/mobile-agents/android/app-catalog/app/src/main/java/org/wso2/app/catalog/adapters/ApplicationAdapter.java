@@ -18,7 +18,6 @@
 package org.wso2.app.catalog.adapters;
 
 import android.app.Activity;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +34,7 @@ import org.wso2.app.catalog.R;
 import org.wso2.app.catalog.api.ApplicationManager;
 import org.wso2.app.catalog.beans.Application;
 import org.wso2.app.catalog.utils.Constants;
+import org.wso2.app.catalog.utils.Preference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,14 +44,14 @@ import java.util.List;
  */
 public class ApplicationAdapter extends ArrayAdapter<Application> implements Filterable {
 
+    private static final String TAG = ApplicationAdapter.class.getName();
+    private final int TAG_BTN_INSTALL = 0;
+    private final int TAG_BTN_UNINSTALL = 1;
     private Activity activity;
     private int resource;
     private List<Application> applications;
     private List<Application> fullAppList;
     private ApplicationManager applicationManager;
-    private static final String TAG = ApplicationAdapter.class.getName();
-    private final int TAG_BTN_INSTALL = 0;
-    private final int TAG_BTN_UNINSTALL = 1;
 
     public ApplicationAdapter(Activity activity, int resource, List<Application> objects) {
         super(activity, resource, objects);
@@ -83,70 +83,73 @@ public class ApplicationAdapter extends ArrayAdapter<Application> implements Fil
         } else {
             holder = (AppHolder) row.getTag();
         }
+        if (applications.size() > position) {
+            final Application data = applications.get(position);
 
-        final Application data = applications.get(position);
-
-        if (data.getIcon() != null) {
-            Picasso.with(activity).load(data.getIcon()).placeholder(R.drawable.app_icon).into(holder.imgAppIcon);
-        }
-
-        holder.txtAppName.setText(data.getName());
-        holder.txtProvider.setText(data.getCategory());
-        if (Constants.ApplicationPayload.TYPE_WEB_CLIP.equals(data.getAppType().trim())) {
-            holder.txtRating.setText(activity.getResources().getString(R.string.app_type_web_clip));
-        } else {
-            holder.txtRating.setText(activity.getResources().getString(R.string.app_type_enterprise));
-        }
-
-        View.OnClickListener onClickListener = new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-
-                int iTag = (Integer) view.getTag();
-
-                switch (iTag) {
-                    case TAG_BTN_INSTALL:
-                        if (Constants.ApplicationPayload.TYPE_WEB_CLIP.equals(data.getAppType().trim())) {
-                            try {
-                                applicationManager.manageWebAppBookmark(data.getAppUrl(), data.getName(), activity.getResources().
-                                        getString(R.string.operation_install));
-                            } catch (AppCatalogException e) {
-                                Log.e(TAG, "Cannot create Webclip due to invalid operation type." + e);
-                            }
-                        } else {
-                            applicationManager.installApp(data.getAppUrl(), data.getPackageName());
-                        }
-                        break;
-                    case TAG_BTN_UNINSTALL:
-                        if (Constants.ApplicationPayload.TYPE_WEB_CLIP.equals(data.getAppType().trim())) {
-                            try {
-                                applicationManager.manageWebAppBookmark(data.getAppUrl(), data.getName(), activity.getResources().
-                                        getString(R.string.operation_uninstall));
-                            } catch (AppCatalogException e) {
-                                Log.e(TAG, "Cannot remove Webclip due to invalid operation type." + e);
-                            }
-                        } else {
-                            applicationManager.uninstallApplication(data.getPackageName());
-                        }
-                        break;
-                }
+            if (data.getIcon() != null) {
+                Picasso.with(activity).load(data.getIcon()).placeholder(R.drawable.app_icon).into(holder.imgAppIcon);
             }
-        };
 
-        if (applicationManager.isPackageInstalled(data.getPackageName())) {
-            holder.btnInstall.setBackgroundColor(Color.parseColor(Constants.UNINSTALL_BUTTON_COLOR));
-            holder.btnInstall.setText(activity.getResources().getString(R.string.action_uninstall));
-            holder.btnInstall.setTag(TAG_BTN_UNINSTALL);
-            holder.btnInstall.setOnClickListener(onClickListener);
+            holder.txtAppName.setText(data.getName());
+            holder.txtProvider.setText(data.getCategory());
+            if (Constants.ApplicationPayload.TYPE_WEB_CLIP.equals(data.getAppType().trim())) {
+                holder.txtRating.setText(activity.getResources().getString(R.string.app_type_web_clip));
+            } else {
+                holder.txtRating.setText(activity.getResources().getString(R.string.app_type_enterprise));
+            }
+
+            View.OnClickListener onClickListener = new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+
+                    int iTag = (Integer) view.getTag();
+
+                    switch (iTag) {
+                        case TAG_BTN_INSTALL:
+                            if (Constants.ApplicationPayload.TYPE_WEB_CLIP.equals(data.getAppType().trim())) {
+                                try {
+                                    applicationManager.manageWebAppBookmark(data.getAppUrl(), data.getName(), activity.getResources().
+                                            getString(R.string.operation_install));
+                                } catch (AppCatalogException e) {
+                                    Log.e(TAG, "Cannot create Webclip due to invalid operation type." + e);
+                                }
+                            } else {
+                                applicationManager.installApp(data.getAppUrl(), data.getPackageName());
+                            }
+                            break;
+                        case TAG_BTN_UNINSTALL:
+                            if (Constants.ApplicationPayload.TYPE_WEB_CLIP.equals(data.getAppType().trim())) {
+                                try {
+                                    applicationManager.manageWebAppBookmark(data.getAppUrl(), data.getName(), activity.getResources().
+                                            getString(R.string.operation_uninstall));
+                                } catch (AppCatalogException e) {
+                                    Log.e(TAG, "Cannot remove Webclip due to invalid operation type." + e);
+                                }
+                            } else {
+                                applicationManager.uninstallApplication(data.getPackageName());
+                            }
+                            break;
+                    }
+                }
+            };
+
+            if (applicationManager.isPackageInstalled(data.getPackageName())) {
+                holder.btnInstall.setBackgroundColor(Color.parseColor(Constants.UNINSTALL_BUTTON_COLOR));
+                holder.btnInstall.setText(activity.getResources().getString(R.string.action_uninstall));
+                holder.btnInstall.setTag(TAG_BTN_UNINSTALL);
+                holder.btnInstall.setOnClickListener(onClickListener);
+            } else {
+                holder.btnInstall.setBackgroundColor(Color.parseColor(Constants.INSTALL_BUTTON_COLOR));
+                holder.btnInstall.setText(activity.getResources().getString(R.string.action_install));
+                holder.btnInstall.setTag(TAG_BTN_INSTALL);
+                holder.btnInstall.setOnClickListener(onClickListener);
+            }
+
+            return row;
         } else {
-            holder.btnInstall.setBackgroundColor(Color.parseColor(Constants.INSTALL_BUTTON_COLOR));
-            holder.btnInstall.setText(activity.getResources().getString(R.string.action_install));
-            holder.btnInstall.setTag(TAG_BTN_INSTALL);
-            holder.btnInstall.setOnClickListener(onClickListener);
+            return null;
         }
-
-        return row;
     }
 
     @Override
@@ -165,10 +168,16 @@ public class ApplicationAdapter extends ArrayAdapter<Application> implements Fil
 
                 FilterResults results = new FilterResults();
                 ArrayList<Application> filteredApplications = new ArrayList<>();
-
                 constraint = constraint.toString().toLowerCase();
                 for (int i = 0; i < fullAppList.size(); i++) {
-                    String dataNames = fullAppList.get(i).getName();
+                    String dataNames;
+                    if (Preference.getBoolean(activity, activity.getResources().
+                            getString(R.string.intent_extra_is_category))) {
+                        dataNames = fullAppList.get(i).getCategory();
+                    } else {
+                        dataNames = fullAppList.get(i).getName();
+                    }
+
                     if (dataNames.toLowerCase().startsWith(constraint.toString())) {
                         filteredApplications.add(fullAppList.get(i));
                     }

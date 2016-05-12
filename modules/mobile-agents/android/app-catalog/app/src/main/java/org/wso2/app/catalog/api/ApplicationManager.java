@@ -27,19 +27,20 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.Browser;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import org.wso2.app.catalog.AppCatalogException;
 import org.wso2.app.catalog.R;
 import org.wso2.app.catalog.beans.DeviceAppInfo;
@@ -50,11 +51,13 @@ import org.wso2.app.catalog.utils.StreamHandler;
 import org.wso2.emm.agent.proxy.IDPTokenManagerException;
 import org.wso2.emm.agent.proxy.utils.ServerUtilities;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +73,8 @@ public class ApplicationManager {
     private static final int BUFFER_SIZE = 1024;
     private static final int READ_FAILED = -1;
     private static final int BUFFER_OFFSET = 0;
+    private static final int DOWNLOAD_PERCENTAGE_TOTAL = 100;
+    private static final int DOWNLOADER_INCREMENT = 10;
     private static final String TAG = ApplicationManager.class.getName();
     private Context context;
     private Resources resources;
@@ -204,13 +209,13 @@ public class ApplicationManager {
             CommonUtils.callAgentApp(context, Constants.Operation.INSTALL_APPLICATION,
                                      url, null);
         } else if (isDownloadManagerAvailable(context)) {
+            downloadedAppName = getAppNameFromPackage(packageName);
             IntentFilter filter = new IntentFilter(
                     DownloadManager.ACTION_DOWNLOAD_COMPLETE);
             context.registerReceiver(downloadReceiver, filter);
             downloadViaDownloadManager(url, downloadedAppName);
         } else {
-            AppUpdater updater = new AppUpdater();
-            updater.execute(url);
+            downloadApp(url);
         }
     }
 
@@ -308,7 +313,7 @@ public class ApplicationManager {
      * @param appName - Name of the application to be downloaded.
      */
     private void downloadViaDownloadManager(String url, String appName) {
-        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        final DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         Uri downloadUri = Uri
                 .parse(url);
         DownloadManager.Request request = new DownloadManager.Request(
@@ -331,66 +336,101 @@ public class ApplicationManager {
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, appName);
         // Enqueue a new download and same the referenceId
         downloadReference = downloadManager.enqueue(request);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean downloading = true;
+                int progress = 0;
+                while (downloading) {
+                    DownloadManager.Query query = new DownloadManager.Query();
+                    query.setFilterById(downloadReference);
+                    Cursor cursor = downloadManager.query(query);
+                    cursor.moveToFirst();
+                    int bytesDownloaded = cursor.getInt(cursor.getColumnIndex(DownloadManager.
+                                                                                      COLUMN_BYTES_DOWNLOADED_SO_FAR));
+                    int bytesTotal = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                    if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.
+                            STATUS_SUCCESSFUL) {
+                        downloading = false;
+                    }
+                    int downloadProgress = (int) ((bytesDownloaded * 100l) / bytesTotal);
+                    if (downloadProgress != DOWNLOAD_PERCENTAGE_TOTAL) {
+                        progress += DOWNLOADER_INCREMENT;
+                    } else {
+                        progress = DOWNLOAD_PERCENTAGE_TOTAL;
+                    }
+
+                    Preference.putString(context, resources.getString(R.string.app_download_progress),
+                                         String.valueOf(progress));
+                    cursor.close();
+                }
+            }
+        }).start();
     }
 
     /**
      * Installs or updates an application to the device.
+     *
+     * @param url - APK Url should be passed in as a String.
      */
-    public class AppUpdater extends AsyncTask<String, Void, Void> {
+    private void downloadApp(String url) {
+        RequestQueue queue = null;
+        try {
+            queue = ServerUtilities.getCertifiedHttpClient();
+        } catch (IDPTokenManagerException e) {
+            Log.e(TAG, "Failed to retrieve HTTP client", e);
+        }
 
-        @Override
-        protected Void doInBackground(String... inputData) {
-            FileOutputStream outStream = null;
-            InputStream inStream = null;
-            try {
-                HttpGet httpGet = new HttpGet(inputData[BUFFER_OFFSET]);
-                HttpClient httpClient = ServerUtilities.getCertifiedHttpClient();
-                HttpResponse response = httpClient.execute(httpGet);
+        InputStreamVolleyRequest request = new InputStreamVolleyRequest(Request.Method.GET, url,
+            new Response.Listener<byte[]>() {
+                @Override
+                public void onResponse(byte[] response) {
+                    if (response != null) {
+                        FileOutputStream outStream = null;
+                        InputStream inStream = null;
+                        try {
+                            String directory = Environment.getExternalStorageDirectory().getPath() +
+                                               resources.getString(R.string.application_mgr_download_location);
+                            File file = new File(directory);
+                            file.mkdirs();
+                            File outputFile = new File(file,
+                                               resources.getString(R.string.application_mgr_download_file_name));
 
-                String directory = Environment.getExternalStorageDirectory().getPath() +
-                                   resources.getString(R.string.application_mgr_download_location);
-                File file = new File(directory);
+                            if (outputFile.exists()) {
+                                outputFile.delete();
+                            }
 
-                if (!file.mkdirs()) {
-                    Log.e(TAG, "Download directory creation failed.");
-                }
+                            outStream = new FileOutputStream(outputFile);
+                            inStream = new ByteArrayInputStream(response);
 
-                File outputFile = new File(file,
-                                           resources.getString(R.string.application_mgr_download_file_name));
+                            byte[] buffer = new byte[BUFFER_SIZE];
+                            int lengthFile;
 
-                if (outputFile.exists()) {
-                    if (!outputFile.delete()) {
-                        Log.e(TAG, "Existing APK removal failed.");
+                            while ((lengthFile = inStream.read(buffer)) != READ_FAILED) {
+                                outStream.write(buffer, BUFFER_OFFSET, lengthFile);
+                            }
+
+                            String filePath = directory + resources.getString(R.string.application_mgr_download_file_name);
+                            Uri fileUri = Uri.fromFile(new File(filePath));
+                            startInstallerIntent(fileUri);
+                        } catch (IOException e) {
+                            Log.e(TAG, "File download/save failure in AppUpdator.", e);
+                        } catch (IllegalArgumentException e) {
+                            Log.e(TAG, "Error occurred while sending 'Get' request due to empty host name");
+                        } finally {
+                            StreamHandler.closeOutputStream(outStream, TAG);
+                            StreamHandler.closeInputStream(inStream, TAG);
+                        }
                     }
                 }
-
-                outStream = new FileOutputStream(outputFile);
-
-                inStream = response.getEntity().getContent();
-
-                byte[] buffer = new byte[BUFFER_SIZE];
-                int lengthFile;
-
-                while ((lengthFile = inStream.read(buffer)) != READ_FAILED) {
-                    outStream.write(buffer, BUFFER_OFFSET, lengthFile);
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, error.toString());
                 }
-
-                String filePath = directory + resources.getString(R.string.application_mgr_download_file_name);
-                Uri fileUri = Uri.fromFile(new File(filePath));
-                startInstallerIntent(fileUri);
-            } catch (IDPTokenManagerException e) {
-                Log.e(TAG, "Error occurred while sending 'Get' request due to IDP proxy initialization issue.");
-            } catch (IOException e) {
-                Log.e(TAG, "File download/save failure in AppUpdator.", e);
-            } catch (IllegalArgumentException e) {
-                Log.e(TAG, "Error occurred while sending 'Get' request due to empty host name");
-            } finally {
-                StreamHandler.closeOutputStream(outStream, TAG);
-                StreamHandler.closeInputStream(inStream, TAG);
-            }
-
-            return null;
-        }
+            }, null);
+        queue.add(request);
     }
 
 }

@@ -36,6 +36,7 @@ import android.os.Environment;
 import android.provider.Browser;
 import android.util.Base64;
 import android.util.Log;
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -43,7 +44,11 @@ import com.android.volley.VolleyError;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
+import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.IDPTokenManagerException;
+import org.wso2.emm.agent.proxy.IdentityProxy;
+import org.wso2.emm.agent.proxy.beans.Token;
+import org.wso2.emm.agent.proxy.interfaces.TokenCallBack;
 import org.wso2.emm.agent.proxy.utils.ServerUtilities;
 import org.wso2.emm.agent.utils.AlarmUtils;
 import org.wso2.emm.agent.utils.CommonUtils;
@@ -66,7 +71,7 @@ import java.util.Map;
  * This class handles all the functionalities required for managing application
  * installation and un-installation.
  */
-public class ApplicationManager {
+public class ApplicationManager implements TokenCallBack {
     private static final int SYSTEM_APPS_DISABLED_FLAG = 0;
     private static final int MAX_URL_HASH = 32;
     private static final int COMPRESSION_LEVEL = 100;
@@ -80,6 +85,9 @@ public class ApplicationManager {
     private Resources resources;
     private PackageManager packageManager;
     private long downloadReference;
+    private Token token;
+    private String appUrl;
+    private String schedule;
 
     private BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
         @Override
@@ -96,10 +104,14 @@ public class ApplicationManager {
                     PackageInfo info = pm.getPackageArchiveInfo(downloadDirectoryPath + File.separator + resources.
                                                                     getString(R.string.download_mgr_download_file_name),
                                                                 PackageManager.GET_ACTIVITIES);
+                    if (info != null && info.packageName != null) {
+                        Preference.putString(context, context.getResources().getString(R.string.shared_pref_installed_app),
+                                             info.packageName);
+                    }
                     Preference.putString(context, context.getResources().getString(R.string.shared_pref_installed_file),
                                          resources.getString(R.string.download_mgr_download_file_name));
-                    startInstallerIntent(Uri.fromFile(new File(downloadDirectoryPath + File.separator +
-                                                       resources.getString(R.string.download_mgr_download_file_name))));
+                    triggerInstallation(Uri.fromFile(new File(downloadDirectoryPath + File.separator +
+                                                              resources.getString(R.string.download_mgr_download_file_name))));
                 }
             }
         }
@@ -196,6 +208,24 @@ public class ApplicationManager {
         return false;
     }
 
+    public void triggerInstallation(Uri fileUri) {
+        if (Constants.SYSTEM_APP_ENABLED) {
+            CommonUtils.callSystemApp(context, Constants.Operation.SILENT_INSTALL_APPLICATION, schedule,
+                                      fileUri.toString());
+        } else {
+            if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
+                try {
+                    AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.INSTALL_APPLICATION,
+                                               fileUri.toString());
+                } catch (ParseException e) {
+                    Log.e(TAG, "One time alarm time string parsing failed." + e);
+                }
+            } else {
+                startInstallerIntent(fileUri);
+            }
+        }
+    }
+
     /**
      * Installs an application to the device.
      *
@@ -239,16 +269,32 @@ public class ApplicationManager {
      * Installs an application to the device.
      *
      * @param url - APK Url should be passed in as a String.
+     * @param schedule - If update/installation is scheduled, schedule information should be passed.
      */
     public void installApp(String url, String schedule) {
-        if (isDownloadManagerAvailable(context)) {
-            IntentFilter filter = new IntentFilter(
-                    DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-            context.registerReceiver(downloadReceiver, filter);
-            downloadViaDownloadManager(url, resources.getString(R.string.download_mgr_download_file_name));
+        url = url.substring(url.lastIndexOf("/"), url.length());
+        if (Constants.APP_MANAGER_HOST != null) {
+            this.appUrl = Constants.APP_MANAGER_HOST + Constants.APP_DOWNLOAD_ENDPOINT + url;
         } else {
-            downloadApp(url, schedule);
+            String ipSaved = Preference.getString(context, Constants.PreferenceFlag.IP);
+            ServerConfig utils = new ServerConfig();
+            if (ipSaved != null && !ipSaved.isEmpty()) {
+                utils.setServerIP(ipSaved);
+                this.appUrl = utils.getAPIServerURL(context) + Constants.APP_DOWNLOAD_ENDPOINT + url;
+            } else {
+                Log.e(TAG, "There is no valid IP to contact the server");
+            }
         }
+        this.schedule = schedule;
+        String clientKey = Preference.getString(context, Constants.CLIENT_ID);
+        String clientSecret = Preference.getString(context, Constants.CLIENT_SECRET);
+        if (IdentityProxy.getInstance().getContext() == null) {
+            IdentityProxy.getInstance().setContext(context);
+        }
+
+        IdentityProxy.getInstance().requestToken(IdentityProxy.getInstance().getContext(), this,
+                                                 clientKey,
+                                                 clientSecret);
     }
 
     /**
@@ -363,6 +409,7 @@ public class ApplicationManager {
         // Set the local destination for the downloaded file to a path
         // within the application's external files directory
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, appName);
+        request.addRequestHeader("Authorization", "Bearer " + token.getAccessToken());
         // Enqueue a new download and same the referenceId
         downloadReference = downloadManager.enqueue(request);
         new Thread(new Runnable() {
@@ -401,9 +448,8 @@ public class ApplicationManager {
      * Installs or updates an application to the device.
      *
      * @param url - APK Url should be passed in as a String.
-     * @param schedule - If update/installation is scheduled, schedule information should be passed.
      */
-    private void downloadApp(String url, final String schedule) {
+    private void downloadApp(String url) {
         RequestQueue queue = null;
         try {
             queue = ServerUtilities.getCertifiedHttpClient();
@@ -441,24 +487,7 @@ public class ApplicationManager {
                             }
 
                             String filePath = directory + resources.getString(R.string.application_mgr_download_file_name);
-                            Uri fileUri = Uri.fromFile(new File(filePath));
-                            if (Constants.SYSTEM_APP_ENABLED) {
-                                CommonUtils.callSystemApp(context, Constants.Operation.SILENT_INSTALL_APPLICATION, schedule,
-                                                          fileUri.toString());
-                            } else {
-                                if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
-                                    AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.INSTALL_APPLICATION,
-                                                               fileUri.toString());
-                                } else {
-                                    Intent installIntent = new Intent(Intent.ACTION_VIEW);
-                                    installIntent.setDataAndType(fileUri, context.getResources().getString(
-                                            R.string.application_mgr_mime));
-                                    installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    context.startActivity(installIntent);
-                                }
-                            }
-                        } catch (ParseException e) {
-                            Log.e(TAG, "One time alarm time string parsing failed." + e);
+                            triggerInstallation(Uri.fromFile(new File(filePath)));
                         } catch (IOException e) {
                             Log.e(TAG, "File download/save failure in AppUpdator.", e);
                         } catch (IllegalArgumentException e) {
@@ -475,8 +504,32 @@ public class ApplicationManager {
                 public void onErrorResponse(VolleyError error) {
                     Log.e(TAG, error.toString());
                 }
-            }, null);
+            }, null)
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Accept", "*/*");
+                headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
+                headers.put("Authorization", "Bearer " + token.getAccessToken());
+                return headers;
+            }
+        };
         queue.add(request);
     }
 
+    @Override
+    public void onReceiveTokenResult(Token token, String status) {
+        this.token = token;
+        if (isDownloadManagerAvailable(context) && !Constants.SERVER_PROTOCOL.equals(resources.getString(
+                R.string.server_protocol_https))) {
+            IntentFilter filter = new IntentFilter(
+                    DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+            context.registerReceiver(downloadReceiver, filter);
+            downloadViaDownloadManager(this.appUrl, resources.getString(R.string.download_mgr_download_file_name));
+        } else {
+            downloadApp(this.appUrl);
+        }
+    }
 }

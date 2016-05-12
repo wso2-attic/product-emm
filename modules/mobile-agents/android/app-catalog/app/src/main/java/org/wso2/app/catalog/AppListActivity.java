@@ -32,8 +32,10 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,6 +53,7 @@ import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class AppListActivity extends Activity implements APIResultCallBack {
@@ -63,8 +66,12 @@ public class AppListActivity extends Activity implements APIResultCallBack {
     private TextView txtError;
     private EditText etSearch;
     private TextView btnSignOut;
+    private Spinner spinner;
     private ArrayList<Application> mobileApps;
     private ArrayList<Application> webApps;
+    private List<String> mobileAppCategories;
+    private List<String> webAppCategories;
+    private AdapterView.OnItemSelectedListener categoryListener;
     private final int TAG_BTN_MOBILE_APPS = 0;
     private final int TAG_BTN_WEB_APPS = 1;
     private final int TAG_BTN_SIGN_OUT = 2;
@@ -83,11 +90,15 @@ public class AppListActivity extends Activity implements APIResultCallBack {
         txtError = (TextView)findViewById(R.id.txtError);
         btnSignOut = (TextView)findViewById(R.id.btnSignOut);
         etSearch = (EditText)findViewById(R.id.etSearch);
+        spinner = (Spinner)findViewById(R.id.spinner);
         mobileApps = new ArrayList<>();
         webApps = new ArrayList<>();
         appList.setVisibility(View.GONE);
         txtError.setVisibility(View.GONE);
-
+        mobileAppCategories = new ArrayList<>();
+        webAppCategories = new ArrayList<>();
+        mobileAppCategories.add(getResources().getString(R.string.filter_hint));
+        webAppCategories.add(getResources().getString(R.string.filter_hint));
         btnMobileApps.setVisibility(View.GONE);
         btnMobileApps.setTag(TAG_BTN_MOBILE_APPS);
         btnMobileApps.setOnClickListener(onClickListener);
@@ -157,15 +168,21 @@ public class AppListActivity extends Activity implements APIResultCallBack {
                     initiateListView(mobileApps);
                     btnMobileApps.setBackgroundColor(Color.parseColor(ACTIVE_BUTTON_COLOR));
                     btnWebApps.setBackgroundColor(Color.parseColor(INACTIVE_BUTTON_COLOR));
+                    initiateCategoryFilter(mobileAppCategories);
                     break;
                 case TAG_BTN_WEB_APPS:
                     initiateListView(webApps);
                     btnMobileApps.setBackgroundColor(Color.parseColor(INACTIVE_BUTTON_COLOR));
                     btnWebApps.setBackgroundColor(Color.parseColor(ACTIVE_BUTTON_COLOR));
+                    initiateCategoryFilter(webAppCategories);
                     break;
                 case TAG_BTN_SIGN_OUT:
                     try {
                         CommonUtils.unRegisterClientApp(context);
+                        Preference.clearPreferences(context);
+                        Intent intent = new Intent(AppListActivity.this, ServerDetails.class);
+                        startActivity(intent);
+                        finish();
                     } catch (AppCatalogException e) {
                         Log.e(TAG, "Dynamic client unregistration failed." + e);
                     }
@@ -173,6 +190,16 @@ public class AppListActivity extends Activity implements APIResultCallBack {
             }
         }
     };
+
+    private void initiateCategoryFilter(List<String> categories) {
+        if (categories != null) {
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(context,
+                                                                  android.R.layout.simple_spinner_item, categories);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(dataAdapter);
+            spinner.setOnItemSelectedListener(categoryListener);
+        }
+    }
 
     /**
      * Retriever application list from the server.
@@ -238,10 +265,16 @@ public class AppListActivity extends Activity implements APIResultCallBack {
         for (int i = 0; i < payload.length(); i++) {
             try {
                 application = PayloadParser.parseApplication(payload.getJSONObject(i), context);
-                if(Constants.ApplicationPayload.TYPE_WEB_CLIP.equals(application.getAppType().trim())) {
+                if (Constants.ApplicationPayload.TYPE_WEB_CLIP.equals(application.getAppType().trim())) {
                     webApps.add(application);
+                    if (webAppCategories != null && !webAppCategories.contains(application.getCategory())) {
+                        webAppCategories.add(application.getCategory());
+                    }
                 } else {
                     mobileApps.add(application);
+                    if (mobileAppCategories != null && !mobileAppCategories.contains(application.getCategory())) {
+                        mobileAppCategories.add(application.getCategory());
+                    }
                 }
             } catch (JSONException e) {
                 Log.e(TAG, "Failed parsing application list response" + e);
@@ -250,10 +283,12 @@ public class AppListActivity extends Activity implements APIResultCallBack {
 
         if (mobileApps.size() > 0) {
             initiateListView(mobileApps);
+            initiateCategoryFilter(mobileAppCategories);
             btnMobileApps.setBackgroundColor(Color.parseColor(ACTIVE_BUTTON_COLOR));
             btnWebApps.setBackgroundColor(Color.parseColor(INACTIVE_BUTTON_COLOR));
         } else if (webApps.size() > 0) {
             initiateListView(webApps);
+            initiateCategoryFilter(webAppCategories);
             btnMobileApps.setBackgroundColor(Color.parseColor(INACTIVE_BUTTON_COLOR));
             btnWebApps.setBackgroundColor(Color.parseColor(ACTIVE_BUTTON_COLOR));
         } else {
@@ -282,6 +317,8 @@ public class AppListActivity extends Activity implements APIResultCallBack {
 
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                Preference.putBoolean(context, context.getResources().
+                        getString(R.string.intent_extra_is_category), false);
                 appAdapter.getFilter().filter(cs);
             }
 
@@ -293,6 +330,25 @@ public class AppListActivity extends Activity implements APIResultCallBack {
             public void afterTextChanged(Editable arg0) {
             }
         });
+
+        categoryListener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+                Preference.putBoolean(context, context.getResources().
+                        getString(R.string.intent_extra_is_category), true);
+                if (item.trim().equals(context.getResources().
+                        getString(R.string.filter_hint))) {
+                    item = context.getResources().
+                            getString(R.string.empty_string_character);
+                }
+                appAdapter.getFilter().filter(item);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        };
     }
 
     @Override
