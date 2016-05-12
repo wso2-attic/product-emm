@@ -44,10 +44,13 @@ import org.wso2.app.catalog.utils.Preference;
 import org.wso2.emm.agent.proxy.IdentityProxy;
 import org.wso2.emm.agent.proxy.beans.CredentialInfo;
 import org.wso2.emm.agent.proxy.interfaces.APIAccessCallBack;
+import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Map;
 
-public class LoginActivity extends Activity implements APIAccessCallBack {
+public class LoginActivity extends Activity implements APIAccessCallBack, APIResultCallBack {
     private Button btnLogin;
     private EditText etUsername;
     private EditText etDomain;
@@ -166,7 +169,7 @@ public class LoginActivity extends Activity implements APIAccessCallBack {
                             etDomain.getText().toString().trim();
                 }
 
-                startAuthentication();
+                getClientCredentials();
             } else {
                 if (etUsername.getText() != null && !etUsername.getText().toString().trim().isEmpty()) {
                     Toast.makeText(context,
@@ -190,43 +193,36 @@ public class LoginActivity extends Activity implements APIAccessCallBack {
             String clientId = Preference.getString(context, Constants.CLIENT_ID);
             String clientSecret = Preference.getString(context, Constants.CLIENT_SECRET);
             String clientName;
-            progressDialog = ProgressDialog.show(context, getResources().getString(R.string.dialog_authenticate), getResources().
-                    getString(R.string.dialog_message_please_wait), true);
-
 
             if (clientId == null || clientSecret == null) {
-                try {
-                    String clientCredentials = getClientCredentials();
-                    if (clientCredentials != null) {
-                        try {
-                            JSONObject payload = new JSONObject(clientCredentials);
-                            clientId = payload.getString(Constants.CLIENT_ID);
-                            clientSecret = payload.getString(Constants.CLIENT_SECRET);
-                            clientName = payload.getString(Constants.CLIENT_NAME);
+                String clientCredentials = Preference.getString(context, getResources().getString(
+                        R.string.shared_pref_client_credentials));
+                if (clientCredentials != null) {
+                    try {
+                        JSONObject payload = new JSONObject(clientCredentials);
+                        clientId = payload.getString(Constants.CLIENT_ID);
+                        clientSecret = payload.getString(Constants.CLIENT_SECRET);
+                        clientName = payload.getString(Constants.CLIENT_NAME);
 
-                            if (clientName != null && !clientName.isEmpty()) {
-                                Preference.putString(context, Constants.CLIENT_NAME, clientName);
-                            }
-                            if (clientId != null && !clientId.isEmpty() &&
-                                clientSecret != null && !clientSecret.isEmpty()) {
-                                initializeIDPLib(clientId, clientSecret);
-                            }
-                        } catch (JSONException e) {
-                            String msg = "error occurred while parsing client credential payload";
-                            Log.e(TAG, msg, e);
-                            showInternalServerErrorMessage();
+                        if (clientName != null && !clientName.isEmpty()) {
+                            Preference.putString(context, Constants.CLIENT_NAME, clientName);
                         }
-                    } else {
-                        String msg = "error occurred while retrieving client credentials";
-                        Log.e(TAG, msg);
+                        if (clientId != null && !clientId.isEmpty() &&
+                            clientSecret != null && !clientSecret.isEmpty()) {
+                            initializeIDPLib(clientId, clientSecret);
+                        }
+                    } catch (JSONException e) {
+                        String msg = "error occurred while parsing client credential payload";
+                        Log.e(TAG, msg, e);
+                        CommonDialogUtils.stopProgressDialog(progressDialog);
                         showInternalServerErrorMessage();
                     }
-                } catch (AppCatalogException e) {
+                } else {
                     String msg = "error occurred while retrieving client credentials";
-                    Log.e(TAG, msg, e);
+                    Log.e(TAG, msg);
+                    CommonDialogUtils.stopProgressDialog(progressDialog);
                     showInternalServerErrorMessage();
                 }
-
             } else {
                 initializeIDPLib(clientId, clientSecret);
             }
@@ -287,13 +283,38 @@ public class LoginActivity extends Activity implements APIAccessCallBack {
     }
 
     /**
-     * This method is used to retrieve consumer-key and consumer-secret.
+     * Manipulates the dynamic client registration response received from server.
      *
-     * @return JSON formatted string.
-     * @throws AppCatalogException
+     * @param result the result of the dynamic client request
      */
-    private String getClientCredentials() throws AppCatalogException {
+    private void manipulateDynamicClientResponse(Map<String, String> result) {
+        String responseStatus;
+        if (result != null) {
+            responseStatus = result.get(Constants.STATUS);
+            if (Constants.Status.CREATED.equals(responseStatus)) {
+                String dynamicClientResponse = result.get(Constants.RESPONSE);
+                if (dynamicClientResponse != null) {
+                    Preference.putString(context, getResources().getString(R.string.shared_pref_client_credentials),
+                                         dynamicClientResponse);
+                    startAuthentication();
+                }
+            } else {
+                CommonDialogUtils.stopProgressDialog(progressDialog);
+                showAuthenticationError();
+            }
+        } else {
+            CommonDialogUtils.stopProgressDialog(progressDialog);
+            showAuthenticationError();
+        }
+    }
+
+    /**
+     * This method is used to retrieve consumer-key and consumer-secret.
+     */
+    private void getClientCredentials() {
         String ipSaved = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
+        progressDialog = ProgressDialog.show(context, getResources().getString(R.string.dialog_authenticate), getResources().
+                getString(R.string.dialog_message_please_wait), true);
         if (ipSaved != null && !ipSaved.isEmpty()) {
             ServerConfig utils = new ServerConfig();
             utils.setServerIP(ipSaved);
@@ -312,12 +333,20 @@ public class LoginActivity extends Activity implements APIAccessCallBack {
             } catch (UnsupportedEncodingException e) {
                 Log.e(TAG, "UTF-8 is unsupported" + e);
             }
-            String encodedCredentials = Base64.encodeToString(dataToEncode, Base64.DEFAULT);
-            DynamicClientManager dynamicClientManager = new DynamicClientManager();
-            return dynamicClientManager.getClientCredentials(profile, utils, context, encodedCredentials);
+
+            try {
+                String encodedCredentials = Base64.encodeToString(dataToEncode, Base64.DEFAULT);
+                DynamicClientManager dynamicClientManager = new DynamicClientManager();
+                dynamicClientManager.getClientCredentials(profile, utils, context, encodedCredentials, LoginActivity.this);
+            } catch (AppCatalogException e) {
+                Log.e(TAG, "Client credentials generation failed" + e);
+                CommonDialogUtils.stopProgressDialog(progressDialog);
+                showAuthenticationError();
+            }
+        } else {
+            Log.e(TAG, "There is no valid IP to contact the server");
         }
-        Log.e(TAG, "There is no valid IP to contact the server");
-        return null;
+
     }
 
     /**
@@ -414,4 +443,10 @@ public class LoginActivity extends Activity implements APIAccessCallBack {
 
     }
 
+    @Override
+    public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
+        if (requestCode == Constants.DYNAMIC_CLIENT_REGISTER_REQUEST_CODE) {
+            manipulateDynamicClientResponse(result);
+        }
+    }
 }

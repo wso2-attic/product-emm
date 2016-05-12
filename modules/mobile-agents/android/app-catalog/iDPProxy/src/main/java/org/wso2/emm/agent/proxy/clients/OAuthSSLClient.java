@@ -19,29 +19,28 @@
 package org.wso2.emm.agent.proxy.clients;
 
 import android.util.Log;
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.Volley;
 import org.wso2.emm.agent.proxy.IDPTokenManagerException;
 import org.wso2.emm.agent.proxy.IdentityProxy;
 import org.wso2.emm.agent.proxy.R;
 import org.wso2.emm.agent.proxy.utils.Constants;
 import org.wso2.emm.agent.proxy.utils.StreamHandlerUtil;
-
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.Map;
 
@@ -49,8 +48,8 @@ public class OAuthSSLClient implements CommunicationClient {
     private static final String TAG = OAuthSSLClient.class.getName();
 
     @Override
-    public HttpClient getHttpClient() throws IDPTokenManagerException {
-        HttpClient client = null;
+    public RequestQueue getHttpClient() throws IDPTokenManagerException {
+        RequestQueue client = null;
         InputStream inStream = null;
         try {
             if (Constants.SERVER_PROTOCOL.equalsIgnoreCase("https://")) {
@@ -58,21 +57,26 @@ public class OAuthSSLClient implements CommunicationClient {
                 inStream = IdentityProxy.getInstance().getContext().getResources().
                         openRawResource(R.raw.truststore);
                 localTrustStore.load(inStream, Constants.TRUSTSTORE_PASSWORD.toCharArray());
+                String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+                TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+                tmf.init(localTrustStore);
 
-                SchemeRegistry schemeRegistry = new SchemeRegistry();
-                schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(),
-                                                   Constants.HTTP));
-                SSLSocketFactory sslSocketFactory = new SSLSocketFactory(localTrustStore);
-                sslSocketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-                schemeRegistry.register(new Scheme("https", sslSocketFactory, Constants.HTTPS));
-                HttpParams params = new BasicHttpParams();
-                ClientConnectionManager connectionManager =
-                        new ThreadSafeClientConnManager(params, schemeRegistry);
 
-                client = new DefaultHttpClient(connectionManager, params);
-
+                SSLContext context = SSLContext.getInstance("TLS");
+                context.init(null, tmf.getTrustManagers(), null);
+                final SSLSocketFactory socketFactory = context.getSocketFactory();
+                HurlStack hurlStack = new HurlStack() {
+                    @Override
+                    protected HttpURLConnection createConnection(URL url) throws IOException {
+                        HttpsURLConnection httpsURLConnection = (HttpsURLConnection) super.createConnection(url);
+                        httpsURLConnection.setSSLSocketFactory(socketFactory);
+                        httpsURLConnection.setHostnameVerifier(getHostnameVerifier());
+                        return httpsURLConnection;
+                    }
+                };
+                client = Volley.newRequestQueue(IdentityProxy.getInstance().getContext(), hurlStack);
             } else {
-                client = new DefaultHttpClient();
+                client = Volley.newRequestQueue(IdentityProxy.getInstance().getContext());
             }
 
         } catch (KeyStoreException e) {
@@ -87,10 +91,6 @@ public class OAuthSSLClient implements CommunicationClient {
             String errorMsg = "Error occurred while due to mismatch of defined algorithm.";
             Log.e(TAG, errorMsg);
             throw new IDPTokenManagerException(errorMsg, e);
-        } catch (UnrecoverableKeyException e) {
-            String errorMsg = "Error occurred while accessing keystore.";
-            Log.e(TAG, errorMsg);
-            throw new IDPTokenManagerException(errorMsg, e);
         } catch (KeyManagementException e) {
             String errorMsg = "Error occurred while accessing keystore.";
             Log.e(TAG, errorMsg);
@@ -103,6 +103,16 @@ public class OAuthSSLClient implements CommunicationClient {
             StreamHandlerUtil.closeInputStream(inStream, TAG);
         }
         return client;
+    }
+
+    private HostnameVerifier getHostnameVerifier() {
+        return new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                HostnameVerifier hv = HttpsURLConnection.getDefaultHostnameVerifier();
+                return hv.verify(hostname, session);
+            }
+        };
     }
 
     //TODO: Move oauth specific bits in Agent source to proxy.
