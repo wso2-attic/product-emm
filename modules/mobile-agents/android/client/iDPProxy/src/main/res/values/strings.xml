@@ -49,5 +49,4 @@
     <string name="shared_pref_default_string"></string>
     <string name="shared_pref_default_status">true</string>
     <string name="shared_pref_false_status">false</string>
-
 </resources>

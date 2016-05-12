@@ -182,7 +182,12 @@ public class MessageProcessor implements APIResultCallBack {
 			Log.d(TAG, "Reply Payload: " + requestParams);
 		}
 
-		if(ipSaved != null && !ipSaved.isEmpty()) {
+		if (requestParams != null && requestParams.trim().equals(context.getResources().getString(
+				R.string.operation_value_null))) {
+			requestParams = null;
+		}
+
+		if (ipSaved != null && !ipSaved.isEmpty()) {
 			CommonUtils.callSecuredAPI(context, url,
 			                           HTTP_METHODS.PUT, requestParams, MessageProcessor.this,
 			                           Constants.NOTIFICATION_REQUEST_CODE

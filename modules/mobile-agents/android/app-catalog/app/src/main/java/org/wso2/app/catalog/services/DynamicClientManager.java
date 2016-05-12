@@ -21,6 +21,17 @@ package org.wso2.app.catalog.services;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.StringRequest;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.wso2.app.catalog.AppCatalogException;
 import org.wso2.app.catalog.beans.RegistrationProfile;
 import org.wso2.app.catalog.beans.ServerConfig;
@@ -29,6 +40,7 @@ import org.wso2.app.catalog.utils.Constants;
 import org.wso2.emm.agent.proxy.IDPTokenManagerException;
 import org.wso2.emm.agent.proxy.IdentityProxy;
 import org.wso2.emm.agent.proxy.beans.EndPointInfo;
+import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.ServerUtilities;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -66,6 +78,8 @@ public class DynamicClientManager {
         endPointInfo.setEndPoint(endPoint);
         endPointInfo.setRequestParams(profile.toJSON());
         endPointInfo.setHeader(BASIC_HEADER + credentials);
+        endPointInfo.setRequestParamsMap(profile.toMap());
+        //sendRequest(endPointInfo, apiResultCallback, Constants.DYNAMIC_CLIENT_REGISTER_REQUEST_CODE);
         String response = null;
         try {
             SendRequest sendRequestTask = new SendRequest();
@@ -107,7 +121,8 @@ public class DynamicClientManager {
         EndPointInfo endPointInfo = new EndPointInfo();
         endPointInfo.setHttpMethod(org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.DELETE);
         endPointInfo.setEndPoint(endPoint.toString());
-
+        //sendRequest(endPointInfo, apiResultCallback, Constants.DYNAMIC_CLIENT_UNREGISTER_REQUEST_CODE);
+        //return true;
         try {
             SendRequest sendRequestTask = new SendRequest();
             Map<String, String> responseParams = sendRequestTask.execute(endPointInfo).get();
@@ -164,5 +179,81 @@ public class DynamicClientManager {
             }
             return responseParams;
         }
+    }
+
+    /**
+     * This method is used to send requests to backend.
+     * The reason to use this method because the function which is already
+     * available for sending requests is secured with token. Therefor this can be used
+     * to send requests without tokens.
+     */
+    private void sendRequest(final EndPointInfo endPointInfo, final APIResultCallBack apiResultCallback,
+                                            final int requestCode) {
+        RequestQueue queue =  null;
+        int requestMethod = 0;
+        org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS httpMethod = endPointInfo.getHttpMethod();
+        switch (httpMethod) {
+            case POST:
+                requestMethod = Request.Method.POST;
+                break;
+            case DELETE:
+                requestMethod = Request.Method.DELETE;
+                break;
+        }
+
+        try {
+            queue = ServerUtilities.getCertifiedHttpClient();
+        } catch (IDPTokenManagerException e) {
+            Log.e(TAG, "Failed to retrieve HTTP client", e);
+        }
+
+        JsonObjectRequest request = null;
+        try {
+            request = new JsonObjectRequest(requestMethod, endPointInfo.getEndPoint(),
+                                            (endPointInfo.getRequestParams() != null) ?
+                                            new JSONObject(endPointInfo.getRequestParams()) : null,
+                                                      new Response.Listener<JSONObject>() {
+                                                          @Override
+                                                          public void onResponse(JSONObject response) {
+                                                              Log.d(TAG, response.toString());
+                                                          }
+                                                      },
+                                                      new Response.ErrorListener() {
+                                                          @Override
+                                                          public void onErrorResponse(VolleyError error) {
+                                                              Log.d(TAG, error.toString());
+                                                          }
+                                                      })
+
+            {
+                @Override
+                protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                    String result = new String(response.data);
+                    if(org.wso2.emm.agent.proxy.utils.Constants.DEBUG_ENABLED) {
+                        if(result != null && !result.isEmpty()) {
+                            Log.d(TAG, "Result :" + result);
+                        }
+                    }
+                    Map<String, String> responseParams = new HashMap<>();
+                    responseParams.put(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_BODY, result);
+                    responseParams.put(org.wso2.emm.agent.proxy.utils.Constants.SERVER_RESPONSE_STATUS, String.valueOf(response.statusCode));
+                    apiResultCallback.onReceiveAPIResult(responseParams, requestCode);
+                    return super.parseNetworkResponse(response);
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Content-Type", "application/json");
+                    headers.put("Accept", "application/json");
+                    headers.put("User-Agent", Constants.USER_AGENT);
+                    return headers;
+                }
+            };
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to parse request JSON", e);
+        }
+
+        queue.add(request);
     }
 }

@@ -18,18 +18,28 @@
 package org.wso2.emm.agent.proxy;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 import org.wso2.emm.agent.proxy.beans.EndPointInfo;
 import org.wso2.emm.agent.proxy.beans.Token;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.interfaces.TokenCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants;
 import org.wso2.emm.agent.proxy.utils.ServerUtilities;
-
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -42,6 +52,7 @@ public class APIController implements TokenCallBack {
 	private String clientKey, clientSecret;
 	private APIResultCallBack apiResultCallback;
 	private EndPointInfo apiEndPointInfo;
+	private int requestMethod;
 	
 	public APIController(String clientKey, String clientSecret){
 		this.clientKey = clientKey;
@@ -49,6 +60,7 @@ public class APIController implements TokenCallBack {
 	}
 
 	public APIController() {
+
 	}
 
 	/**
@@ -72,134 +84,263 @@ public class APIController implements TokenCallBack {
 		IdentityProxy.getInstance().setRequestCode(requestCode);
 
 		IdentityProxy.getInstance().requestToken(IdentityProxy.getInstance().getContext(), this,
-				this.clientKey,
-				this.clientSecret);
-		// temporarily added to support non OAuth calls
-		//new NetworkCallTask(apiResultCallback).execute(apiEndPointInfo);
+		                                         this.clientKey,
+		                                         this.clientSecret);
 	}
 
 	@Override
 	public void onReceiveTokenResult(Token token, String status) {
 		this.token = token;
-		new NetworkCallTask(apiResultCallback).execute(apiEndPointInfo);
+		setRequestMethod(apiEndPointInfo.getHttpMethod());
+		if (apiEndPointInfo.getRequestParamsMap() != null) {
+			sendStringRequest(apiResultCallback, apiEndPointInfo, false);
+		} else if (apiEndPointInfo.getRequestParams() != null) {
+			if (isJSONObject(apiEndPointInfo.getRequestParams())) {
+				sendJsonObjectRequest(apiResultCallback, apiEndPointInfo, false);
+			} else {
+				sendJsonArrayRequest(apiResultCallback, apiEndPointInfo, false);
+			}
+		} else {
+			sendJsonObjectRequest(apiResultCallback, apiEndPointInfo, false);
+		}
+	}
+
+	private boolean isJSONObject (String data) {
+		Object json;
+		try {
+			json = new JSONTokener(data).nextValue();
+			return (json instanceof JSONObject);
+		} catch (JSONException e) {
+			Log.e(TAG, "Failed to parse response JSON", e);
+			return false;
+		}
+	}
+
+	private void setRequestMethod(HTTP_METHODS httpMethod) {
+		switch (httpMethod) {
+			case GET:
+				requestMethod = Request.Method.GET;
+				break;
+			case POST:
+				requestMethod = Request.Method.POST;
+				break;
+			case DELETE:
+				requestMethod = Request.Method.DELETE;
+				break;
+			case PUT:
+				requestMethod = Request.Method.PUT;
+				break;
+		}
 	}
 
 	/**
-	 * AsyncTask to contact server and access the API with retrieved token.
+	 * Secured network call to contact server and access the API with retrieved token.
 	 */
-	private class NetworkCallTask extends AsyncTask<EndPointInfo, Void, Map<String, String>> {
-		APIResultCallBack apiResultCallBack;
-
-		public NetworkCallTask(APIResultCallBack apiResultCallBack) {
-			this.apiResultCallBack = apiResultCallBack;
-        }
-
-		@Override
-		protected Map<String, String> doInBackground(EndPointInfo... params) {
-			EndPointInfo endPointInfo = params[0];
-
-			Map<String, String> responseParams = null;
-			String accessToken = token.getAccessToken();
-			Map<String, String> headers = new HashMap<String, String>();
-			headers.put("Content-Type", "application/json");
-			headers.put("Accept", "*/*");
-			headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
-			headers.put("Authorization", "Bearer " + accessToken);
-
-			try {
-				responseParams = ServerUtilities.postData(endPointInfo, headers);
-                if (Constants.DEBUG_ENABLED) {
-	                Iterator<Map.Entry<String, String>> iterator = responseParams.entrySet().iterator();
-	                while (iterator.hasNext()) {
-		                Map.Entry<String, String> respParams = iterator.next();
-		                StringBuilder paras = new StringBuilder();
-		                paras.append("response-params: key:");
-		                paras.append(respParams.getKey());
-		                paras.append(", value:");
-		                paras.append(respParams.getValue());
-		                Log.d(TAG, paras.toString());
-	                }
-                }
-
-            } catch (IDPTokenManagerException e) {
-				Log.e(TAG, "Failed to contact server." + e);
-			}
-
-			return responseParams;
-		}
-
-		@Override
-		protected void onPostExecute(Map<String, String> result) {
-			if(Constants.DEBUG_ENABLED) {
-				if(result != null && !result.isEmpty()) {
-					Log.d(TAG, "Result :" + Arrays.toString(result.entrySet().toArray()));
-				}
-			}
-			apiResultCallBack.onReceiveAPIResult(result, IdentityProxy.getInstance().getRequestCode());
-		}
-	}
-
-	public void securedNetworkCall(APIResultCallBack callback, int licenseRequestCode,
-	                               EndPointInfo apiUtilities, Context context) {
-
+	public void securedNetworkCall(final APIResultCallBack callBack, int requestCode,
+	                               final EndPointInfo apiUtilities, Context context) {
 		if (IdentityProxy.getInstance().getContext() == null) {
 			IdentityProxy.getInstance().setContext(context);
 		}
-
-		IdentityProxy.getInstance().setRequestCode(licenseRequestCode);
-		new SecuredNetworkCallTask(callback,licenseRequestCode).execute(apiUtilities);
+		setRequestMethod(apiUtilities.getHttpMethod());
+		IdentityProxy.getInstance().setRequestCode(requestCode);
+		if (apiUtilities.getRequestParamsMap() != null) {
+			sendStringRequest(callBack, apiUtilities, true);
+		} else if (apiUtilities.getRequestParams() != null) {
+			if (isJSONObject(apiUtilities.getRequestParams())) {
+				sendJsonObjectRequest(callBack, apiUtilities, true);
+			} else {
+				sendJsonArrayRequest(callBack, apiUtilities, true);
+			}
+		} else {
+			sendJsonObjectRequest(callBack, apiUtilities, true);
+		}
 	}
 
-	public class SecuredNetworkCallTask extends AsyncTask<EndPointInfo, Void, Map<String, String>> {
-		APIResultCallBack apiResultCallBack;
-		int requestCode;
-
-		public SecuredNetworkCallTask(APIResultCallBack apiResultCallBack, int requestCode) {
-			this.apiResultCallBack = apiResultCallBack;
-			this.requestCode = requestCode;
+	private void sendStringRequest(final APIResultCallBack callBack, final EndPointInfo apiUtilities,
+	                               final boolean isSecured) {
+		RequestQueue queue =  null;
+		try {
+			queue = ServerUtilities.getCertifiedHttpClient();
+		} catch (IDPTokenManagerException e) {
+			Log.e(TAG, "Failed to retrieve HTTP client", e);
 		}
 
-		@Override
-		protected Map<String, String> doInBackground(EndPointInfo... params) {
-			EndPointInfo endPointInfo = params[0];
+		StringRequest request = new StringRequest(requestMethod, apiUtilities.getEndPoint(),
+		                                          new Response.Listener<String>() {
+			                                          @Override
+			                                          public void onResponse(String response) {
+				                                          Log.d(TAG, response);
+			                                          }
+		                                          },
+		                                          new Response.ErrorListener() {
+			                                          @Override
+			                                          public void onErrorResponse(VolleyError error) {
+				                                          Log.e(TAG, error.toString());
+			                                          }
+		                                          })
 
-			Map<String, String> responseParams = null;
-			Map<String, String> headers = new HashMap<String, String>();
-			headers.put("Content-Type", "application/json");
-			headers.put("Accept", "*/*");
-			headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
-
-			try {
-				responseParams = ServerUtilities.postData(endPointInfo, headers);
-				if (Constants.DEBUG_ENABLED) {
-					Iterator<Map.Entry<String, String>> iterator = responseParams.entrySet().iterator();
-					while (iterator.hasNext()) {
-						Map.Entry<String, String> respParams = iterator.next();
-						StringBuilder paras = new StringBuilder();
-						paras.append("response-params: key:");
-						paras.append(respParams.getKey());
-						paras.append(", value:");
-						paras.append(respParams.getValue());
-						Log.d(TAG, paras.toString());
+		{
+			@Override
+			protected Response<String> parseNetworkResponse(NetworkResponse response) {
+				String result = new String(response.data);
+				if(Constants.DEBUG_ENABLED) {
+					if(result != null && !result.isEmpty()) {
+						Log.d(TAG, "Result :" + result);
 					}
 				}
-
-			} catch (IDPTokenManagerException e) {
-				Log.e(TAG, "Failed to contact server.", e);
+				Map<String, String> responseParams = new HashMap<>();
+				responseParams.put(Constants.SERVER_RESPONSE_BODY, result);
+				responseParams.put(Constants.SERVER_RESPONSE_STATUS, String.valueOf(response.statusCode));
+				callBack.onReceiveAPIResult(responseParams, IdentityProxy.getInstance().getRequestCode());
+				return super.parseNetworkResponse(response);
 			}
 
-			return responseParams;
-		}
+			@Override
+			protected Map<String, String> getParams() throws AuthFailureError {
+				return apiUtilities.getRequestParamsMap();
+			}
 
-		@Override
-		protected void onPostExecute(Map<String, String> result) {
-			if(Constants.DEBUG_ENABLED) {
-				if(result != null && !result.isEmpty()) {
-					Log.d(TAG, "Result :" + Arrays.toString(result.entrySet().toArray()));
+			@Override
+			public Map<String, String> getHeaders() throws AuthFailureError {
+				Map<String, String> headers = new HashMap<>();
+				headers.put("Content-Type", "application/json");
+				headers.put("Accept", "*/*");
+				headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
+				if(!isSecured) {
+					String accessToken = token.getAccessToken();
+					headers.put("Authorization", "Bearer " + accessToken);
 				}
+				return headers;
 			}
-			apiResultCallBack.onReceiveAPIResult(result, requestCode);
+		};
+
+		queue.add(request);
+	}
+
+	private void sendJsonObjectRequest(final APIResultCallBack callBack, final EndPointInfo apiUtilities,
+	                                   final boolean isSecured) {
+		RequestQueue queue =  null;
+		try {
+			queue = ServerUtilities.getCertifiedHttpClient();
+		} catch (IDPTokenManagerException e) {
+			Log.e(TAG, "Failed to retrieve HTTP client", e);
 		}
+
+		JsonObjectRequest request = null;
+		try {
+			request = new JsonObjectRequest(requestMethod, apiUtilities.getEndPoint(),
+			                                (apiUtilities.getRequestParams() != null) ?
+			                                new JSONObject(apiUtilities.getRequestParams()) : null,
+                                                      new Response.Listener<JSONObject>() {
+                                                          @Override
+                                                          public void onResponse(JSONObject response) {
+                                                              Log.d(TAG, response.toString());
+                                                          }
+                                                      },
+                                                      new Response.ErrorListener() {
+                                                          @Override
+                                                          public void onErrorResponse(VolleyError error) {
+                                                              Log.e(TAG, error.toString());
+                                                          }
+                                                      })
+
+            {
+                @Override
+                protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                    String result = new String(response.data);
+                    if(Constants.DEBUG_ENABLED) {
+                        if(result != null && !result.isEmpty()) {
+                            Log.d(TAG, "Result :" + result);
+                        }
+                    }
+                    Map<String, String> responseParams = new HashMap<>();
+                    responseParams.put(Constants.SERVER_RESPONSE_BODY, result);
+                    responseParams.put(Constants.SERVER_RESPONSE_STATUS, String.valueOf(response.statusCode));
+                    callBack.onReceiveAPIResult(responseParams, IdentityProxy.getInstance().getRequestCode());
+                    return super.parseNetworkResponse(response);
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Content-Type", "application/json");
+                    headers.put("Accept", "*/*");
+                    headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
+                    if(!isSecured) {
+                        String accessToken = token.getAccessToken();
+                        headers.put("Authorization", "Bearer " + accessToken);
+                    }
+                    return headers;
+                }
+            };
+		} catch (JSONException e) {
+			Log.e(TAG, "Failed to parse request JSON", e);
+		}
+
+		queue.add(request);
+	}
+
+	private void sendJsonArrayRequest(final APIResultCallBack callBack, final EndPointInfo apiUtilities,
+	                                   final boolean isSecured) {
+		RequestQueue queue =  null;
+		try {
+			queue = ServerUtilities.getCertifiedHttpClient();
+		} catch (IDPTokenManagerException e) {
+			Log.e(TAG, "Failed to retrieve HTTP client", e);
+		}
+
+		JsonArrayRequest request = null;
+		try {
+			request = new JsonArrayRequest(requestMethod, apiUtilities.getEndPoint(),
+			                                (apiUtilities.getRequestParams() != null) ?
+			                                new JSONArray(apiUtilities.getRequestParams()) : null,
+			                                new Response.Listener<JSONArray>() {
+				                                @Override
+				                                public void onResponse(JSONArray response) {
+					                                Log.d(TAG, response.toString());
+				                                }
+			                                },
+			                                new Response.ErrorListener() {
+				                                @Override
+				                                public void onErrorResponse(VolleyError error) {
+					                                Log.e(TAG, error.toString());
+				                                }
+			                                })
+
+			{
+				@Override
+				protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
+					String result = new String(response.data);
+					if(Constants.DEBUG_ENABLED) {
+						if(result != null && !result.isEmpty()) {
+							Log.d(TAG, "Result :" + result);
+						}
+					}
+					Map<String, String> responseParams = new HashMap<>();
+					responseParams.put(Constants.SERVER_RESPONSE_BODY, result);
+					responseParams.put(Constants.SERVER_RESPONSE_STATUS, String.valueOf(response.statusCode));
+					callBack.onReceiveAPIResult(responseParams, IdentityProxy.getInstance().getRequestCode());
+					return super.parseNetworkResponse(response);
+				}
+
+				@Override
+				public Map<String, String> getHeaders() throws AuthFailureError {
+					Map<String, String> headers = new HashMap<>();
+					headers.put("Content-Type", "application/json");
+					headers.put("Accept", "*/*");
+					headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
+					if(!isSecured) {
+						String accessToken = token.getAccessToken();
+						headers.put("Authorization", "Bearer " + accessToken);
+					}
+					return headers;
+				}
+			};
+		} catch (JSONException e) {
+			Log.e(TAG, "Failed to parse request JSON", e);
+		}
+
+		queue.add(request);
 	}
 
 }

@@ -27,13 +27,13 @@ public class Constants {
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
 	public static final boolean SYSTEM_APP_ENABLED = false;
+	public static final boolean ALLOW_SYSTEM_APPS_IN_APPS_LIST_RESPONSE = false;
 	public static final String SYSTEM_APP_SERVICE_START_ACTION = "org.wso2.emm.system.service.START_SERVICE";
 	public static final String GCM_PROJECT_NUMBER = "GOOGLE-API-PROJECT-NUMBER";
 	public static final String GCM_REG_ID = "gcm_reg_id";
 	public static final String REG_ID = "regId";
 	public static final String NOTIFIER_LOCAL = "LOCAL";
 	public static final String NOTIFIER_GCM = "GCM";
-
 	public static final String SERVER_PORT = "80";
 	public static final String SERVER_PROTOCOL = "http://";
 	public static final String API_VERSION = "1.0.0/";
@@ -62,7 +62,6 @@ public class Constants {
 	public static final String LICENSE_ENDPOINT = SERVER_APP_ENDPOINT + "device/license";
 	public static final String REGISTER_ENDPOINT = SERVER_APP_ENDPOINT + "enrollment/";
 	public static final String CONFIGURATION_ENDPOINT = SERVER_APP_ENDPOINT + "configuration/";
-
 	public static final String OAUTH_ENDPOINT = "/oauth2/token";
 	public static final String DEVICE_ENDPOINT = SERVER_APP_ENDPOINT + "device/";
 	public static final String IS_REGISTERED_ENDPOINT = REGISTER_ENDPOINT;
@@ -122,6 +121,7 @@ public class Constants {
 	 */
 	public static final int REGISTER_REQUEST_CODE = 300;
 	public static final int IS_REGISTERED_REQUEST_CODE = 301;
+	public static final int DYNAMIC_CLIENT_REGISTER_REQUEST_CODE = 302;
 	public static final int SENDER_ID_REQUEST_CODE = 303;
 	public static final int LICENSE_REQUEST_CODE = 304;
 	public static final int UNREGISTER_REQUEST_CODE = 305;
@@ -132,7 +132,8 @@ public class Constants {
 	public static final int CONFIGURATION_REQUEST_CODE = 310;
 	public static final int AUTHENTICATION_REQUEST_CODE = 311;
 	public static final int EVENT_REQUEST_CODE = 312;
-	public static final int APP_LIST_REQUEST_CODE = 300;
+	public static final int APP_LIST_REQUEST_CODE = 313;
+	public static final int DYNAMIC_CLIENT_UNREGISTER_REQUEST_CODE = 314;
 
 	/**
 	 * Google API project id registered to use GCM.

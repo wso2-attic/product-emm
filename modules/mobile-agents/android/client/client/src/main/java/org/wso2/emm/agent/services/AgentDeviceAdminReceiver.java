@@ -110,7 +110,7 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 				                           Constants.UNREGISTER_REQUEST_CODE);
 				try {
 					LocalNotification.stopPolling(context);
-					CommonUtils.unRegisterClientApp(context);
+					CommonUtils.unRegisterClientApp(context, AgentDeviceAdminReceiver.this);
 					CommonUtils.clearAppData(context);
 				} catch (AndroidAgentException e) {
 					Log.e(TAG, "Error occurred while removing Oauth application", e);

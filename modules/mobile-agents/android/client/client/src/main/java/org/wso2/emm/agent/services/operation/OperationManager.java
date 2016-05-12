@@ -87,6 +87,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
     private static final String APP_INFO_TAG_NAME = "name";
     private static final String APP_INFO_TAG_PACKAGE = "package";
     private static final String APP_INFO_TAG_VERSION = "version";
+    private static final String APP_INFO_TAG_SYSTEM = "isSystemApp";
     private static final int DEFAULT_PASSWORD_LENGTH = 0;
     private static final int DEFAULT_VOLUME = 0;
     private static final int DEFAULT_FLAG = 0;
@@ -250,6 +251,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 app.put(APP_INFO_TAG_NAME, Uri.encode(infoApp.getAppname()));
                 app.put(APP_INFO_TAG_PACKAGE, infoApp.getPackagename());
                 app.put(APP_INFO_TAG_VERSION, infoApp.getVersionCode());
+                app.put(APP_INFO_TAG_SYSTEM, infoApp.isSystemApp());
                 if (application != null) {
                     app.put(Constants.Device.USS, application.getUss());
                 }

@@ -18,7 +18,7 @@
 
 package org.wso2.emm.agent.proxy.clients;
 
-import org.apache.http.client.HttpClient;
+import com.android.volley.RequestQueue;
 import org.wso2.emm.agent.proxy.IDPTokenManagerException;
 
 import java.util.Map;
@@ -34,7 +34,7 @@ public interface CommunicationClient {
      * @return A secured http client.
      * @throws IDPTokenManagerException
      */
-    HttpClient getHttpClient() throws IDPTokenManagerException;
+    RequestQueue getHttpClient() throws IDPTokenManagerException;
 
 
     /**

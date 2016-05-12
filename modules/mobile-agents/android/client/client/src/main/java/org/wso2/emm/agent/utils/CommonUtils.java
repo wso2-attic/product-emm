@@ -30,13 +30,11 @@ import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
-
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,7 +54,6 @@ import org.wso2.emm.agent.services.DynamicClientManager;
 import org.wso2.emm.agent.services.PolicyOperationsMapper;
 import org.wso2.emm.agent.services.PolicyRevokeHandler;
 import org.wso2.emm.agent.services.ResultPayload;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -146,10 +143,7 @@ public class CommonUtils {
 		ConnectivityManager connectivityManager =
 				(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo info = connectivityManager.getActiveNetworkInfo();
-		if (info == null) {
-			return false;
-		}
-		return info.isConnected();
+		return (info != null && info.isConnected());
 	}
 
 	/**
@@ -177,7 +171,7 @@ public class CommonUtils {
 	 * @param context Application context
 	 * @throws AndroidAgentException
 	 */
-	public static void unRegisterClientApp(Context context) throws AndroidAgentException {
+	public static void unRegisterClientApp(Context context, APIResultCallBack apiCallBack) throws AndroidAgentException {
 		String serverIP = Preference.getString(context, Constants.PreferenceFlag.IP);
 
 		if (serverIP != null && !serverIP.isEmpty()) {
@@ -198,7 +192,7 @@ public class CommonUtils {
 				utils.setServerIP(serverIP);
 
 				DynamicClientManager dynamicClientManager = new DynamicClientManager();
-				boolean isUnregistered = dynamicClientManager.unregisterClient(profile, utils, context);
+				boolean isUnregistered = dynamicClientManager.unregisterClient(profile, utils, context, apiCallBack);
 
 				if (!isUnregistered) {
 					Log.e(TAG, "Error occurred while removing the OAuth client app");
