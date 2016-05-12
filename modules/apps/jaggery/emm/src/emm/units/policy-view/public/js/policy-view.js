@@ -1993,6 +1993,7 @@ var changeAndroidWifiPolicy = function (select) {
     slideDownPaneAgainstValueSet(select, 'control-wifi-phase2', ['802eap']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-identity', ['802eap']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-anoidentity', ['802eap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-cacert', ['802eap']);
 }
 
 /**
@@ -2006,6 +2007,7 @@ var changeAndroidWifiPolicyEAP = function (select, superSelect) {
     slideDownPaneAgainstValueSet(select, 'control-wifi-provisioning', ['fast']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-identity', ['peap', 'ttls', 'pwd', 'fast', 'leap']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-anoidentity', ['peap', 'ttls']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-cacert', ['peap', 'tls', 'ttls']);
     changeAndroidWifiPolicy(superSelect);
 }
 

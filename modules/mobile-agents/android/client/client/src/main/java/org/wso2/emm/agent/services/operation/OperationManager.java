@@ -29,9 +29,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,6 +51,8 @@ import org.wso2.emm.agent.beans.ComplianceFeature;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.beans.Notification;
 import org.wso2.emm.agent.beans.Operation;
+import org.wso2.emm.agent.beans.WifiProfile;
+import org.wso2.emm.agent.dao.NotificationDAO;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 import org.wso2.emm.agent.services.DeviceInfoPayload;
@@ -92,7 +96,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
     private static String[] AUTHORIZED_PINNING_APPS;
     private static String AGENT_PACKAGE_NAME;
 
-    public OperationManager(Context context){
+    public OperationManager(Context context) {
         this.context = context;
         this.resources = context.getResources();
         this.devicePolicyManager =
@@ -107,51 +111,51 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
     }
 
     /**
-     *  Methods used by child classes to retrieve values of private variables in Parent Class
+     * Methods used by child classes to retrieve values of private variables in Parent Class
      */
 
     /* Retrieve context resources. */
-    public Resources getContextResources(){
+    public Resources getContextResources() {
         return resources;
     }
 
     /* Retrieve resultBuilder. */
-    public ResultPayload getResultBuilder(){
+    public ResultPayload getResultBuilder() {
         return resultBuilder;
     }
 
     /* Retrieve devicePolicyManager. */
-    public DevicePolicyManager getDevicePolicyManager(){
+    public DevicePolicyManager getDevicePolicyManager() {
         return devicePolicyManager;
     }
 
     /* Retrieve cdmDeviceAdmin */
-    public ComponentName getCdmDeviceAdmin(){
+    public ComponentName getCdmDeviceAdmin() {
         return cdmDeviceAdmin;
     }
 
     /* Retrieve default password length */
-    public int getDefaultPasswordLength(){
+    public int getDefaultPasswordLength() {
         return DEFAULT_PASSWORD_LENGTH;
     }
 
     /* Retrieve appList */
-    public ApplicationManager getAppList(){
+    public ApplicationManager getAppList() {
         return appList;
     }
 
     /* Retrieve Default Password Minimum Length */
-    public int getDefaultPasswordMinLength(){
+    public int getDefaultPasswordMinLength() {
         return DEFAULT_PASSWORD_MIN_LENGTH;
     }
 
     /* Retrieve Day Milliseconds Multiplier */
-    public long getDayMillisecondsMultiplier(){
+    public long getDayMillisecondsMultiplier() {
         return DAY_MILLISECONDS_MULTIPLIER;
     }
 
     /* Retrieve Context */
-    public Context getContext(){
+    public Context getContext() {
         return context;
     }
 
@@ -279,9 +283,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         intent.putExtra(resources.getString(R.string.intent_extra_type),
                         resources.getString(R.string.intent_extra_ring));
         intent.putExtra(resources.getString(R.string.intent_extra_message),
-                        resources.getString(R.string.intent_extra_stop_ringing));
+                resources.getString(R.string.intent_extra_stop_ringing));
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
 
         if (Constants.DEBUG_MODE_ENABLED) {
@@ -298,16 +302,45 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         boolean wifiStatus;
         String ssid = null;
         String password = null;
+        WifiProfile wifiProfile = null;
         JSONObject result = new JSONObject();
 
         try {
             JSONObject wifiData = new JSONObject(operation.getPayLoad().toString());
-            if (!wifiData.isNull(resources.getString(R.string.intent_extra_ssid))) {
-                ssid = (String) wifiData.get(resources.getString(R.string.intent_extra_ssid));
+
+            wifiProfile = new WifiProfile();
+
+            if (!wifiData.isNull(WifiProfile.SSID)) {
+                wifiProfile.setSsid(wifiData.getString(WifiProfile.SSID));
             }
-            if (!wifiData.isNull(resources.getString(R.string.intent_extra_password))) {
-                password = (String) wifiData.get(resources.getString(R.string.intent_extra_password));
+            if (!wifiData.isNull(WifiProfile.TYPE)) {
+                wifiProfile.setType(WifiProfile.Type.getByValue(wifiData.getString(WifiProfile.TYPE)));
             }
+            if (!wifiData.isNull(WifiProfile.PASSWORD)) {
+                wifiProfile.setPassword(wifiData.getString(WifiProfile.PASSWORD));
+            }
+            if (!wifiData.isNull(WifiProfile.EAPMETHOD)) {
+                wifiProfile.setEapMethod(WifiProfile.EAPMethod.getByValue(wifiData.getString(WifiProfile.EAPMETHOD)));
+            }
+            if (!wifiData.isNull(WifiProfile.PHASE2)) {
+                wifiProfile.setPhase2(WifiProfile.Phase2.getByValue(wifiData.getString(WifiProfile.PHASE2)));
+            }
+            if (!wifiData.isNull(WifiProfile.PROVISIONING)) {
+                wifiProfile.setProvisioning(wifiData.getInt(WifiProfile.PROVISIONING));
+            }
+            if (!wifiData.isNull(WifiProfile.IDENTITY)) {
+                wifiProfile.setIdentity(wifiData.getString(WifiProfile.IDENTITY));
+            }
+            if (!wifiData.isNull(WifiProfile.ANONYMOUSIDENTITY)) {
+                wifiProfile.setAnonymousIdentity(wifiData.getString(WifiProfile.ANONYMOUSIDENTITY));
+            }
+            if (!wifiData.isNull(WifiProfile.CACERT)) {
+                wifiProfile.setCaCert(wifiData.getString(WifiProfile.CACERT));
+            }
+            if (!wifiData.isNull(WifiProfile.CACERTNAME)) {
+                wifiProfile.setCaCertName(wifiData.getString(WifiProfile.CACERTNAME));
+            }
+            
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
             resultBuilder.build(operation);
@@ -315,7 +348,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         }
 
         WiFiConfig config = new WiFiConfig(context.getApplicationContext());
-        wifiStatus = config.saveWEPConfig(ssid, password);
+        wifiStatus = config.setWifiConfig(wifiProfile);
 
         try {
             String status;
@@ -430,7 +463,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         ArrayList<ComplianceFeature> result = new ArrayList<>();
 
         try {
-            if(payload != null) {
+            if (payload != null) {
                 List<org.wso2.emm.agent.beans.Operation> operations = mapper.readValue(
                         payload,
                         mapper.getTypeFactory().constructCollectionType(List.class,
@@ -495,7 +528,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 manageWebClip(operation);
             } else {
                 packageName = appData.getString(getContextResources().getString(R.string.app_identifier));
-                if(appData.has(getContextResources().getString(R.string.app_schedule))) {
+                if (appData.has(getContextResources().getString(R.string.app_schedule))) {
                     schedule = appData.getString(getContextResources().getString(R.string.app_schedule));
                 }
                 getAppList().uninstallApplication(packageName, schedule);
@@ -710,6 +743,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             Log.d(TAG, "Device unlocked");
         }
     }
+
     /**
      * This method is used to check whether agent is registered as the device owner.
      *
@@ -768,15 +802,15 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
 
-        if(serverAddress != null) {
+        if (serverAddress != null) {
             Intent intent = new Intent(context, AlertActivity.class);
             intent.putExtra(resources.getString(R.string.intent_extra_message), resources.getString(R.string.toast_message_vpn));
             intent.putExtra(resources.getString(R.string.intent_extra_operation_id), operation.getId());
             intent.putExtra(resources.getString(R.string.intent_extra_payload), operation.getPayLoad().toString());
             intent.putExtra(resources.getString(R.string.intent_extra_type),
-                            Constants.Operation.VPN);
+                    Constants.Operation.VPN);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                            Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
             context.startActivity(intent);
         }
@@ -791,11 +825,11 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
 
     @Override
     public void passOperationToSystemApp(Operation operation) throws AndroidAgentException {
-        if(getApplicationManager().isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
-            CommonUtils.callSystemApp(getContext(),operation.getCode(),
-                                      Boolean.toString(operation.isEnabled()), null);
+        if (getApplicationManager().isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
+            CommonUtils.callSystemApp(getContext(), operation.getCode(),
+                    Boolean.toString(operation.isEnabled()), null);
         } else {
-            if(operation.isEnabled()) {
+            if (operation.isEnabled()) {
                 Log.e(TAG, "Invalid operation code received");
             }
         }
@@ -833,7 +867,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
     /**
      * This method is being invoked when get info operation get executed.
      *
-     * @param result response result
+     * @param result      response result
      * @param requestCode code of the requested operation
      */
     @Override
