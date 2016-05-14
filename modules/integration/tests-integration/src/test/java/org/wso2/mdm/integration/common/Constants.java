@@ -364,4 +364,19 @@ public final class Constants {
         public static final String CERTIFICATE_PAYLOAD= "\"serialNumber\":\"12438035315552875930\"";
 
     }
+
+    public static final class DashboardMonitoring {
+        private DashboardMonitoring() { throw new AssertionError(); }
+
+        public static final String DASHBOARD_MONITORING_GROUP = "dashboard-monitoring";
+        public static final String DEVICE_COUNT_OVERVIEW_API_ENDPOINT =
+            "/mdm-admin/dashboard/device-count-overview";
+        public static final String DEVICE_COUNTS_BY_POTENTIAL_VULNERABILITIES_API_ENDPOINT =
+            "/mdm-admin/dashboard/device-counts-by-potential-vulnerabilities";
+        public static final String NON_COMPLIANT_DEVICE_COUNTS_BY_FEATURES_API_ENDPOINT =
+            "/mdm-admin/dashboard/non-compliant-device-counts-by-features?start=0&length=5";
+        public static final String DEVICE_COUNTS_BY_GROUPS_API_ENDPOINT =
+            "/mdm-admin/dashboard/device-counts-by-groups";
+    }
+
 }
