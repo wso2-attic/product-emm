@@ -231,7 +231,7 @@ public class Operation {
 
     @GET
     @Path("activity/{id}")
-    public org.wso2.carbon.device.mgt.common.operation.mgt.Operation getActivity(@PathParam("id") String id)
+    public Response getActivity(@PathParam("id") String id)
             throws MDMAPIException {
         org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation;
         DeviceManagementProviderService dmService;
@@ -243,6 +243,6 @@ public class Operation {
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
-        return operation;
+        return Response.status(Response.Status.OK).entity(operation).build();
     }
 }
