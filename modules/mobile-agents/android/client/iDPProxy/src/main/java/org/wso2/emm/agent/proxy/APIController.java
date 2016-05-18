@@ -154,7 +154,7 @@ public class APIController implements TokenCallBack {
 				sendJsonArrayRequest(callBack, apiUtilities, true);
 			}
 		} else if (apiEndPointInfo.isJSONArrayRequest()) {
-			sendJsonArrayRequest(apiResultCallback, apiEndPointInfo, false);
+			sendJsonArrayRequest(apiResultCallback, apiEndPointInfo, true);
 		} else {
 			sendJsonObjectRequest(callBack, apiUtilities, true);
 		}

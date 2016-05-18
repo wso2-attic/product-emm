@@ -48,7 +48,7 @@ import java.util.List;
  * This class handles all the functionalities related to device WIFI configuration.
  */
 public class WiFiConfig {
-    private static ConnectivityManager connectivityManager;
+    private ConnectivityManager connectivityManager;
     private WifiManager wifiManager;
     private static final int WIFI_CONFIG_PRIORITY = 40;
     private static final int WIFI_CONFIG_DEFAULT_INDEX = 0;
@@ -56,7 +56,7 @@ public class WiFiConfig {
     private Context context;
 
     public WiFiConfig(Context context) {
-        this.context = context;
+        this.context = context.getApplicationContext();
         wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         connectivityManager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -71,7 +71,7 @@ public class WiFiConfig {
      * @param context     - Application context.
      * @param networkType - Network type (WIFI/Data).
      */
-    private static boolean isConnected(Context context, int networkType) {
+    private boolean isConnected(Context context, int networkType) {
         NetworkInfo networkInfo = null;
         if (connectivityManager != null) {
             networkInfo = connectivityManager.getNetworkInfo(networkType);
