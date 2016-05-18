@@ -118,7 +118,6 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
             }
         }
         new LooperThread().run();
-
         return location;
     }
 

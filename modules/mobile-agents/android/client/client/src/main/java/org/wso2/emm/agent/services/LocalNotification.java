@@ -43,6 +43,7 @@ public class LocalNotification {
 		}
 		long currentTime = SystemClock.elapsedRealtime();
 		currentTime += DEFAULT_BUFFER;
+		stopPolling(context);
 		if (!Preference.getBoolean(context, LOCAL_NOTIFIER_INVOKED_PREF_KEY)) {
 			Preference.putBoolean(context, LOCAL_NOTIFIER_INVOKED_PREF_KEY, true);
 			Intent alarm = new Intent(context, AlarmReceiver.class);
