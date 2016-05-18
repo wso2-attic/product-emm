@@ -32,7 +32,7 @@ public class DashboardAPIChecker extends TestBase {
 
     private MDMHttpClient client;
 
-    @BeforeClass(alwaysRun = true, groups = { Constants.DashboardMonitoring.DASHBOARD_MONITORING_GROUP })
+    @BeforeClass(alwaysRun = true, groups = {Constants.DashboardAPIChecker.DASHBOARD_TEST_CASES_GROUP})
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL);
@@ -41,7 +41,7 @@ public class DashboardAPIChecker extends TestBase {
 
     @Test(description = "Testing device-count-overview-api with no-db-data")
     public void testDeviceCountOverviewAPIWithNoDBData() throws Exception {
-        MDMResponse response = client.get(Constants.DashboardMonitoring.DEVICE_COUNT_OVERVIEW_API_ENDPOINT);
+        MDMResponse response = client.get(Constants.DashboardAPIChecker.DEVICE_COUNT_OVERVIEW_API_ENDPOINT);
         org.testng.Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         // checking for total device count response with no data
         Assert.assertTrue(response.getBody().contains("{\"context\":\"Total-device-count\",\"data\":[{\"group\":" +
@@ -53,21 +53,23 @@ public class DashboardAPIChecker extends TestBase {
 
     @Test(description = "Testing device-counts-by-potential-vulnerabilities-api with no-db-data")
     public void testDeviceCountsByPotentialVulnerabilitiesAPIWithNoDBData() throws Exception {
-        MDMResponse response = client.get(Constants.DashboardMonitoring.
+        MDMResponse response = client.get(Constants.DashboardAPIChecker.
             DEVICE_COUNTS_BY_POTENTIAL_VULNERABILITIES_API_ENDPOINT);
         org.testng.Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-        // checking for total device count response with no data
+        // checking for correct response with no data
         Assert.assertTrue(response.getBody().
-            contains("{\"group\":\"NON_COMPLIANT\",\"displayNameForGroup\":\"Non-compliant\",\"deviceCount\":0}," +
-                "{\"group\":\"UNMONITORED\",\"displayNameForGroup\":\"Unmonitored\",\"deviceCount\":0}]}"));
+            contains("[{\"context\":\"Device-counts-by-potential-vulnerabilities\",\"groupingAttribute\":" +
+                "\"potential-vulnerability\",\"data\":[{\"group\":\"NON_COMPLIANT\",\"displayNameForGroup\":" +
+                    "\"Non-compliant\",\"deviceCount\":0},{\"group\":\"UNMONITORED\",\"displayNameForGroup\":" +
+                        "\"Unmonitored\",\"deviceCount\":0}]}]"));
     }
 
     @Test(description = "Testing non-compliant-device-counts-by-features-api with no-db-data")
     public void testNonCompliantDeviceCountsByFeaturesAPIWithNoDBData() throws Exception {
-        MDMResponse response = client.get(Constants.DashboardMonitoring.
+        MDMResponse response = client.get(Constants.DashboardAPIChecker.
             NON_COMPLIANT_DEVICE_COUNTS_BY_FEATURES_API_ENDPOINT);
         org.testng.Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-        // checking for total device count response with no data
+        // checking for correct response with no data
         Assert.assertTrue(response.getBody().
             contains("[{\"totalRecordCount\":0,\"context\":\"Non-compliant-device-counts-by-features\"," +
                 "\"groupingAttribute\":\"non-compliant-feature-code\",\"data\":[]}]"));
@@ -75,12 +77,65 @@ public class DashboardAPIChecker extends TestBase {
 
     @Test(description = "Testing device-counts-by-groups-api with no-db-data")
     public void testDeviceCountsByGroupsAPIWithNoDBData() throws Exception {
-        MDMResponse response = client.get(Constants.DashboardMonitoring.DEVICE_COUNTS_BY_GROUPS_API_ENDPOINT);
+        MDMResponse response = client.get(Constants.DashboardAPIChecker.DEVICE_COUNTS_BY_GROUPS_API_ENDPOINT);
         org.testng.Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-        // checking for total device count response with no data
+        // checking for correct response with no data
         Assert.assertTrue(response.getBody().
             contains("[{\"context\":\"Device-counts-by-platforms\",\"groupingAttribute\":\"platform\",\"data\":[]}," +
                 "{\"context\":\"Device-counts-by-ownerships\",\"groupingAttribute\":\"ownership\",\"data\":[]}]"));
+    }
+
+    @Test(description = "Testing feature-non-compliant-device-counts-by-groups-api with no-db-data")
+    public void testFeatureNonCompliantDeviceCountsByGroupsAPIWithNoDBData() throws Exception {
+        MDMResponse response = client.get(Constants.DashboardAPIChecker.
+            FEATURE_NON_COMPLIANT_DEVICE_COUNTS_BY_GROUPS_API_ENDPOINT);
+        org.testng.Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        // checking for correct response with no data
+        Assert.assertTrue(response.getBody().contains("[{\"context\":" +
+            "\"Feature-non-compliant-device-counts-by-platforms\",\"groupingAttribute\":\"platform\",\"data\":[]}," +
+                "{\"context\":\"Feature-non-compliant-device-counts-by-ownerships\"," +
+                    "\"groupingAttribute\":\"ownership\",\"data\":[]}]"));
+    }
+
+    @Test(description = "Testing filtered-device-count-over-total-api with no-db-data")
+    public void testFilteredDeviceCountOverTotalAPIWithNoDBData() throws Exception {
+        MDMResponse response = client.get(Constants.DashboardAPIChecker.FILTERED_DEVICE_COUNT_OVER_TOTAL_API_ENDPOINT);
+        org.testng.Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        // checking for correct response with no data
+        Assert.assertTrue(response.getBody().contains("[{\"context\":\"Filtered-device-count-over-total\"," +
+            "\"data\":[{\"group\":\"filtered\",\"displayNameForGroup\":\"Filtered\",\"deviceCount\":0}," +
+                "{\"group\":\"total\",\"displayNameForGroup\":\"Total\",\"deviceCount\":0}]}]"));
+    }
+
+    @Test(description = "Testing feature-non-compliant-device-count-over-total-api with no-db-data")
+    public void testFeatureNonCompliantDeviceCountOverTotalAPIWithNoDBData() throws Exception {
+        MDMResponse response = client.get(Constants.DashboardAPIChecker.
+            FEATURE_NON_COMPLIANT_DEVICE_COUNT_OVER_TOTAL_API_ENDPOINT);
+        org.testng.Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        // checking for correct response with no data
+        Assert.assertTrue(response.getBody().contains("[{\"context\":" +
+            "\"Feature-non-compliant-device-count-over-total\",\"data\":[{\"group\":" +
+                "\"feature-non-compliant-and-filtered\",\"displayNameForGroup\":" +
+                    "\"Feature-non-compliant-and-filtered\",\"deviceCount\":0},{\"group\":\"total\"," +
+                        "\"displayNameForGroup\":\"Total\",\"deviceCount\":0}]}]"));
+    }
+
+    @Test(description = "Testing devices-with-details-api with no-db-data")
+    public void testDevicesWithDetailsAPIWithNoDBData() throws Exception {
+        MDMResponse response = client.get(Constants.DashboardAPIChecker.DEVICES_WITH_DETAILS_API_ENDPOINT);
+        org.testng.Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        // checking for correct response with no data
+        Assert.assertTrue(response.getBody().contains("[{\"context\":\"Filtered-devices-with-details\",\"data\":[]}]"));
+    }
+
+    @Test(description = "Testing feature-non-compliant-devices-with-details-api with no-db-data")
+    public void testFeatureNonCompliantDevicesWithDetailsAPIWithNoDBData() throws Exception {
+        MDMResponse response = client.get(Constants.DashboardAPIChecker.
+            FEATURE_NON_COMPLIANT_DEVICES_WITH_DETAILS_API_ENDPOINT);
+        org.testng.Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        // checking for correct response with no data
+        Assert.assertTrue(response.getBody().contains("[{\"context\":" +
+            "\"Filtered-feature-non-compliant-devices-with-details\",\"data\":[]}]"));
     }
 
 }

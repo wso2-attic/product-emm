@@ -29,6 +29,7 @@ public class EndPointInfo {
 	private String endPoint;
 	private String requestParams;
 	private Map<String, String> requestParamsMap;
+	private boolean isJSONArrayRequest;
 
 	public Map<String, String> getRequestParamsMap() {
 		return requestParamsMap;
@@ -60,6 +61,14 @@ public class EndPointInfo {
 
 	public void setEndPoint(String endPoint) {
 		this.endPoint = endPoint;
+	}
+
+	public boolean isJSONArrayRequest() {
+		return isJSONArrayRequest;
+	}
+
+	public void setIsJSONArrayRequest(boolean isJSONArrayRequest) {
+		this.isJSONArrayRequest = isJSONArrayRequest;
 	}
 
 }

@@ -25,7 +25,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import org.wso2.emm.agent.services.location.LocationService;
 
@@ -98,7 +101,23 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
 
     @Override
     public Location getLocation() {
-        this.setLocation();
+        class LooperThread extends Thread {
+            public Handler mHandler;
+
+            public void run() {
+                if (Looper.myLooper() == null)
+                {
+                    Looper.prepare();
+                }
+               LocationServiceImpl.this.setLocation();
+                mHandler = new Handler() {
+                    public void handleMessage(Message msg) {
+                        Log.e(TAG, "No network/GPS Switched off." + msg);
+                    }
+                };
+            }
+        }
+        new LooperThread().run();
         return location;
     }
 

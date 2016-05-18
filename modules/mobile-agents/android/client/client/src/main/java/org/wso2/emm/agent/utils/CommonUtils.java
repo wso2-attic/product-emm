@@ -84,6 +84,11 @@ public class CommonUtils {
 		if (requestParams != null) {
 			apiUtilities.setRequestParams(requestParams);
 		}
+
+		if (endpoint.contains(Constants.NOTIFICATION_ENDPOINT)) {
+			apiUtilities.setIsJSONArrayRequest(true);
+		}
+
 		APIController apiController;
 
 		if (org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE.

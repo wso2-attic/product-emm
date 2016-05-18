@@ -280,7 +280,7 @@ public class AndroidAPIUtils {
                 deviceInfo.setDeviceIdentifier(deviceIdentifier);
                 updateDeviceInfo(deviceInfo);
             } catch (DeviceDetailsMgtException e) {
-                throw new OperationManagementException("Error occurred while updating the device infomation.", e);
+                throw new OperationManagementException("Error occurred while updating the device information.", e);
             }
 
 

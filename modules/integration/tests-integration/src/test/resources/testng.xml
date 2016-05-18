@@ -31,7 +31,7 @@
             <class name="org.wso2.mdm.integration.mobileDevice.MobileDeviceManagementWithNoDevices"/>
         </classes>
     </test>
-    <test name="dashboard-monitoring" preserve-order="true" parallel="false">
+    <test name="dashboard-test-cases" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.mdm.integration.dashboard.DashboardAPIChecker"/>
         </classes>
