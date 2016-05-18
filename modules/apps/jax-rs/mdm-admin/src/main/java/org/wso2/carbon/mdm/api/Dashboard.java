@@ -25,6 +25,7 @@ import org.wso2.carbon.device.mgt.analytics.dashboard.GadgetDataService;
 import org.wso2.carbon.device.mgt.analytics.dashboard.dao.bean.DetailedDeviceEntry;
 import org.wso2.carbon.device.mgt.analytics.dashboard.dao.bean.DeviceCountByGroupEntry;
 import org.wso2.carbon.device.mgt.analytics.dashboard.dao.bean.FilterSet;
+import org.wso2.carbon.device.mgt.analytics.dashboard.dao.exception.DataAccessLayerException;
 import org.wso2.carbon.device.mgt.analytics.dashboard.dao.exception.InvalidParameterValueException;
 import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
@@ -35,7 +36,6 @@ import org.wso2.carbon.mdm.exception.Message;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +56,8 @@ public class Dashboard {
     public static final String PAGINATION_ENABLED = "pagination-enabled";
     public static final String START_INDEX = "start";
     public static final String RESULT_COUNT = "length";
+    public static final String FLAG_TRUE = "true";
+    public static final String FLAG_FALSE = "false";
 
     @GET
     @Path("device-count-overview")
@@ -68,7 +70,7 @@ public class Dashboard {
         DeviceCountByGroupEntry totalDeviceCount;
         try {
             totalDeviceCount = gadgetDataService.getTotalDeviceCount();
-        } catch (SQLException e) {
+        } catch (DataAccessLayerException e) {
             String msg = "An internal error occurred while trying to execute relevant data service function " +
                 "@ Dashboard API layer to retrieve total device count.";
             log.error(msg, e);
@@ -85,7 +87,7 @@ public class Dashboard {
         List<DeviceCountByGroupEntry> deviceCountsByConnectivityStatuses;
         try {
             deviceCountsByConnectivityStatuses = gadgetDataService.getDeviceCountsByConnectivityStatuses();
-        } catch (SQLException e) {
+        } catch (DataAccessLayerException e) {
             String msg = "An internal error occurred while trying to execute relevant data service function " +
                 "@ Dashboard API layer to retrieve device counts by connectivity statuses.";
             log.error(msg, e);
@@ -113,7 +115,7 @@ public class Dashboard {
         List<DeviceCountByGroupEntry> deviceCountsByPotentialVulnerabilities;
         try {
             deviceCountsByPotentialVulnerabilities = gadgetDataService.getDeviceCountsByPotentialVulnerabilities();
-        } catch (SQLException e) {
+        } catch (DataAccessLayerException e) {
             String msg = "An internal error occurred while trying to execute relevant data service function " +
                 "@ Dashboard API layer to retrieve device counts by potential vulnerabilities.";
             log.error(msg, e);
@@ -151,7 +153,7 @@ public class Dashboard {
             message.setDescription("This was while trying to execute relevant data service " +
                 "function @ Dashboard API layer to retrieve a non-compliant set of device counts by features.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-        } catch (SQLException e) {
+        } catch (DataAccessLayerException e) {
             String msg = "An internal error occurred while trying to execute relevant data service function " +
                 "@ Dashboard API layer to retrieve a non-compliant set of device counts by features.";
             log.error(msg, e);
@@ -197,7 +199,7 @@ public class Dashboard {
             message.setDescription("This was while trying to execute relevant data service " +
                 "function @ Dashboard API layer to retrieve a filtered set of device counts by platforms.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-        } catch (SQLException e) {
+        } catch (DataAccessLayerException e) {
             String msg = "An internal error occurred while trying to execute relevant data service function " +
                 "@ Dashboard API layer to retrieve a filtered set of device counts by platforms.";
             log.error(msg, e);
@@ -220,7 +222,7 @@ public class Dashboard {
             message.setDescription("This was while trying to execute relevant data service " +
                 "function @ Dashboard API layer to retrieve a filtered set of device counts by ownerships.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-        } catch (SQLException e) {
+        } catch (DataAccessLayerException e) {
             String msg = "An internal error occurred while trying to execute relevant data service function " +
                 "@ Dashboard API layer to retrieve a filtered set of device counts by ownerships.";
             log.error(msg, e);
@@ -266,7 +268,7 @@ public class Dashboard {
                 "function @ Dashboard API layer to retrieve a filtered set of " +
                     "feature non-compliant device counts by platforms.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-        } catch (SQLException e) {
+        } catch (DataAccessLayerException e) {
             String msg = "An internal error occurred while trying to execute relevant data service function " +
                 "@ Dashboard API layer to retrieve a filtered set of feature non-compliant device counts by platforms.";
             log.error(msg, e);
@@ -291,7 +293,7 @@ public class Dashboard {
                 "function @ Dashboard API layer to retrieve a filtered set of " +
                     "feature non-compliant device counts by ownerships.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-        } catch (SQLException e) {
+        } catch (DataAccessLayerException e) {
             String msg = "An internal error occurred while trying to execute relevant data service function " +
                 "@ Dashboard API layer to retrieve a filtered set of feature non-compliant " +
                     "device counts by ownerships.";
@@ -340,7 +342,7 @@ public class Dashboard {
             message.setDescription("This was while trying to execute relevant data service " +
                 "function @ Dashboard API layer to retrieve a filtered device count over the total.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-        } catch (SQLException e) {
+        } catch (DataAccessLayerException e) {
             String msg = "An internal error occurred while trying to execute relevant data service function " +
                 "@ Dashboard API layer to retrieve a filtered device count over the total.";
             log.error(msg, e);
@@ -351,7 +353,7 @@ public class Dashboard {
         DeviceCountByGroupEntry totalDeviceCount;
         try {
             totalDeviceCount = gadgetDataService.getTotalDeviceCount();
-        } catch (SQLException e) {
+        } catch (DataAccessLayerException e) {
             String msg = "An internal error occurred while trying to execute relevant data service function " +
                 "@ Dashboard API layer to retrieve the total device count over filtered.";
             log.error(msg, e);
@@ -400,7 +402,7 @@ public class Dashboard {
             message.setDescription("This was while trying to execute relevant data service " +
                 "function @ Dashboard API layer to retrieve a feature non-compliant device count over the total.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-        } catch (SQLException e) {
+        } catch (DataAccessLayerException e) {
             String msg = "An internal error occurred while trying to execute relevant data service function " +
                 "@ Dashboard API layer to retrieve a feature non-compliant device count over the total.";
             log.error(msg, e);
@@ -411,7 +413,7 @@ public class Dashboard {
         DeviceCountByGroupEntry totalDeviceCount;
         try {
             totalDeviceCount = gadgetDataService.getTotalDeviceCount();
-        } catch (SQLException e) {
+        } catch (DataAccessLayerException e) {
             String msg = "An internal error occurred while trying to execute relevant data service function " +
                 "@ Dashboard API layer to retrieve the total device count over filtered feature non-compliant.";
             log.error(msg, e);
@@ -450,7 +452,7 @@ public class Dashboard {
             message.setDescription("Pagination-enabled query parameter with value true or false is required.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
 
-        } else if ("true".equals(paginationEnabled)) {
+        } else if (FLAG_TRUE.equals(paginationEnabled)) {
 
             // getting gadget data service
             GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
@@ -473,7 +475,7 @@ public class Dashboard {
                 message.setDescription("This was while trying to execute relevant data service " +
                     "function @ Dashboard API layer to retrieve a filtered set of devices with details.");
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            } catch (SQLException e) {
+            } catch (DataAccessLayerException e) {
                 String msg = "An internal error occurred while trying to execute relevant data service function " +
                     "@ Dashboard API layer to retrieve a filtered set of devices with details.";
                 log.error(msg, e);
@@ -481,7 +483,7 @@ public class Dashboard {
             }
 
             DashboardPaginationGadgetDataWrapper
-                    dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
+                dashboardPaginationGadgetDataWrapper = new DashboardPaginationGadgetDataWrapper();
             dashboardPaginationGadgetDataWrapper.setContext("Filtered-and-paginated-devices-with-details");
             dashboardPaginationGadgetDataWrapper.setGroupingAttribute(null);
             dashboardPaginationGadgetDataWrapper.setData(paginationResult.getData());
@@ -492,7 +494,7 @@ public class Dashboard {
 
             return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
 
-        } else if ("false".equals(paginationEnabled)) {
+        } else if (FLAG_FALSE.equals(paginationEnabled)) {
 
             // getting gadget data service
             GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
@@ -514,7 +516,7 @@ public class Dashboard {
                 message.setDescription("This was while trying to execute relevant data service " +
                     "function @ Dashboard API layer to retrieve a filtered set of devices with details.");
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            } catch (SQLException e) {
+            } catch (DataAccessLayerException e) {
                 String msg = "An internal error occurred while trying to execute relevant data service function " +
                     "@ Dashboard API layer to retrieve a filtered set of devices with details.";
                 log.error(msg, e);
@@ -558,7 +560,7 @@ public class Dashboard {
             message.setDescription("Query parameter pagination-enabled with value true or false is required.");
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
 
-        } else if ("true".equals(paginationEnabled)) {
+        } else if (FLAG_TRUE.equals(paginationEnabled)) {
 
             // getting gadget data service
             GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
@@ -580,7 +582,7 @@ public class Dashboard {
                     "function @ Dashboard API layer to retrieve a filtered set of " +
                         "feature non-compliant devices with details.");
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            } catch (SQLException e) {
+            } catch (DataAccessLayerException e) {
                 String msg = "An internal error occurred while trying to execute relevant data service function " +
                     "@ Dashboard API layer to retrieve a filtered set of feature non-compliant devices with details.";
                 log.error(msg, e);
@@ -599,7 +601,7 @@ public class Dashboard {
 
             return Response.status(HttpStatus.SC_OK).entity(responsePayload).build();
 
-        } else if ("false".equals(paginationEnabled)) {
+        } else if (FLAG_FALSE.equals(paginationEnabled)) {
 
             // getting gadget data service
             GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
@@ -621,7 +623,7 @@ public class Dashboard {
                     "function @ Dashboard API layer to retrieve a filtered set of " +
                         "feature non-compliant devices with details.");
                 return Response.status(HttpStatus.SC_BAD_REQUEST).entity(message).build();
-            } catch (SQLException e) {
+            } catch (DataAccessLayerException e) {
                 String msg = "An internal error occurred while trying to execute relevant data service function " +
                     "@ Dashboard API layer to retrieve a filtered set of feature " +
                         "non-compliant set of devices with details.";
