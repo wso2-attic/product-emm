@@ -39,8 +39,6 @@ import org.wso2.carbon.mdm.api.util.MDMIOSOperationUtil;
 import org.wso2.carbon.mdm.api.util.ResponsePayload;
 import org.wso2.carbon.mdm.beans.ApplicationWrapper;
 import org.wso2.carbon.mdm.beans.MobileApp;
-import org.wso2.carbon.mdm.util.MDMUtil;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -232,13 +230,13 @@ public class Operation {
 
     @GET
     @Path("activity/{id}")
-    public Response getActivity(@PathParam("type") String type, @PathParam("id") String id)
+    public Response getActivity(@PathParam("id") String id)
             throws MDMAPIException {
         org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation;
         DeviceManagementProviderService dmService;
         try {
             dmService = MDMAPIUtils.getDeviceManagementService();
-            operation = dmService.getOperationByActivityId(type, id);
+            operation = dmService.getOperationByActivityId(id);
         } catch (OperationManagementException e) {
             String msg = "Error occurred while fetching the activity for the supplied id.";
             log.error(msg, e);
