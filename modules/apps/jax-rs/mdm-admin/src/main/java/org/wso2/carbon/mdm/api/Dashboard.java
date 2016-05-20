@@ -39,9 +39,10 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-@Produces({"application/json"})
 @Consumes({"application/json"})
+@Produces({"application/json"})
 
+@SuppressWarnings("NonJaxWsWebServices")
 public class Dashboard {
 
     private static Log log = LogFactory.getLog(Dashboard.class);
