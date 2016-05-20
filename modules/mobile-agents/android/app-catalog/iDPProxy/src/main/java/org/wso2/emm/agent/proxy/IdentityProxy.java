@@ -34,7 +34,6 @@ import org.wso2.emm.agent.proxy.utils.ServerUtilities;
  */
 public class IdentityProxy implements CallBack {
 
-    public final static boolean initiated = false;
     public static String clientID;
     public static String clientSecret;
     private static String TAG = "IdentityProxy";
@@ -73,8 +72,8 @@ public class IdentityProxy implements CallBack {
     @Override
     public void receiveAccessToken(String status, String message, Token token) {
         if (token != null) {
-            Log.d(TAG, token.getAccessToken());
-            Log.d(TAG, token.getRefreshToken());
+            Log.d(TAG, "Access Token: " + token.getAccessToken());
+            Log.d(TAG, "Refresh Token: " + token.getRefreshToken());
         }
 
         IdentityProxy.token = token;

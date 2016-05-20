@@ -27,7 +27,6 @@ import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.util.Log;
@@ -42,7 +41,6 @@ import org.wso2.emm.agent.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Network statistics such as connection type and signal details can be fetched
@@ -68,9 +66,9 @@ public class DeviceNetworkStatus extends PhoneStateListener {
 
     private static DeviceNetworkStatus deviceNetworkStatus;
 
-    private DeviceNetworkStatus(Context context) {
+    private DeviceNetworkStatus(final Context context) {
         this.context = context;
-        wifiManager = (WifiManager) this.context.getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         receiverWifi = new WifiReceiver();
 
         // Register broadcast receiver
@@ -79,9 +77,8 @@ public class DeviceNetworkStatus extends PhoneStateListener {
         // start scanning wifi
         startWifiScan();
 
-        info = getNetworkInfo(this.context);
+        info = getNetworkInfo(context);
         mapper = new ObjectMapper();
-
     }
 
     public static DeviceNetworkStatus getInstance(Context context) {
@@ -120,10 +117,7 @@ public class DeviceNetworkStatus extends PhoneStateListener {
 
     public boolean isConnectedMobile() {
         info = getNetworkInfo(this.context);
-        if (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_MOBILE) {
-            return true;
-        }
-        return false;
+        return (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_MOBILE);
     }
 
     private NetworkInfo getNetworkInfo(Context context) {

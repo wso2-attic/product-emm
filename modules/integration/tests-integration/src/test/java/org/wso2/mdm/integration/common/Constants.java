@@ -364,4 +364,30 @@ public final class Constants {
         public static final String CERTIFICATE_PAYLOAD= "\"serialNumber\":\"12438035315552875930\"";
 
     }
+
+    public static final class DashboardAPIChecker {
+        private DashboardAPIChecker() { throw new AssertionError(); }
+
+        public static final String DASHBOARD_TEST_CASES_GROUP = "dashboard-test-cases";
+        public static final String DEVICE_COUNT_OVERVIEW_API_ENDPOINT =
+            "/mdm-admin/dashboard/device-count-overview";
+        public static final String DEVICE_COUNTS_BY_POTENTIAL_VULNERABILITIES_API_ENDPOINT =
+            "/mdm-admin/dashboard/device-counts-by-potential-vulnerabilities";
+        public static final String NON_COMPLIANT_DEVICE_COUNTS_BY_FEATURES_API_ENDPOINT =
+            "/mdm-admin/dashboard/non-compliant-device-counts-by-features?start=0&length=5";
+        public static final String DEVICE_COUNTS_BY_GROUPS_API_ENDPOINT =
+            "/mdm-admin/dashboard/device-counts-by-groups";
+        public static final String FEATURE_NON_COMPLIANT_DEVICE_COUNTS_BY_GROUPS_API_ENDPOINT =
+            "/mdm-admin/dashboard/feature-non-compliant-device-counts-by-groups?non-compliant-feature-code=ABC";
+        public static final String FILTERED_DEVICE_COUNT_OVER_TOTAL_API_ENDPOINT =
+            "/mdm-admin/dashboard/filtered-device-count-over-total";
+        public static final String FEATURE_NON_COMPLIANT_DEVICE_COUNT_OVER_TOTAL_API_ENDPOINT =
+            "/mdm-admin/dashboard/feature-non-compliant-device-count-over-total?non-compliant-feature-code=ABC";
+        public static final String DEVICES_WITH_DETAILS_API_ENDPOINT =
+            "/mdm-admin/dashboard/devices-with-details?pagination-enabled=false";
+        public static final String FEATURE_NON_COMPLIANT_DEVICES_WITH_DETAILS_API_ENDPOINT =
+            "/mdm-admin/dashboard/feature-non-compliant-devices-with-details" +
+                "?non-compliant-feature-code=ABC&pagination-enabled=false";
+    }
+
 }

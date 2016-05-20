@@ -31,6 +31,11 @@
             <class name="org.wso2.mdm.integration.mobileDevice.MobileDeviceManagementWithNoDevices"/>
         </classes>
     </test>
+    <test name="dashboard-test-cases" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.dashboard.DashboardAPIChecker"/>
+        </classes>
+    </test>
     <test name="android-enrollment" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.mdm.integration.device.enrollment.AndroidEnrollment"/>

@@ -90,7 +90,8 @@ public class PayloadParser {
             }
 
             if (!payload.isNull(Constants.ApplicationPayload.ICON)) {
-                application.setIcon(serverUrl + payload.getString(Constants.ApplicationPayload.ICON));
+                application.setIcon(serverUrl + Constants.APP_IMAGE_ENDPOINT +  payload.getString(
+                        Constants.ApplicationPayload.ICON));
             }
 
             if (!payload.isNull(Constants.ApplicationPayload.DESCRIPTION)) {
@@ -102,7 +103,8 @@ public class PayloadParser {
             }
 
             if (!payload.isNull(Constants.ApplicationPayload.THUMBNAIL_URL)) {
-                application.setThumbnailUrl(serverUrl + payload.getString(Constants.ApplicationPayload.THUMBNAIL_URL));
+                application.setThumbnailUrl(serverUrl + Constants.APP_IMAGE_ENDPOINT + payload.getString(
+                        Constants.ApplicationPayload.THUMBNAIL_URL));
             }
 
             if (!payload.isNull(Constants.ApplicationPayload.RECENT_CHANGES)) {
@@ -110,7 +112,7 @@ public class PayloadParser {
             }
 
             if (!payload.isNull(Constants.ApplicationPayload.BANNER)) {
-                application.setBanner(serverUrl + payload.getString(Constants.ApplicationPayload.BANNER));
+                application.setBanner(serverUrl + Constants.APP_IMAGE_ENDPOINT + payload.getString(Constants.ApplicationPayload.BANNER));
             }
 
             if (!payload.isNull(Constants.ApplicationPayload.PLATFORM)) {
@@ -139,7 +141,7 @@ public class PayloadParser {
                 for (int i = 0; i < screenshots.length(); i++) {
                     String screenshot = screenshots.get(i).toString();
                     if (screenshot != null) {
-                        screenshotsList.add(serverUrl + screenshot);
+                        screenshotsList.add(serverUrl + Constants.APP_IMAGE_ENDPOINT + screenshot);
                     }
                 }
                 application.setScreenshots(screenshotsList);

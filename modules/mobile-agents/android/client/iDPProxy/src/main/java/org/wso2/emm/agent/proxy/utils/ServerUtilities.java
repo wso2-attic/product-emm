@@ -27,6 +27,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * This class represents all the utilities used for network communication between SDK 
@@ -70,6 +71,15 @@ public class ServerUtilities {
 		}
 
 		return receivedDate;
+	}
+
+	public static void addHeaders(Map<String, String> headers) {
+		CommunicationClientFactory communicationClientFactory = new CommunicationClientFactory();
+		CommunicationClient communicationClient = communicationClientFactory.
+				getClient(Constants.HttpClient.HTTP_CLIENT_IN_USE);
+		if(communicationClient != null) {
+			communicationClient.addAdditionalHeader(headers);
+		}
 	}
 
 	/**

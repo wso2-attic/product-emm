@@ -100,6 +100,8 @@ public class APIController implements TokenCallBack {
 			} else {
 				sendJsonArrayRequest(apiResultCallback, apiEndPointInfo, false);
 			}
+		} else if (apiEndPointInfo.isJSONArrayRequest()) {
+			sendJsonArrayRequest(apiResultCallback, apiEndPointInfo, false);
 		} else {
 			sendJsonObjectRequest(apiResultCallback, apiEndPointInfo, false);
 		}
@@ -151,6 +153,8 @@ public class APIController implements TokenCallBack {
 			} else {
 				sendJsonArrayRequest(callBack, apiUtilities, true);
 			}
+		} else if (apiEndPointInfo.isJSONArrayRequest()) {
+			sendJsonArrayRequest(apiResultCallback, apiEndPointInfo, true);
 		} else {
 			sendJsonObjectRequest(callBack, apiUtilities, true);
 		}
@@ -210,6 +214,7 @@ public class APIController implements TokenCallBack {
 					String accessToken = token.getAccessToken();
 					headers.put("Authorization", "Bearer " + accessToken);
 				}
+				ServerUtilities.addHeaders(headers);
 				return headers;
 			}
 		};
@@ -270,6 +275,7 @@ public class APIController implements TokenCallBack {
                         String accessToken = token.getAccessToken();
                         headers.put("Authorization", "Bearer " + accessToken);
                     }
+	                ServerUtilities.addHeaders(headers);
                     return headers;
                 }
             };
@@ -333,6 +339,7 @@ public class APIController implements TokenCallBack {
 						String accessToken = token.getAccessToken();
 						headers.put("Authorization", "Bearer " + accessToken);
 					}
+					ServerUtilities.addHeaders(headers);
 					return headers;
 				}
 			};

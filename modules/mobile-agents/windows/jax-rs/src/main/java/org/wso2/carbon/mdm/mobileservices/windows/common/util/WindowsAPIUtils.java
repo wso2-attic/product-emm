@@ -93,7 +93,9 @@ public class WindowsAPIUtils {
         WindowsDeviceUtils deviceUtils = new WindowsDeviceUtils();
         DeviceIDHolder deviceIDHolder = deviceUtils.validateDeviceIdentifiers(deviceIDs,
                 message, responseMediaType);
-        getDeviceManagementService().addOperation(operation, deviceIDHolder.getValidDeviceIDList());
+        getDeviceManagementService().addOperation(
+                DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_WINDOWS, operation,
+                deviceIDHolder.getValidDeviceIDList());
         if (!deviceIDHolder.getInvalidDeviceIdList().isEmpty()) {
             return javax.ws.rs.core.Response.status(PluginConstants.StatusCodes.
                     MULTI_STATUS_HTTP_CODE).type(

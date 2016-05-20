@@ -123,7 +123,8 @@ public class AndroidAPIUtils {
                 message, responseMediaType);
 
         List<DeviceIdentifier> validDeviceIds = deviceIDHolder.getValidDeviceIDList();
-        int status = getDeviceManagementService().addOperation(operation, validDeviceIds);
+        int status = getDeviceManagementService().addOperation(
+                DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, operation, validDeviceIds);
         if (status > 0) {
             GCMService gcmService = getGCMService();
             if (gcmService.isGCMEnabled()) {
@@ -280,15 +281,17 @@ public class AndroidAPIUtils {
                 deviceInfo.setDeviceIdentifier(deviceIdentifier);
                 updateDeviceInfo(deviceInfo);
             } catch (DeviceDetailsMgtException e) {
-                throw new OperationManagementException("Error occurred while updating the device infomation.", e);
+                throw new OperationManagementException("Error occurred while updating the device information.", e);
             }
 
 
         } else if (AndroidConstants.OperationCodes.DEVICE_LOCATION.equals(operation.getCode())) {
             try {
                 DeviceLocation location = new Gson().fromJson(operation.getOperationResponse(), DeviceLocation.class);
-                location.setDeviceIdentifier(deviceIdentifier);
-                updateDeviceLocation(location);
+                if (location != null) {
+                    location.setDeviceIdentifier(deviceIdentifier);
+                    updateDeviceLocation(location);
+                }
             } catch (DeviceDetailsMgtException e) {
                 throw new OperationManagementException("Error occurred while updating the device location.", e);
             }

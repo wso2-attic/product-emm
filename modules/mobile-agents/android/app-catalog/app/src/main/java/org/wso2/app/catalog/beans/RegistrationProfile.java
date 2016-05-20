@@ -20,6 +20,8 @@ package org.wso2.app.catalog.beans;
 
 import org.wso2.app.catalog.AppCatalogException;
 import org.wso2.app.catalog.utils.CommonUtils;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class represents the data that are required to register
@@ -33,6 +35,7 @@ public class RegistrationProfile {
     private String owner;
     private String grantType;
     private boolean saasApp;
+    private String applicationType;
 
     private static final String TAG = RegistrationProfile.class.getSimpleName();
 
@@ -84,7 +87,27 @@ public class RegistrationProfile {
         this.saasApp = saasApp;
     }
 
+    public String getApplicationType() {
+        return applicationType;
+    }
+
+    public void setApplicationType(String applicationType) {
+        this.applicationType = applicationType;
+    }
+
     public String toJSON() throws AppCatalogException {
         return CommonUtils.toJSON(this);
+    }
+
+    public Map<String, String> toMap() throws AppCatalogException {
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("callbackUrl", getCallbackUrl());
+        resultMap.put("clientName", getClientName());
+        resultMap.put("tokenScope", getTokenScope());
+        resultMap.put("owner", getOwner());
+        resultMap.put("grantType", getGrantType());
+        resultMap.put("saasApp", String.valueOf(getSaasApp()));
+        resultMap.put("applicationType", getApplicationType());
+        return resultMap;
     }
 }

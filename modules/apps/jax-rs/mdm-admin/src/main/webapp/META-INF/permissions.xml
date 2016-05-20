@@ -796,6 +796,13 @@
     </Permission>
 
     <Permission>
+        <name>Device All Information</name>
+        <path>/device-mgt/admin/information/list</path>
+        <url>/information/list</url>
+        <method>POST</method>
+    </Permission>
+
+    <Permission>
         <name>Device Search</name>
         <path>/device-mgt/emm-admin/search</path>
         <url>/search</url>
