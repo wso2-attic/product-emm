@@ -1003,7 +1003,7 @@
         <mdm.version>2.1.0-SNAPSHOT</mdm.version>
 
         <!-- Carbon API Management -->
-        <carbon.api.mgt.version>5.0.3</carbon.api.mgt.version>
+        <carbon.api.mgt.version>5.0.4</carbon.api.mgt.version>
         <carbon.api.mgt.version.range>(5.0.0,6.0.0]</carbon.api.mgt.version.range>
 
         <!-- Carbon Mediation -->

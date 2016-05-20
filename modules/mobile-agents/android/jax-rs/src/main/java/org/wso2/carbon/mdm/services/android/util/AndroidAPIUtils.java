@@ -123,7 +123,8 @@ public class AndroidAPIUtils {
                 message, responseMediaType);
 
         List<DeviceIdentifier> validDeviceIds = deviceIDHolder.getValidDeviceIDList();
-        int status = getDeviceManagementService().addOperation(operation, validDeviceIds);
+        int status = getDeviceManagementService().addOperation(
+                DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, operation, validDeviceIds);
         if (status > 0) {
             GCMService gcmService = getGCMService();
             if (gcmService.isGCMEnabled()) {
