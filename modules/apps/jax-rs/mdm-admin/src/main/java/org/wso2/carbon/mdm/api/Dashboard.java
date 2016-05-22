@@ -39,6 +39,15 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class consists of dashboard related REST APIs
+ * to be consumed by individual client gadgets such as
+ * [1] Overview of Devices,
+ * [2] Potential Vulnerabilities,
+ * [3] Non-compliant Devices by Features,
+ * [4] Device Groupings and etc.
+ */
+
 @Consumes({"application/json"})
 @Produces({"application/json"})
 
@@ -137,7 +146,7 @@ public class Dashboard {
     @GET
     @Path("non-compliant-device-counts-by-features")
     public Response getNonCompliantDeviceCountsByFeatures(@QueryParam(START_INDEX) int startIndex,
-                                                  @QueryParam(RESULT_COUNT) int resultCount) throws MDMAPIException {
+                                            @QueryParam(RESULT_COUNT) int resultCount) throws MDMAPIException {
 
         GadgetDataService gadgetDataService = MDMAPIUtils.getGadgetDataService();
         DashboardPaginationGadgetDataWrapper
