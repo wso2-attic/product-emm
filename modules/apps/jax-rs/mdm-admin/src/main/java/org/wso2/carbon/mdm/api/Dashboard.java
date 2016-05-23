@@ -68,13 +68,13 @@ public class Dashboard {
     public static final String FLAG_FALSE = "false";
     // Constants related to common error-response messages
     public static final String INVALID_QUERY_PARAM_VALUE_POTENTIAL_VULNERABILITY = "Received an invalid value for " +
-        "query parameter : " + POTENTIAL_VULNERABILITY + ", Should be either 'NON_COMPLIANT' or 'UNMONITORED'.";
+        "query parameter : " + POTENTIAL_VULNERABILITY + ", Should be either NON_COMPLIANT or UNMONITORED.";
     public static final String INVALID_QUERY_PARAM_VALUE_START_INDEX = "Received an invalid value for " +
         "query parameter : " + START_INDEX + ", Should not be lesser than 0.";
     public static final String INVALID_QUERY_PARAM_VALUE_RESULT_COUNT = "Received an invalid value for " +
         "query parameter : " + RESULT_COUNT + ", Should not be lesser than 5.";
     public static final String INVALID_QUERY_PARAM_VALUE_PAGINATION_ENABLED = "Received an invalid value for " +
-        "query parameter : " + PAGINATION_ENABLED + ", Should be either 'true' or 'false'.";
+        "query parameter : " + PAGINATION_ENABLED + ", Should be either true or false.";
     public static final String REQUIRED_QUERY_PARAM_VALUE_NON_COMPLIANT_FEATURE_CODE = "Missing query parameter : " +
         NON_COMPLIANT_FEATURE_CODE + " is required.";
     public static final String REQUIRED_QUERY_PARAM_VALUE_PAGINATION_ENABLED = "Missing query parameter : " +
