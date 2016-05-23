@@ -138,6 +138,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.devicemgt:org.wso2.carbon.email.sender.feature:${carbon.device.mgt.version}
                                 </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.extensions.push.notification.provider.gcm.feature:${carbon.device.mgt.version}
+                                </featureArtifactDef>
 
                                 <!-- Analytics related features -->
                                 <featureArtifactDef>
@@ -634,6 +637,10 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.device.mgt.analytics.dashboard.feature.group</id>
+                                    <version>${carbon.device.mgt.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.device.mgt.extensions.push.notification.provider.gcm.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
                                 <!-- End of Device Management Features -->
