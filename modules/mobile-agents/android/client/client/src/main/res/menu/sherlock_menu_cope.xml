@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ WSO2 Inc. licenses this file to you under the Apache License,
@@ -16,7 +15,7 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
 -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/more"
@@ -26,12 +25,10 @@
         <menu>
             <item
                 android:id="@+id/info_setting"
-                android:title="@string/menu_item_phone_info">
-            </item>
+                android:title="@string/menu_item_phone_info"></item>
             <item
                 android:id="@+id/ip_setting"
-                android:title="@string/menu_item_ip">
-            </item>
+                android:title="@string/menu_item_ip"></item>
         </menu>
     </item>
 

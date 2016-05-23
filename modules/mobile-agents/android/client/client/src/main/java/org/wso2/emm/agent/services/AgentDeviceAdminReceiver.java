@@ -17,8 +17,22 @@
  */
 package org.wso2.emm.agent.services;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SignatureException;
 import java.util.Map;
 
+import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.bouncycastle.jce.provider.asymmetric.ec.KeyPairGenerator;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.ServerConfig;
@@ -35,6 +49,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.util.Log;
 import android.widget.Toast;
+
+import javax.security.auth.x500.X500Principal;
 
 /**
  * This is the component that is responsible for actual device administration.
@@ -69,6 +85,12 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		String notifier = Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE);
 		if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
 			LocalNotification.startPolling(context);
+		}
+
+		try {
+			CommonUtils.generateDeviceCertificate(context);
+		} catch (AndroidAgentException e) {
+			Log.e(TAG, e.getMessage());
 		}
 	}
 

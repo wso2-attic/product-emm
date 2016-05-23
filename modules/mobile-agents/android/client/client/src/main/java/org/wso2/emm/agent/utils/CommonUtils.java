@@ -35,6 +35,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
+import org.bouncycastle.jce.PKCS10CertificationRequest;
+import org.bouncycastle.jce.provider.asymmetric.ec.KeyPairGenerator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,9 +57,23 @@ import org.wso2.emm.agent.services.DynamicClientManager;
 import org.wso2.emm.agent.services.PolicyOperationsMapper;
 import org.wso2.emm.agent.services.PolicyRevokeHandler;
 import org.wso2.emm.agent.services.ResultPayload;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.security.auth.x500.X500Principal;
 
 /**
  * This class represents all the common functions used throughout the application.
@@ -108,6 +125,43 @@ public class CommonUtils {
 			}
 		}
 
+	}
+
+	/**
+	 * Generates keys, CSR and certificates for the devices.
+	 * @param context - Application context.
+	 */
+	public static void generateDeviceCertificate(Context context) throws AndroidAgentException{
+		try {
+			KeyPair myKeyPair = null;
+			myKeyPair = KeyPairGenerator.getInstance(Constants.DEVICE_KEY_TYPE).generateKeyPair();
+			X500Principal subject = new X500Principal(Constants.DEVICE_CSR_INFO);
+			PKCS10CertificationRequest csr = new PKCS10CertificationRequest
+					(Constants.DEVICE_KEY_ALGO, subject, myKeyPair.getPublic(), null, myKeyPair.getPrivate()
+					);
+			InputStream inputStream = new
+					BufferedInputStream(new FileInputStream(new File("/sdcard/Download/KEYSTORE.p12")));
+			FileOutputStream outputStream = context.openFileOutput(Constants.DEVICE_CERTIFCATE_NAME, Context.MODE_PRIVATE);
+			byte[] buffer = new byte[1024];
+			int bytesRead = 0;
+			while ((bytesRead = inputStream.read(buffer)) != -1) {
+				outputStream.write(buffer, 0, bytesRead);
+			}
+			inputStream.close();
+			outputStream.close();
+		} catch (NoSuchAlgorithmException e) {
+			throw new AndroidAgentException("No algorithm for key generation", e);
+		} catch (SignatureException e) {
+			throw new AndroidAgentException("Invalid Signature", e);
+		} catch (NoSuchProviderException e) {
+			throw new AndroidAgentException("Invalid provider", e);
+		} catch (InvalidKeyException e) {
+			throw new AndroidAgentException("Invalid key", e);
+		} catch (FileNotFoundException e) {
+			Log.e(TAG, e.getMessage());
+		} catch (IOException e) {
+			Log.e(TAG, e.getMessage());
+		}
 	}
 
 	/**

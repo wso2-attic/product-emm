@@ -116,6 +116,16 @@ public class Constants {
 
 	public static final String SERVICE_PACKAGE_NAME = "org.wso2.emm.system.service";
 
+	/**
+	 * Device certificates.
+	 */
+	public static final String DEVICE_CERTIFCATE_NAME = "device-cert.p12";
+	public static final String DEVICE_CERTIFCATE_PASSWORD = "wso2carbon";
+	public static final String DEVICE_KEY_TYPE = "RSA";
+	public static final String DEVICE_KEY_ALGO = "SHA256withRSA";
+	public static final String DEVICE_CSR_INFO = "CN=WSO2 V3 Certificate";
+
+
 	public static final String APP_LOCK_SERVICE = "AppLockService";
 
 	/**

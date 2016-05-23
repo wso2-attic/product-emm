@@ -31,8 +31,13 @@ import android.util.Log;
 import org.wso2.emm.agent.beans.WifiProfile;
 import org.wso2.emm.agent.utils.Constants;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -53,6 +58,8 @@ public class WiFiConfig {
     private static final int WIFI_CONFIG_PRIORITY = 40;
     private static final int WIFI_CONFIG_DEFAULT_INDEX = 0;
     private static final String TAG = WiFiConfig.class.getName();
+    private static final String WIFI_ANONYMOUS_ID = "anonymous_identity";
+    private static final String KEYSTORE_PKCS12 = "pkcs12";
     private Context context;
 
     public WiFiConfig(Context context) {
@@ -126,63 +133,90 @@ public class WiFiConfig {
                     break;
                 case EAP:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                        WifiEnterpriseConfig enterpriseConfig = new WifiEnterpriseConfig();
                         wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_EAP);
                         wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.IEEE8021X);
 
                         switch (profile.getEapMethod()) {
                             case PEAP:
-                                enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.PEAP);
-                                enterpriseConfig.setIdentity(profile.getIdentity());
-                                enterpriseConfig.setAnonymousIdentity(profile.getAnonymousIdentity());
-                                enterpriseConfig.setPassword(profile.getPassword());
+                                wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.PEAP);
+                                wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
+                                wifiConfig. enterpriseConfig.setAnonymousIdentity(profile.getAnonymousIdentity());
+                                wifiConfig.enterpriseConfig.setPassword(profile.getPassword());
                                 switch (profile.getPhase2()) {
                                     case GTC:
-                                        enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.GTC);
+                                        wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.GTC);
                                         break;
                                     case MCHAPV2:
-                                        enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.MSCHAPV2);
+                                        wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.MSCHAPV2);
                                         break;
                                     default:
-                                        enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.NONE);
+                                        wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.NONE);
                                 }
-                                enterpriseConfig.setCaCertificate(getCertifcate(profile));
+                                wifiConfig.enterpriseConfig.setCaCertificate(getCertifcate(profile));
                                 break;
                             case TLS:
-                                enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.TLS);
-                                enterpriseConfig.setIdentity(profile.getIdentity());
-                                enterpriseConfig.setCaCertificate(getCertifcate(profile));
+                                wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.TLS);
+                                wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
+                                wifiConfig.enterpriseConfig.setCaCertificate(getCertifcate(profile));
+                                wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.NONE);
+                                wifiConfig.enterpriseConfig.setAnonymousIdentity(WIFI_ANONYMOUS_ID);
+                                try {
+                                    KeyStore keyStore = KeyStore.getInstance(KEYSTORE_PKCS12);
+                                    InputStream in = new
+                                            BufferedInputStream(context.openFileInput(Constants.DEVICE_CERTIFCATE_NAME));
+                                    keyStore.load(in,Constants.DEVICE_CERTIFCATE_PASSWORD.toCharArray());
+                                    Enumeration<String> aliases = keyStore.aliases();
+                                    while (aliases.hasMoreElements()) {
+                                        String alias = aliases.nextElement();
+                                        Log.d(TAG, "alias: " + alias);
+                                        X509Certificate cert = (X509Certificate) keyStore.getCertificate(alias);
+                                        Log.d(TAG, cert.toString());
+                                        PrivateKey key = (PrivateKey) keyStore.getKey(alias, Constants.DEVICE_CERTIFCATE_PASSWORD.toCharArray());
+                                        Log.d(TAG, key.toString());
+                                        wifiConfig.enterpriseConfig.setClientKeyEntry(key, cert);
+                                    }
+                                } catch (KeyStoreException e) {
+                                    Log.e(TAG, "Cannot get the keystore");
+                                } catch (FileNotFoundException e) {
+                                    Log.e(TAG, "Wifi TLS Keystore file not found");
+                                } catch (CertificateException e) {
+                                    Log.e(TAG, e.getMessage());
+                                } catch (NoSuchAlgorithmException e) {
+                                    Log.e(TAG, e.getMessage());
+                                } catch (IOException e) {
+                                    Log.e(TAG, e.getMessage());
+                                } catch (UnrecoverableKeyException e) {
+                                    Log.e(TAG, e.getMessage());
+                                }
 
                                 break;
                             case TTLS:
-                                enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.TTLS);
-                                enterpriseConfig.setIdentity(profile.getIdentity());
+                                wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.TTLS);
+                                wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
                                 switch (profile.getPhase2()) {
                                     case GTC:
-                                        enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.GTC);
+                                        wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.GTC);
                                         break;
                                     case MCHAPV2:
-                                        enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.MSCHAPV2);
+                                        wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.MSCHAPV2);
                                         break;
                                     default:
-                                        enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.NONE);
+                                        wifiConfig. enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.NONE);
                                 }
-                                enterpriseConfig.setCaCertificate(getCertifcate(profile));
+                                wifiConfig.enterpriseConfig.setCaCertificate(getCertifcate(profile));
                                 break;
                             case PWD:
-                                enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.PWD);
-                                enterpriseConfig.setIdentity(profile.getIdentity());
-                                enterpriseConfig.setPassword(profile.getPassword());
+                                wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.PWD);
+                                wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
+                                wifiConfig.enterpriseConfig.setPassword(profile.getPassword());
                                 break;
                             case SIM:
-                                enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.SIM);
+                                wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.SIM);
                                 break;
                             case AKA:
-                                enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.AKA);
+                                wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.AKA);
                                 break;
                         }
-
-                        wifiConfig.enterpriseConfig = enterpriseConfig;
                     }
                     break;
                 default:

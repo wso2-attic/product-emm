@@ -2289,9 +2289,12 @@ var changeAndroidWifiPolicyEAP = function (select, superSelect) {
     slideDownPaneAgainstValueSet(select, 'control-wifi-password', ['peap', 'ttls', 'pwd' ,'fast', 'leap']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-phase2', ['peap', 'ttls', 'fast']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-provisioning', ['fast']);
-    slideDownPaneAgainstValueSet(select, 'control-wifi-identity', ['peap', 'ttls', 'pwd', 'fast', 'leap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-identity', ['peap', 'tls', 'ttls', 'pwd', 'fast', 'leap']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-anoidentity', ['peap', 'ttls']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-cacert', ['peap', 'tls', 'ttls']);
+    if(superSelect.value != '802eap'){
+        changeAndroidWifiPolicy(superSelect);
+    }
 }
 
 /**
