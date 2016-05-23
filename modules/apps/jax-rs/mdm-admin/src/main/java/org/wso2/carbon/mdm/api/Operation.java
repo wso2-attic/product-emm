@@ -39,8 +39,6 @@ import org.wso2.carbon.mdm.api.util.MDMIOSOperationUtil;
 import org.wso2.carbon.mdm.api.util.ResponsePayload;
 import org.wso2.carbon.mdm.beans.ApplicationWrapper;
 import org.wso2.carbon.mdm.beans.MobileApp;
-import org.wso2.carbon.mdm.util.MDMUtil;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -55,6 +53,7 @@ import java.util.List;
 public class Operation {
 
     private static Log log = LogFactory.getLog(Operation.class);
+
     /* @deprecated */
     @GET
     public List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getAllOperations()
@@ -75,7 +74,7 @@ public class Operation {
     @GET
     @Path("paginate/{type}/{id}")
     public PaginationResult getDeviceOperations(
-            @PathParam("type") String type,	@PathParam("id") String id, @QueryParam("start") int startIdx,
+            @PathParam("type") String type, @PathParam("id") String id, @QueryParam("start") int startIdx,
             @QueryParam("length") int length, @QueryParam("search") String search)
             throws MDMAPIException {
         PaginationResult operations;
@@ -95,26 +94,26 @@ public class Operation {
         return operations;
     }
 
-	@GET
-	@Path("{type}/{id}")
-	public List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getDeviceOperations(
-			@PathParam("type") String type,	@PathParam("id") String id)
-			throws MDMAPIException {
-		List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
-		DeviceManagementProviderService dmService;
-		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
-		try {
-			deviceIdentifier.setType(type);
-			deviceIdentifier.setId(id);
-			dmService = MDMAPIUtils.getDeviceManagementService();
-			operations = dmService.getOperations(deviceIdentifier);
-		} catch (OperationManagementException e) {
-			String msg = "Error occurred while fetching the operations for the device.";
-			log.error(msg, e);
-			throw new MDMAPIException(msg, e);
-		}
-		return operations;
-	}
+    @GET
+    @Path("{type}/{id}")
+    public List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> getDeviceOperations(
+            @PathParam("type") String type, @PathParam("id") String id)
+            throws MDMAPIException {
+        List<? extends org.wso2.carbon.device.mgt.common.operation.mgt.Operation> operations;
+        DeviceManagementProviderService dmService;
+        DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+        try {
+            deviceIdentifier.setType(type);
+            deviceIdentifier.setId(id);
+            dmService = MDMAPIUtils.getDeviceManagementService();
+            operations = dmService.getOperations(deviceIdentifier);
+        } catch (OperationManagementException e) {
+            String msg = "Error occurred while fetching the operations for the device.";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+        return operations;
+    }
 
     /* @deprecated */
     @POST
@@ -123,9 +122,9 @@ public class Operation {
         ResponsePayload responseMsg = new ResponsePayload();
         try {
             dmService = MDMAPIUtils.getDeviceManagementService();
-            int operationId = dmService.addOperation(operationContext.getOperation(),
+            int operationId = dmService.addOperation(operationContext.getType(), operationContext.getOperation(),
                     operationContext.getDevices());
-            if (operationId>0) {
+            if (operationId > 0) {
                 Response.status(HttpStatus.SC_CREATED);
                 responseMsg.setMessageFromServer("Operation has added successfully.");
             }
@@ -137,27 +136,27 @@ public class Operation {
         }
     }
 
-	@GET
-	@Path("{type}/{id}/apps")
-	public List<? extends Application> getInstalledApps(
-			@PathParam("type") String type,
-			@PathParam("id") String id)
-			throws MDMAPIException {
-		List<Application> applications;
-		ApplicationManagementProviderService appManagerConnector;
-		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
-		try {
-			deviceIdentifier.setType(type);
-			deviceIdentifier.setId(id);
-			appManagerConnector = MDMAPIUtils.getAppManagementService();
-			applications = appManagerConnector.getApplicationListForDevice(deviceIdentifier);
-		} catch (ApplicationManagementException e) {
-			String msg = "Error occurred while fetching the apps of the device.";
-			log.error(msg, e);
-			throw new MDMAPIException(msg, e);
-		}
-		return applications;
-	}
+    @GET
+    @Path("{type}/{id}/apps")
+    public List<? extends Application> getInstalledApps(
+            @PathParam("type") String type,
+            @PathParam("id") String id)
+            throws MDMAPIException {
+        List<Application> applications;
+        ApplicationManagementProviderService appManagerConnector;
+        DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+        try {
+            deviceIdentifier.setType(type);
+            deviceIdentifier.setId(id);
+            appManagerConnector = MDMAPIUtils.getAppManagementService();
+            applications = appManagerConnector.getApplicationListForDevice(deviceIdentifier);
+        } catch (ApplicationManagementException e) {
+            String msg = "Error occurred while fetching the apps of the device.";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+        return applications;
+    }
 
     @POST
     @Path("installApp/{tenantDomain}")
@@ -231,7 +230,7 @@ public class Operation {
 
     @GET
     @Path("activity/{id}")
-    public org.wso2.carbon.device.mgt.common.operation.mgt.Operation getActivity(@PathParam("id") String id)
+    public Response getActivity(@PathParam("id") String id)
             throws MDMAPIException {
         org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation;
         DeviceManagementProviderService dmService;
@@ -243,6 +242,6 @@ public class Operation {
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
-        return operation;
+        return Response.status(Response.Status.OK).entity(operation).build();
     }
 }

@@ -31,6 +31,7 @@ import java.util.List;
 @XmlRootElement
 public class DeviceOperationContext {
 
+    private String type;
 	private List<DeviceIdentifier> devices;
 	private Operation operation;
 
@@ -51,4 +52,13 @@ public class DeviceOperationContext {
 	public void setOperation(Operation operation) {
 		this.operation = operation;
 	}
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
 }
