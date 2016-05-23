@@ -66,6 +66,20 @@ public class Dashboard {
     public static final String RESULT_COUNT = "length";
     public static final String FLAG_TRUE = "true";
     public static final String FLAG_FALSE = "false";
+    // Constants related to common error-response messages
+    public static final String INVALID_QUERY_PARAM_VALUE_POTENTIAL_VULNERABILITY = "Received an invalid value for " +
+        "query parameter : " + POTENTIAL_VULNERABILITY + ", Should be either 'NON_COMPLIANT' or 'UNMONITORED'.";
+    public static final String INVALID_QUERY_PARAM_VALUE_START_INDEX = "Received an invalid value for " +
+        "query parameter : " + START_INDEX + ", Should not be lesser than 0.";
+    public static final String INVALID_QUERY_PARAM_VALUE_RESULT_COUNT = "Received an invalid value for " +
+        "query parameter : " + RESULT_COUNT + ", Should not be lesser than 5.";
+    public static final String INVALID_QUERY_PARAM_VALUE_PAGINATION_ENABLED = "Received an invalid value for " +
+        "query parameter : " + PAGINATION_ENABLED + ", Should be either 'true' or 'false'.";
+    public static final String REQUIRED_QUERY_PARAM_VALUE_NON_COMPLIANT_FEATURE_CODE = "Missing query parameter : " +
+        NON_COMPLIANT_FEATURE_CODE + " is required.";
+    public static final String REQUIRED_QUERY_PARAM_VALUE_PAGINATION_ENABLED = "Missing query parameter : " +
+        PAGINATION_ENABLED + " is required.";
+    public static final String ERROR_IN_RETRIEVING_REQUESTED_DATA = "Error in retrieving requested data.";
 
     @GET
     @Path("device-count-overview")
@@ -79,10 +93,10 @@ public class Dashboard {
         try {
             totalDeviceCount = gadgetDataService.getTotalDeviceCount();
         } catch (DataAccessLayerException e) {
-            String msg = "An internal error occurred while trying to execute relevant data service function " +
-                "@ Dashboard API layer to retrieve total device count.";
-            log.error(msg, e);
-            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
+            log.error("An internal error occurred while trying to execute relevant data service function " +
+                "@ Dashboard API layer to retrieve total device count.", e);
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).
+                entity(ERROR_IN_RETRIEVING_REQUESTED_DATA).build();
         }
 
         List<DeviceCountByGroup> totalDeviceCountInListEntry = new ArrayList<>();
@@ -97,10 +111,10 @@ public class Dashboard {
         try {
             deviceCountsByConnectivityStatuses = gadgetDataService.getDeviceCountsByConnectivityStatuses();
         } catch (DataAccessLayerException e) {
-            String msg = "An internal error occurred while trying to execute relevant data service function " +
-                "@ Dashboard API layer to retrieve device counts by connectivity statuses.";
-            log.error(msg, e);
-            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
+            log.error("An internal error occurred while trying to execute relevant data service function " +
+                "@ Dashboard API layer to retrieve device counts by connectivity statuses.", e);
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).
+                entity(ERROR_IN_RETRIEVING_REQUESTED_DATA).build();
         }
 
         DashboardGadgetDataWrapper dashboardGadgetDataWrapper2 = new DashboardGadgetDataWrapper();
@@ -125,10 +139,10 @@ public class Dashboard {
         try {
             deviceCountsByPotentialVulnerabilities = gadgetDataService.getDeviceCountsByPotentialVulnerabilities();
         } catch (DataAccessLayerException e) {
-            String msg = "An internal error occurred while trying to execute relevant data service function " +
-                "@ Dashboard API layer to retrieve device counts by potential vulnerabilities.";
-            log.error(msg, e);
-            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
+            log.error("An internal error occurred while trying to execute relevant data service function " +
+                "@ Dashboard API layer to retrieve device counts by potential vulnerabilities.", e);
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).
+                entity(ERROR_IN_RETRIEVING_REQUESTED_DATA).build();
         }
 
         DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
@@ -159,17 +173,17 @@ public class Dashboard {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value. " +
                 "This was while trying to execute relevant data service function @ Dashboard API layer to retrieve " +
                     "a non-compliant set of device counts by features.", e);
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity("").build();
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(INVALID_QUERY_PARAM_VALUE_START_INDEX).build();
         } catch (InvalidResultCountValueException e) {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value. " +
                 "This was while trying to execute relevant data service function @ Dashboard API layer to retrieve " +
                     "a non-compliant set of device counts by features.", e);
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity("").build();
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(INVALID_QUERY_PARAM_VALUE_RESULT_COUNT).build();
         } catch (DataAccessLayerException e) {
-            String msg = "An internal error occurred while trying to execute relevant data service function " +
-                "@ Dashboard API layer to retrieve a non-compliant set of device counts by features.";
-            log.error(msg, e);
-            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
+            log.error("An internal error occurred while trying to execute relevant data service function " +
+                "@ Dashboard API layer to retrieve a non-compliant set of device counts by features.", e);
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).
+                entity(ERROR_IN_RETRIEVING_REQUESTED_DATA).build();
         }
 
         dashboardPaginationGadgetDataWrapper.setContext("Non-compliant-device-counts-by-features");
@@ -208,12 +222,13 @@ public class Dashboard {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value. " +
                 "This was while trying to execute relevant data service function @ Dashboard API layer to retrieve " +
                     "a filtered set of device counts by platforms.", e);
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity("").build();
+            return Response.status(HttpStatus.SC_BAD_REQUEST).
+                entity(INVALID_QUERY_PARAM_VALUE_POTENTIAL_VULNERABILITY).build();
         } catch (DataAccessLayerException e) {
-            String msg = "An internal error occurred while trying to execute relevant data service function " +
-                "@ Dashboard API layer to retrieve a filtered set of device counts by platforms.";
-            log.error(msg, e);
-            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
+            log.error("An internal error occurred while trying to execute relevant data service function " +
+                "@ Dashboard API layer to retrieve a filtered set of device counts by platforms.", e);
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).
+                entity(ERROR_IN_RETRIEVING_REQUESTED_DATA).build();
         }
 
         DashboardGadgetDataWrapper dashboardGadgetDataWrapper1 = new DashboardGadgetDataWrapper();
@@ -229,12 +244,13 @@ public class Dashboard {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value. " +
                 "This was while trying to execute relevant data service function @ Dashboard API layer to retrieve " +
                     "a filtered set of device counts by ownerships.", e);
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity("").build();
+            return Response.status(HttpStatus.SC_BAD_REQUEST).
+                entity(INVALID_QUERY_PARAM_VALUE_POTENTIAL_VULNERABILITY).build();
         } catch (DataAccessLayerException e) {
-            String msg = "An internal error occurred while trying to execute relevant data service function " +
-                "@ Dashboard API layer to retrieve a filtered set of device counts by ownerships.";
-            log.error(msg, e);
-            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
+            log.error("An internal error occurred while trying to execute relevant data service function " +
+                "@ Dashboard API layer to retrieve a filtered set of device counts by ownerships.", e);
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).
+                entity(ERROR_IN_RETRIEVING_REQUESTED_DATA).build();
         }
 
         DashboardGadgetDataWrapper dashboardGadgetDataWrapper2 = new DashboardGadgetDataWrapper();
@@ -271,13 +287,14 @@ public class Dashboard {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value. " +
                 "This was while trying to execute relevant data service function @ Dashboard API layer to retrieve " +
                     "a filtered set of feature non-compliant device counts by platforms.", e);
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity("").build();
+            return Response.status(HttpStatus.SC_BAD_REQUEST).
+                entity(REQUIRED_QUERY_PARAM_VALUE_NON_COMPLIANT_FEATURE_CODE).build();
         } catch (DataAccessLayerException e) {
-            String msg = "An internal error occurred while trying to execute relevant data service function " +
+            log.error("An internal error occurred while trying to execute relevant data service function " +
                 "@ Dashboard API layer to retrieve a filtered set of feature non-compliant " +
-                    "device counts by platforms.";
-            log.error(msg, e);
-            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
+                    "device counts by platforms.", e);
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).
+                entity(ERROR_IN_RETRIEVING_REQUESTED_DATA).build();
         }
 
         DashboardGadgetDataWrapper dashboardGadgetDataWrapper1 = new DashboardGadgetDataWrapper();
@@ -294,13 +311,14 @@ public class Dashboard {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value. " +
                 "This was while trying to execute relevant data service function @ Dashboard API layer to retrieve " +
                     "a filtered set of feature non-compliant device counts by ownerships.", e);
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity("").build();
+            return Response.status(HttpStatus.SC_BAD_REQUEST).
+                entity(REQUIRED_QUERY_PARAM_VALUE_NON_COMPLIANT_FEATURE_CODE).build();
         } catch (DataAccessLayerException e) {
-            String msg = "An internal error occurred while trying to execute relevant data service function " +
+            log.error("An internal error occurred while trying to execute relevant data service function " +
                 "@ Dashboard API layer to retrieve a filtered set of feature non-compliant " +
-                    "device counts by ownerships.";
-            log.error(msg, e);
-            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
+                    "device counts by ownerships.", e);
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).
+                entity(ERROR_IN_RETRIEVING_REQUESTED_DATA).build();
         }
 
         DashboardGadgetDataWrapper dashboardGadgetDataWrapper2 = new DashboardGadgetDataWrapper();
@@ -340,12 +358,13 @@ public class Dashboard {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value. " +
                 "This was while trying to execute relevant data service function @ Dashboard API layer to retrieve " +
                     "a filtered device count over the total.", e);
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity("").build();
+            return Response.status(HttpStatus.SC_BAD_REQUEST).
+                entity(INVALID_QUERY_PARAM_VALUE_POTENTIAL_VULNERABILITY).build();
         } catch (DataAccessLayerException e) {
-            String msg = "An internal error occurred while trying to execute relevant data service function " +
-                "@ Dashboard API layer to retrieve a filtered device count over the total.";
-            log.error(msg, e);
-            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
+            log.error("An internal error occurred while trying to execute relevant data service function " +
+                "@ Dashboard API layer to retrieve a filtered device count over the total.", e);
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).
+                entity(ERROR_IN_RETRIEVING_REQUESTED_DATA).build();
         }
 
         // creating TotalDeviceCount Data Wrapper
@@ -353,10 +372,10 @@ public class Dashboard {
         try {
             totalDeviceCount = gadgetDataService.getTotalDeviceCount();
         } catch (DataAccessLayerException e) {
-            String msg = "An internal error occurred while trying to execute relevant data service function " +
-                "@ Dashboard API layer to retrieve the total device count over filtered.";
-            log.error(msg, e);
-            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
+            log.error("An internal error occurred while trying to execute relevant data service function " +
+                "@ Dashboard API layer to retrieve the total device count over filtered.", e);
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).
+                entity(ERROR_IN_RETRIEVING_REQUESTED_DATA).build();
         }
 
         List<Object> filteredDeviceCountOverTotalDataWrapper = new ArrayList<>();
@@ -397,12 +416,13 @@ public class Dashboard {
             log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value. " +
                 "This was while trying to execute relevant data service function @ Dashboard API layer to retrieve " +
                     "a feature non-compliant device count over the total.", e);
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity("").build();
+            return Response.status(HttpStatus.SC_BAD_REQUEST).
+                entity(REQUIRED_QUERY_PARAM_VALUE_NON_COMPLIANT_FEATURE_CODE).build();
         } catch (DataAccessLayerException e) {
-            String msg = "An internal error occurred while trying to execute relevant data service function " +
-                "@ Dashboard API layer to retrieve a feature non-compliant device count over the total.";
-            log.error(msg, e);
-            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
+            log.error("An internal error occurred while trying to execute relevant data service function " +
+                "@ Dashboard API layer to retrieve a feature non-compliant device count over the total.", e);
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).
+                entity(ERROR_IN_RETRIEVING_REQUESTED_DATA).build();
         }
 
         // creating TotalDeviceCount Data Wrapper
@@ -410,10 +430,10 @@ public class Dashboard {
         try {
             totalDeviceCount = gadgetDataService.getTotalDeviceCount();
         } catch (DataAccessLayerException e) {
-            String msg = "An internal error occurred while trying to execute relevant data service function " +
-                "@ Dashboard API layer to retrieve the total device count over filtered feature non-compliant.";
-            log.error(msg, e);
-            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
+            log.error("An internal error occurred while trying to execute relevant data service function " +
+                "@ Dashboard API layer to retrieve the total device count over filtered feature non-compliant.", e);
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).
+                entity(ERROR_IN_RETRIEVING_REQUESTED_DATA).build();
         }
 
         List<Object> featureNonCompliantDeviceCountOverTotalDataWrapper = new ArrayList<>();
@@ -443,8 +463,8 @@ public class Dashboard {
 
         if (paginationEnabled == null) {
 
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity("Missing required query parameter. " +
-                    "Query parameter 'Pagination-enabled' with value true or false is required.").build();
+            return Response.status(HttpStatus.SC_BAD_REQUEST).
+                entity(REQUIRED_QUERY_PARAM_VALUE_PAGINATION_ENABLED).build();
 
         } else if (FLAG_TRUE.equals(paginationEnabled)) {
 
@@ -466,22 +486,25 @@ public class Dashboard {
                 log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value. " +
                     "This was while trying to execute relevant data service function @ Dashboard API layer to " +
                         "retrieve a filtered set of devices with details.", e);
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity("").build();
+                return Response.status(HttpStatus.SC_BAD_REQUEST).
+                    entity(INVALID_QUERY_PARAM_VALUE_POTENTIAL_VULNERABILITY).build();
             } catch (InvalidStartIndexValueException e) {
                 log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value. " +
                     "This was while trying to execute relevant data service function @ Dashboard API layer to " +
                         "retrieve a filtered set of devices with details.", e);
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity("").build();
+                return Response.status(HttpStatus.SC_BAD_REQUEST).
+                    entity(INVALID_QUERY_PARAM_VALUE_START_INDEX).build();
             } catch (InvalidResultCountValueException e) {
                 log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value. " +
                     "This was while trying to execute relevant data service function @ Dashboard API layer to " +
                         "retrieve a filtered set of devices with details.", e);
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity("").build();
+                return Response.status(HttpStatus.SC_BAD_REQUEST).
+                    entity(INVALID_QUERY_PARAM_VALUE_RESULT_COUNT).build();
             } catch (DataAccessLayerException e) {
-                String msg = "An internal error occurred while trying to execute relevant data service function " +
-                    "@ Dashboard API layer to retrieve a filtered set of devices with details.";
-                log.error(msg, e);
-                return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
+                log.error("An internal error occurred while trying to execute relevant data service function " +
+                    "@ Dashboard API layer to retrieve a filtered set of devices with details.", e);
+                return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).
+                    entity(ERROR_IN_RETRIEVING_REQUESTED_DATA).build();
             }
 
             DashboardPaginationGadgetDataWrapper
@@ -515,12 +538,13 @@ public class Dashboard {
                 log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value. " +
                     "This was while trying to execute relevant data service function @ Dashboard API layer to " +
                         "retrieve a filtered set of devices with details.", e);
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity("").build();
+                return Response.status(HttpStatus.SC_BAD_REQUEST).
+                    entity(INVALID_QUERY_PARAM_VALUE_POTENTIAL_VULNERABILITY).build();
             } catch (DataAccessLayerException e) {
-                String msg = "An internal error occurred while trying to execute relevant data service function " +
-                    "@ Dashboard API layer to retrieve a filtered set of devices with details.";
-                log.error(msg, e);
-                return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
+                log.error("An internal error occurred while trying to execute relevant data service function " +
+                    "@ Dashboard API layer to retrieve a filtered set of devices with details.", e);
+                return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).
+                    entity(ERROR_IN_RETRIEVING_REQUESTED_DATA).build();
             }
 
             DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
@@ -535,9 +559,8 @@ public class Dashboard {
 
         } else {
 
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity("Invalid query parameter value. " +
-                "Invalid value detected for query parameter pagination-enabled. " +
-                    "Should only be either true or false.").build();
+            return Response.status(HttpStatus.SC_BAD_REQUEST).
+                entity(INVALID_QUERY_PARAM_VALUE_PAGINATION_ENABLED).build();
 
         }
     }
@@ -552,8 +575,8 @@ public class Dashboard {
                                                              @QueryParam(RESULT_COUNT) int resultCount) {
         if (paginationEnabled == null) {
 
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity("Missing required query parameter. " +
-                "Query parameter 'Pagination-enabled' with value true or false is required.").build();
+            return Response.status(HttpStatus.SC_BAD_REQUEST).
+                entity(REQUIRED_QUERY_PARAM_VALUE_PAGINATION_ENABLED).build();
 
         } else if (FLAG_TRUE.equals(paginationEnabled)) {
 
@@ -574,22 +597,26 @@ public class Dashboard {
                 log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value. " +
                     "This was while trying to execute relevant data service function @ Dashboard API layer to " +
                         "retrieve a filtered set of feature non-compliant devices with details.", e);
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity("").build();
+                return Response.status(HttpStatus.SC_BAD_REQUEST).
+                    entity(REQUIRED_QUERY_PARAM_VALUE_NON_COMPLIANT_FEATURE_CODE).build();
             } catch (InvalidStartIndexValueException e) {
                 log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value. " +
                     "This was while trying to execute relevant data service function @ Dashboard API layer to " +
                         "retrieve a filtered set of feature non-compliant devices with details.", e);
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity("").build();
+                return Response.status(HttpStatus.SC_BAD_REQUEST).
+                    entity(INVALID_QUERY_PARAM_VALUE_START_INDEX).build();
             } catch (InvalidResultCountValueException e) {
                 log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value. " +
                     "This was while trying to execute relevant data service function @ Dashboard API layer to " +
                         "retrieve a filtered set of feature non-compliant devices with details.", e);
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity("").build();
+                return Response.status(HttpStatus.SC_BAD_REQUEST).
+                    entity(INVALID_QUERY_PARAM_VALUE_RESULT_COUNT).build();
             } catch (DataAccessLayerException e) {
-                String msg = "An internal error occurred while trying to execute relevant data service function " +
-                    "@ Dashboard API layer to retrieve a filtered set of feature non-compliant devices with details.";
-                log.error(msg, e);
-                return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
+                log.error("An internal error occurred while trying to execute relevant data service function " +
+                    "@ Dashboard API layer to retrieve a filtered set of feature " +
+                        "non-compliant devices with details.", e);
+                return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).
+                    entity(ERROR_IN_RETRIEVING_REQUESTED_DATA).build();
             }
 
             DashboardPaginationGadgetDataWrapper
@@ -623,13 +650,14 @@ public class Dashboard {
                 log.error("Error occurred @ Gadget Data Service layer due to invalid parameter value. " +
                     "This was while trying to execute relevant data service function @ Dashboard API layer to " +
                         "retrieve a filtered set of feature non-compliant devices with details.", e);
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity("").build();
+                return Response.status(HttpStatus.SC_BAD_REQUEST).
+                    entity(REQUIRED_QUERY_PARAM_VALUE_NON_COMPLIANT_FEATURE_CODE).build();
             } catch (DataAccessLayerException e) {
-                String msg = "An internal error occurred while trying to execute relevant data service function " +
+                log.error("An internal error occurred while trying to execute relevant data service function " +
                     "@ Dashboard API layer to retrieve a filtered set of feature " +
-                        "non-compliant devices with details.";
-                log.error(msg, e);
-                return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(msg).build();
+                        "non-compliant devices with details.", e);
+                return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).
+                    entity(ERROR_IN_RETRIEVING_REQUESTED_DATA).build();
             }
 
             DashboardGadgetDataWrapper dashboardGadgetDataWrapper = new DashboardGadgetDataWrapper();
@@ -644,9 +672,8 @@ public class Dashboard {
 
         } else {
 
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity("Invalid query parameter value. " +
-                "Invalid value detected for query parameter pagination-enabled. " +
-                    "Should only be either true or false.").build();
+            return Response.status(HttpStatus.SC_BAD_REQUEST).
+                entity(INVALID_QUERY_PARAM_VALUE_PAGINATION_ENABLED).build();
 
         }
     }
