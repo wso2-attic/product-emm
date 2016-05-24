@@ -170,14 +170,16 @@ public class Dashboard {
             paginationResult = gadgetDataService.
                 getNonCompliantDeviceCountsByFeatures(startIndex, resultCount);
         } catch (InvalidStartIndexValueException e) {
-            log.error("Error occurred @ Gadget Data Service layer due to invalid (query) parameter value. " +
-                "This was while trying to execute relevant data service function @ Dashboard API layer to retrieve " +
-                    "a non-compliant set of device counts by features.", e);
+            log.error("Bad request and error occurred @ Gadget Data Service layer due to " +
+                "invalid (query) parameter value. This was while trying to execute relevant data service " +
+                    "function @ Dashboard API layer to retrieve a non-compliant set " +
+                        "of device counts by features.", e);
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(INVALID_QUERY_PARAM_VALUE_START_INDEX).build();
         } catch (InvalidResultCountValueException e) {
-            log.error("Error occurred @ Gadget Data Service layer due to invalid (query) parameter value. " +
-                "This was while trying to execute relevant data service function @ Dashboard API layer to retrieve " +
-                    "a non-compliant set of device counts by features.", e);
+            log.error("Bad request and error occurred @ Gadget Data Service layer due to " +
+                "invalid (query) parameter value. This was while trying to execute relevant data service " +
+                    "function @ Dashboard API layer to retrieve a non-compliant set " +
+                        "of device counts by features.", e);
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(INVALID_QUERY_PARAM_VALUE_RESULT_COUNT).build();
         } catch (DataAccessLayerException e) {
             log.error("An internal error occurred while trying to execute relevant data service function " +
@@ -219,9 +221,9 @@ public class Dashboard {
         try {
             deviceCountsByPlatforms = gadgetDataService.getDeviceCountsByPlatforms(filterSet);
         } catch (InvalidPotentialVulnerabilityValueException e) {
-            log.error("Error occurred @ Gadget Data Service layer due to invalid (query) parameter value. " +
-                "This was while trying to execute relevant data service function @ Dashboard API layer to retrieve " +
-                    "a filtered set of device counts by platforms.", e);
+            log.error("Bad request and error occurred @ Gadget Data Service layer due to " +
+                "invalid (query) parameter value. This was while trying to execute relevant data service " +
+                    "function @ Dashboard API layer to retrieve a filtered set of device counts by platforms.", e);
             return Response.status(HttpStatus.SC_BAD_REQUEST).
                 entity(INVALID_QUERY_PARAM_VALUE_POTENTIAL_VULNERABILITY).build();
         } catch (DataAccessLayerException e) {
@@ -241,9 +243,9 @@ public class Dashboard {
         try {
             deviceCountsByOwnerships = gadgetDataService.getDeviceCountsByOwnershipTypes(filterSet);
         } catch (InvalidPotentialVulnerabilityValueException e) {
-            log.error("Error occurred @ Gadget Data Service layer due to invalid (query) parameter value. " +
-                "This was while trying to execute relevant data service function @ Dashboard API layer to retrieve " +
-                    "a filtered set of device counts by ownerships.", e);
+            log.error("Bad request and error occurred @ Gadget Data Service layer due to " +
+                "invalid (query) parameter value. This was while trying to execute relevant data service " +
+                    "function @ Dashboard API layer to retrieve a filtered set of device counts by ownerships.", e);
             return Response.status(HttpStatus.SC_BAD_REQUEST).
                 entity(INVALID_QUERY_PARAM_VALUE_POTENTIAL_VULNERABILITY).build();
         } catch (DataAccessLayerException e) {
@@ -284,9 +286,10 @@ public class Dashboard {
             featureNonCompliantDeviceCountsByPlatforms = gadgetDataService.
                 getFeatureNonCompliantDeviceCountsByPlatforms(nonCompliantFeatureCode, filterSet);
         } catch (InvalidFeatureCodeValueException e) {
-            log.error("Error occurred @ Gadget Data Service layer due to invalid (query) parameter value. " +
-                "This was while trying to execute relevant data service function @ Dashboard API layer to retrieve " +
-                    "a filtered set of feature non-compliant device counts by platforms.", e);
+            log.error("Bad request and error occurred @ Gadget Data Service layer due to " +
+                "invalid (query) parameter value. This was while trying to execute relevant data service " +
+                    "function @ Dashboard API layer to retrieve a filtered set of feature " +
+                        "non-compliant device counts by platforms.", e);
             return Response.status(HttpStatus.SC_BAD_REQUEST).
                 entity(REQUIRED_QUERY_PARAM_VALUE_NON_COMPLIANT_FEATURE_CODE).build();
         } catch (DataAccessLayerException e) {
@@ -308,9 +311,10 @@ public class Dashboard {
             featureNonCompliantDeviceCountsByOwnerships = gadgetDataService.
                 getFeatureNonCompliantDeviceCountsByOwnershipTypes(nonCompliantFeatureCode, filterSet);
         } catch (InvalidFeatureCodeValueException e) {
-            log.error("Error occurred @ Gadget Data Service layer due to invalid (query) parameter value. " +
-                "This was while trying to execute relevant data service function @ Dashboard API layer to retrieve " +
-                    "a filtered set of feature non-compliant device counts by ownerships.", e);
+            log.error("Bad request and error occurred @ Gadget Data Service layer due to " +
+                "invalid (query) parameter value. This was while trying to execute relevant data service function " +
+                    "@ Dashboard API layer to retrieve a filtered set of feature " +
+                        "non-compliant device counts by ownerships.", e);
             return Response.status(HttpStatus.SC_BAD_REQUEST).
                 entity(REQUIRED_QUERY_PARAM_VALUE_NON_COMPLIANT_FEATURE_CODE).build();
         } catch (DataAccessLayerException e) {
@@ -355,9 +359,9 @@ public class Dashboard {
         try {
             filteredDeviceCount = gadgetDataService.getDeviceCount(filterSet);
         } catch (InvalidPotentialVulnerabilityValueException e) {
-            log.error("Error occurred @ Gadget Data Service layer due to invalid (query) parameter value. " +
-                "This was while trying to execute relevant data service function @ Dashboard API layer to retrieve " +
-                    "a filtered device count over the total.", e);
+            log.error("Bad request and error occurred @ Gadget Data Service layer due to " +
+                "invalid (query) parameter value. This was while trying to execute relevant data service " +
+                    "function @ Dashboard API layer to retrieve a filtered device count over the total.", e);
             return Response.status(HttpStatus.SC_BAD_REQUEST).
                 entity(INVALID_QUERY_PARAM_VALUE_POTENTIAL_VULNERABILITY).build();
         } catch (DataAccessLayerException e) {
@@ -413,9 +417,9 @@ public class Dashboard {
             featureNonCompliantDeviceCount = gadgetDataService.
                 getFeatureNonCompliantDeviceCount(nonCompliantFeatureCode, filterSet);
         } catch (InvalidFeatureCodeValueException e) {
-            log.error("Error occurred @ Gadget Data Service layer due to invalid (query) parameter value. " +
-                "This was while trying to execute relevant data service function @ Dashboard API layer to retrieve " +
-                    "a feature non-compliant device count over the total.", e);
+            log.error("Bad request and error occurred @ Gadget Data Service layer due to " +
+                "invalid (query) parameter value. This was while trying to execute relevant data service function " +
+                    "@ Dashboard API layer to retrieve a feature non-compliant device count over the total.", e);
             return Response.status(HttpStatus.SC_BAD_REQUEST).
                 entity(REQUIRED_QUERY_PARAM_VALUE_NON_COMPLIANT_FEATURE_CODE).build();
         } catch (DataAccessLayerException e) {
@@ -485,21 +489,21 @@ public class Dashboard {
                 paginationResult = gadgetDataService.
                     getDevicesWithDetails(filterSet, startIndex, resultCount);
             } catch (InvalidPotentialVulnerabilityValueException e) {
-                log.error("Error occurred @ Gadget Data Service layer due to invalid (query) parameter value. " +
-                    "This was while trying to execute relevant data service function @ Dashboard API layer to " +
-                        "retrieve a filtered set of devices with details.", e);
+                log.error("Bad request and error occurred @ Gadget Data Service layer due to " +
+                    "invalid (query) parameter value. This was while trying to execute relevant data service " +
+                        "function @ Dashboard API layer to retrieve a filtered set of devices with details.", e);
                 return Response.status(HttpStatus.SC_BAD_REQUEST).
                     entity(INVALID_QUERY_PARAM_VALUE_POTENTIAL_VULNERABILITY).build();
             } catch (InvalidStartIndexValueException e) {
-                log.error("Error occurred @ Gadget Data Service layer due to invalid (query) parameter value. " +
-                    "This was while trying to execute relevant data service function @ Dashboard API layer to " +
-                        "retrieve a filtered set of devices with details.", e);
+                log.error("Bad request and error occurred @ Gadget Data Service layer due to " +
+                    "invalid (query) parameter value. This was while trying to execute relevant data service " +
+                        "function @ Dashboard API layer to retrieve a filtered set of devices with details.", e);
                 return Response.status(HttpStatus.SC_BAD_REQUEST).
                     entity(INVALID_QUERY_PARAM_VALUE_START_INDEX).build();
             } catch (InvalidResultCountValueException e) {
-                log.error("Error occurred @ Gadget Data Service layer due to invalid (query) parameter value. " +
-                    "This was while trying to execute relevant data service function @ Dashboard API layer to " +
-                        "retrieve a filtered set of devices with details.", e);
+                log.error("Bad request and error occurred @ Gadget Data Service layer due to " +
+                    "invalid (query) parameter value. This was while trying to execute relevant data service " +
+                        "function @ Dashboard API layer to retrieve a filtered set of devices with details.", e);
                 return Response.status(HttpStatus.SC_BAD_REQUEST).
                     entity(INVALID_QUERY_PARAM_VALUE_RESULT_COUNT).build();
             } catch (DataAccessLayerException e) {
@@ -537,9 +541,9 @@ public class Dashboard {
             try {
                 devicesWithDetails = gadgetDataService.getDevicesWithDetails(filterSet);
             } catch (InvalidPotentialVulnerabilityValueException e) {
-                log.error("Error occurred @ Gadget Data Service layer due to invalid (query) parameter value. " +
-                    "This was while trying to execute relevant data service function @ Dashboard API layer to " +
-                        "retrieve a filtered set of devices with details.", e);
+                log.error("Bad request and error occurred @ Gadget Data Service layer due to " +
+                    "invalid (query) parameter value. This was while trying to execute relevant data service " +
+                        "function @ Dashboard API layer to retrieve a filtered set of devices with details.", e);
                 return Response.status(HttpStatus.SC_BAD_REQUEST).
                     entity(INVALID_QUERY_PARAM_VALUE_POTENTIAL_VULNERABILITY).build();
             } catch (DataAccessLayerException e) {
@@ -600,21 +604,24 @@ public class Dashboard {
                     getFeatureNonCompliantDevicesWithDetails(nonCompliantFeatureCode,
                         filterSet, startIndex, resultCount);
             } catch (InvalidFeatureCodeValueException e) {
-                log.error("Error occurred @ Gadget Data Service layer due to invalid (query) parameter value. " +
-                    "This was while trying to execute relevant data service function @ Dashboard API layer to " +
-                        "retrieve a filtered set of feature non-compliant devices with details.", e);
+                log.error("Bad request and error occurred @ Gadget Data Service layer due to " +
+                    "invalid (query) parameter value. This was while trying to execute relevant data service " +
+                        "function @ Dashboard API layer to retrieve a filtered set of " +
+                            "feature non-compliant devices with details.", e);
                 return Response.status(HttpStatus.SC_BAD_REQUEST).
                     entity(REQUIRED_QUERY_PARAM_VALUE_NON_COMPLIANT_FEATURE_CODE).build();
             } catch (InvalidStartIndexValueException e) {
-                log.error("Error occurred @ Gadget Data Service layer due to invalid (query) parameter value. " +
-                    "This was while trying to execute relevant data service function @ Dashboard API layer to " +
-                        "retrieve a filtered set of feature non-compliant devices with details.", e);
+                log.error("Bad request and error occurred @ Gadget Data Service layer due to " +
+                    "invalid (query) parameter value. This was while trying to execute relevant data service " +
+                        "function @ Dashboard API layer to retrieve a filtered set of " +
+                            "feature non-compliant devices with details.", e);
                 return Response.status(HttpStatus.SC_BAD_REQUEST).
                     entity(INVALID_QUERY_PARAM_VALUE_START_INDEX).build();
             } catch (InvalidResultCountValueException e) {
-                log.error("Error occurred @ Gadget Data Service layer due to invalid (query) parameter value. " +
-                    "This was while trying to execute relevant data service function @ Dashboard API layer to " +
-                        "retrieve a filtered set of feature non-compliant devices with details.", e);
+                log.error("Bad request and error occurred @ Gadget Data Service layer due to " +
+                    "invalid (query) parameter value. This was while trying to execute relevant data service " +
+                        "function @ Dashboard API layer to retrieve a filtered set of " +
+                            "feature non-compliant devices with details.", e);
                 return Response.status(HttpStatus.SC_BAD_REQUEST).
                     entity(INVALID_QUERY_PARAM_VALUE_RESULT_COUNT).build();
             } catch (DataAccessLayerException e) {
@@ -653,9 +660,10 @@ public class Dashboard {
                 featureNonCompliantDevicesWithDetails = gadgetDataService.
                     getFeatureNonCompliantDevicesWithDetails(nonCompliantFeatureCode, filterSet);
             } catch (InvalidFeatureCodeValueException e) {
-                log.error("Error occurred @ Gadget Data Service layer due to invalid (query) parameter value. " +
-                    "This was while trying to execute relevant data service function @ Dashboard API layer to " +
-                        "retrieve a filtered set of feature non-compliant devices with details.", e);
+                log.error("Bad request and error occurred @ Gadget Data Service layer due to " +
+                    "invalid (query) parameter value. This was while trying to execute relevant data service " +
+                        "function @ Dashboard API layer to retrieve a filtered set of " +
+                            "feature non-compliant devices with details.", e);
                 return Response.status(HttpStatus.SC_BAD_REQUEST).
                     entity(REQUIRED_QUERY_PARAM_VALUE_NON_COMPLIANT_FEATURE_CODE).build();
             } catch (DataAccessLayerException e) {
