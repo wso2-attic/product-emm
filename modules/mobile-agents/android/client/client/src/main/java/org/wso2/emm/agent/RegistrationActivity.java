@@ -165,23 +165,32 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	 * Display connectivity error.
 	 */
 	private void displayConnectionError(){
-		alertDialog = CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-                            getResources().getString(R.string.title_head_connection_error),
-                            getResources().getString(R.string.error_internal_server),
-                            getResources().getString(R.string.button_ok),
-                            registrationFailedOKBtnClickListerner);
-		alertDialog.show();
+		RegistrationActivity.this.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				alertDialog = CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
+                                                        getResources().getString(R.string.title_head_connection_error),
+                                                        getResources().getString(R.string.error_internal_server),
+                                                        getResources().getString(R.string.button_ok),
+                                                        registrationFailedOKBtnClickListerner);
+			}
+		});
 	}
 	
 	/**
 	 * Display internal server error.
 	 */
 	private void displayInternalServerError(){
-		alertDialog = CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-                      getResources().getString(R.string.title_head_registration_error),
-                      getResources().getString(R.string.error_for_all_unknown_registration_failures),
-                      getResources().getString(R.string.button_ok),
-                      registrationFailedOKBtnClickListerner);
+		RegistrationActivity.this.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				alertDialog = CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
+                                                        getResources().getString(R.string.title_head_registration_error),
+                                                        getResources().getString(R.string.error_for_all_unknown_registration_failures),
+                                                        getResources().getString(R.string.button_ok),
+                                                        registrationFailedOKBtnClickListerner);
+			}
+		});
 	}
 
 	@Override
@@ -192,7 +201,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS);
 				Preference.putString(context, Constants.PreferenceFlag.REG_ID, info.getDeviceId());
-				if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
+				if (Constants.Status.SUCCESSFUL.equals(responseStatus) || Constants.Status.CREATED.equals(responseStatus)) {
 					if (Constants.NOTIFIER_GCM.equals(Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE))) {
 						registerGCM();
 					} else {
@@ -209,7 +218,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			loadAlreadyRegisteredActivity();
 		} else if (requestCode == Constants.GCM_REGISTRATION_ID_SEND_CODE && result != null) {
 			String status = result.get(Constants.STATUS_KEY);
-			if (!Constants.Status.SUCCESSFUL.equals(status)) {
+			if (!(Constants.Status.SUCCESSFUL.equals(status) || Constants.Status.ACCEPT.equals(status))) {
 				displayConnectionError();
 			} else {
 				getEffectivePolicy();
