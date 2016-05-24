@@ -530,6 +530,10 @@
                                 </featureArtifactDef>
                                 <!-- End of Dashboards Features -->
 
+                                <featureArtifactDef>
+                                    org.wso2.carbon.analytics.cdmf:org.wso2.carbon.analytics.cdmf.feature:${carbon.analytics.cdmf.version}
+                                </featureArtifactDef>
+
                             </featureArtifacts>
                         </configuration>
                     </execution>
@@ -1120,6 +1124,11 @@
                                     <version>${carbon.dashboards.version}</version>
                                 </feature>
                                 <!-- End of Dashboard Features -->
+
+                                <feature>
+                                    <id>org.wso2.carbon.analytics.cdmf.feature.group</id>
+                                    <version>${carbon.analytics.cdmf.version}</version>
+                                </feature>
 
                             </features>
                         </configuration>
