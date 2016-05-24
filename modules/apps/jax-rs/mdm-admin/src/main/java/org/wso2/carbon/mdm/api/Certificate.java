@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.certificate.mgt.core.dao.CertificateManagementDAOException;
 import org.wso2.carbon.certificate.mgt.core.dto.CertificateResponse;
 import org.wso2.carbon.certificate.mgt.core.exception.KeystoreException;
+import org.wso2.carbon.certificate.mgt.core.impl.CertificateGenerator;
 import org.wso2.carbon.certificate.mgt.core.service.CertificateManagementService;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.PaginationRequest;
@@ -30,20 +31,21 @@ import org.wso2.carbon.device.mgt.common.PaginationResult;
 import org.wso2.carbon.mdm.api.common.MDMAPIException;
 import org.wso2.carbon.mdm.api.util.MDMAPIUtils;
 import org.wso2.carbon.mdm.beans.EnrollmentCertificate;
-import org.wso2.carbon.mdm.exception.*;
 import org.wso2.carbon.mdm.exception.BadRequestException;
+import org.wso2.carbon.mdm.exception.Message;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * All the certificate related tasks such as saving certificates, can be done through this endpoint.
  */
-@Produces({ "application/json", "application/xml" })
-@Consumes({ "application/json", "application/xml" })
+@Produces({"application/json", "application/xml"})
+@Consumes({"application/json", "application/xml"})
 public class Certificate {
 
     private static Log log = LogFactory.getLog(Operation.class);
@@ -79,6 +81,35 @@ public class Certificate {
             String msg = "Error occurred while converting PEM file to X509Certificate.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
+        }
+    }
+
+    /**
+     * Sign the client's certificate signing request and save it in the database.
+     *
+     * @param binarySecurityToken Base64 encoded Certificate signing request.
+     * @return X509Certificate type sign certificate.
+     */
+    @GET
+    @Path("csr-sign")
+    public Response getSignedCertFromCSR(@HeaderParam("Accept") String acceptHeader, String binarySecurityToken) {
+        MediaType responseMediaType = MDMAPIUtils.getResponseMediaType(acceptHeader);
+        Message message = new Message();
+        X509Certificate signedCert;
+        CertificateGenerator certificateGenerator = new CertificateGenerator();
+        try {
+            if (certificateGenerator.getSignedCertificateFromCSR(binarySecurityToken) == null) {
+                message.setErrorMessage("Error occurred while signing the CSR.");
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
+                        entity(message).type(responseMediaType).build();
+            } else {
+                signedCert = certificateGenerator.getSignedCertificateFromCSR(binarySecurityToken);
+                return Response.status(Response.Status.OK).entity(signedCert).type(responseMediaType).build();
+            }
+        } catch (KeystoreException e) {
+            String msg = "Error occurred while fetching certificate.";
+            log.error(msg, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(msg).type(responseMediaType).build();
         }
     }
 
@@ -178,7 +209,7 @@ public class Certificate {
     @DELETE
     @Path("{serialNumber}")
     public Response removeCertificate(@HeaderParam("Accept") String acceptHeader,
-                                       @PathParam("serialNumber") String serialNumber) throws MDMAPIException {
+                                      @PathParam("serialNumber") String serialNumber) throws MDMAPIException {
         MediaType responseMediaType = MDMAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
 
@@ -192,7 +223,7 @@ public class Certificate {
         boolean deleted;
         try {
             deleted = certificateService.removeCertificate(serialNumber);
-            if(deleted){
+            if (deleted) {
                 return Response.status(Response.Status.OK).entity("").type(responseMediaType).build();
             } else {
                 return Response.status(Response.Status.NOT_FOUND).entity("").type(responseMediaType).build();
