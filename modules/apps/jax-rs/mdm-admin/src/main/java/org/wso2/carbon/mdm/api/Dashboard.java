@@ -463,8 +463,8 @@ public class Dashboard {
 
         if (paginationEnabled == null) {
 
-            log.error("Bad request on calling devices-with-details Dashboard API. " +
-                REQUIRED_QUERY_PARAM_VALUE_PAGINATION_ENABLED);
+            log.error("Bad request on retrieving a filtered set of devices with details @ " +
+                "Dashboard API layer. " + REQUIRED_QUERY_PARAM_VALUE_PAGINATION_ENABLED);
             return Response.status(HttpStatus.SC_BAD_REQUEST).
                 entity(REQUIRED_QUERY_PARAM_VALUE_PAGINATION_ENABLED).build();
 
@@ -561,8 +561,8 @@ public class Dashboard {
 
         } else {
 
-            log.error("Bad request on calling devices-with-details Dashboard API. " +
-                INVALID_QUERY_PARAM_VALUE_PAGINATION_ENABLED);
+            log.error("Bad request on retrieving a filtered set of devices with details @ " +
+                "Dashboard API layer. " + INVALID_QUERY_PARAM_VALUE_PAGINATION_ENABLED);
             return Response.status(HttpStatus.SC_BAD_REQUEST).
                 entity(INVALID_QUERY_PARAM_VALUE_PAGINATION_ENABLED).build();
 
@@ -579,8 +579,8 @@ public class Dashboard {
                                                              @QueryParam(RESULT_COUNT) int resultCount) {
         if (paginationEnabled == null) {
 
-            log.error("Bad request on calling feature-non-compliant-devices-with-details Dashboard API. " +
-                REQUIRED_QUERY_PARAM_VALUE_PAGINATION_ENABLED);
+            log.error("Bad request on retrieving a filtered set of feature non-compliant devices with " +
+                "details @ Dashboard API layer. " + REQUIRED_QUERY_PARAM_VALUE_PAGINATION_ENABLED);
             return Response.status(HttpStatus.SC_BAD_REQUEST).
                 entity(REQUIRED_QUERY_PARAM_VALUE_PAGINATION_ENABLED).build();
 
@@ -678,8 +678,8 @@ public class Dashboard {
 
         } else {
 
-            log.error("Bad request on calling feature-non-compliant-devices-with-details Dashboard API. " +
-                INVALID_QUERY_PARAM_VALUE_PAGINATION_ENABLED);
+            log.error("Bad request on retrieving a filtered set of feature non-compliant devices with " +
+                "details @ Dashboard API layer. " + INVALID_QUERY_PARAM_VALUE_PAGINATION_ENABLED);
             return Response.status(HttpStatus.SC_BAD_REQUEST).
                 entity(INVALID_QUERY_PARAM_VALUE_PAGINATION_ENABLED).build();
 
