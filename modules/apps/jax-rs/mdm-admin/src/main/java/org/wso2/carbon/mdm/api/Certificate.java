@@ -18,13 +18,11 @@
 
 package org.wso2.carbon.mdm.api;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.certificate.mgt.core.dao.CertificateManagementDAOException;
 import org.wso2.carbon.certificate.mgt.core.dto.CertificateResponse;
 import org.wso2.carbon.certificate.mgt.core.exception.KeystoreException;
-import org.wso2.carbon.certificate.mgt.core.impl.CertificateGenerator;
 import org.wso2.carbon.certificate.mgt.core.service.CertificateManagementService;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.PaginationRequest;
@@ -38,8 +36,6 @@ import org.wso2.carbon.mdm.exception.Message;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.security.cert.CertificateEncodingException;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,44 +80,6 @@ public class Certificate {
             String msg = "Error occurred while converting PEM file to X509Certificate.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
-        }
-    }
-
-    /**
-     * Sign the client's certificate signing request and save it in the database.
-     *
-     * @param binarySecurityToken Base64 encoded Certificate signing request.
-     * @return X509Certificate type sign certificate.
-     */
-    @POST
-    @Path("csr-sign")
-    @Produces({MediaType.TEXT_PLAIN, MediaType.TEXT_PLAIN})
-    @Consumes({MediaType.TEXT_PLAIN, MediaType.TEXT_PLAIN})
-    public Response getSignedCertFromCSR(@HeaderParam("Accept") String acceptHeader, String binarySecurityToken) {
-        MediaType responseMediaType = MDMAPIUtils.getResponseMediaType(acceptHeader);
-        Message message = new Message();
-        X509Certificate signedCert;
-        String singedCertificate;
-        Base64 base64 = new Base64();
-        CertificateGenerator certificateGenerator = new CertificateGenerator();
-        try {
-            if (certificateGenerator.getSignedCertificateFromCSR(binarySecurityToken) == null) {
-                message.setErrorMessage("Error occurred while signing the CSR.");
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
-                        entity(message).type(responseMediaType).build();
-            } else {
-                signedCert = certificateGenerator.getSignedCertificateFromCSR(binarySecurityToken);
-                singedCertificate = base64.encodeToString(signedCert.getEncoded());
-                return Response.status(Response.Status.OK).entity(singedCertificate).type(responseMediaType).build();
-            }
-        } catch (KeystoreException e) {
-            String msg = "Error occurred while fetching certificate.";
-            log.error(msg, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(msg).type(responseMediaType).build();
-        } catch (CertificateEncodingException e) {
-            String msg = "Error occurred while encoding the certificate.";
-            log.error(msg, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(msg).type(responseMediaType).build();
         }
     }
 
