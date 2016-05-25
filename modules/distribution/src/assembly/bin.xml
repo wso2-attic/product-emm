@@ -523,11 +523,24 @@
             </outputDirectory>
             <fileMode>755</fileMode>
         </file>
+        <!--<file>-->
+            <!--<source>../apps/jax-rs/mdm-admin/target/mdm-admin.war</source>-->
+            <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps-->
+            <!--</outputDirectory>-->
+            <!--<fileMode>755</fileMode>-->
+        <!--</file>-->
         <file>
-            <source>../apps/jax-rs/mdm-admin/target/mdm-admin.war</source>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/devicemgt_admin.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
+            <destName>mdm-admin.war</destName>
             <fileMode>755</fileMode>
+        </file>
+        <!-- Copy APILifeCycle.xml -->
+        <file>
+            <source>src/repository/resources/lifecycles/APILifeCycle.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/resources/lifecycles</outputDirectory>
+            <fileMode>644</fileMode>
         </file>
         <!--<file>-->
         <!--<source>-->

@@ -43,7 +43,7 @@ public class AndroidPolicyManagement extends TestBase {
         MDMResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
                 PayloadGenerator.getJsonPayload(Constants.PolicyManagement.ANDROID_POLICY_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString());
-        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
         Assert.assertEquals(PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
                 Constants.HTTP_METHOD_POST).toString(),response.getBody());
     }
@@ -53,7 +53,7 @@ public class AndroidPolicyManagement extends TestBase {
         MDMResponse response = client.post(Constants.PolicyManagement.ADD_POLICY_ENDPOINT,
                 PayloadGenerator.getJsonPayload(Constants.PolicyManagement.ANDROID_POLICY_WORK_PROFILE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString());
-        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
         Assert.assertEquals(PayloadGenerator.getJsonPayload(Constants.PolicyManagement.POLICY_RESPONSE_PAYLOAD_FILE_NAME,
                 Constants.HTTP_METHOD_POST).toString(),response.getBody());
     }
@@ -79,7 +79,7 @@ public class AndroidPolicyManagement extends TestBase {
                 PayloadGenerator.getJsonPayload(
                         Constants.PolicyManagement.ANDROID_POLICY_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_PUT).toString());
-        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
     }
 
     @Test(description = "Test update policy with erroneous payload.", dependsOnMethods = { "testAddPolicy"})
