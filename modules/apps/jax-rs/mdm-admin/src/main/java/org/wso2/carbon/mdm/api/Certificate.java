@@ -48,7 +48,7 @@ import java.util.List;
 @Consumes({"application/json", "application/xml"})
 public class Certificate {
 
-    private static Log log = LogFactory.getLog(Operation.class);
+    private static Log log = LogFactory.getLog(Certificate.class);
 
     /**
      * Save a list of certificates and relevant information in the database.
