@@ -560,8 +560,6 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             operation.setPayLoad(result.toString());
 
             if (status.equals(resources.getString(R.string.shared_pref_default_status))) {
-                Toast.makeText(context, resources.getString(R.string.toast_message_reboot),
-                               Toast.LENGTH_LONG).show();
                 operation.setStatus(resources.getString(R.string.operation_value_completed));
                 resultBuilder.build(operation);
 

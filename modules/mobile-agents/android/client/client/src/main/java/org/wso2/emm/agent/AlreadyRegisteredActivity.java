@@ -359,7 +359,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				responseStatus = result.get(Constants.STATUS);
 				if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
 					displayInternalServerError();
-				} else if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
+				} else if (Constants.Status.SUCCESSFUL.equals(responseStatus) || Constants.Status.ACCEPT.equals(responseStatus)) {
 					if (Constants.DEBUG_MODE_ENABLED) {
 						Log.d(TAG, "Device has already enrolled");
 					}
