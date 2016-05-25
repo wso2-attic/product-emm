@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ WSO2 Inc. licenses this file to you under the Apache License,
@@ -20,7 +19,7 @@
     package="org.wso2.emm.agent"
     android:sharedUserId="org.wso2.emm.agent"
     android:versionCode="2"
-    android:versionName="2.0" >
+    android:versionName="2.0">
 
     <uses-sdk
         android:minSdkVersion="16"
@@ -59,22 +58,20 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:screenOrientation="portrait"
-        android:theme="@style/TopBarTheme" >
+        android:theme="@style/TopBarTheme">
         <activity
             android:name=".RegistrationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/TopBarTheme" >
-        </activity>
+            android:theme="@style/TopBarTheme"></activity>
         <activity
             android:name=".DisplayDeviceInfoActivity"
             android:label="@string/title_activity_display_device_info"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
@@ -84,7 +81,7 @@
         </receiver>
         <receiver
             android:name=".services.AgentDeviceAdminReceiver"
-            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
             <intent-filter>
 
                 <!-- This action is required -->
@@ -93,15 +90,14 @@
 
             <meta-data
                 android:name="android.app.device_admin"
-                android:resource="@xml/agent_device_admin" >
-            </meta-data>
+                android:resource="@xml/agent_device_admin"></meta-data>
         </receiver>
         <receiver android:name=".services.AlarmReceiver" />
         <receiver android:name=".events.EventAlarmReceiver" />
         <receiver
             android:name=".services.DeviceStartupIntentReceiver"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
@@ -109,8 +105,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".services.NotificationReceiver"
-                       android:exported="false">
+        <receiver
+            android:name=".services.NotificationReceiver"
+            android:exported="false">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -121,10 +118,13 @@
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.PACKAGE_DATA_CLEARED" />
-                <data android:scheme="package"/>
+
+                <data android:scheme="package" />
             </intent-filter>
         </receiver>
-        <service android:name=".services.ApplicationManagementService"
+
+        <service
+            android:name=".services.ApplicationManagementService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -133,84 +133,75 @@
         </service>
         <service
             android:name=".GCMIntentService"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-        <service android:name=".services.VPNService"
+        <service
+            android:name=".services.VPNService"
             android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
-                <action android:name="android.net.VpnService"/>
+                <action android:name="android.net.VpnService" />
             </intent-filter>
         </service>
 
         <activity
             android:name=".AlreadyRegisteredActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Sherlock" >
-        </activity>
+            android:theme="@style/Theme.Sherlock"></activity>
         <activity
             android:name=".AuthenticationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Sherlock"
-            android:windowSoftInputMode="stateUnchanged|adjustPan" >
-        </activity>
+            android:windowSoftInputMode="stateUnchanged|adjustPan"></activity>
         <activity
             android:name=".AuthenticationErrorActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".NotifyActivity"
             android:label="@string/title_activity_notify"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ServerDetails"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateUnchanged|adjustPan" >
-        </activity>
+            android:windowSoftInputMode="stateUnchanged|adjustPan"></activity>
         <activity
             android:name=".PinCodeActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateUnchanged|adjustPan" >
-        </activity>
+            android:windowSoftInputMode="stateUnchanged|adjustPan"></activity>
         <activity
             android:name=".AlertActivity"
             android:label="@string/title_activity_alert"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
+            android:theme="@android:style/Theme.Dialog"></activity>
         <activity
             android:name=".LockActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_lock">
-        </activity>
+            android:label="@string/title_activity_lock"></activity>
         <!-- Managed Profile Manifest items -->
         <activity
             android:name=".services.EnableProfileActivity"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".WorkProfileManager"
             android:label="@string/title_activity_notify"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".AgentReceptionActivity"
             android:label="WSO2 Agent">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".AppLockActivity"
             android:label="@string/title_activity_alert"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
-        </activity>
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+
         <service
             android:name=".services.AppLockService"
             android:exported="false" />

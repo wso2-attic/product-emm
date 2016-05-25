@@ -87,6 +87,14 @@ public class AccessTokenHandler {
                                                       @Override
                                                       public void onErrorResponse(VolleyError error) {
                                                           Log.e(TAG, error.toString());
+                                                          JSONObject errorObj = new JSONObject();
+                                                          try {
+                                                              errorObj.put(Constants.ERROR_DESCRIPTION_LABEL, error.toString());
+                                                          } catch (JSONException e) {
+                                                              Log.e(TAG, "Invalid JSON format", e);
+                                                          } finally {
+                                                              processTokenResponse(Constants.ACCESS_FAILURE, errorObj.toString());
+                                                          }
                                                       }
                                                   })
 

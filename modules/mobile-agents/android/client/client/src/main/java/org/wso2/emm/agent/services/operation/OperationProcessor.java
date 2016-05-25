@@ -184,6 +184,9 @@ public class OperationProcessor {
 	 */
 	public void setPolicyBundle(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
 		if (isDeviceAdminActive()) {
+			if (Preference.getString(context, Constants.PreferenceFlag.APPLIED_POLICY) != null) {
+				operationManager.revokePolicy(operation);
+			}
 			String payload = operation.getPayLoad().toString();
 			if (Constants.DEBUG_MODE_ENABLED) {
 				Log.d(TAG, "Policy payload: " + payload);

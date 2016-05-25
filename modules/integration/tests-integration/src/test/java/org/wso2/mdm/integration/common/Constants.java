@@ -141,9 +141,9 @@ public final class Constants {
         public static final String COMMAND_OPERATION_PAYLOAD_FOR_INVALID_DEVICE_ID = "[\"" + NUMBER_NOT_EQUAL_TO_DEVICE_ID + "\"]";
         public static final String COMMAND_OPERATION_PAYLOAD_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID =
                 "["+ DEVICE_ID + ", " + NUMBER_NOT_EQUAL_TO_DEVICE_ID + "]";
-        public static final String OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID = "Device Id not found for device found at 1";
+        public static final String OPERATION_RESPONSE_FOR_INVALID_DEVICE_ID = "\"Device Id not found for device found at 1\"";
         public static final String OPERATION_RESPONSE_FOR_TWO_DEVICES_WITH_ONE_INVALID_DEVICE_ID =
-                                                                            "Device Id not found for device found at 2";
+                                                                            "\"Device Id not found for device found at 2\"";
         public static final String CAMERA_OPERATION = "camera";
         public static final String LOCK_OPERATION = "lock";
         public static final String WIPE_DATA_OPERATION = "wipe_data";

@@ -165,7 +165,7 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.mobile.impl</artifactId>
+            <artifactId>org.wso2.carbon.device.mgt.mobile</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
