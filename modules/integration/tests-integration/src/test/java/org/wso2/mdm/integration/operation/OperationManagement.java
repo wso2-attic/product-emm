@@ -99,7 +99,7 @@ public class OperationManagement extends TestBase {
     public void testGetDeviceApps() throws Exception{
         MDMResponse response = client.get(Constants.OperationManagement.GET_DEVICE_APPS_ENDPOINT+
                 Constants.DEVICE_ID+Constants.OperationManagement.PATH_APPS);
-        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
 
     }
 }

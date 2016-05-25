@@ -31,15 +31,12 @@ import android.util.Log;
 
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.beans.WifiProfile;
-import org.wso2.emm.agent.events.listeners.DeviceCertCreateListener;
+import org.wso2.emm.agent.events.listeners.DeviceCertCreationListener;
+import org.wso2.emm.agent.events.listeners.WifiConfigCreationListener;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStore;
@@ -96,7 +93,7 @@ public class WiFiConfig {
      *
      * @param profile - WIFI Profile.
      */
-    public boolean setWifiConfig(final WifiProfile profile) {
+    public void setWifiConfig(final WifiProfile profile, final WifiConfigCreationListener listener) {
         final WifiConfiguration wifiConfig = new WifiConfiguration();
         boolean isSaveSuccessful = false;
         boolean isNetworkEnabled = false;
@@ -167,7 +164,7 @@ public class WiFiConfig {
                                 if(Constants.ENABLE_DEVICE_CERTIFICATE_GENERATION){
 
                                     try {
-                                        CommonUtils.generateDeviceCertificate(context, new DeviceCertCreateListener() {
+                                        CommonUtils.generateDeviceCertificate(context, new DeviceCertCreationListener() {
                                             @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
                                             @Override
                                             public void onDeviceCertCreated(InputStream inputStream) {
@@ -184,6 +181,16 @@ public class WiFiConfig {
                                                         Log.d(TAG, key.toString());
                                                         wifiConfig.enterpriseConfig.setClientKeyEntry(key, cert);
                                                     }
+                                                    wifiManager.setWifiEnabled(true);
+                                                    int result = wifiManager.addNetwork(wifiConfig);
+                                                    boolean isSaveSuccessful = wifiManager.saveConfiguration();
+                                                    boolean isNetworkEnabled = wifiManager.enableNetwork(result, true);
+                                                    if (Constants.DEBUG_MODE_ENABLED) {
+                                                        Log.d(TAG, "add Network returned." + result);
+                                                        Log.d(TAG, "saveConfiguration returned." + isSaveSuccessful);
+                                                        Log.d(TAG, "enableNetwork returned." + isNetworkEnabled);
+                                                    }
+                                                    listener.onCreateWifiConfig(isSaveSuccessful);
                                                 } catch (IOException e) {
                                                    Log.d(TAG, e.getMessage());
                                                 } catch (CertificateException e) {
@@ -202,14 +209,18 @@ public class WiFiConfig {
                                         e.printStackTrace();
                                     }
                                 }
-                                break;
+                                return;
                             case TTLS:
                                 wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.TTLS);
                                 wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
                                 switch (profile.getPhase2()) {
+                                    case PAP:
+                                        wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.PAP);
                                     case GTC:
                                         wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.GTC);
                                         break;
+                                    case MCHAP:
+                                        wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.MSCHAP);
                                     case MCHAPV2:
                                         wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.MSCHAPV2);
                                         break;
@@ -248,7 +259,7 @@ public class WiFiConfig {
             Log.d(TAG, "enableNetwork returned." + isNetworkEnabled);
         }
 
-        return isSaveSuccessful;
+        listener.onCreateWifiConfig(isSaveSuccessful);
     }
 
     /**

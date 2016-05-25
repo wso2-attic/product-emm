@@ -49,7 +49,7 @@ import java.util.List;
 
 public class Certificate {
 
-    private static Log log = LogFactory.getLog(Operation.class);
+    private static Log log = LogFactory.getLog(Certificate.class);
 
     /**
      * Save a list of certificates and relevant information in the database.

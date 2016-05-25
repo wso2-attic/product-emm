@@ -44,7 +44,7 @@ public class ConfigurationManagement extends TestBase {
                 PayloadGenerator.getJsonPayload(
                         Constants.ConfigurationManagement.CONFIGURATION_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString());
-        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                         Constants.ConfigurationManagement.CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
