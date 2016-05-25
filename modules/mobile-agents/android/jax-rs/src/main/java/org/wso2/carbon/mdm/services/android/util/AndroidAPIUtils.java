@@ -38,6 +38,7 @@ import org.wso2.carbon.device.mgt.common.app.mgt.Application;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
 import org.wso2.carbon.device.mgt.common.device.details.DeviceLocation;
 import org.wso2.carbon.device.mgt.common.notification.mgt.NotificationManagementService;
+import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
@@ -123,9 +124,9 @@ public class AndroidAPIUtils {
                 message, responseMediaType);
 
         List<DeviceIdentifier> validDeviceIds = deviceIDHolder.getValidDeviceIDList();
-        int status = getDeviceManagementService().addOperation(
+        Activity activity = getDeviceManagementService().addOperation(
                 DeviceManagementConstants.MobileDeviceTypes.MOBILE_DEVICE_TYPE_ANDROID, operation, validDeviceIds);
-        if (status > 0) {
+        if (activity != null) {
             GCMService gcmService = getGCMService();
             if (gcmService.isGCMEnabled()) {
                 List<DeviceIdentifier> deviceIDList = deviceIDHolder.getValidDeviceIDList();
@@ -142,7 +143,7 @@ public class AndroidAPIUtils {
                     responseMediaType).entity(deviceUtils.
                     convertErrorMapIntoErrorMessage(deviceIDHolder.getErrorDeviceIdList())).build();
         }
-        return javax.ws.rs.core.Response.status(javax.ws.rs.core.Response.Status.CREATED).
+        return javax.ws.rs.core.Response.status(javax.ws.rs.core.Response.Status.CREATED).entity(activity).
                 type(responseMediaType).build();
     }
 

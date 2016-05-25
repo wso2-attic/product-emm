@@ -28,6 +28,7 @@ import org.wso2.carbon.device.mgt.common.Platform;
 import org.wso2.carbon.device.mgt.common.app.mgt.Application;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
 import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManager;
+import org.wso2.carbon.device.mgt.common.operation.mgt.Activity;
 import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
 import org.wso2.carbon.device.mgt.core.app.mgt.ApplicationManagementProviderService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
@@ -117,18 +118,19 @@ public class Operation {
 
     /* @deprecated */
     @POST
-    public ResponsePayload addOperation(DeviceOperationContext operationContext) throws MDMAPIException {
+    public Response addOperation(DeviceOperationContext operationContext) throws MDMAPIException {
         DeviceManagementProviderService dmService;
         ResponsePayload responseMsg = new ResponsePayload();
         try {
             dmService = MDMAPIUtils.getDeviceManagementService();
-            int operationId = dmService.addOperation(operationContext.getType(), operationContext.getOperation(),
+            Activity activity = dmService.addOperation(operationContext.getType(), operationContext.getOperation(),
                     operationContext.getDevices());
-            if (operationId > 0) {
+            if (activity != null) {
                 Response.status(HttpStatus.SC_CREATED);
                 responseMsg.setMessageFromServer("Operation has added successfully.");
             }
-            return responseMsg;
+            //Response.status(HttpStatus.SC_CREATED);
+            return Response.status(HttpStatus.SC_CREATED).entity(activity).build();
         } catch (OperationManagementException e) {
             String msg = "Error occurred while saving the operation";
             log.error(msg, e);
