@@ -218,9 +218,13 @@ public class WiFiConfig {
                                 wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.TTLS);
                                 wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
                                 switch (profile.getPhase2()) {
+                                    case PAP:
+                                        wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.PAP);
                                     case GTC:
                                         wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.GTC);
                                         break;
+                                    case MCHAP:
+                                        wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.MSCHAP);
                                     case MCHAPV2:
                                         wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.MSCHAPV2);
                                         break;
