@@ -55,31 +55,31 @@ public class Dashboard {
     private static Log log = LogFactory.getLog(Dashboard.class);
 
     // Constants related to Dashboard filtering
-    public static final String CONNECTIVITY_STATUS = "connectivity-status";
-    public static final String POTENTIAL_VULNERABILITY = "potential-vulnerability";
-    public static final String NON_COMPLIANT_FEATURE_CODE = "non-compliant-feature-code";
-    public static final String PLATFORM = "platform";
-    public static final String OWNERSHIP = "ownership";
+    private static final String CONNECTIVITY_STATUS = "connectivity-status";
+    private static final String POTENTIAL_VULNERABILITY = "potential-vulnerability";
+    private static final String NON_COMPLIANT_FEATURE_CODE = "non-compliant-feature-code";
+    private static final String PLATFORM = "platform";
+    private static final String OWNERSHIP = "ownership";
     // Constants related to pagination
-    public static final String PAGINATION_ENABLED = "pagination-enabled";
-    public static final String START_INDEX = "start";
-    public static final String RESULT_COUNT = "length";
-    public static final String FLAG_TRUE = "true";
-    public static final String FLAG_FALSE = "false";
+    private static final String PAGINATION_ENABLED = "pagination-enabled";
+    private static final String START_INDEX = "start";
+    private static final String RESULT_COUNT = "length";
+    private static final String FLAG_TRUE = "true";
+    private static final String FLAG_FALSE = "false";
     // Constants related to common error-response messages
-    public static final String INVALID_QUERY_PARAM_VALUE_POTENTIAL_VULNERABILITY = "Received an invalid value for " +
+    private static final String INVALID_QUERY_PARAM_VALUE_POTENTIAL_VULNERABILITY = "Received an invalid value for " +
         "query parameter : " + POTENTIAL_VULNERABILITY + ", Should be either NON_COMPLIANT or UNMONITORED.";
-    public static final String INVALID_QUERY_PARAM_VALUE_START_INDEX = "Received an invalid value for " +
+    private static final String INVALID_QUERY_PARAM_VALUE_START_INDEX = "Received an invalid value for " +
         "query parameter : " + START_INDEX + ", Should not be lesser than 0.";
-    public static final String INVALID_QUERY_PARAM_VALUE_RESULT_COUNT = "Received an invalid value for " +
+    private static final String INVALID_QUERY_PARAM_VALUE_RESULT_COUNT = "Received an invalid value for " +
         "query parameter : " + RESULT_COUNT + ", Should not be lesser than 5.";
-    public static final String INVALID_QUERY_PARAM_VALUE_PAGINATION_ENABLED = "Received an invalid value for " +
+    private static final String INVALID_QUERY_PARAM_VALUE_PAGINATION_ENABLED = "Received an invalid value for " +
         "query parameter : " + PAGINATION_ENABLED + ", Should be either true or false.";
-    public static final String REQUIRED_QUERY_PARAM_VALUE_NON_COMPLIANT_FEATURE_CODE = "Missing required query " +
+    private static final String REQUIRED_QUERY_PARAM_VALUE_NON_COMPLIANT_FEATURE_CODE = "Missing required query " +
         "parameter : " + NON_COMPLIANT_FEATURE_CODE;
-    public static final String REQUIRED_QUERY_PARAM_VALUE_PAGINATION_ENABLED = "Missing required query " +
+    private static final String REQUIRED_QUERY_PARAM_VALUE_PAGINATION_ENABLED = "Missing required query " +
         "parameter : " + PAGINATION_ENABLED;
-    public static final String ERROR_IN_RETRIEVING_REQUESTED_DATA = "Error in retrieving requested data.";
+    private static final String ERROR_IN_RETRIEVING_REQUESTED_DATA = "Error in retrieving requested data.";
 
     @GET
     @Path("device-count-overview")
