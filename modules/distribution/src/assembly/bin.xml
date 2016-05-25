@@ -471,6 +471,17 @@
             </includes>
         </fileSet>
 
+        <!-- Copy Certificate Management API -->
+        <fileSet>
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps
+            </directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
+            <includes>
+                <include>certificate-mgt.war</include>
+            </includes>
+        </fileSet>
+
         <!-- Copying Dashboard related files-->
         <fileSet>
             <directory>
