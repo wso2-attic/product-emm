@@ -53,6 +53,7 @@ import org.wso2.emm.agent.beans.Notification;
 import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.beans.WifiProfile;
 import org.wso2.emm.agent.dao.NotificationDAO;
+import org.wso2.emm.agent.events.listeners.WifiConfigCreateListener;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 import org.wso2.emm.agent.services.DeviceInfoPayload;
@@ -298,12 +299,12 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      *
      * @param operation - Operation object.
      */
-    public void configureWifi(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+    public void configureWifi(final org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
         boolean wifiStatus;
         String ssid = null;
         String password = null;
         WifiProfile wifiProfile = null;
-        JSONObject result = new JSONObject();
+        final JSONObject result = new JSONObject();
 
         try {
             JSONObject wifiData = new JSONObject(operation.getPayLoad().toString());
@@ -348,28 +349,32 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         }
 
         WiFiConfig config = new WiFiConfig(context.getApplicationContext());
-        wifiStatus = config.setWifiConfig(wifiProfile);
+        config.setWifiConfig(wifiProfile, new WifiConfigCreateListener() {
+            @Override
+            public void onCreateWifiConfig(boolean isSavedWifi) {
+                try {
+                    String status;
+                    if (isSavedWifi) {
+                        status = resources.getString(R.string.shared_pref_default_status);
+                        result.put(resources.getString(R.string.operation_status), status);
+                    } else {
+                        status = resources.getString(R.string.shared_pref_false_status);
+                        result.put(resources.getString(R.string.operation_status), status);
+                    }
+                } catch (JSONException e) {
+                    operation.setStatus(resources.getString(R.string.operation_value_error));
+                    resultBuilder.build(operation);
+                   Log.e(TAG, "Invalid JSON format" + e);
+                }
+                if (Constants.DEBUG_MODE_ENABLED) {
+                    Log.d(TAG, "Wifi configured");
+                }
+                operation.setStatus(resources.getString(R.string.operation_value_completed));
+                operation.setPayLoad(result.toString());
+                resultBuilder.build(operation);
 
-        try {
-            String status;
-            if (wifiStatus) {
-                status = resources.getString(R.string.shared_pref_default_status);
-                result.put(resources.getString(R.string.operation_status), status);
-            } else {
-                status = resources.getString(R.string.shared_pref_false_status);
-                result.put(resources.getString(R.string.operation_status), status);
             }
-        } catch (JSONException e) {
-            operation.setStatus(resources.getString(R.string.operation_value_error));
-            resultBuilder.build(operation);
-            throw new AndroidAgentException("Invalid JSON format.", e);
-        }
-        if (Constants.DEBUG_MODE_ENABLED) {
-            Log.d(TAG, "Wifi configured");
-        }
-        operation.setStatus(resources.getString(R.string.operation_value_completed));
-        operation.setPayLoad(result.toString());
-        resultBuilder.build(operation);
+        });
     }
 
     /**
