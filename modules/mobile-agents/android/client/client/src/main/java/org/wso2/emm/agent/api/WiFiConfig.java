@@ -32,6 +32,7 @@ import android.util.Log;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.beans.WifiProfile;
 import org.wso2.emm.agent.events.listeners.DeviceCertCreateListener;
+import org.wso2.emm.agent.events.listeners.WifiConfigCreateListener;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 
@@ -96,7 +97,7 @@ public class WiFiConfig {
      *
      * @param profile - WIFI Profile.
      */
-    public boolean setWifiConfig(final WifiProfile profile) {
+    public void setWifiConfig(final WifiProfile profile, final WifiConfigCreateListener listener) {
         final WifiConfiguration wifiConfig = new WifiConfiguration();
         boolean isSaveSuccessful = false;
         boolean isNetworkEnabled = false;
@@ -184,6 +185,16 @@ public class WiFiConfig {
                                                         Log.d(TAG, key.toString());
                                                         wifiConfig.enterpriseConfig.setClientKeyEntry(key, cert);
                                                     }
+                                                    wifiManager.setWifiEnabled(true);
+                                                    int result = wifiManager.addNetwork(wifiConfig);
+                                                    boolean isSaveSuccessful = wifiManager.saveConfiguration();
+                                                    boolean isNetworkEnabled = wifiManager.enableNetwork(result, true);
+                                                    if (Constants.DEBUG_MODE_ENABLED) {
+                                                        Log.d(TAG, "add Network returned." + result);
+                                                        Log.d(TAG, "saveConfiguration returned." + isSaveSuccessful);
+                                                        Log.d(TAG, "enableNetwork returned." + isNetworkEnabled);
+                                                    }
+                                                    listener.onCreateWifiConfig(isSaveSuccessful);
                                                 } catch (IOException e) {
                                                    Log.d(TAG, e.getMessage());
                                                 } catch (CertificateException e) {
@@ -202,7 +213,7 @@ public class WiFiConfig {
                                         e.printStackTrace();
                                     }
                                 }
-                                break;
+                                return;
                             case TTLS:
                                 wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.TTLS);
                                 wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
@@ -248,7 +259,7 @@ public class WiFiConfig {
             Log.d(TAG, "enableNetwork returned." + isNetworkEnabled);
         }
 
-        return isSaveSuccessful;
+        listener.onCreateWifiConfig(isSaveSuccessful);
     }
 
     /**

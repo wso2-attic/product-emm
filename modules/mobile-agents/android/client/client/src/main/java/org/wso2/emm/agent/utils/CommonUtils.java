@@ -141,6 +141,7 @@ public class CommonUtils {
 	/**
 	 * Generates keys, CSR and certificates for the devices.
 	 * @param context - Application context.
+	 * @param listener - DeviceCertCreateListener which provide device .
 	 */
 	public static void generateDeviceCertificate(final Context context, final DeviceCertCreateListener listener) throws AndroidAgentException{
 
