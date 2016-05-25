@@ -31,16 +31,12 @@ import android.util.Log;
 
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.beans.WifiProfile;
-import org.wso2.emm.agent.events.listeners.DeviceCertCreateListener;
-import org.wso2.emm.agent.events.listeners.WifiConfigCreateListener;
+import org.wso2.emm.agent.events.listeners.DeviceCertCreationListener;
+import org.wso2.emm.agent.events.listeners.WifiConfigCreationListener;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStore;
@@ -97,7 +93,7 @@ public class WiFiConfig {
      *
      * @param profile - WIFI Profile.
      */
-    public void setWifiConfig(final WifiProfile profile, final WifiConfigCreateListener listener) {
+    public void setWifiConfig(final WifiProfile profile, final WifiConfigCreationListener listener) {
         final WifiConfiguration wifiConfig = new WifiConfiguration();
         boolean isSaveSuccessful = false;
         boolean isNetworkEnabled = false;
@@ -168,7 +164,7 @@ public class WiFiConfig {
                                 if(Constants.ENABLE_DEVICE_CERTIFICATE_GENERATION){
 
                                     try {
-                                        CommonUtils.generateDeviceCertificate(context, new DeviceCertCreateListener() {
+                                        CommonUtils.generateDeviceCertificate(context, new DeviceCertCreationListener() {
                                             @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
                                             @Override
                                             public void onDeviceCertCreated(InputStream inputStream) {

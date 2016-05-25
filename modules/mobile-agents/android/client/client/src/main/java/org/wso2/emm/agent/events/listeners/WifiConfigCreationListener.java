@@ -17,7 +17,7 @@
 
 package org.wso2.emm.agent.events.listeners;
 
-public interface WifiConfigCreateListener {
+public interface WifiConfigCreationListener {
 
     public void onCreateWifiConfig(boolean isSavedWifi);
 }

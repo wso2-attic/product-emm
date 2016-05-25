@@ -17,26 +17,11 @@
  */
 package org.wso2.emm.agent.services;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SignatureException;
 import java.util.Map;
 
-import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.bouncycastle.jce.provider.asymmetric.ec.KeyPairGenerator;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.ServerConfig;
-import org.wso2.emm.agent.events.listeners.DeviceCertCreateListener;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 import org.wso2.emm.agent.utils.Constants;
@@ -50,8 +35,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.util.Log;
 import android.widget.Toast;
-
-import javax.security.auth.x500.X500Principal;
 
 /**
  * This is the component that is responsible for actual device administration.

@@ -5,7 +5,7 @@ import java.io.InputStream;
 /**
  * Created by dilan on 5/24/16.
  */
-public interface DeviceCertCreateListener {
+public interface DeviceCertCreationListener {
 
     public void onDeviceCertCreated(InputStream certificate);
 }

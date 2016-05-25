@@ -52,8 +52,7 @@ import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.beans.Notification;
 import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.beans.WifiProfile;
-import org.wso2.emm.agent.dao.NotificationDAO;
-import org.wso2.emm.agent.events.listeners.WifiConfigCreateListener;
+import org.wso2.emm.agent.events.listeners.WifiConfigCreationListener;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 import org.wso2.emm.agent.services.DeviceInfoPayload;
@@ -349,7 +348,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         }
 
         WiFiConfig config = new WiFiConfig(context.getApplicationContext());
-        config.setWifiConfig(wifiProfile, new WifiConfigCreateListener() {
+        config.setWifiConfig(wifiProfile, new WifiConfigCreationListener() {
             @Override
             public void onCreateWifiConfig(boolean isSavedWifi) {
                 try {

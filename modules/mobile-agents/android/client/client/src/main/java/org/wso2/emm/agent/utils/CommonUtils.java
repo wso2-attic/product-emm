@@ -49,7 +49,7 @@ import org.wso2.emm.agent.beans.AppRestriction;
 import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.beans.UnregisterProfile;
-import org.wso2.emm.agent.events.listeners.DeviceCertCreateListener;
+import org.wso2.emm.agent.events.listeners.DeviceCertCreationListener;
 import org.wso2.emm.agent.proxy.APIController;
 import org.wso2.emm.agent.proxy.beans.EndPointInfo;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
@@ -63,8 +63,6 @@ import org.wso2.emm.agent.services.ResultPayload;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -141,9 +139,9 @@ public class CommonUtils {
 	/**
 	 * Generates keys, CSR and certificates for the devices.
 	 * @param context - Application context.
-	 * @param listener - DeviceCertCreateListener which provide device .
+	 * @param listener - DeviceCertCreationListener which provide device .
 	 */
-	public static void generateDeviceCertificate(final Context context, final DeviceCertCreateListener listener) throws AndroidAgentException{
+	public static void generateDeviceCertificate(final Context context, final DeviceCertCreationListener listener) throws AndroidAgentException{
 
 		if(context.getFileStreamPath(Constants.DEVICE_CERTIFCATE_NAME).exists()){
 			try {
