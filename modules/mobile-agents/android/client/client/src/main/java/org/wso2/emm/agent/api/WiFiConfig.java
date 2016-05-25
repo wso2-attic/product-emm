@@ -18,6 +18,7 @@
 package org.wso2.emm.agent.api;
 
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -28,7 +29,10 @@ import android.os.Build;
 import android.util.Base64;
 import android.util.Log;
 
+import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.beans.WifiProfile;
+import org.wso2.emm.agent.events.listeners.DeviceCertCreateListener;
+import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 
 import java.io.BufferedInputStream;
@@ -93,7 +97,7 @@ public class WiFiConfig {
      * @param profile - WIFI Profile.
      */
     public boolean setWifiConfig(final WifiProfile profile) {
-        WifiConfiguration wifiConfig = new WifiConfiguration();
+        final WifiConfiguration wifiConfig = new WifiConfiguration();
         boolean isSaveSuccessful = false;
         boolean isNetworkEnabled = false;
         int result = 0;
@@ -160,35 +164,44 @@ public class WiFiConfig {
                                 wifiConfig.enterpriseConfig.setCaCertificate(getCertifcate(profile));
                                 wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.NONE);
                                 wifiConfig.enterpriseConfig.setAnonymousIdentity(WIFI_ANONYMOUS_ID);
-                                try {
-                                    KeyStore keyStore = KeyStore.getInstance(KEYSTORE_PKCS12);
-                                    InputStream in = new
-                                            BufferedInputStream(context.openFileInput(Constants.DEVICE_CERTIFCATE_NAME));
-                                    keyStore.load(in,Constants.DEVICE_CERTIFCATE_PASSWORD.toCharArray());
-                                    Enumeration<String> aliases = keyStore.aliases();
-                                    while (aliases.hasMoreElements()) {
-                                        String alias = aliases.nextElement();
-                                        Log.d(TAG, "alias: " + alias);
-                                        X509Certificate cert = (X509Certificate) keyStore.getCertificate(alias);
-                                        Log.d(TAG, cert.toString());
-                                        PrivateKey key = (PrivateKey) keyStore.getKey(alias, Constants.DEVICE_CERTIFCATE_PASSWORD.toCharArray());
-                                        Log.d(TAG, key.toString());
-                                        wifiConfig.enterpriseConfig.setClientKeyEntry(key, cert);
-                                    }
-                                } catch (KeyStoreException e) {
-                                    Log.e(TAG, "Cannot get the keystore");
-                                } catch (FileNotFoundException e) {
-                                    Log.e(TAG, "Wifi TLS Keystore file not found");
-                                } catch (CertificateException e) {
-                                    Log.e(TAG, e.getMessage());
-                                } catch (NoSuchAlgorithmException e) {
-                                    Log.e(TAG, e.getMessage());
-                                } catch (IOException e) {
-                                    Log.e(TAG, e.getMessage());
-                                } catch (UnrecoverableKeyException e) {
-                                    Log.e(TAG, e.getMessage());
-                                }
+                                if(Constants.ENABLE_DEVICE_CERTIFICATE_GENERATION){
 
+                                    try {
+                                        CommonUtils.generateDeviceCertificate(context, new DeviceCertCreateListener() {
+                                            @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+                                            @Override
+                                            public void onDeviceCertCreated(InputStream inputStream) {
+                                                try {
+                                                    KeyStore keyStore = KeyStore.getInstance(KEYSTORE_PKCS12);
+                                                    keyStore.load(inputStream, Constants.DEVICE_CERTIFCATE_PASSWORD.toCharArray());
+                                                    Enumeration<String> aliases = keyStore.aliases();
+                                                    while (aliases.hasMoreElements()) {
+                                                        String alias = aliases.nextElement();
+                                                        Log.d(TAG, "alias: " + alias);
+                                                        X509Certificate cert = (X509Certificate) keyStore.getCertificate(alias);
+                                                        Log.d(TAG, cert.toString());
+                                                        PrivateKey key = (PrivateKey) keyStore.getKey(alias, Constants.DEVICE_CERTIFCATE_PASSWORD.toCharArray());
+                                                        Log.d(TAG, key.toString());
+                                                        wifiConfig.enterpriseConfig.setClientKeyEntry(key, cert);
+                                                    }
+                                                } catch (IOException e) {
+                                                   Log.d(TAG, e.getMessage());
+                                                } catch (CertificateException e) {
+                                                    Log.d(TAG, e.getMessage());
+                                                } catch (UnrecoverableKeyException e) {
+                                                    Log.d(TAG, e.getMessage());
+                                                } catch (NoSuchAlgorithmException e) {
+                                                    Log.d(TAG, e.getMessage());
+                                                } catch (KeyStoreException e) {
+                                                    Log.d(TAG, e.getMessage());
+                                                }
+                                            }
+                                        });
+
+                                    } catch (AndroidAgentException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
                                 break;
                             case TTLS:
                                 wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.TTLS);

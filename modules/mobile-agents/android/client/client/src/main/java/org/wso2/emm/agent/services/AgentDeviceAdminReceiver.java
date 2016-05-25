@@ -36,6 +36,7 @@ import org.bouncycastle.jce.provider.asymmetric.ec.KeyPairGenerator;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.ServerConfig;
+import org.wso2.emm.agent.events.listeners.DeviceCertCreateListener;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 import org.wso2.emm.agent.utils.Constants;
@@ -67,7 +68,7 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 	 * Called when this application is approved to be a device administrator.
 	 */
 	@Override
-	public void onEnabled(Context context, Intent intent) {
+	public void onEnabled(final Context context, Intent intent) {
 		super.onEnabled(context, intent);
 
 		Resources resources = context.getResources();
@@ -82,15 +83,11 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 
 		Toast.makeText(context, R.string.device_admin_enabled,
 				Toast.LENGTH_LONG).show();
+
+
 		String notifier = Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE);
 		if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
 			LocalNotification.startPolling(context);
-		}
-
-		try {
-			CommonUtils.generateDeviceCertificate(context);
-		} catch (AndroidAgentException e) {
-			Log.e(TAG, e.getMessage());
 		}
 	}
 

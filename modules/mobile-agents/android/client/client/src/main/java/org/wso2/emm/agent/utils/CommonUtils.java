@@ -29,6 +29,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Base64;
 import android.util.Log;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -48,6 +49,7 @@ import org.wso2.emm.agent.beans.AppRestriction;
 import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.beans.UnregisterProfile;
+import org.wso2.emm.agent.events.listeners.DeviceCertCreateListener;
 import org.wso2.emm.agent.proxy.APIController;
 import org.wso2.emm.agent.proxy.beans.EndPointInfo;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
@@ -59,6 +61,8 @@ import org.wso2.emm.agent.services.PolicyRevokeHandler;
 import org.wso2.emm.agent.services.ResultPayload;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -66,12 +70,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.KeyPair;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SignatureException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.security.auth.x500.X500Principal;
 
@@ -131,37 +142,78 @@ public class CommonUtils {
 	 * Generates keys, CSR and certificates for the devices.
 	 * @param context - Application context.
 	 */
-	public static void generateDeviceCertificate(Context context) throws AndroidAgentException{
-		try {
-			KeyPair myKeyPair = null;
-			myKeyPair = KeyPairGenerator.getInstance(Constants.DEVICE_KEY_TYPE).generateKeyPair();
-			X500Principal subject = new X500Principal(Constants.DEVICE_CSR_INFO);
-			PKCS10CertificationRequest csr = new PKCS10CertificationRequest
-					(Constants.DEVICE_KEY_ALGO, subject, myKeyPair.getPublic(), null, myKeyPair.getPrivate()
-					);
-			InputStream inputStream = new
-					BufferedInputStream(new FileInputStream(new File("/sdcard/Download/KEYSTORE.p12")));
-			FileOutputStream outputStream = context.openFileOutput(Constants.DEVICE_CERTIFCATE_NAME, Context.MODE_PRIVATE);
-			byte[] buffer = new byte[1024];
-			int bytesRead = 0;
-			while ((bytesRead = inputStream.read(buffer)) != -1) {
-				outputStream.write(buffer, 0, bytesRead);
+	public static void generateDeviceCertificate(final Context context, final DeviceCertCreateListener listener) throws AndroidAgentException{
+
+		if(context.getFileStreamPath(Constants.DEVICE_CERTIFCATE_NAME).exists()){
+			try {
+				listener.onDeviceCertCreated(new BufferedInputStream(context.openFileInput(Constants.DEVICE_CERTIFCATE_NAME)));
+			} catch (FileNotFoundException e) {
+				Log.e(TAG, e.getMessage());
 			}
-			inputStream.close();
-			outputStream.close();
-		} catch (NoSuchAlgorithmException e) {
-			throw new AndroidAgentException("No algorithm for key generation", e);
-		} catch (SignatureException e) {
-			throw new AndroidAgentException("Invalid Signature", e);
-		} catch (NoSuchProviderException e) {
-			throw new AndroidAgentException("Invalid provider", e);
-		} catch (InvalidKeyException e) {
-			throw new AndroidAgentException("Invalid key", e);
-		} catch (FileNotFoundException e) {
-			Log.e(TAG, e.getMessage());
-		} catch (IOException e) {
-			Log.e(TAG, e.getMessage());
+		}else{
+
+			try {
+				ServerConfig utils = new ServerConfig();
+				final KeyPair deviceKeyPair= KeyPairGenerator.getInstance(Constants.DEVICE_KEY_TYPE).generateKeyPair();
+				X500Principal subject = new X500Principal(Constants.DEVICE_CSR_INFO);
+				PKCS10CertificationRequest csr = new PKCS10CertificationRequest
+						(Constants.DEVICE_KEY_ALGO, subject, deviceKeyPair.getPublic(), null, deviceKeyPair.getPrivate()
+						);
+
+
+				EndPointInfo endPointInfo = new EndPointInfo();
+				endPointInfo.setHttpMethod(org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.POST);
+				endPointInfo.setEndPoint(utils.getAPIServerURL(context) + Constants.SCEP_ENDPOINT);
+				endPointInfo.setRequestParams(Base64.encodeToString(csr.getEncoded(), Base64.DEFAULT));
+
+				new APIController().invokeAPI(endPointInfo,new APIResultCallBack() {
+					@Override
+					public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
+						try {
+							CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
+							InputStream in = new ByteArrayInputStream(Base64.decode(result.get("response"), Base64.DEFAULT));
+							X509Certificate cert = (X509Certificate)certFactory.generateCertificate(in);
+							ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+							KeyStore keyStore = KeyStore.getInstance("PKCS12");
+							keyStore.load(null);
+							keyStore.setKeyEntry(Constants.DEVICE_CERTIFCATE_ALIAS, (Key)deviceKeyPair.getPrivate(),
+									Constants.DEVICE_CERTIFCATE_PASSWORD.toCharArray(),
+									new java.security.cert.Certificate[]{cert});
+							keyStore.store(byteArrayOutputStream, Constants.DEVICE_CERTIFCATE_PASSWORD.toCharArray());
+							FileOutputStream outputStream = context.openFileOutput(Constants.DEVICE_CERTIFCATE_NAME, Context.MODE_PRIVATE);
+							outputStream.write(byteArrayOutputStream.toByteArray());
+							byteArrayOutputStream.close();
+							outputStream.close();
+							try {
+								listener.onDeviceCertCreated(new BufferedInputStream(context.openFileInput(Constants.DEVICE_CERTIFCATE_NAME)));
+							} catch (FileNotFoundException e) {
+								Log.e(TAG, e.getMessage());
+							}
+						} catch (CertificateException e) {
+							Log.e(TAG, e.getMessage());
+						} catch (KeyStoreException e) {
+							e.printStackTrace();
+						} catch (NoSuchAlgorithmException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				},Constants.SCEP_REQUEST_CODE,context, true);
+
+			} catch (NoSuchAlgorithmException e) {
+				throw new AndroidAgentException("No algorithm for key generation", e);
+			} catch (SignatureException e) {
+				throw new AndroidAgentException("Invalid Signature", e);
+			} catch (NoSuchProviderException e) {
+				throw new AndroidAgentException("Invalid provider", e);
+			} catch (InvalidKeyException e) {
+				throw new AndroidAgentException("Invalid key", e);
+			}
+
 		}
+
+
 	}
 
 	/**

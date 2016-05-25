@@ -53,6 +53,7 @@ public class APIController implements TokenCallBack {
 	private APIResultCallBack apiResultCallback;
 	private EndPointInfo apiEndPointInfo;
 	private int requestMethod;
+	private boolean isStringRequest = false;
 	
 	public APIController(String clientKey, String clientSecret){
 		this.clientKey = clientKey;
@@ -88,22 +89,44 @@ public class APIController implements TokenCallBack {
 		                                         this.clientSecret);
 	}
 
+	public void invokeAPI(EndPointInfo apiEndPointInfo, APIResultCallBack apiResultCallBack,
+						  int requestCode, Context context, boolean isString) {
+		this.isStringRequest = isString;
+		this.apiResultCallback = apiResultCallBack;
+		this.apiEndPointInfo = apiEndPointInfo;
+
+		if (IdentityProxy.getInstance().getContext() == null) {
+			IdentityProxy.getInstance().setContext(context);
+		}
+
+		IdentityProxy.getInstance().setRequestCode(requestCode);
+
+		IdentityProxy.getInstance().requestToken(IdentityProxy.getInstance().getContext(), this,
+				this.clientKey,
+				this.clientSecret);
+	}
+
+
 	@Override
 	public void onReceiveTokenResult(Token token, String status) {
 		this.token = token;
 		setRequestMethod(apiEndPointInfo.getHttpMethod());
-		if (apiEndPointInfo.getRequestParamsMap() != null) {
+		if(isStringRequest){
 			sendStringRequest(apiResultCallback, apiEndPointInfo, false);
-		} else if (apiEndPointInfo.getRequestParams() != null) {
-			if (isJSONObject(apiEndPointInfo.getRequestParams())) {
-				sendJsonObjectRequest(apiResultCallback, apiEndPointInfo, false);
-			} else {
+		}else{
+			if (apiEndPointInfo.getRequestParamsMap() != null) {
+				sendStringRequest(apiResultCallback, apiEndPointInfo, false);
+			} else if (apiEndPointInfo.getRequestParams() != null) {
+				if (isJSONObject(apiEndPointInfo.getRequestParams())) {
+					sendJsonObjectRequest(apiResultCallback, apiEndPointInfo, false);
+				} else {
+					sendJsonArrayRequest(apiResultCallback, apiEndPointInfo, false);
+				}
+			} else if (apiEndPointInfo.isJSONArrayRequest()) {
 				sendJsonArrayRequest(apiResultCallback, apiEndPointInfo, false);
+			} else {
+				sendJsonObjectRequest(apiResultCallback, apiEndPointInfo, false);
 			}
-		} else if (apiEndPointInfo.isJSONArrayRequest()) {
-			sendJsonArrayRequest(apiResultCallback, apiEndPointInfo, false);
-		} else {
-			sendJsonObjectRequest(apiResultCallback, apiEndPointInfo, false);
 		}
 	}
 
@@ -160,7 +183,7 @@ public class APIController implements TokenCallBack {
 		}
 	}
 
-	private void sendStringRequest(final APIResultCallBack callBack, final EndPointInfo apiUtilities,
+	public void sendStringRequest(final APIResultCallBack callBack, final EndPointInfo apiUtilities,
 	                               final boolean isSecured) {
 		RequestQueue queue =  null;
 		try {
@@ -200,6 +223,11 @@ public class APIController implements TokenCallBack {
 			}
 
 			@Override
+			public byte[] getBody() throws AuthFailureError {
+				return apiUtilities.getRequestParams().getBytes();
+			}
+
+			@Override
 			protected Map<String, String> getParams() throws AuthFailureError {
 				return apiUtilities.getRequestParamsMap();
 			}
@@ -207,8 +235,8 @@ public class APIController implements TokenCallBack {
 			@Override
 			public Map<String, String> getHeaders() throws AuthFailureError {
 				Map<String, String> headers = new HashMap<>();
-				headers.put("Content-Type", "application/json");
-				headers.put("Accept", "*/*");
+				headers.put("Content-Type", "text/plain");
+				headers.put("Accept", "text/plain");
 				headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
 				if(!isSecured) {
 					String accessToken = token.getAccessToken();

@@ -23,7 +23,7 @@ package org.wso2.emm.agent.utils;
  */
 public class Constants {
 
-	public static final boolean DEBUG_MODE_ENABLED = true;
+	public static final boolean DEBUG_MODE_ENABLED = false;
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
 	public static final boolean SYSTEM_APP_ENABLED = false;
@@ -63,6 +63,7 @@ public class Constants {
 	public static final String LICENSE_ENDPOINT = SERVER_APP_ENDPOINT + "device/license";
 	public static final String REGISTER_ENDPOINT = SERVER_APP_ENDPOINT + "enrollment/";
 	public static final String CONFIGURATION_ENDPOINT = SERVER_APP_ENDPOINT + "configuration/";
+	public static final String SCEP_ENDPOINT = "/mdm-admin/certificates/csr-sign";
 	public static final String OAUTH_ENDPOINT = "/oauth2/token";
 	public static final String DEVICE_ENDPOINT = SERVER_APP_ENDPOINT + "device/";
 	public static final String IS_REGISTERED_ENDPOINT = REGISTER_ENDPOINT;
@@ -119,11 +120,13 @@ public class Constants {
 	/**
 	 * Device certificates.
 	 */
+	public static final boolean ENABLE_DEVICE_CERTIFICATE_GENERATION = true;
 	public static final String DEVICE_CERTIFCATE_NAME = "device-cert.p12";
+	public static final String DEVICE_CERTIFCATE_ALIAS = "wso2carbon";
 	public static final String DEVICE_CERTIFCATE_PASSWORD = "wso2carbon";
 	public static final String DEVICE_KEY_TYPE = "RSA";
 	public static final String DEVICE_KEY_ALGO = "SHA256withRSA";
-	public static final String DEVICE_CSR_INFO = "CN=WSO2 V3 Certificate";
+	public static final String DEVICE_CSR_INFO = "CN=WSO2 Device";
 
 
 	public static final String APP_LOCK_SERVICE = "AppLockService";
@@ -146,6 +149,7 @@ public class Constants {
 	public static final int EVENT_REQUEST_CODE = 312;
 	public static final int APP_LIST_REQUEST_CODE = 313;
 	public static final int DYNAMIC_CLIENT_UNREGISTER_REQUEST_CODE = 314;
+	public static final int SCEP_REQUEST_CODE = 300;
 
 	/**
 	 * Google API project id registered to use GCM.
