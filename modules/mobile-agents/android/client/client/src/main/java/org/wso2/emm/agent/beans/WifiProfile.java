@@ -45,7 +45,6 @@ public class WifiProfile {
 
         }
 
-
         public static Type getByValue(String value) {
             for(Type e: Type.values()) {
                 if(e.value.equals(value)) {

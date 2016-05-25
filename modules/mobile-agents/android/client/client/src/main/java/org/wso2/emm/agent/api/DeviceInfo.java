@@ -105,7 +105,7 @@ public class DeviceInfo {
 	 * Returns the IMEI Number.
 	 * @return - Device IMEI number.
 	 */
-	public String getDeviceId() {	
+	public String getDeviceId() {
 		String deviceId = telephonyManager.getDeviceId();
 		
 		if (deviceId == null || deviceId.isEmpty()) {

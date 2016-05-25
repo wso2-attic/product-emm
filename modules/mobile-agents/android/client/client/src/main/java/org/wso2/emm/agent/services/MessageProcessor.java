@@ -222,7 +222,7 @@ public class MessageProcessor implements APIResultCallBack {
 
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS_KEY);
-				if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
+				if (Constants.Status.SUCCESSFUL.equals(responseStatus) || Constants.Status.CREATED.equals(responseStatus)) {
 					response = result.get(Constants.RESPONSE);
 					if (response != null && !response.isEmpty()) {
 						if (Constants.DEBUG_MODE_ENABLED) {

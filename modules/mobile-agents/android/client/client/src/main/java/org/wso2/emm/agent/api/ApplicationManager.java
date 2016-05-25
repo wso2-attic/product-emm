@@ -470,6 +470,7 @@ public class ApplicationManager implements TokenCallBack {
             Log.e(TAG, "Failed to retrieve HTTP client", e);
         }
 
+
         InputStreamVolleyRequest request = new InputStreamVolleyRequest(Request.Method.GET, url,
             new Response.Listener<byte[]>() {
                 @Override
