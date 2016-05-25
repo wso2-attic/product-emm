@@ -7,5 +7,9 @@ import java.io.InputStream;
  */
 public interface DeviceCertCreationListener {
 
+    /**
+     * This method will be called after the device certificate is created
+     * @param certificate - Returns the input stream of the certificate
+     */
     public void onDeviceCertCreated(InputStream certificate);
 }
