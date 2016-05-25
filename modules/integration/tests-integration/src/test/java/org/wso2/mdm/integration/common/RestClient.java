@@ -74,6 +74,7 @@ public class RestClient {
     }
 
     public HttpResponse post(String endpoint, String body) throws Exception {
+        this.requestHeaders.put("Accept", "application/json");
         return HttpRequestUtil.doPost(new URL(backEndUrl + endpoint), body, requestHeaders);
     }
 
