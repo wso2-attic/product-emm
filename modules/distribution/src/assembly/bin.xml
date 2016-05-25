@@ -478,7 +478,7 @@
             </directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
             <includes>
-                <include>certificatemgt.war</include>
+                <include>certificate-mgt.war</include>
             </includes>
         </fileSet>
 
