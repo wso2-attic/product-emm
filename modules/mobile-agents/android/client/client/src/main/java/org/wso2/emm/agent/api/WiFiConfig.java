@@ -35,6 +35,7 @@ import org.wso2.emm.agent.events.listeners.DeviceCertCreationListener;
 import org.wso2.emm.agent.events.listeners.WifiConfigCreationListener;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -137,6 +138,11 @@ public class WiFiConfig {
                     }
                     break;
                 case EAP:
+                    //If profile identity equals the pattern pick the username from the agent
+                    if(profile.getIdentity() != null && profile.getIdentity().equals(Constants.USERNAME_PATTERN)) {
+                        profile.setIdentity(Preference.getString(context, Constants.USERNAME));
+                    }
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                         wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_EAP);
                         wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.IEEE8021X);
