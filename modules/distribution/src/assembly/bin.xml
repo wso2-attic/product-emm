@@ -512,7 +512,9 @@
 
     <files>
         <file>
-            <source>../mobile-agents/android/jax-rs/target/mdm-android-agent.war</source>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/mdm-android-agent.war
+            </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>

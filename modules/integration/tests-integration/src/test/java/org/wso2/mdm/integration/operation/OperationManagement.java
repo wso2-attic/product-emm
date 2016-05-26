@@ -53,7 +53,7 @@ public class OperationManagement extends TestBase {
                 Constants.HTTP_METHOD_POST);
         enrollmentData.addProperty(Constants.DEVICE_IDENTIFIER_KEY, Constants.DEVICE_ID);
         MDMResponse response = client.post(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT, enrollmentData.toString());
-        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                 Constants.AndroidEnrollment.ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME,
                 Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
