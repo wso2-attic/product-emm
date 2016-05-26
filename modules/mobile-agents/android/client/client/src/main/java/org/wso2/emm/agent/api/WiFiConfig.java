@@ -116,7 +116,10 @@ public class WiFiConfig {
                     wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
                     wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
 
-                    wifiConfig.wepKeys[WIFI_CONFIG_DEFAULT_INDEX] = "\"" + profile.getPassword() + "\"";
+                    if(profile.getPassword() != null){
+                        wifiConfig.wepKeys[WIFI_CONFIG_DEFAULT_INDEX] = "\"" + profile.getPassword() + "\"";
+                    }
+
                     wifiConfig.wepTxKeyIndex = WIFI_CONFIG_DEFAULT_INDEX;
 
                     break;
@@ -129,8 +132,9 @@ public class WiFiConfig {
                     wifiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
                     wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
                     wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
-
-                    wifiConfig.preSharedKey = "\"" + profile.getPassword() + "\"";
+                    if(profile.getPassword() != null){
+                        wifiConfig.preSharedKey = "\"" + profile.getPassword() + "\"";
+                    }
                     break;
                 case EAP:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -140,9 +144,15 @@ public class WiFiConfig {
                         switch (profile.getEapMethod()) {
                             case PEAP:
                                 wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.PEAP);
-                                wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
-                                wifiConfig. enterpriseConfig.setAnonymousIdentity(profile.getAnonymousIdentity());
-                                wifiConfig.enterpriseConfig.setPassword(profile.getPassword());
+                                if(profile.getIdentity() != null){
+                                    wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
+                                }
+                                if(profile.getAnonymousIdentity() != null){
+                                    wifiConfig. enterpriseConfig.setAnonymousIdentity(profile.getAnonymousIdentity());
+                                }
+                                if(profile.getPassword() != null){
+                                    wifiConfig.enterpriseConfig.setPassword(profile.getPassword());
+                                }
                                 switch (profile.getPhase2()) {
                                     case GTC:
                                         wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.GTC);
@@ -153,12 +163,18 @@ public class WiFiConfig {
                                     default:
                                         wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.NONE);
                                 }
-                                wifiConfig.enterpriseConfig.setCaCertificate(getCertifcate(profile));
+                                if(profile.getCaCert() != null){
+                                    wifiConfig.enterpriseConfig.setCaCertificate(getCertifcate(profile));
+                                }
                                 break;
                             case TLS:
                                 wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.TLS);
-                                wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
-                                wifiConfig.enterpriseConfig.setCaCertificate(getCertifcate(profile));
+                                if(profile.getIdentity() != null){
+                                    wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
+                                }
+                                if(profile.getCaCert() != null){
+                                    wifiConfig.enterpriseConfig.setCaCertificate(getCertifcate(profile));
+                                }
                                 wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.NONE);
                                 wifiConfig.enterpriseConfig.setAnonymousIdentity(WIFI_ANONYMOUS_ID);
                                 if(Constants.ENABLE_DEVICE_CERTIFICATE_GENERATION){
@@ -212,27 +228,41 @@ public class WiFiConfig {
                                 return;
                             case TTLS:
                                 wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.TTLS);
-                                wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
+                                if(profile.getIdentity() != null){
+                                    wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
+                                }
+                                if(profile.getAnonymousIdentity() != null){
+                                    wifiConfig. enterpriseConfig.setAnonymousIdentity(profile.getAnonymousIdentity());
+                                }
+                                if(profile.getPassword() != null){
+                                    wifiConfig.enterpriseConfig.setPassword(profile.getPassword());
+                                }
                                 switch (profile.getPhase2()) {
                                     case PAP:
                                         wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.PAP);
+                                        break;
                                     case GTC:
                                         wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.GTC);
                                         break;
                                     case MCHAP:
                                         wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.MSCHAP);
+                                        break;
                                     case MCHAPV2:
                                         wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.MSCHAPV2);
                                         break;
                                     default:
                                         wifiConfig. enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.NONE);
                                 }
-                                wifiConfig.enterpriseConfig.setCaCertificate(getCertifcate(profile));
+                                if(profile.getCaCert() != null){
+                                    wifiConfig.enterpriseConfig.setCaCertificate(getCertifcate(profile));
+                                }
                                 break;
                             case PWD:
                                 wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.PWD);
                                 wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
-                                wifiConfig.enterpriseConfig.setPassword(profile.getPassword());
+                                if(profile.getPassword() != null){
+                                    wifiConfig.enterpriseConfig.setPassword(profile.getPassword());
+                                }
                                 break;
                             case SIM:
                                 wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.SIM);
