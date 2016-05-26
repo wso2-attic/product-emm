@@ -86,7 +86,7 @@ public class WifiProfile {
     }
 
     public enum Phase2 {
-        NONE("none"), MCHAPV2("mchapv2"), GTC("gtc");
+        NONE("none"), PAP("pap"), MCHAP("mchap"), MCHAPV2("mchapv2"), GTC("gtc");
 
         private String value;
 

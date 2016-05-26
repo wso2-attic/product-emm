@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.mdm.api;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.certificate.mgt.core.dao.CertificateManagementDAOException;
@@ -37,6 +38,7 @@ import org.wso2.carbon.mdm.exception.Message;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +46,10 @@ import java.util.List;
 /**
  * All the certificate related tasks such as saving certificates, can be done through this endpoint.
  */
-@Produces({"application/json", "application/xml"})
-@Consumes({"application/json", "application/xml"})
+
 public class Certificate {
 
-    private static Log log = LogFactory.getLog(Operation.class);
+    private static Log log = LogFactory.getLog(Certificate.class);
 
     /**
      * Save a list of certificates and relevant information in the database.
@@ -59,6 +60,8 @@ public class Certificate {
      * @throws MDMAPIException
      */
     @POST
+    @Produces({"application/json", "application/xml"})
+    @Consumes({"application/json", "application/xml"})
     public Response saveCertificate(@HeaderParam("Accept") String acceptHeader,
                                     EnrollmentCertificate[] enrollmentCertificates) throws MDMAPIException {
         MediaType responseMediaType = MDMAPIUtils.getResponseMediaType(acceptHeader);
@@ -90,12 +93,16 @@ public class Certificate {
      * @param binarySecurityToken Base64 encoded Certificate signing request.
      * @return X509Certificate type sign certificate.
      */
-    @GET
+    @POST
     @Path("csr-sign")
+    @Produces({MediaType.TEXT_PLAIN, MediaType.TEXT_PLAIN})
+    @Consumes({MediaType.TEXT_PLAIN, MediaType.TEXT_PLAIN})
     public Response getSignedCertFromCSR(@HeaderParam("Accept") String acceptHeader, String binarySecurityToken) {
         MediaType responseMediaType = MDMAPIUtils.getResponseMediaType(acceptHeader);
         Message message = new Message();
         X509Certificate signedCert;
+        String singedCertificate;
+        Base64 base64 = new Base64();
         CertificateGenerator certificateGenerator = new CertificateGenerator();
         try {
             if (certificateGenerator.getSignedCertificateFromCSR(binarySecurityToken) == null) {
@@ -104,10 +111,15 @@ public class Certificate {
                         entity(message).type(responseMediaType).build();
             } else {
                 signedCert = certificateGenerator.getSignedCertificateFromCSR(binarySecurityToken);
-                return Response.status(Response.Status.OK).entity(signedCert).type(responseMediaType).build();
+                singedCertificate = base64.encodeToString(signedCert.getEncoded());
+                return Response.status(Response.Status.OK).entity(singedCertificate).type(responseMediaType).build();
             }
         } catch (KeystoreException e) {
             String msg = "Error occurred while fetching certificate.";
+            log.error(msg, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(msg).type(responseMediaType).build();
+        } catch (CertificateEncodingException e) {
+            String msg = "Error occurred while encoding the certificate.";
             log.error(msg, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(msg).type(responseMediaType).build();
         }
@@ -122,6 +134,8 @@ public class Certificate {
      */
     @GET
     @Path("{serialNumber}")
+    @Produces({"application/json", "application/xml"})
+    @Consumes({"application/json", "application/xml"})
     public Response getCertificate(@HeaderParam("Accept") String acceptHeader,
                                    @PathParam("serialNumber") String serialNumber) throws MDMAPIException {
         MediaType responseMediaType = MDMAPIUtils.getResponseMediaType(acceptHeader);
@@ -155,6 +169,8 @@ public class Certificate {
      */
     @GET
     @Path("paginate")
+    @Produces({"application/json", "application/xml"})
+    @Consumes({"application/json", "application/xml"})
     public Response getAllCertificates(@HeaderParam("Accept") String acceptHeader,
                                        @QueryParam("start") int startIndex,
                                        @QueryParam("length") int length)
@@ -191,6 +207,8 @@ public class Certificate {
      * @throws MDMAPIException
      */
     @GET
+    @Produces({"application/json", "application/xml"})
+    @Consumes({"application/json", "application/xml"})
     public Response getAllCertificates(@HeaderParam("Accept") String acceptHeader)
             throws MDMAPIException {
         MediaType responseMediaType = MDMAPIUtils.getResponseMediaType(acceptHeader);
@@ -208,6 +226,8 @@ public class Certificate {
 
     @DELETE
     @Path("{serialNumber}")
+    @Produces({"application/json", "application/xml"})
+    @Consumes({"application/json", "application/xml"})
     public Response removeCertificate(@HeaderParam("Accept") String acceptHeader,
                                       @PathParam("serialNumber") String serialNumber) throws MDMAPIException {
         MediaType responseMediaType = MDMAPIUtils.getResponseMediaType(acceptHeader);

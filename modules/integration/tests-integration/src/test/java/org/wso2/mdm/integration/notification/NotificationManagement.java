@@ -52,7 +52,7 @@ public class NotificationManagement extends TestBase {
                 PayloadGenerator.getJsonPayload(
                         Constants.NotificationManagement.NOTIFICATION_PAYLOAD_FILE_NAME ,
                         Constants.HTTP_METHOD_POST).toString());
-        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                         Constants.NotificationManagement.NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString(),
@@ -74,7 +74,7 @@ public class NotificationManagement extends TestBase {
                 PayloadGenerator.getJsonPayload(
                         Constants.NotificationManagement.NOTIFICATION_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_PUT).toString());
-        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_ACCEPTED, response.getStatus());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.NotificationManagement.NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_PUT).toString(),
                 response.getBody(), true);

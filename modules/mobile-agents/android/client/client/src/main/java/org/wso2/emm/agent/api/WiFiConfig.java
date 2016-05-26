@@ -31,15 +31,13 @@ import android.util.Log;
 
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.beans.WifiProfile;
-import org.wso2.emm.agent.events.listeners.DeviceCertCreateListener;
+import org.wso2.emm.agent.events.listeners.DeviceCertCreationListener;
+import org.wso2.emm.agent.events.listeners.WifiConfigCreationListener;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStore;
@@ -96,7 +94,7 @@ public class WiFiConfig {
      *
      * @param profile - WIFI Profile.
      */
-    public boolean setWifiConfig(final WifiProfile profile) {
+    public void setWifiConfig(final WifiProfile profile, final WifiConfigCreationListener listener) {
         final WifiConfiguration wifiConfig = new WifiConfiguration();
         boolean isSaveSuccessful = false;
         boolean isNetworkEnabled = false;
@@ -119,7 +117,10 @@ public class WiFiConfig {
                     wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
                     wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
 
-                    wifiConfig.wepKeys[WIFI_CONFIG_DEFAULT_INDEX] = "\"" + profile.getPassword() + "\"";
+                    if(profile.getPassword() != null){
+                        wifiConfig.wepKeys[WIFI_CONFIG_DEFAULT_INDEX] = "\"" + profile.getPassword() + "\"";
+                    }
+
                     wifiConfig.wepTxKeyIndex = WIFI_CONFIG_DEFAULT_INDEX;
 
                     break;
@@ -132,10 +133,16 @@ public class WiFiConfig {
                     wifiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
                     wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
                     wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
-
-                    wifiConfig.preSharedKey = "\"" + profile.getPassword() + "\"";
+                    if(profile.getPassword() != null){
+                        wifiConfig.preSharedKey = "\"" + profile.getPassword() + "\"";
+                    }
                     break;
                 case EAP:
+                    //If profile identity equals the pattern pick the username from the agent
+                    if(profile.getIdentity() != null && profile.getIdentity().equals(Constants.USERNAME_PATTERN)) {
+                        profile.setIdentity(Preference.getString(context, Constants.USERNAME));
+                    }
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                         wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_EAP);
                         wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.IEEE8021X);
@@ -143,9 +150,15 @@ public class WiFiConfig {
                         switch (profile.getEapMethod()) {
                             case PEAP:
                                 wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.PEAP);
-                                wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
-                                wifiConfig. enterpriseConfig.setAnonymousIdentity(profile.getAnonymousIdentity());
-                                wifiConfig.enterpriseConfig.setPassword(profile.getPassword());
+                                if(profile.getIdentity() != null){
+                                    wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
+                                }
+                                if(profile.getAnonymousIdentity() != null){
+                                    wifiConfig. enterpriseConfig.setAnonymousIdentity(profile.getAnonymousIdentity());
+                                }
+                                if(profile.getPassword() != null){
+                                    wifiConfig.enterpriseConfig.setPassword(profile.getPassword());
+                                }
                                 switch (profile.getPhase2()) {
                                     case GTC:
                                         wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.GTC);
@@ -156,18 +169,24 @@ public class WiFiConfig {
                                     default:
                                         wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.NONE);
                                 }
-                                wifiConfig.enterpriseConfig.setCaCertificate(getCertifcate(profile));
+                                if(profile.getCaCert() != null){
+                                    wifiConfig.enterpriseConfig.setCaCertificate(getCertifcate(profile));
+                                }
                                 break;
                             case TLS:
                                 wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.TLS);
-                                wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
-                                wifiConfig.enterpriseConfig.setCaCertificate(getCertifcate(profile));
+                                if(profile.getIdentity() != null){
+                                    wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
+                                }
+                                if(profile.getCaCert() != null){
+                                    wifiConfig.enterpriseConfig.setCaCertificate(getCertifcate(profile));
+                                }
                                 wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.NONE);
                                 wifiConfig.enterpriseConfig.setAnonymousIdentity(WIFI_ANONYMOUS_ID);
                                 if(Constants.ENABLE_DEVICE_CERTIFICATE_GENERATION){
 
                                     try {
-                                        CommonUtils.generateDeviceCertificate(context, new DeviceCertCreateListener() {
+                                        CommonUtils.generateDeviceCertificate(context, new DeviceCertCreationListener() {
                                             @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
                                             @Override
                                             public void onDeviceCertCreated(InputStream inputStream) {
@@ -184,6 +203,16 @@ public class WiFiConfig {
                                                         Log.d(TAG, key.toString());
                                                         wifiConfig.enterpriseConfig.setClientKeyEntry(key, cert);
                                                     }
+                                                    wifiManager.setWifiEnabled(true);
+                                                    int result = wifiManager.addNetwork(wifiConfig);
+                                                    boolean isSaveSuccessful = wifiManager.saveConfiguration();
+                                                    boolean isNetworkEnabled = wifiManager.enableNetwork(result, true);
+                                                    if (Constants.DEBUG_MODE_ENABLED) {
+                                                        Log.d(TAG, "add Network returned." + result);
+                                                        Log.d(TAG, "saveConfiguration returned." + isSaveSuccessful);
+                                                        Log.d(TAG, "enableNetwork returned." + isNetworkEnabled);
+                                                    }
+                                                    listener.onCreateWifiConfig(isSaveSuccessful);
                                                 } catch (IOException e) {
                                                    Log.d(TAG, e.getMessage());
                                                 } catch (CertificateException e) {
@@ -202,13 +231,27 @@ public class WiFiConfig {
                                         e.printStackTrace();
                                     }
                                 }
-                                break;
+                                return;
                             case TTLS:
                                 wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.TTLS);
-                                wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
+                                if(profile.getIdentity() != null){
+                                    wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
+                                }
+                                if(profile.getAnonymousIdentity() != null){
+                                    wifiConfig. enterpriseConfig.setAnonymousIdentity(profile.getAnonymousIdentity());
+                                }
+                                if(profile.getPassword() != null){
+                                    wifiConfig.enterpriseConfig.setPassword(profile.getPassword());
+                                }
                                 switch (profile.getPhase2()) {
+                                    case PAP:
+                                        wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.PAP);
+                                        break;
                                     case GTC:
                                         wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.GTC);
+                                        break;
+                                    case MCHAP:
+                                        wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.MSCHAP);
                                         break;
                                     case MCHAPV2:
                                         wifiConfig.enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.MSCHAPV2);
@@ -216,12 +259,16 @@ public class WiFiConfig {
                                     default:
                                         wifiConfig. enterpriseConfig.setPhase2Method(WifiEnterpriseConfig.Phase2.NONE);
                                 }
-                                wifiConfig.enterpriseConfig.setCaCertificate(getCertifcate(profile));
+                                if(profile.getCaCert() != null){
+                                    wifiConfig.enterpriseConfig.setCaCertificate(getCertifcate(profile));
+                                }
                                 break;
                             case PWD:
                                 wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.PWD);
                                 wifiConfig.enterpriseConfig.setIdentity(profile.getIdentity());
-                                wifiConfig.enterpriseConfig.setPassword(profile.getPassword());
+                                if(profile.getPassword() != null){
+                                    wifiConfig.enterpriseConfig.setPassword(profile.getPassword());
+                                }
                                 break;
                             case SIM:
                                 wifiConfig.enterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.SIM);
@@ -248,7 +295,7 @@ public class WiFiConfig {
             Log.d(TAG, "enableNetwork returned." + isNetworkEnabled);
         }
 
-        return isSaveSuccessful;
+        listener.onCreateWifiConfig(isSaveSuccessful);
     }
 
     /**
