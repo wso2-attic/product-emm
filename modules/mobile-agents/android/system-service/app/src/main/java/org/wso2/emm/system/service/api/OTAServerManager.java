@@ -21,13 +21,15 @@ package org.wso2.emm.system.service.api;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RecoverySystem;
 import android.util.Log;
-import org.wso2.emm.system.service.utils.Constants;
+import org.wso2.emm.system.service.R;
 import org.wso2.emm.system.service.utils.FileUtils;
+import org.wso2.emm.system.service.utils.Preference;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -95,27 +97,14 @@ public class OTAServerManager {
 
     public void startCheckingVersion() {
 
-        if (!checkURL(serverConfig.getBuildPropURL())) {
-            if (this.stateChangeListener != null) {
-                if (this.checkNetworkOnline()) {
-                    reportCheckingError(OTAStateChangeListener.ERROR_CANNOT_FIND_SERVER);
-                } else {
-                    reportCheckingError(OTAStateChangeListener.ERROR_WIFI_NOT_AVAILABLE);
-                }
+        if (this.stateChangeListener != null) {
+            if (this.checkNetworkOnline()) {
+                reportCheckingError(OTAStateChangeListener.ERROR_CANNOT_FIND_SERVER);
+            } else {
+                reportCheckingError(OTAStateChangeListener.ERROR_WIFI_NOT_AVAILABLE);
             }
-            return;
         }
-
-        parser = getTargetPackagePropertyList(serverConfig.getBuildPropURL());
-
-        if (parser != null) {
-            if (this.stateChangeListener != null) {
-                this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_CHECKED,
-                                                           OTAStateChangeListener.NO_ERROR, parser, DEFAULT_STATE_INFO_CODE);
-            }
-        } else {
-            reportCheckingError(OTAStateChangeListener.ERROR_WRITE_FILE_ERROR);
-        }
+        getTargetPackagePropertyList(this.serverConfig.getBuildPropURL());
     }
 
     /**
@@ -123,7 +112,7 @@ public class OTAServerManager {
      *
      * @return - Returns true if the firmware needs to be upgraded.
      */
-    public boolean compareLocalVersionToServer() {
+    public boolean compareLocalVersionToServer(BuildPropParser parser) {
         if (parser == null) {
             Log.d(TAG, "compareLocalVersion Without fetch remote prop list.");
             return false;
@@ -146,8 +135,17 @@ public class OTAServerManager {
     }
 
     void publishDownloadProgress(long total, long downloaded) {
-        Log.d(TAG, "Download Progress - Total: " + total + " Downloaded:" + downloaded);
-        Long progress = (downloaded * 100) / total;
+        long progress = (downloaded * 100) / total;
+        long published = 0L;
+        if (Preference.getString(context, "publishedProgress") != null) {
+            published = Long.valueOf(Preference.getString(context, "publishedProgress"));
+        }
+
+        if ((progress != published) && (progress % 5) == 0) {
+            Preference.putString(context, "publishedProgress", String.valueOf(progress));
+            Log.d(TAG, "Download Progress - " + progress + "% - Total: " + total + " Downloaded:" + downloaded);
+        }
+
         if (this.stateChangeListener != null && progress != cacheProgress) {
             this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.MESSAGE_DOWNLOAD_PROGRESS,
                                                        DEFAULT_STATE_INFO_CODE, null, progress);
@@ -176,83 +174,67 @@ public class OTAServerManager {
         }
     }
 
-    public long getUpgradePackageSize() {
-        if (!checkURL(serverConfig.getPackageURL())) {
-            Log.e(TAG, "getUpgradePackageSize Failed");
-            return -1;
-        }
+    public void startDownloadUpgradePackage(final OTAServerManager serverManager) {
+        new AsyncTask<Void, Void, Void>() {
+            protected Void doInBackground(Void... unused) {
+                if (serverManager.stateChangeListener != null) {
+                    reportDownloadError(OTAStateChangeListener.ERROR_CANNOT_FIND_SERVER);
+                }
 
-        URL url = serverConfig.getPackageURL();
-        URLConnection con;
-        try {
-            con = url.openConnection();
-            return con.getContentLength();
-        } catch (IOException e) {
-            Log.e(TAG, "Connection failure when retrieving update package size." + e);
-            return -1;
-        }
-    }
+                File targetFile = new File(FileUtils.getUpgradePackageFilePath());
+                try {
+                    boolean fileStatus = targetFile.createNewFile();
+                    if (!fileStatus) {
+                        Log.e(TAG, "Update package file creation failed.");
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "Update package file retrieval error." + e);
+                    reportDownloadError(OTAStateChangeListener.ERROR_WRITE_FILE_ERROR);
+                }
 
-    public void startDownloadUpgradePackage() {
+                try {
+                    wakeLock.acquire();
 
-        if (!checkURL(serverConfig.getPackageURL())) {
-            if (this.stateChangeListener != null) {
-                reportDownloadError(OTAStateChangeListener.ERROR_CANNOT_FIND_SERVER);
+                    URL url = serverConfig.getPackageURL();
+                    Log.d(TAG, "Start downloading package:" + url.toString());
+                    URLConnection connection = url.openConnection();
+                    connection.setReadTimeout(DEFAULT_CONNECTION_TIMEOUT);
+
+                    int lengthOfFile;
+                    lengthOfFile = connection.getContentLength();
+                    InputStream input = new BufferedInputStream(url.openStream());
+                    OutputStream output = new FileOutputStream(targetFile);
+
+                    Log.d(TAG, "Update package file size:" + lengthOfFile);
+                    byte data[] = new byte[DEFAULT_BYTES];
+                    long total = 0, count;
+                    while ((count = input.read(data)) >= 0) {
+                        total += count;
+                        publishDownloadProgress(lengthOfFile, total);
+                        output.write(data, DEFAULT_OFFSET, (int) count);
+                    }
+
+                    output.flush();
+                    output.close();
+                    input.close();
+                    if (serverManager.stateChangeListener != null) {
+                        serverManager.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_DOWNLOADING,
+                                                                            DEFAULT_STATE_ERROR_CODE, null, DEFAULT_STATE_INFO_CODE);
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "Connection failure when downloading update package." + e);
+                    reportDownloadError(OTAStateChangeListener.ERROR_WRITE_FILE_ERROR);
+                } finally {
+                    wakeLock.release();
+                    wakeLock.acquire(2);
+                }
+                return null;
             }
-            return;
-        }
-
-        File targetFile = new File(FileUtils.getUpgradePackageFilePath());
-        try {
-            boolean fileStatus = targetFile.createNewFile();
-            if (!fileStatus) {
-                Log.e(TAG, "Update package file creation failed.");
-            }
-        } catch (IOException e) {
-            Log.e(TAG, "Update package file retrieval error." + e);
-            reportDownloadError(OTAStateChangeListener.ERROR_WRITE_FILE_ERROR);
-            return;
-        }
-
-        try {
-            wakeLock.acquire();
-
-            URL url = serverConfig.getPackageURL();
-            Log.d(TAG, "Start downloading package:" + url.toString());
-            URLConnection connection = url.openConnection();
-            connection.setReadTimeout(DEFAULT_CONNECTION_TIMEOUT);
-
-            int lengthOfFile;
-            lengthOfFile = connection.getContentLength();
-            InputStream input = new BufferedInputStream(url.openStream());
-            OutputStream output = new FileOutputStream(targetFile);
-
-            Log.d(TAG, "Update package file size:" + lengthOfFile);
-            byte data[] = new byte[DEFAULT_BYTES];
-            long total = 0, count;
-            while ((count = input.read(data)) >= 0) {
-                total += count;
-                publishDownloadProgress(lengthOfFile, total);
-                output.write(data, DEFAULT_OFFSET, (int) count);
-            }
-
-            output.flush();
-            output.close();
-            input.close();
-            if (this.stateChangeListener != null) {
-                this.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_DOWNLOADING,
-                                                           DEFAULT_STATE_ERROR_CODE, null, DEFAULT_STATE_INFO_CODE);
-            }
-        } catch (IOException e) {
-            Log.e(TAG, "Connection failure when downloading update package." + e);
-            reportDownloadError(OTAStateChangeListener.ERROR_WRITE_FILE_ERROR);
-        } finally {
-            wakeLock.release();
-            wakeLock.acquire(2);
-        }
+        }.execute();
     }
 
     public void startVerifyUpgradePackage() {
+        Preference.putBoolean(context, context.getResources().getString(R.string.verification_failed_flag), false);
         File recoveryFile = new File(FileUtils.getUpgradePackageFilePath());
 
         try {
@@ -268,6 +250,10 @@ public class OTAServerManager {
         } finally {
             wakeLock.release();
         }
+    }
+
+    public OTAServerConfig getServerConfig() {
+        return this.serverConfig;
     }
 
     public void startInstallUpgradePackage() {
@@ -289,85 +275,89 @@ public class OTAServerManager {
 
     }
 
-    private boolean checkURL(URL url) {
-        // Returns true since this is a static URL case
-        return true;
-    }
-
     /**
      * Downloads the property list from remote site, and parse it to property list.
      * The caller can parse this list and get information.
-     *
-     * @return - Returns true if rhe firmware needs to be upgraded.
      */
-    public BuildPropParser getTargetPackagePropertyList(URL url) {
+    public void getTargetPackagePropertyList(final URL url) {
 
-        InputStream reader = null;
-        ByteArrayOutputStream writer = null;
-        BuildPropParser parser = null;
-        final int bufSize = 1024;
+        new AsyncTask<Void, Void, Void>() {
+            protected Void doInBackground(Void... param) {
+                InputStream reader = null;
+                ByteArrayOutputStream writer = null;
+                BuildPropParser parser = null;
+                final int bufSize = 1024;
 
-        // First, trying to download the property list file. the build.prop of target image.
-        try {
-            URLConnection urlConnection;
-
-			/* Use the URL configuration to open a connection
-               to the OTA server */
-            urlConnection = url.openConnection();
-
-			/* Since you get a URLConnection, use it to get the
-                           InputStream */
-            reader = urlConnection.getInputStream();
-
-			/* Now that the InputStream is open, get the content
-                           length */
-            final int contentLength = urlConnection.getContentLength();
-            byte[] buffer = new byte[bufSize];
-
-            if (contentLength != -1) {
-                writer = new ByteArrayOutputStream(contentLength);
-            } else {
-                writer = new ByteArrayOutputStream(DEFAULT_STREAM_LENGTH);
-            }
-
-            int totalBufRead = 0;
-            int bytesRead;
-
-            Log.d(TAG, "Start download: " + url.toString() + " to buffer");
-
-            while ((bytesRead = reader.read(buffer)) > 0) {
-                // Write current segment into byte output stream
-                writer.write(buffer, 0, bytesRead);
-                Log.d(TAG, "wrote " + bytesRead + " into byte output stream");
-                totalBufRead += bytesRead;
-
-                buffer = new byte[bufSize];
-            }
-
-            Log.d(TAG, "Download finished: " + (Integer.toString(totalBufRead)) + " bytes downloaded");
-
-            parser = new BuildPropParser(writer, context);
-
-        } catch (IOException e) {
-            Log.e(TAG, "Property list download failed due to connection failure." + e);
-            return null;
-        } finally {
-            if (reader != null) {
+                // First, trying to download the property list file. the build.prop of target image.
                 try {
-                    reader.close();
+                    URLConnection urlConnection;
+
+                    /* Use the URL configuration to open a connection
+                       to the OTA server */
+                    urlConnection = url.openConnection();
+
+                    /* Since you get a URLConnection, use it to get the
+                                   InputStream */
+                    reader = urlConnection.getInputStream();
+
+                    /* Now that the InputStream is open, get the content
+                                   length */
+                    final int contentLength = urlConnection.getContentLength();
+                    byte[] buffer = new byte[bufSize];
+
+                    if (contentLength != -1) {
+                        writer = new ByteArrayOutputStream(contentLength);
+                    } else {
+                        writer = new ByteArrayOutputStream(DEFAULT_STREAM_LENGTH);
+                    }
+
+                    int totalBufRead = 0;
+                    int bytesRead;
+
+                    Log.d(TAG, "Start download: " + url.toString() + " to buffer");
+
+                    while ((bytesRead = reader.read(buffer)) > 0) {
+                        // Write current segment into byte output stream
+                        writer.write(buffer, 0, bytesRead);
+                        Log.d(TAG, "wrote " + bytesRead + " into byte output stream");
+                        totalBufRead += bytesRead;
+
+                        buffer = new byte[bufSize];
+                    }
+
+                    Log.d(TAG, "Download finished: " + (Integer.toString(totalBufRead)) + " bytes downloaded");
+
+                    parser = new BuildPropParser(writer, context);
+
                 } catch (IOException e) {
-                    Log.e(TAG, "Failed to close buffer reader." + e);
+                    Log.e(TAG, "Property list download failed due to connection failure." + e);
+                } finally {
+                    if (reader != null) {
+                        try {
+                            reader.close();
+                        } catch (IOException e) {
+                            Log.e(TAG, "Failed to close buffer reader." + e);
+                        }
+                    }
+                    if (writer != null) {
+                        try {
+                            writer.close();
+                        } catch (IOException e) {
+                            Log.e(TAG, "Failed to close buffer writer." + e);
+                        }
+                    }
+                    if (parser != null) {
+                        if (stateChangeListener != null) {
+                            stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_CHECKED,
+                                                                  OTAStateChangeListener.NO_ERROR, parser, DEFAULT_STATE_INFO_CODE);
+                        }
+                    } else {
+                        reportCheckingError(OTAStateChangeListener.ERROR_WRITE_FILE_ERROR);
+                    }
                 }
+                return null;
             }
-            if (writer != null) {
-                try {
-                    writer.close();
-                } catch (IOException e) {
-                    Log.e(TAG, "Failed to close buffer writer." + e);
-                }
-            }
-        }
-        return parser;
+        }.execute();
     }
 
     public interface OTAStateChangeListener {

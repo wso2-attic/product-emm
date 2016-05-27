@@ -29,6 +29,7 @@ public class Constants {
 	public static final String OTA_CONFIG_LOCATION = "/data/system/ota.conf";
 	public static final String DEFAULT_OTA_SERVER_ADDRESS = "emm.wso2.com";
 	public static final String DEFAULT_OTA_SERVER_PROTOCOL = "http";
+	public static final String DEFAULT_OTA_SERVER_SUB_DIRECTORY = null;
 	public static final int DEFAULT_OTA_SERVER_PORT = 80;
 	public static final String DEFAULT_OTA_BUILD_PROP_FILE = "build.prop";
 	public static final String DEFAULT_OTA_ZIP_FILE = ".ota.zip";

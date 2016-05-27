@@ -19,6 +19,7 @@
 package org.wso2.emm.system.service.api;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 import org.wso2.emm.system.service.utils.Constants;
 
@@ -48,89 +49,119 @@ public class OTAServerConfig {
 
     public OTAServerConfig(String productName, Context context) throws MalformedURLException {
         this.context = context;
-        if (!loadConfigureFromFile(Constants.OTA_CONFIG_LOCATION, productName)) {
-            Log.i(TAG, "Loading default configuration for product " + productName + ".");
-            defaultConfigure(productName);
-        }
+        //loadConfigureFromFile(Constants.OTA_CONFIG_LOCATION, productName);
+        defaultConfigure(productName);
     }
 
-    public boolean loadConfigureFromFile(String configFile, String product) {
-        try {
-            Log.d(TAG, "Loading configuration from file " +
-                       configFile + " for product " + product);
-            BuildPropParser parser = new BuildPropParser(new File(configFile), context);
-            String protocol = parser.getProp(PROTOCOL_TAG);
+    public void loadConfigureFromFile(final String configFile, final String product) {
+        new AsyncTask<Void, Void, Boolean>() {
+            protected Boolean doInBackground(Void... params) {
+                try {
+                    Log.d(TAG, "Loading configuration from file " +
+                               configFile + " for product " + product);
+                    BuildPropParser parser = new BuildPropParser(new File(configFile), context);
+                    String protocol = parser.getProp(PROTOCOL_TAG);
 
-            /* Retrieving properties needed to build URLs*/
-            if (protocol == null) {
-                Log.i(TAG, "Using default protocol " + Constants.DEFAULT_OTA_SERVER_PROTOCOL);
-                protocol = Constants.DEFAULT_OTA_SERVER_PROTOCOL;
+                    /* Retrieving properties needed to build URLs*/
+                    if (protocol == null) {
+                        Log.i(TAG, "Using default protocol " + Constants.DEFAULT_OTA_SERVER_PROTOCOL);
+                        protocol = Constants.DEFAULT_OTA_SERVER_PROTOCOL;
+                    }
+
+                    String server = parser.getProp(SERVER_IP_CONFIG);
+                    if (server == null) {
+                        Log.i(TAG, "Using default server " + Constants.DEFAULT_OTA_SERVER_ADDRESS);
+                        server = Constants.DEFAULT_OTA_SERVER_ADDRESS;
+                    }
+
+                    String portConfig = parser.getProp(PORT_CONFIG_STR);
+                    int port;
+                    if (portConfig != null) {
+                        port = Long.valueOf(portConfig).intValue();
+                    } else {
+                        Log.i(TAG, "Using default port " + Constants.DEFAULT_OTA_SERVER_PORT);
+                        port = Constants.DEFAULT_OTA_SERVER_PORT;
+                    }
+
+                    String updateFileName = parser.getProp(OTA_TAG);
+                    if (updateFileName == null) {
+                        Log.i(TAG, "Using default OTA suffix " + Constants.DEFAULT_OTA_ZIP_FILE);
+                        updateFileName = Constants.DEFAULT_OTA_ZIP_FILE;
+                    }
+
+                    String buildFile = parser.getProp(BUILD_TAG);
+                    if (buildFile == null) {
+                        Log.i(TAG, "Using default build config suffix " +
+                                   Constants.DEFAULT_OTA_BUILD_PROP_FILE);
+                        buildFile = Constants.DEFAULT_OTA_BUILD_PROP_FILE;
+                    }
+
+                    String buildMonthlyCheck = parser.getProp(MONTHLY_TAG);
+                    String fileAddress, buildConfigAddress;
+                    if (Constants.DEFAULT_OTA_SERVER_SUB_DIRECTORY != null) {
+                        fileAddress = Constants.DEFAULT_OTA_SERVER_SUB_DIRECTORY + File.separator + product +
+                                      File.separator + updateFileName;
+                        buildConfigAddress = Constants.DEFAULT_OTA_SERVER_SUB_DIRECTORY + File.separator + product +
+                                             File.separator + buildFile;
+                    } else {
+                        fileAddress = product + File.separator + updateFileName;
+                        buildConfigAddress = product + File.separator + buildFile;
+                    }
+
+                    // Supported url protocols are ftp, http, https, jar, file
+                    updatePackageURL = new URL(protocol, server, port, fileAddress);
+                    buildPropURL = new URL(protocol, server, port, buildConfigAddress);
+
+                    Log.d(TAG, "Package is at URL: " + updatePackageURL);
+                    Log.d(TAG, "Build Property is at URL: " + buildPropURL);
+                    long delay;
+                    if (buildMonthlyCheck != null) {
+                        Calendar calendar = Calendar.getInstance();
+                        long checkTime = Long.parseLong(buildMonthlyCheck);
+                        delay = checkTime - calendar.getTimeInMillis();
+                        if (delay <= 0) {
+                            // Determine next 30 day delay if original value expired
+                            delay = DEFAULT_DELAY;
+                            parser.setProp(MONTHLY_TAG, Long.toString(delay));
+                        }
+                    }
+
+                } catch (IOException ie) {
+                    Log.e(TAG,
+                          "Build property file does not meet required specification."
+                          + ie);
+                    Log.i(TAG, "Loading default configuration for product " + product + ".");
+                    return false;
+                }
+                return true;
             }
 
-            String server = parser.getProp(SERVER_IP_CONFIG);
-            if (server == null) {
-                Log.i(TAG, "Using default server " + Constants.DEFAULT_OTA_SERVER_ADDRESS);
-                server = Constants.DEFAULT_OTA_SERVER_ADDRESS;
-            }
-
-            String portConfig = parser.getProp(PORT_CONFIG_STR);
-            int port;
-            if (portConfig != null) {
-                port = Long.valueOf(portConfig).intValue();
-            } else {
-                Log.i(TAG, "Using default port " + Constants.DEFAULT_OTA_SERVER_PORT);
-                port = Constants.DEFAULT_OTA_SERVER_PORT;
-            }
-
-            String updateFileName = parser.getProp(OTA_TAG);
-            if (updateFileName == null) {
-                Log.i(TAG, "Using default OTA suffix " + Constants.DEFAULT_OTA_ZIP_FILE);
-                updateFileName = Constants.DEFAULT_OTA_ZIP_FILE;
-            }
-
-            String buildFile = parser.getProp(BUILD_TAG);
-            if (buildFile == null) {
-                Log.i(TAG, "Using default build config suffix " +
-                           Constants.DEFAULT_OTA_BUILD_PROP_FILE);
-                buildFile = Constants.DEFAULT_OTA_BUILD_PROP_FILE;
-            }
-
-            String buildMonthlyCheck = parser.getProp(MONTHLY_TAG);
-
-            String fileAddress = product + "/" + product + updateFileName;
-            String buildConfigAddress = product + "/" + buildFile;
-
-            // Supported url protocols are ftp, http, https, jar, file
-            updatePackageURL = new URL(protocol, server, port, fileAddress);
-            buildPropURL = new URL(protocol, server, port, buildConfigAddress);
-
-            Log.d(TAG, "Package is at URL: " + updatePackageURL);
-            Log.d(TAG, "Build Property is at URL: " + buildPropURL);
-            long delay;
-            if (buildMonthlyCheck != null) {
-                Calendar calendar = Calendar.getInstance();
-                long checkTime = Long.parseLong(buildMonthlyCheck);
-                delay = checkTime - calendar.getTimeInMillis();
-                if (delay <= 0) {
-                    // Determine next 30 day delay if original value expired
-                    delay = DEFAULT_DELAY;
-                    parser.setProp(MONTHLY_TAG, Long.toString(delay));
+            @Override
+            protected void onPostExecute(Boolean result) {
+                if (!result) {
+                    try {
+                        defaultConfigure(product);
+                    } catch (MalformedURLException e) {
+                        Log.e(TAG,
+                              "Build property file URL is not formatted properly."
+                              + e);
+                    }
                 }
             }
-
-        } catch (IOException ie) {
-            Log.e(TAG,
-                  "Build property file does not meet required specification."
-                  + ie);
-            return false;
-        }
-
-        return true;
+        }.execute();
     }
 
     public void defaultConfigure(String product) throws MalformedURLException {
-        String fileAddress = product + "/" + product + Constants.DEFAULT_OTA_ZIP_FILE;
-        String buildConfigAddress = product + "/" + Constants.DEFAULT_OTA_BUILD_PROP_FILE;
+        String fileAddress, buildConfigAddress;
+        if (Constants.DEFAULT_OTA_SERVER_SUB_DIRECTORY != null) {
+            fileAddress = Constants.DEFAULT_OTA_SERVER_SUB_DIRECTORY + File.separator + product + File.separator + product +
+                          Constants.DEFAULT_OTA_ZIP_FILE;
+            buildConfigAddress = Constants.DEFAULT_OTA_SERVER_SUB_DIRECTORY + File.separator + product + File.separator +
+                                 Constants.DEFAULT_OTA_BUILD_PROP_FILE;
+        } else {
+            fileAddress = product + File.separator + product + Constants.DEFAULT_OTA_ZIP_FILE;
+            buildConfigAddress = product + File.separator + Constants.DEFAULT_OTA_BUILD_PROP_FILE;
+        }
         updatePackageURL = new URL(Constants.DEFAULT_OTA_SERVER_PROTOCOL, Constants.DEFAULT_OTA_SERVER_ADDRESS,
                                    Constants.DEFAULT_OTA_SERVER_PORT, fileAddress);
         buildPropURL = new URL(Constants.DEFAULT_OTA_SERVER_PROTOCOL, Constants.DEFAULT_OTA_SERVER_ADDRESS, Constants.
