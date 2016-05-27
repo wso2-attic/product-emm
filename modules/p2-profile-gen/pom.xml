@@ -537,7 +537,19 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.dashboards:org.wso2.carbon.dashboards.portal.feature:${carbon.dashboards.version}
                                 </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.dashboards:org.wso2.carbon.dashboards.deployment.feature:${carbon.dashboards.version}
+                                </featureArtifactDef>
                                 <!-- End of Dashboards Features -->
+
+                                <!-- EMM analytics Features -->
+                                <featureArtifactDef>
+                                    org.wso2.carbon.analytics.cdmf:org.wso2.carbon.analytics.cdmf.feature:${carbon.analytics.cdmf.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.analytics.cdmf:org.wso2.carbon.analytics.emm.feature:${carbon.analytics.cdmf.version}
+                                </featureArtifactDef>
+                                <!-- End of EMM analytics Features -->
 
                             </featureArtifacts>
                         </configuration>
@@ -610,6 +622,14 @@
                                 <feature>
                                     <id>org.wso2.carbon.device.mgt.extensions.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.device.mgt.mobile.feature.group</id>
+                                    <version>${carbon.mobile.device.mgt.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.device.mgt.mobile.android.feature.group</id>
+                                    <version>${carbon.mobile.device.mgt.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.policy.mgt.server.feature.group</id>
@@ -1127,7 +1147,22 @@
                                     <id>org.wso2.carbon.dashboards.portal.feature.group</id>
                                     <version>${carbon.dashboards.version}</version>
                                 </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.dashboard.deployment.feature.group</id>
+                                    <version>${carbon.dashboards.version}</version>
+                                </feature>
                                 <!-- End of Dashboard Features -->
+
+                                <!-- EMM Analytics Features -->
+                                <feature>
+                                    <id>org.wso2.carbon.analytics.cdmf.feature.group</id>
+                                    <version>${carbon.analytics.cdmf.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.analytics.emm.feature.group</id>
+                                    <version>${carbon.analytics.cdmf.version}</version>
+                                </feature>
+                                <!-- End of EMM Analytics Features -->
 
                             </features>
                         </configuration>

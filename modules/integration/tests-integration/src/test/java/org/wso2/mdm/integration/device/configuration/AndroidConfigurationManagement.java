@@ -47,7 +47,7 @@ public class AndroidConfigurationManagement extends TestBase {
                                                     Constants.AndroidConfigurationManagement.PAYLOAD_FILE_NAME,
                                                     Constants.HTTP_METHOD_POST).toString()
         );
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                                               Constants.AndroidConfigurationManagement.RESPONSE_PAYLOAD_FILE_NAME,
                                               Constants.HTTP_METHOD_POST).toString(),
@@ -62,7 +62,7 @@ public class AndroidConfigurationManagement extends TestBase {
                                                    Constants.AndroidConfigurationManagement.PAYLOAD_FILE_NAME,
                                                    Constants.HTTP_METHOD_PUT).toString()
         );
-        Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                                               Constants.AndroidConfigurationManagement.RESPONSE_PAYLOAD_FILE_NAME,
                                               Constants.HTTP_METHOD_PUT).toString(),

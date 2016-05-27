@@ -26,7 +26,6 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
-import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.mdm.integration.common.*;
 
 
@@ -74,7 +73,7 @@ public class AndroidDeviceManagement extends TestBase{
         device.addProperty(Constants.AndroidDeviceManagement.KEY_DEVICE_NAME, "UpdatedName");
         MDMResponse response = client.put(Constants.AndroidDeviceManagement.DEVICE_MGT_ENDPOINT + Constants.DEVICE_ID,
                                            device.toString());
-        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_ACCEPTED, response.getStatus());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                                               Constants.AndroidDeviceManagement.RESPONSE_PAYLOAD_FILE_NAME,
                                               Constants.HTTP_METHOD_PUT).toString(),

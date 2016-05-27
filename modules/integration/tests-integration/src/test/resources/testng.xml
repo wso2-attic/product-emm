@@ -66,11 +66,6 @@
             <class name="org.wso2.mdm.integration.device.configuration.AndroidConfigurationManagement"/>
         </classes>
     </test>
-    <test name="android-policy" preserve-order="true" parallel="false">
-        <classes>
-            <class name="org.wso2.mdm.integration.device.policy.AndroidPolicy"/>
-        </classes>
-    </test>
      <test name="operation-mgt" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.mdm.integration.operation.OperationManagement"/>
