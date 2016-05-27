@@ -20,7 +20,9 @@ package org.wso2.emm.system.service.api;
 
 import android.content.Context;
 import android.util.Log;
+import org.wso2.emm.system.service.R;
 import org.wso2.emm.system.service.utils.Constants;
+import org.wso2.emm.system.service.utils.Preference;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -44,6 +46,7 @@ public class OTAServerConfig {
 
     public void defaultConfigure(String product) throws MalformedURLException {
         String fileAddress, buildConfigAddress;
+        String serverAddress = Preference.getString(context, context.getResources().getString(R.string.firmware_server));
         if (Constants.DEFAULT_OTA_SERVER_SUB_DIRECTORY != null) {
             fileAddress = Constants.DEFAULT_OTA_SERVER_SUB_DIRECTORY + File.separator + product + File.separator + product +
                           Constants.DEFAULT_OTA_ZIP_FILE;
@@ -53,10 +56,17 @@ public class OTAServerConfig {
             fileAddress = product + File.separator + product + Constants.DEFAULT_OTA_ZIP_FILE;
             buildConfigAddress = product + File.separator + Constants.DEFAULT_OTA_BUILD_PROP_FILE;
         }
-        updatePackageURL = new URL(Constants.DEFAULT_OTA_SERVER_PROTOCOL, Constants.DEFAULT_OTA_SERVER_ADDRESS,
-                                   Constants.DEFAULT_OTA_SERVER_PORT, fileAddress);
-        buildPropURL = new URL(Constants.DEFAULT_OTA_SERVER_PROTOCOL, Constants.DEFAULT_OTA_SERVER_ADDRESS, Constants.
-                DEFAULT_OTA_SERVER_PORT, buildConfigAddress);
+
+        if (serverAddress != null) {
+            updatePackageURL = new URL(serverAddress + File.separator + fileAddress);
+            buildPropURL = new URL(serverAddress + File.separator + buildConfigAddress);
+        } else {
+            updatePackageURL = new URL(Constants.DEFAULT_OTA_SERVER_PROTOCOL, Constants.DEFAULT_OTA_SERVER_ADDRESS,
+                                       Constants.DEFAULT_OTA_SERVER_PORT, fileAddress);
+            buildPropURL = new URL(Constants.DEFAULT_OTA_SERVER_PROTOCOL, Constants.DEFAULT_OTA_SERVER_ADDRESS, Constants.
+                    DEFAULT_OTA_SERVER_PORT, buildConfigAddress);
+        }
+
         Log.d(TAG, "create a new server config: package url " + updatePackageURL.toString() + ":" +
                    updatePackageURL.getPort());
         Log.d(TAG, "build.prop URL:" + buildPropURL.toString());
