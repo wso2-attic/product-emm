@@ -28,7 +28,10 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.UserManager;
 import android.util.Log;
+import android.webkit.URLUtil;
 import android.widget.Toast;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.wso2.emm.system.service.api.OTADownload;
 import org.wso2.emm.system.service.api.SettingsManager;
 import org.wso2.emm.system.service.utils.AlarmUtils;
@@ -309,7 +312,26 @@ public class EMMSystemService extends IntentService {
         Context context = this.getApplicationContext();
         Preference.putBoolean(context, context.getResources().getString(R.string.
                                                                                 firmware_status_check_in_progress), false);
+        String schedule = null;
+        String server;
         if (command != null && !command.trim().isEmpty()) {
+            try {
+                JSONObject upgradeData = new JSONObject(command);
+                if (!upgradeData.isNull(context.getResources().getString(R.string.alarm_schedule))) {
+                    schedule = (String) upgradeData.get(context.getResources().getString(R.string.alarm_schedule));
+                }
+
+                if (!upgradeData.isNull(context.getResources().getString(R.string.firmware_server))) {
+                    server = (String) upgradeData.get(context.getResources().getString(R.string.firmware_server));
+                    if (URLUtil.isValidUrl(server)) {
+                        Preference.putString(context, context.getResources().getString(R.string.firmware_server), server);
+                    }
+                }
+            } catch (JSONException e) {
+                Log.e(TAG, "Firmware upgrade payload parsing failed." + e);
+            }
+        }
+        if (schedule != null && !schedule.trim().isEmpty()) {
             Log.i(TAG, "Upgrade has been scheduled to " + command);
             Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), command);
             try {

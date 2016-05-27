@@ -87,7 +87,11 @@ var iosOperationConstants = {
     "CELLULAR_OPERATION_CODE": "CELLULAR",
     "DOMAIN": "DOMAIN",
     "VPN_OPERATION_CODE": "VPN",
-    "VPN_OPERATION": "vpn"
+    "VPN_OPERATION": "vpn",
+    "PER_APP_VPN_OPERATION_CODE": "PER_APP_VPN",
+    "PER_APP_VPN_OPERATION": "per-app-vpn",
+    "APP_TO_PER_APP_VPN_MAPPING_OPERATION_CODE": "APP_TO_PER_APP_VPN_MAPPING",
+    "APP_TO_PER_APP_VPN_MAPPING_OPERATION": "app-to-per-app-vpn-mapping"
 };
 
 /**
@@ -1184,6 +1188,42 @@ validateStep["policy-profile"] = function () {
                 }
 
                 // updating validationStatusArray with validationStatus
+                validationStatusArray.push(validationStatus);
+            }
+
+            if ($.inArray(iosOperationConstants["PER_APP_VPN_OPERATION_CODE"], configuredOperations) != -1) {
+                operation = iosOperationConstants["PER_APP_VPN_OPERATION"];
+                continueToCheckNextInputs = true;
+
+                var uuid = $("input#per-app-vpn-uuid").val();
+                if (!uuid) {
+                    validationStatus = {
+                        "error": true,
+                        "subErrorMsg": "VPN UUID is required. You cannot proceed.",
+                        "erroneousFeature": operation
+                    };
+                    continueToCheckNextInputs = false;
+                }
+                // at-last, if the value of continueToCheckNextInputs is still true
+                // this means that no error is found
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
+                validationStatusArray.push(validationStatus);
+            }
+
+            if ($.inArray(iosOperationConstants["APP_TO_PER_APP_VPN_MAPPING_OPERATION_CODE"], configuredOperations) != -1) {
+                operation = iosOperationConstants["APP_TO_PER_APP_VPN_MAPPING_OPERATION"];
+                continueToCheckNextInputs = true;
+                if (continueToCheckNextInputs) {
+                    validationStatus = {
+                        "error": false,
+                        "okFeature": operation
+                    };
+                }
                 validationStatusArray.push(validationStatus);
             }
             // Validating EMAIL

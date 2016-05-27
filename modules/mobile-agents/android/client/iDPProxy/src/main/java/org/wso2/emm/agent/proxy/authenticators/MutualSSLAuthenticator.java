@@ -19,12 +19,19 @@
 package org.wso2.emm.agent.proxy.authenticators;
 
 import android.content.Context;
+import android.util.Log;
 import org.wso2.emm.agent.proxy.R;
 import org.wso2.emm.agent.proxy.interfaces.AuthenticationCallback;
 import org.wso2.emm.agent.proxy.utils.Constants;
 import org.wso2.emm.agent.proxy.utils.Keystore;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.Map;
 
 /**
@@ -35,6 +42,7 @@ public class MutualSSLAuthenticator implements ClientAuthenticator {
     private static Context context = null;
     private static AuthenticationCallback callback = null;
     private static int requestCode = 0;
+    private static final String TAG = MutualSSLAuthenticator.class.getName();
 
     @Override
     public void doAuthenticate() {
@@ -44,8 +52,24 @@ public class MutualSSLAuthenticator implements ClientAuthenticator {
     @Override
     public KeyStore getCredentialCertificate() {
         if (localKeyStore == null) {
-            localKeyStore = Keystore.getKeystore(R.raw.keystore,
-                                                 Constants.KEYSTORE_PASSWORD);
+            if (Constants.KEYSTORE_LOCATION != null) {
+                try {
+                    localKeyStore = KeyStore.getInstance("BKS");
+                    localKeyStore.load(new FileInputStream(new File(Constants.KEYSTORE_LOCATION)),
+                                         Constants.KEYSTORE_PASSWORD.toCharArray());
+                } catch (IOException e) {
+                    Log.e(TAG, "Error occurred while loading key store." + e);
+                } catch (NoSuchAlgorithmException e) {
+                    Log.e(TAG, "Error occurred due to mismatch of defined algorithm." + e);
+                } catch (CertificateException e) {
+                    Log.e(TAG, "Error occurred while loading certificate." + e);
+                } catch (KeyStoreException e) {
+                    Log.e(TAG, "Error occurred while loading key store." + e);
+                }
+            } else {
+                localKeyStore = Keystore.getKeystore(R.raw.truststore,
+                                                       Constants.KEYSTORE_PASSWORD);
+            }
         }
         return localKeyStore;
     }
