@@ -63,7 +63,7 @@ public class Constants {
 	public static final String LICENSE_ENDPOINT = SERVER_APP_ENDPOINT + "device/license";
 	public static final String REGISTER_ENDPOINT = SERVER_APP_ENDPOINT + "enrollment/";
 	public static final String CONFIGURATION_ENDPOINT = SERVER_APP_ENDPOINT + "configuration/";
-	public static final String SCEP_ENDPOINT = "/mdm-admin/certificates/csr-sign";
+	public static final String SCEP_ENDPOINT = "/certificate-mgt/certificates/signcsr";
 	public static final String OAUTH_ENDPOINT = "/oauth2/token";
 	public static final String DEVICE_ENDPOINT = SERVER_APP_ENDPOINT + "device/";
 	public static final String IS_REGISTERED_ENDPOINT = REGISTER_ENDPOINT;
@@ -114,6 +114,7 @@ public class Constants {
 	public static final String OPERATION_ID = "operationId";
 	public static final boolean HIDE_UNREGISTER_BUTTON = false;
 	public static final String IS_HARD_LOCK_ENABLED = "isHardLockEnabled";
+	public static final String USERNAME_PATTERN = "[user]";
 
 	public static final String SERVICE_PACKAGE_NAME = "org.wso2.emm.system.service";
 

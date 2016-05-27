@@ -24,7 +24,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -165,12 +168,14 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			deviceType = Constants.DEFAULT_OWNERSHIP;
 			Preference.putString(context, Constants.DEVICE_TYPE, deviceType);
 		}
+
 	}
 
 	private OnClickListener onClickAuthenticate = new OnClickListener() {
 
 		@Override
 		public void onClick(View view) {
+
 			if (etUsername.getText() != null && !etUsername.getText().toString().trim().isEmpty() &&
 			    etPassword.getText() != null && !etPassword.getText().toString().trim().isEmpty()) {
 
@@ -188,7 +193,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					deviceType = Constants.OWNERSHIP_COPE;
 				}
 
-				showAuthenticationDialog();			
+				showAuthenticationDialog();
 			} else {
 				if (etUsername.getText() != null && !etUsername.getText().toString().trim().isEmpty()) {
 					Toast.makeText(context,
@@ -401,10 +406,10 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 				}
 
 			} else {
-				getConfigurationsFromServer();
+				checkManifestPermissions();
 			}
 		} else if (deviceType != null){
-			getConfigurationsFromServer();
+			checkManifestPermissions();
 		}
 
 	}
@@ -428,10 +433,36 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		}
 	}
 
+
+
+	/**
+	 * Retriever configurations from the server.
+	 */
+	private void checkManifestPermissions(){
+		if (ActivityCompat.checkSelfPermission(AuthenticationActivity.this, android.Manifest.permission.READ_PHONE_STATE)
+				!= PackageManager.PERMISSION_GRANTED) {
+
+			ActivityCompat.requestPermissions(AuthenticationActivity.this,
+					new String[]{android.Manifest.permission.READ_PHONE_STATE},
+					110);
+		}else{
+			getConfigurationsFromServer();
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		if(requestCode == 110){
+			getConfigurationsFromServer();
+		}
+	}
+
+
 	/**
 	 * Retriever configurations from the server.
 	 */
 	private void getConfigurationsFromServer() {
+
 		final OnCancelListener cancelListener = new OnCancelListener() {
 
 			@Override
@@ -702,7 +733,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 						Preference.putBoolean(context, Constants.PreferenceFlag.IS_AGREED, true);
 						dialog.dismiss();
 						//load the next intent based on ownership type
-						getConfigurationsFromServer();
+						checkManifestPermissions();
 					}
 				});
 
@@ -951,7 +982,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					    equals(org.wso2.emm.agent.proxy.utils.Constants.Authenticator.
 							           MUTUAL_SSL_AUTHENTICATOR)) {
 				if(Constants.SKIP_LICENSE){
-					getConfigurationsFromServer();
+					checkManifestPermissions();
 				} else {
 					getLicense();
 				}
