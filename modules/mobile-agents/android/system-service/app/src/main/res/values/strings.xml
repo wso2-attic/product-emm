@@ -5,6 +5,7 @@
     <string name="alarm_interval">interval</string>
     <string name="alarm_schedule">schedule</string>
     <string name="app_uri">packageUri</string>
+    <string name="verification_failed_flag">isVerificationFailed</string>
     <string name="firmware_status_check_in_progress">firmwareStatusCheck</string>
     <string name="alarm_scheduled_operation">scheduledOperation</string>
 </resources>

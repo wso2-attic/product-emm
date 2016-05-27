@@ -198,6 +198,7 @@
     <string name="shared_pref_eula">eula</string>
     <string name="shared_pref_regId">regId</string>
     <string name="shared_pref_username">username</string>
+    <string name="shared_pref_location">location</string>
     <string name="shared_pref_pin">pin</string>
     <string name="shared_pref_command">command</string>
     <string name="shared_pref_reg_success">1</string>

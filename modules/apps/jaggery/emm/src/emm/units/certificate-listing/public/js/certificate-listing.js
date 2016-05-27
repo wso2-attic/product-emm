@@ -49,7 +49,7 @@ function hidePopup() {
  * on Certificate Listing page in WSO2 MDM Console.
  */
 function removeCertificate(serialNumber) {
-    var removeCertificateAPI = "/mdm-admin/certificates/" + serialNumber;
+    var removeCertificateAPI = "/admin-certificate/certificates/" + serialNumber;
     $(modalPopupContent).html($('#remove-certificate-modal-content').html());
     showPopup();
 
@@ -109,10 +109,10 @@ function loadCertificates(searchParam) {
     var certificateListing = $("#certificate-listing");
     var certificateListingSrc = certificateListing.attr("src");
     $.template("certificate-listing", certificateListingSrc, function (template) {
-        var serviceURL = "/mdm-admin/certificates";
+        var serviceURL = "/admin-certificate/certificates";
 
         if(searchParam != null && searchParam != undefined && searchParam.trim() != '') {
-            serviceURL = "/mdm-admin/certificates/" + searchParam;
+            serviceURL = "/admin-certificate/certificates" + searchParam;
         }
 
         var successCallback = function (data) {
