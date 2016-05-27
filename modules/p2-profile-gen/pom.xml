@@ -533,12 +533,14 @@
                                 </featureArtifactDef>
                                 <!-- End of Dashboards Features -->
 
+                                <!-- EMM analytics Features -->
                                 <featureArtifactDef>
                                     org.wso2.carbon.analytics.cdmf:org.wso2.carbon.analytics.cdmf.feature:${carbon.analytics.cdmf.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.analytics.cdmf:org.wso2.carbon.analytics.emm.feature:${carbon.analytics.cdmf.version}
                                 </featureArtifactDef>
+                                <!-- End of EMM analytics Features -->
 
                             </featureArtifacts>
                         </configuration>
@@ -1135,6 +1137,7 @@
                                 </feature>
                                 <!-- End of Dashboard Features -->
 
+                                <!-- EMM Analytics Features -->
                                 <feature>
                                     <id>org.wso2.carbon.analytics.cdmf.feature.group</id>
                                     <version>${carbon.analytics.cdmf.version}</version>
@@ -1143,6 +1146,7 @@
                                     <id>org.wso2.carbon.analytics.emm.feature.group</id>
                                     <version>${carbon.analytics.cdmf.version}</version>
                                 </feature>
+                                <!-- End of EMM Analytics Features -->
 
                             </features>
                         </configuration>

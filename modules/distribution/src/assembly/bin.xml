@@ -1029,7 +1029,7 @@
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
-        <!-- Adding Analytics Dashboard CApp -->
+        <!-- Adding EMM Analytics Dashboard and gadget CApps -->
         <file>
             <source>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/carbonapps/org_wso2_carbon_analytics_cdmf-1.0.0.car</source>
