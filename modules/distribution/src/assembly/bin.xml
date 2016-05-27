@@ -523,7 +523,7 @@
 
     <files>
         <file>
-            <source>../mobile-agents/android/jax-rs/target/mdm-android-agent.war</source>
+            <source>../mobile-agents/android/jax-rs/target/api#device-mgt#android#v2.1.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>
@@ -541,7 +541,7 @@
             <!--<fileMode>755</fileMode>-->
         <!--</file>-->
         <file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/devicemgt_admin.war</source>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/api#device-mgt#v1.1.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <destName>mdm-admin.war</destName>
