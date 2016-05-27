@@ -60,15 +60,16 @@ public class Constants {
 
 	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";
 	public static final String SERVER_AUTHENTICATION_ENDPOINT = "register/authenticate/device";
-	public static final String LICENSE_ENDPOINT = SERVER_APP_ENDPOINT + "device/license";
-	public static final String REGISTER_ENDPOINT = SERVER_APP_ENDPOINT + "enrollment/";
+	public static final String LICENSE_ENDPOINT = SERVER_APP_ENDPOINT + "configuration/license";
+	public static final String REGISTER_ENDPOINT = SERVER_APP_ENDPOINT + "devices/";
 	public static final String CONFIGURATION_ENDPOINT = SERVER_APP_ENDPOINT + "configuration/";
 	public static final String SCEP_ENDPOINT = "/certificate-mgt/certificates/signcsr";
 	public static final String OAUTH_ENDPOINT = "/oauth2/token";
 	public static final String DEVICE_ENDPOINT = SERVER_APP_ENDPOINT + "device/";
-	public static final String IS_REGISTERED_ENDPOINT = REGISTER_ENDPOINT;
+	public static final String IS_REGISTERED_ENDPOINT = "/status";
 	public static final String UNREGISTER_ENDPOINT =  REGISTER_ENDPOINT;
-	public static final String NOTIFICATION_ENDPOINT = SERVER_APP_ENDPOINT + "operation/";
+	public static final String DEVICES_ENDPOINT = SERVER_APP_ENDPOINT + "devices/";
+	public static final String NOTIFICATION_ENDPOINT  = "/pending-operations";
 	public static final String GOOGLE_PLAY_APP_URI = "market://details?id=";
 	public static final String DYNAMIC_CLIENT_REGISTER_ENDPOINT = "/dynamic-client-web/register";
 	public static final String APP_LIST_ENDPOINT = "/api/appm/publisher/v1.0/apps/mobileapp?field-filter=all";

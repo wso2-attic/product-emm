@@ -288,7 +288,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 						utils.setServerIP(serverIP);
 						if (utils.getHostFromPreferences(context) != null && !utils.getHostFromPreferences(context).isEmpty()) {
 							CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-							                           utils.getAPIServerURL(context) + Constants.IS_REGISTERED_ENDPOINT + regId,
+							                           utils.getAPIServerURL(context) + Constants.DEVICES_ENDPOINT + regId + Constants.IS_REGISTERED_ENDPOINT,
 							                           HTTP_METHODS.GET,
 							                           null, AlreadyRegisteredActivity.this,
 							                           Constants.IS_REGISTERED_REQUEST_CODE);
