@@ -246,4 +246,21 @@ public class Operation {
         }
         return Response.status(Response.Status.OK).entity(activity).build();
     }
+
+    @GET
+    @Path("activity/after/{timestamp}")
+    public Response getActivityUpdatedAfter(@PathParam("timestamp") String timestamp)
+            throws MDMAPIException {
+        List<Activity> activities;
+        DeviceManagementProviderService dmService;
+        try {
+            dmService = MDMAPIUtils.getDeviceManagementService();
+            activities = dmService.getActivitiesUpdatedAfter(Long.parseLong(timestamp));
+        } catch (OperationManagementException e) {
+            String msg = "Error occurred while fetching the activities updated after given time stamp.";
+            log.error(msg, e);
+            throw new MDMAPIException(msg, e);
+        }
+        return Response.status(Response.Status.OK).entity(activities).build();
+    }
 }
