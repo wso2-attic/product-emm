@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.system.service.R;
@@ -172,7 +173,7 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
         if (error == 0) {
             // Success download, trying to install package.
             otaServerManager.startVerifyUpgradePackage();
-            showMessageToCurrentUser(context, "upgrade");
+            showMessageToCurrentUser(context, "Firmware upgrade package verification started.");
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
@@ -195,10 +196,7 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
     }
 
     public void showMessageToCurrentUser(Context context, String message) {
-        Intent intent = new Intent(Constants.AGENT_APP_PACKAGE_NAME + Constants.AGENT_APP_ALERT_ACTIVITY);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("message", message);
-        context.startActivity(intent);
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
 }

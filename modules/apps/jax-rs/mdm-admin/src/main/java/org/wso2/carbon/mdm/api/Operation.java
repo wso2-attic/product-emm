@@ -234,16 +234,16 @@ public class Operation {
     @Path("activity/{id}")
     public Response getActivity(@PathParam("id") String id)
             throws MDMAPIException {
-        org.wso2.carbon.device.mgt.common.operation.mgt.Operation operation;
+        Activity activity;
         DeviceManagementProviderService dmService;
         try {
             dmService = MDMAPIUtils.getDeviceManagementService();
-            operation = dmService.getOperationByActivityId(id);
+            activity = dmService.getOperationByActivityId(id);
         } catch (OperationManagementException e) {
             String msg = "Error occurred while fetching the activity for the supplied id.";
             log.error(msg, e);
             throw new MDMAPIException(msg, e);
         }
-        return Response.status(Response.Status.OK).entity(operation).build();
+        return Response.status(Response.Status.OK).entity(activity).build();
     }
 }
