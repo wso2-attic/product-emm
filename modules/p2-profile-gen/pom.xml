@@ -127,7 +127,7 @@
                                     org.wso2.carbon.devicemgt:org.wso2.carbon.certificate.mgt.api.feature:${carbon.device.mgt.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon.devicemgt:org.wso2.carbon.certificate.mgt.cert.adminapi.feature:${carbon.device.mgt.version}
+                                    org.wso2.carbon.devicemgt:org.wso2.carbon.certificate.mgt.cert.admin.api.feature:${carbon.device.mgt.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.devicemgt:org.wso2.carbon.webapp.authenticator.framework.server.feature:${carbon.device.mgt.version}
@@ -173,6 +173,9 @@
                                 <!-- Mobile Device Management Features -->
                                 <featureArtifactDef>
                                     org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.device.mgt.mobile.feature:${carbon.mobile.device.mgt.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.device.mgt.mobile.windows.feature:${carbon.mobile.device.mgt.version}
                                 </featureArtifactDef>
                                 <!-- Mobile Device Management Features -->
 
@@ -613,6 +616,10 @@
                                     <version>${carbon.mobile.device.mgt.version}</version>
                                 </feature>
                                 <feature>
+                                    <id>org.wso2.carbon.device.mgt.mobile.windows.feature.group</id>
+                                    <version>${carbon.mobile.device.mgt.version}</version>
+                                </feature>
+                                <feature>
                                     <id>org.wso2.carbon.policy.mgt.server.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
@@ -625,7 +632,7 @@
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.certificate.mgt.cert.adminapi.feature.group</id>
+                                    <id>org.wso2.carbon.certificate.mgt.cert.admin.api.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
                                 <feature>
@@ -1035,6 +1042,10 @@
                                     <version>${appmgt.feature.version}</version>
                                 </feature>
                                 <feature>
+                                    <id>org.wso2.carbon.device.mgt.mobile.windows.feature.group</id>
+                                    <version>${carbon.mobile.device.mgt.version}</version>
+                                </feature>
+                                <feature>
                                     <id>org.wso2.carbon.appmgt.publisher.feature.group</id>
                                     <version>${appmgt.feature.version}</version>
                                 </feature>
@@ -1187,7 +1198,7 @@
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.certificate.mgt.cert.adminapi.feature.group</id>
+                                    <id>org.wso2.carbon.certificate.mgt.cert.admin.api.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
                                 <feature>
