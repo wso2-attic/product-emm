@@ -17,19 +17,11 @@
  */
 package org.wso2.emm.system.service.api;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.system.service.R;
@@ -51,7 +43,6 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
     private static final String UPGRADE_VERSION = "version";
     private static final String UPGRADE_RELEASE = "release";
     private static final String UPGRADE_SIZE = "size";
-    private static final int HANDLER_DEFAULT_ARG = 1;
     private static final String UPGRADE_DESCRIPTION = "description";
     private Context context;
     private OTAServerManager otaServerManager;

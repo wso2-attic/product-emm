@@ -58,7 +58,6 @@ public class OTAServerManager {
     private static final int DEFAULT_OFFSET = 0;
     private OTAStateChangeListener stateChangeListener;
     private OTAServerConfig serverConfig;
-    private BuildPropParser parser = null;
     private long cacheProgress = -1;
     private Context context;
     private WakeLock wakeLock;
