@@ -309,6 +309,7 @@
     <string name="txt_byod">  BYOD (This device is my own device)</string>
     <string name="txt_cope">  COPE (This device is corporate owned)</string>
     <string name="txt_incompatible">Registration failed, check your internet connection and click to retry</string>
+    <string name="network_not_available_message">EMM enrollment failed, check your internet connection and re-launch the agent to continue</string>
     <string name="txt_retry">Retry Registration</string>
     <string name="txt_old_pin">Old PIN Code</string>
     <string name="txt_enter_pin">Enter PIN Code</string>
