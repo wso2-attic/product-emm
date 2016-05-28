@@ -67,7 +67,7 @@ public class MutualSSLAuthenticator implements ClientAuthenticator {
                     Log.e(TAG, "Error occurred while loading key store." + e);
                 }
             } else {
-                localKeyStore = Keystore.getKeystore(R.raw.truststore,
+                localKeyStore = Keystore.getKeystore(R.raw.keystore,
                                                        Constants.KEYSTORE_PASSWORD);
             }
         }
