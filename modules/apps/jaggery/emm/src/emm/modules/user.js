@@ -27,6 +27,8 @@ var userModule = function () {
     var mdmProps = require('/config/mdm-props.js').config();
     var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
 
+    var emmAdminBasePath = "/api/device-mgt/v1.0";
+
     /* Initializing user manager */
     var carbon = require('carbon');
     var tenantId = carbon.server.tenantId();
@@ -342,7 +344,7 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/users";
+            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/users";
             return privateMethods.callBackend(url, constants.HTTP_GET);
 
         } catch (e) {
@@ -369,7 +371,7 @@ var userModule = function () {
         var carbonUser = privateMethods.getCarbonUser();
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/users/view?username=" + encodeURIComponent(username);
+            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/users/" + encodeURIComponent(username);
             var response = privateMethods.callBackend(url, constants.HTTP_GET);
             response["userDomain"] = carbonUser.domain;
             return response;
@@ -388,9 +390,8 @@ var userModule = function () {
         var carbonUser = privateMethods.getCarbonUser();
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/users/roles?username=" + encodeURIComponent(username);
-            var response = privateMethods.callBackend(url, constants.HTTP_GET);
-            return response;
+            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/users/" + encodeURIComponent(username) + "/roles";
+            return privateMethods.callBackend(url, constants.HTTP_GET);
         } catch (e) {
             throw e;
         } finally {
@@ -434,7 +435,7 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/roles";
+            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/roles";
             return privateMethods.callBackend(url, constants.HTTP_GET);
         } catch (e) {
             throw e;
@@ -458,7 +459,7 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/roles/" + encodeURIComponent(userStore);
+            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/roles?user-store=" + encodeURIComponent(userStore);
             return privateMethods.callBackend(url, constants.HTTP_GET);
         } catch (e) {
             throw e;
@@ -478,6 +479,7 @@ var userModule = function () {
             throw constants["ERRORS"]["USER_NOT_FOUND"];
         }
         try {
+            //TODO Fix this to get device types properly from the admin JAX-RS
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + "/mdm-admin/devices/types";
             return privateMethods.callBackend(url, constants.HTTP_GET);
@@ -502,9 +504,8 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/roles/role?rolename=" + encodeURIComponent(roleName);
-            var response = privateMethods.callBackend(url, constants.HTTP_GET);
-            return response;
+            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/roles/" + encodeURIComponent(roleName);
+            return privateMethods.callBackend(url, constants.HTTP_GET);
         } catch (e) {
             throw e;
         } finally {
