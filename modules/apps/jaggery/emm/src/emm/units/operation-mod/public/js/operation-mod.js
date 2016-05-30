@@ -107,13 +107,17 @@ var operationModule = function () {
         "CALENDAR_SUBSCRIPTION_OPERATION_CODE": "CALENDAR_SUBSCRIPTION",
         "APN_OPERATION_CODE": "APN",
         "DOMAIN_CODE": "DOMAIN",
-        "CELLULAR_OPERATION_CODE": "CELLULAR"
+        "CELLULAR_OPERATION_CODE": "CELLULAR",
+        "PER_APP_VPN_OPERATION_CODE": "PER_APP_VPN",
+        "APP_TO_PER_APP_VPN_MAPPING_OPERATION_CODE": "APP_TO_PER_APP_VPN_MAPPING"
     };
 
     publicMethods.getIOSServiceEndpoint = function (operationCode) {
         var featureMap = {
             "DEVICE_LOCK": "lock",
             "VPN": "vpn",
+            "PER_APP_VPN": "perappvpn",
+            "APP_TO_PER_APP_VPN_MAPPING": "apptoperappvpnmapping",
             "RING": "ring",
             "LOCATION": "location",
             "NOTIFICATION": "notification",
@@ -276,6 +280,22 @@ var operationModule = function () {
                     "ikev2DeadPeerDetectionInterval": operationPayload.ikEv2["deadPeerDetectionInterval"],
                     "ikev2ServerCertificateIssuerCommonName": operationPayload.ikEv2["serverCertificateIssuerCommonName"],
                     "ikev2ServerCertificateCommonName": operationPayload.ikEv2["serverCertificateCommonName"]
+                };
+                break;
+            case iosOperationConstants["PER_APP_VPN_OPERATION_CODE"]:
+                payload = {
+                    "operation": {
+                        "VPNUUID": operationPayload["PER-APP-VPNUUID"],
+                        "safariDomains": operationPayload["safariDomains"],
+                        "onDemandMatchAppEnabled": operationPayload["onDemandMatchAppEnabled"]
+                    }
+                };
+                break;
+            case iosOperationConstants["APP_TO_PER_APP_VPN_MAPPING_OPERATION_CODE"]:
+                payload = {
+                    "operation": {
+                        "appLayerVPNMappings": operationPayload["appLayerVPNMappings"]
+                    }
                 };
                 break;
             case iosOperationConstants["WIFI_OPERATION_CODE"]:
@@ -515,20 +535,57 @@ var operationModule = function () {
                     };
                 }
 
+                var domainsAlways = new Array();
+                for (var i = 0; i < operationData["onDemandMatchDomainsAlways"].length; i++) {
+                    domainsAlways.push(operationData["onDemandMatchDomainsAlways"][i].domain);
+                }
+
+                var domainsNever = new Array();
+                for (var i = 0; i < operationData["onDemandMatchDomainsNever"].length; i++) {
+                    domainsNever.push(operationData["onDemandMatchDomainsNever"][i].domain);
+                }
+
+                var domainsRetry = new Array();
+                for (var i = 0; i < operationData["onDemandMatchDomainsOnRetry"].length; i++) {
+                    domainsRetry.push(operationData["onDemandMatchDomainsOnRetry"][i].domain);
+                }
+
                 payload = {
                     "operation": {
                         "userDefinedName": operationData["userDefinedName"],
                         "overridePrimary": operationData["overridePrimary"],
                         "onDemandEnabled": operationData["onDemandEnabled"],
-                        "onDemandMatchDomainsAlways": operationData["onDemandMatchDomainsAlways"],
-                        "onDemandMatchDomainsNever": operationData["onDemandMatchDomainsNever"],
-                        "onDemandMatchDomainsOnRetry": operationData["onDemandMatchDomainsOnRetry"],
+                        "onDemandMatchDomainsAlways": domainsAlways,
+                        "onDemandMatchDomainsNever": domainsNever,
+                        "onDemandMatchDomainsOnRetry": domainsRetry,
                         "onDemandRules" : operationData["onDemandRules"],
                         "vendorConfigs" : operationData["vendorConfigs"],
                         "vpnType" : operationData["vpnType"],
                         "ppp": ppp,
                         "ipSec": ipSec,
                         "ikEv2": ikev2
+                    }
+                };
+                break;
+            case iosOperationConstants["PER_APP_VPN_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                var domains = new Array();
+                for (var i = 0; i < operationData["safariDomains"].length; i++) {
+                    domains.push(operationData["safariDomains"][i].domain);
+                }
+                payload = {
+                    "operation": {
+                        "VPNUUID": operationData["VPNUUID"],
+                        "safariDomains": domains,
+                        "onDemandMatchAppEnabled": operationData["onDemandMatchAppEnabled"]
+                    }
+                };
+                break;
+            case iosOperationConstants["APP_TO_PER_APP_VPN_MAPPING_OPERATION_CODE"]:
+                operationType = operationTypeConstants["PROFILE"];
+                payload = {
+                    "operation": {
+                        "appLayerVPNMappings": operationData["appLayerVPNMappings"]
                     }
                 };
                 break;
@@ -870,7 +927,8 @@ var operationModule = function () {
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "schedule" : operationData["schedule"]
+                        "schedule" : operationData["schedule"],
+                        "server" : operationData["server"]
                     }
                 };
                 break;
@@ -1377,57 +1435,14 @@ var operationModule = function () {
                     // var childInputValue;
                     if (operationDataObj.hasClass("one-column-input-array")) {
                         // generating input fields to populate complex value
-                        for (i = 0; i < value.length; ++i) {
-                            operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
-                        }
-                        // traversing through each child input
-                        $(".child-input", this).each(function () {
-                            childInput = $(this);
-                            var childInputValue = value[childInputIndex];
-                            // populating extracted value in the UI according to the input type
-                            if (childInput.is(":text") ||
-                                childInput.is(":hidden") ||
-                                childInput.is("textarea") ||
-                                childInput.is(":password") ||
-                                childInput.is("select")) {
-                                childInput.val(childInputValue);
-                            } else if (childInput.is(":checkbox")) {
-                                operationDataObj.prop("checked", childInputValue);
+                        if (value) {
+                            for (i = 0; i < value.length; ++i) {
+                                operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
                             }
-                            // incrementing childInputIndex
-                            childInputIndex++;
-                        });
-                    } else if (operationDataObj.hasClass("valued-check-box-array")) {
-                        // traversing through each child input
-                        $(".child-input", this).each(function () {
-                            childInput = $(this);
-                            // check if corresponding value of current checkbox exists in the array of values
-                            if (value.indexOf(childInput.data("value")) != -1) {
-                                // if YES, set checkbox as checked
-                                childInput.prop("checked", true);
-                            }
-                        });
-                    } else if (operationDataObj.hasClass("multi-column-joined-input-array")) {
-                        // generating input fields to populate complex value
-                        for (i = 0; i < value.length; ++i) {
-                            operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
-                        }
-                        var columnCount = operationDataObj.data("column-count");
-                        var multiColumnJoinedInputArrayIndex = 0;
-                        // handling scenarios specifically
-                        if (operationDataObj.attr("id") == "wifi-mcc-and-mncs") {
                             // traversing through each child input
                             $(".child-input", this).each(function () {
                                 childInput = $(this);
-                                var multiColumnJoinedInput = value[multiColumnJoinedInputArrayIndex];
-                                var childInputValue;
-                                if ((childInputIndex % columnCount) == 0) {
-                                    childInputValue = multiColumnJoinedInput.substring(3, 0)
-                                } else {
-                                    childInputValue = multiColumnJoinedInput.substring(3);
-                                    // incrementing childInputIndex
-                                    multiColumnJoinedInputArrayIndex++;
-                                }
+                                var childInputValue = value[childInputIndex];
                                 // populating extracted value in the UI according to the input type
                                 if (childInput.is(":text") ||
                                     childInput.is(":hidden") ||
@@ -1442,36 +1457,87 @@ var operationModule = function () {
                                 childInputIndex++;
                             });
                         }
-                    } else if (operationDataObj.hasClass("multi-column-key-value-pair-array")) {
-                        // generating input fields to populate complex value
-                        for (i = 0; i < value.length; ++i) {
-                            operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
-                        }
-                        columnCount = operationDataObj.data("column-count");
-                        var multiColumnKeyValuePairArrayIndex = 0;
+                    } else if (operationDataObj.hasClass("valued-check-box-array")) {
                         // traversing through each child input
                         $(".child-input", this).each(function () {
                             childInput = $(this);
-                            var multiColumnKeyValuePair = value[multiColumnKeyValuePairArrayIndex];
-                            var childInputKey = childInput.data("child-key");
-                            var childInputValue = multiColumnKeyValuePair[childInputKey];
-                            // populating extracted value in the UI according to the input type
-                            if (childInput.is(":text") ||
-                                childInput.is(":hidden") ||
-                                childInput.is("textarea") ||
-                                childInput.is(":password") ||
-                                childInput.is("select")) {
-                                childInput.val(childInputValue);
-                            } else if (childInput.is(":checkbox")) {
-                                operationDataObj.prop("checked", childInputValue);
+                            // check if corresponding value of current checkbox exists in the array of values
+                            if (value) {
+                                if (value.indexOf(childInput.data("value")) != -1) {
+                                    // if YES, set checkbox as checked
+                                    childInput.prop("checked", true);
+                                }
                             }
-                            // incrementing multiColumnKeyValuePairArrayIndex for the next row of inputs
-                            if ((childInputIndex % columnCount) == (columnCount - 1)) {
-                                multiColumnKeyValuePairArrayIndex++;
-                            }
-                            // incrementing childInputIndex
-                            childInputIndex++;
                         });
+                    } else if (operationDataObj.hasClass("multi-column-joined-input-array")) {
+                        // generating input fields to populate complex value
+                        if (value) {
+                            for (i = 0; i < value.length; ++i) {
+                                operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
+                            }
+                            var columnCount = operationDataObj.data("column-count");
+                            var multiColumnJoinedInputArrayIndex = 0;
+                            // handling scenarios specifically
+                            if (operationDataObj.attr("id") == "wifi-mcc-and-mncs") {
+                                // traversing through each child input
+                                $(".child-input", this).each(function () {
+                                    childInput = $(this);
+                                    var multiColumnJoinedInput = value[multiColumnJoinedInputArrayIndex];
+                                    var childInputValue;
+                                    if ((childInputIndex % columnCount) == 0) {
+                                        childInputValue = multiColumnJoinedInput.substring(3, 0)
+                                    } else {
+                                        childInputValue = multiColumnJoinedInput.substring(3);
+                                        // incrementing childInputIndex
+                                        multiColumnJoinedInputArrayIndex++;
+                                    }
+                                    // populating extracted value in the UI according to the input type
+                                    if (childInput.is(":text") ||
+                                        childInput.is(":hidden") ||
+                                        childInput.is("textarea") ||
+                                        childInput.is(":password") ||
+                                        childInput.is("select")) {
+                                        childInput.val(childInputValue);
+                                    } else if (childInput.is(":checkbox")) {
+                                        operationDataObj.prop("checked", childInputValue);
+                                    }
+                                    // incrementing childInputIndex
+                                    childInputIndex++;
+                                });
+                            }
+                        }
+                    } else if (operationDataObj.hasClass("multi-column-key-value-pair-array")) {
+                        // generating input fields to populate complex value
+                        if (value) {
+                            for (i = 0; i < value.length; ++i) {
+                                operationDataObj.parent().find("a").filterByData("click-event", "add-form").click();
+                            }
+                            columnCount = operationDataObj.data("column-count");
+                            var multiColumnKeyValuePairArrayIndex = 0;
+                            // traversing through each child input
+                            $(".child-input", this).each(function () {
+                                childInput = $(this);
+                                var multiColumnKeyValuePair = value[multiColumnKeyValuePairArrayIndex];
+                                var childInputKey = childInput.data("child-key");
+                                var childInputValue = multiColumnKeyValuePair[childInputKey];
+                                // populating extracted value in the UI according to the input type
+                                if (childInput.is(":text") ||
+                                    childInput.is(":hidden") ||
+                                    childInput.is("textarea") ||
+                                    childInput.is(":password") ||
+                                    childInput.is("select")) {
+                                    childInput.val(childInputValue);
+                                } else if (childInput.is(":checkbox")) {
+                                    operationDataObj.prop("checked", childInputValue);
+                                }
+                                // incrementing multiColumnKeyValuePairArrayIndex for the next row of inputs
+                                if ((childInputIndex % columnCount) == (columnCount - 1)) {
+                                    multiColumnKeyValuePairArrayIndex++;
+                                }
+                                // incrementing childInputIndex
+                                childInputIndex++;
+                            });
+                        }
                     }
                 }
             }

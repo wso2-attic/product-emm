@@ -33,6 +33,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -54,8 +56,12 @@ public class OAuthSSLClient implements CommunicationClient {
         try {
             if (Constants.SERVER_PROTOCOL.equalsIgnoreCase("https://")) {
                 KeyStore localTrustStore = KeyStore.getInstance("BKS");
-                inStream = IdentityProxy.getInstance().getContext().getResources().
-                        openRawResource(R.raw.truststore);
+                if (Constants.TRUSTSTORE_LOCATION != null) {
+                    inStream = new FileInputStream(new File(Constants.TRUSTSTORE_LOCATION));
+                } else {
+                    inStream = IdentityProxy.getInstance().getContext().getResources().
+                            openRawResource(R.raw.truststore);
+                }
                 localTrustStore.load(inStream, Constants.TRUSTSTORE_PASSWORD.toCharArray());
                 String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
                 TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
@@ -88,7 +94,7 @@ public class OAuthSSLClient implements CommunicationClient {
             Log.e(TAG, errorMsg);
             throw new IDPTokenManagerException(errorMsg, e);
         } catch (NoSuchAlgorithmException e) {
-            String errorMsg = "Error occurred while due to mismatch of defined algorithm.";
+            String errorMsg = "Error occurred due to mismatch of defined algorithm.";
             Log.e(TAG, errorMsg);
             throw new IDPTokenManagerException(errorMsg, e);
         } catch (KeyManagementException e) {
@@ -96,7 +102,7 @@ public class OAuthSSLClient implements CommunicationClient {
             Log.e(TAG, errorMsg);
             throw new IDPTokenManagerException(errorMsg, e);
         } catch (IOException e) {
-            String errorMsg = "Error occurred while loading trust store. ";
+            String errorMsg = "Error occurred while loading trust store.";
             Log.e(TAG, errorMsg);
             throw new IDPTokenManagerException(errorMsg, e);
         } finally {
