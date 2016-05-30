@@ -544,7 +544,6 @@
             <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/api#device-mgt#v1.0.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
-            <destName>api#device-mgt#v1.1.war</destName>
             <fileMode>755</fileMode>
         </file>
         <!-- Copy APILifeCycle.xml -->
