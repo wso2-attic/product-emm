@@ -106,8 +106,13 @@ public class DeviceInfo {
 	 * @return - Device IMEI number.
 	 */
 	public String getDeviceId() {
-		String deviceId = telephonyManager.getDeviceId();
-		
+
+		String deviceId = null;
+
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+			deviceId = telephonyManager.getDeviceId();
+		}
+
 		if (deviceId == null || deviceId.isEmpty()) {
 			deviceId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
 		}

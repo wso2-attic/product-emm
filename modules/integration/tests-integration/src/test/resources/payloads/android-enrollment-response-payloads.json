@@ -1,6 +1,5 @@
 {
   "POST" : {
-      "responseCode" : "Created",
       "responseMessage" : "Device enrollment succeeded."
   },
   "PUT" : {

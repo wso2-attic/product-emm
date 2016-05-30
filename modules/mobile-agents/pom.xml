@@ -30,8 +30,4 @@
     <artifactId>wso2mdm-product-mobileservices</artifactId>
     <packaging>pom</packaging>
 
-    <modules>
-        <module>windows/jax-rs</module>
-        <module>android/jax-rs</module>
-    </modules>
 </project>

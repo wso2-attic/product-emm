@@ -17,7 +17,8 @@
  ~ under the License.
  -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.mdm</groupId>
@@ -35,16 +36,15 @@
     </parent>
 
     <modules>
-        <module>modules/apps/jax-rs/mdm-admin</module>
         <module>modules/mobile-agents</module>
         <module>modules/apps/jaggery/emm</module>
-	<module>modules/apps/jaggery/emm-web-agent</module>
+        <module>modules/apps/jaggery/emm-web-agent</module>
         <!--<module>modules/tools</module>-->
         <module>modules/mdm-ui</module>
-	<module>modules/features</module>
+        <module>modules/features</module>
         <module>modules/p2-profile-gen</module>
         <module>modules/distribution</module>
-        <module>modules/integration</module>
+        <!--module>modules/integration</module-->
     </modules>
 
     <dependencyManagement>
@@ -1058,11 +1058,12 @@
         <carbon.data.version>4.3.4</carbon.data.version>
 
 
-	    <!-- Release plugin ID for github-->
+        <!-- Release plugin ID for github-->
         <project.scm.id>github-scm</project.scm.id>
 
         <!-- Carbon Dashboards version-->
-        <carbon.dashboards.version>1.0.13</carbon.dashboards.version>
+        <carbon.dashboards.version>1.0.17-SNAPSHOT</carbon.dashboards.version>
+        <carbon.analytics.cdmf.version>1.0.0-SNAPSHOT</carbon.analytics.cdmf.version>
     </properties>
 
     <scm>

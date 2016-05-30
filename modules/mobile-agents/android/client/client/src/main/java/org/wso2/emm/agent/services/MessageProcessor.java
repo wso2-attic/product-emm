@@ -140,7 +140,7 @@ public class MessageProcessor implements APIResultCallBack {
 		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
-		String url = utils.getAPIServerURL(context) + Constants.NOTIFICATION_ENDPOINT + deviceId;
+		String url = utils.getAPIServerURL(context) + Constants.DEVICES_ENDPOINT + deviceId + Constants.NOTIFICATION_ENDPOINT;
 
 		Log.i(TAG, "Get pending operations from: " + url);
 
