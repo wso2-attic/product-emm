@@ -523,13 +523,13 @@
 
     <files>
         <file>
-            <source>../mobile-agents/android/jax-rs/target/api#device-mgt#android#v2.1.war</source>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/api#device-mgt#android#v2.1.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>
         </file>
         <file>
-            <source>../mobile-agents/windows/jax-rs/target/mdm-windows-agent.war</source>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/mdm-windows-agent.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>
@@ -544,7 +544,7 @@
             <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/api#device-mgt#v1.1.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
-            <destName>mdm-admin.war</destName>
+            <destName>api#device-mgt#v1.1.war</destName>
             <fileMode>755</fileMode>
         </file>
         <!-- Copy APILifeCycle.xml -->

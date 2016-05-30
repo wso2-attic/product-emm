@@ -171,6 +171,12 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.device.mgt.mobile.feature:${carbon.mobile.device.mgt.version}
                                 </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.device.mgt.mobile.android.feature:${carbon.mobile.device.mgt.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.device.mgt.mobile.windows.feature:${carbon.mobile.device.mgt.version}
+                                </featureArtifactDef>
                                 <!-- Mobile Device Management Features -->
 
                                 <!-- Carbon Deployment Features -->
@@ -607,6 +613,14 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.device.mgt.mobile.feature.group</id>
+                                    <version>${carbon.mobile.device.mgt.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.device.mgt.mobile.android.feature.group</id>
+                                    <version>${carbon.mobile.device.mgt.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.device.mgt.mobile.windows.feature.group</id>
                                     <version>${carbon.mobile.device.mgt.version}</version>
                                 </feature>
                                 <feature>
@@ -1165,6 +1179,14 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.device.mgt.mobile.feature.group</id>
+                                    <version>${carbon.mobile.device.mgt.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.device.mgt.mobile.android.feature.group</id>
+                                    <version>${carbon.mobile.device.mgt.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.device.mgt.mobile.windows.feature.group</id>
                                     <version>${carbon.mobile.device.mgt.version}</version>
                                 </feature>
                                 <feature>
