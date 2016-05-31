@@ -452,13 +452,14 @@ public class CommonUtils {
 	                                                          Resources resources)
 			throws AndroidAgentException {
 		AppRestriction appRestriction = new AppRestriction();
-		JSONArray restrictedApps;
+		JSONArray restrictedApps = null;
 		try {
 			JSONObject payload = new JSONObject(operation.getPayLoad().toString());
 			appRestriction.setRestrictionType(
 					(String) payload.get(Constants.AppRestriction.RESTRICTION_TYPE));
-			restrictedApps = payload.getJSONArray(Constants.AppRestriction.RESTRICTED_APPLICATIONS);
-
+			if (!payload.isNull(Constants.AppRestriction.RESTRICTED_APPLICATIONS)) {
+				restrictedApps = payload.getJSONArray(Constants.AppRestriction.RESTRICTED_APPLICATIONS);
+			}
 		} catch (JSONException e) {
 			if (resources != null && resultBuilder != null) {
 				operation.setStatus(resources.getString(R.string.operation_value_error));

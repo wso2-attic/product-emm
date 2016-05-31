@@ -36,6 +36,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -44,6 +46,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.Map;
 
 /**
@@ -55,8 +58,24 @@ public class MutualSSLClient implements CommunicationClient {
 
     static {
         if (localTrustStore == null) {
-            localTrustStore = Keystore.getKeystore(R.raw.truststore,
-                                                   Constants.TRUSTSTORE_PASSWORD);
+            if (Constants.TRUSTSTORE_LOCATION != null) {
+                try {
+                    localTrustStore = KeyStore.getInstance("BKS");
+                    localTrustStore.load(new FileInputStream(new File(Constants.TRUSTSTORE_LOCATION)),
+                                         Constants.TRUSTSTORE_PASSWORD.toCharArray());
+                } catch (IOException e) {
+                    Log.e(TAG, "Error occurred while loading trust store." + e);
+                } catch (NoSuchAlgorithmException e) {
+                    Log.e(TAG, "Error occurred due to mismatch of defined algorithm." + e);
+                } catch (CertificateException e) {
+                    Log.e(TAG, "Error occurred while loading certificate." + e);
+                } catch (KeyStoreException e) {
+                    Log.e(TAG, "Error occurred while loading trust store." + e);
+                }
+            } else {
+                localTrustStore = Keystore.getKeystore(R.raw.truststore,
+                                                       Constants.TRUSTSTORE_PASSWORD);
+            }
         }
     }
 

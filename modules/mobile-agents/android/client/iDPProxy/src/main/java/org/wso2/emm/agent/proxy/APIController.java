@@ -111,9 +111,9 @@ public class APIController implements TokenCallBack {
 	public void onReceiveTokenResult(Token token, String status) {
 		this.token = token;
 		setRequestMethod(apiEndPointInfo.getHttpMethod());
-		if(isStringRequest){
+		if(isStringRequest) {
 			sendStringRequest(apiResultCallback, apiEndPointInfo, false);
-		}else{
+		} else {
 			if (apiEndPointInfo.getRequestParamsMap() != null) {
 				sendStringRequest(apiResultCallback, apiEndPointInfo, false);
 			} else if (apiEndPointInfo.getRequestParams() != null) {
@@ -176,8 +176,8 @@ public class APIController implements TokenCallBack {
 			} else {
 				sendJsonArrayRequest(callBack, apiUtilities, true);
 			}
-		} else if (apiEndPointInfo.isJSONArrayRequest()) {
-			sendJsonArrayRequest(apiResultCallback, apiEndPointInfo, true);
+		} else if (apiUtilities.isJSONArrayRequest()) {
+			sendJsonArrayRequest(callBack, apiUtilities, true);
 		} else {
 			sendJsonObjectRequest(callBack, apiUtilities, true);
 		}

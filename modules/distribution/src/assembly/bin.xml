@@ -458,7 +458,7 @@
         </fileSet>
 
 
-	<!-- Copy APPM ReST APIs and OAuth artifacts-->
+    <!-- Copy APPM ReST APIs and OAuth artifacts-->
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps
             </directory>
@@ -479,6 +479,15 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
             <includes>
                 <include>certificate-mgt.war</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps
+            </directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
+            <includes>
+                <include>admin-certificate.war</include>
             </includes>
         </fileSet>
 
@@ -544,7 +553,6 @@
             <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/api#device-mgt#v1.0.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
-            <destName>api#device-mgt#v1.1.war</destName>
             <fileMode>755</fileMode>
         </file>
         <!-- Copy APILifeCycle.xml -->

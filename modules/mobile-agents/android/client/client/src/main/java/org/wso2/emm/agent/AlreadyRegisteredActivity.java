@@ -288,7 +288,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 						utils.setServerIP(serverIP);
 						if (utils.getHostFromPreferences(context) != null && !utils.getHostFromPreferences(context).isEmpty()) {
 							CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-							                           utils.getAPIServerURL(context) + Constants.IS_REGISTERED_ENDPOINT + regId,
+							                           utils.getAPIServerURL(context) + Constants.DEVICES_ENDPOINT + regId + Constants.IS_REGISTERED_ENDPOINT,
 							                           HTTP_METHODS.GET,
 							                           null, AlreadyRegisteredActivity.this,
 							                           Constants.IS_REGISTERED_REQUEST_CODE);
@@ -337,7 +337,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			stopProgressDialog();
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS);
-				if (responseStatus != null && Constants.Status.SUCCESSFUL.equals(responseStatus)) {
+				if (responseStatus != null && Constants.Status.ACCEPT.equals(responseStatus)) {
 					stopPolling();
 					initiateUnregistration();
 				} else if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {

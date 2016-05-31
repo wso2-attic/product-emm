@@ -28,7 +28,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import android.widget.Toast;
 import org.wso2.emm.agent.api.DeviceState;
+import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.Response;
@@ -50,13 +52,19 @@ public class AgentReceptionActivity extends Activity {
         Response androidForWorkCompatibility = state.evaluateAndroidForWorkCompatibility();
         manager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         boolean isDeviceActive = Preference.getBoolean(context, Constants.PreferenceFlag.DEVICE_ACTIVE);
-        if (isDeviceActive || Constants.SKIP_WORK_PROFILE_CREATION) {
-            skipToEnrollment();
-        }
-        if (androidForWorkCompatibility.getCode()) {
-            manageAndroidForWorkReceiption();
+        if (CommonUtils.isNetworkAvailable(context)) {
+            if (isDeviceActive || Constants.SKIP_WORK_PROFILE_CREATION) {
+                skipToEnrollment();
+            }
+            if (androidForWorkCompatibility.getCode()) {
+                manageAndroidForWorkReceiption();
+            } else {
+                skipToEnrollment();
+            }
         } else {
-            skipToEnrollment();
+            Toast.makeText(context, context.getResources().getString(R.string.network_not_available_message),
+                           Toast.LENGTH_LONG).show();
+            finish();
         }
     }
 

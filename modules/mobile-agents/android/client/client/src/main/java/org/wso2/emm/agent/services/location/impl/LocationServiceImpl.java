@@ -30,7 +30,10 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import com.google.gson.Gson;
+import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.services.location.LocationService;
+import org.wso2.emm.agent.utils.Preference;
 
 /**
  * This class holds the function implementations of the location service.
@@ -40,7 +43,7 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
     private Location location;
     private LocationManager locationManager;
     private static LocationServiceImpl serviceInstance;
-
+    private Context context;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60;
     private static final String TAG = LocationServiceImpl.class.getSimpleName();
@@ -48,6 +51,7 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
     private LocationServiceImpl() {}
 
     private LocationServiceImpl(Context context) {
+        this.context = context;
         locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
     }
 
@@ -78,6 +82,10 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
                     if (locationManager != null) {
                         location = locationManager.getLastKnownLocation(
                                 LocationManager.NETWORK_PROVIDER);
+                        if (location != null) {
+                            Preference.putString(context, context.getResources().getString(R.string.shared_pref_location),
+                                                 new Gson().toJson(location));
+                        }
                     }
                 }
 
@@ -90,6 +98,10 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
                         if (locationManager != null) {
                             location = locationManager.getLastKnownLocation(
                                     LocationManager.GPS_PROVIDER);
+                            if (location != null) {
+                                Preference.putString(context, context.getResources().getString(R.string.shared_pref_location),
+                                                     new Gson().toJson(location));
+                            }
                         }
                     }
                 }
@@ -109,7 +121,7 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
                 {
                     Looper.prepare();
                 }
-               LocationServiceImpl.this.setLocation();
+                LocationServiceImpl.this.setLocation();
                 mHandler = new Handler() {
                     public void handleMessage(Message msg) {
                         Log.e(TAG, "No network/GPS Switched off." + msg);
@@ -118,6 +130,10 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
             }
         }
         new LooperThread().run();
+        if (location == null) {
+            location = new Gson().fromJson(Preference.getString(context, context.getResources().getString(
+                    R.string.shared_pref_location)), Location.class);
+        }
         return location;
     }
 
@@ -128,7 +144,10 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
 
     @Override
     public void onLocationChanged(Location location) {
-
+        if (location != null) {
+            Preference.putString(context, context.getResources().getString(R.string.shared_pref_location),
+                                 new Gson().toJson(location));
+        }
     }
 
     @Override

@@ -363,7 +363,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 } catch (JSONException e) {
                     operation.setStatus(resources.getString(R.string.operation_value_error));
                     resultBuilder.build(operation);
-                   Log.e(TAG, "Invalid JSON format" + e);
+                    Log.e(TAG, "Invalid JSON format" + e);
                 }
                 if (Constants.DEBUG_MODE_ENABLED) {
                     Log.d(TAG, "Wifi configured");
@@ -590,21 +590,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      */
     public void upgradeFirmware(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
         JSONObject result = new JSONObject();
-        String schedule;
-
-        try {
-            JSONObject upgradeData = new JSONObject(operation.getPayLoad().toString());
-            if (!upgradeData.isNull(resources.getString(R.string.intent_extra_schedule))) {
-                schedule = (String) upgradeData.get(resources.getString(R.string.intent_extra_schedule));
-                Preference.putString(context, resources.getString(R.string.pref_key_schedule), schedule);
-            }
-
-        } catch (JSONException e) {
-            operation.setStatus(resources.getString(R.string.operation_value_error));
-            resultBuilder.build(operation);
-            throw new AndroidAgentException("Invalid JSON format.", e);
-        }
-
+        Preference.putString(context, resources.getString(R.string.pref_key_schedule), operation.getPayLoad().toString());
         try {
             String status = resources.getString(R.string.shared_pref_default_status);
             result.put(resources.getString(R.string.operation_status), status);
