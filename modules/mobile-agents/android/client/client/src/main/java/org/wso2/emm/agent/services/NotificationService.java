@@ -137,7 +137,6 @@ public class NotificationService extends BroadcastReceiver {
             notifyManager.notify(operationId, mBuilder.build());
 
         } else {
-
             Intent intent = new Intent(context, AlertActivity.class);
             intent.putExtra(context.getResources().getString(R.string.intent_extra_message), message);
             intent.putExtra(context.getResources().getString(R.string.intent_extra_operation_id), operationId);

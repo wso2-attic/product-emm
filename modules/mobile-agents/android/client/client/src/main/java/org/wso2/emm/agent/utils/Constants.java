@@ -55,6 +55,7 @@ public class Constants {
 	// This is used to skip the license
 	public static final boolean SKIP_LICENSE = false;
 	public static final boolean HIDE_LOGIN_UI = false;
+	public static final boolean HIDE_UNREGISTER_BUTTON = false;
 	public static final boolean SKIP_WORK_PROFILE_CREATION = false;
 	public static final boolean HIDE_ERROR_DIALOG = false;
 
@@ -113,7 +114,6 @@ public class Constants {
 	public static final String IS_LOCKED = "lock";
 	public static final String LOCK_MESSAGE = "lockMessage";
 	public static final String OPERATION_ID = "operationId";
-	public static final boolean HIDE_UNREGISTER_BUTTON = false;
 	public static final String IS_HARD_LOCK_ENABLED = "isHardLockEnabled";
 	public static final String USERNAME_PATTERN = "[user]";
 

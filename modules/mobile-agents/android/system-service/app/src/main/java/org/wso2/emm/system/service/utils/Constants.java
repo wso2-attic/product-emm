@@ -25,10 +25,9 @@ public class Constants {
 
 	public static final String AGENT_APP_PACKAGE_NAME = "org.wso2.emm.agent";
 	public static final String AGENT_APP_LAUNCH_ACTIVITY = "ServerDetails";
-	public static final String AGENT_APP_ALERT_ACTIVITY = "AlertActivity";
-	public static final String OTA_CONFIG_LOCATION = "/data/system/ota.conf";
 	public static final String DEFAULT_OTA_SERVER_ADDRESS = "emm.wso2.com";
 	public static final String DEFAULT_OTA_SERVER_PROTOCOL = "http";
+	public static final String DEFAULT_OTA_SERVER_SUB_DIRECTORY = null;
 	public static final int DEFAULT_OTA_SERVER_PORT = 80;
 	public static final String DEFAULT_OTA_BUILD_PROP_FILE = "build.prop";
 	public static final String DEFAULT_OTA_ZIP_FILE = ".ota.zip";
