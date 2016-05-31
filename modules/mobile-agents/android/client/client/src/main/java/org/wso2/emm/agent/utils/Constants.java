@@ -58,7 +58,7 @@ public class Constants {
 	public static final boolean SKIP_WORK_PROFILE_CREATION = false;
 	public static final boolean HIDE_ERROR_DIALOG = false;
 
-	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";
+	public static final String SERVER_APP_ENDPOINT = "/api/device-mgt/android/v1.0/";
 	public static final String SERVER_AUTHENTICATION_ENDPOINT = "register/authenticate/device";
 	public static final String LICENSE_ENDPOINT = SERVER_APP_ENDPOINT + "configuration/license";
 	public static final String REGISTER_ENDPOINT = SERVER_APP_ENDPOINT + "devices/";
