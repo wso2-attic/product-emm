@@ -481,15 +481,15 @@
                 <include>certificate-mgt.war</include>
             </includes>
         </fileSet>
-        <fileSet>
+        <!--fileSet>
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps
             </directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
             <includes>
-                <include>admin-certificate.war</include>
+                <include>api#certificate-mgt#v1.0.war</include>
             </includes>
-        </fileSet>
+        </fileSet-->
 
         <!-- Copying Dashboard related files-->
         <fileSet>
@@ -1060,6 +1060,13 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
+        </file>
+	<!-- Copying Certificate management admin webapp -->
+	<file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/api#certificate-mgt#v1.0.war</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
+            </outputDirectory>
+            <fileMode>755</fileMode>
         </file>
     </files>
 
