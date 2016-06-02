@@ -282,21 +282,6 @@ public class DeviceInfoPayload {
         batteryProperties.add(property);
 
         property = new Device.Property();
-        property.setName(Constants.Device.TEMPERATURE);
-        property.setValue(String.valueOf(power.getTemperature()));
-        batteryProperties.add(property);
-
-        property = new Device.Property();
-        property.setName(Constants.Device.CURRENT_AVERAGE);
-        property.setValue(String.valueOf(power.getCurrentAverage()));
-        batteryProperties.add(property);
-
-        property = new Device.Property();
-        property.setName(Constants.Device.TECHNOLOGY);
-        property.setValue(String.valueOf(power.getTechnology()));
-        batteryProperties.add(property);
-
-        property = new Device.Property();
         property.setName(Constants.Device.HEALTH);
         property.setValue(String.valueOf(power.getHealth()));
         batteryProperties.add(property);
