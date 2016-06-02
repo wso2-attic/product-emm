@@ -67,6 +67,7 @@ import org.wso2.emm.agent.utils.Preference;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -88,6 +89,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
     private static final String APP_INFO_TAG_PACKAGE = "package";
     private static final String APP_INFO_TAG_VERSION = "version";
     private static final String APP_INFO_TAG_SYSTEM = "isSystemApp";
+    private static final String STATUS = "status";
+    private static final String TIMESTAMP = "timestamp";
+
     private static final int DEFAULT_PASSWORD_LENGTH = 0;
     private static final int DEFAULT_VOLUME = 0;
     private static final int DEFAULT_FLAG = 0;
@@ -201,32 +205,34 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 result.put(Constants.LocationInfo.LATITUDE, currentLocation.getLatitude());
                 result.put(Constants.LocationInfo.LONGITUDE, currentLocation.getLongitude());
 
+                if (currentAddress != null) {
+                    result.put(Constants.LocationInfo.CITY, currentAddress.getCity());
+                    result.put(Constants.LocationInfo.COUNTRY, currentAddress.getCountry());
+                    result.put(Constants.LocationInfo.STATE, currentAddress.getState());
+                    result.put(Constants.LocationInfo.STREET1, currentAddress.getStreet1());
+                    result.put(Constants.LocationInfo.STREET2, currentAddress.getStreet2());
+                    result.put(Constants.LocationInfo.ZIP, currentAddress.getZip());
+                } else {
+                    Log.e(TAG, "Address is not available for the given coordinates");
+                }
+
+                operation.setOperationResponse(result.toString());
+                operation.setStatus(resources.getString(R.string.operation_value_completed));
+                resultBuilder.build(operation);
+
+                if (Constants.DEBUG_MODE_ENABLED) {
+                    Log.d(TAG, "Device location sent");
+                }
+
             } else {
                 operation.setStatus(resources.getString(R.string.operation_value_error));
+                JSONObject errorMessage = new JSONObject();
+                errorMessage.put(STATUS, "Location service is not enabled in the device");
+                errorMessage.put(TIMESTAMP, Calendar.getInstance().getTime().toString());
+                operation.setOperationResponse(errorMessage.toString());
                 resultBuilder.build(operation);
-                throw new AndroidAgentException("Error occurred while initiating location service");
+                Log.e(TAG, "Location service is not enabled in the device");
             }
-
-            if (currentAddress != null) {
-                result.put(Constants.LocationInfo.CITY, currentAddress.getCity());
-                result.put(Constants.LocationInfo.COUNTRY, currentAddress.getCountry());
-                result.put(Constants.LocationInfo.STATE, currentAddress.getState());
-                result.put(Constants.LocationInfo.STREET1, currentAddress.getStreet1());
-                result.put(Constants.LocationInfo.STREET2, currentAddress.getStreet2());
-                result.put(Constants.LocationInfo.ZIP, currentAddress.getZip());
-
-            } else {
-                Log.e(TAG, "Address is not available for the given coordinates");
-            }
-
-            operation.setOperationResponse(result.toString());
-            operation.setStatus(resources.getString(R.string.operation_value_completed));
-            resultBuilder.build(operation);
-
-            if (Constants.DEBUG_MODE_ENABLED) {
-                Log.d(TAG, "Device location sent");
-            }
-
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
             resultBuilder.build(operation);
