@@ -332,10 +332,10 @@ public class EMMSystemService extends IntentService {
             }
         }
         if (schedule != null && !schedule.trim().isEmpty()) {
-            Log.i(TAG, "Upgrade has been scheduled to " + command);
-            Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), command);
+            Log.i(TAG, "Upgrade has been scheduled to " + schedule);
+            Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), schedule);
             try {
-                AlarmUtils.setOneTimeAlarm(context, command, Constants.Operation.UPGRADE_FIRMWARE, null);
+                AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.UPGRADE_FIRMWARE, null);
             } catch (ParseException e) {
                 Log.e(TAG, "One time alarm time string parsing failed." + e);
             }
