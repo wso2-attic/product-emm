@@ -28,8 +28,8 @@ public class AppLockActivity extends SherlockActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
 
-            if (extras.containsKey(getResources().getString(R.string.intent_extra_message))) {
-                message = extras.getString(getResources().getString(R.string.intent_extra_message));
+            if (extras.containsKey(getResources().getString(R.string.intent_extra_message_text))) {
+                message = extras.getString(getResources().getString(R.string.intent_extra_message_text));
             }
         }
 

@@ -54,7 +54,8 @@ public class NotificationDAO {
     public void addNotification(Notification notification) {
         ContentValues values = new ContentValues();
         values.put(Constants.NotificationTable.ID, notification.getId());
-        values.put(Constants.NotificationTable.MESSAGE, notification.getMessage());
+        values.put(Constants.NotificationTable.MESSAGE_TITLE, notification.getMessageTitle());
+        values.put(Constants.NotificationTable.MESSAGE_TEXT, notification.getMessageText());
         values.put(Constants.NotificationTable.RECEIVED_TIME, notification.getReceivedTime());
         values.put(Constants.NotificationTable.STATUS, notification.getStatus().toString());
         values.put(Constants.NotificationTable.RESPONSE_TIME, notification.getStatus().toString());
@@ -106,10 +107,11 @@ public class NotificationDAO {
     private Notification cursorToNotification(Cursor cursor) {
         Notification notification = new Notification();
         notification.setId(cursor.getInt(0));
-        notification.setMessage(cursor.getString(1));
-        notification.setReceivedTime(cursor.getString(2));
-        notification.setStatus(Notification.Status.valueOf(cursor.getString(3)));
-        notification.setReceivedTime(cursor.getString(4));
+        notification.setMessageTitle(cursor.getString(1));
+        notification.setMessageText(cursor.getString(2));
+        notification.setReceivedTime(cursor.getString(3));
+        notification.setStatus(Notification.Status.valueOf(cursor.getString(4)));
+        notification.setReceivedTime(cursor.getString(5));
         return notification;
     }
 }

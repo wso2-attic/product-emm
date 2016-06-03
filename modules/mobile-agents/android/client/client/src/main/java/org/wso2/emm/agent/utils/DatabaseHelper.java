@@ -36,7 +36,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Information related to the notification table
     private static final String CREATE_NOTIFICATION_TABLE = "CREATE TABLE " + Constants.NotificationTable.NAME +
                                                             "(" + Constants.NotificationTable.ID + " integer primary key, " +
-                                                            Constants.NotificationTable.MESSAGE + " text not null, " +
+                                                            Constants.NotificationTable.MESSAGE_TITLE + " text not null, " +
+                                                            Constants.NotificationTable.MESSAGE_TEXT + " text not null, " +
                                                             Constants.NotificationTable.RECEIVED_TIME + " text not null, " + // sqlite does not support date
                                                             Constants.NotificationTable.STATUS + " text, " +
                                                             Constants.NotificationTable.RESPONSE_TIME + " text)";

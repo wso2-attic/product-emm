@@ -173,9 +173,8 @@
             android:windowSoftInputMode="stateUnchanged|adjustPan"></activity>
         <activity
             android:name=".AlertActivity"
-            android:label="@string/title_activity_alert"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Dialog"></activity>
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"></activity>
         <activity
             android:name=".LockActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

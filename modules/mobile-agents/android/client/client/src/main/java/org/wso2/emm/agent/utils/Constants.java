@@ -352,7 +352,8 @@ public class Constants {
 		}
 		public static final String NAME = "notification";
 		public static final String ID = "id";
-		public static final String MESSAGE = "message";
+		public static final String MESSAGE_TITLE = "messageTitle";
+		public static final String MESSAGE_TEXT = "messageText";
 		public static final String RECEIVED_TIME = "received_time";
 		public static final String RESPONSE_TIME = "response_time";
 		public static final String STATUS = "status";
