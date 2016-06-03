@@ -321,7 +321,6 @@ public class CommonUtils {
 	 */
 	public static void disableAdmin(Context context) {
 		DevicePolicyManager devicePolicyManager;
-
 		ComponentName demoDeviceAdmin;
 		devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
 		demoDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
