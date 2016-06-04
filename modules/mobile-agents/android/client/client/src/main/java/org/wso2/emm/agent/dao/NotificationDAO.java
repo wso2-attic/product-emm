@@ -114,4 +114,5 @@ public class NotificationDAO {
         notification.setReceivedTime(cursor.getString(5));
         return notification;
     }
+
 }

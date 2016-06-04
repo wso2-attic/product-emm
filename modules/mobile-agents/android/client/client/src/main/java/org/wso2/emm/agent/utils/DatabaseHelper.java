@@ -64,4 +64,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(DROP_NOTIFICATION_TABLE);
         onCreate(db);
     }
+
 }

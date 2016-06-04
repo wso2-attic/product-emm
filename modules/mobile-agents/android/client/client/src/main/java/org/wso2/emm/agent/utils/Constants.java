@@ -118,6 +118,7 @@ public class Constants {
 	public static final String USERNAME_PATTERN = "[user]";
 
 	public static final String SERVICE_PACKAGE_NAME = "org.wso2.emm.system.service";
+	public static final String EMM_DB = "emm_db";
 
 	/**
 	 * Device certificates.

@@ -241,6 +241,7 @@ public class CommonUtils {
 			editor.commit();
 			Preference.clearPreferences(context);
 			clearClientCredentials(context);
+			context.deleteDatabase(Constants.EMM_DB);
 		}
 	}
 
