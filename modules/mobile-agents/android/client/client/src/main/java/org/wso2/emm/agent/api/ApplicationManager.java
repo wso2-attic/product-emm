@@ -286,15 +286,22 @@ public class ApplicationManager implements TokenCallBack {
             }
         }
         this.schedule = schedule;
-        String clientKey = Preference.getString(context, Constants.CLIENT_ID);
-        String clientSecret = Preference.getString(context, Constants.CLIENT_SECRET);
-        if (IdentityProxy.getInstance().getContext() == null) {
-            IdentityProxy.getInstance().setContext(context);
-        }
 
-        IdentityProxy.getInstance().requestToken(IdentityProxy.getInstance().getContext(), this,
-                                                 clientKey,
-                                                 clientSecret);
+        if (org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE.
+                equals(org.wso2.emm.agent.proxy.utils.Constants.Authenticator.
+                               MUTUAL_SSL_AUTHENTICATOR)) {
+            downloadApp(this.appUrl);
+        } else {
+            String clientKey = Preference.getString(context, Constants.CLIENT_ID);
+            String clientSecret = Preference.getString(context, Constants.CLIENT_SECRET);
+            if (IdentityProxy.getInstance().getContext() == null) {
+                IdentityProxy.getInstance().setContext(context);
+            }
+
+            IdentityProxy.getInstance().requestToken(IdentityProxy.getInstance().getContext(), this,
+                                                     clientKey,
+                                                     clientSecret);
+        }
     }
 
     /**
@@ -526,7 +533,11 @@ public class ApplicationManager implements TokenCallBack {
                 headers.put("Content-Type", "application/json");
                 headers.put("Accept", "*/*");
                 headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
-                headers.put("Authorization", "Bearer " + token.getAccessToken());
+                if (!org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE.
+                        equals(org.wso2.emm.agent.proxy.utils.Constants.Authenticator.
+                                       MUTUAL_SSL_AUTHENTICATOR)) {
+                    headers.put("Authorization", "Bearer " + token.getAccessToken());
+                }
                 return headers;
             }
         };
