@@ -345,7 +345,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
                 Intent intent = new Intent(getContext(), AlertActivity.class);
                 intent.putExtra(getContextResources().getString(R.string.intent_extra_type),
                         getContextResources().getString(R.string.intent_extra_password_setting));
-                intent.putExtra(getContextResources().getString(R.string.intent_extra_message),
+                intent.putExtra(getContextResources().getString(R.string.intent_extra_message_text),
                         getContextResources().getString(R.string.policy_violation_password_tail));
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
                                 Intent.FLAG_ACTIVITY_NEW_TASK);

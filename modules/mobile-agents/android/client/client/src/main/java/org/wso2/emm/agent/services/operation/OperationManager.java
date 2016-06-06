@@ -226,12 +226,13 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
 
             } else {
                 operation.setStatus(resources.getString(R.string.operation_value_error));
-                JSONObject errorMessage = new JSONObject();
-                errorMessage.put(STATUS, "Location service is not enabled in the device");
-                errorMessage.put(TIMESTAMP, Calendar.getInstance().getTime().toString());
-                operation.setOperationResponse(errorMessage.toString());
+                String errorMessage = "Location service is not enabled in the device";
+                JSONObject errorResult = new JSONObject();
+                errorResult.put(STATUS, errorMessage);
+                errorResult.put(TIMESTAMP, Calendar.getInstance().getTime().toString());
+                operation.setOperationResponse(errorResult.toString());
                 resultBuilder.build(operation);
-                Log.e(TAG, "Location service is not enabled in the device");
+                Log.e(TAG, errorMessage);
             }
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
@@ -288,7 +289,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         Intent intent = new Intent(context, AlertActivity.class);
         intent.putExtra(resources.getString(R.string.intent_extra_type),
                         resources.getString(R.string.intent_extra_ring));
-        intent.putExtra(resources.getString(R.string.intent_extra_message),
+        intent.putExtra(resources.getString(R.string.intent_extra_message_text),
                 resources.getString(R.string.intent_extra_stop_ringing));
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -798,7 +799,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
 
         if (serverAddress != null) {
             Intent intent = new Intent(context, AlertActivity.class);
-            intent.putExtra(resources.getString(R.string.intent_extra_message), resources.getString(R.string.toast_message_vpn));
+            intent.putExtra(resources.getString(R.string.intent_extra_message_text), resources.getString(R.string.toast_message_vpn));
             intent.putExtra(resources.getString(R.string.intent_extra_operation_id), operation.getId());
             intent.putExtra(resources.getString(R.string.intent_extra_payload), operation.getPayLoad().toString());
             intent.putExtra(resources.getString(R.string.intent_extra_type),
@@ -841,12 +842,22 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             operation.setOperationResponse(notificationService.buildResponse(Notification.Status.RECEIVED));
             getResultBuilder().build(operation);
             JSONObject inputData = new JSONObject(operation.getPayLoad().toString());
-            String message = inputData.getString(getContextResources().getString(R.string.intent_extra_message));
+            String messageTitle = inputData.getString(getContextResources().getString(R.string.intent_extra_message_title));
+            String messageText = inputData.getString(getContextResources().getString(R.string.intent_extra_message_text));
 
-            if (message != null && !message.isEmpty()) {
+            if (messageTitle != null && !messageTitle.isEmpty() &&
+                    messageText != null && !messageText.isEmpty()) {
                 //adding notification to the db
-                notificationService.addNotification(operation.getId(), message, Notification.Status.RECEIVED);
-                notificationService.showNotification(operation.getId(), message);
+                notificationService.addNotification(operation.getId(), messageTitle, messageText, Notification.Status.RECEIVED);
+                notificationService.showNotification(operation.getId(), messageTitle, messageText);
+            } else {
+                operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+                String errorMessage = "Message title/text is empty. Please retry with valid inputs";
+                JSONObject errorResult = new JSONObject();
+                errorResult.put(STATUS, errorMessage);
+                operation.setOperationResponse(errorResult.toString());
+                getResultBuilder().build(operation);
+                Log.e(TAG, errorMessage);
             }
             if (Constants.DEBUG_MODE_ENABLED) {
                 Log.d(TAG, "Notification received");

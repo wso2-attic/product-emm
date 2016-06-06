@@ -241,6 +241,7 @@ public class CommonUtils {
 			editor.commit();
 			Preference.clearPreferences(context);
 			clearClientCredentials(context);
+			context.deleteDatabase(Constants.EMM_DB);
 		}
 	}
 
@@ -321,7 +322,6 @@ public class CommonUtils {
 	 */
 	public static void disableAdmin(Context context) {
 		DevicePolicyManager devicePolicyManager;
-
 		ComponentName demoDeviceAdmin;
 		devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
 		demoDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);

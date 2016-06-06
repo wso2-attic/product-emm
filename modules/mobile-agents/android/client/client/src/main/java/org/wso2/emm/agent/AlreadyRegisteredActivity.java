@@ -337,7 +337,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			stopProgressDialog();
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS);
-				if (responseStatus != null && Constants.Status.ACCEPT.equals(responseStatus)) {
+				if (responseStatus != null && Constants.Status.SUCCESSFUL.equals(responseStatus)) {
 					stopPolling();
 					initiateUnregistration();
 				} else if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {

@@ -74,7 +74,7 @@ public class Constants {
 	public static final String GOOGLE_PLAY_APP_URI = "market://details?id=";
 	public static final String DYNAMIC_CLIENT_REGISTER_ENDPOINT = "/dynamic-client-web/register";
 	public static final String APP_LIST_ENDPOINT = "/api/appm/publisher/v1.0/apps/mobileapp?field-filter=all";
-	public static final String APP_DOWNLOAD_ENDPOINT = "/api/appm/store/v1.0/apps/mobile/binaries";
+	public static final String APP_DOWNLOAD_ENDPOINT = "/publisher/api/mobileapp/getfile";
 	public static final String ACTION_RESPONSE = "org.wso2.emm.agent.MESSAGE_PROCESSED";
 	public static final String POLICY_ENDPOINT = SERVER_APP_ENDPOINT + "policy/";
 	public static final String EVENT_ENDPOINT = SERVER_APP_ENDPOINT + "events/";
@@ -118,6 +118,7 @@ public class Constants {
 	public static final String USERNAME_PATTERN = "[user]";
 
 	public static final String SERVICE_PACKAGE_NAME = "org.wso2.emm.system.service";
+	public static final String EMM_DB = "emm_db";
 
 	/**
 	 * Device certificates.
@@ -352,7 +353,8 @@ public class Constants {
 		}
 		public static final String NAME = "notification";
 		public static final String ID = "id";
-		public static final String MESSAGE = "message";
+		public static final String MESSAGE_TITLE = "messageTitle";
+		public static final String MESSAGE_TEXT = "messageText";
 		public static final String RECEIVED_TIME = "received_time";
 		public static final String RESPONSE_TIME = "response_time";
 		public static final String STATUS = "status";
