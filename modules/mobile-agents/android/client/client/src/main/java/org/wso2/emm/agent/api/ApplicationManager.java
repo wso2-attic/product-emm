@@ -290,7 +290,15 @@ public class ApplicationManager implements TokenCallBack {
         if (org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE.
                 equals(org.wso2.emm.agent.proxy.utils.Constants.Authenticator.
                                MUTUAL_SSL_AUTHENTICATOR)) {
-            downloadApp(this.appUrl);
+            if (isDownloadManagerAvailable(context)) {
+                IntentFilter filter = new IntentFilter(
+                        DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+                context.registerReceiver(downloadReceiver, filter);
+                removeExistingFile();
+                downloadViaDownloadManager(this.appUrl, resources.getString(R.string.download_mgr_download_file_name));
+            } else {
+                downloadApp(this.appUrl);
+            }
         } else {
             String clientKey = Preference.getString(context, Constants.CLIENT_ID);
             String clientSecret = Preference.getString(context, Constants.CLIENT_SECRET);
@@ -310,14 +318,13 @@ public class ApplicationManager implements TokenCallBack {
      * @param packageName - Application package name should be passed in as a String.
      */
     public void uninstallApplication(String packageName, String schedule) {
-        if (packageName != null &&
-            !packageName.contains(resources.getString(R.string.application_package_prefix))) {
-            packageName = resources.getString(R.string.application_package_prefix) + packageName;
-        }
-
         if (Constants.SYSTEM_APP_ENABLED) {
             CommonUtils.callSystemApp(context, Constants.Operation.SILENT_UNINSTALL_APPLICATION, schedule, packageName);
         } else {
+            if (packageName != null &&
+                !packageName.contains(resources.getString(R.string.application_package_prefix))) {
+                packageName = resources.getString(R.string.application_package_prefix) + packageName;
+            }
             if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
                 try {
                     AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.UNINSTALL_APPLICATION, packageName);
@@ -419,17 +426,20 @@ public class ApplicationManager implements TokenCallBack {
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI
                                        | DownloadManager.Request.NETWORK_MOBILE);
         // Set whether this download may proceed over a roaming connection.
-        request.setAllowedOverRoaming(false);
+        request.setAllowedOverRoaming(true);
         // Set the title of this download, to be displayed in notifications
         // (if enabled).
         request.setTitle(resources.getString(R.string.downloader_message_title));
-        // Set a description of this download, to be displayed in
-        // notifications (if enabled)
-        request.setDescription(resources.getString(R.string.downloader_message_description) + appName);
+        request.setVisibleInDownloadsUi(false);
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
         // Set the local destination for the downloaded file to a path
         // within the application's external files directory
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, appName);
-        request.addRequestHeader("Authorization", "Bearer " + token.getAccessToken());
+        if (!org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE.
+                equals(org.wso2.emm.agent.proxy.utils.Constants.Authenticator.
+                               MUTUAL_SSL_AUTHENTICATOR)) {
+            request.addRequestHeader("Authorization", "Bearer " + token.getAccessToken());
+        }
         // Enqueue a new download and same the referenceId
         downloadReference = downloadManager.enqueue(request);
         new Thread(new Runnable() {
