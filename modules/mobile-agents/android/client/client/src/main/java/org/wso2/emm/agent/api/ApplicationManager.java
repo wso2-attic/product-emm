@@ -46,9 +46,6 @@ import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.IDPTokenManagerException;
-import org.wso2.emm.agent.proxy.IdentityProxy;
-import org.wso2.emm.agent.proxy.beans.Token;
-import org.wso2.emm.agent.proxy.interfaces.TokenCallBack;
 import org.wso2.emm.agent.proxy.utils.ServerUtilities;
 import org.wso2.emm.agent.utils.AlarmUtils;
 import org.wso2.emm.agent.utils.CommonUtils;
@@ -71,7 +68,7 @@ import java.util.Map;
  * This class handles all the functionalities required for managing application
  * installation and un-installation.
  */
-public class ApplicationManager implements TokenCallBack {
+public class ApplicationManager {
     private static final int SYSTEM_APPS_DISABLED_FLAG = 0;
     private static final int MAX_URL_HASH = 32;
     private static final int COMPRESSION_LEVEL = 100;
@@ -85,7 +82,6 @@ public class ApplicationManager implements TokenCallBack {
     private Resources resources;
     private PackageManager packageManager;
     private long downloadReference;
-    private Token token;
     private String appUrl;
     private String schedule;
 
@@ -272,10 +268,11 @@ public class ApplicationManager implements TokenCallBack {
      * @param schedule - If update/installation is scheduled, schedule information should be passed.
      */
     public void installApp(String url, String schedule) {
-        url = url.substring(url.lastIndexOf("/"), url.length());
-        if (Constants.APP_MANAGER_HOST != null) {
+        if (url.contains(Constants.APP_DOWNLOAD_ENDPOINT) && Constants.APP_MANAGER_HOST != null) {
+            url = url.substring(url.lastIndexOf("/"), url.length());
             this.appUrl = Constants.APP_MANAGER_HOST + Constants.APP_DOWNLOAD_ENDPOINT + url;
-        } else {
+        } else if (url.contains(Constants.APP_DOWNLOAD_ENDPOINT)) {
+            url = url.substring(url.lastIndexOf("/"), url.length());
             String ipSaved = Preference.getString(context, Constants.PreferenceFlag.IP);
             ServerConfig utils = new ServerConfig();
             if (ipSaved != null && !ipSaved.isEmpty()) {
@@ -284,31 +281,18 @@ public class ApplicationManager implements TokenCallBack {
             } else {
                 Log.e(TAG, "There is no valid IP to contact the server");
             }
+        } else {
+            this.appUrl = url;
         }
         this.schedule = schedule;
-
-        if (org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE.
-                equals(org.wso2.emm.agent.proxy.utils.Constants.Authenticator.
-                               MUTUAL_SSL_AUTHENTICATOR)) {
-            if (isDownloadManagerAvailable(context)) {
-                IntentFilter filter = new IntentFilter(
-                        DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-                context.registerReceiver(downloadReceiver, filter);
-                removeExistingFile();
-                downloadViaDownloadManager(this.appUrl, resources.getString(R.string.download_mgr_download_file_name));
-            } else {
-                downloadApp(this.appUrl);
-            }
+        if (isDownloadManagerAvailable(context)) {
+            IntentFilter filter = new IntentFilter(
+                    DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+            context.registerReceiver(downloadReceiver, filter);
+            removeExistingFile();
+            downloadViaDownloadManager(this.appUrl, resources.getString(R.string.download_mgr_download_file_name));
         } else {
-            String clientKey = Preference.getString(context, Constants.CLIENT_ID);
-            String clientSecret = Preference.getString(context, Constants.CLIENT_SECRET);
-            if (IdentityProxy.getInstance().getContext() == null) {
-                IdentityProxy.getInstance().setContext(context);
-            }
-
-            IdentityProxy.getInstance().requestToken(IdentityProxy.getInstance().getContext(), this,
-                                                     clientKey,
-                                                     clientSecret);
+            downloadApp(this.appUrl);
         }
     }
 
@@ -435,11 +419,6 @@ public class ApplicationManager implements TokenCallBack {
         // Set the local destination for the downloaded file to a path
         // within the application's external files directory
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, appName);
-        if (!org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE.
-                equals(org.wso2.emm.agent.proxy.utils.Constants.Authenticator.
-                               MUTUAL_SSL_AUTHENTICATOR)) {
-            request.addRequestHeader("Authorization", "Bearer " + token.getAccessToken());
-        }
         // Enqueue a new download and same the referenceId
         downloadReference = downloadManager.enqueue(request);
         new Thread(new Runnable() {
@@ -543,29 +522,10 @@ public class ApplicationManager implements TokenCallBack {
                 headers.put("Content-Type", "application/json");
                 headers.put("Accept", "*/*");
                 headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
-                if (!org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE.
-                        equals(org.wso2.emm.agent.proxy.utils.Constants.Authenticator.
-                                       MUTUAL_SSL_AUTHENTICATOR)) {
-                    headers.put("Authorization", "Bearer " + token.getAccessToken());
-                }
                 return headers;
             }
         };
         queue.add(request);
     }
 
-    @Override
-    public void onReceiveTokenResult(Token token, String status) {
-        this.token = token;
-        if (isDownloadManagerAvailable(context) && !Constants.SERVER_PROTOCOL.equals(resources.getString(
-                R.string.server_protocol_https))) {
-            IntentFilter filter = new IntentFilter(
-                    DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-            context.registerReceiver(downloadReceiver, filter);
-            removeExistingFile();
-            downloadViaDownloadManager(this.appUrl, resources.getString(R.string.download_mgr_download_file_name));
-        } else {
-            downloadApp(this.appUrl);
-        }
-    }
 }
