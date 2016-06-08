@@ -18,12 +18,14 @@
 
 package org.wso2.emm.system.service;
 
+import android.annotation.TargetApi;
 import android.app.IntentService;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.UserManager;
@@ -91,6 +93,9 @@ public class EMMSystemService extends IntentService {
     private String appUri = null;
     private Context context;
 
+    private static String[] AUTHORIZED_PINNING_APPS;
+    private static String AGENT_PACKAGE_NAME;
+
     public EMMSystemService() {
         super("EMMSystemService");
     }
@@ -101,6 +106,8 @@ public class EMMSystemService extends IntentService {
         cdmDeviceAdmin = new ComponentName(this, ServiceDeviceAdminReceiver.class);
         devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         mUserManager = (UserManager) getSystemService(Context.USER_SERVICE);
+        AGENT_PACKAGE_NAME = context.getPackageName();
+        AUTHORIZED_PINNING_APPS = new String[]{AGENT_PACKAGE_NAME, Constants.AGENT_APP_PACKAGE_NAME};
         if (!devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
             startAdmin();
         } else {
@@ -155,6 +162,12 @@ public class EMMSystemService extends IntentService {
      */
     public void doTask(String code) {
         switch (code) {
+            case Constants.Operation.DEVICE_LOCK:
+                enableHardLock();
+                break;
+            case Constants.Operation.DEVICE_UNLOCK:
+                disableHardLock();
+                break;
             case Constants.Operation.ENABLE_ADMIN:
                 startAdmin();
                 break;
@@ -415,4 +428,33 @@ public class EMMSystemService extends IntentService {
             AppUtils.silentUninstallApp(context, packageName);
         }
     }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void enableHardLock() {
+        String message = context.getResources().getString(R.string.txt_lock_activity);
+        if (appUri != null && !appUri.isEmpty()) {
+            message = appUri;
+        }
+        if (SettingsManager.isDeviceOwner()) {
+            devicePolicyManager.setLockTaskPackages(cdmDeviceAdmin, AUTHORIZED_PINNING_APPS);
+            Intent intent = new Intent(context, LockActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                            Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY |
+                            Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            intent.putExtra(Constants.ADMIN_MESSAGE, message);
+            intent.putExtra(Constants.IS_LOCKED, true);
+            context.startActivity(intent);
+        } else {
+            Log.e(TAG, "Device owner is not set, hence executing default lock");
+            devicePolicyManager.lockNow();
+        }
+    }
+
+    private void disableHardLock() {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                        Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
 }

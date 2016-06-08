@@ -35,6 +35,9 @@ public class Constants {
 	public static final String STATUS = "status";
 	public static final String PAYLOAD = "payload";
 	public static final String SYSTEM_APP_ACTION_RESPONSE = "org.wso2.emm.system.service.MESSAGE_PROCESSED";
+	public static final boolean DEBUG_MODE_ENABLED = true;
+	public static final String ADMIN_MESSAGE = "message";
+	public static final String IS_LOCKED = "lock";
 
 	/**
 	 * Operation IDs
@@ -46,6 +49,8 @@ public class Constants {
 		public static final String APP_RESTRICTION = "APP-RESTRICTION";
 		public static final String UPGRADE_FIRMWARE = "UPGRADE_FIRMWARE";
 		public static final String REBOOT = "REBOOT";
+		public static final String DEVICE_LOCK = "DEVICE_LOCK";
+		public static final String DEVICE_UNLOCK = "DEVICE_UNLOCK";
 		public static final String EXECUTE_SHELL_COMMAND = "SHELL_COMMAND";
 		public static final String SILENT_INSTALL_APPLICATION = "SILENT_INSTALL_APPLICATION";
 		public static final String SILENT_UNINSTALL_APPLICATION = "SILENT_UNINSTALL_APPLICATION";

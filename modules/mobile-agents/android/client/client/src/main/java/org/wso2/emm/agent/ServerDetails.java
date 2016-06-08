@@ -19,7 +19,6 @@ package org.wso2.emm.agent;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;

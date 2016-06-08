@@ -157,10 +157,13 @@ public class OperationProcessor {
 				break;
 			case Constants.Operation.ALLOW_PARENT_PROFILE_APP_LINKING:
 				operationManager.handleUserRestriction(operation);
+				break;
 			case Constants.Operation.DISALLOW_CONFIG_VPN:
 				operationManager.handleUserRestriction(operation);
+				break;
 			case Constants.Operation.DISALLOW_INSTALL_APPS:
 				operationManager.handleUserRestriction(operation);
+				break;
 			case Constants.Operation.VPN:
 				operationManager.configureVPN(operation);
 				break;
