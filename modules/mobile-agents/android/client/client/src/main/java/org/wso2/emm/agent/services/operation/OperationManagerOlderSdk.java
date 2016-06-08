@@ -92,8 +92,8 @@ public class OperationManagerOlderSdk extends OperationManager {
             operation.setPayLoad(result.toString());
 
             if (status.equals(getContextResources().getString(R.string.shared_pref_default_status))) {
-                Toast.makeText(getContext(), getContextResources().getString(R.string.toast_message_wipe),
-                        Toast.LENGTH_LONG).show();
+                /*Toast.makeText(getContext(), getContextResources().getString(R.string.toast_message_wipe),
+                        Toast.LENGTH_LONG).show();*/
                 operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
                 getResultBuilder().build(operation);
 
@@ -101,8 +101,8 @@ public class OperationManagerOlderSdk extends OperationManager {
                     Log.d(TAG, "Started to wipe data");
                 }
             } else {
-                Toast.makeText(getContext(), getContextResources().getString(R.string.toast_message_wipe_failed),
-                        Toast.LENGTH_LONG).show();
+                /*Toast.makeText(getContext(), getContextResources().getString(R.string.toast_message_wipe_failed),
+                        Toast.LENGTH_LONG).show();*/
                 operation.setStatus(getContextResources().getString(R.string.operation_value_error));
                 getResultBuilder().build(operation);
             }
