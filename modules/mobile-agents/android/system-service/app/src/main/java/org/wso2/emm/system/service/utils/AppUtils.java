@@ -17,9 +17,13 @@
  */
 package org.wso2.emm.system.service.utils;
 
+import android.app.PackageInstallObserver;
 import android.content.Context;
+import android.content.pm.IPackageDeleteObserver;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.Log;
 
 import java.lang.reflect.InvocationTargetException;
@@ -44,54 +48,29 @@ public class AppUtils {
      */
     public static void silentInstallApp(Context context, Uri packageUri) {
         PackageManager pm = context.getPackageManager();
-        Class<? extends PackageManager> packageManager = pm.getClass();
-        Method[] allMethods = packageManager.getMethods();
-        for (Method method : allMethods) {
-            if (method.getName().equals("installPackage")) {
-                Log.d(TAG, "Installing the app.");
-                try {
-                    method.invoke(
-                            pm,
-                            new Object[]{
-                                    packageUri,
-                                    null,
-                                    INSTALL_ALL_USERS | INSTALL_FORWARD_LOCK | INSTALL_ALLOW_DOWNGRADE |
-                                            INSTALL_REPLACE_EXISTING,
-                                    null});
-                } catch (IllegalAccessException e) {
-                    Log.e(TAG, "Access denied by PackageManager." + e);
-                } catch (InvocationTargetException e) {
-                    Log.e(TAG, "Installation method not found." + e);
-                }
-
-                break;
-            }
-        }
+        PackageInstallObserver observer = new PackageInstallObserver();
+        pm.installPackage(packageUri, observer, INSTALL_ALL_USERS | INSTALL_FORWARD_LOCK | INSTALL_ALLOW_DOWNGRADE |
+                                           INSTALL_REPLACE_EXISTING, null);
     }
-
 
     /**
      * Silently uninstalls the app resides in the provided URI.
      * @param context - Application context.
      * @param  packageName - App package name.
      */
-    public static void silentUninstallApp(Context context, String packageName) {
+    public static void silentUninstallApp(Context context, final String packageName) {
         PackageManager pm = context.getPackageManager();
-        Class<? extends PackageManager> packageManager = pm.getClass();
-        Method[] allMethods = packageManager.getMethods();
-
-        for (Method method : allMethods) {
-            if (method.getName().equals("deletePackage")) {
-                Log.d(TAG, "Removing the app.");
-                try {
-                    method.invoke(pm, new Object[]{packageName, null, DELETE_ALL_USERS});
-                } catch (IllegalAccessException e) {
-                    Log.e(TAG, "Access denied by PackageManager." + e);
-                } catch (InvocationTargetException e) {
-                    Log.e(TAG, "Installation method not found." + e);
-                }
-                break;
+        IPackageDeleteObserver observer = new IPackageDeleteObserver() {
+            @Override
+            public void packageDeleted(String s, int i) throws RemoteException {
+                Log.d(TAG, packageName + " deleted successfully.");
             }
-        }
+
+            @Override
+            public IBinder asBinder() {
+                return null;
+            }
+        };
+        pm.deletePackage(packageName, observer, DELETE_ALL_USERS);
     }
 }

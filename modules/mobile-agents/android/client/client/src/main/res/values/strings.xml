@@ -339,8 +339,8 @@
     <string name="application_package_launcher_uninstall_action">com.android.launcher.action.UNINSTALL_SHORTCUT</string>
     <string name="android_download_manager_ui_resolver">com.android.providers.downloads.ui</string>
     <string name="android_download_manager_list_resolver">com.android.providers.downloads.ui.DownloadList</string>
-    <string name="downloader_message_title">EMM Agent is installing an app for you</string>
-    <string name="downloader_message_description">EMM Agent is installing </string>
+    <string name="downloader_message_title">EMM Agent is downloading an application</string>
+    <string name="downloader_message_description">EMM Agent is installing an application</string>
 
     <!-- SERVER UTILITIES -->
     <string name="server_util_req_type_post">POST</string>
