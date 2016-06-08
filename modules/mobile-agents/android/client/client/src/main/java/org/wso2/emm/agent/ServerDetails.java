@@ -70,7 +70,11 @@ public class ServerDetails extends Activity {
 		} else {
 			btnStartRegistration.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.VISIBLE);
-			String ipSaved = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
+			String ipSaved = Constants.DEFAULT_HOST;
+			String prefIP = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
+			if (prefIP != null) {
+				ipSaved = prefIP;
+			}
 
 			if (Constants.DEFAULT_HOST != null) {
 				ipSaved = Constants.DEFAULT_HOST;

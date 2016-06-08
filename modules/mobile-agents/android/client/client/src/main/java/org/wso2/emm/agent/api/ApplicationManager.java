@@ -273,7 +273,11 @@ public class ApplicationManager {
             this.appUrl = Constants.APP_MANAGER_HOST + Constants.APP_DOWNLOAD_ENDPOINT + url;
         } else if (url.contains(Constants.APP_DOWNLOAD_ENDPOINT)) {
             url = url.substring(url.lastIndexOf("/"), url.length());
-            String ipSaved = Preference.getString(context, Constants.PreferenceFlag.IP);
+            String ipSaved = Constants.DEFAULT_HOST;
+            String prefIP = Preference.getString(context, Constants.PreferenceFlag.IP);
+            if (prefIP != null) {
+                ipSaved = prefIP;
+            }
             ServerConfig utils = new ServerConfig();
             if (ipSaved != null && !ipSaved.isEmpty()) {
                 utils.setServerIP(ipSaved);

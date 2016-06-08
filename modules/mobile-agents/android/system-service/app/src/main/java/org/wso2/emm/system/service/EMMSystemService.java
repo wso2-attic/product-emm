@@ -31,7 +31,6 @@ import android.os.PowerManager;
 import android.os.UserManager;
 import android.util.Log;
 import android.webkit.URLUtil;
-import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.system.service.api.OTADownload;
@@ -353,8 +352,7 @@ public class EMMSystemService extends IntentService {
                 Log.e(TAG, "One time alarm time string parsing failed." + e);
             }
         } else {
-            Toast.makeText(context, "Upgrade request initiated by admin.",
-                           Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "Upgrade request initiated by admin.");
             //Prepare for upgrade
             OTADownload otaDownload = new OTADownload(context);
             otaDownload.startOTA();
@@ -365,9 +363,7 @@ public class EMMSystemService extends IntentService {
      * Rebooting the device.
      */
     private void rebootDevice() {
-        Log.i(TAG, "A reboot has been requested");
-        Toast.makeText(this, "Reboot request initiated by admin.",
-                       Toast.LENGTH_SHORT).show();
+        Log.i(TAG, "Reboot request initiated by admin.");
         try {
             Thread.sleep(5000);
             PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);

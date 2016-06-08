@@ -134,7 +134,11 @@ public class GCMRegistrationManager implements APIResultCallBack {
 		deviceInfoPayload.build();
 
 		String replyPayload = deviceInfoPayload.getDeviceInfoPayload();
-		String ipSaved = Preference.getString(getContext(), Constants.PreferenceFlag.IP);
+		String ipSaved = Constants.DEFAULT_HOST;
+		String prefIP = Preference.getString(getContext(), Constants.PreferenceFlag.IP);
+		if (prefIP != null) {
+			ipSaved = prefIP;
+		}
 
 		if (ipSaved != null && !ipSaved.isEmpty()) {
 			ServerConfig utils = new ServerConfig();

@@ -154,8 +154,11 @@ public class ApplicationManagementService extends IntentService implements APIRe
      */
     private void getAppListFromServer() {
         Context context = this.getApplicationContext();
-        String ipSaved = Preference.getString(context, Constants.PreferenceFlag.IP);
-
+        String ipSaved = Constants.DEFAULT_HOST;
+        String prefIP = Preference.getString(context, Constants.PreferenceFlag.IP);
+        if (prefIP != null) {
+            ipSaved = prefIP;
+        }
         if (ipSaved != null && !ipSaved.isEmpty()) {
             utils.setServerIP(ipSaved);
             CommonUtils.callSecuredAPI(context, utils.getAPIServerURL(context) + Constants.APP_LIST_ENDPOINT,
