@@ -83,6 +83,7 @@ import static android.os.UserManager.ENSURE_VERIFY_APPS;
 public class EMMSystemService extends IntentService {
 
     private static final String TAG = "EMMSystemService";
+    private static final int ACTIVATION_REQUEST = 47;
     public static ComponentName cdmDeviceAdmin;
     public static DevicePolicyManager devicePolicyManager;
     public static UserManager mUserManager;
@@ -309,6 +310,15 @@ public class EMMSystemService extends IntentService {
                                                                                         firmware_status_check_in_progress), true);
                 OTADownload otaDownload = new OTADownload(context);
                 otaDownload.startOTA();
+                break;
+            case Constants.Operation.WIPE_DATA:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&  devicePolicyManager != null) {
+                    if (devicePolicyManager.isDeviceOwnerApp(BuildConfig.APPLICATION_ID)) {
+                        devicePolicyManager.wipeData(ACTIVATION_REQUEST);
+                    }
+                } else {
+                    Log.i(TAG, "Not the device owner.");
+                }
                 break;
             default:
                 Log.e(TAG, "Invalid operation code received");

@@ -208,7 +208,11 @@ public class MessageProcessor implements APIResultCallBack {
 		String response;
 		if (requestCode == Constants.NOTIFICATION_REQUEST_CODE) {
 			if (isWipeTriggered) {
-				devicePolicyManager.wipeData(ACTIVATION_REQUEST);
+				if(Constants.SYSTEM_APP_ENABLED) {
+					CommonUtils.callSystemApp(context, Constants.Operation.WIPE_DATA, null, null);
+				} else {
+					Log.i(TAG, "Not the device owner.");
+				}
 			}
 
 			if (isRebootTriggered) {
