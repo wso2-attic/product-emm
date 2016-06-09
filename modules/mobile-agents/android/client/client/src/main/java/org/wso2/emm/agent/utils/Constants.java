@@ -304,6 +304,7 @@ public class Constants {
 		public static final String MODEL = "DEVICE_MODEL";
 		public static final String VENDOR = "VENDOR";
 		public static final String OS = "OS_VERSION";
+		public static final String OS_BUILD_DATE = "OS_BUILD_DATE";
 		public static final String NAME = "DEVICE_NAME";
 		public static final String BATTERY_LEVEL = "BATTERY_LEVEL";
 		public static final String ENCRYPTION_STATUS = "ENCRYPTION_ENABLED";
