@@ -31,7 +31,7 @@ public class NetworkConnectedReceiver extends BroadcastReceiver {
         if(!Preference.getBoolean(context, FRESH_BOOTUP_FLAG))	{
             if (!Preference.getBoolean(context, Constants.PreferenceFlag.REGISTERED) && CommonUtils.
                     isNetworkAvailable(context)) {
-                if (Constants.AUTO_ENROLLMENT_ENABLED) {
+                if (Constants.AUTO_ENROLLMENT_BACKGROUND_SERVICE_ENABLED) {
                     Preference.putBoolean(context, FRESH_BOOTUP_FLAG, true);
                     Intent autoEnrollIntent = new Intent(context, EnrollmentService.class);
                     autoEnrollIntent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
