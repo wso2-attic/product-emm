@@ -36,7 +36,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.asymmetric.ec.KeyPairGenerator;
 import org.json.JSONArray;
@@ -59,7 +58,6 @@ import org.wso2.emm.agent.services.DynamicClientManager;
 import org.wso2.emm.agent.services.PolicyOperationsMapper;
 import org.wso2.emm.agent.services.PolicyRevokeHandler;
 import org.wso2.emm.agent.services.ResultPayload;
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -90,7 +88,9 @@ import javax.security.auth.x500.X500Principal;
 public class CommonUtils {
 
 	public static String TAG = CommonUtils.class.getSimpleName();
-
+	private static final String PROTOCOL_HTTPS = "https://";
+	private static final String PROTOCOL_HTTP = "http://";
+	private static final String COLON = ":";
 	/**
 	 * Calls the secured API.
 	 * @param context           -The Activity which calls an API..
@@ -491,4 +491,50 @@ public class CommonUtils {
 		appRestriction.setRestrictedList(restrictedPackages);
 		return appRestriction;
 	}
+
+	public static void saveHostDeatils(Context context, String host){
+		if (host.contains(PROTOCOL_HTTP)) {
+			String hostWithPort = host.substring(PROTOCOL_HTTP.length(), host.length());
+			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.IP,
+			                     getHostFromUrl(hostWithPort));
+			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.PROTOCOL, PROTOCOL_HTTP);
+			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.PORT,
+			                     getPortFromUrl(hostWithPort, PROTOCOL_HTTP));
+		} else if (host.contains(PROTOCOL_HTTPS)) {
+			String hostWithPort = host.substring(PROTOCOL_HTTPS.length(), host.length());
+			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.IP,
+			                     getHostFromUrl(hostWithPort));
+			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.PROTOCOL, PROTOCOL_HTTPS);
+			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.PORT,
+			                     getPortFromUrl(hostWithPort, PROTOCOL_HTTPS));
+		} else if (host.contains(COLON)) {
+			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.IP,
+			                     getHostFromUrl(host));
+			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.PORT,
+			                     getPortFromUrl(host, PROTOCOL_HTTP));
+		} else {
+			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.IP, host);
+		}
+	}
+
+	public static String getHostFromUrl (String url) {
+		if (url.contains(COLON)) {
+			return url.substring(0, url.indexOf(COLON));
+		} else {
+			return url;
+		}
+	}
+
+	public static String getPortFromUrl (String url, String protocol) {
+		if (url.contains(COLON)) {
+			return url.substring((url.indexOf(COLON) + 1), url.length());
+		} else {
+			if(protocol.equals(PROTOCOL_HTTP)) {
+				return String.valueOf(org.wso2.emm.agent.proxy.utils.Constants.HTTP);
+			} else {
+				return String.valueOf(org.wso2.emm.agent.proxy.utils.Constants.HTTPS);
+			}
+		}
+	}
+
 }

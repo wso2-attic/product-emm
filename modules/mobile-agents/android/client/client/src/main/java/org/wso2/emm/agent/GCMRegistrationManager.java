@@ -50,7 +50,7 @@ public class GCMRegistrationManager implements APIResultCallBack {
 	private GoogleCloudMessaging cloudMessaging;
 
 	private String googleProjectNumber;
-	private Activity activity;
+	private Context activity;
 	private String registrationId;
 	private final static int REQUEST_CODE = 4034;
 	private DialogInterface.OnClickListener registrationFailedClickListener = new DialogInterface.OnClickListener() {
@@ -60,7 +60,7 @@ public class GCMRegistrationManager implements APIResultCallBack {
 		}
 	};
 
-	public GCMRegistrationManager(Activity activity, String googleProjectNumber) {
+	public GCMRegistrationManager(Context activity, String googleProjectNumber) {
 		this.activity = activity;
 		this.googleProjectNumber = googleProjectNumber;
 		cloudMessaging = GoogleCloudMessaging.getInstance(activity);
@@ -70,7 +70,7 @@ public class GCMRegistrationManager implements APIResultCallBack {
 		return activity.getApplicationContext();
 	}
 
-	private Activity getActivity() {
+	private Context getActivity() {
 		return activity;
 	}
 

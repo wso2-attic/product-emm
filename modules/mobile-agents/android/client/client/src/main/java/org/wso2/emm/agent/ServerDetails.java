@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.wso2.emm.agent.api.DeviceState;
+import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.Response;
@@ -45,9 +46,6 @@ public class ServerDetails extends Activity {
 	private Context context;
 	private DeviceState state;
 	private TextView txtSeverAddress;
-	private static final String PROTOCOL_HTTPS = "https://";
-	private static final String PROTOCOL_HTTP = "http://";
-	private static final String COLON = ":";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +76,7 @@ public class ServerDetails extends Activity {
 
 			if (Constants.DEFAULT_HOST != null) {
 				ipSaved = Constants.DEFAULT_HOST;
-				saveHostDeatils(ipSaved);
+				CommonUtils.saveHostDeatils(context, ipSaved);
 			}
 
 			// check if we have the IP saved previously.
@@ -164,7 +162,7 @@ public class ServerDetails extends Activity {
 				case DialogInterface.BUTTON_POSITIVE:
 					if (!evServerIP.getText().toString().trim().isEmpty()) {
 						String host = evServerIP.getText().toString().trim();
-						saveHostDeatils(host);
+						CommonUtils.saveHostDeatils(context, host);
 
 						startAuthenticationActivity();
 					} else {
@@ -184,51 +182,6 @@ public class ServerDetails extends Activity {
 			}
 		}
 	};
-
-	private void saveHostDeatils(String host){
-		if (host.indexOf(PROTOCOL_HTTP) > -1) {
-			String hostWithPort = host.substring(PROTOCOL_HTTP.length(), host.length());
-			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.IP,
-			                     getHostFromUrl(hostWithPort));
-			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.PROTOCOL, PROTOCOL_HTTP);
-			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.PORT,
-			                     getPortFromUrl(hostWithPort, PROTOCOL_HTTP));
-		} else if (host.indexOf(PROTOCOL_HTTPS) > -1) {
-			String hostWithPort = host.substring(PROTOCOL_HTTPS.length(), host.length());
-			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.IP,
-			                     getHostFromUrl(hostWithPort));
-			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.PROTOCOL, PROTOCOL_HTTPS);
-			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.PORT,
-			                     getPortFromUrl(hostWithPort, PROTOCOL_HTTPS));
-		} else if (host.indexOf(COLON) > -1) {
-			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.IP,
-			                     getHostFromUrl(host));
-			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.PORT,
-			                     getPortFromUrl(host, PROTOCOL_HTTP));
-		} else {
-			Preference.putString(context.getApplicationContext(), Constants.PreferenceFlag.IP, host);
-		}
-	}
-
-	private String getHostFromUrl (String url) {
-		if (url.indexOf(COLON) > -1) {
-			return url.substring(0, url.indexOf(COLON));
-		} else {
-			return url;
-		}
-	}
-
-	private String getPortFromUrl (String url, String protocol) {
-		if (url.indexOf(COLON) > -1) {
-			return url.substring((url.indexOf(COLON) + 1), url.length());
-		} else {
-			if(protocol.equals(PROTOCOL_HTTP)) {
-				return String.valueOf(org.wso2.emm.agent.proxy.utils.Constants.HTTP);
-			} else {
-				return String.valueOf(org.wso2.emm.agent.proxy.utils.Constants.HTTPS);
-			}
-		}
-	}
 
 	/**
 	 * This method is called to open AuthenticationActivity.

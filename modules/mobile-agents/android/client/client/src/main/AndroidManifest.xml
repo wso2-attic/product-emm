@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
  ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ WSO2 Inc. licenses this file to you under the Apache License,
@@ -58,8 +59,8 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:screenOrientation="portrait"
         android:largeHeap="true"
+        android:screenOrientation="portrait"
         android:theme="@style/TopBarTheme">
         <activity
             android:name=".RegistrationActivity"
@@ -124,6 +125,17 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".services.NetworkConnectedReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
 
         <service
             android:name=".services.ApplicationManagementService"
@@ -133,6 +145,7 @@
                 <action android:name="org.wso2.emm.agent.START_SERVICE" />
             </intent-filter>
         </service>
+        <service android:name=".services.EnrollmentService" />
         <service
             android:name=".GCMIntentService"
             android:exported="false">
@@ -208,4 +221,3 @@
             android:exported="false" />
     </application>
 </manifest>
-
