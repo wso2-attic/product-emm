@@ -15,18 +15,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var modalPopup = '.wr-modalpopup',
-    modalPopupContainer = modalPopup + ' .modalpopup-container',
-    modalPopupContent = modalPopup + ' .modalpopup-content';
-function openCollapsedNav() {
-    $(".wr-hidden-nav-toggle-btn").addClass("active");
-    $("#hiddenNav").slideToggle("slideDown", function () {
-        if ($(this).css("display") == "none") {
-            $(".wr-hidden-nav-toggle-btn").removeClass("active");
-        }
-    });
-}
 
+var modalPopup = ".wr-modalpopup",
+    modalPopupContainer = modalPopup + " .modalpopup-container",
+    modalPopupContent = modalPopup + " .modalpopup-content";
+
+//function openCollapsedNav() {
+//    $(".wr-hidden-nav-toggle-btn").addClass("active");
+//    $("#hiddenNav").slideToggle("slideDown", function () {
+//        if ($(this).css("display") == "none") {
+//            $(".wr-hidden-nav-toggle-btn").removeClass("active");
+//        }
+//    });
+//}
 
 /*
  * set popup maximum height function.
@@ -56,7 +57,9 @@ function hidePopup() {
     $(modalPopup).hide();
 }
 
-
+/*
+ * QR-code generation function.
+ */
 function generateQRCode(qrCodeClass) {
     var enrollmentURL = $("#qr-code-modal").data("enrollment-url");
     $(qrCodeClass).qrcode({
@@ -72,60 +75,72 @@ function toggleEnrollment() {
     showPopup();
 }
 
-var showNotificationCount = function (data) {
-    if (data) {
-        data = JSON.parse(data);
-        if (data.length > 0) {
-            $("#notification-bubble").html(data.length);
+var updateNotificationCount = function (data, jqXHR) {
+    if (jqXHR.status == 200 && data) {
+        var responsePayload = JSON.parse(data);
+        var newNotificationsCount = responsePayload.devices.length;
+        if (newNotificationsCount > 0) {
+            $("#notification-bubble").html(newNotificationsCount);
         } else {
-            hideNotificationCount();
+            $("#notification-bubble").html("Error");
         }
-    } else {
-        hideNotificationCount();
     }
 };
 
 function loadNotificationCount() {
     if ("true" == $("#right-sidebar").attr("is-authorized")) {
-        var serviceURL = "/mdm-admin/notifications/NEW";
-        invokerUtil.get(serviceURL, showNotificationCount, hideNotificationCount);
-        loadNotifications();
+        var serviceURL = "/api/device-mgt/v1.0/notifications?status=NEW";
+        invokerUtil.get(serviceURL, updateNotificationCount, hideNotificationCount);
+        loadNewNotifications();
     } else {
         $("#notification-bubble-wrapper").remove();
     }
 }
 
-function hideNotificationCount() {
-    $("#notification-bubble").hide();
+function hideNotificationCount(jqXHR) {
+    if (jqXHR.status == 404) {
+        // this means "no new notifications to show"
+        $("#notification-bubble").hide();
+    } else {
+        $("#notification-bubble").html("Error");
+    }
 }
 
-function loadNotifications() {
-    if ("true" == $("#right-sidebar").attr("is-authorized")) {
-        var notificationListing = $("#notifications");
-        var notificationListingSrc = notificationListing.attr("src");
-        var currentUser = notificationListing.data("currentUser");
-        $.template("notification-listing", notificationListingSrc, function (template) {
-            var serviceURL = "/mdm-admin/notifications/NEW";
-            var successCallback = function (data) {
-                var viewModel = {};
-                data = JSON.parse(data);
-                viewModel.notifications = data;
-                if (data.length > 0) {
-                    var content = template(viewModel);
-                    $(".sidebar-messages").html(content);
-                } else {
-                    var content = "<h4 class='text-center' >You have no new notifications</a></h4>";
-                    $(".sidebar-messages").html(content);
+function loadNewNotifications() {
+    var messageSideBar = ".sidebar-messages";
+    if ($("#right-sidebar").attr("is-authorized") == "true") {
+        var notifications = $("#notifications");
+        var currentUser = notifications.data("currentUser");
+
+        $.template("notification-listing", notifications.attr("src"), function (template) {
+            var serviceURL = "/api/device-mgt/v1.0/notifications?status=NEW";
+
+            var successCallback = function (data, jqXHR) {
+                if (jqXHR.status == 200 && data) {
+                    var viewModel = {};
+                    var responsePayload = JSON.parse(data);
+
+                    if (responsePayload.devices && responsePayload.devices.length > 0) {
+                        viewModel.notifications = responsePayload.devices;
+                        $(messageSideBar).html(template(viewModel));
+                    } else {
+                        $(messageSideBar).html("<h4 class='text-center'>Error in getting new notifications.</h4>");
+                    }
                 }
             };
-            invokerUtil.get(serviceURL, successCallback, function (message) {
-                var content = "<p>Unexpected error occurred while notification listing </p>";
-                $(".sidebar-messages").html(content);
-            });
+
+            var errorCallback = function (jqXHR) {
+                if (jqXHR.status = 404) {
+                    $(messageSideBar).html("<h4 class='text-center'>No new notifications found...</h4>");
+                } else {
+                    $(messageSideBar).html("<h4 class ='message-danger'>Unexpected error occurred while trying " +
+                        "to retrieve any new notifications.</h4>");
+                }
+            };
+            invokerUtil.get(serviceURL, successCallback, errorCallback);
         });
     } else {
-        var content = "<h4 class ='message-danger'>You are not authorized to view notifications</h4>";
-        $(".sidebar-messages").html(content);
+        $(messageSideBar).html("<h4 class ='message-danger'>You are not authorized to view notifications</h4>");
     }
 }
 
