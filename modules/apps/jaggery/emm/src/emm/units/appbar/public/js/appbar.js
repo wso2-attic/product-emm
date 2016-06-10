@@ -87,7 +87,7 @@ var updateNotificationCount = function (data, jqXHR) {
     }
 };
 
-function loadNotificationCount() {
+function loadNotificationsPanel() {
     if ("true" == $("#right-sidebar").attr("is-authorized")) {
         var serviceURL = "/api/device-mgt/v1.0/notifications?status=NEW";
         invokerUtil.get(serviceURL, updateNotificationCount, hideNotificationCount);
@@ -145,16 +145,15 @@ function loadNewNotifications() {
 }
 
 /**
- * Sidebar function
+ * Toggle function for
+ * notification listing sidebar.
  * @return {Null}
  */
 $.sidebar_toggle = function (action, target, container) {
     var elem = '[data-toggle=sidebar]',
         button,
-        container,
-        conrainerOffsetLeft,
-        conrainerOffsetRight,
-        target,
+        containerOffsetLeft,
+        containerOffsetRight,
         targetOffsetLeft,
         targetOffsetRight,
         targetWidth,
@@ -165,18 +164,20 @@ $.sidebar_toggle = function (action, target, container) {
 
     var sidebar_window = {
         update: function (target, container, button) {
-            conrainerOffsetLeft = $(container).data('offset-left') ? $(container).data('offset-left') : 0,
-                conrainerOffsetRight = $(container).data('offset-right') ? $(container).data('offset-right') : 0,
-                targetOffsetLeft = $(target).data('offset-left') ? $(target).data('offset-left') : 0,
-                targetOffsetRight = $(target).data('offset-right') ? $(target).data('offset-right') : 0,
-                targetWidth = $(target).data('width'),
-                targetSide = $(target).data("side"),
-                pushType = $(container).parent().is('body') == true ? 'padding' : 'margin';
+            containerOffsetLeft = $(container).data('offset-left') ? $(container).data('offset-left') : 0;
+            containerOffsetRight = $(container).data('offset-right') ? $(container).data('offset-right') : 0;
+            targetOffsetLeft = $(target).data('offset-left') ? $(target).data('offset-left') : 0;
+            targetOffsetRight = $(target).data('offset-right') ? $(target).data('offset-right') : 0;
+            targetWidth = $(target).data('width');
+            targetSide = $(target).data("side");
+            pushType = $(container).parent().is('body') == true ? 'padding' : 'margin';
+
             if (button !== undefined) {
                 relationship = button.attr('rel') ? button.attr('rel') : '';
                 buttonParent = $(button).parent();
             }
         },
+
         show: function () {
             if ($(target).data('sidebar-fixed') == true) {
                 $(target).height($(window).height() - $(target).data('fixed-offset'));
@@ -221,6 +222,7 @@ $.sidebar_toggle = function (action, target, container) {
             }
             $(target).trigger('shown.sidebar');
         },
+
         hide: function () {
             $(target).trigger('hide.sidebar');
             $(target).removeClass('toggled');
@@ -267,8 +269,9 @@ $.sidebar_toggle = function (action, target, container) {
         sidebar_window.hide();
     }
     // binding click function
-    $('body').off('click', elem);
-    $('body').on('click', elem, function (e) {
+    var body = 'body';
+    $(body).off('click', elem);
+    $(body).on('click', elem, function (e) {
         e.preventDefault();
         button = $(this);
         container = button.data('container');
@@ -337,13 +340,15 @@ $.fn.collapse_nav_sub = function () {
 };
 
 $(document).ready(function () {
-    loadNotificationCount();
+    loadNotificationsPanel();
     $.sidebar_toggle();
 
-    $("#right-sidebar").on("click", ".new-notification", function (e) {
+    $("#right-sidebar").on("click", ".new-notification", function () {
         var notificationId = $(this).data("id");
         var redirectUrl = $(this).data("url");
         var markAsReadNotificationsAPI = "/mdm-admin/notifications/" + notificationId + "/CHECKED";
+        var messageSideBar = ".sidebar-messages";
+
         invokerUtil.put(
             markAsReadNotificationsAPI,
             null,
@@ -352,12 +357,11 @@ $(document).ready(function () {
                 if (data.statusCode == responseCodes["ACCEPTED"]) {
                     location.href = redirectUrl;
                 }
-            }, function (data) {
+            }, function () {
                 var content = "<li class='message message-danger'><h4><i class='icon fw fw-error'></i>Warning</h4>" +
-                              "<p>Unexpected error occurred while loading notification. Please refresh the page and" +
-                              " try again</p></li>";
-                $(".sidebar-messages").html(content);
-                $(".sidebar-messages").html(content);
+                    "<p>Unexpected error occurred while loading notification. Please refresh the page and" +
+                        " try again</p></li>";
+                $(messageSideBar).html(content);
             }
         );
     });
