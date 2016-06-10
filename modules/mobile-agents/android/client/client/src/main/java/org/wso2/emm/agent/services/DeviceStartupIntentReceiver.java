@@ -19,8 +19,14 @@ package org.wso2.emm.agent.services;
 
 import java.util.Locale;
 
+import android.util.Log;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.events.EventRegistry;
+import org.wso2.emm.agent.services.operation.OperationProcessor;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
@@ -40,6 +46,7 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 	private static final int DEFAULT_TIME_MILLISECONDS = 1000;
 	private static final int DEFAULT_REQUEST_CODE = 0;
 	public static final int DEFAULT_INDEX = 0;
+	public static final int DEFAULT_ID = -1;
 	public static final int DEFAULT_INTERVAL = 30000;
 	private Resources resources;
     private static final String TAG = "DeviceStartupIntent";
@@ -68,19 +75,23 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 		}
 
 		if (isLocked) {
-       /*     org.wso2.emm.agent.beans.Operation lockOperation = new Operation();
+            Operation lockOperation = new Operation();
+			lockOperation.setId(DEFAULT_ID);
 			lockOperation.setCode(Constants.Operation.DEVICE_LOCK);
-            OperationProcessor operationProcessor = new OperationProcessor(context);
-            try {
+			try {
+				JSONObject payload = new JSONObject();
+				payload.put(Constants.ADMIN_MESSAGE, lockMessage);
+				payload.put(Constants.IS_HARD_LOCK_ENABLED, true);
+				lockOperation.setPayLoad(payload.toString());
+				OperationProcessor operationProcessor = new OperationProcessor(context);
                 operationProcessor.doTask(lockOperation);
             } catch (AndroidAgentException e) {
-                Log.d(TAG, "Operation not supported.");
-            }
-        }
-			Operation operation = new Operation(context);
-			operation.enableHardLock(lockMessage);
-	 */
+                Log.e(TAG, "Error occurred while executing hard lock operaton at the device startup");
+            } catch (JSONException e) {
+				Log.e(TAG, "Error occurred while building hard lock operation payload");
 			}
+		}
+
 
 		int interval = Preference.getInt(context, context.getResources().getString(R.string.shared_pref_frequency));
 		if(interval == DEFAULT_INDEX){

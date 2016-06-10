@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 import org.wso2.emm.system.service.R;
 import org.wso2.emm.system.service.api.OTADownload;
 import org.wso2.emm.system.service.utils.AppUtils;
@@ -47,38 +46,33 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 		if (operation != null && operation.trim().equals(Constants.Operation.UPGRADE_FIRMWARE)) {
 			Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), null);
-			Toast.makeText(context, "Upgrade request initiated by admin.",
-			               Toast.LENGTH_SHORT).show();
+			Log.i(TAG, "Upgrade request initiated by admin.");
 			//Prepare for upgrade
 			OTADownload otaDownload = new OTADownload(context);
 			otaDownload.startOTA();
 		} else if(operation != null && operation.trim().equals(Constants.Operation.SILENT_INSTALL_APPLICATION)) {
 			Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), null);
 			Preference.putString(context, context.getResources().getString(R.string.app_uri), null);
-			Toast.makeText(context, "App install request initiated by admin.",
-					Toast.LENGTH_SHORT).show();
+			Log.i(TAG, "App install request initiated by admin.");
 			//Prepare for silent install
 			String packageUri;
 			if (intent.hasExtra(context.getResources().getString(R.string.app_uri))) {
 				packageUri = intent.getStringExtra(context.getResources().getString(R.string.app_uri));
 				AppUtils.silentInstallApp(context, Uri.parse(packageUri));
 			} else {
-				Toast.makeText(context, "App installation failed.",
-						Toast.LENGTH_SHORT).show();
+				Log.e(TAG, "App installation failed.");
 			}
 		} else if(operation != null && operation.trim().equals(Constants.Operation.SILENT_UNINSTALL_APPLICATION)) {
 			Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), null);
 			Preference.putString(context, context.getResources().getString(R.string.app_uri), null);
-			Toast.makeText(context, "App uninstall request initiated by admin.",
-					Toast.LENGTH_SHORT).show();
+			Log.i(TAG, "App uninstall request initiated by admin.");
 			//Prepare for silent uninstall
 			String packageName;
 			if (intent.hasExtra(context.getResources().getString(R.string.app_uri))) {
 				packageName = intent.getStringExtra(context.getResources().getString(R.string.app_uri));
 				AppUtils.silentUninstallApp(context, packageName);
 			} else {
-				Toast.makeText(context, "App uninstallation failed.",
-						Toast.LENGTH_SHORT).show();
+				Log.i(TAG, "App uninstallation failed.");
 			}
 		}
 	}

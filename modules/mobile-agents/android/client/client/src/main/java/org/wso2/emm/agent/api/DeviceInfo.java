@@ -78,6 +78,14 @@ public class DeviceInfo {
 	}
 
 	/**
+	 * Returns the device OS build date.
+	 * @return - OS build date.
+	 */
+	public long getOSBuildDate() {
+		return Build.TIME;
+	}
+
+	/**
 	 * Returns the OS version.
 	 * @return - Device OS version.
 	 */

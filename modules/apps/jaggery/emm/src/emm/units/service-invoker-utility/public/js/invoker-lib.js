@@ -20,36 +20,43 @@ var invokerUtil = function () {
 
     var module = {};
 
-    var END_POINT = window.location.origin+"/emm/api/invoker/execute/";
+    var END_POINT = window.location.origin + "/emm/api/invoker/execute/";
 
     module.get = function (url, successCallback, errorCallback) {
         var payload = null;
         execute("GET", url, payload, successCallback, errorCallback);
     };
+
     module.post = function (url, payload, successCallback, errorCallback) {
         execute("POST", url, payload, successCallback, errorCallback);
     };
+
     module.put = function (url, payload, successCallback, errorCallback) {
         execute("PUT", url, payload, successCallback, errorCallback);
     };
+
     module.delete = function (url, successCallback, errorCallback) {
         var payload = null;
         execute("DELETE", url, payload, successCallback, errorCallback);
     };
-    function execute (methoad, url, payload, successCallback, errorCallback) {
-        var data = {
+
+    var execute = function (method, url, payload, successCallback, errorCallback) {
+        var request = {
             url: END_POINT,
             type: "POST",
             contentType: "application/json",
             accept: "application/json",
             success: successCallback
         };
-        var paramValue = {};
-        paramValue.actionMethod = methoad;
-        paramValue.actionUrl = url;
-        paramValue.actionPayload = JSON.stringify(payload)
-        data.data = JSON.stringify(paramValue);
-        $.ajax(data).fail(function (jqXHR) {
+
+        var data = {};
+        data.actionMethod = method;
+        data.actionUrl = url;
+        data.actionPayload = JSON.stringify(payload);
+
+        request.data = JSON.stringify(data);
+
+        $.ajax(request).fail(function (jqXHR) {
             if (jqXHR.status == "401") {
                 console.log("Unauthorized access attempt!");
                 $(modalPopupContent).html($('#error-msg').html());
@@ -59,5 +66,7 @@ var invokerUtil = function () {
             }
         });
     };
+
     return module;
+
 }();

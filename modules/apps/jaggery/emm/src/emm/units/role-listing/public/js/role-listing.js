@@ -60,9 +60,9 @@ var loadPaginatedObjects = function (objectGridId, objectGridContainer, objectGr
 function loadRoles(searchQuery) {
     var loadingContent = $("#loading-content");
     loadingContent.show();
-    var serviceURL = "/mdm-admin/roles";
+    var serviceURL = "/api/device-mgt/v1.0/roles";
     if (searchQuery) {
-        serviceURL = serviceURL + "/search?filter=" + searchQuery;
+        serviceURL = serviceURL + "?filter=" + searchQuery;
     }
     var callback = function (data) {
         if (data != null || data == "null") {
@@ -140,7 +140,7 @@ function hidePopup() {
  */
 $("#role-grid").on("click", ".remove-role-link", function () {
     var role = $(this).data("role");
-    var removeRoleAPI = "/mdm-admin/roles?rolename=" + role;
+    var removeRoleAPI = "/api/device-mgt/v1.0/roles?rolename=" + role;
 
     $(modalPopupContent).html($('#remove-role-modal-content').html());
     showPopup();

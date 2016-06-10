@@ -63,11 +63,6 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		} catch (AndroidAgentException e) {
 			Log.e(TAG, "Failed to perform operation", e);
 		}
-
-		Toast.makeText(context, R.string.device_admin_enabled,
-				Toast.LENGTH_LONG).show();
-
-
 		String notifier = Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE);
 		if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
 			LocalNotification.startPolling(context);
@@ -99,8 +94,11 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 	public void startUnRegistration(Context context) {
 		String regId = Preference.getString(context, Constants.PreferenceFlag.REG_ID);
 		if (regId != null && !regId.isEmpty()) {
-			String serverIP = Preference.getString(context, Constants.PreferenceFlag.IP);
-
+			String serverIP = Constants.DEFAULT_HOST;
+			String prefIP = Preference.getString(context, Constants.PreferenceFlag.IP);
+			if (prefIP != null) {
+				serverIP = prefIP;
+			}
 			if (serverIP != null && !serverIP.isEmpty()) {
 				ServerConfig utils = new ServerConfig();
 				utils.setServerIP(serverIP);

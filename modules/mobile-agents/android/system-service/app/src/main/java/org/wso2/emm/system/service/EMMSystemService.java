@@ -18,18 +18,19 @@
 
 package org.wso2.emm.system.service;
 
+import android.annotation.TargetApi;
 import android.app.IntentService;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.UserManager;
 import android.util.Log;
 import android.webkit.URLUtil;
-import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.system.service.api.OTADownload;
@@ -82,6 +83,7 @@ import static android.os.UserManager.ENSURE_VERIFY_APPS;
 public class EMMSystemService extends IntentService {
 
     private static final String TAG = "EMMSystemService";
+    private static final int ACTIVATION_REQUEST = 47;
     public static ComponentName cdmDeviceAdmin;
     public static DevicePolicyManager devicePolicyManager;
     public static UserManager mUserManager;
@@ -90,6 +92,9 @@ public class EMMSystemService extends IntentService {
     private String command = null;
     private String appUri = null;
     private Context context;
+
+    private static String[] AUTHORIZED_PINNING_APPS;
+    private static String AGENT_PACKAGE_NAME;
 
     public EMMSystemService() {
         super("EMMSystemService");
@@ -101,6 +106,8 @@ public class EMMSystemService extends IntentService {
         cdmDeviceAdmin = new ComponentName(this, ServiceDeviceAdminReceiver.class);
         devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         mUserManager = (UserManager) getSystemService(Context.USER_SERVICE);
+        AGENT_PACKAGE_NAME = context.getPackageName();
+        AUTHORIZED_PINNING_APPS = new String[]{AGENT_PACKAGE_NAME, Constants.AGENT_APP_PACKAGE_NAME};
         if (!devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
             startAdmin();
         } else {
@@ -155,6 +162,12 @@ public class EMMSystemService extends IntentService {
      */
     public void doTask(String code) {
         switch (code) {
+            case Constants.Operation.DEVICE_LOCK:
+                enableHardLock();
+                break;
+            case Constants.Operation.DEVICE_UNLOCK:
+                disableHardLock();
+                break;
             case Constants.Operation.ENABLE_ADMIN:
                 startAdmin();
                 break;
@@ -298,6 +311,15 @@ public class EMMSystemService extends IntentService {
                 OTADownload otaDownload = new OTADownload(context);
                 otaDownload.startOTA();
                 break;
+            case Constants.Operation.WIPE_DATA:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&  devicePolicyManager != null) {
+                    if (devicePolicyManager.isDeviceOwnerApp(BuildConfig.APPLICATION_ID)) {
+                        devicePolicyManager.wipeData(ACTIVATION_REQUEST);
+                    }
+                } else {
+                    Log.i(TAG, "Not the device owner.");
+                }
+                break;
             default:
                 Log.e(TAG, "Invalid operation code received");
                 break;
@@ -340,8 +362,7 @@ public class EMMSystemService extends IntentService {
                 Log.e(TAG, "One time alarm time string parsing failed." + e);
             }
         } else {
-            Toast.makeText(context, "Upgrade request initiated by admin.",
-                           Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "Upgrade request initiated by admin.");
             //Prepare for upgrade
             OTADownload otaDownload = new OTADownload(context);
             otaDownload.startOTA();
@@ -352,9 +373,7 @@ public class EMMSystemService extends IntentService {
      * Rebooting the device.
      */
     private void rebootDevice() {
-        Log.i(TAG, "A reboot has been requested");
-        Toast.makeText(this, "Reboot request initiated by admin.",
-                       Toast.LENGTH_SHORT).show();
+        Log.i(TAG, "Reboot request initiated by admin.");
         try {
             Thread.sleep(5000);
             PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -415,4 +434,33 @@ public class EMMSystemService extends IntentService {
             AppUtils.silentUninstallApp(context, packageName);
         }
     }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void enableHardLock() {
+        String message = context.getResources().getString(R.string.txt_lock_activity);
+        if (appUri != null && !appUri.isEmpty()) {
+            message = appUri;
+        }
+        if (SettingsManager.isDeviceOwner()) {
+            devicePolicyManager.setLockTaskPackages(cdmDeviceAdmin, AUTHORIZED_PINNING_APPS);
+            Intent intent = new Intent(context, LockActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                            Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY |
+                            Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            intent.putExtra(Constants.ADMIN_MESSAGE, message);
+            intent.putExtra(Constants.IS_LOCKED, true);
+            context.startActivity(intent);
+        } else {
+            Log.e(TAG, "Device owner is not set, hence executing default lock");
+            devicePolicyManager.lockNow();
+        }
+    }
+
+    private void disableHardLock() {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                        Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
 }
