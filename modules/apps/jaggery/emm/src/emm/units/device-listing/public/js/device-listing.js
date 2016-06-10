@@ -163,7 +163,8 @@ function loadDevices(searchType, searchParam){
 
     var serviceURL;
     if ($.hasPermission("LIST_DEVICES")) {
-        serviceURL = "/mdm-admin/devices";
+        //serviceURL = "/mdm-admin/devices";
+        serviceURL = "/api/device-mgt/v1.0/devices";
     } else if ($.hasPermission("LIST_OWN_DEVICES")) {
         //Get authenticated users devices
         serviceURL = "/mdm-admin/users/devices?username="+currentUser;
@@ -320,7 +321,7 @@ function initPage() {
     var currentUser = $("#device-listing").data("currentUser");
     var serviceURL;
     if ($.hasPermission("LIST_DEVICES")) {
-        serviceURL = "/mdm-admin/devices";
+        serviceURL ="/api/device-mgt/v1.0/devices"
     } else if ($.hasPermission("LIST_OWN_DEVICES")) {
         //Get authenticated users devices
         serviceURL = "/mdm-admin/users/devices?username=" + currentUser;
