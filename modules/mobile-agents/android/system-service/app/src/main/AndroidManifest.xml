@@ -16,7 +16,7 @@
  ~ under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.wso2.emm.system.service"
-    android:sharedUserId="android.uid.system">
+          android:sharedUserId="android.uid.system">
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -48,6 +48,12 @@
                 android:name=".MainActivity"
                 android:exported="true"
                 android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+                android:name=".LockActivity"
+                android:configChanges="orientation|keyboardHidden|screenSize"
+                android:label="@string/title_activity_lock">
         </activity>
 
         <receiver

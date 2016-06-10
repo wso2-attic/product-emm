@@ -142,6 +142,11 @@ public class DeviceInfoPayload {
         properties.add(property);
 
         property = new Device.Property();
+        property.setName(Constants.Device.OS_BUILD_DATE);
+        property.setValue(String.valueOf(deviceInfo.getOSBuildDate()));
+        properties.add(property);
+
+        property = new Device.Property();
         property.setName(Constants.Device.NAME);
         property.setValue(deviceInfo.getDeviceName());
         properties.add(property);

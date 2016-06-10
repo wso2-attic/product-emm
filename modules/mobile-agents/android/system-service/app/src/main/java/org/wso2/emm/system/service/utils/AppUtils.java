@@ -26,9 +26,6 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 /**
  * Utility class to hold app operations.
  */

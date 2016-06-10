@@ -290,9 +290,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         intent.putExtra(resources.getString(R.string.intent_extra_type),
                         resources.getString(R.string.intent_extra_ring));
         intent.putExtra(resources.getString(R.string.intent_extra_message_text),
-                resources.getString(R.string.intent_extra_stop_ringing));
+                        resources.getString(R.string.intent_extra_stop_ringing));
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
 
         if (Constants.DEBUG_MODE_ENABLED) {
@@ -669,8 +669,6 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param operation - Operation object.
      */
     public void lockDevice(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-        operation.setStatus(resources.getString(R.string.operation_value_completed));
-        resultBuilder.build(operation);
         JSONObject inputData;
         String message = null;
         boolean isHardLockEnabled = false;
@@ -685,14 +683,16 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
-        if (isHardLockEnabled) {
+        if (isHardLockEnabled && Constants.SYSTEM_APP_ENABLED) {
             if (message == null || message.isEmpty()) {
                 message = resources.getString(R.string.txt_lock_activity);
             }
             Preference.putBoolean(context, Constants.IS_LOCKED, true);
             Preference.putString(context, Constants.LOCK_MESSAGE, message);
-            enableHardLock(message);
+            enableHardLock(message, operation);
         } else {
+            operation.setStatus(resources.getString(R.string.operation_value_completed));
+            resultBuilder.build(operation);
             devicePolicyManager.lockNow();
         }
 
@@ -701,19 +701,16 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void enableHardLock(String message) {
-        if (isDeviceOwner()) {
-            devicePolicyManager.setLockTaskPackages(cdmDeviceAdmin, AUTHORIZED_PINNING_APPS);
-            Intent intent = new Intent(context, LockActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                            Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Constants.ADMIN_MESSAGE, message);
-            intent.putExtra(Constants.IS_LOCKED, true);
-            context.startActivity(intent);
+    public void enableHardLock(String message, Operation operation) {
+        String payload = "false";
+        if (getApplicationManager().isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
+            operation.setStatus(resources.getString(R.string.operation_value_completed));
+            CommonUtils.callSystemApp(getContext(), Constants.Operation.DEVICE_LOCK, payload, message);
         } else {
-            devicePolicyManager.lockNow();
+            operation.setStatus(resources.getString(R.string.operation_value_error));
+            Log.e(TAG, "System service is not available");
         }
+        resultBuilder.build(operation);
     }
 
     /**
@@ -722,31 +719,21 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param operation - Operabtion object.
      */
     public void unlockDevice(org.wso2.emm.agent.beans.Operation operation) {
-        operation.setStatus(resources.getString(R.string.operation_value_completed));
-        resultBuilder.build(operation);
-
-        boolean isLocked = Preference.getBoolean(context, Constants.IS_LOCKED);
-        if (isLocked) {
-            if (isDeviceOwner()) {
-                Intent intent = new Intent(context, ServerDetails.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                                Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+        if (getApplicationManager().isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
+            boolean isLocked = Preference.getBoolean(context, Constants.IS_LOCKED);
+            if (isLocked) {
+                Preference.putBoolean(context, Constants.IS_LOCKED, false);
+                CommonUtils.callSystemApp(getContext(), Constants.Operation.DEVICE_UNLOCK, null, null);
             }
+            if (Constants.DEBUG_MODE_ENABLED) {
+                Log.d(TAG, "Device unlocked");
+            }
+            operation.setStatus(resources.getString(R.string.operation_value_completed));
+        } else {
+            operation.setStatus(resources.getString(R.string.operation_value_error));
+            Log.e(TAG, "System service is not available");
         }
-        if (Constants.DEBUG_MODE_ENABLED) {
-            Log.d(TAG, "Device unlocked");
-        }
-    }
-
-    /**
-     * This method is used to check whether agent is registered as the device owner.
-     *
-     * @return true if agent is the device owner.
-     */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private boolean isDeviceOwner() {
-        return devicePolicyManager.isDeviceOwnerApp(AGENT_PACKAGE_NAME);
+        resultBuilder.build(operation);
     }
 
     /**

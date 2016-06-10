@@ -176,10 +176,6 @@ public class OTAServerManager {
     public void startDownloadUpgradePackage(final OTAServerManager serverManager) {
         new AsyncTask<Void, Void, Void>() {
             protected Void doInBackground(Void... unused) {
-                if (serverManager.stateChangeListener != null) {
-                    reportDownloadError(OTAStateChangeListener.ERROR_CANNOT_FIND_SERVER);
-                }
-
                 File targetFile = new File(FileUtils.getUpgradePackageFilePath());
                 try {
                     boolean fileStatus = targetFile.createNewFile();

@@ -91,8 +91,11 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		// Check network connection availability before calling the API.
 		if (CommonUtils.isNetworkAvailable(context)) {
 			// Call device registration API.
-			String ipSaved = Preference.getString(context.getApplicationContext(),Constants.PreferenceFlag.IP);
-
+			String ipSaved = Constants.DEFAULT_HOST;
+			String prefIP = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
+			if (prefIP != null) {
+				ipSaved = prefIP;
+			}
 			if (ipSaved != null && !ipSaved.isEmpty()) {
 				ServerConfig utils = new ServerConfig();
 				utils.setServerIP(ipSaved);
@@ -280,8 +283,11 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		deviceInfoPayload.build();
 
 		String replyPayload = deviceInfoPayload.getDeviceInfoPayload();
-		String ipSaved = Preference.getString(context, Constants.PreferenceFlag.IP);
-
+		String ipSaved = Constants.DEFAULT_HOST;
+		String prefIP = Preference.getString(context, Constants.PreferenceFlag.IP);
+		if (prefIP != null) {
+			ipSaved = prefIP;
+		}
 		if (ipSaved != null && !ipSaved.isEmpty()) {
 			ServerConfig utils = new ServerConfig();
 			utils.setServerIP(ipSaved);

@@ -50,17 +50,28 @@ public class OperationManagerDeviceOwner extends OperationManager {
 
     @Override
     public void wipeDevice(Operation operation) throws AndroidAgentException {
-        String inputPin;
+        String inputPin = null;
         String savedPin = Preference.getString(getContext(), getContextResources().getString(R.string.shared_pref_pin));
         JSONObject result = new JSONObject();
         String ownershipType = Preference.getString(getContext(), Constants.DEVICE_TYPE);
-
+        if (Constants.DEFAULT_OWNERSHIP != null) {
+            ownershipType = Constants.DEFAULT_OWNERSHIP;
+        }
         try {
-            JSONObject wipeKey = new JSONObject(operation.getPayLoad().toString());
-            inputPin = (String) wipeKey.get(getContextResources().getString(R.string.shared_pref_pin));
+            JSONObject wipeKey;
             String status;
-            if (Constants.OWNERSHIP_BYOD.equals(ownershipType.trim()) ||
-                    (inputPin != null && inputPin.trim().equals(savedPin.trim()))) {
+            if (operation.getPayLoad() != null) {
+                wipeKey = new JSONObject(operation.getPayLoad().toString());
+                if (!wipeKey.isNull(getContextResources().getString(R.string.shared_pref_pin))) {
+                    inputPin = (String) wipeKey.get(getContextResources().getString(R.string.shared_pref_pin));
+                }
+            }
+
+            if (Constants.OWNERSHIP_COPE.equals(ownershipType.trim())) {
+                status = getContextResources().getString(R.string.shared_pref_default_status);
+                result.put(getContextResources().getString(R.string.operation_status), status);
+            } else if (Constants.OWNERSHIP_BYOD.equals(ownershipType.trim()) ||
+                       (inputPin != null && savedPin != null && inputPin.trim().equals(savedPin.trim()))) {
                 status = getContextResources().getString(R.string.shared_pref_default_status);
                 result.put(getContextResources().getString(R.string.operation_status), status);
             } else {
@@ -71,8 +82,8 @@ public class OperationManagerDeviceOwner extends OperationManager {
             operation.setPayLoad(result.toString());
 
             if (status.equals(getContextResources().getString(R.string.shared_pref_default_status))) {
-                Toast.makeText(getContext(), getContextResources().getString(R.string.toast_message_wipe),
-                        Toast.LENGTH_LONG).show();
+                /*Toast.makeText(getContext(), getContextResources().getString(R.string.toast_message_wipe),
+                        Toast.LENGTH_LONG).show();*/
                 operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
                 getResultBuilder().build(operation);
 
@@ -80,8 +91,8 @@ public class OperationManagerDeviceOwner extends OperationManager {
                     Log.d(TAG, "Started to wipe data");
                 }
             } else {
-                Toast.makeText(getContext(), getContextResources().getString(R.string.toast_message_wipe_failed),
-                        Toast.LENGTH_LONG).show();
+                /*Toast.makeText(getContext(), getContextResources().getString(R.string.toast_message_wipe_failed),
+                        Toast.LENGTH_LONG).show();*/
                 operation.setStatus(getContextResources().getString(R.string.operation_value_error));
                 getResultBuilder().build(operation);
             }

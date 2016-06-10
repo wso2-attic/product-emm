@@ -189,7 +189,11 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		if (regId != null && !regId.isEmpty()) {
 			if (CommonUtils.isNetworkAvailable(context)) {
-				String serverIP = Preference.getString(AlreadyRegisteredActivity.this, Constants.PreferenceFlag.IP);
+				String serverIP = Constants.DEFAULT_HOST;
+				String prefIP = Preference.getString(AlreadyRegisteredActivity.this, Constants.PreferenceFlag.IP);
+				if (prefIP != null) {
+					serverIP = prefIP;
+				}
 				if (serverIP != null && !serverIP.isEmpty()) {
 					stopPolling();
 					ServerConfig utils = new ServerConfig();
@@ -276,8 +280,11 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		if (isRegistered) {
 			if (CommonUtils.isNetworkAvailable(context)) {
-
-				String serverIP = Preference.getString(context, Constants.PreferenceFlag.IP);
+				String serverIP = Constants.DEFAULT_HOST;
+				String prefIP = Preference.getString(context, Constants.PreferenceFlag.IP);
+				if (prefIP != null) {
+					serverIP = prefIP;
+				}
 				regId = Preference.getString(context, Constants.PreferenceFlag.REG_ID);
 
 				if (regId != null) {
