@@ -482,7 +482,6 @@ var userModule = function () {
             //TODO Fix this to get device types properly from the admin JAX-RS
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + "/mdm-admin/devices/types";
-            //var url = mdmProps["httpsURL"] + "/api/device-mgt/v1.0/devices/";
             return privateMethods.callBackend(url, constants.HTTP_GET);
         } catch (e) {
             throw e;
