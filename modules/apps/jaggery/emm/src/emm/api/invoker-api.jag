@@ -24,7 +24,7 @@ var log = new Log("api/invoker-api.jag");
 
 var constants = require("/modules/constants.js");
 var mdmProps = require('/config/mdm-props.js').config();
-var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
+var serviceInvokers = require("/modules/backend-service-invoker.js")["backendServiceInvoker"];
 
 var result;
 
