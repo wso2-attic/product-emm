@@ -87,7 +87,8 @@ var showNotificationCount = function (data) {
 
 function loadNotificationCount() {
     if ("true" == $("#right-sidebar").attr("is-authorized")) {
-        var serviceURL = "/mdm-admin/notifications/NEW";
+        //var serviceURL = "/mdm-admin/notifications/NEW";
+        var serviceURL = "/api/device-mgt/v1.0/notifications"
         invokerUtil.get(serviceURL, showNotificationCount, hideNotificationCount);
         loadNotifications();
     } else {
@@ -105,7 +106,8 @@ function loadNotifications() {
         var notificationListingSrc = notificationListing.attr("src");
         var currentUser = notificationListing.data("currentUser");
         $.template("notification-listing", notificationListingSrc, function (template) {
-            var serviceURL = "/mdm-admin/notifications/NEW";
+            //var serviceURL = "/mdm-admin/notifications/NEW";
+            var serviceURL = "/api/device-mgt/v1.0/notifications"
             var successCallback = function (data) {
                 var viewModel = {};
                 data = JSON.parse(data);
