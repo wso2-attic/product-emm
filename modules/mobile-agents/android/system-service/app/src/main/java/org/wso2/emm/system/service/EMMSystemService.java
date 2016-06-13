@@ -83,7 +83,7 @@ import static android.os.UserManager.ENSURE_VERIFY_APPS;
 public class EMMSystemService extends IntentService {
 
     private static final String TAG = "EMMSystemService";
-    private static final int ACTIVATION_REQUEST = 47;
+    private static final int ACTIVATION_REQUEST = 0x00000002;
     public static ComponentName cdmDeviceAdmin;
     public static DevicePolicyManager devicePolicyManager;
     public static UserManager mUserManager;
