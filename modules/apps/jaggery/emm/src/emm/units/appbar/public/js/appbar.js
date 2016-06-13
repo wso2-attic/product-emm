@@ -115,7 +115,7 @@ function loadNewNotifications() {
         $.template("notification-listing", notifications.attr("src"), function (template) {
             var serviceURL = "/api/device-mgt/v1.0/notifications?status=NEW";
 
-            var successCallback = function (data, jqXHR) {
+            var successCallback = function (data, textStatus, jqXHR) {
                 if (jqXHR.status == 200 && data) {
                     var viewModel = {};
                     var responsePayload = JSON.parse(data);

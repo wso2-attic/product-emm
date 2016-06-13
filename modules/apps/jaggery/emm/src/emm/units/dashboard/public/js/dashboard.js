@@ -30,7 +30,6 @@ var updateStats = function (serviceURL, id) {
                 }
             } else if (!data) {
                 updateStats(serviceURL, id);
-                
             }
         },
 
