@@ -12,6 +12,7 @@ function inputIsValid(regExp, inputString) {
 
 var validateInline = {};
 var clearInline = {};
+var emmAdminBasePath = "/api/device-mgt/v1.0";
 
 var enableInlineError = function (inputField, errorMsg, errorSign) {
     var fieldIdentifier = "#" + inputField;
@@ -148,7 +149,7 @@ $( "#userStore" )
         $( "select option:selected" ).each(function() {
             str += $( this ).text() + " ";
         });
-        var addUserAPI = "/mdm-admin/roles/"+ str;
+        var addUserAPI = emmAdminBasePath + "/roles/"+ str;
 
         invokerUtil.get(
             addUserAPI,
@@ -226,7 +227,7 @@ $(document).ready(function () {
             addUserFormData.emailAddress = emailAddress;
             addUserFormData.roles = roles;
 
-            var addUserAPI = "/mdm-admin/users";
+            var addUserAPI = emmAdminBasePath + "/users";
 
             invokerUtil.post(
                 addUserAPI,

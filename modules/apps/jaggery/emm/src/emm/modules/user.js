@@ -451,6 +451,7 @@ var userModule = function () {
      * Get User Roles from user store (Internal roles not included).
      */
     publicMethods.getRolesByUserStore = function (userStore) {
+        var ROLE_LIMIT = mdmProps.pageSize;
         var carbonUser = session.get(constants["USER_SESSION_KEY"]);
         var utility = require('/modules/utility.js')["utility"];
         if (!carbonUser) {
@@ -459,7 +460,7 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/roles?user-store=" + encodeURIComponent(userStore);
+            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/roles?limit="+ROLE_LIMIT;
             return privateMethods.callBackend(url, constants.HTTP_GET);
         } catch (e) {
             throw e;

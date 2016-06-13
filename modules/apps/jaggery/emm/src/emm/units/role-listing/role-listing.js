@@ -11,5 +11,6 @@ function onRequest(context) {
     var mdmProps = require("/config/mdm-props.js").config();
     context["appContext"] = mdmProps.appContext;
     context["adminRole"] = mdmProps.adminRole;
+    context["pageSize"] = mdmProps.pageSize;
     return context;
 }

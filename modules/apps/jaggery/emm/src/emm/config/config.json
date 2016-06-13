@@ -14,6 +14,7 @@
     "adminUser":"admin",
     "adminRole":"admin",
     "usernameLength":30,
+    "pageSize":10,
     "ssoConfiguration" : {
         "enabled" : false,
         "issuer" : "mdm",
