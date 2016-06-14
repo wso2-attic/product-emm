@@ -65,7 +65,7 @@ public class Constants {
 	public static final String LICENSE_ENDPOINT = SERVER_APP_ENDPOINT + "configuration/license";
 	public static final String REGISTER_ENDPOINT = SERVER_APP_ENDPOINT + "devices/";
 	public static final String CONFIGURATION_ENDPOINT = SERVER_APP_ENDPOINT + "configuration/";
-	public static final String SCEP_ENDPOINT = "/certificate-mgt/certificates/signcsr";
+	public static final String SCEP_ENDPOINT = "/api/scep-mgt/v1.0/certificates/signcsr";
 	public static final String OAUTH_ENDPOINT = "/oauth2/token";
 	public static final String DEVICE_ENDPOINT = SERVER_APP_ENDPOINT + "device/";
 	public static final String IS_REGISTERED_ENDPOINT = "/status";

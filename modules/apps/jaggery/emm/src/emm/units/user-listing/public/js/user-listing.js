@@ -12,6 +12,7 @@ $(function () {
     $(sortableElem).disableSelection();
 });
 
+var emmAdminBasePath = "/api/device-mgt/v1.0";
 var modalPopup = ".wr-modalpopup";
 var modalPopupContainer = modalPopup + " .modalpopup-container";
 var modalPopupContent = modalPopup + " .modalpopup-content";
@@ -19,7 +20,7 @@ var body = "body";
 var isInit = true;
 $(".icon .text").res_text(0.2);
 
-var resetPasswordServiceURL = "/mdm-admin/users/reset-password";
+var resetPasswordServiceURL = emmAdminBasePath + "/users/reset-password";
 
 /*
  * set popup maximum height function.
@@ -66,7 +67,7 @@ function getSelectedUsernames() {
  */
 $("a.invite-user-link").click(function () {
     var usernameList = getSelectedUsernames();
-    var inviteUserAPI = "/mdm-admin/users/email-invitation";
+    var inviteUserAPI = emmAdminBasePath + "/users/email-invitation";
 
     if (usernameList.length == 0) {
         $(modalPopupContent).html($("#errorUsers").html());
@@ -108,7 +109,7 @@ $("a.invite-user-link").click(function () {
 function removeUser(uname, uid) {
     var username = uname;
     var userid = uid;
-    var removeUserAPI = "/mdm-admin/users?username=" + username;
+    var removeUserAPI = emmAdminBasePath + "/users?username=" + username;
     $(modalPopupContent).html($('#remove-user-modal-content').html());
     showPopup();
 
@@ -234,9 +235,9 @@ function loadUsers(searchParam) {
     var userListing = $("#user-listing");
     var userListingSrc = userListing.attr("src");
     $.template("user-listing", userListingSrc, function (template) {
-        var serviceURL = "/mdm-admin/users";
+        var serviceURL = emmAdminBasePath + "/users";
         if (searchParam) {
-            serviceURL = serviceURL + "/view-users?username=" + searchParam;
+            serviceURL = serviceURL + "?filter=" + searchParam;
         }
         var successCallback = function (data) {
             if (!data) {
@@ -248,9 +249,8 @@ function loadUsers(searchParam) {
             var canEdit = $("#can-edit").val();
             var canResetPassword = $("#can-reset-password").val();
             data = JSON.parse(data);
-            data = data.responseContent;
             var viewModel = {};
-            viewModel.users = data;
+            viewModel.users = data.users;
             for (var i = 0; i < viewModel.users.length; i++) {
                 viewModel.users[i].userid = viewModel.users[i].username.replace(/[^\w\s]/gi, '');
                 if (canRemove) {
@@ -264,7 +264,7 @@ function loadUsers(searchParam) {
                 }
                 viewModel.users[i].adminUser = $("#user-table").data("user");
             }
-            if (data.length > 0) {
+            if (data.count > 0) {
                 $('#ast-container').removeClass('hidden');
                 $('#user-listing-status-msg').text("");
                 var content = template(viewModel);
