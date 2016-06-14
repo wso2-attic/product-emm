@@ -28,7 +28,7 @@ var invokerUtil = function () {
         requestPayload.actionPayload = JSON.stringify(payload);
 
         var request = {
-            url: window.location.origin + "/emm/api/invoker/execute/",
+            url: "/emm/api/invoker/execute/",
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify(requestPayload),
