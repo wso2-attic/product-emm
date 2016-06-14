@@ -52,14 +52,19 @@ public class EnrollmentService extends IntentService implements APIResultCallBac
 
     private void startEnrollment() {
         Log.i(TAG, "EMM auto enrollment initiated.");
-        CommonUtils.saveHostDeatils(context, Constants.DEFAULT_HOST);
-        //Setting default ownership to COPE
-        Preference.putString(context, Constants.DEVICE_TYPE, Constants.OWNERSHIP_COPE);
-        AuthenticatorFactory authenticatorFactory = new AuthenticatorFactory();
-        ClientAuthenticator authenticator = authenticatorFactory.getClient(
-                org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE,
-                EnrollmentService.this, Constants.AUTHENTICATION_REQUEST_CODE);
-        authenticator.doAuthenticate();
+        if (CommonUtils.
+                isNetworkAvailable(context)) {
+            CommonUtils.saveHostDeatils(context, Constants.DEFAULT_HOST);
+            //Setting default ownership to COPE
+            Preference.putString(context, Constants.DEVICE_TYPE, Constants.OWNERSHIP_COPE);
+            AuthenticatorFactory authenticatorFactory = new AuthenticatorFactory();
+            ClientAuthenticator authenticator = authenticatorFactory.getClient(
+                    org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE,
+                    EnrollmentService.this, Constants.AUTHENTICATION_REQUEST_CODE);
+            authenticator.doAuthenticate();
+        } else {
+            startEnrollment();
+        }
     }
 
     @Override
@@ -301,7 +306,7 @@ public class EnrollmentService extends IntentService implements APIResultCallBac
         Log.i(TAG, "EMM auto enrollment, GCM registration initiated.");
         new AsyncTask<Void, Void, String>() {
             String senderId = Preference.getString(context, context.getResources().getString(R.string.shared_pref_sender_id));
-            GCMRegistrationManager registrationManager = new GCMRegistrationManager(EnrollmentService.this, senderId);
+            GCMRegistrationManager registrationManager = new GCMRegistrationManager(EnrollmentService.this, null, senderId);
 
             @Override
             protected String doInBackground(Void... params) {

@@ -109,8 +109,17 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".services.NotificationReceiver"
+            android:name=".services.NetworkConnectedReceiver"
+            android:enabled="true"
             android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".services.NotificationReceiver"
+            android:exported="false" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -125,27 +134,21 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".services.NetworkConnectedReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
-
         <service
             android:name=".services.ApplicationManagementService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="org.wso2.emm.agent.START_SERVICE" />
             </intent-filter>
         </service>
-        <service android:name=".services.EnrollmentService" />
+        <service android:name=".services.EnrollmentService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.wso2.emm.agent.enrollment.START_SERVICE" />
+            </intent-filter>
+        </service>
         <service
             android:name=".GCMIntentService"
             android:exported="false">
