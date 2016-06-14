@@ -640,24 +640,29 @@ var userModule = function () {
      * retrieve secondary user stores.
      * This needs Authentication since the method access admin services.
      *
-     * @returns {string array} Array of secondary user stores.
+     * @returns Array of secondary user stores.
      */
     publicMethods.getSecondaryUserStores = function () {
         var returnVal = [];
-        var endpoint = mdmProps.adminService + constants.USER_STORE_CONFIG_ADMIN_SERVICE_END_POINT;
+        var endpoint = mdmProps["adminService"] + constants["USER_STORE_CONFIG_ADMIN_SERVICE_END_POINT"];
         var wsPayload = "<xsd:getSecondaryRealmConfigurations  xmlns:xsd='http://org.apache.axis2/xsd'/>";
         serviceInvokers.WS.soapRequest(
-            "urn:getSecondaryRealmConfigurations", endpoint, wsPayload, function (wsResponse) {
+            "urn:getSecondaryRealmConfigurations",
+            endpoint,
+            wsPayload,
+            function (wsResponse) {
                 var domainIDs = stringify(wsResponse.*::['return']. *::domainId.text());
                 if (domainIDs != "\"\"") {
-                    var regExpForSearch = new RegExp(constants.USER_STORES_NOISY_CHAR, "g");
+                    var regExpForSearch = new RegExp(constants["USER_STORES_NOISY_CHAR"], "g");
                     domainIDs = domainIDs.replace(regExpForSearch, "");
-                    returnVal = domainIDs.split(constants.USER_STORES_SPLITTING_CHAR);
+                    returnVal = domainIDs.split(constants["USER_STORES_SPLITTING_CHAR"]);
                 }
             }, function (e) {
                 log.error("Error retrieving secondary user stores", e);
-            }, constants.SOAP_VERSION);
+            },
+            constants["SOAP_VERSION"]);
         return returnVal;
     };
+
     return publicMethods;
 }();
