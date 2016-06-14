@@ -232,12 +232,8 @@ $(document).ready(function () {
             invokerUtil.post(
                 addUserAPI,
                 addUserFormData,
-                function (data) {
-                    data = JSON.parse(data);
-                    if (data.errorMessage) {
-                        $(errorMsg).text("Selected user store prompted an error : " + data.errorMessage);
-                        $(errorMsgWrapper).removeClass("hidden");
-                    } else if (data["statusCode"] == 201) {
+                function (data, textStatus, jqXHR) {
+                    if (jqXHR.status == 201) {
                         // Clearing user input fields.
                         $("input#username").val("");
                         $("input#firstname").val("");
@@ -248,12 +244,19 @@ $(document).ready(function () {
                         $("#user-create-form").addClass("hidden");
                         $("#user-created-msg").removeClass("hidden");
                         generateQRCode("#user-created-msg .qr-code");
-                    } else if (data["status"] == 409) {
-                        $(errorMsg).text(data["messageFromServer"]);
-                        $(errorMsgWrapper).removeClass("hidden");
-                    } else if (data["status"] == 500) {
-                        $(errorMsg).text("An unexpected error occurred at backend server. Please try again later.");
-                        $(errorMsgWrapper).removeClass("hidden");
+
+                    } else {
+                        data = JSON.parse(data);
+                        if (data.errorMessage) {
+                            $(errorMsg).text("Selected user store prompted an error : " + data.errorMessage);
+                            $(errorMsgWrapper).removeClass("hidden");
+                        } else if (data["status"] == 409) {
+                            $(errorMsg).text(data["messageFromServer"]);
+                            $(errorMsgWrapper).removeClass("hidden");
+                        } else if (data["status"] == 500) {
+                            $(errorMsg).text("An unexpected error occurred at backend server. Please try again later.");
+                            $(errorMsgWrapper).removeClass("hidden");
+                        }
                     }
                 }, function (data) {
                     if (data["status"] == 409) {
