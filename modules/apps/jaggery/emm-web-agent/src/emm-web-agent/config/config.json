@@ -37,5 +37,6 @@
         "companyName" : "WSO2 Enterprise Mobility Manager",
         "browserTitle" : "WSO2 EMM",
         "copyrightText" : "\u00A9 %date-year%, WSO2 Inc. (http://www.wso2.org) All Rights Reserved."
-    }
+    },
+    "isOAuthEnabled" : true
 }
