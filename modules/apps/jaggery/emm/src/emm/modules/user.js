@@ -443,7 +443,7 @@ var userModule = function () {
     /**
      * Get User Roles from user store (Internal roles not included).
      */
-    publicMethods.getRolesByUserStore = function (userStore) {
+    publicMethods.getRolesByUserStore = function () {
         var ROLE_LIMIT = mdmProps.pageSize;
         var carbonUser = session.get(constants["USER_SESSION_KEY"]);
         var utility = require('/modules/utility.js')["utility"];
@@ -479,7 +479,10 @@ var userModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + "/api/device-mgt/v1.0/devices/types";
-            return privateMethods.callBackend(url, constants["HTTP_GET"]);
+            var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
+            if (response.status == "success") {
+                response.content = parse(response.content);
+            }
         } catch (e) {
             throw e;
         } finally {

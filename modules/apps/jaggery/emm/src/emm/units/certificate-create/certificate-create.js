@@ -23,20 +23,23 @@
  * @returns {*} A context object that returns the dynamic state of this page to be presented
  */
 function onRequest(context) {
-    var log = new Log("units/user-create/certificate-create.js");
+    // var log = new Log("units/user-create/certificate-create.js");
     var userModule = require("/modules/user.js")["userModule"];
-    var response = userModule.getRolesByUserStore("PRIMARY");
     var mdmProps = require('/config/mdm-props.js').config();
-    context["charLimit"] = mdmProps.usernameLength;
+
+    var response = userModule.getRolesByUserStore();
     if (response["status"] == "success") {
         context["roles"] = response["content"];
     }
-    context["usernameJSRegEx"] = mdmProps.userValidationConfig.usernameJSRegEx;
-    context["usernameHelpText"] = mdmProps.userValidationConfig.usernameHelpMsg;
-    context["usernameRegExViolationErrorMsg"] = mdmProps.userValidationConfig.usernameRegExViolationErrorMsg;
-    context["firstnameJSRegEx"] = mdmProps.userValidationConfig.firstnameJSRegEx;
-    context["firstnameRegExViolationErrorMsg"] = mdmProps.userValidationConfig.firstnameRegExViolationErrorMsg;
-    context["lastnameJSRegEx"] = mdmProps.userValidationConfig.lastnameJSRegEx;
-    context["lastnameRegExViolationErrorMsg"] = mdmProps.userValidationConfig.lastnameRegExViolationErrorMsg;
+
+    context["charLimit"] = mdmProps["usernameLength"];
+    context["usernameJSRegEx"] = mdmProps["userValidationConfig"]["usernameJSRegEx"];
+    context["usernameHelpText"] = mdmProps["userValidationConfig"]["usernameHelpMsg"];
+    context["usernameRegExViolationErrorMsg"] = mdmProps["userValidationConfig"]["usernameRegExViolationErrorMsg"];
+    context["firstnameJSRegEx"] = mdmProps["userValidationConfig"]["firstnameJSRegEx"];
+    context["firstnameRegExViolationErrorMsg"] = mdmProps["userValidationConfig"]["firstnameRegExViolationErrorMsg"];
+    context["lastnameJSRegEx"] = mdmProps["userValidationConfig"]["lastnameJSRegEx"];
+    context["lastnameRegExViolationErrorMsg"] = mdmProps["userValidationConfig"]["lastnameRegExViolationErrorMsg"];
+
     return context;
 }
