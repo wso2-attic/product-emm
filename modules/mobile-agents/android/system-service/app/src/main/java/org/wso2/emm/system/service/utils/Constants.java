@@ -24,6 +24,7 @@ package org.wso2.emm.system.service.utils;
 public class Constants {
 
 	public static final String AGENT_APP_PACKAGE_NAME = "org.wso2.emm.agent";
+	public static final String PACKAGE_NAME = "org.wso2.emm.system.service";
 	public static final String AGENT_APP_LAUNCH_ACTIVITY = "ServerDetails";
 	public static final String DEFAULT_OTA_SERVER_ADDRESS = "emm.wso2.com";
 	public static final String DEFAULT_OTA_SERVER_PROTOCOL = "http";
@@ -34,7 +35,9 @@ public class Constants {
 	public static final String UPDATE_PACKAGE_NAME = "update.zip";
 	public static final String STATUS = "status";
 	public static final String PAYLOAD = "payload";
+	public static final String CODE = "code";
 	public static final String SYSTEM_APP_ACTION_RESPONSE = "org.wso2.emm.system.service.MESSAGE_PROCESSED";
+	public static final String AGENT_APP_SERVICE_NAME = "org.wso2.emm.agent.START_SERVICE";
 	public static final boolean DEBUG_MODE_ENABLED = true;
 	public static final String ADMIN_MESSAGE = "message";
 	public static final String IS_LOCKED = "lock";
@@ -96,7 +99,9 @@ public class Constants {
 		public static final String SET_SCREEN_CAPTURE_DISABLED = "SET_SCREEN_CAPTURE_DISABLED";
 		public static final String SET_STATUS_BAR_DISABLED = "SET_STATUS_BAR_DISABLED";
 		public static final String GET_FIRMWARE_UPGRADE_PACKAGE_STATUS = "FIRMWARE_UPGRADE_PACKAGE_STATUS";
+		public static final String GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS = "FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS";
 		public static final String WIPE_DATA = "WIPE_DATA";
+		public static final String FAILED_FIRMWARE_UPGRADE_NOTIFICATION = "FAILED_FIRMWARE_UPGRADE_NOTIFICATION";
 	}
 
 	/**

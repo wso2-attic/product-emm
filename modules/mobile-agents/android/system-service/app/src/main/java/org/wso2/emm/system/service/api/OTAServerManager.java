@@ -18,7 +18,11 @@
 
 package org.wso2.emm.system.service.api;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -27,7 +31,11 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RecoverySystem;
 import android.util.Log;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.wso2.emm.system.service.R;
+import org.wso2.emm.system.service.utils.CommonUtils;
+import org.wso2.emm.system.service.utils.Constants;
 import org.wso2.emm.system.service.utils.FileUtils;
 import org.wso2.emm.system.service.utils.Preference;
 
@@ -42,6 +50,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.GeneralSecurityException;
+import java.util.List;
 
 /**
  * This class handles the functionality required for performing OTA updates. Basically it handles
@@ -136,13 +145,20 @@ public class OTAServerManager {
     void publishDownloadProgress(long total, long downloaded) {
         long progress = (downloaded * 100) / total;
         long published = 0L;
-        if (Preference.getString(context, "publishedProgress") != null) {
-            published = Long.valueOf(Preference.getString(context, "publishedProgress"));
+        if (Preference.getString(context, context.getResources().getString(R.string.firmware_download_progress)) != null) {
+            published = Long.valueOf(Preference.getString(context, context.getResources().getString(
+                    R.string.firmware_download_progress)));
         }
 
         if ((progress != published) && (progress % 5) == 0) {
-            Preference.putString(context, "publishedProgress", String.valueOf(progress));
+            Preference.putString(context, context.getResources().getString(R.string.firmware_download_progress),
+                                 String.valueOf(progress));
             Log.d(TAG, "Download Progress - " + progress + "% - Total: " + total + " Downloaded:" + downloaded);
+            publishFirmwareDownloadProgress(progress);
+            if (progress == 100) {
+                Preference.putString(context, context.getResources().getString(R.string.firmware_download_progress),
+                                     String.valueOf(DEFAULT_STATE_INFO_CODE));
+            }
         }
 
         if (this.stateChangeListener != null && progress != cacheProgress) {
@@ -150,6 +166,29 @@ public class OTAServerManager {
                                                        DEFAULT_STATE_INFO_CODE, null, progress);
             cacheProgress = progress;
         }
+    }
+
+    private void publishFirmwareDownloadProgress(long progress) {
+        JSONObject result = new JSONObject();
+        try {
+            result.put("progress", String.valueOf(progress));
+            sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS, Constants.Status.SUCCESSFUL,
+                          result.toString());
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to create JSON object when publishing OTA progress.");
+            sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS, Constants.Status.SUCCESSFUL,
+                          String.valueOf(DEFAULT_STATE_INFO_CODE));
+        }
+    }
+
+    private void sendBroadcast(String code, String status, String payload) {
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(Constants.SYSTEM_APP_ACTION_RESPONSE);
+        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        broadcastIntent.putExtra(Constants.CODE, code);
+        broadcastIntent.putExtra(Constants.STATUS, status);
+        broadcastIntent.putExtra(Constants.PAYLOAD, payload);
+        context.sendBroadcast(broadcastIntent);
     }
 
     void reportCheckingError(int error) {
@@ -219,6 +258,7 @@ public class OTAServerManager {
                 } catch (IOException e) {
                     Log.e(TAG, "Connection failure when downloading update package." + e);
                     reportDownloadError(OTAStateChangeListener.ERROR_WRITE_FILE_ERROR);
+                    CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
                 } finally {
                     wakeLock.release();
                     wakeLock.acquire(2);
@@ -238,10 +278,16 @@ public class OTAServerManager {
             RecoverySystem.verifyPackage(recoveryFile, recoveryVerifyListener, null);
         } catch (IOException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_VERIFY_FAILED);
-            Log.e(TAG, "Update verification failed due to file error." + e);
+            String message = "Update verification failed due to file error.";
+            Log.e(TAG, message + e);
+            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+                    context, context.getResources().getString(R.string.operation_id)), message);
         } catch (GeneralSecurityException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_VERIFY_FAILED);
-            Log.e(TAG, "Update verification failed due to security check failure." + e);
+            String message = "Update verification failed due to security check failure.";
+            Log.e(TAG, message + e);
+            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+                    context, context.getResources().getString(R.string.operation_id)), message);
         } finally {
             wakeLock.release();
         }
@@ -260,10 +306,16 @@ public class OTAServerManager {
             RecoverySystem.installPackage(context, recoveryFile);
         } catch (IOException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_INSTALL_FAILED);
-            Log.e(TAG, "Update installation failed due to file error." + e);
+            String message = "Update installation failed due to file error.";
+            Log.e(TAG, message + e);
+            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+                    context, context.getResources().getString(R.string.operation_id)), message);
         } catch (SecurityException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_INSTALL_FAILED);
-            Log.e(TAG, "Update installation failure due to security check failure." + e);
+            String message = "Update installation failure due to security check failure.";
+            Log.e(TAG, message + e);
+            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+                    context, context.getResources().getString(R.string.operation_id)), message);
         } finally {
             wakeLock.release();
         }
@@ -326,6 +378,7 @@ public class OTAServerManager {
 
                 } catch (IOException e) {
                     Log.e(TAG, "Property list download failed due to connection failure." + e);
+                    CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
                 } finally {
                     if (reader != null) {
                         try {
