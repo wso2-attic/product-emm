@@ -181,17 +181,12 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
             }
         } else if (error == ERROR_WIFI_NOT_AVAILABLE) {
             Log.e(TAG, "OTA failed due to WIFI connection failure.");
-            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
         } else if (error == ERROR_CANNOT_FIND_SERVER) {
             String message = "OTA failed due to OTA server not accessible.";
             Log.e(TAG, message);
-            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
-                    context, context.getResources().getString(R.string.operation_id)), message);
         } else if (error == ERROR_WRITE_FILE_ERROR) {
             String message = "OTA failed due to file write error.";
             Log.e(TAG, message);
-            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
-                    context, context.getResources().getString(R.string.operation_id)), message);
         }
     }
 

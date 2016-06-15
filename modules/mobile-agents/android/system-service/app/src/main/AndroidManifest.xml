@@ -53,6 +53,7 @@
 
         <activity
                 android:name=".LockActivity"
+                android:screenOrientation="portrait"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/title_activity_lock">
         </activity>

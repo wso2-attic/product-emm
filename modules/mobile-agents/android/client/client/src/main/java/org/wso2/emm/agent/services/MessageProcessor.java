@@ -187,7 +187,12 @@ public class MessageProcessor implements APIResultCallBack {
 				firmwareOperation.setCode(Constants.Operation.UPGRADE_FIRMWARE);
 				firmwareOperation.setStatus(context.getResources().getString(R.string.operation_value_error));
 				firmwareOperation.setOperationResponse(firmwareOperationMessage);
-				replyPayload.add(firmwareOperation);
+				if (replyPayload != null) {
+					replyPayload.add(firmwareOperation);
+				} else {
+					replyPayload = new ArrayList<>();
+					replyPayload.add(firmwareOperation);
+				}
 			}
 		} catch (JsonMappingException e) {
 			throw new AndroidAgentException("Issue in json mapping", e);
