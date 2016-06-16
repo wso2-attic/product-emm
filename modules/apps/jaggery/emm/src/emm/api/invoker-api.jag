@@ -28,14 +28,22 @@ var serviceInvokers = require("/modules/backend-service-invoker.js")["backendSer
 
 if (uriMatcher.match("/{context}/api/invoker/execute/")) {
     var method = request.getContent().actionMethod;
-    var targetURL = mdmProps["httpsURL"] + request.getContent().actionUrl;
+    var url = request.getContent().actionUrl;
     var payload = request.getContent().actionPayload;
 
-    if (!method && !targetURL && !payload) {
+    if (!method) {
         method = parse(request.getContent()).actionMethod;
-        targetURL = mdmProps["httpsURL"] + parse(request.getContent()).actionUrl;
+    }
+
+    if (!url) {
+        url = parse(request.getContent()).actionUrl;
+    }
+
+    if (!payload) {
         payload = parse(request.getContent()).actionPayload;
     }
+
+    var targetURL = mdmProps["httpsURL"] + url;
 
     try {
         switch (method) {

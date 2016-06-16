@@ -471,7 +471,7 @@ var userModule = function () {
      */
     publicMethods.getPlatforms = function () {
         var carbonUser = session.get(constants["USER_SESSION_KEY"]);
-        var utility = require('/modules/utility.js')["utility"];
+        var utility = require("/modules/utility.js")["utility"];
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants["ERRORS"]["USER_NOT_FOUND"];
@@ -483,12 +483,14 @@ var userModule = function () {
             if (response.status == "success") {
                 response.content = parse(response.content);
             }
+            return response;
         } catch (e) {
             throw e;
         } finally {
             utility.endTenantFlow();
         }
     };
+
     /*
      @Updated
      */
@@ -505,7 +507,7 @@ var userModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + emmAdminBasePath + "/roles/" + encodeURIComponent(roleName);
-            return privateMethods.callBackend(url, constants.HTTP_GET);
+            return privateMethods.callBackend(url, constants["HTTP_GET"]);
         } catch (e) {
             throw e;
         } finally {
