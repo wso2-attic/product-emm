@@ -221,11 +221,13 @@ public class OperationProcessor {
 				}
 			} catch (IOException e) {
 				operation.setStatus(context.getResources().getString(R.string.operation_value_error));
+				operation.setOperationResponse("Error occurred while parsing policy bundle stream.");
 				operationManager.setPolicyBundle(operation);
 				throw new AndroidAgentException("Error occurred while parsing stream", e);
 			}
 		} else {
 			operation.setStatus(context.getResources().getString(R.string.operation_value_error));
+			operation.setOperationResponse("Device administrator is not activated, hence cannot execute policies.");
 			operationManager.setPolicyBundle(operation);
 			throw new AndroidAgentException("Device administrator is not activated, hence cannot execute policies");
 		}

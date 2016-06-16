@@ -94,10 +94,12 @@ public class OperationManagerDeviceOwner extends OperationManager {
                 /*Toast.makeText(getContext(), getContextResources().getString(R.string.toast_message_wipe_failed),
                         Toast.LENGTH_LONG).show();*/
                 operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+                operation.setOperationResponse("Invalid PIN code entered.");
                 getResultBuilder().build(operation);
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing WIPE payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -141,6 +143,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
 
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing APPLICATION payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -190,6 +193,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
 
                 } else {
                     operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+                    operation.setOperationResponse("Invalid application details provided.");
                     getResultBuilder().build(operation);
                     throw new AndroidAgentException("Invalid application details");
                 }
@@ -200,6 +204,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing APPLICATION payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -240,6 +245,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing ENCRYPT payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Issue in parsing json", e);
         }
@@ -368,6 +374,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing PASSWORD_POLICY payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -399,6 +406,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing CHANGE_LOCK_CODE payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -450,6 +458,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing APP_HIDE payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -477,6 +486,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing APP_UN_HIDE payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -504,6 +514,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing APP_BLOCK payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -533,6 +544,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing PROFILE payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -561,6 +573,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
     @Override
     public void configureWorkProfile(Operation operation) throws AndroidAgentException {
         operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+        operation.setOperationResponse("Operation not supported.");
         getResultBuilder().build(operation);
         Log.d(TAG, "Operation not supported.");
     }

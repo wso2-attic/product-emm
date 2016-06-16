@@ -62,7 +62,6 @@ import org.wso2.emm.agent.utils.CommonDialogUtils;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
@@ -469,7 +468,6 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * Retriever configurations from the server.
 	 */
 	private void getConfigurationsFromServer() {
-
 		final OnCancelListener cancelListener = new OnCancelListener() {
 
 			@Override

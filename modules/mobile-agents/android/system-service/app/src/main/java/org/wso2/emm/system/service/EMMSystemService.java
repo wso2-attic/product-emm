@@ -84,6 +84,7 @@ public class EMMSystemService extends IntentService {
 
     private static final String TAG = "EMMSystemService";
     private static final int ACTIVATION_REQUEST = 0x00000002;
+    private static final int DEFAULT_STATE_INFO_CODE = 0;
     public static ComponentName cdmDeviceAdmin;
     public static DevicePolicyManager devicePolicyManager;
     public static UserManager mUserManager;
@@ -91,6 +92,7 @@ public class EMMSystemService extends IntentService {
     private String operationCode = null;
     private String command = null;
     private String appUri = null;
+    private int operationId;
     private Context context;
 
     private static String[] AUTHORIZED_PINNING_APPS;
@@ -132,6 +134,10 @@ public class EMMSystemService extends IntentService {
 
                 if (extras.containsKey("appUri")) {
                     appUri = extras.getString("appUri");
+                }
+
+                if (extras.containsKey("operationId")) {
+                    operationId = extras.getInt("operationId");
                 }
             }
 
@@ -312,13 +318,15 @@ public class EMMSystemService extends IntentService {
                 otaDownload.startOTA();
                 break;
             case Constants.Operation.WIPE_DATA:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&  devicePolicyManager != null) {
-                    if (devicePolicyManager.isDeviceOwnerApp(BuildConfig.APPLICATION_ID)) {
-                        devicePolicyManager.wipeData(ACTIVATION_REQUEST);
-                    }
-                } else {
-                    Log.i(TAG, "Not the device owner.");
+                try {
+                    Runtime.getRuntime().exec("sh");
+                    Runtime.getRuntime().exec("am broadcast -a android.intent.action.MASTER_CLEAR");
+                } catch (IOException e) {
+                    Log.e("TAG", "Shell command execution failed." + e);
                 }
+                break;
+            case Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS:
+                publishFirmwareDownloadProgress();
                 break;
             default:
                 Log.e(TAG, "Invalid operation code received");
@@ -334,6 +342,10 @@ public class EMMSystemService extends IntentService {
         Context context = this.getApplicationContext();
         Preference.putBoolean(context, context.getResources().getString(R.string.
                                                                                 firmware_status_check_in_progress), false);
+        Preference.putString(context, context.getResources().getString(R.string.firmware_download_progress),
+                             String.valueOf(DEFAULT_STATE_INFO_CODE));
+        Preference.putInt(context, context.getResources().getString(R.string.operation_id), operationId);
+
         String schedule = null;
         String server;
         if (command != null && !command.trim().isEmpty()) {
@@ -454,6 +466,36 @@ public class EMMSystemService extends IntentService {
             Log.e(TAG, "Device owner is not set, hence executing default lock");
             devicePolicyManager.lockNow();
         }
+    }
+
+    private void publishFirmwareDownloadProgress() {
+        long progress;
+        JSONObject result = new JSONObject();
+        if (Preference.getString(context, context.getResources().getString(R.string.firmware_download_progress)) != null) {
+            progress = Long.valueOf(Preference.getString(context, context.getResources().getString(
+                    R.string.firmware_download_progress)));
+        } else {
+            progress = DEFAULT_STATE_INFO_CODE;
+        }
+        try {
+            result.put("progress", String.valueOf(progress));
+            sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS, Constants.Status.SUCCESSFUL,
+                          result.toString());
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to create JSON object when publishing OTA progress.");
+            sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS, Constants.Status.SUCCESSFUL,
+                          String.valueOf(DEFAULT_STATE_INFO_CODE));
+        }
+    }
+
+    private void sendBroadcast(String code, String status, String payload) {
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(Constants.SYSTEM_APP_ACTION_RESPONSE);
+        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        broadcastIntent.putExtra(Constants.CODE, code);
+        broadcastIntent.putExtra(Constants.STATUS, status);
+        broadcastIntent.putExtra(Constants.PAYLOAD, payload);
+        context.sendBroadcast(broadcastIntent);
     }
 
     private void disableHardLock() {
