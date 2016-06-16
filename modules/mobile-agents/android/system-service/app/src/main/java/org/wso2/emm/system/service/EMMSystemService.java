@@ -117,7 +117,6 @@ public class EMMSystemService extends IntentService {
         All requests are handled on a single worker thread. They may take as long as necessary
 		(and will not block the application's main thread),
 		but only one request will be processed at a time.*/
-
             Log.d(TAG, "Entered onHandleIntent of the Command Runner Service.");
             Bundle extras = intent.getExtras();
             if (extras != null) {
@@ -178,7 +177,7 @@ public class EMMSystemService extends IntentService {
                 startAdmin();
                 break;
             case Constants.Operation.UPGRADE_FIRMWARE:
-                upgradeFirmware();
+                upgradeFirmware(false);
                 break;
             case Constants.Operation.REBOOT:
                 rebootDevice();
@@ -314,8 +313,7 @@ public class EMMSystemService extends IntentService {
             case Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS:
                 Preference.putBoolean(context, context.getResources().getString(R.string.
                                                                                         firmware_status_check_in_progress), true);
-                OTADownload otaDownload = new OTADownload(context);
-                otaDownload.startOTA();
+                upgradeFirmware(true);
                 break;
             case Constants.Operation.WIPE_DATA:
                 try {
@@ -337,11 +335,11 @@ public class EMMSystemService extends IntentService {
     /**
      * Upgrading device firmware over the air (OTA).
      */
-    public void upgradeFirmware() {
+    public void upgradeFirmware(boolean isStatusCheck) {
         Log.i(TAG, "An upgrade has been requested");
         Context context = this.getApplicationContext();
         Preference.putBoolean(context, context.getResources().getString(R.string.
-                                                                                firmware_status_check_in_progress), false);
+                                                                                firmware_status_check_in_progress), isStatusCheck);
         Preference.putString(context, context.getResources().getString(R.string.firmware_download_progress),
                              String.valueOf(DEFAULT_STATE_INFO_CODE));
         Preference.putInt(context, context.getResources().getString(R.string.operation_id), operationId);
@@ -374,7 +372,11 @@ public class EMMSystemService extends IntentService {
                 Log.e(TAG, "One time alarm time string parsing failed." + e);
             }
         } else {
-            Log.i(TAG, "Upgrade request initiated by admin.");
+            if (isStatusCheck) {
+                Log.i(TAG, "Firmware status check is initiated by admin.");
+            } else {
+                Log.i(TAG, "Upgrade request initiated by admin.");
+            }
             //Prepare for upgrade
             OTADownload otaDownload = new OTADownload(context);
             otaDownload.startOTA();

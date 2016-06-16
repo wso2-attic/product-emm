@@ -46,7 +46,10 @@
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
-
+    <uses-permission android:name="org.wso2.emm.system.service.permission.ACCESS"/>
+    <permission android:name="org.wso2.emm.agent.permission.ACCESS"
+        android:protectionLevel="signature"></permission>
+    <uses-permission android:name="org.wso2.emm.agent.permission.ACCESS"/>
     <permission
         android:name="org.wso2.emm.agent.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -137,6 +140,7 @@
         <service
             android:name=".services.ApplicationManagementService"
             android:enabled="true"
+            android:permission="org.wso2.emm.agent.permission.ACCESS"
             android:exported="true" >
             <intent-filter>
                 <action android:name="org.wso2.emm.agent.START_SERVICE" />
@@ -144,6 +148,7 @@
         </service>
         <service android:name=".services.EnrollmentService"
             android:enabled="true"
+            android:permission="org.wso2.emm.agent.permission.ACCESS"
             android:exported="true">
             <intent-filter>
                 <action android:name="org.wso2.emm.agent.enrollment.START_SERVICE" />
@@ -221,6 +226,7 @@
 
         <service
             android:name=".services.AppLockService"
+            android:permission="org.wso2.emm.agent.permission.ACCESS"
             android:exported="false" />
     </application>
 </manifest>

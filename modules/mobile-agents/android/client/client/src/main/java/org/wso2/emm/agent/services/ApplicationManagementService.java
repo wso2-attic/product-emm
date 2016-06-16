@@ -168,6 +168,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
                     Preference.putInt(context, context.getResources().getString(R.string.firmware_upgrade_failed_id),
                                          id);
                 }
+                break;
             default:
                 Log.e(TAG, "Invalid operation code received");
                 break;
