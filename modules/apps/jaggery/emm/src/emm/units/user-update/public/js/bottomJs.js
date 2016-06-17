@@ -14,6 +14,8 @@ function inputIsValid(regExp, inputString) {
 var validateInline = {};
 var clearInline = {};
 
+var emmAdminBasePath = "/api/device-mgt/v1.0";
+
 var enableInlineError = function (inputField, errorMsg, errorSign) {
     var fieldIdentifier = "#" + inputField;
     var errorMsgIdentifier = "#" + inputField + " ." + errorMsg;
@@ -207,7 +209,7 @@ $(document).ready(function () {
             }
             addUserFormData.roles = roles;
 
-            var addUserAPI = "/mdm-admin/users?username=" + username;
+            var addUserAPI = emmAdminBasePath + "/users/" + username;
 
             invokerUtil.put(
                 addUserAPI,

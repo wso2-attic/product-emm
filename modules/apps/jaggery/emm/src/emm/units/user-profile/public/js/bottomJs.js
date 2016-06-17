@@ -41,9 +41,11 @@ function loadDevicesList() {
     var deviceListingSrc = devicesList.attr("src");
     var username = devicesList.data("username");
     var domain = devicesList.data("domain");
+    var emmAdminBasePath = "/api/device-mgt/v1.0";
 
     $.template("user-devices-view", deviceListingSrc, function (template) {
-        var serviceURL = "/mdm-admin/users/devices?username=" + username;
+        
+        var serviceURL = emmAdminBasePath + "/devices?user=" + username;
 
         var successCallback = function (data) {
             var viewModel = {};
