@@ -30,6 +30,7 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RecoverySystem;
+import android.os.SystemProperties;
 import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -126,11 +127,11 @@ public class OTAServerManager {
             return false;
         }
 
-        Long buildTime = Build.TIME;
+        Long buildTime = Long.parseLong(SystemProperties.get(BUILD_DATE_UTC_PROPERTY));
         String buildTimeUTC = parser.getProp(BUILD_DATE_UTC_PROPERTY);
         Long remoteBuildUTC;
         if ((buildTimeUTC != null) && (!(buildTimeUTC.equals("null")))) {
-            remoteBuildUTC = (Long.parseLong(buildTimeUTC)) * 1000;
+            remoteBuildUTC = Long.parseLong(buildTimeUTC);
         } else {
             remoteBuildUTC = Long.MIN_VALUE;
             Log.e(TAG, "UTC date not found in config file, config may be corrupted or missing");
