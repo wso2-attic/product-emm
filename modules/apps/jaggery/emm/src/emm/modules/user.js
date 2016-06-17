@@ -366,6 +366,7 @@ var userModule = function () {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + emmAdminBasePath + "/users/" + encodeURIComponent(username);
             var response = privateMethods.callBackend(url, constants.HTTP_GET);
+            response.content = parse(response.content);
             response["userDomain"] = carbonUser.domain;
             return response;
         } catch (e) {
