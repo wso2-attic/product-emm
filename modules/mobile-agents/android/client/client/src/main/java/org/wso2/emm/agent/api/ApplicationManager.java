@@ -442,7 +442,10 @@ public class ApplicationManager {
                             STATUS_SUCCESSFUL) {
                         downloading = false;
                     }
-                    int downloadProgress = (int) ((bytesDownloaded * 100l) / bytesTotal);
+                    int downloadProgress = 0;
+                    if (bytesTotal > 0) {
+                        downloadProgress = (int) ((bytesDownloaded * 100l) / bytesTotal);
+                    }
                     if (downloadProgress != DOWNLOAD_PERCENTAGE_TOTAL) {
                         progress += DOWNLOADER_INCREMENT;
                     } else {

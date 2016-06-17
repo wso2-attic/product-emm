@@ -84,6 +84,7 @@ public class EMMSystemService extends IntentService {
 
     private static final String TAG = "EMMSystemService";
     private static final int ACTIVATION_REQUEST = 0x00000002;
+    private static final int DEFAULT_STATE_INFO_CODE = 0;
     public static ComponentName cdmDeviceAdmin;
     public static DevicePolicyManager devicePolicyManager;
     public static UserManager mUserManager;
@@ -91,6 +92,7 @@ public class EMMSystemService extends IntentService {
     private String operationCode = null;
     private String command = null;
     private String appUri = null;
+    private int operationId;
     private Context context;
 
     private static String[] AUTHORIZED_PINNING_APPS;
@@ -115,7 +117,6 @@ public class EMMSystemService extends IntentService {
         All requests are handled on a single worker thread. They may take as long as necessary
 		(and will not block the application's main thread),
 		but only one request will be processed at a time.*/
-
             Log.d(TAG, "Entered onHandleIntent of the Command Runner Service.");
             Bundle extras = intent.getExtras();
             if (extras != null) {
@@ -132,6 +133,10 @@ public class EMMSystemService extends IntentService {
 
                 if (extras.containsKey("appUri")) {
                     appUri = extras.getString("appUri");
+                }
+
+                if (extras.containsKey("operationId")) {
+                    operationId = extras.getInt("operationId");
                 }
             }
 
@@ -172,7 +177,7 @@ public class EMMSystemService extends IntentService {
                 startAdmin();
                 break;
             case Constants.Operation.UPGRADE_FIRMWARE:
-                upgradeFirmware();
+                upgradeFirmware(false);
                 break;
             case Constants.Operation.REBOOT:
                 rebootDevice();
@@ -308,17 +313,18 @@ public class EMMSystemService extends IntentService {
             case Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS:
                 Preference.putBoolean(context, context.getResources().getString(R.string.
                                                                                         firmware_status_check_in_progress), true);
-                OTADownload otaDownload = new OTADownload(context);
-                otaDownload.startOTA();
+                upgradeFirmware(true);
                 break;
             case Constants.Operation.WIPE_DATA:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&  devicePolicyManager != null) {
-                    if (devicePolicyManager.isDeviceOwnerApp(BuildConfig.APPLICATION_ID)) {
-                        devicePolicyManager.wipeData(ACTIVATION_REQUEST);
-                    }
-                } else {
-                    Log.i(TAG, "Not the device owner.");
+                try {
+                    Runtime.getRuntime().exec("sh");
+                    Runtime.getRuntime().exec("am broadcast -a android.intent.action.MASTER_CLEAR");
+                } catch (IOException e) {
+                    Log.e("TAG", "Shell command execution failed." + e);
                 }
+                break;
+            case Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS:
+                publishFirmwareDownloadProgress();
                 break;
             default:
                 Log.e(TAG, "Invalid operation code received");
@@ -329,11 +335,15 @@ public class EMMSystemService extends IntentService {
     /**
      * Upgrading device firmware over the air (OTA).
      */
-    public void upgradeFirmware() {
+    public void upgradeFirmware(boolean isStatusCheck) {
         Log.i(TAG, "An upgrade has been requested");
         Context context = this.getApplicationContext();
         Preference.putBoolean(context, context.getResources().getString(R.string.
-                                                                                firmware_status_check_in_progress), false);
+                                                                                firmware_status_check_in_progress), isStatusCheck);
+        Preference.putString(context, context.getResources().getString(R.string.firmware_download_progress),
+                             String.valueOf(DEFAULT_STATE_INFO_CODE));
+        Preference.putInt(context, context.getResources().getString(R.string.operation_id), operationId);
+
         String schedule = null;
         String server;
         if (command != null && !command.trim().isEmpty()) {
@@ -362,7 +372,11 @@ public class EMMSystemService extends IntentService {
                 Log.e(TAG, "One time alarm time string parsing failed." + e);
             }
         } else {
-            Log.i(TAG, "Upgrade request initiated by admin.");
+            if (isStatusCheck) {
+                Log.i(TAG, "Firmware status check is initiated by admin.");
+            } else {
+                Log.i(TAG, "Upgrade request initiated by admin.");
+            }
             //Prepare for upgrade
             OTADownload otaDownload = new OTADownload(context);
             otaDownload.startOTA();
@@ -454,6 +468,36 @@ public class EMMSystemService extends IntentService {
             Log.e(TAG, "Device owner is not set, hence executing default lock");
             devicePolicyManager.lockNow();
         }
+    }
+
+    private void publishFirmwareDownloadProgress() {
+        long progress;
+        JSONObject result = new JSONObject();
+        if (Preference.getString(context, context.getResources().getString(R.string.firmware_download_progress)) != null) {
+            progress = Long.valueOf(Preference.getString(context, context.getResources().getString(
+                    R.string.firmware_download_progress)));
+        } else {
+            progress = DEFAULT_STATE_INFO_CODE;
+        }
+        try {
+            result.put("progress", String.valueOf(progress));
+            sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS, Constants.Status.SUCCESSFUL,
+                          result.toString());
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to create JSON object when publishing OTA progress.");
+            sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS, Constants.Status.SUCCESSFUL,
+                          String.valueOf(DEFAULT_STATE_INFO_CODE));
+        }
+    }
+
+    private void sendBroadcast(String code, String status, String payload) {
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(Constants.SYSTEM_APP_ACTION_RESPONSE);
+        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        broadcastIntent.putExtra(Constants.CODE, code);
+        broadcastIntent.putExtra(Constants.STATUS, status);
+        broadcastIntent.putExtra(Constants.PAYLOAD, payload);
+        context.sendBroadcast(broadcastIntent);
     }
 
     private void disableHardLock() {

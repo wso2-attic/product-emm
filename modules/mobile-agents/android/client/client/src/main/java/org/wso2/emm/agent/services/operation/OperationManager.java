@@ -160,7 +160,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
 
     /* Retrieve Context */
     public Context getContext() {
-        return context;
+        return this.context;
     }
 
     /* Retrieve applicationManager */
@@ -230,7 +230,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 JSONObject errorResult = new JSONObject();
                 errorResult.put(STATUS, errorMessage);
                 errorResult.put(TIMESTAMP, Calendar.getInstance().getTime().toString());
-                operation.setOperationResponse(errorResult.toString());
+                operation.setOperationResponse(errorMessage);
                 resultBuilder.build(operation);
                 Log.e(TAG, errorMessage);
             }
@@ -265,6 +265,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 result.put(app);
             } catch (JSONException e) {
                 operation.setStatus(resources.getString(R.string.operation_value_error));
+                operation.setOperationResponse("Error in parsing application list.");
                 resultBuilder.build(operation);
                 throw new AndroidAgentException("Invalid JSON format.", e);
             }
@@ -290,9 +291,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         intent.putExtra(resources.getString(R.string.intent_extra_type),
                         resources.getString(R.string.intent_extra_ring));
         intent.putExtra(resources.getString(R.string.intent_extra_message_text),
-                        resources.getString(R.string.intent_extra_stop_ringing));
+                resources.getString(R.string.intent_extra_stop_ringing));
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
 
         if (Constants.DEBUG_MODE_ENABLED) {
@@ -350,6 +351,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing WIFI payload.");
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -369,6 +371,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                     }
                 } catch (JSONException e) {
                     operation.setStatus(resources.getString(R.string.operation_value_error));
+                    operation.setOperationResponse("Error in parsing WIFI payload.");
                     resultBuilder.build(operation);
                     Log.e(TAG, "Invalid JSON format" + e);
                 }
@@ -431,6 +434,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             operationType = webClipData.getString(resources.getString(R.string.operation_type));
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing WebClip payload.");
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -489,6 +493,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             }
         } catch (IOException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing policy monitor payload stream.");
             resultBuilder.build(operation);
             throw new AndroidAgentException("Error occurred while parsing stream.", e);
         }
@@ -552,6 +557,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing APPLICATION payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -581,10 +587,12 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 Toast.makeText(context, resources.getString(R.string.toast_message_reboot_failed),
                                Toast.LENGTH_LONG).show();
                 operation.setStatus(resources.getString(R.string.operation_value_error));
+                operation.setOperationResponse(resources.getString(R.string.toast_message_reboot_failed));
                 resultBuilder.build(operation);
             }
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in processing result payload.");
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -613,10 +621,12 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 }
             } else {
                 operation.setStatus(resources.getString(R.string.operation_value_error));
+                operation.setOperationResponse("Firmware upgrade failed due to download failure.");
                 resultBuilder.build(operation);
             }
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in processing result payload.");
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -645,10 +655,12 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 }
             } else {
                 operation.setStatus(resources.getString(R.string.operation_value_error));
+                operation.setOperationResponse("Device reboot failed due to insufficient privileges.");
                 resultBuilder.build(operation);
             }
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in processing result payload.");
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -669,6 +681,8 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param operation - Operation object.
      */
     public void lockDevice(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+        operation.setStatus(resources.getString(R.string.operation_value_completed));
+        resultBuilder.build(operation);
         JSONObject inputData;
         String message = null;
         boolean isHardLockEnabled = false;
@@ -680,6 +694,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             }
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing LOCK payload.");
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -689,6 +704,8 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             }
             Preference.putBoolean(context, Constants.IS_LOCKED, true);
             Preference.putString(context, Constants.LOCK_MESSAGE, message);
+            operation.setStatus(resources.getString(R.string.operation_value_completed));
+            resultBuilder.build(operation);
             enableHardLock(message, operation);
         } else {
             operation.setStatus(resources.getString(R.string.operation_value_completed));
@@ -708,6 +725,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             CommonUtils.callSystemApp(getContext(), Constants.Operation.DEVICE_LOCK, payload, message);
         } else {
             operation.setStatus(resources.getString(R.string.operation_value_error));
+            operation.setOperationResponse("System service is not available.");
             Log.e(TAG, "System service is not available");
         }
         resultBuilder.build(operation);
@@ -731,6 +749,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             operation.setStatus(resources.getString(R.string.operation_value_completed));
         } else {
             operation.setStatus(resources.getString(R.string.operation_value_error));
+            operation.setOperationResponse("System service is not available.");
             Log.e(TAG, "System service is not available");
         }
         resultBuilder.build(operation);
@@ -749,6 +768,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
 
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing APPLICATION payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -780,6 +800,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
 
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing VPN payload.");
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -842,7 +863,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 String errorMessage = "Message title/text is empty. Please retry with valid inputs";
                 JSONObject errorResult = new JSONObject();
                 errorResult.put(STATUS, errorMessage);
-                operation.setOperationResponse(errorResult.toString());
+                operation.setOperationResponse(errorMessage);
                 getResultBuilder().build(operation);
                 Log.e(TAG, errorMessage);
             }
@@ -851,6 +872,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing NOTIFICATION payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }

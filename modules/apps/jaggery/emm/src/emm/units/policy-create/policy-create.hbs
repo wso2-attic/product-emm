@@ -66,12 +66,12 @@
                                 <i class="icon fw fw-error"></i><span></span>
                             </div>
                             <div>
-                                <label class="wr-input-label">Set a Name for your Policy*</label>
+                                <label class="wr-input-label">Set a Name for your Policy *</label>
                                 <br/>
                                 <label class="wr-input-label">
                                     (Policy name should be 1-to-30 characters long)
                                 </label>
-                                <div id="plicynameField" class="wr-input-control">
+                                <div id="policyNameField" class="wr-input-control">
                                     <div class="cus-col-50 form-group wr-input-control">
                                         <input id="policy-name-input" class="form-control" type="text" value=""/>
                                         <label class="error nameEmpty hidden" for="summary">Policy name is required & Should be be 1-to-30 characters long.</label>
@@ -200,7 +200,7 @@
                             </div>
                             <div class="wr-advance-operations">
                                 <div class="wr-advance-operations-init">
-                                    <br><i class="fw fw-settings fw-spin fw-2x"></i>Loading platform features . . .<br><br>
+                                    <br>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fw fw-settings fw-spin fw-2x"></i>&nbsp;&nbsp;&nbsp;Loading platform features . . .<br><br>
                                 </div>
                             </div>
                             <div class="wr-input-control wr-btn-grp">
@@ -212,7 +212,7 @@
                 </div>
             </div>
             <div id="loading-content" class="col-centered">
-                <br><br><i class="fw fw-settings fw-spin fw-2x"></i>Loading policy creation wizard . . .<br>
+                <br><br>&nbsp;&nbsp;<i class="fw fw-settings fw-spin fw-2x"></i>&nbsp;&nbsp;&nbsp;Loading policy creation wizard . . .<br><br>
             </div>
             <div class="container col-centered wr-content policy-platform hidden">
                 <div class="wr-form">
@@ -220,9 +220,9 @@
                     <hr>
                     <div id="policy-platform-wizard-steps" class="row wr-wizard"></div>
                     <hr>
-                    <div id="policy-platform-main-error-msg" class="alert alert-danger hidden" role="alert">
-                        <i class="icon fw fw-error"></i><span></span>
-                    </div>
+                    <!--<div id="policy-platform-main-error-msg" class="alert alert-danger hidden" role="alert">-->
+                        <!--<i class="icon fw fw-error"></i><span></span>-->
+                    <!--</div>-->
                     <div class="row">
                         <div class="col-lg-12">
                             <h4 class="visible-xs"> Step 1: Select a platform</h4>
@@ -231,18 +231,18 @@
                                 <i class="icon fw fw-error"></i><span></span>
                             </div>
                             <div id="supportedPlatforms" class="hidden"
-                            {{#each types}}
-                                {{#equal name "android"}} data-android-id={{id}}
-                                    data-android="true"
-                                {{/equal}}
-                                {{#equal name "ios"}} data-ios-id={{id}}
-                                 data-ios="true"
-                                {{/equal}}
-                                {{#equal name "windows"}}
-                                 data-windows="true" data-windows-id={{id}}
-                                {{/equal}}
-                            {{/each}}
-                                    ></div>
+                                {{#each types}}
+                                    {{#equal name "android"}} data-android-id={{id}}
+                                        data-android="true"
+                                    {{/equal}}
+                                    {{#equal name "ios"}} data-ios-id={{id}}
+                                        data-ios="true"
+                                    {{/equal}}
+                                    {{#equal name "windows"}}
+                                        data-windows="true" data-windows-id={{id}}
+                                    {{/equal}}
+                                {{/each}}
+                            ></div>
                             <div class="row wr-tile-buttons-list">
                                 <div class="wr-input-control">
                                     <ul class="tile-buttons row">
@@ -250,24 +250,24 @@
                                             <a href="javascript:void(0)" class="android-platform wizard-stepper"
                                                data-current="policy-platform" data-next="policy-profile"
                                                data-platform="android" data-validate="false">
-                                                <i class="fw fw-android"></i>
-                                                <b>Android</b>
+                                               <i class="fw fw-android"></i>
+                                               <b>Android</b>
                                             </a>
                                         </li>
                                         <li class="col-xs-12 col-sm-12 col-md- 4 col-lg-4">
                                             <a href="javascript:void(0)" class="ios-platform wizard-stepper"
                                                data-current="policy-platform" data-next="policy-profile"
                                                data-platform="ios" data-validate="false">
-                                                <i class="fw fw-apple"></i>
-                                                <b>Apple iOS</b>
+                                               <i class="fw fw-apple"></i>
+                                               <b>Apple iOS</b>
                                             </a>
                                         </li>
                                         <li class="col-xs-12 col-sm-12 col-md- 4 col-lg-4">
                                             <a href="javascript:void(0)" class="windows-platform wizard-stepper"
                                                data-current="policy-platform" data-next="policy-profile"
                                                data-platform="windows" data-validate="false">
-                                                <i class="fw fw-windows"></i>
-                                                <b>Windows Phone</b>
+                                               <i class="fw fw-windows"></i>
+                                               <b>Windows Phone</b>
                                             </a>
                                         </li>
                                     </ul>

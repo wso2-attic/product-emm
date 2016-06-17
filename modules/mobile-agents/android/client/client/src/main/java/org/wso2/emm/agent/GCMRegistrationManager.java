@@ -50,7 +50,8 @@ public class GCMRegistrationManager implements APIResultCallBack {
 	private GoogleCloudMessaging cloudMessaging;
 
 	private String googleProjectNumber;
-	private Context activity;
+	private Activity activity;
+	private Context context;
 	private String registrationId;
 	private final static int REQUEST_CODE = 4034;
 	private DialogInterface.OnClickListener registrationFailedClickListener = new DialogInterface.OnClickListener() {
@@ -60,17 +61,18 @@ public class GCMRegistrationManager implements APIResultCallBack {
 		}
 	};
 
-	public GCMRegistrationManager(Context activity, String googleProjectNumber) {
+	public GCMRegistrationManager(Context context, Activity activity, String googleProjectNumber) {
 		this.activity = activity;
+		this.context = context;
 		this.googleProjectNumber = googleProjectNumber;
 		cloudMessaging = GoogleCloudMessaging.getInstance(activity);
 	}
 
 	private Context getContext() {
-		return activity.getApplicationContext();
+		return context;
 	}
 
-	private Context getActivity() {
+	private Activity getActivity() {
 		return activity;
 	}
 
@@ -163,8 +165,10 @@ public class GCMRegistrationManager implements APIResultCallBack {
 		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getContext());
 		if (resultCode != ConnectionResult.SUCCESS) {
 			// if not installed try to see if it can be fixed by a user action.
-			if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+			if (getActivity() != null && GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
 				GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), REQUEST_CODE).show();
+			} else {
+				Log.e(TAG, "GCM registration failed, Google play services not available.");
 			}
 			return false;
 		}

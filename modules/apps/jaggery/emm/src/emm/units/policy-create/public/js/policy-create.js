@@ -17,7 +17,6 @@
  */
 
 var validateStep = {};
-var validateInline = {};
 var stepForwardFrom = {};
 var stepBackFrom = {};
 var policy = {};
@@ -53,16 +52,6 @@ var androidOperationConstants = {
     "APPLICATION_OPERATION_CODE":"APP-RESTRICTION"
 };
 
-// Constants to define Android Operation Constants
-var windowsOperationConstants = {
-    "PASSCODE_POLICY_OPERATION": "passcode-policy",
-    "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
-    "CAMERA_OPERATION": "camera",
-    "CAMERA_OPERATION_CODE": "CAMERA",
-    "ENCRYPT_STORAGE_OPERATION": "encrypt-storage",
-    "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE"
-};
-
 // Constants to define iOS Operation Constants
 var iosOperationConstants = {
     "PASSCODE_POLICY_OPERATION": "passcode-policy",
@@ -92,6 +81,16 @@ var iosOperationConstants = {
     "PER_APP_VPN_OPERATION": "per-app-vpn",
     "APP_TO_PER_APP_VPN_MAPPING_OPERATION_CODE": "APP_TO_PER_APP_VPN_MAPPING",
     "APP_TO_PER_APP_VPN_MAPPING_OPERATION": "app-to-per-app-vpn-mapping"
+};
+
+// Constants to define Android Operation Constants
+var windowsOperationConstants = {
+    "PASSCODE_POLICY_OPERATION": "passcode-policy",
+    "PASSCODE_POLICY_OPERATION_CODE": "PASSCODE_POLICY",
+    "CAMERA_OPERATION": "camera",
+    "CAMERA_OPERATION_CODE": "CAMERA",
+    "ENCRYPT_STORAGE_OPERATION": "encrypt-storage",
+    "ENCRYPT_STORAGE_OPERATION_CODE": "ENCRYPT_STORAGE"
 };
 
 /**
@@ -159,7 +158,7 @@ var disableInlineError = function (inputField, errorMsg, errorSign) {
  *clear inline validation messages.
  */
 clearInline["policy-name"] = function () {
-    disableInlineError("plicynameField", "nameEmpty", "nameError");
+    disableInlineError("policyNameField", "nameEmpty", "nameError");
 };
 
 
@@ -169,17 +168,15 @@ clearInline["policy-name"] = function () {
 validateInline["policy-name"] = function () {
     var policyName = $("input#policy-name-input").val();
     if (policyName && inputIsValidAgainstLength(policyName, 1, 30)) {
-        disableInlineError("plicynameField", "nameEmpty", "nameError");
+        disableInlineError("policyNameField", "nameEmpty", "nameError");
     } else {
-        enableInlineError("plicynameField", "nameEmpty", "nameError");
+        enableInlineError("policyNameField", "nameEmpty", "nameError");
     }
 };
 
 $("#policy-name-input").focus(function(){
     clearInline["policy-name"]();
-});
-
-$("#policy-name-input").blur(function(){
+}).blur(function(){
     validateInline["policy-name"]();
 });
 
@@ -2547,7 +2544,7 @@ $(document).ready(function () {
         multiple: true,
         tags: false,
         ajax: {
-            url: window.location.origin + "/emm/api/invoker/execute/",
+            url: "/emm/api/invoker/execute/",
             method: "POST",
             dataType: 'json',
             delay: 250,
@@ -2557,13 +2554,13 @@ $(document).ready(function () {
             data: function (params) {
                 var postData = {};
                 postData.actionMethod = "GET";
-                postData.actionUrl = "/mdm-admin/users/view-users?username=" + params.term;
+                postData.actionUrl = "/api/device-mgt/v1.0/users/search/usernames?filter=" + params.term;
                 postData.actionPayload = null;
                 return JSON.stringify(postData);
             },
-            processResults: function (data, page) {
+            processResults: function (data) {
                 var newData = [];
-                $.each(data.responseContent, function (index, value) {
+                $.each(data, function (index, value) {
                     value.id = value.username;
                     newData.push(value);
                 });

@@ -98,7 +98,7 @@ public class DeviceInfoPayload {
         if (device == null) {
             device = new Device();
         }
-
+        deviceInfo = new DeviceInfo(context);
         Power power = phoneState.getBatteryDetails();
         device.setDeviceIdentifier(deviceInfo.getDeviceId());
         device.setDescription(deviceInfo.getDeviceName());
@@ -143,7 +143,7 @@ public class DeviceInfoPayload {
 
         property = new Device.Property();
         property.setName(Constants.Device.OS_BUILD_DATE);
-        property.setValue(String.valueOf(deviceInfo.getOSBuildDate()));
+        property.setValue(String.valueOf(Build.TIME));
         properties.add(property);
 
         property = new Device.Property();

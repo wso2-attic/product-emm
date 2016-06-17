@@ -92,7 +92,6 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 			}
 		}
 
-
 		int interval = Preference.getInt(context, context.getResources().getString(R.string.shared_pref_frequency));
 		if(interval == DEFAULT_INDEX){
 			interval = DEFAULT_INTERVAL;
@@ -102,7 +101,8 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 			mode = Constants.NOTIFIER_LOCAL;
 		}
 
-		if (Constants.NOTIFIER_LOCAL.equals(mode.trim().toUpperCase(Locale.ENGLISH))) {
+		if (Preference.getBoolean(context, Constants.PreferenceFlag.REGISTERED) && Constants.NOTIFIER_LOCAL.equals(
+				mode.trim().toUpperCase(Locale.ENGLISH))) {
 			long startTime = SystemClock.elapsedRealtime() + DEFAULT_TIME_MILLISECONDS;
 
 			Intent alarmIntent = new Intent(context, AlarmReceiver.class);

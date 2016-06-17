@@ -395,6 +395,10 @@ public class CommonUtils {
 			if (appUri != null) {
 				intent.putExtra("appUri", appUri);
 			}
+
+			if (Constants.Operation.UPGRADE_FIRMWARE.equals(operation)) {
+				intent.putExtra("operationId", Preference.getInt(context, "firmwareOperationId"));
+			}
 			context.startService(intent);
 		} else {
 			Log.e(TAG, "System app not enabled.");
