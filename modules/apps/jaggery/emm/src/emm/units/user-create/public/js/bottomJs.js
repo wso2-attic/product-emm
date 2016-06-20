@@ -245,18 +245,6 @@ $(document).ready(function () {
                         $("#user-created-msg").removeClass("hidden");
                         generateQRCode("#user-created-msg .qr-code");
 
-                    } else {
-                        data = JSON.parse(data);
-                        if (data.errorMessage) {
-                            $(errorMsg).text("Selected user store prompted an error : " + data.errorMessage);
-                            $(errorMsgWrapper).removeClass("hidden");
-                        } else if (data["status"] == 409) {
-                            $(errorMsg).text(data["messageFromServer"]);
-                            $(errorMsgWrapper).removeClass("hidden");
-                        } else if (data["status"] == 500) {
-                            $(errorMsg).text("An unexpected error occurred at backend server. Please try again later.");
-                            $(errorMsgWrapper).removeClass("hidden");
-                        }
                     }
                 }, function (data) {
                     if (data["status"] == 409) {
