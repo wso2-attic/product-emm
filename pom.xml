@@ -849,11 +849,6 @@
                 <artifactId>org.wso2.carbon.identity.oauth</artifactId>
                 <version>${carbon.identity.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.identity</groupId>
-                <artifactId>org.wso2.carbon.identity.oauth</artifactId>
-                <version>${carbon.identity.version}</version>
-            </dependency>
             <!-- Tomcat dependencies -->
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
