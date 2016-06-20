@@ -146,10 +146,10 @@ $(document).ready(function () {
         toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     });
 
-    var getAndroidConfigAPI = "/mdm-android-agent/configuration";
-    var getGeneralConfigAPI = "/mdm-admin/configuration";
-    var getIosConfigAPI = "/ios/configuration";
-    var getWindowsConfigAPI = "/mdm-windows-agent/services/configuration";
+    var androidConfigAPI = "/api/device-mgt/android/v1.0/configuration";
+    var generalConfigAPI = "/api/device-mgt/v1.0/configuration";
+    var iosConfigAPI = "/api/device-mgt/ios/v1.0/configuration";
+    var windowsConfigAPI = "/api/device-mgt/windows/v1.0/configuration";
 
     /**
      * Following requests would execute
@@ -160,7 +160,7 @@ $(document).ready(function () {
 
     if (platformsSupported.indexOf('android') != -1) {
         invokerUtil.get(
-            getAndroidConfigAPI,
+            androidConfigAPI,
             function (data) {
                 data = JSON.parse(data);
                 if (data != null && data.configuration != null) {
@@ -192,7 +192,7 @@ $(document).ready(function () {
     }
 
     invokerUtil.get(
-        getGeneralConfigAPI,
+        generalConfigAPI,
         function (data) {
             data = JSON.parse(data);
             if (data && data.configuration) {
@@ -209,8 +209,10 @@ $(document).ready(function () {
 
     if (platformsSupported.indexOf('windows') != -1) {
         invokerUtil.get(
-            getWindowsConfigAPI,
-            function (data) {
+            windowsConfigAPI,
+            function (data, textStatus, jqXHR) {
+                console.log(jqXHR);
+                console.log(data);
                 data = JSON.parse(data);
                 if (data != null && data.configuration != null) {
                     for (var i = 0; i < data.configuration.length; i++) {
@@ -230,7 +232,7 @@ $(document).ready(function () {
 
     if (platformsSupported.indexOf('ios') != -1) {
         invokerUtil.get(
-            getIosConfigAPI,
+            iosConfigAPI,
             function (data) {
                 data = JSON.parse(data);
                 if (data != null && data.configuration != null) {
@@ -374,33 +376,22 @@ $(document).ready(function () {
             addConfigFormData.type = platformTypeConstants["ANDROID"];
             addConfigFormData.configuration = configList;
 
-            var addConfigAPI = "/mdm-android-agent/configuration";
+            var addConfigAPI = androidConfigAPI;
 
-            invokerUtil.post(
+            invokerUtil.put(
                 addConfigAPI,
                 addConfigFormData,
-                function (data) {
+                function (data, textStatus, jqXHR) {
                     data = JSON.parse(data);
-                    if (data.responseCode == responseCodes["CREATED"]) {
+                    if (jqXHR.status == 201) {
                         $("#config-save-form").addClass("hidden");
                         $("#record-created-msg").removeClass("hidden");
-                    } else if (data == 500) {
-                        $(errorMsg).text("Exception occurred at backend.");
-                        $(errorMsgWrapper).removeClass("hidden");
-                    } else if (data == 403) {
-                        $(errorMsg).text("Action was not permitted.");
-                        $(errorMsgWrapper).removeClass("hidden");
-                    } else {
-                        $(errorMsg).text("An unexpected error occurred.");
-                        $(errorMsgWrapper).removeClass("hidden");
                     }
 
-
                 }, function (data) {
-                    data = data.status;
-                    if (data == 500) {
+                    if (data.status == 500) {
                         $(errorMsg).text("Exception occurred at backend.");
-                    } else if (data == 403) {
+                    } else if (data.status == 403) {
                         $(errorMsg).text("Action was not permitted.");
                     } else {
                         $(errorMsg).text("An unexpected error occurred.");
@@ -440,29 +431,21 @@ $(document).ready(function () {
             configList.push(monitorFrequency);
             addConfigFormData.configuration = configList;
 
-            var addConfigAPI = "/mdm-admin/configuration";
-            invokerUtil.post(
+            var addConfigAPI = "/api/device-mgt/v1.0/configuration";
+            invokerUtil.put(
                 addConfigAPI,
                 addConfigFormData,
-                function (data) {
+                function (data, textStatus, jqXHR) {
                     data = JSON.parse(data);
-                    if (data.statusCode == responseCodes["SUCCESS"]) {
+                    if (jqXHR.status == 201) {
                         $("#config-save-form").addClass("hidden");
                         $("#record-created-msg").removeClass("hidden");
-                    } else if (data == 500) {
-                        $(errorMsg).text("Exception occurred at backend.");
-                    } else if (data == 403) {
-                        $(errorMsg).text("Action was not permitted.");
-                    } else {
-                        $(errorMsg).text("An unexpected error occurred.");
                     }
-
                     $(errorMsgWrapper).removeClass("hidden");
-                }, function (data) {
-                    data = data.status;
-                    if (data == 500) {
+                }, function (jqXHR) {
+                    if (jqXHR.status == 500) {
                         $(errorMsg).text("Exception occurred at backend.");
-                    } else if (data == 403) {
+                    } else if (jqXHR.status == 403) {
                         $(errorMsg).text("Action was not permitted.");
                     } else {
                         $(errorMsg).text("An unexpected error occurred.");
@@ -726,22 +709,15 @@ $(document).ready(function () {
 
             var addConfigAPI = "/ios/configuration";
 
-            invokerUtil.post(
+            invokerUtil.put(
                 addConfigAPI,
                 addConfigFormData,
-                function (data) {
+                function (data, textStatus, jqXHR) {
                     data = JSON.parse(data);
-                    if (data.responseCode == responseCodes["CREATED"]) {
+                    if (jqXHR.status == 201) {
                         $("#config-save-form").addClass("hidden");
                         $("#record-created-msg").removeClass("hidden");
-                    } else if (data == 500) {
-                        $(errorMsg).text("Exception occurred at backend.");
-                    } else if (data == 400) {
-                        $(errorMsg).text("Configurations cannot be empty.");
-                    } else {
-                        $(errorMsg).text("An unexpected error occurred.");
                     }
-
                     $(errorMsgWrapper).removeClass("hidden");
                 }, function (data) {
                     data = data.status;
@@ -832,14 +808,14 @@ $(document).ready(function () {
             addConfigFormData.type = platformTypeConstants["WINDOWS"];
             addConfigFormData.configuration = configList;
 
-            var addConfigAPI = "/mdm-windows-agent/services/configuration";
+            var addConfigAPI = windowsConfigAPI;
 
-            invokerUtil.post(
+            invokerUtil.put(
                 addConfigAPI,
                 addConfigFormData,
-                function (data) {
-                    data = JSON.parse(data);
-                    if (data.responseCode == responseCodes["CREATED"]) {
+                function (data, textStatus, jqXHR) {
+                    data = jqXHR.status;
+                    if (data == 201) {
                         $("#config-save-form").addClass("hidden");
                         $("#record-created-msg").removeClass("hidden");
                     } else if (data == 500) {
