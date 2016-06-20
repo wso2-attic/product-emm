@@ -309,6 +309,10 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.identity:org.wso2.carbon.idp.mgt.feature:${carbon.identity.version}
                                 </featureArtifactDef>
+                                <!--JWT grant type handler-->
+                                <featureArtifactDef>
+                                    org.wso2.carbon.identity:org.wso2.carbon.identity.oauth2.grant.jwt.feature:${identity.jwt.extension.version}
+                                </featureArtifactDef>
                                 <!-- SSO -->
                                 <featureArtifactDef>
                                     org.wso2.carbon.identity:org.wso2.carbon.identity.application.authenticator.basicauth.server.feature:${carbon.identity.version}
@@ -552,6 +556,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.analytics.cdmf:org.wso2.carbon.analytics.emm.feature:${carbon.analytics.cdmf.version}
                                 </featureArtifactDef>
+                                <!--<featureArtifactDef>-->
+                                    <!--org.wso2.carbon.analytics.emm:org.wso2.carbon.analytics.emm.feature:${carbon.analytics.emm.version}-->
+                                <!--</featureArtifactDef>-->
                                 <!-- End of EMM analytics Features -->
 
                             </featureArtifacts>
@@ -760,7 +767,11 @@
                                     <version>${carbon.analytics.common.version}</version>
                                 </feature>
                                 <!-- End of Carbon Analytics Common Features -->
-
+                                <!--jwt grant type handler-->
+                                <feature>
+                                    <id>org.wso2.carbon.identity.oauth2.grant.jwt.feature.group</id>
+                                    <version>${identity.jwt.extension.version}</version>
+                                </feature>
                                 <!-- Carbon Commons Features -->
                                 <feature>
                                     <id>org.wso2.carbon.logging.mgt.feature.group</id>
@@ -1177,6 +1188,10 @@
                                     <id>org.wso2.carbon.analytics.emm.feature.group</id>
                                     <version>${carbon.analytics.cdmf.version}</version>
                                 </feature>
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.carbon.analytics.emm.feature.group</id>-->
+                                    <!--<version>${carbon.analytics.emm.version}</version>-->
+                                <!--</feature>-->
                                 <!-- End of EMM Analytics Features -->
 
                             </features>
@@ -1341,6 +1356,11 @@
                                     <version>${carbon.analytics.common.version}</version>
                                 </feature>
                                 <!-- End of Carbon Analytics Common Features -->
+                                <!--jwt grant type handler-->
+                                <feature>
+                                    <id>org.wso2.carbon.identity.oauth2.grant.jwt.feature.group</id>
+                                    <version>${identity.jwt.extension.version}</version>
+                                </feature>
 
                                 <!-- Carbon Commons Features -->
                                 <feature>
