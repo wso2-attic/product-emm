@@ -226,13 +226,14 @@ $(document).ready(function () {
                         $("#user-create-form").addClass("hidden");
                         $("#user-created-msg").removeClass("hidden");
                     }
-                }, function (data, textStatus, jqXHR) {
+                }, function (jqXHR) {
+                    var payload = JSON.parse(jqXHR.responseText);
                     if (jqXHR.status == 409) {
                         $(errorMsg).text("User : " + username + " doesn't exists. You cannot proceed.");
                     } else if (jqXHR.status == 500) {
                         $(errorMsg).text("An unexpected error occurred at backend server. Please try again later.");
                     } else {
-                        $(errorMsg).text(data.errorMessage);
+                        $(errorMsg).text(payload.message);
                     }
                     $(errorMsgWrapper).removeClass("hidden");
                 }

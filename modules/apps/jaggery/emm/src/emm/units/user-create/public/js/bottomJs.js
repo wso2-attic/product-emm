@@ -247,12 +247,13 @@ $(document).ready(function () {
 
                     }
                 }, function (data) {
-                    if (data["status"] == 409) {
+                    var payload = JSON.parse(data.responseText);
+                    if (data.status == 409) {
                         $(errorMsg).text("User : " + username + " already exists. Pick another username.");
-                    } else if (data["status"] == 500) {
+                    } else if (data.status == 500) {
                         $(errorMsg).text("An unexpected error occurred at backend server. Please try again later.");
                     } else {
-                        $(errorMsg).text(data.errorMessage);
+                        $(errorMsg).text(payload.message);
                     }
                     $(errorMsgWrapper).removeClass("hidden");
                 }

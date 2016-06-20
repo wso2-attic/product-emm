@@ -140,7 +140,8 @@ $(document).ready(function () {
                     $("#role-created-msg").removeClass("hidden");
                 }
             }, function (data) {
-                $(errorMsg).text(data.errorMessage);
+                var payload = JSON.parse(data.responseText);
+                $(errorMsg).text(payload.message);
                 $(errorMsgWrapper).removeClass("hidden");
             }
         );

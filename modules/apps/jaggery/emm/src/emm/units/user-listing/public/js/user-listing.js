@@ -174,26 +174,22 @@ function resetPassword(uname) {
             resetPasswordFormData.username = user;
             resetPasswordFormData.newPassword = window.btoa(unescape(encodeURIComponent(confirmedPassword)));
 
-            var resetPasswordServiceURL = emmAdminBasePath + "users/"+ user +"/credentials";
+            var resetPasswordServiceURL = emmAdminBasePath + "/admin/users/"+ user +"/credentials";
 
             invokerUtil.post(
                 resetPasswordServiceURL,
                 resetPasswordFormData,
-                function (ata, textStatus, jqXHR) {   // The success callback
-                    if (jqXHR.status == 201) {
+                function (data, textStatus, jqXHR) {   // The success callback
+                    if (jqXHR.status == 200) {
                         $(modalPopupContent).html($('#reset-password-success-content').html());
                         $("a#reset-password-success-link").click(function () {
                             hidePopup();
                         });
                     }
-                }, function (data, textStatus, jqXHR) {    // The error callback
-                    if (jqXHR.status == 400) {
-                        $(errorMsg).text("Old password does not match with the provided value.");
-                        $(errorMsgWrapper).removeClass("hidden");
-                    } else {
-                        $(errorMsg).text("An unexpected error occurred. Please try again later.");
-                        $(errorMsgWrapper).removeClass("hidden");
-                    }
+                }, function (jqXHR) {    // The error callback
+                    var payload = JSON.parse(jqXHR.responseText);
+                    $(errorMsg).text(payload.message);
+                    $(errorMsgWrapper).removeClass("hidden");
                 }
             );
         }
