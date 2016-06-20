@@ -48,5 +48,8 @@
         "copyrightOwnersSite" : "http://www.wso2.org",
         "copyrightSuffix" : ""
     },
-    "isOAuthEnabled" : true
+    "isOAuthEnabled" : true,
+    "backendRestEndpoints" : {
+        "deviceMgt" : "/api/device-mgt/v1.0"
+    }
 }

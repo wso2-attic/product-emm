@@ -479,7 +479,7 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/api/device-mgt/v1.0/devices/types";
+            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/devices/types";
             var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
             if (response.status == "success") {
                 response.content = parse(response.content);
@@ -508,7 +508,9 @@ var userModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + emmAdminBasePath + "/roles/" + encodeURIComponent(roleName);
-            return privateMethods.callBackend(url, constants["HTTP_GET"]);
+            var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
+            response.content = parse(response.content);
+            return response;
         } catch (e) {
             throw e;
         } finally {
@@ -650,8 +652,8 @@ var userModule = function () {
         var wsPayload = "<xsd:getSecondaryRealmConfigurations  xmlns:xsd='http://org.apache.axis2/xsd'/>";
         serviceInvokers.WS.soapRequest(
             "urn:getSecondaryRealmConfigurations",
-            endpoint,
             wsPayload,
+            endpoint,
             function (wsResponse) {
                 var domainIDs = stringify(wsResponse.*::['return']. *::domainId.text());
                 if (domainIDs != "\"\"") {

@@ -41,6 +41,11 @@ public class Constants {
 	public static final boolean DEBUG_MODE_ENABLED = true;
 	public static final String ADMIN_MESSAGE = "message";
 	public static final String IS_LOCKED = "lock";
+	public static final int FIRMWARE_UPGRADE_CONNECTIVITY_TIMEOUT = 10000;
+	/**
+	 * Read_TIMEOUT = SO timeout(the time since the last byte has been received)
+	 */
+	public static final int FIRMWARE_UPGRADE_READ_TIMEOUT = 60000;
 
 	/**
 	 * Operation IDs
@@ -115,6 +120,8 @@ public class Constants {
 		public static final String CREATED = "201";
 		public static final String ACCEPT = "202";
 		public static final String AUTHENTICATION_FAILED = "400";
+		public static final String CONNECTION_FAILED = "400";
+		public static final String INVALID_PACKAGE = "402";
 		public static final String INTERNAL_SERVER_ERROR = "500";
 	}
 
