@@ -81,8 +81,8 @@ public class DeviceInfo {
 	 * Returns the device OS build date.
 	 * @return - OS build date.
 	 */
-	public long getOSBuildDate() {
-		return Build.TIME;
+	public String getOSBuildDate() {
+		return String.valueOf(android.os.Build.TIME);
 	}
 
 	/**

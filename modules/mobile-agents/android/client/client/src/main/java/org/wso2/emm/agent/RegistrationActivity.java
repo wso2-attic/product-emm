@@ -242,7 +242,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	private void registerGCM() {
 		new AsyncTask<Void, Void, String>() {
 			String senderId = Preference.getString(context, context.getResources().getString(R.string.shared_pref_sender_id));
-			GCMRegistrationManager registrationManager = new GCMRegistrationManager(RegistrationActivity.this, senderId);
+			GCMRegistrationManager registrationManager = new GCMRegistrationManager(context, RegistrationActivity.this, senderId);
 
 			@Override
 			protected String doInBackground(Void... params) {

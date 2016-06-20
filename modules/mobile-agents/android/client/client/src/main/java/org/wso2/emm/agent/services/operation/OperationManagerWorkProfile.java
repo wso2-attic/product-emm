@@ -54,6 +54,7 @@ public class OperationManagerWorkProfile extends OperationManager {
     @Override
     public void wipeDevice(Operation operation) throws AndroidAgentException {
         operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+        operation.setOperationResponse("Operation not supported.");
         getResultBuilder().build(operation);
         Log.d(TAG, "Operation not supported.");
     }
@@ -61,6 +62,7 @@ public class OperationManagerWorkProfile extends OperationManager {
     @Override
     public void clearPassword(Operation operation) {
         operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+        operation.setOperationResponse("Operation not supported.");
         getResultBuilder().build(operation);
         Log.d(TAG, "Operation not supported.");
     }
@@ -85,6 +87,7 @@ public class OperationManagerWorkProfile extends OperationManager {
 
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing APPLICATION payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -130,6 +133,7 @@ public class OperationManagerWorkProfile extends OperationManager {
 
                 } else {
                     operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+                    operation.setOperationResponse("Invalid application details provided.");
                     getResultBuilder().build(operation);
                     throw new AndroidAgentException("Invalid application details");
                 }
@@ -140,6 +144,7 @@ public class OperationManagerWorkProfile extends OperationManager {
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing APPLICATION payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -148,6 +153,7 @@ public class OperationManagerWorkProfile extends OperationManager {
     @Override
     public void encryptStorage(Operation operation) throws AndroidAgentException {
         operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+        operation.setOperationResponse("Device already encrypted.");
         getResultBuilder().build(operation);
         Log.d(TAG, "Already encrypted.");
     }
@@ -155,12 +161,14 @@ public class OperationManagerWorkProfile extends OperationManager {
     @Override
     public void setPasswordPolicy(Operation operation) throws AndroidAgentException {
         operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+        operation.setOperationResponse("Operation not supported.");
         getResultBuilder().build(operation);
     }
 
     @Override
     public void changeLockCode(Operation operation) throws AndroidAgentException {
         operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+        operation.setOperationResponse("Operation not supported.");
         getResultBuilder().build(operation);
         Log.d(TAG, "Operation not supported.");
     }
@@ -200,6 +208,7 @@ public class OperationManagerWorkProfile extends OperationManager {
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing APP_HIDE payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -227,6 +236,7 @@ public class OperationManagerWorkProfile extends OperationManager {
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing APP_UN_HIDE payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -254,6 +264,7 @@ public class OperationManagerWorkProfile extends OperationManager {
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing APP_BLOCK payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -282,6 +293,7 @@ public class OperationManagerWorkProfile extends OperationManager {
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing PROFILE payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -366,6 +378,7 @@ public class OperationManagerWorkProfile extends OperationManager {
 
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing WORK_PROFILE payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -375,6 +388,7 @@ public class OperationManagerWorkProfile extends OperationManager {
     @Override
     public void passOperationToSystemApp(Operation operation) throws AndroidAgentException {
         operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+        operation.setOperationResponse("Operation not supported.");
         getResultBuilder().build(operation);
         Log.d(TAG, "Operation not supported.");
     }

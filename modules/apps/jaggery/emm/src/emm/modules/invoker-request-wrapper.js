@@ -32,13 +32,11 @@ var invokerRequestWrapper = function () {
                 var response = serviceInvokers.XMLHttp.get(url, function (responsePayload) {
                                                                var response = {};
                                                                response.content = responsePayload["responseContent"];
-                                                               response.status = "success";
-                                                               return response;
-                                                           },
-                                                           function (responsePayload) {
-                                                               var response = {};
-                                                               response.content = responsePayload;
-                                                               response.status = "error";
+                                                                if (responsePayload.status == 200) {
+                                                                    response.status = "success";
+                                                                } else {
+                                                                    response.status = "error";
+                                                                }
                                                                return response;
                                                            });
                 return response;

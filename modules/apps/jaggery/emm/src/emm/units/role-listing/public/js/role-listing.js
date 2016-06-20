@@ -7,6 +7,10 @@ var loadRoleBasedActionURL = function (action, rolename) {
     $(location).attr('href', href);
 };
 
+var ROLE_LIMIT = pageSize;
+
+var emmAdminBasePath = "/api/device-mgt/v1.0";
+
 /**
  * Following function would execute
  * when a user clicks on the list item
@@ -60,9 +64,11 @@ var loadPaginatedObjects = function (objectGridId, objectGridContainer, objectGr
 function loadRoles(searchQuery) {
     var loadingContent = $("#loading-content");
     loadingContent.show();
-    var serviceURL = "/api/device-mgt/v1.0/roles";
+    var serviceURL = emmAdminBasePath + "/roles";
     if (searchQuery) {
-        serviceURL = serviceURL + "?filter=" + searchQuery;
+        serviceURL = serviceURL + "?filter=" + searchQuery + "&limit=" + ROLE_LIMIT;
+    }else {
+        serviceURL = serviceURL + "?limit=" + ROLE_LIMIT;
     }
     var callback = function (data) {
         if (data != null || data == "null") {
@@ -70,8 +76,8 @@ function loadRoles(searchQuery) {
             var canRemove = $("#can-remove").val();
             var canEdit = $("#can-edit").val();
             var roles = [];
-            for(var i=0; i<data.responseContent.length; i++){
-                roles.push({"roleName":data.responseContent[i]});
+            for(var i=0; i<data.count; i++){
+                roles.push({"roleName":data.roles[i]});
                 if(canRemove != null && canRemove != undefined) {
                     roles[i].canRemove = true;
                 }
@@ -140,7 +146,7 @@ function hidePopup() {
  */
 $("#role-grid").on("click", ".remove-role-link", function () {
     var role = $(this).data("role");
-    var removeRoleAPI = "/api/device-mgt/v1.0/roles?rolename=" + role;
+    var removeRoleAPI = emmAdminBasePath + "/roles/" + role;
 
     $(modalPopupContent).html($('#remove-role-modal-content').html());
     showPopup();

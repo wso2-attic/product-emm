@@ -20,14 +20,17 @@ package org.wso2.emm.agent.services;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
 public class NetworkConnectedReceiver extends BroadcastReceiver {
     private static final String FRESH_BOOTUP_FLAG = "fresh_bootup";
+    private static final String TAG = NetworkConnectedReceiver.class.getName();
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.i(TAG, "Network change event triggered.");
         if(!Preference.getBoolean(context, FRESH_BOOTUP_FLAG))	{
             if (!Preference.getBoolean(context, Constants.PreferenceFlag.REGISTERED) && CommonUtils.
                     isNetworkAvailable(context)) {

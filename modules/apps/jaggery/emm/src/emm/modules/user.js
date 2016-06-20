@@ -27,7 +27,7 @@ var userModule = function () {
     var mdmProps = require('/config/mdm-props.js').config();
     var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
 
-    var emmAdminBasePath = "/api/device-mgt/v1.0";
+    var emmAdminBasePath = mdmProps["backendRestEndpoints"]["deviceMgt"];
 
     /* Initializing user manager */
     var carbon = require('carbon');
@@ -55,35 +55,28 @@ var userModule = function () {
             throw constants.ERRORS.USER_NOT_FOUND;
         }
         return carbonUser;
-    }
+    };
 
     /**
      * Only GET method is implemented for now since there are no other type of methods used this method.
      * @param url - URL to call the backend without the host
      * @param method - HTTP Method (GET, POST)
-     * @returns {
-     *  'status': 'success'|'error',
-     *  'content': {}
-     * }
+     * @returns An object with 'status': 'success'|'error', 'content': {}
      */
     privateMethods.callBackend = function (url, method) {
-        if (constants.HTTP_GET == method) {
-            var response = serviceInvokers.XMLHttp.get(url, function (responsePayload) {
-                var response = {};
-                response.content = responsePayload["responseContent"];
-                if (responsePayload["responseContent"] == null && responsePayload != null) {
-                    response.content = responsePayload;
+        if (constants["HTTP_GET"] == method) {
+            return serviceInvokers.XMLHttp.get(url,
+                function (xmlHttpRequest) {
+                    var response = {};
+                    response.content = xmlHttpRequest.responseText;
+                    if (xmlHttpRequest.status == 200) {
+                        response.status = "success";
+                    } else {
+                        response.status = "error";
+                    }
+                    return response;
                 }
-                response.status = "success";
-                return response;
-            },
-            function (responsePayload) {
-                var response = {};
-                response.content = responsePayload;
-                response.status = "error";
-                return response;
-            });
-            return response;
+            );
         } else {
             log.error("Programming error : This method only support HTTP GET requests.");
         }
@@ -373,6 +366,7 @@ var userModule = function () {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + emmAdminBasePath + "/users/" + encodeURIComponent(username);
             var response = privateMethods.callBackend(url, constants.HTTP_GET);
+            response.content = parse(response.content);
             response["userDomain"] = carbonUser.domain;
             return response;
         } catch (e) {
@@ -397,7 +391,7 @@ var userModule = function () {
         } finally {
             utility.endTenantFlow();
         }
-    }
+    };
 
     /*
      @NewlyAdded
@@ -450,7 +444,8 @@ var userModule = function () {
     /**
      * Get User Roles from user store (Internal roles not included).
      */
-    publicMethods.getRolesByUserStore = function (userStore) {
+    publicMethods.getRolesByUserStore = function () {
+        var ROLE_LIMIT = mdmProps.pageSize;
         var carbonUser = session.get(constants["USER_SESSION_KEY"]);
         var utility = require('/modules/utility.js')["utility"];
         if (!carbonUser) {
@@ -459,8 +454,12 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/roles?user-store=" + encodeURIComponent(userStore);
-            return privateMethods.callBackend(url, constants.HTTP_GET);
+            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/roles?limit=" + ROLE_LIMIT;
+            var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
+            if (response.status == "success") {
+                response.content = parse(response.content).roles;
+            }
+            return response;
         } catch (e) {
             throw e;
         } finally {
@@ -473,22 +472,26 @@ var userModule = function () {
      */
     publicMethods.getPlatforms = function () {
         var carbonUser = session.get(constants["USER_SESSION_KEY"]);
-        var utility = require('/modules/utility.js')["utility"];
+        var utility = require("/modules/utility.js")["utility"];
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants["ERRORS"]["USER_NOT_FOUND"];
         }
         try {
-            //TODO Fix this to get device types properly from the admin JAX-RS
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/devices/types";
-            return privateMethods.callBackend(url, constants.HTTP_GET);
+            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/devices/types";
+            var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
+            if (response.status == "success") {
+                response.content = parse(response.content);
+            }
+            return response;
         } catch (e) {
             throw e;
         } finally {
             utility.endTenantFlow();
         }
     };
+
     /*
      @Updated
      */
@@ -505,7 +508,9 @@ var userModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + emmAdminBasePath + "/roles/" + encodeURIComponent(roleName);
-            return privateMethods.callBackend(url, constants.HTTP_GET);
+            var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
+            response.content = parse(response.content);
+            return response;
         } catch (e) {
             throw e;
         } finally {
@@ -639,24 +644,29 @@ var userModule = function () {
      * retrieve secondary user stores.
      * This needs Authentication since the method access admin services.
      *
-     * @returns {string array} Array of secondary user stores.
+     * @returns Array of secondary user stores.
      */
     publicMethods.getSecondaryUserStores = function () {
         var returnVal = [];
-        var endpoint = mdmProps.adminService + constants.USER_STORE_CONFIG_ADMIN_SERVICE_END_POINT;
+        var endpoint = mdmProps["adminService"] + constants["USER_STORE_CONFIG_ADMIN_SERVICE_END_POINT"];
         var wsPayload = "<xsd:getSecondaryRealmConfigurations  xmlns:xsd='http://org.apache.axis2/xsd'/>";
         serviceInvokers.WS.soapRequest(
-            "urn:getSecondaryRealmConfigurations", endpoint, wsPayload, function (wsResponse) {
+            "urn:getSecondaryRealmConfigurations",
+            wsPayload,
+            endpoint,
+            function (wsResponse) {
                 var domainIDs = stringify(wsResponse.*::['return']. *::domainId.text());
                 if (domainIDs != "\"\"") {
-                    var regExpForSearch = new RegExp(constants.USER_STORES_NOISY_CHAR, "g");
+                    var regExpForSearch = new RegExp(constants["USER_STORES_NOISY_CHAR"], "g");
                     domainIDs = domainIDs.replace(regExpForSearch, "");
-                    returnVal = domainIDs.split(constants.USER_STORES_SPLITTING_CHAR);
+                    returnVal = domainIDs.split(constants["USER_STORES_SPLITTING_CHAR"]);
                 }
             }, function (e) {
                 log.error("Error retrieving secondary user stores", e);
-            }, constants.SOAP_VERSION);
+            },
+            constants["SOAP_VERSION"]);
         return returnVal;
     };
+
     return publicMethods;
 }();
