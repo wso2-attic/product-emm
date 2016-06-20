@@ -985,6 +985,9 @@
         <!-- Carbon Identity -->
         <carbon.identity.version>5.0.7</carbon.identity.version>
 
+        <!--JWT grant type extension feature-->
+        <identity.jwt.extension.version>1.0.2</identity.jwt.extension.version>
+
         <!-- Carbon Multi-tenancy -->
         <carbon.multitenancy.version>4.5.0</carbon.multitenancy.version>
 
@@ -1064,6 +1067,7 @@
         <!-- Carbon Dashboards version-->
         <carbon.dashboards.version>1.0.17</carbon.dashboards.version>
         <carbon.analytics.cdmf.version>1.0.0-SNAPSHOT</carbon.analytics.cdmf.version>
+        <carbon.analytics.emm.version>1.0.0-SNAPSHOT</carbon.analytics.emm.version>
     </properties>
 
     <scm>

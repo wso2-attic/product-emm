@@ -86,6 +86,36 @@ public class WindowsEnrollment extends TestBase {
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
+    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows MS XCEP post" +
+            " request.", dependsOnMethods = {"testBST"})
+    public void testMSXCEP() throws Exception {
+        base64Encoder = new Base64();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(bsd);
+        JsonNode token = node.get(UserToken);
+        String encodedToken = base64Encoder.encodeToString(token.getTextValue().getBytes());
+        String xml = readXML(Constants.WindowsEnrollment.MS_XCEP_FILE, Constants.UTF8);
+        String payload = xml.replace(BSD_PLACEHOLDER, encodedToken);
+        client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
+        MDMResponse response = client.post(Constants.WindowsEnrollment.MS_EXCEP, payload);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
+    @Test(groups = Constants.WindowsEnrollment.WINDOWS_ENROLLMENT_GROUP, description = "Test Windows WSETP post " +
+            "request.", dependsOnMethods = {"testMSXCEP"})
+    public void testWSETP() throws Exception {
+        base64Encoder = new Base64();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(bsd);
+        JsonNode token = node.get(UserToken);
+        String encodedToken = base64Encoder.encodeToString(token.getTextValue().getBytes());
+        String xml = readXML(Constants.WindowsEnrollment.WS_STEP_FILE, Constants.UTF8);
+        String payload = xml.replace(BSD_PLACEHOLDER, encodedToken);
+        client.setHttpHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_SOAP_XML);
+        MDMResponse response = client.post(Constants.WindowsEnrollment.WSTEP_URL, payload);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
     private String readXML(String fileName, String characterEncoding) throws Exception {
         URL url = ClassLoader.getSystemResource(fileName);
         File file = new File(url.toURI());
