@@ -20,6 +20,8 @@ var modalPopup = ".wr-modalpopup",
     modalPopupContainer = modalPopup + " .modalpopup-container",
     modalPopupContent = modalPopup + " .modalpopup-content";
 
+var emmAdminBasePath = "/api/device-mgt/v1.0";
+
 //function openCollapsedNav() {
 //    $(".wr-hidden-nav-toggle-btn").addClass("active");
 //    $("#hiddenNav").slideToggle("slideDown", function () {
@@ -75,7 +77,7 @@ function toggleEnrollment() {
     showPopup();
 }
 
-var updateNotificationCount = function (data, jqXHR) {
+var updateNotificationCount = function (data, textStatus, jqXHR) {
     if (jqXHR.status == 200 && data) {
         var responsePayload = JSON.parse(data);
         var newNotificationsCount = responsePayload.devices.length;
@@ -89,7 +91,7 @@ var updateNotificationCount = function (data, jqXHR) {
 
 function loadNotificationsPanel() {
     if ("true" == $("#right-sidebar").attr("is-authorized")) {
-        var serviceURL = "/api/device-mgt/v1.0/notifications?status=NEW";
+        var serviceURL = emmAdminBasePath + "/notifications?status=NEW";
         invokerUtil.get(serviceURL, updateNotificationCount, hideNotificationCount);
         loadNewNotifications();
     } else {
@@ -113,7 +115,7 @@ function loadNewNotifications() {
         var currentUser = notifications.data("currentUser");
 
         $.template("notification-listing", notifications.attr("src"), function (template) {
-            var serviceURL = "/api/device-mgt/v1.0/notifications?status=NEW";
+            var serviceURL = emmAdminBasePath + "/notifications?status=NEW";
 
             var successCallback = function (data, textStatus, jqXHR) {
                 if (jqXHR.status == 200 && data) {

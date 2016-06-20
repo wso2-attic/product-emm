@@ -216,7 +216,7 @@ var backendServiceInvoker = function () {
      * @param soapVersion soapVersion which need to used.
      */
     publicWSInvokers.soapRequest = function (action, requestPayload, endpoint, successCallback, errorCallback, soapVersion) {
-        return privateMethods.initiateWSRequest(action, requestPayload, endpoint, successCallback, errorCallback, soapVersion);
+        return privateMethods.initiateWSRequest(action, endpoint, successCallback, errorCallback, soapVersion, requestPayload);
     };
 
     /**

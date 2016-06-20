@@ -333,7 +333,7 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/users";
+            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/users";
             return privateMethods.callBackend(url, constants.HTTP_GET);
 
         } catch (e) {
@@ -352,7 +352,8 @@ var userModule = function () {
         var carbonUser = privateMethods.getCarbonUser();
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/users/" + encodeURIComponent(username);
+            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/users/" +
+                encodeURIComponent(username);
             var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
             response["content"] = parse(response.content);
             response["userDomain"] = carbonUser.domain;
@@ -373,7 +374,8 @@ var userModule = function () {
         var carbonUser = privateMethods.getCarbonUser();
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/users/" + encodeURIComponent(username) + "/roles";
+            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/users/" +
+                encodeURIComponent(username) + "/roles";
             return privateMethods.callBackend(url, constants["HTTP_GET"]);
         } catch (e) {
             throw e;
@@ -473,7 +475,7 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/api/device-mgt/v1.0/devices/types";
+            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/devices/types";
             var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
             if (response.status == "success") {
                 response.content = parse(response.content);
@@ -501,8 +503,10 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/roles/" + encodeURIComponent(roleName);
-            return privateMethods.callBackend(url, constants["HTTP_GET"]);
+            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/roles/" + encodeURIComponent(roleName);
+            var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
+            response.content = parse(response.content);
+            return response;
         } catch (e) {
             throw e;
         } finally {
@@ -644,8 +648,8 @@ var userModule = function () {
         var wsPayload = "<xsd:getSecondaryRealmConfigurations  xmlns:xsd='http://org.apache.axis2/xsd'/>";
         serviceInvokers.WS.soapRequest(
             "urn:getSecondaryRealmConfigurations",
-            endpoint,
             wsPayload,
+            endpoint,
             function (wsResponse) {
                 var domainIDs = stringify(wsResponse.*::['return']. *::domainId.text());
                 if (domainIDs != "\"\"") {

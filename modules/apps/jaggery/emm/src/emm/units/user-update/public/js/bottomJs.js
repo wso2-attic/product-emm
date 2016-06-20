@@ -214,9 +214,8 @@ $(document).ready(function () {
             invokerUtil.put(
                 addUserAPI,
                 addUserFormData,
-                function (data) {
-                    data = JSON.parse(data);
-                    if (data["statusCode"] == 201) {
+                function (data, textStatus, jqXHR) {
+                    if (jqXHR.status == 201) {
                         // Clearing user input fields.
                         $("input#username").val("");
                         $("input#firstname").val("");
@@ -227,13 +226,14 @@ $(document).ready(function () {
                         $("#user-create-form").addClass("hidden");
                         $("#user-created-msg").removeClass("hidden");
                     }
-                }, function (data) {
-                    if (data["status"] == 409) {
+                }, function (jqXHR) {
+                    var payload = JSON.parse(jqXHR.responseText);
+                    if (jqXHR.status == 409) {
                         $(errorMsg).text("User : " + username + " doesn't exists. You cannot proceed.");
-                    } else if (data["status"] == 500) {
+                    } else if (jqXHR.status == 500) {
                         $(errorMsg).text("An unexpected error occurred at backend server. Please try again later.");
                     } else {
-                        $(errorMsg).text(data.errorMessage);
+                        $(errorMsg).text(payload.message);
                     }
                     $(errorMsgWrapper).removeClass("hidden");
                 }

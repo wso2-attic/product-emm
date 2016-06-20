@@ -245,26 +245,15 @@ $(document).ready(function () {
                         $("#user-created-msg").removeClass("hidden");
                         generateQRCode("#user-created-msg .qr-code");
 
-                    } else {
-                        data = JSON.parse(data);
-                        if (data.errorMessage) {
-                            $(errorMsg).text("Selected user store prompted an error : " + data.errorMessage);
-                            $(errorMsgWrapper).removeClass("hidden");
-                        } else if (data["status"] == 409) {
-                            $(errorMsg).text(data["messageFromServer"]);
-                            $(errorMsgWrapper).removeClass("hidden");
-                        } else if (data["status"] == 500) {
-                            $(errorMsg).text("An unexpected error occurred at backend server. Please try again later.");
-                            $(errorMsgWrapper).removeClass("hidden");
-                        }
                     }
                 }, function (data) {
-                    if (data["status"] == 409) {
+                    var payload = JSON.parse(data.responseText);
+                    if (data.status == 409) {
                         $(errorMsg).text("User : " + username + " already exists. Pick another username.");
-                    } else if (data["status"] == 500) {
+                    } else if (data.status == 500) {
                         $(errorMsg).text("An unexpected error occurred at backend server. Please try again later.");
                     } else {
-                        $(errorMsg).text(data.errorMessage);
+                        $(errorMsg).text(payload.message);
                     }
                     $(errorMsgWrapper).removeClass("hidden");
                 }

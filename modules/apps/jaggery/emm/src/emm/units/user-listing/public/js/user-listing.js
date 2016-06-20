@@ -20,8 +20,6 @@ var body = "body";
 var isInit = true;
 $(".icon .text").res_text(0.2);
 
-var resetPasswordServiceURL = emmAdminBasePath + "/users/reset-password";
-
 /*
  * set popup maximum height function.
  */
@@ -109,7 +107,7 @@ $("a.invite-user-link").click(function () {
 function removeUser(uname, uid) {
     var username = uname;
     var userid = uid;
-    var removeUserAPI = emmAdminBasePath + "/users?username=" + username;
+    var removeUserAPI = emmAdminBasePath + "/users/" + username;
     $(modalPopupContent).html($('#remove-user-modal-content').html());
     showPopup();
 
@@ -176,25 +174,22 @@ function resetPassword(uname) {
             resetPasswordFormData.username = user;
             resetPasswordFormData.newPassword = window.btoa(unescape(encodeURIComponent(confirmedPassword)));
 
+            var resetPasswordServiceURL = emmAdminBasePath + "/admin/users/"+ user +"/credentials";
+
             invokerUtil.post(
                 resetPasswordServiceURL,
                 resetPasswordFormData,
-                function (data) {   // The success callback
-                    data = JSON.parse(data);
-                    if (data.statusCode == 201) {
+                function (data, textStatus, jqXHR) {   // The success callback
+                    if (jqXHR.status == 200) {
                         $(modalPopupContent).html($('#reset-password-success-content').html());
                         $("a#reset-password-success-link").click(function () {
                             hidePopup();
                         });
                     }
-                }, function (data) {    // The error callback
-                    if (data.statusCode == 400) {
-                        $(errorMsg).text("Old password does not match with the provided value.");
-                        $(errorMsgWrapper).removeClass("hidden");
-                    } else {
-                        $(errorMsg).text("An unexpected error occurred. Please try again later.");
-                        $(errorMsgWrapper).removeClass("hidden");
-                    }
+                }, function (jqXHR) {    // The error callback
+                    var payload = JSON.parse(jqXHR.responseText);
+                    $(errorMsg).text(payload.message);
+                    $(errorMsgWrapper).removeClass("hidden");
                 }
             );
         }

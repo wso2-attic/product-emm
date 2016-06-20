@@ -34,6 +34,7 @@ function onRequest(context) {
         }
 
         response = userModule.getRolesByUsername(userName);
+        response.content = parse(response.content);
         if (response["status"] == "success") {
             context["usersRoles"] = response["content"];
         }
