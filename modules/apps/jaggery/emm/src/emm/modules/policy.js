@@ -28,11 +28,11 @@ policyModule = function () {
     var publicMethods = {};
     var privateMethods = {};
 
-    privateMethods.handleGetAllPolicies = function (responsePayload) {
+    privateMethods.handleGetAllPoliciesResponse = function (backendResponse) {
         var response = {};
-        if (responsePayload.status = 200) {
+        if (backendResponse.status = 200) {
             var isUpdated = false;
-            var policyListFromRestEndpoint = parse(responsePayload.responseText)["policies"];
+            var policyListFromRestEndpoint = parse(backendResponse.responseText)["policies"];
             var policyListToView = [];
             var i, policyObjectFromRestEndpoint, policyObjectToView;
             for (i = 0; i < policyListFromRestEndpoint.length; i++) {
@@ -48,20 +48,21 @@ policyModule = function () {
 
                 var assignedRoleCount = policyObjectFromRestEndpoint["roles"].length;
                 var assignedUserCount = policyObjectFromRestEndpoint["users"].length;
-                if (assignedRoleCount > 0) {
-                    policyObjectToView["rolesExist"] = "true";
-                    if (assignedRoleCount == 1) {
-                        policyObjectToView["roles"] = policyObjectFromRestEndpoint["roles"][0];
-                    } else if (assignedRoleCount > 1) {
-                        policyObjectToView["roles"] = policyObjectFromRestEndpoint["roles"][0] + ", ...";
-                    }
-                } else if (assignedUserCount > 0) {
-                    policyObjectToView["usersExist"] = "true";
-                    if (assignedUserCount == 1) {
-                        policyObjectToView["users"] = policyObjectFromRestEndpoint["users"][0];
-                    } else if (assignedUserCount > 1) {
-                        policyObjectToView["users"] = policyObjectFromRestEndpoint["users"][0] + ", ...";
-                    }
+
+                if (assignedRoleCount == 0) {
+                    policyObjectToView["roles"] = "None";
+                } else if (assignedRoleCount == 1) {
+                    policyObjectToView["roles"] = policyObjectFromRestEndpoint["roles"][0];
+                } else if (assignedRoleCount > 1) {
+                    policyObjectToView["roles"] = policyObjectFromRestEndpoint["roles"][0] + ", ...";
+                }
+
+                if (assignedUserCount == 0) {
+                    policyObjectToView["users"] = "None";
+                } else if (assignedUserCount == 1) {
+                    policyObjectToView["users"] = policyObjectFromRestEndpoint["users"][0];
+                } else if (assignedUserCount > 1) {
+                    policyObjectToView["users"] = policyObjectFromRestEndpoint["users"][0] + ", ...";
                 }
 
                 policyObjectToView["compliance"] = policyObjectFromRestEndpoint["compliance"];
@@ -94,7 +95,7 @@ policyModule = function () {
             return response;
         } else {
             response.status = "error";
-            /* responsePayload == "Scope validation failed"
+            /* backendResponse.responseText == "Scope validation failed"
             Here the response.context("Scope validation failed") is used other then response.status(401).
             Reason for this is IDP return 401 as the status in 4 different situations such as,
             1. UnAuthorized.
@@ -105,10 +106,10 @@ policyModule = function () {
             In these cases in order to identify the correct situation we have to compare the unique value from status and
             context which is context.
             */
-            if (responsePayload == "Scope validation failed") {
+            if (backendResponse.responseText == "Scope validation failed") {
                 response.content = "Permission Denied";
             } else {
-                response.content = responsePayload;
+                response.content = backendResponse.responseText;
             }
             return response;
         }
@@ -127,7 +128,7 @@ policyModule = function () {
         try {
             var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] +
                 "/policies?offset=0&limit=100";
-            return serviceInvokers.XMLHttp.get(url, privateMethods.handleGetAllPolicies);
+            return serviceInvokers.XMLHttp.get(url, privateMethods.handleGetAllPoliciesResponse);
         } catch (e) {
             throw e;
         }

@@ -77,7 +77,7 @@ function toggleEnrollment() {
     showPopup();
 }
 
-var updateNotificationCount = function (data, jqXHR) {
+var updateNotificationCount = function (data, textStatus, jqXHR) {
     if (jqXHR.status == 200 && data) {
         var responsePayload = JSON.parse(data);
         var newNotificationsCount = responsePayload.devices.length;
