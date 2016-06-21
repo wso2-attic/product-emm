@@ -106,7 +106,7 @@ function loadOperationBar(deviceType) {
     //var selectedDeviceID = deviceId;
     $.template("operations-bar", operationBarSrc, function (template) {
         //var serviceURL = "/mdm-admin/features/" + platformType;
-        var serviceURL = "/api/device-mgt/v1.0/devices/"+platformType+"/null/features";
+        var serviceURL = "/api/device-mgt/v1.0/devices/"+platformType+"/*/features";
         var successCallback = function (data) {
             var viewModel = {};
             data = JSON.parse(data).filter(function (current) {
@@ -173,8 +173,9 @@ function runOperation(operationName) {
     if (operationName == "NOTIFICATION") {
         var errorMsgWrapper = "#notification-error-msg";
         var errorMsg = "#notification-error-msg span";
-        var message = $("#message").val();
-        if (!message) {
+        var messageTitle = $("#messageTitle").val();
+        var messageText = $("#messageText").val();
+        if (!(messageTitle && messageText)) {
             $(errorMsg).text("Enter a message. It cannot be empty.");
             $(errorMsgWrapper).removeClass("hidden");
         } else {
