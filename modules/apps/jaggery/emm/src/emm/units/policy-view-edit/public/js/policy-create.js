@@ -67,7 +67,7 @@ var disableInlineError = function (inputField, errorMsg, errorSign) {
  *clear inline validation messages.
  */
 clearInline["policy-name"] = function () {
-    disableInlineError("plicynameField", "nameEmpty", "nameError");
+    disableInlineError("policy-name-field", "nameEmpty", "nameError");
 };
 
 
@@ -77,17 +77,15 @@ clearInline["policy-name"] = function () {
 validateInline["policy-name"] = function () {
     var policyName = $("input#policy-name-input").val();
     if (policyName && inputIsValidAgainstLength(policyName, 1, 30)) {
-        disableInlineError("plicynameField", "nameEmpty", "nameError");
+        disableInlineError("policy-name-field", "nameEmpty", "nameError");
     } else {
-        enableInlineError("plicynameField", "nameEmpty", "nameError");
+        enableInlineError("policy-name-field", "nameEmpty", "nameError");
     }
 };
 
 $("#policy-name-input").focus(function(){
     clearInline["policy-name"]();
-});
-
-$("#policy-name-input").blur(function(){
+}).blur(function(){
     validateInline["policy-name"]();
 });
 
@@ -193,7 +191,7 @@ skipStep["policy-platform"] = function (policyPayloadObj) {
     userInput.val(currentlyEffected["users"]).trigger("change");
 
     if (currentlyEffected["users"].length > 0) {
-        $("#users-radio-btn").prop("checked", true)
+        $("#users-radio-btn").prop("checked", true);
         $("#users-select-field").show();
         $("#user-roles-select-field").hide();
     }
@@ -226,9 +224,8 @@ skipStep["policy-platform"] = function (policyPayloadObj) {
                 for (var i = 0; i < configuredOperations.length; ++i) {
                     var configuredOperation = configuredOperations[i];
                     $(".operation-data").filterByData("operation-code", configuredOperation).
-                        find(".panel-title .wr-input-control.switch input[type=checkbox]").each(function () {
-                                                                                                    $(this).click();
-                                                                                                });
+                        find(".panel-title .wr-input-control.switch input[type=checkbox]").
+                            each(function () {$(this).click();});
                 }
             });
         },
@@ -1977,8 +1974,9 @@ var updatePolicy = function (policy, state) {
     // traverses key by key in policy["profile"]
     var key;
     for (key in policy["profile"]) {
-        if (policy["platformId"] == platformTypeIds["WINDOWS"] && key == windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]) {
-            policy["profile"][key].enablePassword = true;
+        if (policy["platformId"] == platformTypeIds["WINDOWS"] &&
+            key == windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]) {
+            policy["profile"][windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]].enablePassword = true;
         }
 
         if (policy["profile"].hasOwnProperty(key)) {
@@ -2021,52 +2019,56 @@ var updatePolicy = function (policy, state) {
         payload["roles"] = [];
     }
 
-    var serviceURL = "/mdm-admin/policies/" + getParameterByName("id");
+    var serviceURL = "/api/device-mgt/v1.0/policies/" + getParameterByName("id");
     invokerUtil.put(
         serviceURL,
         payload,
         // on success
-        function () {
-            if (state == "save") {
+        function (data, textStatus, jqXHR) {
+            if (jqXHR.status == 200) {
                 var policyList = [];
                 policyList.push(getParameterByName("id"));
-                serviceURL = "/mdm-admin/policies/inactivate";
-                invokerUtil.put(
-                    serviceURL,
-                    policyList,
-                    // on success
-                    function () {
-                        $(".add-policy").addClass("hidden");
-                        $(".policy-message").removeClass("hidden");
-                    },
-                    // on error
-                    function (daa) {
-                        console.log(data);
-                    }
-                );
-            } else if (state == "publish") {
-                var policyList = [];
-                policyList.push(getParameterByName("id"));
-                serviceURL = "/mdm-admin/policies/activate";
-                invokerUtil.put(
-                    serviceURL,
-                    policyList,
-                    // on success
-                    function () {
-                        $(".add-policy").addClass("hidden");
-                        $(".policy-naming").addClass("hidden");
-                        $(".policy-message").removeClass("hidden");
-                    },
-                    // on error
-                    function (data) {
-                        console.log(data);
-                    }
-                );
+                if (state == "save") {
+                    serviceURL = "/api/device-mgt/v1.0/policies/deactivate-policy";
+                    invokerUtil.put(
+                        serviceURL,
+                        policyList,
+                        // on success
+                        function (data, textStatus, jqXHR) {
+                            if (jqXHR.status == 200) {
+                                $(".add-policy").addClass("hidden");
+                                $(".policy-message").removeClass("hidden");
+                            }
+                        },
+                        // on error
+                        function (jqXHR) {
+                            console.log("error in saving policy. Received error code : " + jqXHR.status);
+                        }
+                    );
+                } else if (state == "publish") {
+                    serviceURL = "/api/device-mgt/v1.0/policies/activate-policy";
+                    invokerUtil.put(
+                        serviceURL,
+                        policyList,
+                        // on success
+                        function (data, textStatus, jqXHR) {
+                            if (jqXHR.status == 200) {
+                                $(".add-policy").addClass("hidden");
+                                $(".policy-naming").addClass("hidden");
+                                $(".policy-message").removeClass("hidden");
+                            }
+                        },
+                        // on error
+                        function (jqXHR) {
+                            console.log("error in publishing policy. Received error code : " + jqXHR.status);
+                        }
+                    );
+                }
             }
         },
         // on error
-        function () {
-
+        function (jqXHR) {
+            console.log("error in updating policy. Received error code : " + jqXHR.status);
         }
     );
 };
@@ -2280,21 +2282,19 @@ function formatRepoSelection(user) {
 }
 
 $(document).ready(function () {
-
     // Adding initial state of wizard-steps.
-
-    var policyPayloadObj;
     invokerUtil.get(
-        "/mdm-admin/policies/" + getParameterByName("id"),
+        "/api/device-mgt/v1.0/policies/" + getParameterByName("id"),
         // on success
-        function (data) {
-            data = JSON.parse(data);
-            policyPayloadObj = data["responseContent"];
-            skipStep["policy-platform"](policyPayloadObj);
+        function (data, textStatus, jqXHR) {
+            if (jqXHR.status == 200 && data) {
+                var policy = JSON.parse(data);
+                skipStep["policy-platform"](policy);
+            }
         },
         // on error
-        function (data) {
-            console.log(data);
+        function (jqXHR) {
+            console.log(jqXHR);
             // should be redirected to an error page
         }
     );

@@ -40,7 +40,7 @@ var userModule = function () {
 
     /**
      * Get the carbon user object from the session. If not found - it will throw a user not found error.
-     * @returns {carbon user object}
+     * @returns {object} carbon user object
      */
     privateMethods.getCarbonUser = function () {
         var carbon = require("carbon");
@@ -93,12 +93,12 @@ var userModule = function () {
      * @returns {number} HTTP Status code 201 if succeeded, 409 if user already exists
      */
     publicMethods.addUser = function (username, firstname, lastname, emailAddress, userRoles) {
-        var statusCode, carbon = require('carbon');
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
-        var utility = require('/modules/utility.js').utility;
+        var statusCode, carbon = require("carbon");
+        var carbonUser = session.get(constants["USER_SESSION_KEY"]);
+        var utility = require("/modules/utility.js")["utility"];
         if (!carbonUser) {
             log.error("User object was not found in the session");
-            throw constants.ERRORS.USER_NOT_FOUND;
+            throw constants["ERRORS"]["USER_NOT_FOUND"];
         }
         try {
             utility.startTenantFlow(carbonUser);
@@ -334,7 +334,7 @@ var userModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/users";
-            return privateMethods.callBackend(url, constants.HTTP_GET);
+            return privateMethods.callBackend(url, constants["HTTP_GET"]);
 
         } catch (e) {
             throw e;
@@ -346,7 +346,7 @@ var userModule = function () {
     /**
      * Return a User object from the backend by calling the JAX-RS
      * @param username
-     * @returns {object} an response object with status and content.
+     * @returns {object} a response object with status and content on success.
      */
     publicMethods.getUser = function (username) {
         var carbonUser = privateMethods.getCarbonUser();
@@ -366,9 +366,9 @@ var userModule = function () {
     };
 
     /**
-     * TODO: comment
+     * Returns a set of roles assigned to a particular user
      * @param username
-     * @returns {*}
+     * @returns {object} a response object with status and content on success.
      */
     publicMethods.getRolesByUsername = function (username) {
         var carbonUser = privateMethods.getCarbonUser();
@@ -410,6 +410,7 @@ var userModule = function () {
      */
     /**
      * Get User Roles from user store (Internal roles not included).
+     * @returns {object} a response object with status and content on success.
      */
     publicMethods.getRoles = function () {
         var carbonUser = session.get(constants["USER_SESSION_KEY"]);
@@ -439,6 +440,7 @@ var userModule = function () {
      */
     /**
      * Get User Roles from user store (Internal roles not included).
+     * @returns {object} a response object with status and content on success.
      */
     publicMethods.getRolesByUserStore = function () {
         var ROLE_LIMIT = mdmProps.pageSize;
@@ -503,7 +505,8 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/roles/" + encodeURIComponent(roleName);
+            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] +
+                "/roles/" + encodeURIComponent(roleName);
             var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
             response.content = parse(response.content);
             return response;
