@@ -1026,30 +1026,31 @@ var operationModule = function () {
 
     publicMethods.getAndroidServiceEndpoint = function (operationCode) {
         var featureMap = {
-            "WIFI": "wifi",
-            "CAMERA": "camera",
-            "VPN": "vpn",
-            "DEVICE_LOCK": "lock",
-            "DEVICE_UNLOCK": "unlock",
+            "WIFI": "configure-wifi",
+            "CAMERA": "control-camera",
+            "VPN": "configure-vpn",
+            "DEVICE_LOCK": "lock-devices",
+            "DEVICE_UNLOCK": "unlock-devices",
             "DEVICE_LOCATION": "location",
             "CLEAR_PASSWORD": "clear-password",
             "APPLICATION_LIST": "get-application-list",
-            "DEVICE_RING": "ring-device",
-            "DEVICE_REBOOT": "reboot-device",
+            "DEVICE_RING": "ring",
+            "DEVICE_REBOOT": "reboot",
             "UPGRADE_FIRMWARE": "upgrade-firmware",
             "DEVICE_MUTE": "mute",
-            "NOTIFICATION": "notification",
-            "ENCRYPT_STORAGE": "encrypt",
+            "NOTIFICATION": "send-notification",
+            "ENCRYPT_STORAGE": "encrypt-storage",
             "CHANGE_LOCK_CODE": "change-lock-code",
-            "WEBCLIP": "webclip",
+            "WEBCLIP": "set-webclip",
             "INSTALL_APPLICATION": "install-application",
             "UNINSTALL_APPLICATION": "uninstall-application",
             "BLACKLIST_APPLICATIONS": "blacklist-applications",
-            "PASSCODE_POLICY": "password-policy",
+            "PASSCODE_POLICY": "set-password-policy",
             "ENTERPRISE_WIPE": "enterprise-wipe",
-            "WIPE_DATA": "wipe-data"
+            "WIPE_DATA": "wipe"
         };
-        return "/mdm-android-agent/operation/" + featureMap[operationCode];
+        //return "/mdm-android-agent/operation/" + featureMap[operationCode];
+        return "/api/device-mgt/android/v1.0/admin/devices/" + featureMap[operationCode];
     };
 
     /**

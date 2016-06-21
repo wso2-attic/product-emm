@@ -92,7 +92,7 @@ var backendServiceInvoker = function () {
         log.debug("Service Invoker-Method: " + httpMethod);
 
         log.info(stringify(xmlHttpRequest.status));
-        log.info(xmlHttpRequest.responseText);
+        //log.info(xmlHttpRequest.responseText);
 
         if (xmlHttpRequest.status == 401 && (xmlHttpRequest.responseText == TOKEN_EXPIRED ||
             xmlHttpRequest.responseText == TOKEN_INVALID ) && count < 5) {
