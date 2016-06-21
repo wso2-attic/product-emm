@@ -167,7 +167,8 @@ function loadDevices(searchType, searchParam){
         serviceURL = "/api/device-mgt/v1.0/devices";
     } else if ($.hasPermission("LIST_OWN_DEVICES")) {
         //Get authenticated users devices
-        serviceURL = "/mdm-admin/users/devices?username="+currentUser;
+        serviceURL = "/api/device-mgt/v1.0/devices?user="+currentUser;
+        //serviceURL = "/mdm-admin/users/devices?username="+currentUser;
     } else {
         $("#loading-content").remove();
         $('#device-table').addClass('hidden');
@@ -195,14 +196,14 @@ function loadDevices(searchType, searchParam){
         filter: false,
         pageLength : 16,
         ajax: { url : '/emm/api/devices', data : {url : serviceURL},
-                dataSrc: function ( json ) {
+                dataSrc: function (json) {
                     $('#device-grid').removeClass('hidden');
                     $("#loading-content").remove();
                     var $list = $("#device-table :input[type='search']");
                     $list.each(function(){
                         $(this).addClass("hidden");
                     });
-                    return json.data;
+                    return json.devices;
                 }
         },
         columnDefs: [
@@ -324,14 +325,14 @@ function initPage() {
         serviceURL ="/api/device-mgt/v1.0/devices"
     } else if ($.hasPermission("LIST_OWN_DEVICES")) {
         //Get authenticated users devices
-        serviceURL = "/mdm-admin/users/devices?username=" + currentUser;
+        serviceURL = "/api/device-mgt/v1.0/devices?user=" + currentUser;
     }
     invokerUtil.get(
         serviceURL,
         function (data) {
             if (data) {
                 data = JSON.parse(data);
-                if (data.length > 0) {
+                if (data.devices.length > 0) {
                     loadDevices();
                 } else {
                     $("#loading-content").remove();
