@@ -26,8 +26,7 @@ import java.util.Date;
 public class Notification {
 
     private int id;
-    private String messageTitle;
-    private String messageText;
+    private String message;
     private String receivedTime; // This is due to lack of support for dates in sqlite
     private String responseTime; // This is due to lack of support for dates in sqlite
     private Status status;
@@ -44,6 +43,14 @@ public class Notification {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getReceivedTime() {
@@ -68,21 +75,5 @@ public class Notification {
 
     public void setStatus(Status status) {
         this.status = status;
-    }
-
-    public String getMessageTitle() {
-        return messageTitle;
-    }
-
-    public void setMessageTitle(String messageTitle) {
-        this.messageTitle = messageTitle;
-    }
-
-    public String getMessageText() {
-        return messageText;
-    }
-
-    public void setMessageText(String messageText) {
-        this.messageText = messageText;
     }
 }

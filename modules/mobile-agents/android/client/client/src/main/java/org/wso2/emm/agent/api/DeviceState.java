@@ -200,19 +200,29 @@ public class DeviceState {
                                                                 Intent.ACTION_BATTERY_CHANGED));
         int level = 0;
         int scale = 0;
-        int plugState = 0;
-        int healthState = 0;
+        Bundle bundle = null;
+        boolean isPresent = false;
         if (batteryIntent != null) {
             level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, DEFAULT_LEVEL);
             scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, DEFAULT_LEVEL);
-            plugState = batteryIntent.getIntExtra(BatteryManager.EXTRA_PLUGGED, DEFAULT_LEVEL);
-            healthState = batteryIntent.getIntExtra(BatteryManager.EXTRA_HEALTH, DEFAULT_LEVEL);
+            isPresent = batteryIntent.getBooleanExtra(PRESENT, false);
+            bundle = batteryIntent.getExtras();
         }
 
         power.setLevel(level);
         power.setScale(scale);
-        power.setPlugged(getPlugType(plugState));
-        power.setHealth(getHealth(healthState));
+        if (isPresent) {
+            power.setTechnology(bundle.getString(TECHNOLOGY));
+            power.setVoltage(bundle.getInt(VOLTAGE));
+            power.setTemperature(bundle.getInt(TEMPERATURE));
+            //Average battery current in micro-amperes, as an integer.
+            power.setCurrentAverage(bundle.getInt(CURRENT_AVG));
+            power.setHealth(getHealth(bundle.getInt(HEALTH)));
+            power.setStatus(getStatus(bundle.getInt(STATUS)));
+            power.setPlugged(getPlugType(bundle.getInt(PLUGGED)));
+
+        }
+
         return power;
     }
 

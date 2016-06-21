@@ -17,16 +17,12 @@
  */
 
 package org.wso2.emm.agent;
-import android.content.Context;
 import android.os.Bundle;
 
 import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import org.wso2.emm.agent.services.MessageProcessor;
-import org.wso2.emm.agent.utils.CommonUtils;
-import org.wso2.emm.agent.utils.Constants;
-import org.wso2.emm.agent.utils.Preference;
 
 /**
  * IntentService responsible for handling GCM messages.
@@ -41,19 +37,11 @@ public class GCMIntentService extends GcmListenerService {
 	 */
 	@Override
 	public void onMessageReceived(String from, Bundle data) {
-		Context context = this.getApplicationContext();
-		MessageProcessor messageProcessor = new MessageProcessor(context);
+		MessageProcessor messageProcessor = new MessageProcessor(this.getApplicationContext());
 		try {
 			messageProcessor.getMessages();
 		} catch (AndroidAgentException e) {
 			Log.e(TAG, "Failed to perform operation", e);
-		}
-
-		if (Constants.SYSTEM_APP_ENABLED && Preference.getBoolean(context, context.getResources().
-				getString(R.string.firmware_upgrade_failed))) {
-			Preference.putBoolean(context, context.getResources().
-					getString(R.string.firmware_upgrade_failed), false);
-			CommonUtils.callSystemApp(context, Constants.Operation.UPGRADE_FIRMWARE, null, null);
 		}
 	}
 

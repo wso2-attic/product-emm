@@ -18,53 +18,46 @@
 
 var invokerUtil = function () {
 
-    var publicMethods = {};
-    var privateMethods = {};
+    var module = {};
 
-    privateMethods.execute = function (method, url, payload, successCallback, errorCallback) {
-        var requestPayload = {};
-        requestPayload.actionMethod = method;
-        requestPayload.actionUrl = url;
-        requestPayload.actionPayload = JSON.stringify(payload);
+    var END_POINT = window.location.origin+"/emm/api/invoker/execute/";
 
-        var request = {
-            url: "/emm/api/invoker/execute/",
+    module.get = function (url, successCallback, errorCallback) {
+        var payload = null;
+        execute("GET", url, payload, successCallback, errorCallback);
+    };
+    module.post = function (url, payload, successCallback, errorCallback) {
+        execute("POST", url, payload, successCallback, errorCallback);
+    };
+    module.put = function (url, payload, successCallback, errorCallback) {
+        execute("PUT", url, payload, successCallback, errorCallback);
+    };
+    module.delete = function (url, successCallback, errorCallback) {
+        var payload = null;
+        execute("DELETE", url, payload, successCallback, errorCallback);
+    };
+    function execute (methoad, url, payload, successCallback, errorCallback) {
+        var data = {
+            url: END_POINT,
             type: "POST",
             contentType: "application/json",
-            data: JSON.stringify(requestPayload),
             accept: "application/json",
-            success: successCallback,
-            error: function (jqXHR) {
-                if (jqXHR.status == "401") {
-                    console.log("Unauthorized access attempt!");
-                    $(modalPopupContent).html($("#error-msg").html());
-                    showPopup();
-                } else {
-                    errorCallback(jqXHR);
-                }
-            }
+            success: successCallback
         };
-
-        $.ajax(request);
+        var paramValue = {};
+        paramValue.actionMethod = methoad;
+        paramValue.actionUrl = url;
+        paramValue.actionPayload = JSON.stringify(payload)
+        data.data = JSON.stringify(paramValue);
+        $.ajax(data).fail(function (jqXHR) {
+            if (jqXHR.status == "401") {
+                console.log("Unauthorized access attempt!");
+                $(modalPopupContent).html($('#error-msg').html());
+                showPopup();
+            } else {
+                errorCallback(jqXHR);
+            }
+        });
     };
-
-    publicMethods.get = function (url, successCallback, errorCallback) {
-        var payload = null;
-        privateMethods.execute("GET", url, payload, successCallback, errorCallback);
-    };
-
-    publicMethods.post = function (url, payload, successCallback, errorCallback) {
-        privateMethods.execute("POST", url, payload, successCallback, errorCallback);
-    };
-
-    publicMethods.put = function (url, payload, successCallback, errorCallback) {
-        privateMethods.execute("PUT", url, payload, successCallback, errorCallback);
-    };
-
-    publicMethods.delete = function (url, successCallback, errorCallback) {
-        var payload = null;
-        privateMethods.execute("DELETE", url, payload, successCallback, errorCallback);
-    };
-
-    return publicMethods;
+    return module;
 }();

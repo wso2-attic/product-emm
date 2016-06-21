@@ -62,6 +62,7 @@ import org.wso2.emm.agent.utils.CommonDialogUtils;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
@@ -285,11 +286,8 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * @param clientSecret client secret value to access APIs.
 	 */
 	private void initializeIDPLib(String clientKey, String clientSecret) {
-		String serverIP = Constants.DEFAULT_HOST;
-		String prefIP = Preference.getString(AuthenticationActivity.this, Constants.PreferenceFlag.IP);
-		if (prefIP != null) {
-			serverIP = prefIP;
-		}
+		
+		String serverIP = Preference.getString(AuthenticationActivity.this, Constants.PreferenceFlag.IP);
 		if (serverIP != null && !serverIP.isEmpty()) {
 			ServerConfig utils = new ServerConfig();
 			utils.setServerIP(serverIP);
@@ -420,11 +418,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * Retriever license agreement details from the server.
 	 */
 	private void getLicenseFromServer() {
-		String ipSaved = Constants.DEFAULT_HOST;
-		String prefIP = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
-		if (prefIP != null) {
-			ipSaved = prefIP;
-		}
+		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
 
 		if (ipSaved != null && !ipSaved.isEmpty()) {
 			ServerConfig utils = new ServerConfig();
@@ -468,6 +462,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * Retriever configurations from the server.
 	 */
 	private void getConfigurationsFromServer() {
+
 		final OnCancelListener cancelListener = new OnCancelListener() {
 
 			@Override
@@ -491,11 +486,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			}
 		});
 
-		String ipSaved = Constants.DEFAULT_HOST;
-		String prefIP = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
-		if (prefIP != null) {
-			ipSaved = prefIP;
-		}
+		String ipSaved = Preference.getString(context.getApplicationContext(),Constants.PreferenceFlag.IP);
 
 		if (ipSaved != null && !ipSaved.isEmpty()) {
 			ServerConfig utils = new ServerConfig();
@@ -941,11 +932,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	 * @throws AndroidAgentException
 	 */
 	private void getClientCredentials() {
-		String ipSaved = Constants.DEFAULT_HOST;
-		String prefIP = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
-		if (prefIP != null) {
-			ipSaved = prefIP;
-		}
+		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
 		progressDialog = ProgressDialog.show(context, getResources().getString(R.string.dialog_authenticate), getResources().
 				getString(R.string.dialog_message_please_wait), true);
 		if (ipSaved != null && !ipSaved.isEmpty()) {

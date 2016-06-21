@@ -82,13 +82,16 @@ if (uriMatcher.match("/{context}/api/devices")) {
     }
 
     serviceInvokers.XMLHttp.get(
-            targetURL,
-            function (backendResponse) {
-                response.status = backendResponse.status;
-                result =  backendResponse.responseText;
+            targetURL, function (responsePayload) {
+                response.status = 200;
+                result =  responsePayload;
+            },
+            function (responsePayload) {
+                response.status = responsePayload.status;
+                result =  responsePayload.responseText;
             });
 } else if (uriMatcher.match("/{context}/api/devices/")) {
-    if (userModule.isAuthorized("/permission/admin/device-mgt/admin/devices/list")) {
+    if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list")) {
         result = deviceModule.listDevices();
     } else {
         response.sendError(403);
@@ -97,9 +100,9 @@ if (uriMatcher.match("/{context}/api/devices")) {
     elements = uriMatcher.elements();
     deviceId = elements.deviceId;
     type = elements.type;
-    if (userModule.isAuthorized("/permission/admin/device-mgt/admin/devices/list")) {
-        result = deviceModule.viewDevice(type, deviceId).content;
-    } else {
+    if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/list")) {
+        result = deviceModule.viewDevice(type, deviceId);
+    }else {
         response.sendError(403);
     }
 } else if (uriMatcher.match("{context}/api/devices/{type}/{deviceId}/{operation}")) {
@@ -107,7 +110,7 @@ if (uriMatcher.match("/{context}/api/devices")) {
     deviceId = elements.deviceId;
     type = elements.type;
     operation = elements.operation;
-    if (userModule.isAuthorized("/permission/admin/device-mgt/admin/devices/operation")) {
+    if (userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/devices/operation")) {
         result = deviceModule.performOperation(deviceId, operation, [], type);
     } else {
         response.sendError(403);

@@ -40,6 +40,8 @@ import com.actionbarsherlock.app.SherlockActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.api.DeviceInfo;
+import org.wso2.emm.agent.beans.Notification;
+import org.wso2.emm.agent.dao.NotificationDAO;
 import org.wso2.emm.agent.services.NotificationService;
 import org.wso2.emm.agent.services.VPNService;
 import org.wso2.emm.agent.utils.Constants;
@@ -48,13 +50,10 @@ import org.wso2.emm.agent.utils.Constants;
  * Activity which is used to show alerts throughout the application.
  */
 public class AlertActivity extends SherlockActivity {
-	private String messageTitle;
-	private String messageText;
+	private String message;
 	private String payload;
 	private Button btnOK;
 	private TextView txtMessage;
-	private TextView txtMessageTitle;
-	private View horizontalLine;
 	private Uri defaultRingtoneUri;
 	private Ringtone defaultRingtone;
 	private DeviceInfo deviceInfo;
@@ -71,7 +70,6 @@ public class AlertActivity extends SherlockActivity {
 	private static final int DEFAULT_FLAG = 0;
 	private static final int VPN_REQUEST_CODE = 0;
 	private static final String DEVICE_OPERATION_RING = "ring";
-	private static final String DEVICE_OPERATION_ALERT = "alert";
 	private static final String OPEN_LOCK_SETTINGS = "lock_settings";
 	private static final String TAG = AlertActivity.class.getSimpleName();
 
@@ -83,33 +81,26 @@ public class AlertActivity extends SherlockActivity {
 
 		btnOK = (Button) findViewById(R.id.btnOK);
 		txtMessage = (TextView) findViewById(R.id.txtMessage);
-		txtMessageTitle = (TextView) findViewById(R.id.txtMessageTitle);
-		horizontalLine = findViewById(R.id.hLine);
 		deviceInfo = new DeviceInfo(this);
 		context = AlertActivity.this.getApplicationContext();
 		this.resources = context.getResources();
 		audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
+
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 
-			if (extras.containsKey(getResources().getString(R.string.intent_extra_message_title))) {
-				messageTitle = extras.getString(getResources().getString(R.string.intent_extra_message_title));
-			} else {
-				messageTitle = context.getResources().getString(R.string.txt_message_title);
-			}
-
-			if (extras.containsKey(getResources().getString(R.string.intent_extra_message_text))) {
-				messageText = extras.getString(getResources().getString(R.string.intent_extra_message_text));
-			} else {
-				messageText = context.getResources().getString(R.string.txt_message);
+			if (extras.containsKey(getResources().getString(R.string.intent_extra_message))) {
+				message = extras.getString(getResources().getString(R.string.intent_extra_message));
 			}
 
 			type = extras.getString(getResources().getString(R.string.intent_extra_type));
 
 			if (DEVICE_OPERATION_RING.equalsIgnoreCase(type)) {
 				startRing();
-			} else if (Constants.Operation.VPN.equalsIgnoreCase(type)) {
+			}
+
+			if (Constants.Operation.VPN.equalsIgnoreCase(type)) {
 				payload = extras.getString(getResources().getString(R.string.intent_extra_payload));
 			}
 		}
@@ -117,8 +108,7 @@ public class AlertActivity extends SherlockActivity {
 			operationId = extras.getInt(getResources().getString(R.string.intent_extra_operation_id));
 		}
 
-		txtMessageTitle.setText(messageTitle);
-		txtMessage.setText(messageText);
+		txtMessage.setText(message);
 
 		btnOK.setOnClickListener(new OnClickListener() {
 			@Override

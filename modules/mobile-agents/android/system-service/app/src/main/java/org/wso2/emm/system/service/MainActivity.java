@@ -21,7 +21,6 @@ package org.wso2.emm.system.service;
 import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,20 +42,11 @@ public class MainActivity extends Activity {
      * @param cdmDeviceAdmin - Device admin component.
      */
     private void startDeviceAdminPrompt(ComponentName cdmDeviceAdmin) {
-        DevicePolicyManager devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-        if (!devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
-            Intent deviceAdminIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-            deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cdmDeviceAdmin);
-            deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                                       getResources().getString(R.string.device_admin_enable_alert));
-            startActivityForResult(deviceAdminIntent, ACTIVATION_REQUEST);
-        } else {
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                            Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
+        Intent deviceAdminIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+        deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cdmDeviceAdmin);
+        deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                                   getResources().getString(R.string.device_admin_enable_alert));
+        startActivityForResult(deviceAdminIntent, ACTIVATION_REQUEST);
     }
 
     @Override

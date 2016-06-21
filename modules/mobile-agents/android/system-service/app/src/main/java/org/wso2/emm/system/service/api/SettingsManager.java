@@ -18,7 +18,6 @@
 
 package org.wso2.emm.system.service.api;
 
-import android.annotation.TargetApi;
 import android.os.Build;
 import android.util.Log;
 import org.wso2.emm.system.service.BuildConfig;
@@ -44,7 +43,7 @@ public class SettingsManager {
         boolean restrictionState = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
             EMMSystemService.devicePolicyManager != null) {
-            if (isDeviceOwner()) {
+            if (EMMSystemService.devicePolicyManager.isDeviceOwnerApp(BuildConfig.APPLICATION_ID)) {
                 if (state) {
                     EMMSystemService.devicePolicyManager.
                             addUserRestriction(EMMSystemService.cdmDeviceAdmin, code);
@@ -85,14 +84,5 @@ public class SettingsManager {
         }
     }
 
-    /**
-     * This method is used to check whether agent is registered as the device owner.
-     *
-     * @return true if agent is the device owner.
-     */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public static boolean isDeviceOwner() {
-        return EMMSystemService.devicePolicyManager.isDeviceOwnerApp(BuildConfig.APPLICATION_ID);
-    }
 
 }

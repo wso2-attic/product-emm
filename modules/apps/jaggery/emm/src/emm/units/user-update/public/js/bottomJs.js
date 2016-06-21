@@ -14,8 +14,6 @@ function inputIsValid(regExp, inputString) {
 var validateInline = {};
 var clearInline = {};
 
-var emmAdminBasePath = "/api/device-mgt/v1.0";
-
 var enableInlineError = function (inputField, errorMsg, errorSign) {
     var fieldIdentifier = "#" + inputField;
     var errorMsgIdentifier = "#" + inputField + " ." + errorMsg;
@@ -209,13 +207,14 @@ $(document).ready(function () {
             }
             addUserFormData.roles = roles;
 
-            var addUserAPI = emmAdminBasePath + "/users/" + username;
+            var addUserAPI = "/mdm-admin/users?username=" + username;
 
             invokerUtil.put(
                 addUserAPI,
                 addUserFormData,
-                function (data, textStatus, jqXHR) {
-                    if (jqXHR.status == 201) {
+                function (data) {
+                    data = JSON.parse(data);
+                    if (data["statusCode"] == 201) {
                         // Clearing user input fields.
                         $("input#username").val("");
                         $("input#firstname").val("");
@@ -226,14 +225,13 @@ $(document).ready(function () {
                         $("#user-create-form").addClass("hidden");
                         $("#user-created-msg").removeClass("hidden");
                     }
-                }, function (jqXHR) {
-                    var payload = JSON.parse(jqXHR.responseText);
-                    if (jqXHR.status == 409) {
+                }, function (data) {
+                    if (data["status"] == 409) {
                         $(errorMsg).text("User : " + username + " doesn't exists. You cannot proceed.");
-                    } else if (jqXHR.status == 500) {
+                    } else if (data["status"] == 500) {
                         $(errorMsg).text("An unexpected error occurred at backend server. Please try again later.");
                     } else {
-                        $(errorMsg).text(payload.message);
+                        $(errorMsg).text(data.errorMessage);
                     }
                     $(errorMsgWrapper).removeClass("hidden");
                 }

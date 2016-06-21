@@ -47,13 +47,9 @@ public class ApplicationManagementService extends IntentService implements APIRe
     private static final String INTENT_KEY_CODE = "code";
     private static final String INTENT_KEY_APP_URI = "appUri";
     private static final String INTENT_KEY_APP_NAME = "appName";
-    private static final String INTENT_KEY_MESSAGE = "message";
-    private static final String INTENT_KEY_ID = "id";
     private String operationCode = null;
     private String appUri = null;
     private String appName = null;
-    private String message = null;
-    private int id;
     private Context context;
     private ServerConfig utils;
     public ApplicationManagementService() {
@@ -74,14 +70,6 @@ public class ApplicationManagementService extends IntentService implements APIRe
             if (extras.containsKey(INTENT_KEY_APP_NAME)) {
                 appName = extras.getString(INTENT_KEY_APP_NAME);
             }
-
-            if (extras.containsKey(INTENT_KEY_MESSAGE)) {
-                message = extras.getString(INTENT_KEY_MESSAGE);
-            }
-
-            if (extras.containsKey(INTENT_KEY_ID)) {
-                id = extras.getInt(INTENT_KEY_ID);
-            }
         }
 
         Log.d(TAG, "App catalog has sent a command.");
@@ -91,8 +79,6 @@ public class ApplicationManagementService extends IntentService implements APIRe
             Log.i(TAG, "Will now executing the command ..." + operationCode);
             boolean isRegistered = Preference.getBoolean(this.getApplicationContext(), Constants.PreferenceFlag.REGISTERED);
             if (isRegistered && Constants.CATALOG_APP_PACKAGE_NAME.equals(intent.getPackage())) {
-                doTask(operationCode);
-            } else if (isRegistered && Constants.SYSTEM_SERVICE_PACKAGE.equals(intent.getPackage())) {
                 doTask(operationCode);
             } else {
                 sendBroadcast(Constants.Status.AUTHENTICATION_FAILED, null);
@@ -157,18 +143,6 @@ public class ApplicationManagementService extends IntentService implements APIRe
                 sendBroadcast(Constants.Status.SUCCESSFUL, Preference.getString(context, context.getResources().
                         getString(R.string.app_download_progress)));
                 break;
-            case Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION:
-                Preference.putBoolean(context, context.getResources().
-                        getString(R.string.firmware_upgrade_failed), true);
-                if (message != null && id != 0) {
-                    Preference.putBoolean(context, context.getResources().
-                            getString(R.string.firmware_upgrade_failed), false);
-                    Preference.putString(context, context.getResources().getString(R.string.firmware_upgrade_failed_message),
-                                         message);
-                    Preference.putInt(context, context.getResources().getString(R.string.firmware_upgrade_failed_id),
-                                         id);
-                }
-                break;
             default:
                 Log.e(TAG, "Invalid operation code received");
                 break;
@@ -180,11 +154,8 @@ public class ApplicationManagementService extends IntentService implements APIRe
      */
     private void getAppListFromServer() {
         Context context = this.getApplicationContext();
-        String ipSaved = Constants.DEFAULT_HOST;
-        String prefIP = Preference.getString(context, Constants.PreferenceFlag.IP);
-        if (prefIP != null) {
-            ipSaved = prefIP;
-        }
+        String ipSaved = Preference.getString(context, Constants.PreferenceFlag.IP);
+
         if (ipSaved != null && !ipSaved.isEmpty()) {
             utils.setServerIP(ipSaved);
             CommonUtils.callSecuredAPI(context, utils.getAPIServerURL(context) + Constants.APP_LIST_ENDPOINT,

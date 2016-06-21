@@ -544,16 +544,21 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.dashboards:org.wso2.carbon.dashboards.portal.feature:${carbon.dashboards.version}
                                 </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.dashboards:org.wso2.carbon.dashboards.deployment.feature:${carbon.dashboards.version}
+                                </featureArtifactDef>
                                 <!-- End of Dashboards Features -->
 
-                                <!-- EMM Analytics Features -->
+                                <!-- EMM analytics Features -->
+                                <featureArtifactDef>
+                                    org.wso2.carbon.analytics.cdmf:org.wso2.carbon.analytics.cdmf.feature:${carbon.analytics.cdmf.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.analytics.cdmf:org.wso2.carbon.analytics.emm.feature:${carbon.analytics.cdmf.version}
+                                </featureArtifactDef>
                                 <!--<featureArtifactDef>-->
                                     <!--org.wso2.carbon.analytics.emm:org.wso2.carbon.analytics.emm.feature:${carbon.analytics.emm.version}-->
                                 <!--</featureArtifactDef>-->
-                                <!--<featureArtifactDef>-->
-                                    <!--org.wso2.carbon.analytics.emm:org.wso2.carbon.analytics.emm.feature:${carbon.analytics.emm.version}-->
-                                <!--</featureArtifactDef>-->
-
                                 <!-- End of EMM analytics Features -->
 
                             </featureArtifacts>
@@ -1168,17 +1173,26 @@
                                     <id>org.wso2.carbon.dashboards.portal.feature.group</id>
                                     <version>${carbon.dashboards.version}</version>
                                 </feature>
-                                <!--<feature>-->
-                                    <!--<id>org.wso2.carbon.analytics.emm.feature.group</id>-->
-                                    <!--<version>${carbon.analytics.emm.version}</version>-->
-                                <!--</feature>-->
+                                <feature>
+                                    <id>org.wso2.carbon.dashboard.deployment.feature.group</id>
+                                    <version>${carbon.dashboards.version}</version>
+                                </feature>
+                                <!-- End of Dashboard Features -->
+
+                                <!-- EMM Analytics Features -->
+                                <feature>
+                                    <id>org.wso2.carbon.analytics.cdmf.feature.group</id>
+                                    <version>${carbon.analytics.cdmf.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.analytics.emm.feature.group</id>
+                                    <version>${carbon.analytics.cdmf.version}</version>
+                                </feature>
                                 <!--<feature>-->
                                     <!--<id>org.wso2.carbon.analytics.emm.feature.group</id>-->
                                     <!--<version>${carbon.analytics.emm.version}</version>-->
                                 <!--</feature>-->
                                 <!-- End of EMM Analytics Features -->
-
-                                <!-- End of Dashboard Features -->
 
                             </features>
                         </configuration>
@@ -1722,10 +1736,6 @@
                                     <id>org.wso2.carbon.datasource.reader.hadoop.server.feature.group</id>
                                     <version>${carbon.data.version}</version>
                                 </feature>
-                                <!--<feature>-->
-                                    <!--<id>org.wso2.carbon.analytics.emm.feature.group</id>-->
-                                    <!--<version>${carbon.analytics.emm.version}</version>-->
-                                <!--</feature>-->
                                 <!--end analytic features -->
 
                                 <feature>

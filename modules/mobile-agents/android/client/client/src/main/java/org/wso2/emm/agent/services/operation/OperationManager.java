@@ -67,7 +67,6 @@ import org.wso2.emm.agent.utils.Preference;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -89,9 +88,6 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
     private static final String APP_INFO_TAG_PACKAGE = "package";
     private static final String APP_INFO_TAG_VERSION = "version";
     private static final String APP_INFO_TAG_SYSTEM = "isSystemApp";
-    private static final String STATUS = "status";
-    private static final String TIMESTAMP = "timestamp";
-
     private static final int DEFAULT_PASSWORD_LENGTH = 0;
     private static final int DEFAULT_VOLUME = 0;
     private static final int DEFAULT_FLAG = 0;
@@ -160,7 +156,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
 
     /* Retrieve Context */
     public Context getContext() {
-        return this.context;
+        return context;
     }
 
     /* Retrieve applicationManager */
@@ -205,35 +201,32 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 result.put(Constants.LocationInfo.LATITUDE, currentLocation.getLatitude());
                 result.put(Constants.LocationInfo.LONGITUDE, currentLocation.getLongitude());
 
-                if (currentAddress != null) {
-                    result.put(Constants.LocationInfo.CITY, currentAddress.getCity());
-                    result.put(Constants.LocationInfo.COUNTRY, currentAddress.getCountry());
-                    result.put(Constants.LocationInfo.STATE, currentAddress.getState());
-                    result.put(Constants.LocationInfo.STREET1, currentAddress.getStreet1());
-                    result.put(Constants.LocationInfo.STREET2, currentAddress.getStreet2());
-                    result.put(Constants.LocationInfo.ZIP, currentAddress.getZip());
-                } else {
-                    Log.e(TAG, "Address is not available for the given coordinates");
-                }
-
-                operation.setOperationResponse(result.toString());
-                operation.setStatus(resources.getString(R.string.operation_value_completed));
-                resultBuilder.build(operation);
-
-                if (Constants.DEBUG_MODE_ENABLED) {
-                    Log.d(TAG, "Device location sent");
-                }
-
             } else {
                 operation.setStatus(resources.getString(R.string.operation_value_error));
-                String errorMessage = "Location service is not enabled in the device";
-                JSONObject errorResult = new JSONObject();
-                errorResult.put(STATUS, errorMessage);
-                errorResult.put(TIMESTAMP, Calendar.getInstance().getTime().toString());
-                operation.setOperationResponse(errorMessage);
                 resultBuilder.build(operation);
-                Log.e(TAG, errorMessage);
+                throw new AndroidAgentException("Error occurred while initiating location service");
             }
+
+            if (currentAddress != null) {
+                result.put(Constants.LocationInfo.CITY, currentAddress.getCity());
+                result.put(Constants.LocationInfo.COUNTRY, currentAddress.getCountry());
+                result.put(Constants.LocationInfo.STATE, currentAddress.getState());
+                result.put(Constants.LocationInfo.STREET1, currentAddress.getStreet1());
+                result.put(Constants.LocationInfo.STREET2, currentAddress.getStreet2());
+                result.put(Constants.LocationInfo.ZIP, currentAddress.getZip());
+
+            } else {
+                Log.e(TAG, "Address is not available for the given coordinates");
+            }
+
+            operation.setOperationResponse(result.toString());
+            operation.setStatus(resources.getString(R.string.operation_value_completed));
+            resultBuilder.build(operation);
+
+            if (Constants.DEBUG_MODE_ENABLED) {
+                Log.d(TAG, "Device location sent");
+            }
+
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
             resultBuilder.build(operation);
@@ -265,7 +258,6 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 result.put(app);
             } catch (JSONException e) {
                 operation.setStatus(resources.getString(R.string.operation_value_error));
-                operation.setOperationResponse("Error in parsing application list.");
                 resultBuilder.build(operation);
                 throw new AndroidAgentException("Invalid JSON format.", e);
             }
@@ -290,7 +282,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         Intent intent = new Intent(context, AlertActivity.class);
         intent.putExtra(resources.getString(R.string.intent_extra_type),
                         resources.getString(R.string.intent_extra_ring));
-        intent.putExtra(resources.getString(R.string.intent_extra_message_text),
+        intent.putExtra(resources.getString(R.string.intent_extra_message),
                 resources.getString(R.string.intent_extra_stop_ringing));
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -351,7 +343,6 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
-            operation.setOperationResponse("Error in parsing WIFI payload.");
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -371,7 +362,6 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                     }
                 } catch (JSONException e) {
                     operation.setStatus(resources.getString(R.string.operation_value_error));
-                    operation.setOperationResponse("Error in parsing WIFI payload.");
                     resultBuilder.build(operation);
                     Log.e(TAG, "Invalid JSON format" + e);
                 }
@@ -434,7 +424,6 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             operationType = webClipData.getString(resources.getString(R.string.operation_type));
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
-            operation.setOperationResponse("Error in parsing WebClip payload.");
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -493,7 +482,6 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             }
         } catch (IOException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
-            operation.setOperationResponse("Error in parsing policy monitor payload stream.");
             resultBuilder.build(operation);
             throw new AndroidAgentException("Error occurred while parsing stream.", e);
         }
@@ -557,7 +545,6 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
-            operation.setOperationResponse("Error in parsing APPLICATION payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -587,12 +574,10 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 Toast.makeText(context, resources.getString(R.string.toast_message_reboot_failed),
                                Toast.LENGTH_LONG).show();
                 operation.setStatus(resources.getString(R.string.operation_value_error));
-                operation.setOperationResponse(resources.getString(R.string.toast_message_reboot_failed));
                 resultBuilder.build(operation);
             }
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
-            operation.setOperationResponse("Error in processing result payload.");
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -621,12 +606,10 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 }
             } else {
                 operation.setStatus(resources.getString(R.string.operation_value_error));
-                operation.setOperationResponse("Firmware upgrade failed due to download failure.");
                 resultBuilder.build(operation);
             }
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
-            operation.setOperationResponse("Error in processing result payload.");
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -655,12 +638,10 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 }
             } else {
                 operation.setStatus(resources.getString(R.string.operation_value_error));
-                operation.setOperationResponse("Device reboot failed due to insufficient privileges.");
                 resultBuilder.build(operation);
             }
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
-            operation.setOperationResponse("Error in processing result payload.");
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -694,22 +675,17 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             }
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
-            operation.setOperationResponse("Error in parsing LOCK payload.");
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
-        if (isHardLockEnabled && Constants.SYSTEM_APP_ENABLED) {
+        if (isHardLockEnabled) {
             if (message == null || message.isEmpty()) {
                 message = resources.getString(R.string.txt_lock_activity);
             }
             Preference.putBoolean(context, Constants.IS_LOCKED, true);
             Preference.putString(context, Constants.LOCK_MESSAGE, message);
-            operation.setStatus(resources.getString(R.string.operation_value_completed));
-            resultBuilder.build(operation);
-            enableHardLock(message, operation);
+            enableHardLock(message);
         } else {
-            operation.setStatus(resources.getString(R.string.operation_value_completed));
-            resultBuilder.build(operation);
             devicePolicyManager.lockNow();
         }
 
@@ -718,17 +694,19 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         }
     }
 
-    public void enableHardLock(String message, Operation operation) {
-        String payload = "false";
-        if (getApplicationManager().isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
-            operation.setStatus(resources.getString(R.string.operation_value_completed));
-            CommonUtils.callSystemApp(getContext(), Constants.Operation.DEVICE_LOCK, payload, message);
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void enableHardLock(String message) {
+        if (isDeviceOwner()) {
+            devicePolicyManager.setLockTaskPackages(cdmDeviceAdmin, AUTHORIZED_PINNING_APPS);
+            Intent intent = new Intent(context, LockActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                            Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Constants.ADMIN_MESSAGE, message);
+            intent.putExtra(Constants.IS_LOCKED, true);
+            context.startActivity(intent);
         } else {
-            operation.setStatus(resources.getString(R.string.operation_value_error));
-            operation.setOperationResponse("System service is not available.");
-            Log.e(TAG, "System service is not available");
+            devicePolicyManager.lockNow();
         }
-        resultBuilder.build(operation);
     }
 
     /**
@@ -737,22 +715,31 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param operation - Operabtion object.
      */
     public void unlockDevice(org.wso2.emm.agent.beans.Operation operation) {
-        if (getApplicationManager().isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
-            boolean isLocked = Preference.getBoolean(context, Constants.IS_LOCKED);
-            if (isLocked) {
-                Preference.putBoolean(context, Constants.IS_LOCKED, false);
-                CommonUtils.callSystemApp(getContext(), Constants.Operation.DEVICE_UNLOCK, null, null);
-            }
-            if (Constants.DEBUG_MODE_ENABLED) {
-                Log.d(TAG, "Device unlocked");
-            }
-            operation.setStatus(resources.getString(R.string.operation_value_completed));
-        } else {
-            operation.setStatus(resources.getString(R.string.operation_value_error));
-            operation.setOperationResponse("System service is not available.");
-            Log.e(TAG, "System service is not available");
-        }
+        operation.setStatus(resources.getString(R.string.operation_value_completed));
         resultBuilder.build(operation);
+
+        boolean isLocked = Preference.getBoolean(context, Constants.IS_LOCKED);
+        if (isLocked) {
+            if (isDeviceOwner()) {
+                Intent intent = new Intent(context, ServerDetails.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        }
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "Device unlocked");
+        }
+    }
+
+    /**
+     * This method is used to check whether agent is registered as the device owner.
+     *
+     * @return true if agent is the device owner.
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private boolean isDeviceOwner() {
+        return devicePolicyManager.isDeviceOwnerApp(AGENT_PACKAGE_NAME);
     }
 
     /**
@@ -768,7 +755,6 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
 
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
-            operation.setOperationResponse("Error in parsing APPLICATION payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
@@ -800,14 +786,13 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
 
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
-            operation.setOperationResponse("Error in parsing VPN payload.");
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
 
         if (serverAddress != null) {
             Intent intent = new Intent(context, AlertActivity.class);
-            intent.putExtra(resources.getString(R.string.intent_extra_message_text), resources.getString(R.string.toast_message_vpn));
+            intent.putExtra(resources.getString(R.string.intent_extra_message), resources.getString(R.string.toast_message_vpn));
             intent.putExtra(resources.getString(R.string.intent_extra_operation_id), operation.getId());
             intent.putExtra(resources.getString(R.string.intent_extra_payload), operation.getPayLoad().toString());
             intent.putExtra(resources.getString(R.string.intent_extra_type),
@@ -850,29 +835,18 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             operation.setOperationResponse(notificationService.buildResponse(Notification.Status.RECEIVED));
             getResultBuilder().build(operation);
             JSONObject inputData = new JSONObject(operation.getPayLoad().toString());
-            String messageTitle = inputData.getString(getContextResources().getString(R.string.intent_extra_message_title));
-            String messageText = inputData.getString(getContextResources().getString(R.string.intent_extra_message_text));
+            String message = inputData.getString(getContextResources().getString(R.string.intent_extra_message));
 
-            if (messageTitle != null && !messageTitle.isEmpty() &&
-                    messageText != null && !messageText.isEmpty()) {
+            if (message != null && !message.isEmpty()) {
                 //adding notification to the db
-                notificationService.addNotification(operation.getId(), messageTitle, messageText, Notification.Status.RECEIVED);
-                notificationService.showNotification(operation.getId(), messageTitle, messageText);
-            } else {
-                operation.setStatus(getContextResources().getString(R.string.operation_value_error));
-                String errorMessage = "Message title/text is empty. Please retry with valid inputs";
-                JSONObject errorResult = new JSONObject();
-                errorResult.put(STATUS, errorMessage);
-                operation.setOperationResponse(errorMessage);
-                getResultBuilder().build(operation);
-                Log.e(TAG, errorMessage);
+                notificationService.addNotification(operation.getId(), message, Notification.Status.RECEIVED);
+                notificationService.showNotification(operation.getId(), message);
             }
             if (Constants.DEBUG_MODE_ENABLED) {
                 Log.d(TAG, "Notification received");
             }
         } catch (JSONException e) {
             operation.setStatus(getContextResources().getString(R.string.operation_value_error));
-            operation.setOperationResponse("Error in parsing NOTIFICATION payload.");
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }

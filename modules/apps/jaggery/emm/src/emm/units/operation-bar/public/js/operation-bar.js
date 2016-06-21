@@ -103,10 +103,8 @@ function loadOperationBar(deviceType) {
     var operationBar = $("#operations-bar");
     var operationBarSrc = operationBar.attr("src");
     var platformType = deviceType;
-    //var selectedDeviceID = deviceId;
     $.template("operations-bar", operationBarSrc, function (template) {
-        //var serviceURL = "/mdm-admin/features/" + platformType;
-        var serviceURL = "/api/device-mgt/v1.0/devices/"+platformType+"/null/features";
+        var serviceURL = "/mdm-admin/features/" + platformType;
         var successCallback = function (data) {
             var viewModel = {};
             data = JSON.parse(data).filter(function (current) {

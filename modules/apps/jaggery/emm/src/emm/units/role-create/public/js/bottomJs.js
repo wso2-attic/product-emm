@@ -13,8 +13,6 @@ function inputIsValid(regExp, inputString) {
 var validateInline = {};
 var clearInline = {};
 
-var emmAdminBasePath = "/api/device-mgt/v1.0";
-
 var enableInlineError = function (inputField, errorMsg, errorSign) {
     var fieldIdentifier = "#" + inputField;
     var errorMsgIdentifier = "#" + inputField + " ." + errorMsg;
@@ -112,17 +110,15 @@ $(document).ready(function () {
             data: function (params) {
                 var postData = {};
                 postData.actionMethod = "GET";
-                postData.actionUrl = emmAdminBasePath + "/users/search/usernames?filter=" + params.term;
+                postData.actionUrl = "/mdm-admin/users/view-users?username=" + params.term;
                 postData.actionPayload = null;
                 return JSON.stringify(postData);
             },
             processResults: function (data, page) {
                 var newData = [];
-                $.each(data, function (index, value) {
-                    var user = {};
-                    user.username = value.username;
-                    user.id = value.username;
-                    newData.push(user);
+                $.each(data.responseContent, function (index, value) {
+                    value.id = value.username;
+                    newData.push(value);
                 });
                 return {
                     results: newData
@@ -174,7 +170,7 @@ $(document).ready(function () {
             }
             addRoleFormData.users = users;
 
-            var addRoleAPI = emmAdminBasePath + "/roles";
+            var addRoleAPI = "/mdm-admin/roles";
 
             invokerUtil.post(
                 addRoleAPI,
@@ -194,7 +190,7 @@ $(document).ready(function () {
                         window.location.href = '/emm/roles/edit-role-permission?wizard=true&rolename=' + roleName;
                     }
                 }, function (data) {
-                    if (JSON.parse(data).errorMessage.indexOf("RoleExisting") > -1) {
+                    if (JSON.parse(data.responseText).errorMessage.indexOf("RoleExisting") > -1) {
                         $(errorMsg).text("Role name : " + roleName + " already exists. Pick another role name.");
                     } else {
                         $(errorMsg).text(JSON.parse(data.responseText).errorMessage);

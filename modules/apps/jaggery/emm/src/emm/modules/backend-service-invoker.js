@@ -17,31 +17,27 @@
  */
 
 /**
- * This backendServiceInvoker contains the wrappers for back end jaggery calls.
+ * This backendServiceInvoker contains the wrappers for back end jaggary calls.
  */
 var backendServiceInvoker = function () {
-    var log = new Log("modules/backend-service-invoker.js");
-
+    var log = new Log("modules/backend-service-invoker.js")
     var publicXMLHTTPInvokers = {};
-    var publicHTTPClientInvokers = {};
-
     var privateMethods = {};
     var publicWSInvokers = {};
-
+    var publicHTTPClientInvokers = {};
+    var IS_OAUTH_ENABLED = true;
     var TOKEN_EXPIRED = "Access token expired";
     var TOKEN_INVALID = "Invalid input. Access token validation failed";
-
-    var mdmProps = require("/config/mdm-props.js").config();
     var constants = require("/modules/constants.js");
-    var userModule = require("/modules/user.js")["userModule"];
-    var tokenUtil = require("/modules/api-wrapper-util.js")["apiWrapperUtil"];
+    var tokenUtil = require("/modules/api-wrapper-util.js").apiWrapperUtil;
+    var mdmProps = require('/config/mdm-props.js').config();
 
     /**
-     * This method reads the token pair from the session and return the access token.
+     * This methoad reads the token pair from the session and return the access token.
      * If the token pair s not set in the session this will send a redirect to the login page.
      */
     privateMethods.getAccessToken = function () {
-        var tokenPair = session.get(constants["ACCESS_TOKEN_PAIR_IDENTIFIER"]);
+        var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
         if (tokenPair) {
             return tokenPair.accessToken;
         } else {
@@ -50,180 +46,65 @@ var backendServiceInvoker = function () {
     };
 
     /**
-     * ---------------------------------------------------------------------------
-     * Start of XML-HTTP-REQUEST based Interceptor implementations
-     * ---------------------------------------------------------------------------
-     */
-
-    /**
-     * This method add Oauth authentication header to outgoing XML-HTTP Requests if Oauth authentication is enabled.
-     * @param httpMethod HTTP request type.
-     * @param requestPayload payload/data if exists which is needed to be send.
-     * @param endpoint Backend REST API url.
-     * @param responseCallback a function to be called with response retrieved.
+     * This method add Oauth authentication header to outgoing XMLHTTP Requests if Oauth authentication is enabled.
+     * @param method HTTP request type.
+     * @param url target url.
+     * @param payload payload/data which need to be send.
+     * @param successCallback a function to be called if the respond if successful.
+     * @param errorCallback a function to be called if en error is reserved.
      * @param count a counter which hold the number of recursive execution
      */
-    privateMethods.execute = function (httpMethod, requestPayload, endpoint, responseCallback, count) {
+    privateMethods.execute = function (method, url, successCallback, errorCallback, payload, count) {
         var xmlHttpRequest = new XMLHttpRequest();
-
-        xmlHttpRequest.open(httpMethod, endpoint);
-        xmlHttpRequest.setRequestHeader(constants["CONTENT_TYPE_IDENTIFIER"], constants["APPLICATION_JSON"]);
-        xmlHttpRequest.setRequestHeader(constants["ACCEPT_IDENTIFIER"], constants["APPLICATION_JSON"]);
-
-        if (mdmProps["isOAuthEnabled"]) {
+        xmlHttpRequest.open(method, url);
+        xmlHttpRequest.setRequestHeader(constants.CONTENT_TYPE_IDENTIFIER, constants.APPLICATION_JSON);
+        xmlHttpRequest.setRequestHeader(constants.ACCEPT_IDENTIFIER, constants.APPLICATION_JSON);
+        if (IS_OAUTH_ENABLED) {
             var accessToken = privateMethods.getAccessToken();
             if (!accessToken) {
-                userModule.logout(function () {
-                    response.sendRedirect(mdmProps["appContext"] + "login");
-                });
+                response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
             } else {
-                xmlHttpRequest.
-                    setRequestHeader(constants["AUTHORIZATION_HEADER"], constants["BEARER_PREFIX"] + accessToken);
+                xmlHttpRequest.setRequestHeader(constants.AUTHORIZATION_HEADER, constants.BEARER_PREFIX + accessToken);
             }
         }
-
-        if (requestPayload) {
-            xmlHttpRequest.send(requestPayload);
+        if (payload) {
+            xmlHttpRequest.send(payload);
         } else {
             xmlHttpRequest.send();
         }
+        log.debug("Service Invoker-URL: " + url);
+        log.debug("Service Invoker-Method: " + method);
 
-        log.debug("Service Invoker-URL: " + endpoint);
-        log.debug("Service Invoker-Method: " + httpMethod);
-
-        log.info(stringify(xmlHttpRequest.status));
-        //log.info(xmlHttpRequest.responseText);
-
-        if (xmlHttpRequest.status == 401 && (xmlHttpRequest.responseText == TOKEN_EXPIRED ||
-            xmlHttpRequest.responseText == TOKEN_INVALID ) && count < 5) {
+        if ((xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 300) || xmlHttpRequest.status == 302) {
+            if (xmlHttpRequest.responseText != null) {
+                return successCallback(parse(xmlHttpRequest.responseText));
+            } else {
+                return successCallback({"statusCode": 200, "messageFromServer": "Operation Completed"});
+            }
+        } else if (xmlHttpRequest.status == 401 && (xmlHttpRequest.responseText == TOKEN_EXPIRED ||
+                                                    xmlHttpRequest.responseText == TOKEN_INVALID ) && count < 5) {
             tokenUtil.refreshToken();
-            return privateMethods.execute(httpMethod, requestPayload, endpoint, responseCallback, ++count);
+            return privateMethods.execute(method, url, successCallback, errorCallback, payload, (count + 1));
+        } else if (xmlHttpRequest.status == 500) {
+            return errorCallback(xmlHttpRequest);
         } else {
-            return responseCallback(xmlHttpRequest);
+            return errorCallback(xmlHttpRequest);
         }
     };
 
     /**
-     * This method add Oauth authentication header to outgoing XML-HTTP Requests if Oauth authentication is enabled.
-     * @param httpMethod HTTP request type.
-     * @param requestPayload payload/data if exists which is needed to be send.
-     * @param endpoint Backend REST API url.
-     * @param responseCallback a function to be called with response retrieved.
-     */
-    privateMethods.initiateXMLHTTPRequest = function (httpMethod, requestPayload, endpoint, responseCallback) {
-        return privateMethods.execute(httpMethod, requestPayload, endpoint, responseCallback, 0);
-    };
-
-    /**
-     * This method invokes return initiateXMLHttpRequest for get calls
-     * @param endpoint Backend REST API url.
-     * @param responseCallback a function to be called with response retrieved.
-     */
-    publicXMLHTTPInvokers.get = function (endpoint, responseCallback) {
-        var requestPayload = null;
-        return privateMethods.initiateXMLHTTPRequest(constants["HTTP_GET"], requestPayload, endpoint, responseCallback);
-    };
-
-    /**
-     * This method invokes return initiateXMLHttpRequest for post calls
-     * @param endpoint Backend REST API url.
-     * @param requestPayload payload/data if exists which is needed to be send.
-     * @param responseCallback a function to be called with response retrieved.
-     */
-    publicXMLHTTPInvokers.post = function (endpoint, requestPayload, responseCallback) {
-        return privateMethods.initiateXMLHTTPRequest(constants["HTTP_POST"], requestPayload, endpoint, responseCallback);
-    };
-
-    /**
-     * This method invokes return initiateXMLHttpRequest for put calls
-     * @param endpoint Backend REST API url.
-     * @param requestPayload payload/data if exists which is needed to be send.
-     * @param responseCallback a function to be called with response retrieved.
-     */
-    publicXMLHTTPInvokers.put = function (endpoint, requestPayload, responseCallback) {
-        return privateMethods.initiateXMLHTTPRequest(constants["HTTP_PUT"], requestPayload, endpoint, responseCallback);
-    };
-
-    /**
-     * This method invokes return initiateXMLHttpRequest for delete calls
-     * @param endpoint Backend REST API url.
-     * @param responseCallback a function to be called with response retrieved.
-     */
-    publicXMLHTTPInvokers.delete = function (endpoint, responseCallback) {
-        var requestPayload = null;
-        return privateMethods.initiateXMLHTTPRequest(constants["HTTP_DELETE"], requestPayload, endpoint, responseCallback);
-    };
-
-    /**
-     * ---------------------------------------------------------------------------
-     * Start of WS-REQUEST based Interceptor implementations
-     * ---------------------------------------------------------------------------
-     */
-
-    /**
-     * This method add Oauth authentication header to outgoing WS Requests if Oauth authentication is enabled.
-     * @param action
-     * @param endpoint service end point to be triggered.
-     * @param payload soap payload which need to be send.
+     * This method add Oauth authentication header to outgoing XMLHTTP Requests if Oauth authentication is enabled.
+     * @param method HTTP request type.
+     * @param url target url.
+     * @param payload payload/data which need to be send.
      * @param successCallback a function to be called if the respond if successful.
      * @param errorCallback a function to be called if en error is reserved.
-     * @param soapVersion soapVersion which need to used.
      */
-    privateMethods.initiateWSRequest = function (action, endpoint, successCallback, errorCallback, soapVersion, payload) {
-        var ws = require("ws");
-        var wsRequest = new ws.WSRequest();
-        var options = [];
-        if (mdmProps["isOAuthEnabled"]) {
-            var accessToken = privateMethods.getAccessToken();
-            if (accessToken) {
-                var authenticationHeaderName = String(constants["AUTHORIZATION_HEADER"]);
-                var authenticationHeaderValue = String(constants["BEARER_PREFIX"] + accessToken);
-                var headers = [];
-                var oAuthAuthenticationData = {};
-                oAuthAuthenticationData.name = authenticationHeaderName;
-                oAuthAuthenticationData.value = authenticationHeaderValue;
-                headers.push(oAuthAuthenticationData);
-                options.HTTPHeaders = headers;
-            } else {
-                response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
-            }
+    privateMethods.initiateXMLHTTPRequest = function (method, url, successCallback, errorCallback, payload) {
+        if (privateMethods.getAccessToken()) {
+            return privateMethods.execute(method, url, successCallback, errorCallback, payload, 0);
         }
-        options.useSOAP = soapVersion;
-        options.useWSA = constants["WEB_SERVICE_ADDRESSING_VERSION"];
-        options.action = action;
-        var wsResponse;
-        try {
-            wsRequest.open(options, endpoint, false);
-            if (payload) {
-                wsRequest.send(payload);
-            } else {
-                wsRequest.send();
-            }
-            wsResponse = wsRequest.responseE4X;
-        } catch (e) {
-            return errorCallback(e);
-        }
-        return successCallback(wsResponse);
     };
-
-    /**
-     * This method invokes return initiateWSRequest for soap calls
-     * @param action describes particular soap action.
-     * @param requestPayload SOAP request payload which is needed to be send.
-     * @param endpoint service end point to be triggered.
-     * @param successCallback a function to be called if the respond if successful.
-     * @param errorCallback a function to be called if en error is reserved.
-     * @param soapVersion soapVersion which need to used.
-     */
-    publicWSInvokers.soapRequest = function (action, requestPayload, endpoint, successCallback, errorCallback, soapVersion) {
-        return privateMethods.initiateWSRequest(action, endpoint, successCallback, errorCallback, soapVersion, requestPayload);
-    };
-
-    /**
-     * ---------------------------------------------------------------------------
-     * Start of HTTP-CLIENT-REQUEST based Interceptor implementations
-     * ---------------------------------------------------------------------------
-     */
 
     /**
      * This method add Oauth authentication header to outgoing HTTPClient Requests if Oauth authentication is enabled.
@@ -237,41 +118,40 @@ var backendServiceInvoker = function () {
         var HttpClient = Packages.org.apache.commons.httpclient.HttpClient;
         var httpMethodObject;
         switch (method) {
-            case constants["HTTP_GET"]:
-                var GetMethod = Packages.org.apache.commons.httpclient.methods.GetMethod;
-                httpMethodObject = new GetMethod(url);
-                break;
-            case constants["HTTP_POST"]:
+            case constants.HTTP_POST:
                 var PostMethod = Packages.org.apache.commons.httpclient.methods.PostMethod;
                 httpMethodObject = new PostMethod(url);
                 break;
-            case constants["HTTP_PUT"]:
+            case constants.HTTP_PUT:
                 var PutMethod = Packages.org.apache.commons.httpclient.methods.PutMethod;
                 httpMethodObject = new PutMethod(url);
                 break;
-            case constants["HTTP_DELETE"]:
+            case constants.HTTP_GET:
+                var GetMethod = Packages.org.apache.commons.httpclient.methods.GetMethod;
+                httpMethodObject = new GetMethod(url);
+                break;
+            case constants.HTTP_DELETE:
                 var DeleteMethod = Packages.org.apache.commons.httpclient.methods.DeleteMethod;
                 httpMethodObject = new DeleteMethod(url);
                 break;
             default:
-                throw new IllegalArgumentException("Invalid HTTP request method: " + method);
+                throw new IllegalArgumentException("Invalid HTTP request type: " + method);
         }
         var Header = Packages.org.apache.commons.httpclient.Header;
         var header = new Header();
-        header.setName(constants["CONTENT_TYPE_IDENTIFIER"]);
-        header.setValue(constants["APPLICATION_JSON"]);
+        header.setName(constants.CONTENT_TYPE_IDENTIFIER);
+        header.setValue(constants.APPLICATION_JSON);
         httpMethodObject.addRequestHeader(header);
         header = new Header();
-        header.setName(constants["ACCEPT_IDENTIFIER"]);
-        header.setValue(constants["APPLICATION_JSON"]);
+        header.setName(constants.ACCEPT_IDENTIFIER);
+        header.setValue(constants.APPLICATION_JSON);
         httpMethodObject.addRequestHeader(header);
-
-        if (mdmProps["isOAuthEnabled"]) {
+        if (IS_OAUTH_ENABLED) {
             var accessToken = privateMethods.getAccessToken();
             if (accessToken) {
                 header = new Header();
-                header.setName(constants["AUTHORIZATION_HEADER"]);
-                header.setValue(constants["BEARER_PREFIX"] + accessToken);
+                header.setName(constants.AUTHORIZATION_HEADER);
+                header.setValue(constants.BEARER_PREFIX + accessToken);
                 httpMethodObject.addRequestHeader(header);
             } else {
                 response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
@@ -296,15 +176,114 @@ var backendServiceInvoker = function () {
     };
 
     /**
+     * This method add Oauth authentication header to outgoing WS Requests if Oauth authentication is enabled.
+     * @param action
+     * @param endpoint service end point to be triggered.
+     * @param payload soap payload which need to be send.
+     * @param successCallback a function to be called if the respond if successful.
+     * @param errorCallback a function to be called if en error is reserved.
+     * @param soapVersion soapVersion which need to used.
+     */
+    privateMethods.initiateWSRequest = function (action, endpoint, successCallback, errorCallback, soapVersion, payload) {
+        var ws = require('ws');
+        var wsRequest = new ws.WSRequest();
+        var options = new Array();
+        if (IS_OAUTH_ENABLED) {
+            var accessToken = privateMethods.getAccessToken();
+            if (accessToken) {
+                var authenticationHeaderName = String(constants.AUTHORIZATION_HEADER);
+                var authenticationHeaderValue = String(constants.BEARER_PREFIX + accessToken);
+                var headers = [];
+                var oAuthAuthenticationData = {};
+                oAuthAuthenticationData.name = authenticationHeaderName;
+                oAuthAuthenticationData.value = authenticationHeaderValue;
+                headers.push(oAuthAuthenticationData);
+                options.HTTPHeaders = headers;
+            } else {
+                response.sendRedirect(mdmProps["httpsURL"] + "/emm/login");
+            }
+        }
+        options.useSOAP = soapVersion;
+        options.useWSA = constants.WEB_SERVICE_ADDRESSING_VERSION;
+        options.action = action;
+        var wsResponse;
+        try {
+            wsRequest.open(options, endpoint, false);
+            if (payload) {
+                wsRequest.send(payload);
+            } else {
+                wsRequest.send();
+            }
+            wsResponse = wsRequest.responseE4X;
+        } catch (e) {
+            return errorCallback(e);
+        }
+        return successCallback(wsResponse);
+    };
+
+    /**
+     * This method invokes return initiateXMLHttpRequest for get calls
+     * @param url target url.
+     * @param successCallback a function to be called if the respond if successful.
+     * @param errorCallback a function to be called if en error is reserved.
+     */
+    publicXMLHTTPInvokers.get = function (url, successCallback, errorCallback) {
+        return privateMethods.initiateXMLHTTPRequest(constants.HTTP_GET, url, successCallback, errorCallback);
+    };
+
+    /**
+     * This method invokes return initiateXMLHttpRequest for post calls
+     * @param url target url.
+     * @param payload payload/data which need to be send.
+     * @param successCallback a function to be called if the respond if successful.
+     * @param errorCallback a function to be called if en error is reserved.
+     */
+    publicXMLHTTPInvokers.post = function (url, payload, successCallback, errorCallback) {
+        return privateMethods.initiateXMLHTTPRequest(constants.HTTP_POST, url, successCallback, errorCallback, payload);
+    };
+
+    /**
+     * This method invokes return initiateXMLHttpRequest for put calls
+     * @param url target url.
+     * @param payload payload/data which need to be send.
+     * @param successCallback a function to be called if the respond if successful.
+     * @param errorCallback a function to be called if en error is reserved.
+     */
+    publicXMLHTTPInvokers.put = function (url, payload, successCallback, errorCallback) {
+        return privateMethods.initiateXMLHTTPRequest(constants.HTTP_PUT, url, successCallback, errorCallback, payload);
+    };
+
+    /**
+     * This method invokes return initiateXMLHttpRequest for delete calls
+     * @param url target url.
+     * @param successCallback a function to be called if the respond if successful.
+     * @param errorCallback a function to be called if en error is reserved.
+     */
+    publicXMLHTTPInvokers.delete = function (url, successCallback, errorCallback) {
+        return privateMethods.initiateXMLHTTPRequest(constants.HTTP_DELETE, url, successCallback, errorCallback);
+    };
+
+    /**
+     * This method invokes return initiateWSRequest for soap calls
+     * @param endpoint service end point to be triggered.
+     * @param payload soap payload which need to be send.
+     * @param successCallback a function to be called if the respond if successful.
+     * @param errorCallback a function to be called if en error is reserved.
+     * @param soapVersion soapVersion which need to used.
+     */
+    publicWSInvokers.soapRequest = function (action, endpoint, payload, successCallback, errorCallback, soapVersion) {
+        return privateMethods.initiateWSRequest(action, endpoint, successCallback, errorCallback, soapVersion, payload);
+    };
+
+
+    /**
      * This method invokes return initiateHTTPClientRequest for get calls
      * @param url target url.
      * @param successCallback a function to be called if the respond if successful.
      * @param errorCallback a function to be called if en error is reserved.
      */
     publicHTTPClientInvokers.get = function (url, successCallback, errorCallback) {
-        var requestPayload = null;
-        return privateMethods.
-            initiateHTTPClientRequest(constants["HTTP_GET"], url, successCallback, errorCallback, requestPayload);
+        return privateMethods.initiateHTTPClientRequest(constants.HTTP_GET, url, successCallback, errorCallback);
     };
 
     /**
@@ -316,7 +295,7 @@ var backendServiceInvoker = function () {
      */
     publicHTTPClientInvokers.post = function (url, payload, successCallback, errorCallback) {
         return privateMethods.
-            initiateHTTPClientRequest(constants["HTTP_POST"], url, successCallback, errorCallback, payload);
+            initiateHTTPClientRequest(constants.HTTP_POST, url, successCallback, errorCallback, payload);
     };
 
     /**
@@ -327,8 +306,7 @@ var backendServiceInvoker = function () {
      * @param errorCallback a function to be called if en error is reserved.
      */
     publicHTTPClientInvokers.put = function (url, payload, successCallback, errorCallback) {
-        return privateMethods.
-            initiateHTTPClientRequest(constants["HTTP_PUT"], url, successCallback, errorCallback, payload);
+        return privateMethods.initiateHTTPClientRequest(constants.HTTP_PUT, url, successCallback, errorCallback, payload);
     };
 
     /**
@@ -338,15 +316,12 @@ var backendServiceInvoker = function () {
      * @param errorCallback a function to be called if en error is reserved.
      */
     publicHTTPClientInvokers.delete = function (url, successCallback, errorCallback) {
-        var requestPayload = null;
-        return privateMethods.
-            initiateHTTPClientRequest(constants["HTTP_DELETE"], url, successCallback, errorCallback, requestPayload);
+        return privateMethods.initiateHTTPClientRequest(constants.HTTP_DELETE, url, successCallback, errorCallback);
     };
 
-    var publicMethods = {};
-    publicMethods.XMLHttp = publicXMLHTTPInvokers;
-    publicMethods.WS = publicWSInvokers;
-    publicMethods.HttpClient = publicHTTPClientInvokers;
-
-    return publicMethods;
+    var publicInvokers = {};
+    publicInvokers.XMLHttp = publicXMLHTTPInvokers;
+    publicInvokers.WS = publicWSInvokers;
+    publicInvokers.HttpClient = publicHTTPClientInvokers;
+    return publicInvokers;
 }();

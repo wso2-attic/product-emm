@@ -26,8 +26,7 @@ var InitiateViewOption = null;
     if (deviceType == "ios") {
         var serviceUrl = "/ios/operation/deviceinfo";
     } else if (deviceType == "android") {
-        //var serviceUrl = "/mdm-android-agent/operation/device-info";
-        var serviceUrl = "/api/device-mgt/android/v1.0/admin/devices/info";
+        var serviceUrl = "/mdm-android-agent/operation/device-info";
     }
     if(serviceUrl){
         invokerUtil.post(serviceUrl, payload,
@@ -130,7 +129,7 @@ var InitiateViewOption = null;
                 dataSrc: function ( json ) {
                     $('#operations-spinner').addClass('hidden');
                     $("#operations-log-container").empty();
-                    return json.devices;
+                    return json.data;
                 }
             },
             columnDefs: [
@@ -192,8 +191,7 @@ var InitiateViewOption = null;
         var deviceType = applicationsList.data("device-type");
 
         $.template("application-list", deviceListingSrc, function (template) {
-            //var serviceURL = "/mdm-admin/operations/"+deviceType+"/"+deviceId+"/apps";
-            var serviceURL = "/api/device-mgt/v1.0/devices/"+deviceType+"/"+deviceId+"/applications";
+            var serviceURL = "/mdm-admin/operations/"+deviceType+"/"+deviceId+"/apps";
 
             var successCallback = function (data) {
                 data = JSON.parse(data);
@@ -229,10 +227,8 @@ var InitiateViewOption = null;
         var activePolicy = null;
 
         $.template("policy-view", policySrc, function (template) {
-            //var serviceURLPolicy ="/mdm-admin/policies/"+deviceType+"/"+deviceId+"/active-policy"
-            //var serviceURLCompliance = "/mdm-admin/policies/"+deviceType+"/"+deviceId;
-            var serviceURLPolicy="/api/device-mgt/v1.0/devices/"+deviceType+"/"+deviceId+"/effective-policy";
-            var serviceURLCompliance="/api/device-mgt/v1.0/devices/"+deviceType+"/"+deviceId;
+            var serviceURLPolicy ="/mdm-admin/policies/"+deviceType+"/"+deviceId+"/active-policy"
+            var serviceURLCompliance = "/mdm-admin/policies/"+deviceType+"/"+deviceId;
 
             var successCallbackCompliance = function (data) {
                 var viewModel = {};

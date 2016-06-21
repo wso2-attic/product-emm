@@ -13,8 +13,6 @@ function inputIsValid(regExp, inputString) {
 var validateInline = {};
 var clearInline = {};
 
-var emmAdminBasePath = "/api/device-mgt/v1.0";
-
 var enableInlineError = function (inputField, errorMsg, errorSign) {
     var fieldIdentifier = "#" + inputField;
     var errorMsgIdentifier = "#" + inputField + " ." + errorMsg;
@@ -112,7 +110,7 @@ $(document).ready(function () {
             data: function (params) {
                 var postData = {};
                 postData.actionMethod = "GET";
-                postData.actionUrl = emmAdminBasePath + "/users/search/usernames?filter=" + params.term;
+                postData.actionUrl = "/mdm-admin/users/view-users?username=" + params.term;
                 postData.actionPayload = null;
                 return JSON.stringify(postData);
             },
@@ -167,12 +165,12 @@ $(document).ready(function () {
                 addRoleFormData.roleName = domain + "/" + roleName;
             }
 
-            var addRoleAPI = emmAdminBasePath + "/roles/" + currentRoleName;
+            var addRoleAPI = "/mdm-admin/roles?rolename=" + encodeURIComponent(currentRoleName);
             invokerUtil.put(
                 addRoleAPI,
                 addRoleFormData,
-                function (data, textStatus, jqXHR) {
-                    if (jqXHR.status == 200) {
+                function (jqXHR) {
+                    if (JSON.parse(jqXHR).statusCode == 200 || jqXHR.status == 200) {
                         // Clearing user input fields.
                         $("input#rolename").val("");
                         $("#domain").val("");
@@ -181,8 +179,7 @@ $(document).ready(function () {
                         $("#role-created-msg").removeClass("hidden");
                     }
                 }, function (data) {
-                    var payload = JSON.parse(data.responseText);
-                    $(errorMsg).text(payload.message);
+                    $(errorMsg).text(JSON.parse(data.responseText).errorMessage);
                     $(errorMsgWrapper).removeClass("hidden");
                 }
             );

@@ -80,6 +80,7 @@ var operationModule = function () {
         "AUTO_TIME" : "AUTO_TIME",
         "SET_SCREEN_CAPTURE_DISABLED" : "SET_SCREEN_CAPTURE_DISABLED",
         "SET_STATUS_BAR_DISABLED" : "SET_STATUS_BAR_DISABLED",
+        "CHANGE_LOCK_CODE_OPERATION_CODE": "CHANGE_LOCK_CODE",
         "APPLICATION_OPERATION_CODE":"APP-RESTRICTION"
     };
 
@@ -1026,31 +1027,30 @@ var operationModule = function () {
 
     publicMethods.getAndroidServiceEndpoint = function (operationCode) {
         var featureMap = {
-            "WIFI": "configure-wifi",
-            "CAMERA": "control-camera",
-            "VPN": "configure-vpn",
-            "DEVICE_LOCK": "lock-devices",
-            "DEVICE_UNLOCK": "unlock-devices",
+            "WIFI": "wifi",
+            "CAMERA": "camera",
+            "VPN": "vpn",
+            "DEVICE_LOCK": "lock",
+            "DEVICE_UNLOCK": "unlock",
             "DEVICE_LOCATION": "location",
             "CLEAR_PASSWORD": "clear-password",
             "APPLICATION_LIST": "get-application-list",
-            "DEVICE_RING": "ring",
-            "DEVICE_REBOOT": "reboot",
+            "DEVICE_RING": "ring-device",
+            "DEVICE_REBOOT": "reboot-device",
             "UPGRADE_FIRMWARE": "upgrade-firmware",
             "DEVICE_MUTE": "mute",
-            "NOTIFICATION": "send-notification",
-            "ENCRYPT_STORAGE": "encrypt-storage",
+            "NOTIFICATION": "notification",
+            "ENCRYPT_STORAGE": "encrypt",
             "CHANGE_LOCK_CODE": "change-lock-code",
-            "WEBCLIP": "set-webclip",
+            "WEBCLIP": "webclip",
             "INSTALL_APPLICATION": "install-application",
             "UNINSTALL_APPLICATION": "uninstall-application",
             "BLACKLIST_APPLICATIONS": "blacklist-applications",
-            "PASSCODE_POLICY": "set-password-policy",
+            "PASSCODE_POLICY": "password-policy",
             "ENTERPRISE_WIPE": "enterprise-wipe",
-            "WIPE_DATA": "wipe"
+            "WIPE_DATA": "wipe-data"
         };
-        //return "/mdm-android-agent/operation/" + featureMap[operationCode];
-        return "/api/device-mgt/android/v1.0/admin/devices/" + featureMap[operationCode];
+        return "/mdm-android-agent/operation/" + featureMap[operationCode];
     };
 
     /**

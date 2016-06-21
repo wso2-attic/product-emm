@@ -26,10 +26,9 @@ var uriMatcher = new URIMatcher(String(uri));
 
 var log = new Log("api/operation-api.jag");
 
-var deviceModule = require("/modules/device.js")["deviceModule"];
-var serviceInvokers = require("/modules/backend-service-invoker.js")["backendServiceInvoker"];
+var deviceModule = require("/modules/device.js").deviceModule;
+var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
 var mdmProps = require('/config/mdm-props.js').config();
-var result;
 
 if (uriMatcher.match("/{context}/api/operation")) {
     payload = request.getContent();
@@ -40,32 +39,20 @@ if (uriMatcher.match("/{context}/api/operation")) {
     var index = request.getParameter("start");
     var length = request.getParameter("length");
     var search = request.getParameter("search[value]");
-    /*var targetURL = mdmProps.httpsURL + "/mdm-admin/operations/paginate/"+deviceType+"/"+deviceId + "?start=" + index +
-                    "&length=" + length + "&search=" +search;*/
-    var targetURL = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/devices/" +
-                    deviceType + "/" + deviceId + "/operations?offset=" + index +
-                    "&limit=" + length;
+    var targetURL = mdmProps.httpsURL + "/mdm-admin/operations/paginate/"+deviceType+"/"+deviceId + "?start=" + index +
+                    "&length=" + length + "&search=" +search;
     serviceInvokers.XMLHttp.get(
-            targetURL,
-            function (backendResponse) {
-                if (backendResponse.status == 200 && backendResponse.responseText) {
-                    log.info(backendResponse.responseText);
-                    var paginatedResult = {};
-                    paginatedResult["recordsTotal"] = 16;
-                    paginatedResult["recordsFiltered"] = 16;
-                    paginatedResult["draw"] = parseInt("0");
-                    paginatedResult["data"] = parse(backendResponse.responseText);
-                    response.status = 200;
-                    result = paginatedResult;
-
-                    log.info(stringify(result));
-                } else {
-                    response.status = backendResponse.status;
-                    result =  parse(backendResponse.responseText);
-                }
+            targetURL, function (responsePayload) {
+                response.status = 200;
+                result =  responsePayload;
+            },
+            function (responsePayload) {
+                response.status = responsePayload.status;
+                result =  responsePayload.responseText;
             });
 }
-if (result) {
+
+if (result){
     print(result);
 }
 %>

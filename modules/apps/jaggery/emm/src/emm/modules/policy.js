@@ -16,6 +16,9 @@
  * under the License.
  */
 
+/*
+ @Refactored
+ */
 var policyModule;
 policyModule = function () {
     var log = new Log("modules/policy.js");
@@ -23,98 +26,78 @@ policyModule = function () {
     var constants = require("/modules/constants.js");
     var utility = require("/modules/utility.js")["utility"];
     var mdmProps = require('/config/mdm-props.js').config();
-    var serviceInvokers = require("/modules/backend-service-invoker.js")["backendServiceInvoker"];
+    var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
 
     var publicMethods = {};
     var privateMethods = {};
 
-    privateMethods.handleGetAllPoliciesResponse = function (backendResponse) {
+    privateMethods.handleGetAllPoliciesError = function (responsePayload) {
         var response = {};
-        if (backendResponse.status = 200) {
-            var isUpdated = false;
-            var policyListFromRestEndpoint = parse(backendResponse.responseText)["policies"];
-            var policyListToView = [];
-            var i, policyObjectFromRestEndpoint, policyObjectToView;
-            for (i = 0; i < policyListFromRestEndpoint.length; i++) {
-                // get list object
-                policyObjectFromRestEndpoint = policyListFromRestEndpoint[i];
-                // populate list object values to view-object
-                policyObjectToView = {};
-                policyObjectToView["id"] = policyObjectFromRestEndpoint["id"];
-                policyObjectToView["priorityId"] = policyObjectFromRestEndpoint["priorityId"];
-                policyObjectToView["name"] = policyObjectFromRestEndpoint["policyName"];
-                policyObjectToView["platform"] = policyObjectFromRestEndpoint["profile"]["deviceType"]["name"];
-                policyObjectToView["ownershipType"] = policyObjectFromRestEndpoint["ownershipType"];
-
-                var assignedRoleCount = policyObjectFromRestEndpoint["roles"].length;
-                var assignedUserCount = policyObjectFromRestEndpoint["users"].length;
-
-                if (assignedRoleCount == 0) {
-                    policyObjectToView["roles"] = "None";
-                } else if (assignedRoleCount == 1) {
-                    policyObjectToView["roles"] = policyObjectFromRestEndpoint["roles"][0];
-                } else if (assignedRoleCount > 1) {
-                    policyObjectToView["roles"] = policyObjectFromRestEndpoint["roles"][0] + ", ...";
-                }
-
-                if (assignedUserCount == 0) {
-                    policyObjectToView["users"] = "None";
-                } else if (assignedUserCount == 1) {
-                    policyObjectToView["users"] = policyObjectFromRestEndpoint["users"][0];
-                } else if (assignedUserCount > 1) {
-                    policyObjectToView["users"] = policyObjectFromRestEndpoint["users"][0] + ", ...";
-                }
-
-                policyObjectToView["compliance"] = policyObjectFromRestEndpoint["compliance"];
-
-                if (policyObjectFromRestEndpoint["active"] == true &&
-                    policyObjectFromRestEndpoint["updated"] == true) {
-                    policyObjectToView["status"] = "Active/Updated";
-                    isUpdated = true;
-                } else if (policyObjectFromRestEndpoint["active"] == true &&
-                    policyObjectFromRestEndpoint["updated"] == false) {
-                    policyObjectToView["status"] = "Active";
-                } else if (policyObjectFromRestEndpoint["active"] == false &&
-                    policyObjectFromRestEndpoint["updated"] == true) {
-                    policyObjectToView["status"] = "Inactive/Updated";
-                    isUpdated = true;
-                } else if (policyObjectFromRestEndpoint["active"] == false &&
-                    policyObjectFromRestEndpoint["updated"] == false) {
-                    policyObjectToView["status"] = "Inactive";
-                }
-                // push view-objects to list
-                policyListToView.push(policyObjectToView);
-            }
-            // generate response
-            response.updated = isUpdated;
-            response.status = "success";
-            response.content = policyListToView;
-
-            log.info(stringify(policyListToView));
-
-            return response;
+        response.status = "error";
+        /* responsePayload == "Scope validation failed"
+        Here the response.context("Scope validation failed") is used other then response.status(401).
+        Reason for this is IDP return 401 as the status in 4 different situations such as,
+        1. UnAuthorized.
+        2. Scope Validation Failed.
+        3. Permission Denied.
+        4. Access Token Expired.
+        5. Access Token Invalid.
+        In these cases in order to identify the correct situation we have to compare the unique value from status and
+        context which is context.
+         */
+        if (responsePayload == "Scope validation failed") {
+            response.content = "Permission Denied";
         } else {
-            response.status = "error";
-            /* backendResponse.responseText == "Scope validation failed"
-            Here the response.context("Scope validation failed") is used other then response.status(401).
-            Reason for this is IDP return 401 as the status in 4 different situations such as,
-            1. UnAuthorized.
-            2. Scope Validation Failed.
-            3. Permission Denied.
-            4. Access Token Expired.
-            5. Access Token Invalid.
-            In these cases in order to identify the correct situation we have to compare the unique value from status and
-            context which is context.
-            */
-            if (backendResponse.responseText == "Scope validation failed") {
-                response.content = "Permission Denied";
-            } else {
-                response.content = backendResponse.responseText;
-            }
-            return response;
+            response.content = responsePayload;
         }
+        return response;
     };
 
+    privateMethods.handleGetAllPoliciesSuccess = function (responsePayload) {
+        var isUpdated = false;
+        var policyListFromRestEndpoint = responsePayload["responseContent"];
+        var policyListToView = [];
+        var i, policyObjectFromRestEndpoint, policyObjectToView;
+        for (i = 0; i < policyListFromRestEndpoint.length; i++) {
+            // get list object
+            policyObjectFromRestEndpoint = policyListFromRestEndpoint[i];
+            // populate list object values to view-object
+            policyObjectToView = {};
+            policyObjectToView["id"] = policyObjectFromRestEndpoint["id"];
+            policyObjectToView["priorityId"] = policyObjectFromRestEndpoint["priorityId"];
+            policyObjectToView["name"] = policyObjectFromRestEndpoint["policyName"];
+            policyObjectToView["platform"] = policyObjectFromRestEndpoint["profile"]["deviceType"]["name"];
+            policyObjectToView["ownershipType"] = policyObjectFromRestEndpoint["ownershipType"];
+            policyObjectToView["roles"] = privateMethods.
+                getElementsInAString(policyObjectFromRestEndpoint["roles"]);
+            policyObjectToView["users"] = privateMethods.
+                getElementsInAString(policyObjectFromRestEndpoint["users"]);
+            policyObjectToView["compliance"] = policyObjectFromRestEndpoint["compliance"];
+
+            if (policyObjectFromRestEndpoint["active"] == true && policyObjectFromRestEndpoint["updated"] == true) {
+                policyObjectToView["status"] = "Active/Updated";
+                isUpdated = true;
+            } else if (policyObjectFromRestEndpoint["active"] == true &&
+                       policyObjectFromRestEndpoint["updated"] == false) {
+                policyObjectToView["status"] = "Active";
+            } else if (policyObjectFromRestEndpoint["active"] == false &&
+                       policyObjectFromRestEndpoint["updated"] == true) {
+                policyObjectToView["status"] = "Inactive/Updated";
+                isUpdated = true;
+            } else if (policyObjectFromRestEndpoint["active"] == false &&
+                       policyObjectFromRestEndpoint["updated"] == false) {
+                policyObjectToView["status"] = "Inactive";
+            }
+            // push view-objects to list
+            policyListToView.push(policyObjectToView);
+        }
+        // generate response
+        var response = {};
+        response.updated = isUpdated;
+        response.status = "success";
+        response.content = policyListToView;
+        return response;
+    };
     /*
      @Updated
      */
@@ -126,9 +109,10 @@ policyModule = function () {
         }
         var utility = require('/modules/utility.js')["utility"];
         try {
-            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] +
-                "/policies?offset=0&limit=100";
-            return serviceInvokers.XMLHttp.get(url, privateMethods.handleGetAllPoliciesResponse);
+            var url = mdmProps["httpsURL"] + "/mdm-admin/policies";
+            var response = serviceInvokers.XMLHttp.
+                get(url, privateMethods.handleGetAllPoliciesSuccess,privateMethods.handleGetAllPoliciesError);
+            return response;
         } catch (e) {
             throw e;
         }
@@ -148,6 +132,5 @@ policyModule = function () {
         }
         return elementsInAString;
     };
-
     return publicMethods;
 }();

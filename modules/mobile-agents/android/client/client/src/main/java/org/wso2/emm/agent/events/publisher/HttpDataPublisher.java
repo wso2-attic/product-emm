@@ -39,11 +39,8 @@ public class HttpDataPublisher implements APIResultCallBack, DataPublisher {
     static {
         DeviceInfo deviceInfo = new DeviceInfo(EventRegistry.context);
         deviceIdentifier = deviceInfo.getDeviceId();
-        String serverIP = Constants.DEFAULT_HOST;
-        String prefIP = Preference.getString(EventRegistry.context, Constants.PreferenceFlag.IP);
-        if (prefIP != null) {
-            serverIP = prefIP;
-        }
+        String serverIP = Preference.getString(EventRegistry.context,
+                                                   Constants.PreferenceFlag.IP);
         utils = new ServerConfig();
         utils.setServerIP(serverIP);
     }

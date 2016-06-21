@@ -82,15 +82,13 @@ public class NotificationService extends BroadcastReceiver {
     /**
      * This method is used to add notification to the embedded db.
      * @param notificationId notification id (operation id).
-     * @param messageTitle notification title.
-     * @param messageText notification body.
+     * @param message notification.
      * @param status current status of the notification.
      */
-    public void addNotification(int notificationId, String messageTitle, String messageText, Notification.Status status) {
+    public void addNotification(int notificationId, String message, Notification.Status status) {
         Notification notification = new Notification();
         notification.setId(notificationId);
-        notification.setMessageTitle(messageTitle);
-        notification.setMessageText(messageText);
+        notification.setMessage(message);
         notification.setStatus(status);
         notification.setReceivedTime(Calendar.getInstance().getTime().toString());
         notificationDAO.open();
@@ -114,10 +112,9 @@ public class NotificationService extends BroadcastReceiver {
      * This method is used to post a notification in the device.
      *
      * @param operationId id of the calling notification operation.
-     * @param messageTitle message title to be displayed
-     * @param messageText message text to be displayed
+     * @param message message to be displayed
      */
-    public void showNotification(int operationId, String messageTitle, String messageText) {
+    public void showNotification(int operationId, String message) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Intent notification = new Intent(context, NotificationReceiver.class);
@@ -126,8 +123,8 @@ public class NotificationService extends BroadcastReceiver {
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
                             .setSmallIcon(R.drawable.notification)
-                            .setContentTitle(messageTitle)
-                            .setContentText(messageText)
+                            .setContentTitle(context.getResources().getString(R.string.txt_notification))
+                            .setContentText(message)
                             .setPriority(android.app.Notification.PRIORITY_MAX)
                             .setDefaults(android.app.Notification.DEFAULT_VIBRATE)
                             .setDefaults(android.app.Notification.DEFAULT_SOUND)
@@ -141,8 +138,7 @@ public class NotificationService extends BroadcastReceiver {
 
         } else {
             Intent intent = new Intent(context, AlertActivity.class);
-            intent.putExtra(context.getResources().getString(R.string.intent_extra_message_title), messageTitle);
-            intent.putExtra(context.getResources().getString(R.string.intent_extra_message_text), messageText);
+            intent.putExtra(context.getResources().getString(R.string.intent_extra_message), message);
             intent.putExtra(context.getResources().getString(R.string.intent_extra_operation_id), operationId);
             intent.putExtra(context.getResources().getString(R.string.intent_extra_type),
                             context.getResources().getString(R.string.intent_extra_alert));

@@ -39,12 +39,8 @@ public class ServerConfig {
 	}
 
 	public String getServerURL(Context context) {
-		if (Constants.DEFAULT_HOST != null && getHostFromPreferences(context).contains(Constants.DEFAULT_HOST)) {
-			serverURL = Constants.DEFAULT_HOST;
-		} else {
-			serverURL = getProtocolFromPreferences(context) + getHostFromPreferences(context) + COLON +
-			            getPortFromPreferences(context);
-		}
+		serverURL = getProtocolFromPreferences(context) + getHostFromPreferences(context) + COLON +
+		            getPortFromPreferences(context);
 		return serverURL;
 	}
 
@@ -53,12 +49,8 @@ public class ServerConfig {
 	}
 
 	public String getAPIServerURL(Context context) {
-		if (Constants.DEFAULT_HOST != null && getHostFromPreferences(context).contains(Constants.DEFAULT_HOST)) {
-			APIServerURL = Constants.DEFAULT_HOST;
-		} else {
-			APIServerURL = getProtocolFromPreferences(context) + getHostFromPreferences(context) + COLON +
-			               getPortFromPreferences(context);
-		}
+		APIServerURL = getProtocolFromPreferences(context) + getHostFromPreferences(context) + COLON +
+		               getPortFromPreferences(context);
 		return APIServerURL;
 	}
 

@@ -98,7 +98,7 @@ public class DeviceInfoPayload {
         if (device == null) {
             device = new Device();
         }
-        deviceInfo = new DeviceInfo(context);
+
         Power power = phoneState.getBatteryDetails();
         device.setDeviceIdentifier(deviceInfo.getDeviceId());
         device.setDescription(deviceInfo.getDeviceName());
@@ -139,11 +139,6 @@ public class DeviceInfoPayload {
         property = new Device.Property();
         property.setName(Constants.Device.OS);
         property.setValue(deviceInfo.getOsVersion());
-        properties.add(property);
-
-        property = new Device.Property();
-        property.setName(Constants.Device.OS_BUILD_DATE);
-        property.setValue(String.valueOf(Build.TIME));
         properties.add(property);
 
         property = new Device.Property();
@@ -284,6 +279,21 @@ public class DeviceInfoPayload {
         property = new Device.Property();
         property.setName(Constants.Device.BATTERY_VOLTAGE);
         property.setValue(String.valueOf(power.getVoltage()));
+        batteryProperties.add(property);
+
+        property = new Device.Property();
+        property.setName(Constants.Device.TEMPERATURE);
+        property.setValue(String.valueOf(power.getTemperature()));
+        batteryProperties.add(property);
+
+        property = new Device.Property();
+        property.setName(Constants.Device.CURRENT_AVERAGE);
+        property.setValue(String.valueOf(power.getCurrentAverage()));
+        batteryProperties.add(property);
+
+        property = new Device.Property();
+        property.setName(Constants.Device.TECHNOLOGY);
+        property.setValue(String.valueOf(power.getTechnology()));
         batteryProperties.add(property);
 
         property = new Device.Property();

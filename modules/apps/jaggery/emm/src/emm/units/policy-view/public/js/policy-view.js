@@ -1815,7 +1815,7 @@ var updatePolicy = function (policy, state) {
         payload["users"] = [];
         payload["roles"] = [];
     }
-    var serviceURL = "/api/device-mgt/v1.0/policies/" + getParameterByName("id");
+    var serviceURL = "/mdm-admin/policies/" + getParameterByName("id");
     invokerUtil.put(
         serviceURL,
         payload,
@@ -1824,7 +1824,7 @@ var updatePolicy = function (policy, state) {
             if (state == "save") {
                 var policyList = [];
                 policyList.push(getParameterByName("id"));
-                serviceURL = "/api/device-mgt/v1.0/policies/deactivate-policy";
+                serviceURL = "/mdm-admin/policies/inactivate";
                 invokerUtil.put(
                     serviceURL,
                     policyList,
@@ -1841,7 +1841,7 @@ var updatePolicy = function (policy, state) {
             } else if (state == "publish") {
                 var policyList = [];
                 policyList.push(getParameterByName("id"));
-                serviceURL = "/api/device-mgt/v1.0/policies/activate-policy";
+                serviceURL = "/mdm-admin/policies/activate";
                 invokerUtil.put(
                     serviceURL,
                     policyList,
@@ -1994,7 +1994,7 @@ var changeAndroidWifiPolicy = function (select) {
     slideDownPaneAgainstValueSet(select, 'control-wifi-identity', ['802eap']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-anoidentity', ['802eap']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-cacert', ['802eap']);
-};
+}
 
 /**
  * This method will display appropriate fields based on wifi EAP type
@@ -2008,10 +2008,10 @@ var changeAndroidWifiPolicyEAP = function (select, superSelect) {
     slideDownPaneAgainstValueSet(select, 'control-wifi-identity', ['peap', 'tls','ttls', 'pwd', 'fast', 'leap']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-anoidentity', ['peap', 'ttls']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-cacert', ['peap', 'tls', 'ttls']);
-    if (superSelect.value != '802eap') {
+    if(superSelect.value != '802eap'){
         changeAndroidWifiPolicy(superSelect);
     }
-};
+}
 
 // End of functions related to grid-input-view
 
@@ -2034,17 +2034,17 @@ $(document).ready(function () {
 
     var policyPayloadObj;
     invokerUtil.get(
-        "/api/device-mgt/v1.0/policies/" + getParameterByName("id"),
+        "/mdm-admin/policies/" + getParameterByName("id"),
         // on success
-        function (data, textStatus, jqXHR) {
-            if (jqXHR.status == 200 && data) {
-                policyPayloadObj = JSON.parse(data);
-                skipStep["policy-platform"](policyPayloadObj);
-            }
+        function (data) {
+            // console.log("success: " + JSON.stringify(data));
+            data = JSON.parse(data);
+            policyPayloadObj = data["responseContent"];
+            skipStep["policy-platform"](policyPayloadObj);
         },
         // on error
-        function (jqXHR) {
-            console.log(jqXHR);
+        function (data) {
+            console.log(data);
             // should be redirected to an error page
         }
     );

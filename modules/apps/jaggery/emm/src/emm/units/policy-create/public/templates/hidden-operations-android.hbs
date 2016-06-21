@@ -44,9 +44,9 @@
                     <i class="fw fw-vpn fw-stack-2x"></i>
                 </span>
             Virtual Private Network
-            <span id="vpn-configured" class="has-configured status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="vpn-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
-            <span id="vpn-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
+            <span id="wifi-configured" class="has-configured status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="wifi-ok" class="has-success status-icon hidden"><i class="fw fw-ok"></i></span>
+            <span id="wifi-error" class="has-error status-icon hidden"><i class="fw fw-error"></i></span>
         </a>
         <a href="javascript:void(0)" onclick="showAdvanceOperation('work-profile', this)">
              <span class="wr-hidden-operations-icon fw-stack">
@@ -894,27 +894,24 @@
                         </div>
                     </h2>
                 </div>
-                <div id="app-restriction-body" class="panel-collapse panel-body collapse" role="tabpanel" aria-labelledby="app-restriction-body">
+                <div id="app-restriction-body" class="panel-collapse panel-body collapse" role="tabpanel"
+                     aria-labelledby="app-restriction-body">
 
                     <div id="app-restriction-feature-error-msg" class="alert alert-danger hidden" role="alert">
                         <i class="icon fw fw-error"></i><span></span>
                     </div>
 
-                    <label class="wr-input-label" for="app-restriction-type">
-                        Select type
-                        <span class="helper" title="Select a type to proceed.">
-                            <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                        </span>
-                        <br>
-                    </label>
                     <select id="app-restriction-type" class="form-control operationDataKeys" data-key="restrictionType">
-                        <option value="black-list" selected="selected">Black List</option>
+                        <option value="" selected="selected">
+                            None
+                        </option>
+                        <option value="black-list">Black List</option>
                         <option value="white-list">White List</option>
                     </select>
 
                     <div class="wr-input-control">
                         <label class="wr-input-label" for="restricted-applications">
-                            <br><br>Restricted Application List
+                            Restricted Application List
                             <span class="helper" title="Add an application to restrict.">
                                 <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
                             </span>
