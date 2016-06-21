@@ -40,7 +40,7 @@ var loadPaginatedObjects = function (objectGridId, objectGridContainer, objectGr
                                 var content = template(data.viewModel);
                                 $(objectGridContainer).html(content);
                                 if (isInit) {
-                                    $('#role-grid').datatables_extended();
+                                    $('#role-grid').datatables_extended_serverside_paging();
                                     isInit = false;
                                 }
                                 $("#dt-select-all").addClass("hidden");
@@ -64,40 +64,41 @@ var loadPaginatedObjects = function (objectGridId, objectGridContainer, objectGr
 function loadRoles(searchQuery) {
     var loadingContent = $("#loading-content");
     loadingContent.show();
-    var serviceURL = emmAdminBasePath + "/roles";
-    if (searchQuery) {
-        serviceURL = serviceURL + "?filter=" + searchQuery + "&limit=" + ROLE_LIMIT;
-    }else {
-        serviceURL = serviceURL + "?limit=" + ROLE_LIMIT;
-    }
-    var callback = function (data) {
-        if (data != null || data == "null") {
-            data = JSON.parse(data);
-            var canRemove = $("#can-remove").val();
-            var canEdit = $("#can-edit").val();
-            var roles = [];
-            for(var i=0; i<data.count; i++){
-                roles.push({"roleName":data.roles[i]});
-                if(canRemove != null && canRemove != undefined) {
-                    roles[i].canRemove = true;
-                }
+    $('#role-grid').datatables_extended_serverside_paging();
+    // var serviceURL = emmAdminBasePath + "/roles";
+    // if (searchQuery) {
+    //     serviceURL = serviceURL + "?filter=" + searchQuery + "&limit=" + ROLE_LIMIT;
+    // }else {
+    //     serviceURL = serviceURL + "?limit=" + ROLE_LIMIT;
+    // }
+    // var callback = function (data) {
+    //     if (data != null || data == "null") {
+    //         data = JSON.parse(data);
+    //         var canRemove = $("#can-remove").val();
+    //         var canEdit = $("#can-edit").val();
+    //         var roles = [];
+    //         for(var i=0; i<data.count; i++){
+    //             roles.push({"roleName":data.roles[i]});
+    //             if(canRemove != null && canRemove != undefined) {
+    //                 roles[i].canRemove = true;
+    //             }
+    //
+    //             if(canEdit != null && canEdit != undefined) {
+    //                 roles[i].canEdit = true;
+    //             }
+    //         }
+    //
+    //         data = {
+    //             "viewModel": {
+    //                 "roles": roles
+    //             },
+    //             "length": roles.length
+    //         }
+    //     }
+    //     return data;
+    // };
 
-                if(canEdit != null && canEdit != undefined) {
-                    roles[i].canEdit = true;
-                }
-            }
-
-            data = {
-                "viewModel": {
-                    "roles": roles
-                },
-                "length": roles.length
-            }
-        }
-        return data;
-    };
-
-    loadPaginatedObjects("#role-grid", "#ast-container", "#role-listing", serviceURL, callback);
+    // loadPaginatedObjects("#role-grid", "#ast-container", "#role-listing", serviceURL, callback);
     loadingContent.hide();
     var sortableElem = '.wr-sortable';
     $(sortableElem).sortable({
