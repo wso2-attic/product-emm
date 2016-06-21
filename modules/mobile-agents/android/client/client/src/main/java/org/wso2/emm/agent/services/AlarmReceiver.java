@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
@@ -87,6 +88,14 @@ public class AlarmReceiver extends BroadcastReceiver {
 			OperationTask operationTask = new OperationTask();
 			operationTask.execute(context);
 		}
+
+		if (Constants.SYSTEM_APP_ENABLED && Preference.getBoolean(context, context.getResources().
+				getString(R.string.firmware_upgrade_failed))) {
+			Preference.putBoolean(context, context.getResources().
+					getString(R.string.firmware_upgrade_failed), false);
+			CommonUtils.callSystemApp(context, Constants.Operation.UPGRADE_FIRMWARE, null, null);
+		}
+
 	}
 
 	private class OperationTask extends AsyncTask<Context, Void, Void> {

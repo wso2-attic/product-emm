@@ -90,7 +90,7 @@ public class OpenStreetMapService implements ReverseGeoCodingService {
      * to send requests without tokens.
      */
     private void sendRequest(EndPointInfo endPointInfo) {
-        RequestQueue queue =  null;
+        RequestQueue queue = null;
         try {
             queue = ServerUtilities.getCertifiedHttpClient();
         } catch (IDPTokenManagerException e) {
@@ -115,8 +115,8 @@ public class OpenStreetMapService implements ReverseGeoCodingService {
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
                 String result = new String(response.data);
-                if(org.wso2.emm.agent.proxy.utils.Constants.DEBUG_ENABLED) {
-                    if(result != null && !result.isEmpty()) {
+                if (org.wso2.emm.agent.proxy.utils.Constants.DEBUG_ENABLED) {
+                    if (result != null && !result.isEmpty()) {
                         Log.d(TAG, "Result :" + result);
                     }
                 }

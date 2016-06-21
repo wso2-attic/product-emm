@@ -270,12 +270,15 @@ deviceModule = function () {
         var utility = require('/modules/utility.js')["utility"];
         try {
             utility.startTenantFlow(carbonUser);
-
-            var url = mdmProps["httpsURL"] + "/mdm-admin/devices/view?type=" + deviceType + "&id=" + deviceId;
-            var dataNew = serviceInvokers.XMLHttp.get(
-                url, function (responsePayload) {
-                    var device = responsePayload.responseContent;
-                    if (device) {
+            //var url = mdmProps["httpsURL"] + "/mdm-admin/devices/view?type=" + deviceType + "&id=" + deviceId;
+            var url = mdmProps["httpsURL"] + "/api/device-mgt/v1.0/devices/" + deviceType + "/" + deviceId;
+            return serviceInvokers.XMLHttp.get(
+                url, 
+                function (backendResponse) {
+                    var response = {};
+                    if (backendResponse.status == 200 && backendResponse.responseText) {
+                        response["status"] = "success";
+                        var device = parse(backendResponse.responseText);
                         var propertiesList = device["properties"];
                         var properties = {};
                         for (var i = 0; i < propertiesList.length; i++) {
@@ -295,17 +298,14 @@ deviceModule = function () {
                             properties[constants["DEVICE_VENDOR"]] = constants["VENDOR_APPLE"];
                         }
                         deviceObject[constants["DEVICE_PROPERTIES"]] = properties;
-                        return deviceObject;
+                        response["content"] = deviceObject;
+                        return response;
+                    } else {
+                        response["status"] = "error";
+                        return response;
                     }
                 }
-                ,
-                function (responsePayload) {
-                    var response = {};
-                    response["status"] = "error";
-                    return response;
-                }
             );
-            return dataNew;
         } catch (e) {
             throw e;
         } finally {

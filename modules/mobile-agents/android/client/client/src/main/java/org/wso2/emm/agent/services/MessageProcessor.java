@@ -61,6 +61,7 @@ public class MessageProcessor implements APIResultCallBack {
 	private ObjectMapper mapper;
 	private boolean isWipeTriggered = false;
 	private boolean isRebootTriggered = false;
+	private int operationId;
 	private boolean isUpgradeTriggered = false;
 	private boolean isShellCommandTriggered = false;
 	private DevicePolicyManager devicePolicyManager;
@@ -137,10 +138,14 @@ public class MessageProcessor implements APIResultCallBack {
 	 * Call the message retrieval end point of the server to get messages pending.
 	 */
 	public void getMessages() throws AndroidAgentException {
-		String ipSaved = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
+		String ipSaved = Constants.DEFAULT_HOST;
+		String prefIP = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
+		if (prefIP != null) {
+			ipSaved = prefIP;
+		}
 		ServerConfig utils = new ServerConfig();
 		utils.setServerIP(ipSaved);
-		String url = utils.getAPIServerURL(context) + Constants.NOTIFICATION_ENDPOINT + deviceId;
+		String url = utils.getAPIServerURL(context) + Constants.DEVICES_ENDPOINT + deviceId + Constants.NOTIFICATION_ENDPOINT;
 
 		Log.i(TAG, "Get pending operations from: " + url);
 
@@ -159,6 +164,7 @@ public class MessageProcessor implements APIResultCallBack {
 					} else if (operation.getCode().equals(Constants.Operation.UPGRADE_FIRMWARE) && !operation.getStatus().
 							equals(ERROR_STATE)) {
 						isUpgradeTriggered = true;
+						Preference.putInt(context, "firmwareOperationId", operation.getId());
 					} else if (operation.getCode().equals(Constants.Operation.EXECUTE_SHELL_COMMAND) && !operation.getStatus().
 							equals(ERROR_STATE)) {
 						isShellCommandTriggered = true;
@@ -169,6 +175,23 @@ public class MessageProcessor implements APIResultCallBack {
 							throw new AndroidAgentException("Invalid JSON format.", e);
 						}
 					}
+				}
+			}
+			String firmwareOperationMessage = Preference.getString(context, context.getResources().getString(
+					R.string.firmware_upgrade_failed_message));
+			int firmwareOperationId = Preference.getInt(context, context.getResources().getString(
+					R.string.firmware_upgrade_failed_id));
+			if (firmwareOperationMessage != null && firmwareOperationId != 0) {
+				org.wso2.emm.agent.beans.Operation firmwareOperation = new org.wso2.emm.agent.beans.Operation();
+				firmwareOperation.setId(firmwareOperationId);
+				firmwareOperation.setCode(Constants.Operation.UPGRADE_FIRMWARE);
+				firmwareOperation.setStatus(context.getResources().getString(R.string.operation_value_error));
+				firmwareOperation.setOperationResponse(firmwareOperationMessage);
+				if (replyPayload != null) {
+					replyPayload.add(firmwareOperation);
+				} else {
+					replyPayload = new ArrayList<>();
+					replyPayload.add(firmwareOperation);
 				}
 			}
 		} catch (JsonMappingException e) {
@@ -204,7 +227,11 @@ public class MessageProcessor implements APIResultCallBack {
 		String response;
 		if (requestCode == Constants.NOTIFICATION_REQUEST_CODE) {
 			if (isWipeTriggered) {
-				devicePolicyManager.wipeData(ACTIVATION_REQUEST);
+				if(Constants.SYSTEM_APP_ENABLED) {
+					CommonUtils.callSystemApp(context, Constants.Operation.WIPE_DATA, null, null);
+				} else {
+					Log.i(TAG, "Not the device owner.");
+				}
 			}
 
 			if (isRebootTriggered) {

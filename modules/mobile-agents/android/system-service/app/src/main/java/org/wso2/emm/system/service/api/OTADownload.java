@@ -19,17 +19,21 @@ package org.wso2.emm.system.service.api;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.system.service.R;
+import org.wso2.emm.system.service.utils.CommonUtils;
 import org.wso2.emm.system.service.utils.Constants;
 import org.wso2.emm.system.service.utils.Preference;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -100,10 +104,22 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
         }
     }
 
-    private void sendBroadcast(String status, String payload) {
+    public boolean checkNetworkOnline() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+        boolean status = false;
+        if (info != null && info.isConnectedOrConnecting()) {
+            status = true;
+        }
+
+        return status;
+    }
+
+    private void sendBroadcast(String code, String status, String payload) {
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction(Constants.SYSTEM_APP_ACTION_RESPONSE);
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        broadcastIntent.putExtra(Constants.CODE, code);
         broadcastIntent.putExtra(Constants.STATUS, status);
         broadcastIntent.putExtra(Constants.PAYLOAD, payload);
         context.sendBroadcast(broadcastIntent);
@@ -119,21 +135,37 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
                     if (parser != null) {
                         result.put(UPGRADE_DESCRIPTION, parser.getProp("Software is up to date"));
                     }
-                    sendBroadcast(Constants.Status.SUCCESSFUL, result.toString());
+                    sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS, Constants.Status.SUCCESSFUL,
+                                  result.toString());
                 } catch (JSONException e) {
-                    sendBroadcast(Constants.Status.INTERNAL_SERVER_ERROR, null);
-                    Log.e(TAG, "Result payload build failed." + e);
+                    String message = "Result payload build failed.";
+                    sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
+                                  Constants.Status.INVALID_PACKAGE, message);
+                    Log.e(TAG, message + e);
                 }
-            } else {
+            } else if (checkNetworkOnline()) {
                 new AsyncTask<Void, Void, Long>() {
                     protected Long doInBackground(Void... param) {
                         URL url = otaServerManager.getServerConfig().getPackageURL();
                         URLConnection con;
                         try {
                             con = url.openConnection();
+                            con.setConnectTimeout(Constants.FIRMWARE_UPGRADE_CONNECTIVITY_TIMEOUT);
+                            con.setReadTimeout(Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
                             return (long) con.getContentLength();
+                        } catch (SocketTimeoutException e) {
+                            String message = "Connection failure (Socket timeout) when retrieving update package size.";
+                            Log.e(TAG, message + e);
+                            sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
+                                          Constants.Status.CONNECTION_FAILED, message);
+                            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
+                            return (long) -1;
                         } catch (IOException e) {
-                            Log.e(TAG, "Connection failure when retrieving update package size." + e);
+                            String message = "Connection failure when retrieving update package size.";
+                            Log.e(TAG, message + e);
+                            sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
+                                          Constants.Status.CONNECTION_FAILED, message);
+                            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
                             return (long) -1;
                         }
                     }
@@ -159,25 +191,44 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
                                 result.put(UPGRADE_RELEASE, parser.getNumRelease());
                                 result.put(UPGRADE_VERSION, parser.getProp("ro.build.id"));
                                 result.put(UPGRADE_DESCRIPTION, parser.getProp("ro.build.description"));
-                                sendBroadcast(Constants.Status.SUCCESSFUL, result.toString());
+                                sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
+                                              Constants.Status.SUCCESSFUL, result.toString());
                             } catch (JSONException e) {
-                                sendBroadcast(Constants.Status.INTERNAL_SERVER_ERROR, null);
-                                Log.e(TAG, "Result payload build failed." + e);
+                                String message = "Result payload build failed.";
+                                sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
+                                              Constants.Status.INVALID_PACKAGE, message);
+                                Log.e(TAG, message + e);
                             }
 
                         } else {
-                            otaServerManager.startDownloadUpgradePackage(otaServerManager);
+                            if (checkNetworkOnline()) {
+                                otaServerManager.startDownloadUpgradePackage(otaServerManager);
+                            } else {
+                                String message = "Connection failure when starting upgrade download.";
+                                Log.e(TAG, message);
+                                sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
+                                              Constants.Status.CONNECTION_FAILED, message);
+                                CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
+                            }
                         }
                     }
                 }.execute();
 
+            } else {
+                String message = "Connection failure when starting upgrade download.";
+                Log.e(TAG, message);
+                sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
+                              Constants.Status.CONNECTION_FAILED, message);
+                CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
             }
         } else if (error == ERROR_WIFI_NOT_AVAILABLE) {
             Log.e(TAG, "OTA failed due to WIFI connection failure.");
         } else if (error == ERROR_CANNOT_FIND_SERVER) {
-            Log.e(TAG, "OTA failed due to OTA server not accessible.");
+            String message = "OTA failed due to OTA server not accessible.";
+            Log.e(TAG, message);
         } else if (error == ERROR_WRITE_FILE_ERROR) {
-            Log.e(TAG, "OTA failed due to file write error.");
+            String message = "OTA failed due to file write error.";
+            Log.e(TAG, message);
         }
     }
 
@@ -196,20 +247,30 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
                 Log.e(TAG, "Thread interrupted." + e);
-            }
-
-            if (!Preference.getBoolean(context, context.getResources().getString(R.string.verification_failed_flag))) {
-                otaServerManager.startInstallUpgradePackage();
+            } finally {
+                if (!Preference.getBoolean(context, context.getResources().getString(R.string.verification_failed_flag))) {
+                    otaServerManager.startInstallUpgradePackage();
+                }
             }
         }
     }
 
     public void onStateUpgrade(int error) {
         if (error == ERROR_PACKAGE_VERIFY_FAILED) {
-            Log.e(TAG, "Package verification failed, signature does not match.");
+            String message = "Package verification failed, signature does not match.";
+            Log.e(TAG, message);
             Preference.putBoolean(context, context.getResources().getString(R.string.verification_failed_flag), true);
+            sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
+                          Constants.Status.INVALID_PACKAGE, message);
+            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+                    context, context.getResources().getString(R.string.operation_id)), message);
         } else if (error == ERROR_PACKAGE_INSTALL_FAILED) {
-            Log.e(TAG, "Package installation Failed.");
+            String message = "Package installation Failed.";
+            Log.e(TAG, message);
+            sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
+                          Constants.Status.INVALID_PACKAGE, message);
+            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+                    context, context.getResources().getString(R.string.operation_id)), message);
         }
     }
 

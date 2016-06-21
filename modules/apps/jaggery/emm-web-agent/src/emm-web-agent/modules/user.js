@@ -27,6 +27,8 @@ var userModule = function () {
     var mdmProps = require('/config/mdm-props.js').config();
     var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
 
+    var emmAdminBasePath = "/api/device-mgt/v1.0";
+
     /* Initializing user manager */
     var carbon = require('carbon');
     var tenantId = carbon.server.tenantId();
@@ -281,7 +283,7 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/users";
+            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/users";
             return privateMethods.callBackend(url, constants.HTTP_GET);
 
         } catch (e) {
@@ -308,7 +310,7 @@ var userModule = function () {
         var carbonUser = privateMethods.getCarbonUser();
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/users/view?username=" + username;
+            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/users?username=" + username;
             var response = privateMethods.callBackend(url, constants.HTTP_GET);
             response["userDomain"] = carbonUser.domain;
             return response;
@@ -349,7 +351,7 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/users/users-by-username";
+            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/users/usernames";
             return privateMethods.callBackend(url, constants.HTTP_GET)
         } catch (e) {
             throw e;
@@ -373,7 +375,7 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/roles";
+            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/roles";
             return privateMethods.callBackend(url, constants.HTTP_GET);
         } catch (e) {
             throw e;
@@ -392,9 +394,9 @@ var userModule = function () {
             log.error("User object was not found in the session");
             throw constants["ERRORS"]["USER_NOT_FOUND"];
         }
-        try {
+        try {                //TODO Fix getting device types from JAX-RS
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/devices/types";
+            var url = mdmProps["httpsURL"] + "/devices/types";
             return privateMethods.callBackend(url, constants.HTTP_GET);
         } catch (e) {
             throw e;
@@ -417,9 +419,8 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/roles/role?rolename=" + roleName;
-            var response = privateMethods.callBackend(url, constants.HTTP_GET);
-            return response;
+            var url = mdmProps["httpsURL"] + emmAdminBasePath + "/roles?rolename=" + roleName;
+            return privateMethods.callBackend(url, constants.HTTP_GET);
         } catch (e) {
             throw e;
         } finally {
@@ -487,24 +488,29 @@ var userModule = function () {
      * retrieve secondary user stores.
      * This needs Authentication since the method access admin services.
      *
-     * @returns {string array} Array of secondary user stores.
+     * @returns Array of secondary user stores.
      */
     publicMethods.getSecondaryUserStores = function () {
         var returnVal = [];
-        var endpoint = mdmProps.adminService + constants.USER_STORE_CONFIG_ADMIN_SERVICE_END_POINT;
+        var endpoint = mdmProps["adminService"] + constants["USER_STORE_CONFIG_ADMIN_SERVICE_END_POINT"];
         var wsPayload = "<xsd:getSecondaryRealmConfigurations  xmlns:xsd='http://org.apache.axis2/xsd'/>";
         serviceInvokers.WS.soapRequest(
-            "urn:getSecondaryRealmConfigurations", endpoint, wsPayload, function (wsResponse) {
+            "urn:getSecondaryRealmConfigurations",
+            endpoint,
+            wsPayload,
+            function (wsResponse) {
                 var domainIDs = stringify(wsResponse.*::['return']. *::domainId.text());
                 if (domainIDs != "\"\"") {
-                    var regExpForSearch = new RegExp(constants.USER_STORES_NOISY_CHAR, "g");
+                    var regExpForSearch = new RegExp(constants["USER_STORES_NOISY_CHAR"], "g");
                     domainIDs = domainIDs.replace(regExpForSearch, "");
-                    returnVal = domainIDs.split(constants.USER_STORES_SPLITTING_CHAR);
+                    returnVal = domainIDs.split(constants["USER_STORES_SPLITTING_CHAR"]);
                 }
             }, function (e) {
                 log.error("Error retrieving secondary user stores", e);
-            }, constants.SOAP_VERSION);
+            },
+            constants["SOAP_VERSION"]);
         return returnVal;
     };
+
     return publicMethods;
 }();

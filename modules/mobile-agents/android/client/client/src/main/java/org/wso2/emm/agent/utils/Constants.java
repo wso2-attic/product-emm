@@ -27,6 +27,7 @@ public class Constants {
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
 	public static final boolean SYSTEM_APP_ENABLED = false;
+	public static final boolean AUTO_ENROLLMENT_BACKGROUND_SERVICE_ENABLED = false;
 	public static final boolean ALLOW_SYSTEM_APPS_IN_APPS_LIST_RESPONSE = false;
 	public static final String SYSTEM_APP_SERVICE_START_ACTION = "org.wso2.emm.system.service.START_SERVICE";
 	public static final String GCM_PROJECT_NUMBER = "GOOGLE-API-PROJECT-NUMBER";
@@ -59,21 +60,22 @@ public class Constants {
 	public static final boolean SKIP_WORK_PROFILE_CREATION = false;
 	public static final boolean HIDE_ERROR_DIALOG = false;
 
-	public static final String SERVER_APP_ENDPOINT = "/mdm-android-agent/";
+	public static final String SERVER_APP_ENDPOINT = "/api/device-mgt/android/v1.0/";
 	public static final String SERVER_AUTHENTICATION_ENDPOINT = "register/authenticate/device";
-	public static final String LICENSE_ENDPOINT = SERVER_APP_ENDPOINT + "device/license";
-	public static final String REGISTER_ENDPOINT = SERVER_APP_ENDPOINT + "enrollment/";
+	public static final String LICENSE_ENDPOINT = SERVER_APP_ENDPOINT + "configuration/license";
+	public static final String REGISTER_ENDPOINT = SERVER_APP_ENDPOINT + "devices/";
 	public static final String CONFIGURATION_ENDPOINT = SERVER_APP_ENDPOINT + "configuration/";
-	public static final String SCEP_ENDPOINT = "/certificate-mgt/certificates/signcsr";
+	public static final String SCEP_ENDPOINT = "/api/scep-mgt/v1.0/certificates/signcsr";
 	public static final String OAUTH_ENDPOINT = "/oauth2/token";
 	public static final String DEVICE_ENDPOINT = SERVER_APP_ENDPOINT + "device/";
-	public static final String IS_REGISTERED_ENDPOINT = REGISTER_ENDPOINT;
+	public static final String IS_REGISTERED_ENDPOINT = "/status";
 	public static final String UNREGISTER_ENDPOINT =  REGISTER_ENDPOINT;
-	public static final String NOTIFICATION_ENDPOINT = SERVER_APP_ENDPOINT + "operation/";
+	public static final String DEVICES_ENDPOINT = SERVER_APP_ENDPOINT + "devices/";
+	public static final String NOTIFICATION_ENDPOINT  = "/pending-operations";
 	public static final String GOOGLE_PLAY_APP_URI = "market://details?id=";
 	public static final String DYNAMIC_CLIENT_REGISTER_ENDPOINT = "/dynamic-client-web/register";
 	public static final String APP_LIST_ENDPOINT = "/api/appm/publisher/v1.0/apps/mobileapp?field-filter=all";
-	public static final String APP_DOWNLOAD_ENDPOINT = "/api/appm/store/v1.0/apps/mobile/binaries";
+	public static final String APP_DOWNLOAD_ENDPOINT = "/publisher/api/mobileapp/getfile";
 	public static final String ACTION_RESPONSE = "org.wso2.emm.agent.MESSAGE_PROCESSED";
 	public static final String POLICY_ENDPOINT = SERVER_APP_ENDPOINT + "policy/";
 	public static final String EVENT_ENDPOINT = SERVER_APP_ENDPOINT + "events/";
@@ -117,6 +119,7 @@ public class Constants {
 	public static final String USERNAME_PATTERN = "[user]";
 
 	public static final String SERVICE_PACKAGE_NAME = "org.wso2.emm.system.service";
+	public static final String EMM_DB = "emm_db";
 
 	/**
 	 * Device certificates.
@@ -285,6 +288,7 @@ public class Constants {
 		public static final String GET_APPLICATION_LIST = "GET_APP_LIST";
 		public static final String UNINSTALL_WEBCLIP = "UNINSTALL_WEBCLIP";
 		public static final String GET_APP_DOWNLOAD_PROGRESS = "APP_DOWNLOAD_PROGRESS";
+		public static final String FAILED_FIRMWARE_UPGRADE_NOTIFICATION = "FAILED_FIRMWARE_UPGRADE_NOTIFICATION";
 	}
 
 	/**
@@ -301,6 +305,7 @@ public class Constants {
 		public static final String MODEL = "DEVICE_MODEL";
 		public static final String VENDOR = "VENDOR";
 		public static final String OS = "OS_VERSION";
+		public static final String OS_BUILD_DATE = "OS_BUILD_DATE";
 		public static final String NAME = "DEVICE_NAME";
 		public static final String BATTERY_LEVEL = "BATTERY_LEVEL";
 		public static final String ENCRYPTION_STATUS = "ENCRYPTION_ENABLED";
@@ -351,7 +356,8 @@ public class Constants {
 		}
 		public static final String NAME = "notification";
 		public static final String ID = "id";
-		public static final String MESSAGE = "message";
+		public static final String MESSAGE_TITLE = "messageTitle";
+		public static final String MESSAGE_TEXT = "messageText";
 		public static final String RECEIVED_TIME = "received_time";
 		public static final String RESPONSE_TIME = "response_time";
 		public static final String STATUS = "status";

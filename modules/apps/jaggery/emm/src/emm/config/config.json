@@ -14,6 +14,7 @@
     "adminUser":"admin",
     "adminRole":"admin",
     "usernameLength":30,
+    "pageSize":10,
     "ssoConfiguration" : {
         "enabled" : false,
         "issuer" : "mdm",
@@ -46,5 +47,9 @@
         "copyrightOwner" : "WSO2 Inc.",
         "copyrightOwnersSite" : "http://www.wso2.org",
         "copyrightSuffix" : ""
+    },
+    "isOAuthEnabled" : true,
+    "backendRestEndpoints" : {
+        "deviceMgt" : "/api/device-mgt/v1.0"
     }
 }

@@ -189,7 +189,11 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		if (regId != null && !regId.isEmpty()) {
 			if (CommonUtils.isNetworkAvailable(context)) {
-				String serverIP = Preference.getString(AlreadyRegisteredActivity.this, Constants.PreferenceFlag.IP);
+				String serverIP = Constants.DEFAULT_HOST;
+				String prefIP = Preference.getString(AlreadyRegisteredActivity.this, Constants.PreferenceFlag.IP);
+				if (prefIP != null) {
+					serverIP = prefIP;
+				}
 				if (serverIP != null && !serverIP.isEmpty()) {
 					stopPolling();
 					ServerConfig utils = new ServerConfig();
@@ -276,8 +280,11 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		if (isRegistered) {
 			if (CommonUtils.isNetworkAvailable(context)) {
-
-				String serverIP = Preference.getString(context, Constants.PreferenceFlag.IP);
+				String serverIP = Constants.DEFAULT_HOST;
+				String prefIP = Preference.getString(context, Constants.PreferenceFlag.IP);
+				if (prefIP != null) {
+					serverIP = prefIP;
+				}
 				regId = Preference.getString(context, Constants.PreferenceFlag.REG_ID);
 
 				if (regId != null) {
@@ -288,7 +295,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 						utils.setServerIP(serverIP);
 						if (utils.getHostFromPreferences(context) != null && !utils.getHostFromPreferences(context).isEmpty()) {
 							CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-							                           utils.getAPIServerURL(context) + Constants.IS_REGISTERED_ENDPOINT + regId,
+							                           utils.getAPIServerURL(context) + Constants.DEVICES_ENDPOINT + regId + Constants.IS_REGISTERED_ENDPOINT,
 							                           HTTP_METHODS.GET,
 							                           null, AlreadyRegisteredActivity.this,
 							                           Constants.IS_REGISTERED_REQUEST_CODE);
@@ -337,7 +344,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			stopProgressDialog();
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS);
-				if (responseStatus != null && Constants.Status.ACCEPT.equals(responseStatus)) {
+				if (responseStatus != null && Constants.Status.SUCCESSFUL.equals(responseStatus)) {
 					stopPolling();
 					initiateUnregistration();
 				} else if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {

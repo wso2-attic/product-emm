@@ -25,14 +25,12 @@ var userModule = function () {
     var constants = require("/modules/constants.js");
     var utility = require("/modules/utility.js")["utility"];
     var mdmProps = require('/config/mdm-props.js').config();
-    var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
+    var serviceInvokers = require("/modules/backend-service-invoker.js")["backendServiceInvoker"];
 
     /* Initializing user manager */
-    var carbon = require('carbon');
-    var tenantId = carbon.server.tenantId();
-    var url = carbon.server.address('https') + "/admin/services";
+    var carbon = require("carbon");
+    var url = carbon.server.address("https") + "/admin/services";
     var server = new carbon.server.Server(url);
-    var userManager = new carbon.user.UserManager(server, tenantId);
 
     var deviceManagementService = utility.getDeviceManagementService();
     var EmailMessageProperties = Packages.org.wso2.carbon.device.mgt.common.EmailMessageProperties;
@@ -41,47 +39,40 @@ var userModule = function () {
     var privateMethods = {};
 
     /**
-     *  Get the carbon user object from the session. If not found - it will throw a user not found error.
+     * Get the carbon user object from the session. If not found - it will throw a user not found error.
      * @returns {carbon user object}
      */
     privateMethods.getCarbonUser = function () {
-        var carbon = require('carbon');
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
-        var utility = require('/modules/utility.js').utility;
+        var carbon = require("carbon");
+        var carbonUser = session.get(constants["USER_SESSION_KEY"]);
+        var utility = require("/modules/utility.js")["utility"];
         if (!carbonUser) {
             log.error("User object was not found in the session");
-            throw constants.ERRORS.USER_NOT_FOUND;
+            throw constants["ERRORS"]["USER_NOT_FOUND"];
         }
         return carbonUser;
-    }
+    };
 
     /**
      * Only GET method is implemented for now since there are no other type of methods used this method.
      * @param url - URL to call the backend without the host
      * @param method - HTTP Method (GET, POST)
-     * @returns {
-     *  'status': 'success'|'error',
-     *  'content': {}
-     * }
+     * @returns An object with 'status': 'success'|'error', 'content': {}
      */
     privateMethods.callBackend = function (url, method) {
-        if (constants.HTTP_GET == method) {
-            var response = serviceInvokers.XMLHttp.get(url, function (responsePayload) {
-                var response = {};
-                response.content = responsePayload["responseContent"];
-                if (responsePayload["responseContent"] == null && responsePayload != null) {
-                    response.content = responsePayload;
+        if (constants["HTTP_GET"] == method) {
+            return serviceInvokers.XMLHttp.get(url,
+                function (backendResponse) {
+                    var response = {};
+                    response.content = backendResponse.responseText;
+                    if (backendResponse.status == 200) {
+                        response.status = "success";
+                    } else {
+                        response.status = "error";
+                    }
+                    return response;
                 }
-                response.status = "success";
-                return response;
-            },
-            function (responsePayload) {
-                var response = {};
-                response.content = responsePayload;
-                response.status = "error";
-                return response;
-            });
-            return response;
+            );
         } else {
             log.error("Programming error : This method only support HTTP GET requests.");
         }
@@ -342,7 +333,7 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/users";
+            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/users";
             return privateMethods.callBackend(url, constants.HTTP_GET);
 
         } catch (e) {
@@ -355,22 +346,16 @@ var userModule = function () {
     /**
      * Return a User object from the backend by calling the JAX-RS
      * @param username
-     * @returns {
-     *  'status': 'success'|'error',
-     *  'content': {
-            "username": "abc",
-            "firstname": "abc",
-            "lastname": "efj",
-            "emailAddress": "abc@abc.com"
-        }
-     * }
+     * @returns {object} an response object with status and content.
      */
     publicMethods.getUser = function (username) {
         var carbonUser = privateMethods.getCarbonUser();
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/users/view?username=" + encodeURIComponent(username);
-            var response = privateMethods.callBackend(url, constants.HTTP_GET);
+            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/users/" +
+                encodeURIComponent(username);
+            var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
+            response["content"] = parse(response.content);
             response["userDomain"] = carbonUser.domain;
             return response;
         } catch (e) {
@@ -379,6 +364,7 @@ var userModule = function () {
             utility.endTenantFlow();
         }
     };
+
     /**
      * TODO: comment
      * @param username
@@ -388,15 +374,15 @@ var userModule = function () {
         var carbonUser = privateMethods.getCarbonUser();
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/users/roles?username=" + encodeURIComponent(username);
-            var response = privateMethods.callBackend(url, constants.HTTP_GET);
-            return response;
+            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/users/" +
+                encodeURIComponent(username) + "/roles";
+            return privateMethods.callBackend(url, constants["HTTP_GET"]);
         } catch (e) {
             throw e;
         } finally {
             utility.endTenantFlow();
         }
-    }
+    };
 
     /*
      @NewlyAdded
@@ -411,7 +397,7 @@ var userModule = function () {
         try {
             utility.startTenantFlow(carbonUser);
             var url = mdmProps["httpsURL"] + "/mdm-admin/users/users-by-username?username=";
-            return privateMethods.callBackend(url, constants.HTTP_GET)
+            return privateMethods.callBackend(url, constants["HTTP_GET"]);
         } catch (e) {
             throw e;
         } finally {
@@ -427,15 +413,20 @@ var userModule = function () {
      */
     publicMethods.getRoles = function () {
         var carbonUser = session.get(constants["USER_SESSION_KEY"]);
-        var utility = require('/modules/utility.js')["utility"];
+
+        var utility = require("/modules/utility.js")["utility"];
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants["ERRORS"]["USER_NOT_FOUND"];
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/roles";
-            return privateMethods.callBackend(url, constants.HTTP_GET);
+            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/roles";
+            var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
+            if (response.status == "success") {
+                response.content = parse(response.content).roles;
+            }
+            return response;
         } catch (e) {
             throw e;
         } finally {
@@ -449,17 +440,22 @@ var userModule = function () {
     /**
      * Get User Roles from user store (Internal roles not included).
      */
-    publicMethods.getRolesByUserStore = function (userStore) {
+    publicMethods.getRolesByUserStore = function () {
+        var ROLE_LIMIT = mdmProps.pageSize;
         var carbonUser = session.get(constants["USER_SESSION_KEY"]);
-        var utility = require('/modules/utility.js')["utility"];
+        var utility = require("/modules/utility.js")["utility"];
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants["ERRORS"]["USER_NOT_FOUND"];
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/roles/" + encodeURIComponent(userStore);
-            return privateMethods.callBackend(url, constants.HTTP_GET);
+            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/roles?limit=" + ROLE_LIMIT;
+            var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
+            if (response.status == "success") {
+                response.content = parse(response.content).roles;
+            }
+            return response;
         } catch (e) {
             throw e;
         } finally {
@@ -472,21 +468,26 @@ var userModule = function () {
      */
     publicMethods.getPlatforms = function () {
         var carbonUser = session.get(constants["USER_SESSION_KEY"]);
-        var utility = require('/modules/utility.js')["utility"];
+        var utility = require("/modules/utility.js")["utility"];
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants["ERRORS"]["USER_NOT_FOUND"];
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/devices/types";
-            return privateMethods.callBackend(url, constants.HTTP_GET);
+            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/devices/types";
+            var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
+            if (response.status == "success") {
+                response.content = parse(response.content);
+            }
+            return response;
         } catch (e) {
             throw e;
         } finally {
             utility.endTenantFlow();
         }
     };
+
     /*
      @Updated
      */
@@ -502,8 +503,9 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + "/mdm-admin/roles/role?rolename=" + encodeURIComponent(roleName);
-            var response = privateMethods.callBackend(url, constants.HTTP_GET);
+            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/roles/" + encodeURIComponent(roleName);
+            var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
+            response.content = parse(response.content);
             return response;
         } catch (e) {
             throw e;
@@ -638,24 +640,29 @@ var userModule = function () {
      * retrieve secondary user stores.
      * This needs Authentication since the method access admin services.
      *
-     * @returns {string array} Array of secondary user stores.
+     * @returns Array of secondary user stores.
      */
     publicMethods.getSecondaryUserStores = function () {
         var returnVal = [];
-        var endpoint = mdmProps.adminService + constants.USER_STORE_CONFIG_ADMIN_SERVICE_END_POINT;
+        var endpoint = mdmProps["adminService"] + constants["USER_STORE_CONFIG_ADMIN_SERVICE_END_POINT"];
         var wsPayload = "<xsd:getSecondaryRealmConfigurations  xmlns:xsd='http://org.apache.axis2/xsd'/>";
         serviceInvokers.WS.soapRequest(
-            "urn:getSecondaryRealmConfigurations", endpoint, wsPayload, function (wsResponse) {
+            "urn:getSecondaryRealmConfigurations",
+            wsPayload,
+            endpoint,
+            function (wsResponse) {
                 var domainIDs = stringify(wsResponse.*::['return']. *::domainId.text());
                 if (domainIDs != "\"\"") {
-                    var regExpForSearch = new RegExp(constants.USER_STORES_NOISY_CHAR, "g");
+                    var regExpForSearch = new RegExp(constants["USER_STORES_NOISY_CHAR"], "g");
                     domainIDs = domainIDs.replace(regExpForSearch, "");
-                    returnVal = domainIDs.split(constants.USER_STORES_SPLITTING_CHAR);
+                    returnVal = domainIDs.split(constants["USER_STORES_SPLITTING_CHAR"]);
                 }
             }, function (e) {
                 log.error("Error retrieving secondary user stores", e);
-            }, constants.SOAP_VERSION);
+            },
+            constants["SOAP_VERSION"]);
         return returnVal;
     };
+
     return publicMethods;
 }();

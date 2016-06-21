@@ -17,78 +17,78 @@
  * under the License.
  */
 
+var log = new Log("api/invoker-api.jag");
+
 var uri = request.getRequestURI();
 var uriMatcher = new URIMatcher(String(uri));
 
-var log = new Log("api/invoker-api.jag");
-
 var constants = require("/modules/constants.js");
-var mdmProps = require('/config/mdm-props.js').config();
-var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
-
-var result;
+var mdmProps = require("/config/mdm-props.js").config();
+var serviceInvokers = require("/modules/backend-service-invoker.js")["backendServiceInvoker"];
 
 if (uriMatcher.match("/{context}/api/invoker/execute/")) {
     var method = request.getContent().actionMethod;
-    var targetURL = mdmProps.httpsURL + request.getContent().actionUrl;
+    var url = request.getContent().actionUrl;
     var payload = request.getContent().actionPayload;
-    if(method == undefined && payload == undefined){
+
+    if (!method) {
         method = parse(request.getContent()).actionMethod;
-        targetURL = mdmProps.httpsURL + parse(request.getContent()).actionUrl;
+    }
+
+    if (!url) {
+        url = parse(request.getContent()).actionUrl;
+    }
+
+    if (!payload) {
         payload = parse(request.getContent()).actionPayload;
     }
-    try {
 
+    var targetURL = mdmProps["httpsURL"] + url;
+
+    try {
         switch (method) {
-            case constants.HTTP_GET:
-                var responseData = serviceInvokers.XMLHttp.get(
-                        targetURL, function (responsePayload) {
-                            response.status = 200;
-                            response.content =  responsePayload;
-                        },
-                        function (responsePayload) {
-                            response.status = responsePayload.status;
-                            response.content =  responsePayload.responseText;
-                        });
+            case constants["HTTP_GET"]:
+                serviceInvokers.XMLHttp.get(
+                    targetURL,
+                    function (responsePayload) {
+                        response.status = responsePayload.status;
+                        response.content =  responsePayload.responseText;
+                    }
+                );
                 break;
-            case constants.HTTP_POST:
-                var responseData = serviceInvokers.XMLHttp.post(
-                        targetURL, payload, function (responsePayload) {
-                            response.status = 200;
-                            response.content =  responsePayload;
-                        },
-                        function (responsePayload) {
-                            response.status = responsePayload.status;
-                            response.content =  responsePayload.responseText;
-                        });
+            case constants["HTTP_POST"]:
+                serviceInvokers.XMLHttp.post(
+                    targetURL,
+                    payload,
+                    function (responsePayload) {
+                        response.status = responsePayload.status;
+                        response.content =  responsePayload.responseText;
+                    }
+                );
                 break;
-            case constants.HTTP_PUT:
-                var responseData = serviceInvokers.XMLHttp.put(
-                        targetURL, payload, function (responsePayload) {
-                            response.status = 200;
-                            response.content =  responsePayload;
-                        },
-                        function (responsePayload) {
-                            response.status = responsePayload.status;
-                            response.content =  responsePayload.responseText;
-                        });
+            case constants["HTTP_PUT"]:
+                serviceInvokers.XMLHttp.put(
+                    targetURL,
+                    payload,
+                    function (responsePayload) {
+                        response.status = responsePayload.status;
+                        response.content =  responsePayload.responseText;
+                    }
+                );
                 break;
-            case constants.HTTP_DELETE:
-                var responseData =
-                        serviceInvokers.XMLHttp.delete(
-                                targetURL, function (responsePayload) {
-                                    response.status = 200;
-                                    response.content =  responsePayload;
-                                },
-                                function (responsePayload) {
-                                    response.status = responsePayload.status;
-                                    response.content =  responsePayload.responseText;
-                                });
+            case constants["HTTP_DELETE"]:
+                serviceInvokers.XMLHttp.delete(
+                    targetURL,
+                    function (responsePayload) {
+                        response.status = responsePayload.status;
+                        response.content =  responsePayload.responseText;
+                    }
+                );
                 break;
         }
     } catch (e) {
-        log.error("Exception occurred while accessing sevices", e);
+        log.error("Exception occurred while trying to access backend " +
+            "REST API services from Jaggery API invoker layer", e);
     }
 }
-
 %>

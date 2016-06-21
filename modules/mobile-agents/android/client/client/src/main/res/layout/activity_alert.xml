@@ -30,11 +30,26 @@
         android:orientation="vertical">
 
         <TextView
+                android:id="@+id/txtMessageTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/abs__action_bar_title_text_size"
+                android:textColor="@android:color/white"/>
+
+        <View
+                android:id="@+id/hLine"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="#1e90ff"/>
+
+        <TextView
             android:id="@+id/txtMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"/>
 
         <Button
             android:id="@+id/btnOK"

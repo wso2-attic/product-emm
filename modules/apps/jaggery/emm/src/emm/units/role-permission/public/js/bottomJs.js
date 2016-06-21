@@ -13,6 +13,8 @@
 var modalPopup = ".wr-modalpopup";
 var modalPopupContent = modalPopup + " .modalpopup-content";
 
+var emmAdminBasePath = "/api/device-mgt/v1.0";
+
 /*
  * hide popup function.
  */
@@ -78,13 +80,13 @@ $(document).ready(function () {
     var listPartialSrc = $("#list-partial").attr("src");
     var treeTemplateSrc = $("#tree-template").attr("src");
     var roleName = $("#permissionList").data("currentrole");
-    var serviceUrl = "/mdm-admin/roles/permissions?rolename=" + encodeURIComponent(roleName);
+    var serviceUrl = emmAdminBasePath + "/roles/" +encodeURIComponent(roleName)+"/permissions";
     $.registerPartial("list", listPartialSrc, function(){
         $.template("treeTemplate", treeTemplateSrc, function (template) {
             invokerUtil.get(serviceUrl,
                 function(data){
                     data = JSON.parse(data);
-                    var treeData = data.responseContent;
+                    var treeData = data;
                     if(treeData.nodeList.length > 0){
                         treeData = { nodeList: treeData.nodeList };
                         var content = template(treeData);
@@ -121,7 +123,7 @@ $(document).ready(function () {
      */
     $("button#update-permissions-btn").click(function() {
         var roleName = $("#permissionList").data("currentrole");
-        var updateRolePermissionAPI = "/mdm-admin/roles?rolename=" + roleName;
+        var updateRolePermissionAPI = emmAdminBasePath + "/roles/" + roleName;
         var updateRolePermissionData = {};
         var perms = [];
         $("#permissionList li input:checked").each(function(){
@@ -131,14 +133,15 @@ $(document).ready(function () {
         invokerUtil.put(
             updateRolePermissionAPI,
             updateRolePermissionData,
-            function (jqXHR) {
-                if (JSON.parse(jqXHR).statusCode == 200 || jqXHR.status == 200) {
+            function (data, textStatus, jqXHR) {
+                if (jqXHR.status == 200) {
                     // Refreshing with success message
                     $("#role-create-form").addClass("hidden");
                     $("#role-created-msg").removeClass("hidden");
                 }
             }, function (data) {
-                $(errorMsg).text(JSON.parse(data.responseText).errorMessage);
+                var payload = JSON.parse(data.responseText);
+                $(errorMsg).text(payload.message);
                 $(errorMsgWrapper).removeClass("hidden");
             }
         );
