@@ -333,9 +333,12 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/users";
-            return privateMethods.callBackend(url, constants["HTTP_GET"]);
-
+            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/users?offset=0&limit=100";
+            var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
+            if (response.status == "success") {
+                response.content = parse(response.content).users;
+            }
+            return response;
         } catch (e) {
             throw e;
         } finally {

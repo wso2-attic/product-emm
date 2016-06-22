@@ -22,12 +22,12 @@ function onRequest(context) {
 
     var userModule = require("/modules/user.js")["userModule"];
 
-    var rolesResult = userModule.getRoles();
+    var rolesResult = userModule.getRolesByUserStore();
     if (rolesResult.status == "success") {
         context.roles = rolesResult.content;
     }
 
-    var usersResult = userModule.getUsersByUsername();
+    var usersResult = userModule.getUsers();
     if (usersResult.status == "success") {
         context.users = usersResult.content;
     }
