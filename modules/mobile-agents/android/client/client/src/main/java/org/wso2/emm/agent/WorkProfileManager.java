@@ -29,6 +29,7 @@ import android.widget.Toast;
 import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
 
 import static android.app.admin.DevicePolicyManager.ACTION_PROVISION_MANAGED_PROFILE;
 import static android.app.admin.DevicePolicyManager.EXTRA_PROVISIONING_DEVICE_ADMIN_PACKAGE_NAME;
@@ -37,38 +38,25 @@ public class WorkProfileManager extends Activity {
 
     private static final int REQUEST_PROVISION_MANAGED_PROFILE = 1;
     private static final String TAG = "WorkProfileManager";
+    private Activity activity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity = this;
         provisionManagedProfile();
     }
 
     private void provisionManagedProfile() {
-        Activity activity = this;
 
         Intent intent = new Intent(ACTION_PROVISION_MANAGED_PROFILE);
-        intent.putExtra(EXTRA_PROVISIONING_DEVICE_ADMIN_PACKAGE_NAME,
-                activity.getApplicationContext().getPackageName());
-        // Once the provisioning is done, user is prompted to uninstall the agent in personal profile.
-        ApplicationManager applicationManager = new ApplicationManager(this.getApplicationContext());
-        applicationManager.uninstallApplication(Constants.PACKAGE_NAME, null);
-
+        intent.putExtra(EXTRA_PROVISIONING_DEVICE_ADMIN_PACKAGE_NAME, Constants.AGENT_PACKAGE);
         if (intent.resolveActivity(activity.getPackageManager()) != null) {
             startActivityForResult(intent, REQUEST_PROVISION_MANAGED_PROFILE);
-            activity.finish();
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                Log.e(TAG,"Thread is interrupted");
-            }
-            Toast.makeText(this,
-                    "When the work-profile is created, you can uninstall Agent in Personal Profile.",
-                    Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(activity, "Device provisioning is not enabled. Stopping.", Toast.LENGTH_SHORT).show();
         }
-        finish();
     }
 
     @Override
@@ -76,9 +64,23 @@ public class WorkProfileManager extends Activity {
         if (requestCode == REQUEST_PROVISION_MANAGED_PROFILE) {
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(this, "Provisioning done.", Toast.LENGTH_SHORT).show();
+
+                // Once the provisioning is done, user is prompted to uninstall the agent in personal profile.
+                ApplicationManager applicationManager = new ApplicationManager(this.getApplicationContext());
+                applicationManager.uninstallApplication(Constants.PACKAGE_NAME, null);
+
+                //~GM~ save profile created status in shared preferences -: success
+                Preference.putBoolean(this,Constants.PreferenceFlag.PROFILE_CREATED,true);
+
             } else {
+                //~GM~ save profile created status in shared preferences -: failed
                 Toast.makeText(this, "Provisioning failed.", Toast.LENGTH_SHORT).show();
+                Preference.putBoolean(this,Constants.PreferenceFlag.PROFILE_CREATED,false);
+
             }
+
+            finish();
+
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);

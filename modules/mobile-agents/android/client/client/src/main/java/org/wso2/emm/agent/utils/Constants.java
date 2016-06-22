@@ -414,6 +414,7 @@ public class Constants {
 		public static final String REGISTERED = "registered";
 		public static final String IP = "ip";
 		public static final String DEVICE_ACTIVE = "deviceActive";
+		public static final String PROFILE_CREATED = "profileCreated";
 		public static final String PORT = "serverPort";
 		public static final String PROTOCOL = "serverProtocol";
 		public static final String APPLIED_POLICY = "appliedPolicy";

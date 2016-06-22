@@ -94,7 +94,21 @@
             android:layout_alignLeft="@+id/evServerIP"
             android:layout_alignStart="@+id/evServerIP"
             android:layout_alignRight="@+id/btnSetupWorkProfile"
-            android:layout_alignEnd="@+id/btnSetupWorkProfile" />
+            android:layout_alignEnd="@+id/btnSetupWorkProfile"/>
+
+        <Button
+            style="@style/ButtonText"
+            android:id="@+id/btnUninstallApp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_orange"
+            android:text="@string/txt_uninstall_app"
+            android:layout_below="@+id/btnSkipProfile"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+
+            />
+
     </RelativeLayout>
 
 </ScrollView>

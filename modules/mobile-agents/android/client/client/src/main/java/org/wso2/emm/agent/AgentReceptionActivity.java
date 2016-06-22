@@ -20,26 +20,34 @@ package org.wso2.emm.agent;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ListActivity;
 import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
 import android.widget.Toast;
+
+import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.DeviceState;
+import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.Response;
 
+import java.util.List;
+
 public class AgentReceptionActivity extends Activity {
 
     private Context context;
     private static final int TAG_BTN_ENABLE_PROFILE = 0;
-    private static final int TAG_BTN_SKIP_PROFILE = 2;
+    private static final int TAG_BTN_SKIP_PROFILE   = 2;
+    private static final int TAG_BTN_UNINSTALL_APP  = 3; //~GM~ add a new TAG
     DevicePolicyManager manager;
 
     @Override
@@ -56,6 +64,7 @@ public class AgentReceptionActivity extends Activity {
             if (isDeviceActive || Constants.SKIP_WORK_PROFILE_CREATION) {
                 skipToEnrollment();
             }
+
             if (androidForWorkCompatibility.getCode()) {
                 manageAndroidForWorkReceiption();
             } else {
@@ -63,7 +72,7 @@ public class AgentReceptionActivity extends Activity {
             }
         } else {
             Toast.makeText(context, context.getResources().getString(R.string.network_not_available_message),
-                           Toast.LENGTH_LONG).show();
+                    Toast.LENGTH_LONG).show();
             finish();
         }
     }
@@ -90,6 +99,11 @@ public class AgentReceptionActivity extends Activity {
                 case TAG_BTN_SKIP_PROFILE:
                     skipToEnrollment();
                     break;
+                case TAG_BTN_UNINSTALL_APP:
+                    //~GM uninstall enrollment  app here~
+                    ApplicationManager applicationManager = new ApplicationManager(getApplicationContext());
+                    applicationManager.uninstallApplication(Constants.PACKAGE_NAME, null);
+                    break;
                 default:
                     break;
             }
@@ -100,8 +114,8 @@ public class AgentReceptionActivity extends Activity {
      * Start WorkProfileManager which configures Android Managed Profile Feature.
      */
     private void startManagedProfileManager() {
-        Intent ManagedProfileManager = new Intent(getApplicationContext(), WorkProfileManager.class);
-        startActivity(ManagedProfileManager);
+        Intent managedProfileManager = new Intent(AgentReceptionActivity.this, WorkProfileManager.class);
+        startActivity(managedProfileManager);
     }
 
     /**
@@ -111,6 +125,13 @@ public class AgentReceptionActivity extends Activity {
         Intent intent = new Intent(context, ServerDetails.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+
+        Log.d("TAG","APP CALLED");
+
+        //~GM~ if the profile is already not created , then do not remve this screen from stack
+        if(Preference.getBoolean(context,Constants.PreferenceFlag.PROFILE_CREATED)){
+            finish();
+        }
     }
 
     /**
@@ -119,6 +140,7 @@ public class AgentReceptionActivity extends Activity {
     private void displayProfileProvisionPromptScreen(){
         Button btnEnableMngProfile;
         Button btnSkipProfile;
+        Button btnUninstallApp; //~GM~ add a uninstall button if the app is already created work profile
 
         setContentView(R.layout.activity_enable_work_profile);
         btnEnableMngProfile = (Button) findViewById(R.id.btnSetupWorkProfile);
@@ -128,5 +150,23 @@ public class AgentReceptionActivity extends Activity {
         btnSkipProfile = (Button) findViewById(R.id.btnSkipProfile);
         btnSkipProfile.setTag(TAG_BTN_SKIP_PROFILE);
         btnSkipProfile.setOnClickListener(onClickListenerButtonClicked);
+
+        btnUninstallApp = (Button) findViewById(R.id.btnUninstallApp);
+        btnUninstallApp.setTag(TAG_BTN_UNINSTALL_APP);
+        btnUninstallApp.setOnClickListener(onClickListenerButtonClicked);
+
+        //~GM~ disable engage profile buttons if already profile has created
+        if(Preference.getBoolean(context,Constants.PreferenceFlag.PROFILE_CREATED)){
+
+            Toast.makeText(context, "You can uninstall device app !!!", Toast.LENGTH_SHORT).show();
+
+            //profile has created disable buttons
+            btnEnableMngProfile.setEnabled(false);
+            btnSkipProfile.setEnabled(false);
+
+            btnUninstallApp.setVisibility(View.VISIBLE);
+        }
+
+
     }
 }
