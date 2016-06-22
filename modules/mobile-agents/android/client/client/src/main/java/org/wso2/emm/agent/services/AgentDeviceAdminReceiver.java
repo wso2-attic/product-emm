@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.ServerDetails;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
@@ -29,6 +30,7 @@ import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.CommonUtils;
 
 import android.app.admin.DeviceAdminReceiver;
+import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -63,11 +65,6 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		} catch (AndroidAgentException e) {
 			Log.e(TAG, "Failed to perform operation", e);
 		}
-
-		Toast.makeText(context, R.string.device_admin_enabled,
-				Toast.LENGTH_LONG).show();
-
-
 		String notifier = Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE);
 		if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
 			LocalNotification.startPolling(context);
@@ -81,7 +78,7 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 	public void onDisabled(Context context, Intent intent) {
 		super.onDisabled(context, intent);
 		Toast.makeText(context, R.string.device_admin_disabled,
-		               Toast.LENGTH_LONG).show();
+				Toast.LENGTH_LONG).show();
 		regId = Preference
 				.getString(context, Constants.PreferenceFlag.REG_ID);
 
@@ -99,17 +96,20 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 	public void startUnRegistration(Context context) {
 		String regId = Preference.getString(context, Constants.PreferenceFlag.REG_ID);
 		if (regId != null && !regId.isEmpty()) {
-			String serverIP = Preference.getString(context, Constants.PreferenceFlag.IP);
-
+			String serverIP = Constants.DEFAULT_HOST;
+			String prefIP = Preference.getString(context, Constants.PreferenceFlag.IP);
+			if (prefIP != null) {
+				serverIP = prefIP;
+			}
 			if (serverIP != null && !serverIP.isEmpty()) {
 				ServerConfig utils = new ServerConfig();
 				utils.setServerIP(serverIP);
 
 				CommonUtils.callSecuredAPI(context,
-				                           utils.getAPIServerURL(context) + Constants.UNREGISTER_ENDPOINT + regId,
-				                           HTTP_METHODS.DELETE,
-				                           null, AgentDeviceAdminReceiver.this,
-				                           Constants.UNREGISTER_REQUEST_CODE);
+						utils.getAPIServerURL(context) + Constants.UNREGISTER_ENDPOINT + regId,
+						HTTP_METHODS.DELETE,
+						null, AgentDeviceAdminReceiver.this,
+						Constants.UNREGISTER_REQUEST_CODE);
 				try {
 					LocalNotification.stopPolling(context);
 					CommonUtils.unRegisterClientApp(context, AgentDeviceAdminReceiver.this);
@@ -156,16 +156,30 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 
 	@Override
 	public void onProfileProvisioningComplete(Context context, Intent intent) {
-		Intent launch = new Intent(context, EnableProfileActivity.class);
-		launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		context.startActivity(launch);
+
+		//~GM~ saves profile created status in preferences
+		Preference.putBoolean(context,Constants.PreferenceFlag.PROFILE_CREATED,true);
+
+		enableProfile(context);
+	}
+
+	private void enableProfile(Context context) {
+		DevicePolicyManager manager =
+				(DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+		ComponentName componentName = AgentDeviceAdminReceiver.getComponentName(context);
+		// This is the name for the newly created managed profile.
+		manager.setProfileName(componentName, Constants.TAG);
+		// Enable the profile.
+		manager.setProfileEnabled(componentName);
+
+		Intent intent = new Intent(context, ServerDetails.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		context.startActivity(intent);
 
 	}
+
+
 
 	/**
 	 * Generates a {@link ComponentName} that is used throughout the app.

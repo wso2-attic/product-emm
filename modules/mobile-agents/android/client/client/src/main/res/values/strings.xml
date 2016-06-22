@@ -317,6 +317,7 @@
     <string name="txt_start_reg">Start Registration</string>
     <string name="txt_start_enable_work_profile">Setup Work-Profile</string>
     <string name="txt_skip_to_enrolling">Skip and go to Enrollment</string>
+    <string name="txt_uninstall_app">Uninstall App</string>
     <string name="toast_app_installation_failed">Application installation failed, please contact administrator</string>
     <string name="toast_app_removal_failed">Application removal failed, please contact administrator</string>
     <string name="txt_register_success">Device successfully registered, click to un-register from the EMM</string>
