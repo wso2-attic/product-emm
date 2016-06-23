@@ -2393,7 +2393,7 @@ table.dataTable tr.filter-row th {
 .dataTables_filter input {
   padding: 0 15px 0 35px;
   min-width: 300px;
-  margin: 0 0 0 -14px !important;
+  margin: 0 0 0 0px !important;
 }
 
 .table.dataTable tbody tr.active td,
@@ -6612,7 +6612,7 @@ table.dataTable tr td.dataTables_empty {
 }
 .dataTables_filter input {
     padding: 0 15px 0 35px;
-    margin: 0 0 0 -14px !important;
+    margin: 0 0 0 0px !important;
     background-color: #bbb;
     color: #fff;
     height: 40px;

@@ -67,7 +67,6 @@ function loadRoles(searchQuery) {
 
     var dataFilter = function(data){
         data = JSON.parse(data);
-        console.log("Stuff "+ JSON.stringify(data));
 
         var objects = [];
 

@@ -38,6 +38,7 @@ $.fn.datatables_extended_serverside_paging = function(settings ,url, dataFilter,
                 data : function (params) {
                     params.offset = params.start;
                     params.limit = params.length;
+                    params.filter = params.search.value
                 },
                 dataFilter: dataFilter
             },
@@ -53,7 +54,7 @@ $.fn.datatables_extended_serverside_paging = function(settings ,url, dataFilter,
                 'lip' +
                 '>',
             language: {
-                searchPlaceholder: 'Search ...',
+                searchPlaceholder: 'Search by Role name',
                 search: ''
             },
         },settings)
