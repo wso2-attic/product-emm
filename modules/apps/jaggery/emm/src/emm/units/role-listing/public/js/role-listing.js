@@ -64,49 +64,62 @@ var loadPaginatedObjects = function (objectGridId, objectGridContainer, objectGr
 function loadRoles(searchQuery) {
     var loadingContent = $("#loading-content");
     loadingContent.show();
-    $('#role-grid').datatables_extended_serverside_paging();
-    // var serviceURL = emmAdminBasePath + "/roles";
-    // if (searchQuery) {
-    //     serviceURL = serviceURL + "?filter=" + searchQuery + "&limit=" + ROLE_LIMIT;
-    // }else {
-    //     serviceURL = serviceURL + "?limit=" + ROLE_LIMIT;
-    // }
-    // var callback = function (data) {
-    //     if (data != null || data == "null") {
-    //         data = JSON.parse(data);
-    //         var canRemove = $("#can-remove").val();
-    //         var canEdit = $("#can-edit").val();
-    //         var roles = [];
-    //         for(var i=0; i<data.count; i++){
-    //             roles.push({"roleName":data.roles[i]});
-    //             if(canRemove != null && canRemove != undefined) {
-    //                 roles[i].canRemove = true;
-    //             }
-    //
-    //             if(canEdit != null && canEdit != undefined) {
-    //                 roles[i].canEdit = true;
-    //             }
-    //         }
-    //
-    //         data = {
-    //             "viewModel": {
-    //                 "roles": roles
-    //             },
-    //             "length": roles.length
-    //         }
-    //     }
-    //     return data;
-    // };
 
-    // loadPaginatedObjects("#role-grid", "#ast-container", "#role-listing", serviceURL, callback);
-    loadingContent.hide();
-    var sortableElem = '.wr-sortable';
-    $(sortableElem).sortable({
-        beforeStop: function () {
-            var sortedIDs = $(this).sortable('toArray');
+    var dataFilter = function(data){
+        data = JSON.parse(data);
+        console.log("Stuff "+ JSON.stringify(data));
+
+        var objects = [];
+
+        $(data.roles).each(function( index ) {
+            objects.push({name: data.roles[index]})
+        });
+
+        json = {
+            "recordsTotal": data.count,
+            "recordsFiltered": data.count,
+            "data": objects
+        };
+
+        return JSON.stringify( json );
+    }
+
+    var columns = [
+        {
+            class: "remove-padding icon-only content-fill",
+            data: null,
+            defaultContent: '<div class="thumbnail icon"> <i class="square-element text fw fw-user" style="font-size: 30px;"></i></div>'
+        },
+        {
+            class: "fade-edge remove-padding-top",
+            data: "name",
+            defaultContent: ''
+        },
+        {
+            class: "text-right content-fill text-left-on-grid-view no-wrap",
+            data: null,
+            render: function ( data, type, row, meta ) {
+                return '<a onclick="javascript:loadRoleBasedActionURL(\'edit-role\', \'' + data.name + '\')" data-role="' + data.name +
+                    '" data-click-event="edit-form" class="btn padding-reduce-on-grid-view edit-role-link"><span class="fw-stack fw-lg">' +
+                    '<i class="fw fw-ring fw-stack-2x"></i><i class="fw fw-user fw-stack-1x"></i>' +
+                    '<span class="fw-stack fw-move-right fw-move-bottom"><i class="fw fw-circle fw-stack-2x fw-stroke fw-inverse"></i>' +
+                    '<i class="fw fw-circle fw-stack-2x"></i><i class="fw fw-edit fw-stack-1x fw-inverse"></i></span></span>' +
+                    '<span class="hidden-xs hidden-on-grid-view">Edit</span></a>' +
+                    '<a onclick="javascript:loadRoleBasedActionURL(\'edit-role-permission\', \'' + data.name +
+                    '\')" data-role="' + data.name + '" data-click-event="edit-form" class="btn padding-reduce-on-grid-view edit-permission-link">' +
+                    '<span class="fw-stack fw-lg"><i class="fw fw-ring fw-stack-2x"></i><i class="fw fw-security-policy fw-stack-1x"></i>' +
+                    '<span class="fw-stack fw-move-right fw-move-bottom"><i class="fw fw-circle fw-stack-2x fw-stroke fw-inverse"></i>' +
+                    '<i class="fw fw-circle fw-stack-2x"></i><i class="fw fw-edit fw-stack-1x fw-inverse"></i></span></span>' +
+                    '<span class="hidden-xs hidden-on-grid-view">Edit Permission</span></a>' +
+                    '<a data-role="' + data.name + '" data-click-event="remove-form" class="btn padding-reduce-on-grid-view remove-role-link">' +
+                    '<span class="fw-stack"><i class="fw fw-ring fw-stack-2x"></i><i class="fw fw-delete fw-stack-1x"></i></span>' +
+                    '<span class="hidden-xs hidden-on-grid-view">Remove</span></a>'
+            }
         }
-    });
-    $(sortableElem).disableSelection();
+    ];
+
+    $('#role-grid').datatables_extended_serverside_paging(null, '/api/device-mgt/v1.0/roles', dataFilter, columns);
+
 }
 
 var modalPopup = ".wr-modalpopup";

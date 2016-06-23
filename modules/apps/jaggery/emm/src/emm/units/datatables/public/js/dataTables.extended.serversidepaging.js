@@ -19,7 +19,7 @@
 /* ========================================================================
  * datatables_extended function
  * ======================================================================== */
-$.fn.datatables_extended_serverside_paging = function(settings){
+$.fn.datatables_extended_serverside_paging = function(settings ,url, dataFilter, columns){
 
     var elem = $(this);
 
@@ -34,24 +34,14 @@ $.fn.datatables_extended_serverside_paging = function(settings){
             serverSide: true,
             bSortCellsTop: true,
             ajax : {
-                url: '/api/device-mgt/v1.0/roles',
+                url: url,
                 data : function (params) {
                     params.offset = params.start;
                     params.limit = params.length;
                 },
-                dataFilter: function(data){
-                    data = JSON.parse(data);
-                    console.log("Stuff "+ JSON.stringify(data));
-
-                    json = {
-                        "recordsTotal": data.count,
-                        "recordsFiltered": data.count,
-                        "data": data.roles
-                    };
-
-                    return JSON.stringify( json );
-                }
+                dataFilter: dataFilter
             },
+            columns: columns,
             responsive: false,
             autoWidth: false,
             dom:'<"dataTablesTop"' +
