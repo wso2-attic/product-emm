@@ -17,7 +17,7 @@
  */
 
 function onRequest(context) {
-    var userModule = require("/modules/user.js").userModule;
+    var userModule = require("/modules/user.js")["userModule"];
     var mdmProps = require('/config/mdm-props.js').config();
     var constants = require("/modules/constants.js");
     var uiPermissions = userModule.getUIPermissions();
@@ -64,7 +64,8 @@ function onRequest(context) {
             "title": "Apply Changes To Devices",
             "icon": "fw-check",
             "url": "#",
-            "tooltip": "Click to apply policy changes to devices (This depends on policy priority if you have multiple policies)",
+            "tooltip": "Click to apply policy changes to devices " +
+                "(This depends on policy priority if you have multiple policies)",
             "id": "apply-changes"
         });
     }
@@ -73,13 +74,14 @@ function onRequest(context) {
     // where units are attached to a page zone.
     // eg: {{unit "appbar" pageLink="users" title="User Management"}}
     context["currentActions"] = links[context["pageLink"]];
-    context["enrollmentURL"] = mdmProps.generalConfig.host + mdmProps.enrollmentDir;
+    context["enrollmentURL"] = mdmProps["generalConfig"]["host"] + mdmProps["enrollmentDir"];
     var  isAuthorizedForNotifications =
         userModule.isAuthorized("/permission/admin/device-mgt/emm-admin/notifications/view");
-    var currentUser = session.get(constants.USER_SESSION_KEY);
-    context.isAuthorizedForNotifications = isAuthorizedForNotifications;
-    context.currentUser = currentUser;
-    context.appContext = mdmProps.appContext;
+    var currentUser = session.get(constants["USER_SESSION_KEY"]);
+    context["isAuthorizedForNotifications"] = isAuthorizedForNotifications;
+    context["currentUser"] = currentUser;
+    context["appContext"] = mdmProps["appContext"];
+
     return context;
 }
 
