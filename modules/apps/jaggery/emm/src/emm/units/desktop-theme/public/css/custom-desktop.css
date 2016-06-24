@@ -2393,7 +2393,7 @@ table.dataTable tr.filter-row th {
 .dataTables_filter input {
   padding: 0 15px 0 35px;
   min-width: 300px;
-  margin: 0 0 0 0px !important;
+  margin: 0 0 0 -14px !important;
 }
 
 .table.dataTable tbody tr.active td,
@@ -2554,6 +2554,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:first-child {
   background: transparent;
   font-size: 24px;
   font-weight: 300;
+  border-bottom: 1px solid #e4e4e4;
   padding-bottom: 10px;
   margin-bottom: 20px;
 }
@@ -5251,8 +5252,8 @@ a.wr-side-panel-toggle-btn.selected {
 .wr-hidden-operations-content .panel-title .wr-input-control.switch input[type="checkbox"] + .helper + .text {
     display: inline-block;
     float: left;
-    margin-left: -30px;
-    margin-top: -18px;
+    margin-right: 10px;
+    margin-top: -1px;
 }
 
 .wr-hidden-operations-content .panel-title .wr-input-control.switch input[type="checkbox"] + .helper + .text:after {
@@ -6612,7 +6613,7 @@ table.dataTable tr td.dataTables_empty {
 }
 .dataTables_filter input {
     padding: 0 15px 0 35px;
-    margin: 0 0 0 0px !important;
+    margin: 0 0 0 -14px !important;
     background-color: #bbb;
     color: #fff;
     height: 40px;
