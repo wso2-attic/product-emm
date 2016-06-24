@@ -124,7 +124,6 @@ policyModule = function () {
             log.error("User object was not found in the session");
             throw constants["ERRORS"]["USER_NOT_FOUND"];
         }
-        var utility = require('/modules/utility.js')["utility"];
         try {
             var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] +
                 "/policies?offset=0&limit=100";

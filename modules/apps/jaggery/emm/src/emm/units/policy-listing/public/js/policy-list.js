@@ -177,6 +177,7 @@ $(document).ready(function () {
                     },
                     // on error
                     function (jqXHR) {
+                        console.log(stringify(jqXHR.data));
                         $(modalPopupContent).html($("#change-policy-error-content").html());
                         showPopup();
                         $("a#change-policy-error-link").click(function () {
@@ -292,12 +293,65 @@ $(document).ready(function () {
             // if policies found in Active or Active/Updated states with in the selection,
             // pop-up an error saying
             // "You cannot select already active policies. Please deselect active policies and try again."
-            $(modalPopupContent).html($("#errorPolicyPublishSelection").html());
+            $(modalPopupContent).html($("#active-policy-selection-error").html());
             showPopup();
         } else {
             var serviceURL = "/api/device-mgt/v1.0/policies/activate-policy";
             if (policyList.length == 0) {
-                $(modalPopupContent).html($("#errorPolicyRemove").html());
+                $(modalPopupContent).html($("#policy-publish-error").html());
+            } else {
+                $(modalPopupContent).html($("#publish-policy-modal-content").html());
+            }
+            showPopup();
+
+            // on-click function for policy removing "yes" button
+            $("a#publish-policy-yes-link").click(function () {
+                invokerUtil.put(
+                    serviceURL,
+                    policyList,
+                    // on success
+                    function (data, textStatus, jqXHR) {
+                        if (jqXHR.status == 200 && data) {
+                            $(modalPopupContent).html($("#publish-policy-success-content").html());
+                            $("a#publish-policy-success-link").click(function () {
+                                hidePopup();
+                                location.reload();
+                            });
+                        }
+                    },
+                    // on error
+                    function (jqXHR) {
+                        console.log(stringify(jqXHR.data));
+                        $(modalPopupContent).html($("#publish-policy-error-content").html());
+                        $("a#publish-policy-error-link").click(function () {
+                            hidePopup();
+                        });
+                    }
+                );
+            });
+
+            // on-click function for policy removing "cancel" button
+            $("a#publish-policy-cancel-link").click(function () {
+                hidePopup();
+            });
+        }
+    });
+
+    // [4] logic for removing a selected set of policies
+
+    $(".policy-remove-link").click(function () {
+        var policyList = getSelectedPolicies();
+        var statusList = getSelectedPolicyStates();
+        if (($.inArray("Active/Updated", statusList) > -1) || ($.inArray("Active", statusList) > -1)) {
+            // if policies found in Active or Active/Updated states with in the selection,
+            // pop-up an error saying
+            // "You cannot remove already active policies. Please deselect active policies and try again."
+            $(modalPopupContent).html($("#active-policy-selection-error").html());
+            showPopup();
+        } else {
+            var serviceURL = "/api/device-mgt/v1.0/policies/remove-policy";
+            if (policyList.length == 0) {
+                $(modalPopupContent).html($("#policy-remove-error").html());
             } else {
                 $(modalPopupContent).html($("#remove-policy-modal-content").html());
             }
@@ -334,120 +388,6 @@ $(document).ready(function () {
                 hidePopup();
             });
         }
-    });
-
-    // [4] logic for removing a selected set of policies
-
-    $(".policy-remove-link").click(function () {
-        var policyList = getSelectedPolicies();
-        var statusList = getSelectedPolicyStates();
-
-        if (($.inArray("Active/Updated", statusList) > -1) || ($.inArray("Active", statusList) > -1)) {
-            // if policies found in Active or Active/Updated states with in the selection,
-            // pop-up an error saying
-            // "You cannot select already active policies to be removed. Please deselect active policies and try again."
-            $(modalPopupContent).html($("#remove-active-policy-error-content").html());
-            showPopup();
-        } else {
-            var serviceURL = "/api/device-mgt/v1.0/policies/remove-policy";
-            if (policyList.length == 0) {
-                $(modalPopupContent).html($("#errorPolicyPublish").html());
-            } else {
-                $(modalPopupContent).html($('#publish-policy-modal-content').html());
-            }
-            showPopup();
-
-            // on-click function for policy publishing "yes" button
-            $("a#publish-policy-yes-link").click(function () {
-                invokerUtil.put(
-                    serviceURL,
-                    policyList,
-                    // on success
-                    function (data, textStatus, jqXHR) {
-                        if (jqXHR.status == 200 && data) {
-                            $(modalPopupContent).html($('#publish-policy-success-content').html());
-                            $("a#publish-policy-success-link").click(function () {
-                                hidePopup();
-                                location.reload();
-                            });
-                        }
-                    },
-                    // on error
-                    function (jqXHR) {
-                        console.log(stringify(jqXHR.data));
-                        $(modalPopupContent).html($('#publish-policy-error-content').html());
-                        $("a#publish-policy-error-link").click(function () {
-                            hidePopup();
-                        });
-                    }
-                );
-            });
-
-            // on-click function for policy publishing "cancel" button
-            $("a#publish-policy-cancel-link").click(function () {
-                hidePopup();
-            });
-        }
-
-        var deletePolicyAPI = "/api/device-mgt/v1.0/policies/remove-policy";
-        if (policyList.length == 0) {
-            $(modalPopupContent).html($("#errorPolicyRemove").html());
-        } else {
-            $(modalPopupContent).html($('#remove-policy-modal-content').html());
-        }
-        showPopup();
-
-        // on-click function for policy removing "yes" button
-        $("a#remove-policy-yes-link").click(function () {
-            invokerUtil.post(
-                    deletePolicyAPI,
-                    policyList,
-                    // on success
-                    function (data, textStatus, jqXHR) {
-                        if (jqXHR.status == 200 && data) {
-                            $(modalPopupContent).html($('#remove-active-policy-error-content').html());
-                            $("a#remove-active-policy-error-link").click(function () {
-                                hidePopup();
-                            });
-                        }
-
-                        data = JSON.parse(data);
-                        if (data.errorMessage) {
-                            $(modalPopupContent).html($('#remove-policy-error-devices').html());
-                            $("a#remove-policy-error-devices").click(function () {
-                                hidePopup();
-                            });
-                        } else {
-                            $(modalPopupContent).html($('#remove-policy-success-content').html());
-                            $("a#remove-policy-success-link").click(function () {
-                                var thisTable = $(".DTTT_selected").closest('.dataTables_wrapper').find('.dataTable').
-                                                    dataTable();
-                                thisTable.api().rows('.DTTT_selected').remove().draw(false);
-                                hidePopup();
-                            });
-                        }
-                    },
-                    // on error
-                    function (jqXHR) {
-                        if (JSON.parse(data.responseText).errorMessage) {
-                            $(modalPopupContent).html($('#remove-policy-error-devices').html());
-                            $("a#remove-policy-error-devices").click(function () {
-                                hidePopup();
-                            });
-                        } else {
-                            $(modalPopupContent).html($('#remove-policy-error-content').html());
-                            $("a#remove-policy-error-link").click(function () {
-                                hidePopup();
-                            });
-                        }
-                    }
-            );
-        });
-
-        // on-click function for policy removing "cancel" button
-        $("a#remove-policy-cancel-link").click(function () {
-            hidePopup();
-        });
     });
 
     $("#loading-content").remove();

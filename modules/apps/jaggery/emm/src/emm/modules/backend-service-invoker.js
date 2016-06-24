@@ -95,6 +95,7 @@ var backendServiceInvoker = function () {
         log.info("Request payload if any : " + stringify(requestPayload));
         log.info("Response status : " + xmlHttpRequest.status);
         log.info("Response payload : " + xmlHttpRequest.responseText);
+        //log.info("Response headers : " + xmlHttpRequest.getAllResponseHeaders());
 
         if (xmlHttpRequest.status == 401 && (xmlHttpRequest.responseText == TOKEN_EXPIRED ||
             xmlHttpRequest.responseText == TOKEN_INVALID ) && count < 5) {
