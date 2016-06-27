@@ -71,7 +71,7 @@ function loadRoles(searchQuery) {
         var objects = [];
 
         $(data.roles).each(function( index ) {
-            objects.push({name: data.roles[index]})
+            objects.push({name: data.roles[index], DT_RowId : "role-" + data.roles[index]})
         });
 
         json = {

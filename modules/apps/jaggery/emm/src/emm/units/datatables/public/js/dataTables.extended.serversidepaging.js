@@ -58,6 +58,9 @@ $.fn.datatables_extended_serverside_paging = function(settings ,url, dataFilter,
                 searchPlaceholder: 'Search by Role name',
                 search: ''
             },
+            fnCreatedRow: function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('data-type', 'selectable');
+            },
             initComplete: function() {
 
                 this.api().columns().every(function () {
