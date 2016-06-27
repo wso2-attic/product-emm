@@ -17,6 +17,7 @@
  */
 
 function onRequest(context) {
+    // var log = new Log("policy-listing backend js");
     var policyModule = require("/modules/policy.js")["policyModule"];
     var userModule = require("/modules/user.js")["userModule"];
     var response = policyModule.getAllPolicies();
@@ -26,22 +27,14 @@ function onRequest(context) {
         var policyCount = policyListToView.length;
         if (policyCount == 0) {
             context["policyListingStatusMsg"] = "No policy is available to be displayed.";
-            context["saveNewPrioritiesButtonEnabled"] = false;
             context["noPolicy"] = true;
-        } else if (policyCount == 1) {
-            context["saveNewPrioritiesButtonEnabled"] = false;
-            context["noPolicy"] = false;
-            context["isUpdated"] = response["updated"] ;
         } else {
-            context["saveNewPrioritiesButtonEnabled"] = true;
             context["noPolicy"] = false;
-            context["isUpdated"] = response["updated"] ;
+            context["isUpdated"] = response["updated"];
         }
     } else {
         // here, response["status"] == "error"
-        context["policyListToView"] = [];
-        context["policyListingStatusMsg"] = "An unexpected error occurred @ backend. Please try again later.";
-        context["saveNewPrioritiesButtonEnabled"] = false;
+        context["policyListingStatusMsg"] = "An unexpected error occurred. Please try again later.";
         context["noPolicy"] = true;
     }
 

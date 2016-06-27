@@ -18,10 +18,10 @@
 
 /* sorting function */
 var sortUpdateBtn = "#sortUpdateBtn";
-var sortedIDs;
-var dataTableSelection = '.DTTT_selected';
+// var sortedIDs;
+// var dataTableSelection = ".DTTT_selected";
 $('#policy-grid').datatables_extended();
-$(".icon .text").res_text(0.2);
+// $(".icon .text").res_text(0.2);
 
 var saveNewPrioritiesButton = "#save-new-priorities-button";
 var saveNewPrioritiesButtonEnabled = Boolean($(saveNewPrioritiesButton).data("enabled"));
@@ -38,24 +38,24 @@ function InitiateViewOption() {
     $(location).attr('href', $(this).data("url"));
 }
 
-var addSortableIndexNumbers = function () {
-    $(".wr-sortable .list-group-item").not(".ui-sortable-placeholder").each(function (i) {
-        $(".wr-sort-index", this).html(i + 1);
-    });
-};
+//var addSortableIndexNumbers = function () {
+//    $(".wr-sortable .list-group-item").not(".ui-sortable-placeholder").each(function (i) {
+//        $(".wr-sort-index", this).html(i + 1);
+//    });
+//};
 
-var sortElements = function () {
-    addSortableIndexNumbers();
-    var sortableElem = ".wr-sortable";
-    $(sortableElem).sortable({
-        beforeStop: function () {
-            sortedIDs = $(this).sortable("toArray");
-            addSortableIndexNumbers();
-            $(sortUpdateBtn).prop("disabled", false);
-        }
-    });
-    $(sortableElem).disableSelection();
-};
+//var sortElements = function () {
+//    addSortableIndexNumbers();
+//    var sortableElem = ".wr-sortable";
+//    $(sortableElem).sortable({
+//        beforeStop: function () {
+//            sortedIDs = $(this).sortable("toArray");
+//            addSortableIndexNumbers();
+//            $(sortUpdateBtn).prop("disabled", false);
+//        }
+//    });
+//    $(sortableElem).disableSelection();
+//};
 
 /**
  * Modal related stuff are as follows.
@@ -124,7 +124,7 @@ function getSelectedPolicies() {
 }
 
 $(document).ready(function () {
-    sortElements();
+//    sortElements();
 
 //    var policyRoles = $("#policy-roles").text();
 //    var policyUsers = $("#policy-users").text();
@@ -134,10 +134,6 @@ $(document).ready(function () {
 //    }
 //    if (!policyUsers) {
 //        $("#policy-users").hide();
-//    }
-
-//    if ($("#policy-listing-status-msg").text()) {
-//        $("#policy-listing-status").removeClass("hidden");
 //    }
 
     /**
@@ -191,45 +187,6 @@ $(document).ready(function () {
             hidePopup();
         });
     });
-
-//    $(sortUpdateBtn).click(function () {
-//        $(sortUpdateBtn).prop("disabled", true);
-//
-//        var newPolicyPriorityList = [];
-//        var policy;
-//        var i;
-//        for (i = 0; i < sortedIDs.length; i++) {
-//            policy = {};
-//            policy.id = parseInt(sortedIDs[i]);
-//            policy.priority = i + 1;
-//            newPolicyPriorityList.push(policy);
-//        }
-//
-//        var updatePolicyAPI = "/mdm-admin/policies/priorities";
-//        invokerUtil.put(
-//                updatePolicyAPI,
-//                newPolicyPriorityList,
-//                // on success
-//                function (data, textStatus, jqXHR) {
-//                    $(modalPopupContent).html($('#save-policy-priorities-success-content').html());
-//                    showPopup();
-//                    $("a#save-policy-priorities-success-link").click(function () {
-//                        hidePopup();
-//                    });
-//                },
-//                // on error
-//                function (jqXHR) {
-//                    $("#save-policy-priorities-error-content").find(".message-from-server").html("Message From " +
-//                        "Server : " + jqXHR.data["statusText"]);
-//                    $(modalPopupContent).html($('#save-policy-priorities-error-content').html());
-//                    showPopup();
-//                    $("a#save-policy-priorities-error-link").click(function () {
-//                        hidePopup();
-//                    });
-//                }
-//        );
-//
-//    });
 
     // [2] logic for un-publishing a selected set of Active, Active/Updated policies
 
@@ -359,7 +316,7 @@ $(document).ready(function () {
 
             // on-click function for policy removing "yes" button
             $("a#remove-policy-yes-link").click(function () {
-                invokerUtil.put(
+                invokerUtil.post(
                     serviceURL,
                     policyList,
                     // on success
@@ -391,6 +348,9 @@ $(document).ready(function () {
     });
 
     $("#loading-content").remove();
+    if ($("#policy-listing-status-msg").text()) {
+        $("#policy-listing-status").removeClass("hidden");
+    }
     $("#policy-grid").removeClass("hidden");
-    $(".icon .text").res_text(0.2);
+    // $(".icon .text").res_text(0.2);
 });
