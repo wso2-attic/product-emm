@@ -54,7 +54,7 @@
                                     Set a name * to your policy<br>
                                     ( should be 1-to-30 characters long )
                                 </label>
-                                <div id="plicynameField" class="form-group wr-input-control">
+                                <div id="policy-name-field" class="form-group wr-input-control">
                                     <div class="cus-col-50">
                                         <input id="policy-name-input" class="form-control" type="text" value="" placeholder="[ Required field ]"/>
                                     </div>
@@ -145,7 +145,7 @@
                                             <select id="users-input" class="form-control select2" multiple="multiple">
                                                 <option value="ANY" selected>ANY</option>
                                                 {{#each users}}
-                                                    <option>{{this}}</option>
+                                                    <option>{{username}}</option>
                                                 {{/each}}
                                             </select>
                                         </div>
@@ -196,8 +196,9 @@
                             <div class="wr-advance-operations">
                                 <div class="wr-advance-operations-init">
                                     <br>
+                                    &nbsp;&nbsp;
                                     <i class="fw fw-settings fw-spin fw-2x"></i>
-                                    Loading platform features . . .
+                                    &nbsp;Loading platform features . . .
                                     <br>
                                     <br>
                                 </div>
@@ -221,6 +222,6 @@
     <script id="hidden-operations-ios" src="{{self.publicURL}}/templates/hidden-operations-ios.hbs" type="text/x-handlebars-template" ></script>
     <script id="hidden-operations-android" src="{{self.publicURL}}/templates/hidden-operations-android.hbs" type="text/x-handlebars-template" ></script>
     <script id="hidden-operations-windows" src="{{self.publicURL}}/templates/hidden-operations-windows.hbs" type="text/x-handlebars-template" ></script>
-    <script src="{{self.publicURL}}/js/policy-create.js"></script>
+    <script src="{{self.publicURL}}/js/policy-view-edit.js"></script>
 {{/zone}}
 

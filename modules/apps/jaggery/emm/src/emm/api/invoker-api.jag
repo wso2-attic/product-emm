@@ -50,9 +50,9 @@ if (uriMatcher.match("/{context}/api/invoker/execute/")) {
             case constants["HTTP_GET"]:
                 serviceInvokers.XMLHttp.get(
                     targetURL,
-                    function (responsePayload) {
-                        response.status = responsePayload.status;
-                        response.content =  responsePayload.responseText;
+                    function (responseFromBackend) {
+                        response.status = responseFromBackend.status;
+                        response.content = responseFromBackend.responseText;
                     }
                 );
                 break;
@@ -60,9 +60,9 @@ if (uriMatcher.match("/{context}/api/invoker/execute/")) {
                 serviceInvokers.XMLHttp.post(
                     targetURL,
                     payload,
-                    function (responsePayload) {
-                        response.status = responsePayload.status;
-                        response.content =  responsePayload.responseText;
+                    function (responseFromBackend) {
+                        response.status = responseFromBackend.status;
+                        response.content = responseFromBackend.responseText;
                     }
                 );
                 break;
@@ -70,18 +70,18 @@ if (uriMatcher.match("/{context}/api/invoker/execute/")) {
                 serviceInvokers.XMLHttp.put(
                     targetURL,
                     payload,
-                    function (responsePayload) {
-                        response.status = responsePayload.status;
-                        response.content =  responsePayload.responseText;
+                    function (responseFromBackend) {
+                        response.status = responseFromBackend.status;
+                        response.content = responseFromBackend.responseText;
                     }
                 );
                 break;
             case constants["HTTP_DELETE"]:
                 serviceInvokers.XMLHttp.delete(
                     targetURL,
-                    function (responsePayload) {
-                        response.status = responsePayload.status;
-                        response.content =  responsePayload.responseText;
+                    function (responseFromBackend) {
+                        response.status = responseFromBackend.status;
+                        response.content = responseFromBackend.responseText;
                     }
                 );
                 break;

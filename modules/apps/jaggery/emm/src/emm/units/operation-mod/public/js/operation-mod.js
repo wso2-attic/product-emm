@@ -918,7 +918,9 @@ var operationModule = function () {
                 operationType = operationTypeConstants["PROFILE"];
                 payload = {
                     "operation": {
-                        "message" : operationData["message"]
+                        //"message" : operationData["message"]
+                        "messageText": operationData["messageText"],
+                        "messageTitle": operationData["messageTitle"]
                     }
                 };
                 break;

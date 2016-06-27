@@ -106,7 +106,7 @@
                                 Enter PIN code (Optional - This is required only if the device type is BYOD).
                                 <br><br>
                                 <div>
-                                    <input type="password" class="form-control modal-input operationDataKeys" id="pin" data-key="pin"></textarea>
+                                    <input type="password" class="form-control modal-input operationDataKeys" id="pin" data-key="pin">
                                 </div>
                                 <br>
                             {{/equal}}
@@ -118,7 +118,10 @@
                                 <i class="icon fw fw-error"></i><span></span>
                             </div>
                             <div>
-                                <textarea class="form-control modal-input operationDataKeys" id="message" data-key="message"></textarea>
+                                <input type='text' class="form-control modal-input operationDataKeys" id="messageTitle" data-key="messageTitle"/>
+                            </div><br>
+                            <div>
+                                <textarea class="form-control modal-input operationDataKeys" id="messageText" data-key="messageText"></textarea>
                             </div>
                             <br>
                         {{/equal}}

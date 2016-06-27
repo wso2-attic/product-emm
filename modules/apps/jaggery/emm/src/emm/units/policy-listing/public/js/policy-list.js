@@ -48,12 +48,12 @@ var sortElements = function () {
     addSortableIndexNumbers();
     var sortableElem = ".wr-sortable";
     $(sortableElem).sortable({
-                                 beforeStop: function () {
-                                     sortedIDs = $(this).sortable("toArray");
-                                     addSortableIndexNumbers();
-                                     $(sortUpdateBtn).prop("disabled", false);
-                                 }
-                             });
+        beforeStop: function () {
+            sortedIDs = $(this).sortable("toArray");
+            addSortableIndexNumbers();
+            $(sortUpdateBtn).prop("disabled", false);
+        }
+    });
     $(sortableElem).disableSelection();
 };
 
@@ -125,29 +125,39 @@ function getSelectedPolicies() {
 
 $(document).ready(function () {
     sortElements();
-    $("#loading-content").remove();
 
-    var policyRoles = $("#policy-roles").text();
-    var policyUsers = $("#policy-users").text();
+//    var policyRoles = $("#policy-roles").text();
+//    var policyUsers = $("#policy-users").text();
+//
+//    if (!policyRoles) {
+//        $("#policy-roles").hide();
+//    }
+//    if (!policyUsers) {
+//        $("#policy-users").hide();
+//    }
 
-    if (!policyRoles) {
-        $("#policy-roles").hide();
-    }
-    if (!policyUsers) {
-        $("#policy-users").hide();
-    }
+//    if ($("#policy-listing-status-msg").text()) {
+//        $("#policy-listing-status").removeClass("hidden");
+//    }
 
-    if ($("#policy-listing-status-msg").text()) {
-        $("#policy-listing-status").removeClass("hidden");
-    }
+    /**
+     * ********************************************
+     * Click functions related to Policy Listing
+     * ********************************************
+     */
 
-    // Click functions related to Policy Listing
-    var isUpdated = $('#is-updated').val();
+    // [1] logic for running apply-changes-for-devices use-case
+
+    var applyChangesButtonId = "#appbar-btn-apply-changes";
+
+    var isUpdated = $("#is-updated").val();
     if (!isUpdated) {
-        $('#appbar-btn-apply-changes').addClass('hidden');
+        // if no updated policies found, hide the button from app bar
+        $(applyChangesButtonId).addClass("hidden");
     }
 
-    $("#appbar-btn-apply-changes").click(function () {
+    // click-event function for applyChangesButton
+    $(applyChangesButtonId).click(function () {
         var applyPolicyChangesAPI = "/mdm-admin/policies/apply-changes";
         $(modalPopupContent).html($('#change-policy-modal-content').html());
         showPopup();
@@ -157,7 +167,7 @@ $(document).ready(function () {
                     applyPolicyChangesAPI,
                     null,
                     // on success
-                    function () {
+                    function (data, textStatus, jqXHR) {
                         $(modalPopupContent).html($('#change-policy-success-content').html());
                         showPopup();
                         $("a#change-policy-success-link").click(function () {
@@ -166,8 +176,9 @@ $(document).ready(function () {
                         });
                     },
                     // on error
-                    function () {
-                        $(modalPopupContent).html($('#change-policy-error-content').html());
+                    function (jqXHR) {
+                        console.log(stringify(jqXHR.data));
+                        $(modalPopupContent).html($("#change-policy-error-content").html());
                         showPopup();
                         $("a#change-policy-error-link").click(function () {
                             hidePopup();
@@ -181,182 +192,204 @@ $(document).ready(function () {
         });
     });
 
-    $(sortUpdateBtn).click(function () {
-        $(sortUpdateBtn).prop("disabled", true);
+//    $(sortUpdateBtn).click(function () {
+//        $(sortUpdateBtn).prop("disabled", true);
+//
+//        var newPolicyPriorityList = [];
+//        var policy;
+//        var i;
+//        for (i = 0; i < sortedIDs.length; i++) {
+//            policy = {};
+//            policy.id = parseInt(sortedIDs[i]);
+//            policy.priority = i + 1;
+//            newPolicyPriorityList.push(policy);
+//        }
+//
+//        var updatePolicyAPI = "/mdm-admin/policies/priorities";
+//        invokerUtil.put(
+//                updatePolicyAPI,
+//                newPolicyPriorityList,
+//                // on success
+//                function (data, textStatus, jqXHR) {
+//                    $(modalPopupContent).html($('#save-policy-priorities-success-content').html());
+//                    showPopup();
+//                    $("a#save-policy-priorities-success-link").click(function () {
+//                        hidePopup();
+//                    });
+//                },
+//                // on error
+//                function (jqXHR) {
+//                    $("#save-policy-priorities-error-content").find(".message-from-server").html("Message From " +
+//                        "Server : " + jqXHR.data["statusText"]);
+//                    $(modalPopupContent).html($('#save-policy-priorities-error-content').html());
+//                    showPopup();
+//                    $("a#save-policy-priorities-error-link").click(function () {
+//                        hidePopup();
+//                    });
+//                }
+//        );
+//
+//    });
 
-        var newPolicyPriorityList = [];
-        var policy;
-        var i;
-        for (i = 0; i < sortedIDs.length; i++) {
-            policy = {};
-            policy.id = parseInt(sortedIDs[i]);
-            policy.priority = i + 1;
-            newPolicyPriorityList.push(policy);
-        }
-
-        var updatePolicyAPI = "/mdm-admin/policies/priorities";
-        invokerUtil.put(
-                updatePolicyAPI,
-                newPolicyPriorityList,
-                function () {
-                    $(modalPopupContent).html($('#save-policy-priorities-success-content').html());
-                    showPopup();
-                    $("a#save-policy-priorities-success-link").click(function () {
-                        hidePopup();
-                    });
-                },
-                function () {
-                    $("#save-policy-priorities-error-content").find(".message-from-server").html(
-                            "Message From Server  :  " + data["statusText"]);
-                    $(modalPopupContent).html($('#save-policy-priorities-error-content').html());
-                    showPopup();
-                    $("a#save-policy-priorities-error-link").click(function () {
-                        hidePopup();
-                    });
-                }
-        );
-
-    });
+    // [2] logic for un-publishing a selected set of Active, Active/Updated policies
 
     $(".policy-unpublish-link").click(function () {
         var policyList = getSelectedPolicies();
         var statusList = getSelectedPolicyStates();
-        if (($.inArray('Inactive/Updated', statusList) > -1) || ($.inArray('Inactive', statusList) > -1)) {
+        if (($.inArray("Inactive/Updated", statusList) > -1) || ($.inArray("Inactive", statusList) > -1)) {
+            // if policies found in Inactive or Inactive/Updated states with in the selection,
+            // pop-up an error saying
+            // "You cannot select already inactive policies. Please deselect inactive policies and try again."
             $(modalPopupContent).html($("#errorPolicyUnPublishSelection").html());
             showPopup();
         } else {
-            var serviceURL = "/mdm-admin/policies/inactivate";
-            if (policyList == 0) {
+            var serviceURL = "/api/device-mgt/v1.0/policies/deactivate-policy";
+            if (policyList.length == 0) {
                 $(modalPopupContent).html($("#errorPolicyUnPublish").html());
             } else {
-                $(modalPopupContent).html($('#unpublish-policy-modal-content').html());
+                $(modalPopupContent).html($("#unpublish-policy-modal-content").html());
             }
             showPopup();
 
+            // on-click function for policy un-publishing "yes" button
             $("a#unpublish-policy-yes-link").click(function () {
                 invokerUtil.put(
-                        serviceURL,
-                        policyList,
-                        // on success
-                        function () {
-                            $(modalPopupContent).html($('#unpublish-policy-success-content').html());
+                    serviceURL,
+                    policyList,
+                    // on success
+                    function (data, textStatus, jqXHR) {
+                        if (jqXHR.status == 200 && data) {
+                            $(modalPopupContent).html($("#unpublish-policy-success-content").html());
                             $("a#unpublish-policy-success-link").click(function () {
                                 hidePopup();
                                 location.reload();
                             });
-                        },
-                        // on error
-                        function () {
-                            $(modalPopupContent).html($('#unpublish-policy-error-content').html());
-                            $("a#unpublish-policy-error-link").click(function () {
-                                hidePopup();
-                            });
                         }
+                    },
+                    // on error
+                    function (jqXHR) {
+                        console.log(stringify(jqXHR.data));
+                        $(modalPopupContent).html($("#unpublish-policy-error-content").html());
+                        $("a#unpublish-policy-error-link").click(function () {
+                            hidePopup();
+                        });
+                    }
                 );
             });
 
+            // on-click function for policy un-publishing "cancel" button
             $("a#unpublish-policy-cancel-link").click(function () {
                 hidePopup();
             });
         }
     });
 
+    // [3] logic for publishing a selected set of Inactive, Inactive/Updated policies
 
     $(".policy-publish-link").click(function () {
         var policyList = getSelectedPolicies();
         var statusList = getSelectedPolicyStates();
-        if (($.inArray('Active/Updated', statusList) > -1) || ($.inArray('Active', statusList) > -1)) {
-            $(modalPopupContent).html($("#errorPolicyPublishSelection").html());
+        if (($.inArray("Active/Updated", statusList) > -1) || ($.inArray("Active", statusList) > -1)) {
+            // if policies found in Active or Active/Updated states with in the selection,
+            // pop-up an error saying
+            // "You cannot select already active policies. Please deselect active policies and try again."
+            $(modalPopupContent).html($("#active-policy-selection-error").html());
             showPopup();
         } else {
-            var serviceURL = "/mdm-admin/policies/activate";
-            if (policyList == 0) {
-                $(modalPopupContent).html($("#errorPolicyPublish").html());
+            var serviceURL = "/api/device-mgt/v1.0/policies/activate-policy";
+            if (policyList.length == 0) {
+                $(modalPopupContent).html($("#policy-publish-error").html());
             } else {
-                $(modalPopupContent).html($('#publish-policy-modal-content').html());
+                $(modalPopupContent).html($("#publish-policy-modal-content").html());
             }
             showPopup();
 
+            // on-click function for policy removing "yes" button
             $("a#publish-policy-yes-link").click(function () {
                 invokerUtil.put(
-                        serviceURL,
-                        policyList,
-                        // on success
-                        function () {
-                            $(modalPopupContent).html($('#publish-policy-success-content').html());
+                    serviceURL,
+                    policyList,
+                    // on success
+                    function (data, textStatus, jqXHR) {
+                        if (jqXHR.status == 200 && data) {
+                            $(modalPopupContent).html($("#publish-policy-success-content").html());
                             $("a#publish-policy-success-link").click(function () {
                                 hidePopup();
                                 location.reload();
                             });
-                        },
-                        // on error
-                        function () {
-                            $(modalPopupContent).html($('#publish-policy-error-content').html());
-                            $("a#publish-policy-error-link").click(function () {
-                                hidePopup();
-                            });
                         }
+                    },
+                    // on error
+                    function (jqXHR) {
+                        console.log(stringify(jqXHR.data));
+                        $(modalPopupContent).html($("#publish-policy-error-content").html());
+                        $("a#publish-policy-error-link").click(function () {
+                            hidePopup();
+                        });
+                    }
                 );
             });
 
+            // on-click function for policy removing "cancel" button
             $("a#publish-policy-cancel-link").click(function () {
                 hidePopup();
             });
         }
     });
 
+    // [4] logic for removing a selected set of policies
+
     $(".policy-remove-link").click(function () {
         var policyList = getSelectedPolicies();
-        var deletePolicyAPI = "/mdm-admin/policies/bulk-remove";
-        if (policyList == 0) {
-            $(modalPopupContent).html($("#errorPolicy").html());
+        var statusList = getSelectedPolicyStates();
+        if (($.inArray("Active/Updated", statusList) > -1) || ($.inArray("Active", statusList) > -1)) {
+            // if policies found in Active or Active/Updated states with in the selection,
+            // pop-up an error saying
+            // "You cannot remove already active policies. Please deselect active policies and try again."
+            $(modalPopupContent).html($("#active-policy-selection-error").html());
+            showPopup();
         } else {
-            $(modalPopupContent).html($('#remove-policy-modal-content').html());
-        }
-        showPopup();
-        $("a#remove-policy-yes-link").click(function () {
-            invokerUtil.post(
-                    deletePolicyAPI,
+            var serviceURL = "/api/device-mgt/v1.0/policies/remove-policy";
+            if (policyList.length == 0) {
+                $(modalPopupContent).html($("#policy-remove-error").html());
+            } else {
+                $(modalPopupContent).html($("#remove-policy-modal-content").html());
+            }
+            showPopup();
+
+            // on-click function for policy removing "yes" button
+            $("a#remove-policy-yes-link").click(function () {
+                invokerUtil.put(
+                    serviceURL,
                     policyList,
                     // on success
-                    function (data) {
-                        data = JSON.parse(data);
-                        if (data.errorMessage) {
-                            $(modalPopupContent).html($('#remove-policy-error-devices').html());
-                            $("a#remove-policy-error-devices").click(function () {
-                                hidePopup();
-                            });
-                        } else {
-                            $(modalPopupContent).html($('#remove-policy-success-content').html());
+                    function (data, textStatus, jqXHR) {
+                        if (jqXHR.status == 200 && data) {
+                            $(modalPopupContent).html($("#remove-policy-success-content").html());
                             $("a#remove-policy-success-link").click(function () {
-                                var thisTable = $(".DTTT_selected").closest('.dataTables_wrapper').find('.dataTable').
-                                                    dataTable();
-                                thisTable.api().rows('.DTTT_selected').remove().draw(false);
                                 hidePopup();
+                                location.reload();
                             });
                         }
                     },
                     // on error
-                    function (data) {
-                        if (JSON.parse(data.responseText).errorMessage) {
-                            $(modalPopupContent).html($('#remove-policy-error-devices').html());
-                            $("a#remove-policy-error-devices").click(function () {
-                                hidePopup();
-                            });
-                        } else {
-                            $(modalPopupContent).html($('#remove-policy-error-content').html());
-                            $("a#remove-policy-error-link").click(function () {
-                                hidePopup();
-                            });
-                        }
+                    function (jqXHR) {
+                        console.log(stringify(jqXHR.data));
+                        $(modalPopupContent).html($("#remove-policy-error-content").html());
+                        $("a#remove-policy-error-link").click(function () {
+                            hidePopup();
+                        });
                     }
-            );
-        });
+                );
+            });
 
-        $("a#remove-policy-cancel-link").click(function () {
-            hidePopup();
-        });
+            // on-click function for policy removing "cancel" button
+            $("a#remove-policy-cancel-link").click(function () {
+                hidePopup();
+            });
+        }
     });
+
     $("#loading-content").remove();
     $("#policy-grid").removeClass("hidden");
     $(".icon .text").res_text(0.2);
