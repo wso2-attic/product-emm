@@ -1,6 +1,6 @@
 {{#zone "main"}}
     {{#equal isUpdated true}}
-        <input type="hidden" id="is-updated" name="country" value="UPDATED">
+        <input type="hidden" id="is-updated" value="UPDATED">
     {{/equal}}
     <div id="loading-content" class="col-centered">
         &nbsp;
@@ -9,6 +9,7 @@
         Loading policies . . .
         <br>
     </div>
+
     <div id="policy-listing-status" class="raw hidden">
         <ul style="list-style-type: none;">
             <li class="message message-info" >
@@ -19,6 +20,7 @@
             </li>
         </ul>
     </div>
+
     {{#equal noPolicy false}}
         <table class="table table-striped table-hover list-table display responsive nowrap data-table grid-view hidden"
                id="policy-grid">

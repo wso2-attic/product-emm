@@ -30,9 +30,10 @@ policyModule = function () {
 
     privateMethods.handleGetAllPoliciesResponse = function (backendResponse) {
         var response = {};
-        if (backendResponse.status = 200) {
+        if (backendResponse.status == 200 && backendResponse.responseText) {
             var isUpdated = false;
             var policyListFromRestEndpoint = parse(backendResponse.responseText)["policies"];
+
             var policyListToView = [];
             var i, policyObjectFromRestEndpoint, policyObjectToView;
             for (i = 0; i < policyListFromRestEndpoint.length; i++) {
@@ -89,8 +90,6 @@ policyModule = function () {
             response.updated = isUpdated;
             response.status = "success";
             response.content = policyListToView;
-
-            log.info(stringify(policyListToView));
 
             return response;
         } else {
