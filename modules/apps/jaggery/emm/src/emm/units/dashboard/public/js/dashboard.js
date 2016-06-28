@@ -23,8 +23,12 @@ var updateStats = function (serviceURL, id) {
             if (jqXHR.status == 200 && data) {
                 var responsePayload = JSON.parse(data);
                 var itemCount = responsePayload.count;
-                if (itemCount) {
+                if (itemCount == 0) {
+                    $(id).html(0);
+                    $(id + "-view-btn").hide();
+                } else if (itemCount > 0) {
                     $(id).html(itemCount);
+                    $(id + "-view-btn").show();
                 } else {
                     $(id).html("Error...");
                 }
@@ -34,10 +38,7 @@ var updateStats = function (serviceURL, id) {
         },
 
         function (jqXHR) {
-            if (jqXHR.status == 404) {
-                $(id).html(0);
-                $(id + "-view-btn").hide();
-            } else {
+            if (jqXHR.status == 404 || jqXHR.status == 500) {
                 $(id).html("Error...");
             }
         }
