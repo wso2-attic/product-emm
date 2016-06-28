@@ -47,10 +47,7 @@ public class LocalNotification {
 		if (!Preference.getBoolean(context, LOCAL_NOTIFIER_INVOKED_PREF_KEY)) {
 			Preference.putBoolean(context, LOCAL_NOTIFIER_INVOKED_PREF_KEY, true);
 			Intent alarm = new Intent(context, AlarmReceiver.class);
-			PendingIntent recurringAlarm =
-					PendingIntent.getBroadcast(context,
-							REQUEST_CODE,
-							alarm,
+			PendingIntent recurringAlarm = PendingIntent.getBroadcast(context, REQUEST_CODE, alarm,
 							PendingIntent.FLAG_CANCEL_CURRENT);
 			AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 			alarms.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, currentTime, interval,
