@@ -17,18 +17,15 @@
  * under the License.
  */
 
-
 var uri = request.getRequestURI();
 var uriMatcher = new URIMatcher(String(uri));
 
 var log = new Log("api/datatables-invoker-api.jag");
 
-var deviceModule = require("/modules/device.js").deviceModule;
-var userModule = require("/modules/user.js").userModule;
-var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
-var mdmProps = require('/config/mdm-props.js').config();
-
-var result;
+// var deviceModule = require("/modules/device.js").deviceModule;
+var userModule = require("/modules/user.js")["userModule"];
+var serviceInvokers = require("/modules/backend-service-invoker.js")["backendServiceInvoker"];
+var mdmProps = require("/config/mdm-props.js").config();
 
 if (uriMatcher.match("/{context}/api/datatables/invoker")) {
     var url = request.getParameter("url");
@@ -41,7 +38,7 @@ if (uriMatcher.match("/{context}/api/datatables/invoker")) {
         }
         return url + "?" + queryParam + "=" + value;
     }
-    targetURL = mdmProps.httpsURL + request.getParameter("url");
+    targetURL = mdmProps["httpsURL"] + request.getParameter("url");
 
     var allParams = request.getAllParameters();
 
@@ -54,13 +51,10 @@ if (uriMatcher.match("/{context}/api/datatables/invoker")) {
     }
 
     serviceInvokers.XMLHttp.get(
-            targetURL,
-            function (backendResponse) {
-                response.status = backendResponse.status;
-                result =  backendResponse.responseText;
-            });
-}
-
-if (result){
-    print(result);
+        targetURL,
+        function (backendResponse) {
+            response.status = backendResponse.status;
+            response.content =  backendResponse.responseText;
+        }
+    );
 }
