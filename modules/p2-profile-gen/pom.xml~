@@ -543,9 +543,9 @@
                                 <!-- End of Dashboards Features -->
 
                                 <!-- EMM Analytics Features -->
-                                <!--<featureArtifactDef>
+                                <featureArtifactDef>
                                     org.wso2.carbon.analytics.emm:org.wso2.carbon.analytics.emm.feature:${carbon.analytics.emm.version}
-                                </featureArtifactDef>-->
+                                </featureArtifactDef>
                                 <!-- End of EMM Analytics Features -->
 
                             </featureArtifacts>
@@ -1156,10 +1156,10 @@
                                     <id>org.wso2.carbon.dashboards.portal.feature.group</id>
                                     <version>${carbon.dashboards.version}</version>
                                 </feature>
-                                <!--<feature>
+                                <feature>
                                     <id>org.wso2.carbon.analytics.emm.feature.group</id>
                                     <version>${carbon.analytics.emm.version}</version>
-                                </feature> -->
+                                </feature>
                                 <!-- End of Dashboard Features -->
 
                             </features>
@@ -1699,10 +1699,10 @@
                                     <id>org.wso2.carbon.datasource.reader.hadoop.server.feature.group</id>
                                     <version>${carbon.data.version}</version>
                                 </feature>
-                                <!--<feature>
+                                <feature>
                                     <id>org.wso2.carbon.analytics.emm.feature.group</id>
                                     <version>${carbon.analytics.emm.version}</version>
-                                </feature> -->
+                                </feature>
                                 <!--end analytic features -->
 
                                 <feature>
