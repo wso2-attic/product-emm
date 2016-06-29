@@ -27,6 +27,7 @@ public class DeviceAppInfo {
 	private int versionCode;
 	private String icon;
 	private boolean isSystemApp;
+	private boolean isRunning;
 
 	public String getAppname() {
 		return appName;
@@ -74,5 +75,13 @@ public class DeviceAppInfo {
 
 	public void setIsSystemApp(boolean isSystemApp) {
 		this.isSystemApp = isSystemApp;
+	}
+
+	public boolean isRunning() {
+		return isRunning;
+	}
+
+	public void setIsRunning(boolean isRunning) {
+		this.isRunning = isRunning;
 	}
 }

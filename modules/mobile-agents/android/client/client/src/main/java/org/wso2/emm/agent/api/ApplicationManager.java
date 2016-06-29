@@ -52,12 +52,14 @@ import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.StreamHandler;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -138,6 +140,7 @@ public class ApplicationManager {
                 app.setVersionName(packageInfo.versionName);
                 app.setVersionCode(packageInfo.versionCode);
                 app.setIsSystemApp(isSystemPackage(packageInfo));
+                app.setIsRunning(isAppRunning(packageInfo.packageName));
                 appList.put(packageInfo.packageName, app);
             } else if (!isSystemPackage(packageInfo)) {
                 app = new DeviceAppInfo();
@@ -147,10 +150,36 @@ public class ApplicationManager {
                 app.setVersionName(packageInfo.versionName);
                 app.setVersionCode(packageInfo.versionCode);
                 app.setIsSystemApp(false);
+                app.setIsRunning(isAppRunning(packageInfo.packageName));
                 appList.put(packageInfo.packageName, app);
             }
         }
         return appList;
+    }
+
+    public boolean isAppRunning(String packageName) {
+        boolean isRunning = false;
+        try {
+            Process process = Runtime.getRuntime().exec("ps");
+            BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            int read;
+            char[] buffer = new char[4096];
+            StringBuffer output = new StringBuffer();
+            while ((read = in.read(buffer)) > 0) {
+                output.append(buffer, 0, read);
+                if (output.toString().contains(packageName)) {
+                    isRunning = true;
+                }
+            }
+            in.close();
+            if (output.toString().contains(packageName)) {
+                isRunning = true;
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Running processes shell command failed execution." + e);
+        } finally {
+            return isRunning;
+        }
     }
 
     /**

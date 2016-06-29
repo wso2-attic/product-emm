@@ -47,13 +47,9 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <uses-permission android:name="org.wso2.emm.system.service.permission.ACCESS"/>
-
-    <permission
-        android:name="org.wso2.emm.agent.permission.ACCESS"
-        android:protectionLevel="signature"/>
-
+    <permission android:name="org.wso2.emm.agent.permission.ACCESS"
+        android:protectionLevel="signature"></permission>
     <uses-permission android:name="org.wso2.emm.agent.permission.ACCESS"/>
-
     <permission
         android:name="org.wso2.emm.agent.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -220,6 +216,7 @@
             android:label="WSO2 Agent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

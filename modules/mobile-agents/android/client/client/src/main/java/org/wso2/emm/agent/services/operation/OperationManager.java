@@ -89,6 +89,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
     private static final String APP_INFO_TAG_PACKAGE = "package";
     private static final String APP_INFO_TAG_VERSION = "version";
     private static final String APP_INFO_TAG_SYSTEM = "isSystemApp";
+    private static final String APP_INFO_TAG_RUNNING = "isActive";
     private static final String STATUS = "status";
     private static final String TIMESTAMP = "timestamp";
 
@@ -259,6 +260,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 app.put(APP_INFO_TAG_PACKAGE, infoApp.getPackagename());
                 app.put(APP_INFO_TAG_VERSION, infoApp.getVersionCode());
                 app.put(APP_INFO_TAG_SYSTEM, infoApp.isSystemApp());
+                app.put(APP_INFO_TAG_RUNNING, infoApp.isRunning());
                 if (application != null) {
                     app.put(Constants.Device.USS, application.getUss());
                 }
