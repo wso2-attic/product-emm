@@ -87,7 +87,8 @@
         </receiver>
         <receiver
             android:name=".services.AgentDeviceAdminReceiver"
-            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            android:permission="android.permission.BIND_DEVICE_ADMIN"
+            android:exported="false">
             <intent-filter>
 
                 <!-- This action is required -->
@@ -215,6 +216,7 @@
             android:label="WSO2 Agent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

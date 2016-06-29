@@ -143,7 +143,7 @@ public class DeviceInfoPayload {
 
         property = new Device.Property();
         property.setName(Constants.Device.OS_BUILD_DATE);
-        property.setValue(String.valueOf(Build.TIME));
+        property.setValue(deviceInfo.getOSBuildDate());
         properties.add(property);
 
         property = new Device.Property();

@@ -21,6 +21,7 @@ import java.util.List;
 
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
+import android.os.SystemProperties;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 import org.wso2.emm.agent.utils.Preference;
@@ -44,6 +45,7 @@ public class DeviceInfo {
 	private TelephonyManager telephonyManager;
 	private DevicePolicyManager devicePolicyManager;
 	private ComponentName cdmDeviceAdmin;
+	private static final String BUILD_DATE_UTC_PROPERTY = "ro.build.date.utc";
 
 	public DeviceInfo(Context context) {
 		this.context = context;
@@ -82,7 +84,7 @@ public class DeviceInfo {
 	 * @return - OS build date.
 	 */
 	public String getOSBuildDate() {
-		return String.valueOf(android.os.Build.TIME);
+		return SystemProperties.get(BUILD_DATE_UTC_PROPERTY);
 	}
 
 	/**
