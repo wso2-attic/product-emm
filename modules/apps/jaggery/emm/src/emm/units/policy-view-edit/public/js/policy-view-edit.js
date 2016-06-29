@@ -1834,7 +1834,9 @@ stepForwardFrom["policy-criteria"] = function () {
             if ($(this).is(":checked")) {
                 if ($(this).attr("id") == "users-radio-btn") {
                     policy["selectedUsers"] = $("#users-input").val();
+                    policy["selectedUserRoles"] = null;
                 } else if ($(this).attr("id") == "user-roles-radio-btn") {
+                    policy["selectedUsers"] = null;
                     policy["selectedUserRoles"] = $("#user-roles-input").val();
                 }
             }

@@ -20,6 +20,7 @@ function onRequest(context) {
     // var log = new Log("policy-listing.js");
     var policyModule = require("/modules/policy.js")["policyModule"];
     var response = policyModule.getAllPolicies();
+
     if (response["status"] == "success") {
         var policyListToView = response["content"];
         context["policyListToView"] = policyListToView;
@@ -40,8 +41,9 @@ function onRequest(context) {
     } else {
         // here, response["status"] == "error"
         context["policyListToView"] = [];
-        context["policyListingStatusMsg"] = response["content"];
+        context["policyListingStatusMsg"] = "Error in retrieving policies. Please try reloading the page.";
         context["saveNewPrioritiesButtonEnabled"] = false;
     }
+
     return context;
 }

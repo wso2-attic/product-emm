@@ -148,38 +148,43 @@ $(document).ready(function () {
 
     var isUpdated = $("#is-updated").val();
     if (!isUpdated) {
-        // if no updated policies found, hide the button from app bar
+        // if no updated policies found, hide button from app bar
         $(applyChangesButtonId).addClass("hidden");
+    } else {
+        // if updated policies found, show button from app bar
+        $(applyChangesButtonId).removeClass("hidden");
     }
 
     // click-event function for applyChangesButton
     $(applyChangesButtonId).click(function () {
-        var applyPolicyChangesAPI = "/mdm-admin/policies/apply-changes";
+        var serviceURL = "/api/device-mgt/v1.0/policies/apply-changes";
         $(modalPopupContent).html($('#change-policy-modal-content').html());
         showPopup();
 
         $("a#change-policy-yes-link").click(function () {
             invokerUtil.put(
-                    applyPolicyChangesAPI,
-                    null,
-                    // on success
-                    function (data, textStatus, jqXHR) {
+                serviceURL,
+                null,
+                // on success
+                function (data, textStatus, jqXHR) {
+                    if (jqXHR.status == 200) {
                         $(modalPopupContent).html($('#change-policy-success-content').html());
                         showPopup();
                         $("a#change-policy-success-link").click(function () {
                             hidePopup();
                             location.reload();
                         });
-                    },
-                    // on error
-                    function (jqXHR) {
-                        console.log(stringify(jqXHR.data));
-                        $(modalPopupContent).html($("#change-policy-error-content").html());
-                        showPopup();
-                        $("a#change-policy-error-link").click(function () {
-                            hidePopup();
-                        });
                     }
+                },
+                // on error
+                function (jqXHR) {
+                    console.log(stringify(jqXHR.data));
+                    $(modalPopupContent).html($("#change-policy-error-content").html());
+                    showPopup();
+                    $("a#change-policy-error-link").click(function () {
+                        hidePopup();
+                    });
+                }
             );
         });
 

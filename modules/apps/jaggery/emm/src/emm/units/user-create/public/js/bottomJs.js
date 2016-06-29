@@ -72,9 +72,9 @@ var disableInlineError = function (inputField, errorMsg, errorSign) {
  * Validate if provided username is valid against RegEx configures.
  */
 validateInline["user-name"] = function () {
-    var usernameinput = $("input#username");
-    if (inputIsValid( usernameinput.data("regex"), usernameinput.val())) {
-       disableInlineError("usernameInputField", "usernameEmpty", "usernameError");
+    var usernameInput = $("input#username");
+    if (inputIsValid(usernameInput.data("regex"), usernameInput.val())) {
+        disableInlineError("usernameInputField", "usernameEmpty", "usernameError");
     } else {
         enableInlineError("usernameInputField", "usernameEmpty", "usernameError");
     }
@@ -84,8 +84,8 @@ validateInline["user-name"] = function () {
  * Validate if provided first name is valid against RegEx configures.
  */
 validateInline["first-name"] = function () {
-    var firstnameinput = $("input#firstname");
-    if (firstnameinput.val()) {
+    var firstnameInput = $("input#firstname");
+    if (firstnameInput.val()) {
        disableInlineError("firstNameField", "fnError");
     } else {
         enableInlineError("firstNameField", "fnError");
@@ -96,9 +96,9 @@ validateInline["first-name"] = function () {
  * Validate if provided last name is valid against RegEx configures.
  */
 validateInline["last-name"] = function () {
-    var lastnameinput = $("input#lastname");
-    if (lastnameinput.val()) {
-       disableInlineError("lastNameField", "lnError");
+    var lastnameInput = $("input#lastname");
+    if (lastnameInput.val()) {
+        disableInlineError("lastNameField", "lnError");
     } else {
         enableInlineError("lastNameField", "lnError");
     }
