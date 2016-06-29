@@ -2021,7 +2021,9 @@ var updatePolicy = function (policy, state) {
 
     if (policy["selectedUsers"]) {
         payload["users"] = policy["selectedUsers"];
+        payload["roles"] = [];
     } else if (policy["selectedUserRoles"]) {
+        payload["users"] = [];
         payload["roles"] = policy["selectedUserRoles"];
     } else {
         payload["users"] = [];
