@@ -45,16 +45,20 @@
                                                 <b>Ownership Type : </b> {{ownershipType}}
                                             </div>
                                         </div>
-                                        <div class="wr-desc-list-configs highlight col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                                            <div>
-                                                <b>Assigned Role(s) : </b> {{roles}}
+                                        {{#equal roles "None"}}
+                                            <div class="wr-desc-list-configs highlight col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                                <div>
+                                                    <b>Assigned User(s) : </b> {{users}}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="wr-desc-list-configs highlight col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                                            <div>
-                                                <b>Assigned User(s) : </b> {{users}}
+                                        {{/equal}}
+                                        {{#equal users "None"}}
+                                            <div class="wr-desc-list-configs highlight col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                                <div>
+                                                    <b>Assigned Role(s) : </b> {{roles}}
+                                                </div>
                                             </div>
-                                        </div>
+                                        {{/equal}}
                                         <div class="wr-desc-list-configs col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                             <div>
                                                 <b>Compliance Type :</b> {{compliance}}
@@ -77,17 +81,17 @@
         </div>
     </div>
 
-    <div id="change-policy-modal-content" class="hide">
+    <div id="apply-changes-modal-content" class="hide">
         <div class="content">
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
                     <h3>Do you really want to apply changes to all policies?</h3>
 
                     <div class="buttons">
-                        <a href="javascript:void(0)" id="change-policy-yes-link" class="btn-operations">
+                        <a href="javascript:void(0)" id="apply-changes-yes-link" class="btn-operations">
                             Yes
                         </a>
-                        <a href="javascript:void(0)" id="change-policy-cancel-link" class="btn-operations">
+                        <a href="javascript:void(0)" id="apply-changes-cancel-link" class="btn-operations">
                             No
                         </a>
                     </div>
@@ -96,14 +100,14 @@
         </div>
     </div>
 
-    <div id="change-policy-success-content" class="hide">
+    <div id="apply-changes-success-content" class="hide">
         <div class="content">
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
                     <h3>Done. Changes applied successfully.</h3>
 
                     <div class="buttons">
-                        <a href="javascript:void(0)" id="change-policy-success-link" class="btn-operations">
+                        <a href="javascript:void(0)" id="apply-changes-success-link" class="btn-operations">
                             Ok
                         </a>
                     </div>
@@ -112,14 +116,14 @@
         </div>
     </div>
 
-    <div id="change-policy-error-content" class="hide">
+    <div id="apply-changes-error-content" class="hide">
         <div class="content">
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
                     <h3>An unexpected error occurred. Please try again later.</h3>
 
                     <div class="buttons">
-                        <a href="javascript:void(0)" id="change-policy-error-link" class="btn-operations">
+                        <a href="javascript:void(0)" id="apply-changes-error-link" class="btn-operations">
                             Ok
                         </a>
                     </div>
@@ -165,8 +169,6 @@
             <div class="row">
                 <div class="col-lg-5 col-md-6 col-centered">
                     <h3>An unexpected error occurred. Please try again later.</h3>
-                    <h4 class="message-from-server"></h4>
-
                     <div class="buttons">
                         <a href="javascript:void(0)" id="save-policy-priorities-error-link" class="btn-operations">
                             Ok

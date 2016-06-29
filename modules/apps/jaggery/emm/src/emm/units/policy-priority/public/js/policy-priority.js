@@ -78,58 +78,66 @@ $(document).ready(function () {
             newPolicyPriorityList.push(policy);
         }
 
-        var updatePolicyAPI = "/mdm-admin/policies/priorities";
+        var updatePolicyAPI = "/api/device-mgt/v1.0/policies/priorities";
         invokerUtil.put(
             updatePolicyAPI,
             newPolicyPriorityList,
-            function () {
-                $(modalPopupContent).html($('#save-policy-priorities-success-content').html());
-                showPopup();
-                $("a#save-policy-priorities-success-link").click(function () {
-                    hidePopup();
-                });
+            // on success
+            function (data, textStatus, jqXHR) {
+                if (jqXHR.status == 200) {
+                    $(modalPopupContent).html($('#save-policy-priorities-success-content').html());
+                    showPopup();
+                    $("a#save-policy-priorities-success-link").click(function () {
+                        hidePopup();
+                    });
+                }
             },
-            function () {
-                $("#save-policy-priorities-error-content").find(".message-from-server").html(
-                    "Message From Server  :  " + data["statusText"]);
-                $(modalPopupContent).html($('#save-policy-priorities-error-content').html());
-                showPopup();
-                $("a#save-policy-priorities-error-link").click(function () {
-                    hidePopup();
-                });
+            // on error
+            function (jqXHR) {
+                if (jqXHR.status == 400 || jqXHR.status == 500) {
+                    $(modalPopupContent).html($("#save-policy-priorities-error-content").html());
+                    showPopup();
+                    $("a#save-policy-priorities-error-link").click(function () {
+                        hidePopup();
+                    });
+                }
             }
         );
     });
 
     $(applyChangesBtn).click(function () {
-        var applyPolicyChangesAPI = "/mdm-admin/policies/apply-changes";
-        $(modalPopupContent).html($('#change-policy-modal-content').html());
+        var applyPolicyChangesAPI = "/api/device-mgt/v1.0/policies/apply-changes";
+        $(modalPopupContent).html($("#apply-changes-modal-content").html());
         showPopup();
 
-        $("a#change-policy-yes-link").click(function () {
+        $("a#apply-changes-yes-link").click(function () {
             invokerUtil.put(
                 applyPolicyChangesAPI,
                 null,
                 // on success
-                function () {
-                    $(modalPopupContent).html($('#change-policy-success-content').html());
-                    showPopup();
-                    $("a#change-policy-success-link").click(function () {
-                        hidePopup();
-                    });
+                function (data, textStatus, jqXHR) {
+                    if (jqXHR.status == 200) {
+                        $(modalPopupContent).html($("#apply-changes-success-content").html());
+                        showPopup();
+                        $("a#apply-changes-success-link").click(function () {
+                            hidePopup();
+                        });
+                    }
                 },
                 // on error
-                function () {
-                    $(modalPopupContent).html($('#change-policy-error-content').html());
-                    showPopup();
-                    $("a#change-policy-error-link").click(function () {
-                        hidePopup();
-                    });
+                function (jqXHR) {
+                    if (jqXHR.status == 500) {
+                        $(modalPopupContent).html($("#apply-changes-error-content").html());
+                        showPopup();
+                        $("a#apply-changes-error-link").click(function () {
+                            hidePopup();
+                        });
+                    }
                 }
             );
         });
 
-        $("a#change-policy-cancel-link").click(function () {
+        $("a#apply-changes-cancel-link").click(function () {
             hidePopup();
         });
     });
