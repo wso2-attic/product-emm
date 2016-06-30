@@ -7,7 +7,7 @@
                     Device {{device.name}}
                     {{#if device.viewModel.model}}
                         <span class="lbl-device">
-                        ( {{device.viewModel.vendor}} {{device.viewModel.model}} )
+                        ( {{device.viewModel.vendor}} {{device.viewModel.model}})
                     </span>
                     {{/if}}
                 </label>
@@ -119,7 +119,7 @@
                                 </div>
                                 <div class="panel-heading display-none-xs">Device Details</div>
                                 <div id="loading-content" class="col-centered">
-                                    <br><br><i class="fw fw-settings fw-spin fw-2x"></i>Loading Device Details . . .<br>
+                                    <br><br>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fw fw-settings fw-spin fw-2x"></i>&nbsp;&nbsp;&nbsp;Loading Device Details . . .<br>
                                 </div>
                                 <div class="panel-body collapse display-block-sm display-block-md display-block-lg in"
                                      id="tabContent1">
@@ -204,9 +204,7 @@
                                 </div>
                                 <div class="panel-heading display-none-xs"> Policy Compliance</div>
                                 <div id="policy-spinner" class="wr-advance-operations-init hidden">
-                                    <br>
-                                    <i class="fw fw-settings fw-spin fw-2x">
-                                    </i>
+                                    <br><br>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fw fw-settings fw-spin fw-2x"></i>&nbsp;&nbsp;&nbsp;
                                     Loading Policy Compliance . . .
                                     <br>
                                     <br>
@@ -270,7 +268,9 @@
                                 <div class="panel-body collapse display-block-sm display-block-md display-block-lg"
                                      id="tabContent4">
                                     <div id="apps-spinner" class="wr-advance-operations-init hidden">
-                                        <br><i class="fw fw-settings fw-spin fw-2x"></i>Loading App List . . .<br><br>
+                                        <br><br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<i class="fw fw-settings fw-spin fw-2x"></i>
+                                        &nbsp;&nbsp;&nbsp;Loading App List . . .<br><br>
                                     </div>
                                     <div id="applications-list-container">
                                         <div class="panel-body">
@@ -298,7 +298,9 @@
                                         <i class="fw fw-refresh"></i></a> Refresh Operations Log
                                     </span>
                                     <div id="operations-spinner" class="wr-advance-operations-init hidden">
-                                        <br><i class="fw fw-settings fw-spin fw-2x"></i>Loading Operations Log . . .<br><br>
+                                        <br><br>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fw fw-settings fw-spin fw-2x"></i>&nbsp;&nbsp;&nbsp;
+                                        Loading Operations Log . . .
+                                        <br><br>
                                     </div>
                                     <div id="operations-log-container">
                                         <div class="panel-body">

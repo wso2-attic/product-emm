@@ -33,7 +33,8 @@ var InitiateViewOption = null;
         invokerUtil.post(serviceUrl, payload,
             function(message){
                 $(".panel-body").show();
-            }, function (message) {
+            },
+            function (message) {
                 var defaultInnerHTML =
                     "<br><p class='fw-warning'>Device data might not be updated Please refresh this page<p>";
                 $(".panel-body").append(defaultInnerHTML);
@@ -89,7 +90,7 @@ var InitiateViewOption = null;
         $(".device-detail-body").removeClass("hidden");
         $("#loading-content").remove();
         loadOperationBar(deviceType);
-        loadOperationsLog();
+        loadOperationsLog(false);
         loadApplicationsList();
         loadPolicyCompliance();
 
@@ -111,13 +112,14 @@ var InitiateViewOption = null;
     });
 
     function loadOperationsLog(update) {
-        var operationsLog = $("#operations-log");
+        // var operationsLog = $("#operations-log");
+        var operationsLogTable = "#operations-log-table";
         if (update) {
-            operationTable = $('#operations-log-table').DataTable();
+            operationTable = $(operationsLogTable).DataTable();
             operationTable.ajax.reload(null, false);
             return;
         }
-        operationTable =  $('#operations-log-table').datatables_extended({
+        operationTable = $(operationsLogTable).datatables_extended({
             serverSide: true,
             processing: false,
             searching: false,
@@ -125,12 +127,12 @@ var InitiateViewOption = null;
             pageLength : 10,
             order: [],
             ajax: {
-                url : '/emm/api/operation/paginate',
+                url : "/emm/api/operation/paginate",
                 data : {deviceId : deviceIdentifier, deviceType: deviceType},
-                dataSrc: function ( json ) {
-                    $('#operations-spinner').addClass('hidden');
+                dataSrc: function (json) {
+                    $("#operations-spinner").addClass("hidden");
                     $("#operations-log-container").empty();
-                    return json.devices;
+                    return json.operations;
                 }
             },
             columnDefs: [
