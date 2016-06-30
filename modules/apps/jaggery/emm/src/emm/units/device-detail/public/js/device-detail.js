@@ -132,35 +132,38 @@ var InitiateViewOption = null;
                 dataSrc: function (json) {
                     $("#operations-spinner").addClass("hidden");
                     $("#operations-log-container").empty();
-                    return json.operations;
+                    return json.data;
                 }
             },
             columnDefs: [
-                { targets: 0, data: 'code' },
-                { targets: 1, data: 'status', render: function ( status, type, row, meta ) {
-                    var html;
-                    switch (status) {
-                        case 'COMPLETED' :
-                            html = '<span><i class="fw fw-ok icon-success"></i> Completed</span>';
-                            break;
-                        case 'PENDING' :
-                            html = '<span><i class="fw fw-warning icon-warning"></i> Pending</span>';
-                            break;
-                        case 'ERROR' :
-                            html = '<span><i class="fw fw-error icon-danger"></i> Error</span>';
-                            break;
-                        case 'IN_PROGRESS' :
-                            html = '<span><i class="fw fw-ok icon-warning"></i> In Progress</span>';
-                            break;
-                        case 'REPEATED' :
-                            html = '<span><i class="fw fw-ok icon-warning"></i> Repeated</span>';
-                            break;
+                { targets: 0, data: "code" },
+                { targets: 1, data: "status", render:
+                    function (status, type, row, meta) {
+                        var html;
+                        switch (status) {
+                            case "COMPLETED" :
+                                html = '<span><i class="fw fw-ok icon-success"></i> Completed</span>';
+                                break;
+                            case "PENDING" :
+                                html = '<span><i class="fw fw-warning icon-warning"></i> Pending</span>';
+                                break;
+                            case "ERROR" :
+                                html = '<span><i class="fw fw-error icon-danger"></i> Error</span>';
+                                break;
+                            case "IN_PROGRESS" :
+                                html = '<span><i class="fw fw-ok icon-warning"></i> In Progress</span>';
+                                break;
+                            case "REPEATED" :
+                                html = '<span><i class="fw fw-ok icon-warning"></i> Repeated</span>';
+                                break;
+                        }
+                        return html;
                     }
-                    return html;
-                }},
-                { targets: 2, data: 'createdTimeStamp', render: function (date, type, row, meta) {;
-                    var value = String(date);
-                    return value.slice(0,16);
+                },
+                { targets: 2, data: "createdTimeStamp", render:
+                    function (date, type, row, meta) {
+                        var value = String(date);
+                        return value.slice(0,16);
                     }
                 }
             ],
@@ -195,7 +198,7 @@ var InitiateViewOption = null;
 
         $.template("application-list", deviceListingSrc, function (template) {
             //var serviceURL = "/mdm-admin/operations/"+deviceType+"/"+deviceId+"/apps";
-            var serviceURL = "/api/device-mgt/v1.0/devices/"+deviceType+"/"+deviceId+"/applications";
+            var serviceURL = "/api/device-mgt/v1.0/devices/" + deviceType + "/" + deviceId + "/applications";
 
             var successCallback = function (data) {
                 data = JSON.parse(data);
@@ -215,10 +218,13 @@ var InitiateViewOption = null;
                 }
 
             };
-            invokerUtil.get(serviceURL,
-                successCallback, function(message){
-                    $("#applications-list-container").append("<br><p class='fw-warning'>Loading application was not" +
-                                                             " successful please try again in a while<p>");
+            invokerUtil.get(
+                serviceURL,
+                successCallback,
+                function(message) {
+                    $("#applications-list-container").
+                        append("<br><p class='fw-warning'>Loading application was not" +
+                            " successful please try again in a while<p>");
             });
         });
     }
@@ -233,16 +239,16 @@ var InitiateViewOption = null;
         $.template("policy-view", policySrc, function (template) {
             //var serviceURLPolicy ="/mdm-admin/policies/"+deviceType+"/"+deviceId+"/active-policy"
             //var serviceURLCompliance = "/mdm-admin/policies/"+deviceType+"/"+deviceId;
-            var serviceURLPolicy="/api/device-mgt/v1.0/devices/"+deviceType+"/"+deviceId+"/effective-policy";
-            var serviceURLCompliance="/api/device-mgt/v1.0/devices/"+deviceType+"/"+deviceId;
+            var serviceURLPolicy = "/api/device-mgt/v1.0/devices/" + deviceType + "/" + deviceId + "/effective-policy";
+            var serviceURLCompliance = "/api/device-mgt/v1.0/devices/" + deviceType + "/" + deviceId;
 
             var successCallbackCompliance = function (data) {
                 var viewModel = {};
                 viewModel.policy = activePolicy;
                 viewModel.deviceType = deviceType;
                 data = JSON.parse(data);
-                if (data != null && data.complianceFeatures!= null && data.complianceFeatures != undefined &&
-                   data.complianceFeatures.length > 0) {
+                if (data != null && data.complianceFeatures!= null &&
+                    data.complianceFeatures != undefined && data.complianceFeatures.length > 0) {
                     viewModel.compliance = "NON-COMPLIANT";
                     viewModel.complianceFeatures = data.complianceFeatures;
                     var content = template(viewModel);
@@ -253,7 +259,6 @@ var InitiateViewOption = null;
                     $("#policy-list-container").html(content);
                     $("#policy-compliance-table").addClass("hidden");
                 }
-
             };
 
             var successCallbackPolicy = function (data) {
@@ -261,20 +266,25 @@ var InitiateViewOption = null;
                 $('#policy-spinner').addClass('hidden');
                 if(data != null && data.active == true){
                     activePolicy = data;
-                    invokerUtil.get(serviceURLCompliance,
-                        successCallbackCompliance, function(message){
-                            $("#policy-list-container").append("<br><p class='fw-warning'>Loading policy related data" +
-                                                               " was not successful please try again in a while<p>");
+                    invokerUtil.get(
+                        serviceURLCompliance,
+                        successCallbackCompliance,
+                        function(message) {
+                            $("#policy-list-container").
+                                append("<br><p class='fw-warning'>Loading policy related data" +
+                                    " was not successful please try again in a while<p>");
                     });
                 }
             };
 
-            invokerUtil.get(serviceURLPolicy,
-                successCallbackPolicy, function(message){
-                    $("#policy-list-container").append("<br><p class='fw-warning'>Loading policy related was not" +
-                    " successful please try again in a while<p>");
+            invokerUtil.get(
+                serviceURLPolicy,
+                successCallbackPolicy,
+                function(message) {
+                    $("#policy-list-container").
+                        append("<br><p class='fw-warning'>Loading policy related was not" +
+                            " successful please try again in a while<p>");
             });
         });
-
     }
 }());
