@@ -2518,7 +2518,7 @@ $(document).ready(function () {
         androidLink.unbind("click");
         androidLink.attr("data-validate","true");
         androidLink.bind("click",function(){
-            promptErrorPolicyPlatform("You need to configure Android plugging in order to use android related feature.");
+            promptErrorPolicyPlatform("You need to configure Android plugin in order to use android policy wizard.");
         });
 
     }
@@ -2529,7 +2529,7 @@ $(document).ready(function () {
         windowsLink.unbind("click");
         windowsLink.attr("data-validate","true");
         windowsLink.bind("click",function(){
-            promptErrorPolicyPlatform("You need to configure Windows plugging in order to use windows related feature.");
+            promptErrorPolicyPlatform("You need to configure Windows plugin in order to use windows related wizard.");
         });
     }
     var iosLink = $(".ios-platform");

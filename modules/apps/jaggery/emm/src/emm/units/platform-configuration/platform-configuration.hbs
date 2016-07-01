@@ -18,17 +18,20 @@
                             </a>
                             <div id="supportedPlatforms" class="hidden"
                                 {{#each types}}
-                                    {{#equal name "android"}} data-android-id={{id}}
-                                         data-android="true"
+                                    {{#equal name "android"}}
+                                        data-android="true"
+                                        data-android-id={{id}}
                                     {{/equal}}
-                                    {{#equal name "ios"}} data-ios-id={{id}}
-                                         data-ios="true"
+                                    {{#equal name "ios"}}
+                                        data-ios-id={{id}}
+                                        data-ios="true"
                                     {{/equal}}
                                     {{#equal name "windows"}}
-                                 data-windows="true" data-windows-id={{id}}
+                                        data-windows="true"
+                                        data-windows-id={{id}}
                                     {{/equal}}
                                 {{/each}}
-                                    ></div>
+                            ></div>
                                     <a id="androidConfigLink" href="javascript:void(0)" onclick="showAdvanceOperation('android', this)">
                                         <span class="wr-hidden-operations-icon fw-stack">
                                             <i class="fw fw-android fw-stack-2x"></i>
