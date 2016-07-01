@@ -28,7 +28,7 @@ var log = new Log("api/operation-api.jag");
 
 var deviceModule = require("/modules/device.js")["deviceModule"];
 var serviceInvokers = require("/modules/backend-service-invoker.js")["backendServiceInvoker"];
-var mdmProps = require('/config/mdm-props.js').config();
+var mdmProps = require("/config/mdm-props.js").config();
 var result;
 
 if (uriMatcher.match("/{context}/api/operation")) {
@@ -43,29 +43,27 @@ if (uriMatcher.match("/{context}/api/operation")) {
     /*var targetURL = mdmProps.httpsURL + "/mdm-admin/operations/paginate/"+deviceType+"/"+deviceId + "?start=" + index +
                     "&length=" + length + "&search=" +search;*/
     var targetURL = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/devices/" +
-                    deviceType + "/" + deviceId + "/operations?offset=" + index +
-                    "&limit=" + length;
+                    deviceType + "/" + deviceId + "/operations?offset=" + index + "&limit=" + length;
     serviceInvokers.XMLHttp.get(
-            targetURL,
-            function (backendResponse) {
-                if (backendResponse.status == 200 && backendResponse.responseText) {
-                    log.info(backendResponse.responseText);
-                    var paginatedResult = {};
-                    paginatedResult["recordsTotal"] = 16;
-                    paginatedResult["recordsFiltered"] = 16;
-                    paginatedResult["draw"] = parseInt("0");
-                    paginatedResult["data"] = parse(backendResponse.responseText);
-                    response.status = 200;
-                    result = paginatedResult;
+        targetURL,
+        function (backendResponse) {
+            if (backendResponse.status == 200 && backendResponse.responseText) {
+                var responsePayload = parse(backendResponse.responseText);
+                var paginatedResult = {};
+                paginatedResult["recordsTotal"] = responsePayload["count"];
+                paginatedResult["recordsFiltered"] = responsePayload["count"];
+                paginatedResult["draw"] = 0;
+                paginatedResult["data"] = responsePayload["operations"];
 
-                    log.info(stringify(result));
-                } else {
-                    response.status = backendResponse.status;
-                    result =  parse(backendResponse.responseText);
-                }
-            });
-}
-if (result) {
-    print(result);
+                response.status = 200;
+                response.content = paginatedResult;
+
+                log.info(stringify(result));
+            } else {
+                response.status = backendResponse.status;
+                response.content =  parse(backendResponse.responseText);
+            }
+        }
+    );
 }
 %>
