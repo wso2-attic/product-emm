@@ -80,12 +80,13 @@ function toggleEnrollment() {
 var updateNotificationCount = function (data, textStatus, jqXHR) {
     if (jqXHR.status == 200 && data) {
         var responsePayload = JSON.parse(data);
-        var newNotificationsCount = responsePayload.devices.length;
+        var newNotificationsCount = responsePayload.count;
         if (newNotificationsCount > 0) {
             $("#notification-bubble").html(newNotificationsCount);
-        } else {
-            $("#notification-bubble").html("Error");
         }
+//        } else {
+//            $("#notification-bubble").html("Error");
+//        }
     }
 };
 
@@ -122,19 +123,20 @@ function loadNewNotifications() {
                     var viewModel = {};
                     var responsePayload = JSON.parse(data);
 
-                    if (responsePayload.devices && responsePayload.devices.length > 0) {
-                        viewModel.notifications = responsePayload.devices;
-                        $(messageSideBar).html(template(viewModel));
+                    if (responsePayload.notifications) {
+                        viewModel.notifications = responsePayload.notifications;
+                        if (responsePayload.count > 0) {
+                            $(messageSideBar).html(template(viewModel));
+                        } else {
+                            $(messageSideBar).html("<h4 class='text-center'>No new notifications found...</h4>");
+                        }
                     } else {
-                        $(messageSideBar).html("<h4 class='text-center'>Error in getting new notifications.</h4>");
+                        $(messageSideBar).html("<h4 class ='message-danger'>Unexpected error occurred while loading new notifications.</h4>");
                     }
                 }
             };
-
             var errorCallback = function (jqXHR) {
-                if (jqXHR.status = 404) {
-                    $(messageSideBar).html("<h4 class='text-center'>No new notifications found...</h4>");
-                } else {
+                if (jqXHR.status = 500) {
                     $(messageSideBar).html("<h4 class ='message-danger'>Unexpected error occurred while trying " +
                         "to retrieve any new notifications.</h4>");
                 }
