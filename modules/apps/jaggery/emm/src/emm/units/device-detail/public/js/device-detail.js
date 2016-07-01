@@ -86,7 +86,7 @@ var InitiateViewOption = null;
         $(arrow).css("top",arrowPosition - 10);
     }
 
-    $(document).ready(function(){
+    $(document).ready(function() {
         $(".device-detail-body").removeClass("hidden");
         $("#loading-content").remove();
         loadOperationBar(deviceType);
@@ -95,20 +95,19 @@ var InitiateViewOption = null;
         loadPolicyCompliance();
 
         $("#refresh-policy").click(function () {
-            $('#policy-spinner').removeClass('hidden');
+            $("#policy-spinner").removeClass("hidden");
             loadPolicyCompliance();
         });
 
         $("#refresh-apps").click(function () {
-            $('#apps-spinner').removeClass('hidden');
+            $("#apps-spinner").removeClass("hidden");
             loadApplicationsList();
         });
 
         $("#refresh-operations").click(function () {
-            $('#operations-spinner').removeClass('hidden');
+            $("#operations-spinner").removeClass("hidden");
             loadOperationsLog(true);
         });
-
     });
 
     function loadOperationsLog(update) {
