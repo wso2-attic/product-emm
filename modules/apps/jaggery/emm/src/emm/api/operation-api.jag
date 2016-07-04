@@ -17,51 +17,42 @@
  * under the License.
  */
 
-/*
- @Deprecated
- */
-
 var uri = request.getRequestURI();
 var uriMatcher = new URIMatcher(String(uri));
 
 var log = new Log("api/operation-api.jag");
 
-var deviceModule = require("/modules/device.js")["deviceModule"];
 var serviceInvokers = require("/modules/backend-service-invoker.js")["backendServiceInvoker"];
 var mdmProps = require("/config/mdm-props.js").config();
-var result;
 
-if (uriMatcher.match("/{context}/api/operation")) {
-    payload = request.getContent();
-    result = deviceModule.performOperation(payload.devices, payload.operation);
-} else if (uriMatcher.match("/{context}/api/operation/paginate")) {
+if (uriMatcher.match("/{context}/api/operation/paginate")) {
     var deviceType = request.getParameter("deviceType");
     var deviceId = request.getParameter("deviceId");
     var index = request.getParameter("start");
     var length = request.getParameter("length");
     var search = request.getParameter("search[value]");
-    /*var targetURL = mdmProps.httpsURL + "/mdm-admin/operations/paginate/"+deviceType+"/"+deviceId + "?start=" + index +
-                    "&length=" + length + "&search=" +search;*/
-    var targetURL = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/devices/" +
-                    deviceType + "/" + deviceId + "/operations?offset=" + index + "&limit=" + length;
+
+    var restAPIEndpoint = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/devices/" +
+        deviceType + "/" + deviceId + "/operations?offset=" + index + "&limit=" + length;
+
     serviceInvokers.XMLHttp.get(
-        targetURL,
-        function (backendResponse) {
-            if (backendResponse.status == 200 && backendResponse.responseText) {
-                var responsePayload = parse(backendResponse.responseText);
+        restAPIEndpoint,
+        function (restAPIResponse) {
+            if (restAPIResponse["status"] == 200 && restAPIResponse["responseText"]) {
+                var responsePayload = parse(restAPIResponse["responseText"]);
+
                 var paginatedResult = {};
                 paginatedResult["recordsTotal"] = responsePayload["count"];
                 paginatedResult["recordsFiltered"] = responsePayload["count"];
-                paginatedResult["draw"] = 0;
                 paginatedResult["data"] = responsePayload["operations"];
 
-                response.status = 200;
-                response.content = paginatedResult;
-
-                log.info(stringify(result));
+                response["status"] = 200;
+                response["content"] = paginatedResult;
             } else {
-                response.status = backendResponse.status;
-                response.content =  parse(backendResponse.responseText);
+                response["status"] = restAPIResponse["status"];
+                if (restAPIResponse["responseText"]) {
+                    response["content"] =  parse(restAPIResponse["responseText"]);
+                }
             }
         }
     );

@@ -21,21 +21,21 @@ var invokerUtil = function () {
     var publicMethods = {};
     var privateMethods = {};
 
-    privateMethods.execute = function (method, url, payload, successCallback, errorCallback) {
-        var requestPayload = {};
-        requestPayload.actionMethod = method;
-        requestPayload.actionUrl = url;
-        requestPayload.actionPayload = JSON.stringify(payload);
+    privateMethods.execute = function (requestMethod, requestURL, requestPayload, successCallback, errorCallback) {
+        var restAPIRequestDetails = {};
+        restAPIRequestDetails["requestMethod"] = requestMethod;
+        restAPIRequestDetails["requestURL"] = requestURL;
+        restAPIRequestDetails["requestPayload"] = JSON.stringify(requestPayload);
 
         var request = {
             url: "/emm/api/invoker/execute/",
             type: "POST",
             contentType: "application/json",
-            data: JSON.stringify(requestPayload),
+            data: JSON.stringify(restAPIRequestDetails),
             accept: "application/json",
             success: successCallback,
             error: function (jqXHR) {
-                if (jqXHR.status == "401") {
+                if (jqXHR.status == 401) {
                     console.log("Unauthorized access attempt!");
                     $(modalPopupContent).html($("#error-msg").html());
                     showPopup();
@@ -48,22 +48,22 @@ var invokerUtil = function () {
         $.ajax(request);
     };
 
-    publicMethods.get = function (url, successCallback, errorCallback) {
-        var payload = null;
-        privateMethods.execute("GET", url, payload, successCallback, errorCallback);
+    publicMethods.get = function (requestURL, successCallback, errorCallback) {
+        var requestPayload = null;
+        privateMethods.execute("GET", requestURL, requestPayload, successCallback, errorCallback);
     };
 
-    publicMethods.post = function (url, payload, successCallback, errorCallback) {
-        privateMethods.execute("POST", url, payload, successCallback, errorCallback);
+    publicMethods.post = function (requestURL, requestPayload, successCallback, errorCallback) {
+        privateMethods.execute("POST", requestURL, requestPayload, successCallback, errorCallback);
     };
 
-    publicMethods.put = function (url, payload, successCallback, errorCallback) {
-        privateMethods.execute("PUT", url, payload, successCallback, errorCallback);
+    publicMethods.put = function (requestURL, requestPayload, successCallback, errorCallback) {
+        privateMethods.execute("PUT", requestURL, requestPayload, successCallback, errorCallback);
     };
 
-    publicMethods.delete = function (url, successCallback, errorCallback) {
-        var payload = null;
-        privateMethods.execute("DELETE", url, payload, successCallback, errorCallback);
+    publicMethods.delete = function (requestURL, successCallback, errorCallback) {
+        var requestPayload = null;
+        privateMethods.execute("DELETE", requestURL, requestPayload, successCallback, errorCallback);
     };
 
     return publicMethods;
