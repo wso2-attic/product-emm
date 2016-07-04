@@ -21,6 +21,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ApplicationInfo;
@@ -58,6 +59,8 @@ import org.wso2.emm.agent.services.DynamicClientManager;
 import org.wso2.emm.agent.services.PolicyOperationsMapper;
 import org.wso2.emm.agent.services.PolicyRevokeHandler;
 import org.wso2.emm.agent.services.ResultPayload;
+import org.wso2.emm.agent.services.SystemServiceResponseReceiver;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -428,6 +431,13 @@ public class CommonUtils {
 		explicitIntent.setComponent(component);
 
 		return explicitIntent;
+	}
+
+	public static void registerSystemAppReceiver(Context context) {
+		IntentFilter filter = new IntentFilter(Constants.SYSTEM_APP_BROADCAST_ACTION);
+		filter.addCategory(Intent.CATEGORY_DEFAULT);
+		SystemServiceResponseReceiver receiver = new SystemServiceResponseReceiver();
+		context.registerReceiver(receiver, filter);
 	}
 
 	/**

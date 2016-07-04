@@ -27,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
@@ -150,8 +151,8 @@ public class MessageProcessor implements APIResultCallBack {
 		Log.i(TAG, "Get pending operations from: " + url);
 
 		String requestParams;
+		ObjectMapper mapper = new ObjectMapper();
 		try {
-			ObjectMapper mapper = new ObjectMapper();
 			requestParams =  mapper.writeValueAsString(replyPayload);
 			if (replyPayload != null) {
 				for (org.wso2.emm.agent.beans.Operation operation : replyPayload) {
@@ -193,7 +194,33 @@ public class MessageProcessor implements APIResultCallBack {
 					replyPayload = new ArrayList<>();
 					replyPayload.add(firmwareOperation);
 				}
+				Preference.putString(context, context.getResources().getString(
+						R.string.firmware_upgrade_failed_message), null);
 			}
+
+			int applicationOperationId = Preference.getInt(context, context.getResources().getString(
+					R.string.app_install_id));
+			String applicationOperationCode = Preference.getString(context, context.getResources().getString(
+					R.string.app_install_code));
+			String applicationOperationStatus = Preference.getString(context, context.getResources().getString(
+					R.string.app_install_status));
+			String applicationOperationMessage = Preference.getString(context, context.getResources().getString(
+					R.string.app_install_failed_message));
+			if (applicationOperationStatus != null && applicationOperationId != 0 && applicationOperationCode != null) {
+				org.wso2.emm.agent.beans.Operation applicationOperation = new org.wso2.emm.agent.beans.Operation();
+				ApplicationManager appMgt = new ApplicationManager(context);
+				applicationOperation.setId(applicationOperationId);
+				applicationOperation.setCode(applicationOperationCode);
+				applicationOperation = appMgt.getApplicationInstallationStatus(
+						applicationOperation, applicationOperationStatus, applicationOperationMessage);
+				if (replyPayload != null) {
+					replyPayload.add(applicationOperation);
+				} else {
+					replyPayload = new ArrayList<>();
+					replyPayload.add(applicationOperation);
+				}
+			}
+			requestParams =  mapper.writeValueAsString(replyPayload);
 		} catch (JsonMappingException e) {
 			throw new AndroidAgentException("Issue in json mapping", e);
 		} catch (JsonGenerationException e) {
