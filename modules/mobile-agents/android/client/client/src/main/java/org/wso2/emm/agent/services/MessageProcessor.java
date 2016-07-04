@@ -196,8 +196,6 @@ public class MessageProcessor implements APIResultCallBack {
 				}
 				Preference.putString(context, context.getResources().getString(
 						R.string.firmware_upgrade_failed_message), null);
-				Preference.putInt(context, context.getResources().getString(
-						R.string.firmware_upgrade_failed_id), 0);
 			}
 
 			int applicationOperationId = Preference.getInt(context, context.getResources().getString(
@@ -222,13 +220,9 @@ public class MessageProcessor implements APIResultCallBack {
 					replyPayload.add(applicationOperation);
 				}
 				Preference.putString(context, context.getResources().getString(
-						R.string.app_install_code), null);
-				Preference.putString(context, context.getResources().getString(
 						R.string.app_install_status), null);
 				Preference.putString(context, context.getResources().getString(
 						R.string.app_install_failed_message), null);
-				Preference.putInt(context, context.getResources().getString(
-						R.string.app_install_id), 0);
 			}
 			requestParams =  mapper.writeValueAsString(replyPayload);
 		} catch (JsonMappingException e) {
