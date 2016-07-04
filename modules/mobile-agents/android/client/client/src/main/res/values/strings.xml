@@ -218,6 +218,7 @@
     <string name="shared_pref_default_string"></string>
     <string name="shared_pref_default_status">true</string>
     <string name="shared_pref_false_status">false</string>
+    <string name="shared_pref_os_build_date">firmwareBuildDate</string>
 
     <!-- ERROR MESSAGES -->
     <string name="error_connect_to_server">Could not connect to server please check your internet connection and try again</string>
@@ -364,6 +365,10 @@
     <string name="firmware_upgrade_failed">firmwareUpgradeFailed</string>
     <string name="firmware_upgrade_failed_message">firmwareUpgradeFailedMessage</string>
     <string name="firmware_upgrade_failed_id">firmwareUpgradeFailedId</string>
+    <string name="app_install_failed_message">appInstallFailedMessage</string>
+    <string name="app_install_id">appInstallOperationId</string>
+    <string name="app_install_code">appInstallOperationCode</string>
+    <string name="app_install_status">appInstallStatus</string>
     <string name="operation_receivedTimeStamp">receivedTimeStamp</string>
     <string name="operation_createdTimeStamp">createdTimeStamp</string>
     <string name="operation_payLoad">payLoad</string>
@@ -373,6 +378,11 @@
     <string name="operation_value_completed">COMPLETED</string>
     <string name="operation_value_error">ERROR</string>
     <string name="operation_value_progress">IN_PROGRESS</string>
+    <string name="app_status_value_download_started">DOWNLOAD_STARTED</string>
+    <string name="app_status_value_download_completed">DOWNLOAD_COMPLETED</string>
+    <string name="app_status_value_download_failed">DOWNLOAD_FAILED</string>
+    <string name="app_status_value_install_failed">INSTALL_FAILED</string>
+    <string name="app_status_value_installed">INSTALLED</string>
     <string name="operation_install">install</string>
     <string name="operation_uninstall">uninstall</string>
 

@@ -28,6 +28,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.SystemProperties;
 import android.os.UserManager;
 import android.util.Log;
 import android.webkit.URLUtil;
@@ -84,6 +85,7 @@ public class EMMSystemService extends IntentService {
 
     private static final String TAG = "EMMSystemService";
     private static final int ACTIVATION_REQUEST = 0x00000002;
+    private static final String BUILD_DATE_UTC_PROPERTY = "ro.build.date.utc";
     private static final int DEFAULT_STATE_INFO_CODE = 0;
     public static ComponentName cdmDeviceAdmin;
     public static DevicePolicyManager devicePolicyManager;
@@ -326,6 +328,9 @@ public class EMMSystemService extends IntentService {
             case Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS:
                 publishFirmwareDownloadProgress();
                 break;
+            case Constants.Operation.GET_FIRMWARE_BUILD_DATE:
+                publishFirmwareBuildDate();
+                break;
             default:
                 Log.e(TAG, "Invalid operation code received");
                 break;
@@ -505,6 +510,22 @@ public class EMMSystemService extends IntentService {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
                         Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    private void publishFirmwareBuildDate() {
+        String buildDate;
+        JSONObject result = new JSONObject();
+
+        buildDate = SystemProperties.get(BUILD_DATE_UTC_PROPERTY);
+        try {
+            result.put("buildDate", buildDate);
+            sendBroadcast(Constants.Operation.GET_FIRMWARE_BUILD_DATE, Constants.Status.SUCCESSFUL,
+                          result.toString());
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to create JSON object when publishing OTA progress.");
+            sendBroadcast(Constants.Operation.GET_FIRMWARE_BUILD_DATE, Constants.Status.SUCCESSFUL,
+                          String.valueOf(DEFAULT_STATE_INFO_CODE));
+        }
     }
 
 }

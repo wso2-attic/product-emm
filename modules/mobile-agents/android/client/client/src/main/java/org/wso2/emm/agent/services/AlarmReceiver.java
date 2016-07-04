@@ -56,14 +56,23 @@ public class AlarmReceiver extends BroadcastReceiver {
 				//Prepare for install
 				String packageUri;
 				if (intent.hasExtra(context.getResources().getString(R.string.app_uri))) {
+					Preference.putString(context, context.getResources().getString(
+							R.string.app_install_status), context.getResources().getString(
+							R.string.app_status_value_installed));
 					packageUri = intent.getStringExtra(context.getResources().getString(R.string.app_uri));
 					Intent installIntent = new Intent(Intent.ACTION_VIEW);
 					installIntent.setDataAndType(Uri.parse(packageUri), context.getResources().getString(R.string.application_mgr_mime));
 					installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(installIntent);
 				} else {
-					Toast.makeText(context, "App installation failed.",
-							Toast.LENGTH_SHORT).show();
+					String error = "Scheduled install failed due to incorrect package URI";
+					Preference.putString(context, context.getResources().getString(
+							R.string.app_install_status), context.getResources().getString(
+							R.string.app_status_value_install_failed));
+					Preference.putString(context, context.getResources().getString(
+							R.string.app_install_failed_message), error);
+					Log.e(TAG, error);
+
 				}
 			} else if(operation != null && operation.trim().equals(Constants.Operation.UNINSTALL_APPLICATION)) {
 				Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), null);

@@ -30,6 +30,7 @@ public class Constants {
 	public static final boolean AUTO_ENROLLMENT_BACKGROUND_SERVICE_ENABLED = false;
 	public static final boolean ALLOW_SYSTEM_APPS_IN_APPS_LIST_RESPONSE = false;
 	public static final String SYSTEM_APP_SERVICE_START_ACTION = "org.wso2.emm.system.service.START_SERVICE";
+	public static final String SYSTEM_APP_BROADCAST_ACTION = "org.wso2.emm.system.service.MESSAGE_PROCESSED";
 	public static final String GCM_PROJECT_NUMBER = "GOOGLE-API-PROJECT-NUMBER";
 	public static final String GCM_REG_ID = "gcm_reg_id";
 	public static final String REG_ID = "regId";
@@ -289,6 +290,7 @@ public class Constants {
 		public static final String UNINSTALL_WEBCLIP = "UNINSTALL_WEBCLIP";
 		public static final String GET_APP_DOWNLOAD_PROGRESS = "APP_DOWNLOAD_PROGRESS";
 		public static final String FAILED_FIRMWARE_UPGRADE_NOTIFICATION = "FAILED_FIRMWARE_UPGRADE_NOTIFICATION";
+		public static final String GET_FIRMWARE_BUILD_DATE = "FIRMWARE_BUILD_DATE";
 	}
 
 	/**

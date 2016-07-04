@@ -21,9 +21,10 @@ import java.util.List;
 
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
-import android.os.SystemProperties;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.utils.CommonUtils;
+import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import android.content.Context;
 import android.content.res.Resources;
@@ -84,7 +85,19 @@ public class DeviceInfo {
 	 * @return - OS build date.
 	 */
 	public String getOSBuildDate() {
-		return SystemProperties.get(BUILD_DATE_UTC_PROPERTY);
+		if (Constants.SYSTEM_APP_ENABLED) {
+			CommonUtils.registerSystemAppReceiver(context);
+			CommonUtils.callSystemApp(context, Constants.Operation.GET_FIRMWARE_BUILD_DATE, null, null);
+			String buildDate = Preference.getString(context, context.getResources().getString(
+					R.string.shared_pref_os_build_date));
+			if (buildDate != null) {
+				return buildDate;
+			} else {
+				return String.valueOf(Build.TIME);
+			}
+		} else {
+			return String.valueOf(Build.TIME);
+		}
 	}
 
 	/**
