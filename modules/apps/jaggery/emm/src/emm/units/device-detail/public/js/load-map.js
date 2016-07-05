@@ -16,40 +16,39 @@
  * under the License.
  */
 
+var map;
 
-$('a[data-toggle="tab"]').on("shown.bs.tab", function() {
-    var url = $(this).prop('href');
-    var hash = url.substring(url.indexOf("#")+1);
+function loadLeafletMap() {
+    var deviceLocationID = "#device-location",
+        lat = $(deviceLocationID).data("lat"),
+        long = $(deviceLocationID).data("long"),
+        container = "device-location",
+        zoomLevel = 13,
+        tileSet = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        attribution = "&copy; <a href='https://openstreetmap.org/copyright'>OpenStreetMap</a> contributors";
 
-    if(hash == 'device_location'){
-        if(typeof map == "undefined")  {
-            loadLeafletMap();
-        }
-    }else{
+    if (lat && long) {
+        map = L.map(container).setView([lat, long], zoomLevel);
+        L.tileLayer(tileSet, {attribution: attribution}).addTo(map);
+        L.marker([lat, long]).addTo(map).bindPopup("Device is here...").openPopup();
 
+        $("#map-error").hide();
+        $("#device-location").show();
+    } else {
+        $("#device-location").hide();
+        $("#map-error").show();
     }
-});
-
-function loadLeafletMap(){
-
-    var lat     = $("#device-location").data("lat"),
-        long    = $("#device-location").data("long"),
-        container = 'device-location',
-        zoomLevel = 5,
-        tileSet = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        attrib =  '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-
-        if(lat != null && lat != undefined && lat != "" && long != null && long != undefined && long != "") {
-            $("#map-error").hide();
-            $("#device-location").show();
-        }else{
-            $("#device-location").hide();
-            $("#map-error").show();
-        }
-
-    var map = L.map(container).setView([lat,long], zoomLevel);
-
-
-    L.tileLayer(tileSet, { attribution: attrib}).addTo(map);
-    L.marker([lat,long]).addTo(map).bindPopup('Your device is here..').openPopup();
 }
+
+$(document).ready(function () {
+    $("a[data-toggle='tab']").on("shown.bs.tab", function() {
+        var url = $(this).prop("href");
+        var hash = url.substring(url.indexOf("#") + 1);
+
+        if (hash == "device_location") {
+            if (!map) {
+                loadLeafletMap();
+            }
+        }
+    });
+});
