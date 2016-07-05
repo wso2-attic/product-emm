@@ -22,6 +22,9 @@ var responseCodes = {
     "INTERNAL_SERVER_ERROR": "Internal Server Error"
 };
 
+var base_url = "/api/device-mgt/v1.0";
+var base_url_notification_api = base_url + "/notifications";
+
 /**
  * Following function would execute
  * when a user clicks on the list item
@@ -46,11 +49,11 @@ $(document).ready(function () {
     $("#ast-container").on("click", ".new-notification", function(e){
         var notificationId = $(this).data("id");
         var redirectUrl = $(this).data("url");
-        var getNotificationsAPI = "/mdm-admin/notifications/"+notificationId+"/CHECKED";
+        var query = base_url_notification_api + "/" + notificationId + "/mark-checked";
         var errorMsgWrapper = "#error-msg";
         var errorMsg = "#error-msg span";
         invokerUtil.put(
-            getNotificationsAPI,
+            query,
             null,
             function (data) {
                 data = JSON.parse(data);
@@ -87,7 +90,6 @@ function loadNotifications(){
     var deviceListingSrc = deviceListing.attr("src");
     var currentUser = deviceListing.data("currentUser");
     $.template("notification-listing", deviceListingSrc, function (template) {
-        var serviceURL = "/mdm-admin/notifications";
         var successCallback = function (data) {
             var viewModel = {};
             data = JSON.parse(data);
@@ -100,7 +102,7 @@ function loadNotifications(){
             }
 
         };
-        invokerUtil.get(serviceURL,
+        invokerUtil.get(base_url_notification_api,
             successCallback, function(message){
                 console.log(message.content);
         });
