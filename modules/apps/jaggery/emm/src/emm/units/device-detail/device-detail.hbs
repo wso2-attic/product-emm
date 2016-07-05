@@ -7,7 +7,7 @@
                     Device {{device.name}}
                     {{#if device.viewModel.model}}
                         <span class="lbl-device">
-                        ( {{device.viewModel.vendor}} {{device.viewModel.model}})
+                        ( {{device.viewModel.vendor}} {{device.viewModel.model}} )
                     </span>
                     {{/if}}
                 </label>
@@ -53,8 +53,7 @@
                         <tr role="row" class="even">
                             <td class="sorting_1" style="padding:10px 15px;">Status</td>
                             <td style="padding:10px 15px;">
-                                {{#equal device.status "ACTIVE"}}<span><i
-                                        class="fw fw-ok icon-success"></i> Active</span>{{/equal}}
+                                {{#equal device.status "ACTIVE"}}<span><i class="fw fw-ok icon-success"></i> Active</span>{{/equal}}
                                 {{#equal device.status "INACTIVE"}}<span><i class="fw fw-warning icon-warning"></i> Inactive</span>{{/equal}}
                                 {{#equal device.status "BLOCKED"}}<span><i class="fw fw-remove icon-danger"></i> Blocked</span>{{/equal}}
                                 {{#equal device.status "REMOVED"}}<span><i class="fw fw-delete icon-danger"></i> Removed</span>{{/equal}}
@@ -83,9 +82,11 @@
                             </a>
                         </li>
                         <li class="list-group-item">
-                            <a href="#device_location" role="tab" data-toggle="tab" data-lat="{{device.viewModel.location.latitude}}"
-                               data-long="{{device.viewModel.location.longitude}}" aria-controls="device_location">
-                                <i class="icon fw fw-map-location"></i> Device Location
+                            <a href="#device_location" role="tab" data-toggle="tab"
+                               data-lat="{{device.viewModel.location.latitude}}"
+                               data-long="{{device.viewModel.location.longitude}}"
+                               aria-controls="device_location">
+                               <i class="icon fw fw-map-location"></i> Device Location
                             </a>
                         </li>
                         <li class="list-group-item">
@@ -138,7 +139,9 @@
                                                             <div class="tile-name">BATTERY</div>
                                                             <div>
                                                                 <div class="tile-icon"><i class="fw fw-battery"></i></div>
-                                                                <div class="tile-stats">{{device.viewModel.BatteryLevel}}%</div>
+                                                                <div class="tile-stats">
+                                                                    {{device.viewModel.BatteryLevel}} %
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -151,9 +154,12 @@
                                                             <div class="tile-name">STORAGE</div>
                                                             <div>
                                                                 <div class="tile-icon"><i class="fw fw-hdd"></i></div>
-                                                                <div class="tile-stats">{{device.viewModel.DeviceCapacityPercentage}}
-                                                                    %<span class="tile-stats-free">{{device.viewModel.AvailableDeviceCapacity}}
-                                                                        GB Free</span></div>
+                                                                <div class="tile-stats">
+                                                                    {{device.viewModel.DeviceCapacityPercentage}} %
+                                                                    <span class="tile-stats-free">
+                                                                        {{device.viewModel.AvailableDeviceCapacity}} GB Free
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -166,9 +172,12 @@
                                                             <div class="tile-name">LOCAL STORAGE</div>
                                                             <div>
                                                                 <div class="tile-icon"><i class="fw fw-hdd"></i></div>
-                                                                <div class="tile-stats">{{device.viewModel.internal_memory.DeviceCapacityPercentage}}
-                                                                    %<span class="tile-stats-free">{{device.viewModel.internal_memory.FreeCapacity}}
-                                                                        GB Free</span></div>
+                                                                <div class="tile-stats">
+                                                                    {{device.viewModel.internal_memory.DeviceCapacityPercentage}} %
+                                                                    <span class="tile-stats-free">
+                                                                        {{device.viewModel.internal_memory.FreeCapacity}} GB Free
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -181,9 +190,12 @@
                                                             <div class="tile-name">EXTERNAL STORAGE</div>
                                                             <div>
                                                                 <div class="tile-icon"><i class="fw fw-usb-drive"></i></div>
-                                                                <div class="tile-stats">{{device.viewModel.external_memory.DeviceCapacityPercentage}}
-                                                                    %<span class="tile-stats-free">{{device.viewModel.external_memory.FreeCapacity}}
-                                                                        GB Free</span></div>
+                                                                <div class="tile-stats">
+                                                                    {{device.viewModel.external_memory.DeviceCapacityPercentage}} %
+                                                                    <span class="tile-stats-free">
+                                                                        {{device.viewModel.external_memory.FreeCapacity}} GB Free
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -202,24 +214,28 @@
                                         <i class="caret-updown fw fw-sort-down"></i>
                                     </h4>
                                 </div>
-                                <div class="panel-heading display-none-xs"> Policy Compliance</div>
-                                <div id="policy-spinner" class="wr-advance-operations-init hidden">
-                                    <br><br>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fw fw-settings fw-spin fw-2x"></i>
-                                    &nbsp;&nbsp;&nbsp;
-                                    Loading Policy Compliance . . .
-                                    <br>
-                                    <br>
-                                </div>
-                                <div class="panel-body collapse display-block-sm display-block-md display-block-lg"
-                                     id="tabContent2">
+                                <div class="panel-heading display-none-xs">
+                                    Policy Compliance
+                                    &nbsp;&nbsp;
                                     <span>
                                         <a href="#" id="refresh-policy">
                                             <i class="fw fw-refresh"></i>
                                         </a>
                                     </span>
+                                </div>
+                                <div id="policy-spinner" class="wr-advance-operations-init hidden">
+                                    <br><br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <i class="fw fw-settings fw-spin fw-2x"></i>
+                                    &nbsp;&nbsp;&nbsp;
+                                    Loading Policy Compliance . . .
+                                    <br>
+                                    <br>
+                                </div>
+                                <div class="panel-body collapse display-block-sm display-block-md display-block-lg" id="tabContent2">
                                     <div id="policy-list-container">
                                         <div class="panel-body">
-                                            There are no active policies for this device.
+                                            There is no active policy for this device.
                                         </div>
                                         <br class="c-both"/>
                                     </div>
@@ -228,19 +244,21 @@
                             <div class="panel panel-default tab-pane fade fade-in-xs visible-block"
                                  id="device_location">
                                 <div class="panel-heading dropdown visible-xs collapsed" role="tab" id="tab3"
-                                     data-toggle="collapse" data-target="#tabContent3" aria-expanded="false"
-                                     data-parent="#tabs">
+                                    data-toggle="collapse" data-target="#tabContent3" aria-expanded="false"
+                                    data-parent="#tabs">
                                     <h4 class="panel-title">
                                         <i class="fw fw-text fw-2x"></i>
-                                        Device Location
+                                            Device Location
                                         <i class="caret-updown fw fw-sort-down"></i>
                                     </h4>
                                 </div>
                                 <div class="panel-heading display-none-xs">Device Location</div>
                                 <div class="panel-body collapse display-block-sm display-block-md display-block-lg"
-                                     id="tabContent3">
-                                    <div id="device-location" data-lat="{{device.viewModel.location.latitude}}"
-                                         data-long="{{device.viewModel.location.longitude}}" class="panel-body">
+                                    id="tabContent3">
+                                    <div id="device-location"
+                                         data-lat="{{device.viewModel.location.latitude}}"
+                                         data-long="{{device.viewModel.location.longitude}}"
+                                         class="panel-body">
                                     </div>
                                     <div id="map-error" class="panel-body" style="margin: auto;">
                                         Device location cannot be retrieved.
@@ -258,7 +276,9 @@
                                         Installed Applications
                                         <i class="caret-updown fw fw-sort-down"></i></h4>
                                 </div>
-                                <div class="panel-heading display-none-xs">Installed Applications
+                                <div class="panel-heading display-none-xs">
+                                    Installed Applications
+                                    &nbsp;&nbsp;
                                     <span>
                                         <a href="#" id="refresh-apps">
                                             <i class="fw fw-refresh"></i>
@@ -289,17 +309,21 @@
                                      data-parent="#tabs">
                                     <h4 class="panel-title">
                                         <i class="fw fw-text fw-2x"></i>
-                                        Operations Logs
+                                            Operations Logs
                                         <i class="caret-updown fw fw-sort-down"></i>
                                     </h4>
                                 </div>
-                                <div class="panel-heading display-none-xs">Operations Logs
+                                <div class="panel-heading display-none-xs">
+                                    Operations Logs
+                                    &nbsp;&nbsp;
+                                    <span>
+                                        <a href="#" id="refresh-operations">
+                                            <i class="fw fw-refresh"></i>
+                                        </a>
+                                    </span>
                                 </div>
                                 <div class="panel-body collapse display-block-sm display-block-md display-block-lg"
-                                     id="tabContent5">
-                                    <span><a href="#" id="refresh-operations">
-                                        <i class="fw fw-refresh"></i></a> Refresh Operations Log
-                                    </span>
+                                    id="tabContent5">
                                     <div id="operations-spinner" class="wr-advance-operations-init hidden">
                                         <br><br>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fw fw-settings fw-spin fw-2x"></i>&nbsp;&nbsp;&nbsp;
                                         Loading Operations Log . . .
@@ -307,7 +331,7 @@
                                     </div>
                                     <div id="operations-log-container">
                                         <div class="panel-body">
-                                            There are no operations, performed on this device.
+                                            There are no operations, performed yet on this device.
                                         </div>
                                         <br class="c-both"/>
                                     </div>
