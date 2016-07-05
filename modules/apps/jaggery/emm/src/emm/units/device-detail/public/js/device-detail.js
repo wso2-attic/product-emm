@@ -207,35 +207,37 @@ var InitiateViewOption = null;
         var deviceType = applicationsList.data("device-type");
 
         $.template("application-list", applicationListingTemplate, function (template) {
-            //var serviceURL = "/mdm-admin/operations/"+deviceType+"/"+deviceId+"/apps";
             var serviceURL = "/api/device-mgt/v1.0/devices/" + deviceType + "/" + deviceId + "/applications";
-
-            var successCallback = function (data) {
-                data = JSON.parse(data);
-                $("#apps-spinner").addClass("hidden");
-                var viewModel = {};
-                if(data != null && data.length > 0) {
-                    for (var i = 0; i < data.length; i++) {
-                        data[i].name = decodeURIComponent(data[i].name);
-                        data[i].platform = deviceType;
-                    }
-                }
-                viewModel.applications = data;
-                viewModel.deviceType = deviceType;
-                if (data.length > 0){
-                    var content = template(viewModel);
-                    $("#applications-list-container").html(content);
-                }
-
-            };
-
             invokerUtil.get(
                 serviceURL,
-                successCallback,
-                function (message) {
+                // success-callback
+                function (data, textStatus, jqXHR) {
+                    if (jqXHR.status == 200 && data) {
+                        data = JSON.parse(data);
+                        $("#apps-spinner").addClass("hidden");
+                        if (data.length > 0) {
+                            for (var i = 0; i < data.length; i++) {
+                                data[i]["name"] = decodeURIComponent(data[i]["name"]);
+                                data[i]["platform"] = deviceType;
+                            }
+
+                            var viewModel = {};
+                            viewModel["applications"] = data;
+                            viewModel["deviceType"] = deviceType;
+                            var content = template(viewModel);
+                            $("#applications-list-container").html(content);
+                        } else {
+                            $("#applications-list-container").
+                                html("<div class='panel-body'><br><p class='fw-warning'>No applications found. " +
+                                    "please try refreshing the list in a while.<p></div>");
+                        }
+                    }
+                },
+                // error-callback
+                function () {
                     $("#applications-list-container").
-                        append("<br><p class='fw-warning'>Loading application was not" +
-                            " successful please try again in a while<p>");
+                        html("<div class='panel-body'><br><p class='fw-warning'> Loading application list " +
+                            "was not successful. please try refreshing the list in a while.<p></div>");
             });
         });
     }
