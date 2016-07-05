@@ -2529,7 +2529,7 @@ $(document).ready(function () {
         windowsLink.unbind("click");
         windowsLink.attr("data-validate","true");
         windowsLink.bind("click",function(){
-            promptErrorPolicyPlatform("You need to configure Windows plugin in order to use windows related wizard.");
+            promptErrorPolicyPlatform("You need to configure Windows plugin in order to use windows policy wizard.");
         });
     }
     var iosLink = $(".ios-platform");
