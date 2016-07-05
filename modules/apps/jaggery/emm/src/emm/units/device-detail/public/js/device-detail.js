@@ -17,65 +17,75 @@
  */
 
 var InitiateViewOption = null;
+
 (function () {
     var deviceId = $(".device-id");
     var deviceIdentifier = deviceId.data("deviceid");
     var deviceType = deviceId.data("type");
     var payload = [deviceIdentifier];
     var operationTable;
+    var serviceUrl;
+
     if (deviceType == "ios") {
-        var serviceUrl = "/ios/operation/deviceinfo";
+        serviceUrl = "/ios/operation/deviceinfo";
     } else if (deviceType == "android") {
         //var serviceUrl = "/mdm-android-agent/operation/device-info";
-        var serviceUrl = "/api/device-mgt/android/v1.0/admin/devices/info";
+        serviceUrl = "/api/device-mgt/android/v1.0/admin/devices/info";
     }
-    if(serviceUrl){
-        invokerUtil.post(serviceUrl, payload,
-            function(message){
+
+    if (serviceUrl) {
+        invokerUtil.post(
+            serviceUrl,
+            payload,
+            // success-callback
+            function () {
                 $(".panel-body").show();
             },
-            function (message) {
+            // error-callback
+            function () {
                 var defaultInnerHTML =
-                    "<br><p class='fw-warning'>Device data might not be updated Please refresh this page<p>";
+                    "<br><p class='fw-warning'>Device data may not have been updated. Please refresh to try again.<p>";
                 $(".panel-body").append(defaultInnerHTML);
-            });
+            }
+        );
     }
-    $('.media.tab-responsive [data-toggle=tab]').on('shown.bs.tab', function(e){
-        var activeTabPane = $(e.target).attr('href'),
-            activeCollpasePane = $(activeTabPane).find('[data-toggle=collapse]').data('target'),
-            activeCollpasePaneSiblings = $(activeTabPane).siblings().find('[data-toggle=collapse]').data('target'),
-            activeListGroupItem = $('.media .list-group-item.active');
 
-        $(activeCollpasePaneSiblings).collapse('hide');
-        $(activeCollpasePane).collapse('show');
+    $(".media.tab-responsive [data-toggle=tab]").on("shown.bs.tab", function(e) {
+        var activeTabPane = $(e.target).attr("href"),
+            activeCollapsePane = $(activeTabPane).find("[data-toggle=collapse]").data("target"),
+            activeCollapsePaneSiblings = $(activeTabPane).siblings().find("[data-toggle=collapse]").data("target"),
+            activeListGroupItem = $(".media .list-group-item.active");
+
+        $(activeCollapsePaneSiblings).collapse("hide");
+        $(activeCollapsePane).collapse("show");
         positionArrow(activeListGroupItem);
 
         $(".panel-heading .caret-updown").removeClass("fw-sort-down");
         $(".panel-heading.collapsed .caret-updown").addClass("fw-sort-up");
     });
 
-    $('.media.tab-responsive .tab-content').on('shown.bs.collapse', function(e){
-        var activeTabPane = $(e.target).parent().attr('id');
-        $('.media.tab-responsive [data-toggle=tab][href=#'+activeTabPane+']').tab('show');
+    $(".media.tab-responsive .tab-content").on("shown.bs.collapse", function(e) {
+        var activeTabPane = $(e.target).parent().attr("id");
+        $(".media.tab-responsive [data-toggle=tab][href=#" + activeTabPane + "]").tab("show");
         $(".panel-heading .caret-updown").removeClass("fw-sort-up");
         $(".panel-heading.collapsed .caret-updown").addClass("fw-sort-down");
     });
 
-    function positionArrow(selectedTab){
+    function positionArrow(selectedTab) {
         var selectedTabHeight = $(selectedTab).outerHeight();
         var arrowPosition = 0;
         var totalHeight = 0;
         var arrow = $(".media .panel-group.tab-content .arrow-left");
         var parentHeight = $(arrow).parent().outerHeight();
 
-        /*if($(selectedTab).prev().length){
-            $(selectedTab).prevAll().each(function() {
-                totalHeight += $(this).outerHeight();
-            });
-            arrowPosition = totalHeight + (selectedTabHeight / 2);
-        }else{
-            arrowPosition = selectedTabHeight / 2;
-        }*/
+//        if($(selectedTab).prev().length){
+//            $(selectedTab).prevAll().each(function() {
+//                totalHeight += $(this).outerHeight();
+//            });
+//            arrowPosition = totalHeight + (selectedTabHeight / 2);
+//        }else{
+//            arrowPosition = selectedTabHeight / 2;
+//        }
 
         if(arrowPosition >= parentHeight){
             parentHeight = arrowPosition + 10;
@@ -83,7 +93,7 @@ var InitiateViewOption = null;
         }else{
             $(arrow).parent().removeAttr("style");
         }
-        $(arrow).css("top",arrowPosition - 10);
+        $(arrow).css("top", arrowPosition - 10);
     }
 
     $(document).ready(function() {
@@ -111,11 +121,10 @@ var InitiateViewOption = null;
     });
 
     function loadOperationsLog(update) {
-        // var operationsLog = $("#operations-log");
         var operationsLogTable = "#operations-log-table";
         if (update) {
             operationTable = $(operationsLogTable).DataTable();
-            operationTable.ajax.reload(null, false);
+            operationTable.ajax.reload(false);
             return;
         }
         operationTable = $(operationsLogTable).datatables_extended({
@@ -126,8 +135,8 @@ var InitiateViewOption = null;
             pageLength : 10,
             order: [],
             ajax: {
-                url : "/emm/api/operation/paginate",
-                data : {deviceId : deviceIdentifier, deviceType: deviceType},
+                url: "/emm/api/operation/paginate",
+                data: {deviceId : deviceIdentifier, deviceType: deviceType},
                 dataSrc: function (json) {
                     $("#operations-spinner").addClass("hidden");
                     $("#operations-log-container").empty();
@@ -135,73 +144,75 @@ var InitiateViewOption = null;
                 }
             },
             columnDefs: [
-                { targets: 0, data: "code" },
-                { targets: 1, data: "status", render:
-                    function (status, type, row, meta) {
+                {targets: 0, data: "code" },
+                {targets: 1, data: "status", render:
+                    function (status) {
                         var html;
                         switch (status) {
                             case "COMPLETED" :
-                                html = '<span><i class="fw fw-ok icon-success"></i> Completed</span>';
+                                html = "<span><i class='fw fw-ok icon-success'></i> Completed</span>";
                                 break;
                             case "PENDING" :
-                                html = '<span><i class="fw fw-warning icon-warning"></i> Pending</span>';
+                                html = "<span><i class='fw fw-warning icon-warning'></i> Pending</span>";
                                 break;
                             case "ERROR" :
-                                html = '<span><i class="fw fw-error icon-danger"></i> Error</span>';
+                                html = "<span><i class='fw fw-error icon-danger'></i> Error</span>";
                                 break;
                             case "IN_PROGRESS" :
-                                html = '<span><i class="fw fw-ok icon-warning"></i> In Progress</span>';
+                                html = "<span><i class='fw fw-ok icon-warning'></i> In Progress</span>";
                                 break;
                             case "REPEATED" :
-                                html = '<span><i class="fw fw-ok icon-warning"></i> Repeated</span>';
+                                html = "<span><i class='fw fw-ok icon-warning'></i> Repeated</span>";
                                 break;
                         }
                         return html;
                     }
                 },
-                { targets: 2, data: "createdTimeStamp", render:
-                    function (date, type, row, meta) {
+                {targets: 2, data: "createdTimeStamp", render:
+                    function (date) {
                         var value = String(date);
-                        return value.slice(0,16);
+                        return value.slice(0, 16);
                     }
                 }
             ],
-            "createdRow": function( row, data, dataIndex ) {
-                $(row).attr('data-type', 'selectable');
-                $(row).attr('data-id', data.id);
-                $.each($('td', row), function (colIndex) {
-                    switch(colIndex) {
-                        case 1:
-                            $(this).attr('data-grid-label', 'Code');
-                            $(this).attr('data-display', data.code);
-                            break;
-                        case 2:
-                            $(this).attr('data-grid-label', 'Status');
-                            $(this).attr('data-display', data.status);
-                            break;
-                        case 3:
-                            $(this).attr('data-grid-label', "Created Timestamp");
-                            $(this).attr('data-display', data.createdTimeStamp);
-                            break;
+            "createdRow": function(row, data) {
+                $(row).attr("data-type", "selectable");
+                $(row).attr("data-id", data["id"]);
+                $.each($("td", row),
+                    function(colIndex) {
+                        switch(colIndex) {
+                            case 1:
+                                $(this).attr("data-grid-label", "Code");
+                                $(this).attr("data-display", data["code"]);
+                                break;
+                            case 2:
+                                $(this).attr("data-grid-label", "Status");
+                                $(this).attr("data-display", data["status"]);
+                                break;
+                            case 3:
+                                $(this).attr("data-grid-label", "Created Timestamp");
+                                $(this).attr("data-display", data["createdTimeStamp"]);
+                                break;
+                        }
                     }
-                });
+                );
             }
         });
     }
 
     function loadApplicationsList() {
         var applicationsList = $("#applications-list");
-        var deviceListingSrc = applicationsList.attr("src");
+        var applicationListingTemplate = applicationsList.attr("src");
         var deviceId = applicationsList.data("device-id");
         var deviceType = applicationsList.data("device-type");
 
-        $.template("application-list", deviceListingSrc, function (template) {
+        $.template("application-list", applicationListingTemplate, function (template) {
             //var serviceURL = "/mdm-admin/operations/"+deviceType+"/"+deviceId+"/apps";
             var serviceURL = "/api/device-mgt/v1.0/devices/" + deviceType + "/" + deviceId + "/applications";
 
             var successCallback = function (data) {
                 data = JSON.parse(data);
-                $('#apps-spinner').addClass('hidden');
+                $("#apps-spinner").addClass("hidden");
                 var viewModel = {};
                 if(data != null && data.length > 0) {
                     for (var i = 0; i < data.length; i++) {
@@ -211,16 +222,17 @@ var InitiateViewOption = null;
                 }
                 viewModel.applications = data;
                 viewModel.deviceType = deviceType;
-                if(data.length > 0){
+                if (data.length > 0){
                     var content = template(viewModel);
                     $("#applications-list-container").html(content);
                 }
 
             };
+
             invokerUtil.get(
                 serviceURL,
                 successCallback,
-                function(message) {
+                function (message) {
                     $("#applications-list-container").
                         append("<br><p class='fw-warning'>Loading application was not" +
                             " successful please try again in a while<p>");
