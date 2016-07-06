@@ -1940,6 +1940,14 @@ input[type=number].form-control {
   }
 }
 
+.label-bold {
+  font-weight: 600;
+  margin-right: 8px;
+}
+.label-bold:after {
+  content: ": "
+}
+
 /* ========================================================================
  * table styles
  * ======================================================================== */

@@ -305,7 +305,7 @@ function loadUsers(searchParam) {
     ];
 
    
-    $('#user-grid').datatables_extended_serverside_paging(null, '/api/device-mgt/v1.0/users', dataFilter, columns);
+    $('#user-grid').datatables_extended_serverside_paging(null, '/api/device-mgt/v1.0/users', dataFilter, columns, null);
 
     $("#loading-content").hide();
 
