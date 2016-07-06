@@ -44,6 +44,12 @@
                                 <td style="padding:10px 15px;">{{device.viewModel.udid}}</td>
                             </tr>
                         {{/if}}
+                        {{#if device.viewModel.os_build_date}}
+                            <tr role="row" class="even">
+                                <td class="sorting_1" style="padding:10px 15px;">Firmware Build Date</td>
+                                <td style="padding:10px 15px;">{{device.viewModel.os_build_date}}</td>
+                            </tr>
+                        {{/if}}
                         {{#if device.viewModel.phoneNumber}}
                             <tr role="row" class="even">
                                 <td class="sorting_1" style="padding:10px 15px;">Phone Number</td>
