@@ -17,7 +17,7 @@
  */
 
 function onRequest(context) {
-    // var log = new Log("policy-listing.js");
+    //var log = new Log("policy-listing.js");
     var policyModule = require("/modules/policy.js")["policyModule"];
     var response = policyModule.getAllPolicies();
 
@@ -30,7 +30,7 @@ function onRequest(context) {
             context["saveNewPrioritiesButtonEnabled"] = false;
             context["noPolicy"] = true;
         } else if (policyCount == 1) {
-            context["policyListingStatusMsg"] = "Add more policies to set up a priority order.";
+            context["policyListingStatusMsg"] = "Two or more policies should be available to set up a priority order.";
             context["saveNewPrioritiesButtonEnabled"] = false;
             context["noPolicy"] = false;
         } else {
