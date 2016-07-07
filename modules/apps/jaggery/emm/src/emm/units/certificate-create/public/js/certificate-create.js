@@ -21,6 +21,8 @@ var errorMsg = "#certificate-create-error-msg span";
 var validateInline = {};
 var clearInline = {};
 
+var base_api_url = "/api/device-mgt/v1.0";
+
 var enableInlineError = function (inputField, errorMsg, errorSign) {
     var fieldIdentifier = "#" + inputField;
     var errorMsgIdentifier = "#" + inputField + " ." + errorMsg;
@@ -61,13 +63,13 @@ function readSingleFile(evt) {
     var f = evt.target.files[0];
     if (f) {
         var r = new FileReader();
-        r.onload = function(e) {
+        r.onload = function (e) {
             var contents = e.target.result;
             if (f.type == "application/x-x509-ca-cert") {
                 pemContent = contents;
                 console.log(contents);
                 console.log(pemContent);
-                pemContent = pemContent.substring(28,pemContent.length-27);
+                pemContent = pemContent.substring(28, pemContent.length - 27);
                 console.log(pemContent);
                 $(errorMsgWrapper).addClass("hidden");
             } else {
@@ -102,19 +104,19 @@ $(document).ready(function () {
             var addCertificateFormData = {};
             addCertificateFormData.serial = serialNo;
             addCertificateFormData.pem = pemContent;
-            var certificateList =[];
+            var certificateList = [];
             certificateList.push(addCertificateFormData);
-            var addCertificateAPI = "/admin-certificate/certificates";
 
+            var serviceUrl = base_api_url + "/admin/certificates";
             invokerUtil.post(
-                addCertificateAPI,
+                serviceUrl,
                 certificateList,
                 function (data) {
-                        // Refreshing with success message
-                        $("#certificate-create-form").addClass("hidden");
-                        $("#certificate-created-msg").removeClass("hidden");
+                    // Refreshing with success message
+                    $("#certificate-create-form").addClass("hidden");
+                    $("#certificate-created-msg").removeClass("hidden");
                 }, function (data) {
-                   if (data["status"] == 500) {
+                    if (data["status"] == 500) {
                         $(errorMsg).text("An unexpected error occurred at backend server. Please try again later.");
                     } else {
                         $(errorMsg).text(data);

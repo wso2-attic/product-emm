@@ -17,6 +17,9 @@ var modalPopupContainer = modalPopup + " .modalpopup-container";
 var modalPopupContent = modalPopup + " .modalpopup-content";
 var body = "body";
 var isInit = true;
+
+var base_api_url = "/api/certificate-mgt/v1.0";
+
 $(".icon .text").res_text(0.2);
 
 /*
@@ -49,13 +52,13 @@ function hidePopup() {
  * on Certificate Listing page in WSO2 MDM Console.
  */
 function removeCertificate(serialNumber) {
-    var removeCertificateAPI = "/admin-certificate/certificates/" + serialNumber;
+    var serviceUrl = base_api_url + "/admin/certificates/" + serialNumber;
     $(modalPopupContent).html($('#remove-certificate-modal-content').html());
     showPopup();
 
     $("a#remove-certificate-yes-link").click(function () {
         invokerUtil.delete(
-            removeCertificateAPI,
+            serviceUrl,
             function () {
                 $("#" + serialNumber).remove();
                 var newCertificateListCount = $(".user-list > span").length;
@@ -109,49 +112,44 @@ function loadCertificates(searchParam) {
     var certificateListing = $("#certificate-listing");
     var certificateListingSrc = certificateListing.attr("src");
     $.template("certificate-listing", certificateListingSrc, function (template) {
-        var serviceURL = "/admin-certificate/certificates";
+        var serviceURL = base_api_url + "/admin/certificates";
 
-        if(searchParam != null && searchParam != undefined && searchParam.trim() != '') {
-            serviceURL = "/admin-certificate/certificates" + searchParam;
+        if (searchParam != null && searchParam != undefined && searchParam.trim() != '') {
+            serviceURL = base_api_url + "/admin/certificates?" + searchParam;
         }
 
-        var successCallback = function (data) {
-            if (!data) {
-                $('#ast-container').addClass('hidden');
-                $('#certificate-listing-status-msg').text('No certificates are available to be displayed.');
-                return;
+        var successCallback = function (data, textStatus, jqXHR) {
+            if (jqXHR.status == 200 && data) {
+                data = JSON.parse(data);
+
+                var viewModel = {};
+                viewModel.certificates = data.certificates;
+
+                for (var i = 0; i < viewModel.certificates.length; i++) {
+                    viewModel.certificates[i].removePermitted = true;
+                    viewModel.certificates[i].viewPermitted = true;
+                }
+
+                if (viewModel.certificates.length > 0) {
+                    $('#ast-container').removeClass('hidden');
+                    $('#certificate-listing-status-msg').text("");
+                    var content = template(viewModel);
+                    $("#ast-container").html(content);
+                } else {
+                    $('#ast-container').addClass('hidden');
+                    $('#certificate-listing-status-msg').text('No certificate is available to be displayed.');
+                    $('#certificate-listing-status').removeClass('hidden');
+                }
+
+                $("#loading-content").hide();
+
+                if (isInit) {
+                    $('#certificate-grid').datatables_extended();
+                    isInit = false;
+                }
+
+                $(".icon .text").res_text(0.2);
             }
-            var canRemove = $("#can-remove").val();
-            var canEdit = $("#can-edit").val();
-            var canResetPassword = $("#can-reset-password").val();
-            data = JSON.parse(data);
-
-            var viewModel = {};
-            viewModel.certificates = data;
-
-            for (var i = 0; i < viewModel.certificates.length; i++) {
-                viewModel.certificates[i].removePermitted = true;
-                viewModel.certificates[i].viewPermitted = true;
-            }
-
-            if (viewModel.certificates.length > 0) {
-                $('#ast-container').removeClass('hidden');
-                $('#certificate-listing-status-msg').text("");
-                var content = template(viewModel);
-                $("#ast-container").html(content);
-            } else {
-                $('#ast-container').addClass('hidden');
-                $('#certificate-listing-status-msg').text('No certificates are available to be displayed.');
-            }
-
-            $("#loading-content").hide();
-
-            if (isInit) {
-                $('#certificate-grid').datatables_extended();
-                isInit = false;
-            }
-            
-            $(".icon .text").res_text(0.2);
         };
         invokerUtil.get(serviceURL,
             successCallback,
