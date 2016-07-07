@@ -441,7 +441,7 @@ function initPage() {
                     loadDevices();
                 } else {
                     $("#loading-content").remove();
-                    $("#device-listing-status-msg").text("No enrolled devices found.");
+                    $("#device-listing-status-msg").text("No enrolled device is found.");
                     $("#device-listing-status").removeClass(' hidden');
                 }
             }
