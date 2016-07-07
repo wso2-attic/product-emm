@@ -38,7 +38,7 @@ var updateStats = function (serviceURL, id) {
         },
 
         function (jqXHR) {
-            if (jqXHR.status == 404 || jqXHR.status == 500) {
+            if (jqXHR.status == 500) {
                 $(id).html("Error...");
             }
         }
