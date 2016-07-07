@@ -117,7 +117,7 @@ function loadRoles(searchQuery) {
         }
     ];
 
-    $('#role-grid').datatables_extended_serverside_paging(null, '/api/device-mgt/v1.0/roles', dataFilter, columns);
+    $('#role-grid').datatables_extended_serverside_paging(null, '/api/device-mgt/v1.0/roles', dataFilter, columns, null);
 
     loadingContent.hide();
 

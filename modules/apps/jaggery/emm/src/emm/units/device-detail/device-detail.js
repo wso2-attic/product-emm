@@ -52,6 +52,11 @@ function onRequest(context) {
                     viewModel["imei"] = device["properties"]["IMEI"];
                     viewModel["model"] = device["properties"]["DEVICE_MODEL"];
                     viewModel["vendor"] = device["properties"]["VENDOR"];
+                    var osBuildDate = device["properties"]["OS_BUILD_DATE"];
+                    if (osBuildDate != null && osBuildDate != "0") {
+                        var formattedDate = new Date(osBuildDate * 1000);
+                        viewModel["os_build_date"] = formattedDate;
+                    }
                     viewModel["internal_memory"] = {};
                     viewModel["external_memory"] = {};
                     viewModel["location"] = {

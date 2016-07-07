@@ -188,46 +188,42 @@ function loadDevices(searchType, searchParam){
         return {};
     }
 
-    $('#device-grid').datatables_extended({
-        serverSide: true,
-        processing: false,
-        searching: true,
-        ordering:  false,
-        filter: false,
-        pageLength : 16,
-        ajax: { url : '/emm/api/devices', data : {url : serviceURL},
-                dataSrc: function (json) {
-                    $('#device-grid').removeClass('hidden');
-                    $("#loading-content").remove();
-                    var $list = $("#device-table :input[type='search']");
-                    $list.each(function(){
-                        $(this).addClass("hidden");
-                    });
-                    return json.devices;
-                }
-        },
-        columnDefs: [
-            { targets: 0, data: 'name', className: 'remove-padding icon-only content-fill viewEnabledIcon' , render: function ( data, type, row, meta ) {
-                var deviceType = row.type;
+
+    var columns = [
+        {
+            class : 'remove-padding icon-only content-fill viewEnabledIcon',
+            data : 'name',
+            render: function (data, type, row, meta) {
+                var deviceType = row.deviceType;
                 var deviceIdentifier = row.deviceIdentifier;
                 var url = "#";
                 if (status != 'REMOVED') {
                     url = "devices/view?type=" + deviceType + "&id=" + deviceIdentifier;
                 }
-                return '<div onclick="javascript:InitiateViewOption(\'' + url + '\')" class="thumbnail icon"><i class="square-element text fw fw-mobile"></i></div>';
-            }},
-            { targets: 1, data: 'name', className: 'fade-edge' , render: function ( name, type, row, meta ) {
-                var model = getPropertyValue(row.properties, 'DEVICE_MODEL');
-                var vendor = getPropertyValue(row.properties, 'VENDOR');
+                return '<div onclick="javascript:InitiateViewOption(\'' + url + '\')" class="thumbnail icon"><i class="square-element text fw fw-mobile"></i></div>'
+            }
+        },{
+            class: 'fade-edge',
+            data: 'name',
+            render: function ( name, type, row, meta ) {
+                var model = row.model;
+                var vendor = row.vendor;
                 var html = '<h4>Device ' + name + '</h4>';
                 if (model) {
                     html += '<div>(' + vendor + '-' + model + ')</div>';
                 }
                 return html;
-            }},
-            { targets: 2, data: 'enrolmentInfo.owner', className: 'fade-edge remove-padding-top'},
-            { targets: 3, data: 'enrolmentInfo.status', className: 'fade-edge remove-padding-top' ,
-                render: function ( status, type, row, meta ) {
+            }
+        },{
+            class: 'fade-edge remove-padding-top',
+            data: 'owner',
+            render: function ( owner, type, row, meta ) {
+                return '<div><label class="label-bold">Owner</label>' + owner + '</div>';
+            }
+        },{
+            class: 'fade-edge remove-padding-top',
+            data: 'status',
+            render: function ( status, type, row, meta ) {
                 var html;
                 switch (status) {
                     case 'ACTIVE' :
@@ -243,61 +239,170 @@ function loadDevices(searchType, searchParam){
                         html = '<span><i class="fw fw-delete icon-danger"></i> Removed</span>';
                         break;
                 }
-                return html;
-            }},
-            { targets: 4, data: 'type' , className: 'fade-edge remove-padding-top' },
-            { targets: 5, data: 'enrolmentInfo.ownership' , className: 'fade-edge remove-padding-top' },
-            { targets: 6, data: 'enrolmentInfo.status' , className: 'text-right content-fill text-left-on-grid-view no-wrap' ,
-                render: function ( status, type, row, meta ) {
-                var deviceType = row.type;
-                var deviceIdentifier = row.deviceIdentifier;
-                var html = '<span></span>';
-                return html;
-            }}
-        ],
-        "createdRow": function( row, data, dataIndex ) {
-            $(row).attr('data-type', 'selectable');
-            $(row).attr('data-deviceid', data.deviceIdentifier);
-            $(row).attr('data-devicetype', data.type);
-            var model = getPropertyValue(data.properties, 'DEVICE_MODEL');
-            var vendor = getPropertyValue(data.properties, 'VENDOR');
-            var owner = data.enrolmentInfo.owner;
-            var status = data.enrolmentInfo.status;
-            var ownership = data.enrolmentInfo.ownership;
-            var deviceType = data.type;
-            $.each($('td', row), function (colIndex) {
-                switch(colIndex) {
-                    case 1:
-                        $(this).attr('data-search', model + ',' + vendor);
-                        $(this).attr('data-display', model);
-                        break;
-                    case 2:
-                        $(this).attr('data-grid-label', "Owner");
-                        $(this).attr('data-search', owner);
-                        $(this).attr('data-display', owner);
-                        break;
-                    case 3:
-                        $(this).attr('data-grid-label', "Status");
-                        $(this).attr('data-search', status);
-                        $(this).attr('data-display', status);
-                        break;
-                    case 4:
-                        $(this).attr('data-grid-label', "Type");
-                        $(this).attr('data-search', deviceType);
-                        $(this).attr('data-display', deviceType);
-                        break;
-                    case 5:
-                        $(this).attr('data-grid-label', "Ownership");
-                        $(this).attr('data-search', ownership);
-                        $(this).attr('data-display', ownership);
-                        break;
-                }
-            });
-        },
-        "fnDrawCallback": function( oSettings ) {
-            $(".icon .text").res_text(0.2);
+                return '<div><label class="label-bold">Status</label>'+html+'</div>';
+            }
+        },{
+            className: 'fade-edge remove-padding-top',
+            data: 'deviceType',
+            render: function ( deviceType, type, row, meta ) {
+                return '<div><label class="label-bold">Type</label>' + deviceType + '</div>';
+            }
+        },{
+            className: 'fade-edge remove-padding-top',
+            data: 'ownership',
+            render: function ( ownership, type, row, meta ) {
+                return '<div><label class="label-bold">Ownership</label>' + ownership + '</div>';
+            }
         }
+    ];
+
+
+    var dataFilter = function(data){
+        data = JSON.parse(data);
+
+        var objects = [];
+
+        $(data.devices).each(function( index ) {
+            objects.push(
+                {
+                    model: getPropertyValue(data.devices[index].properties, 'DEVICE_MODEL'),
+                    vendor: getPropertyValue(data.devices[index].properties, 'VENDOR'),
+                    owner: data.devices[index].enrolmentInfo.owner,
+                    status: data.devices[index].enrolmentInfo.status,
+                    ownership: data.devices[index].enrolmentInfo.ownership,
+                    deviceType: data.devices[index].type,
+                    deviceIdentifier: data.devices[index].deviceIdentifier,
+                    name : data.devices[index].name
+                }
+            );
+        });
+
+        json = {
+            "recordsTotal": data.count,
+            "recordsFiltered": data.count,
+            "data": objects
+        };
+        return JSON.stringify( json );
+    };
+
+
+    $('#device-grid').datatables_extended_serverside_paging(null, '/api/device-mgt/v1.0/devices', dataFilter, columns,
+        function( oSettings ) {
+        $(".icon .text").res_text(0.2);
+        $('#device-grid').removeClass('hidden');
+        $("#loading-content").remove();
     });
+
+    // $('#device-grid').datatables_extended({
+    //     serverSide: true,
+    //     processing: false,
+    //     searching: true,
+    //     ordering:  false,
+    //     filter: false,
+    //     pageLength : 16,
+    //     ajax: { url : '/emm/api/devices', data : {url : serviceURL},
+    //             dataSrc: function (json) {
+    //                 $('#device-grid').removeClass('hidden');
+    //                 $("#loading-content").remove();
+    //                 var $list = $("#device-table :input[type='search']");
+    //                 $list.each(function(){
+    //                     $(this).addClass("hidden");
+    //                 });
+    //                 return json.devices;
+    //             }
+    //     },
+    //     columnDefs: [
+    //         { targets: 0, data: 'name', className: 'remove-padding icon-only content-fill viewEnabledIcon' , render: function ( data, type, row, meta ) {
+    //             var deviceType = row.type;
+    //             var deviceIdentifier = row.deviceIdentifier;
+    //             var url = "#";
+    //             if (status != 'REMOVED') {
+    //                 url = "devices/view?type=" + deviceType + "&id=" + deviceIdentifier;
+    //             }
+    //             return '<div onclick="javascript:InitiateViewOption(\'' + url + '\')" class="thumbnail icon"><i class="square-element text fw fw-mobile"></i></div>';
+    //         }},
+    //         { targets: 1, data: 'name', className: 'fade-edge' , render: function ( name, type, row, meta ) {
+    //             var model = getPropertyValue(row.properties, 'DEVICE_MODEL');
+    //             var vendor = getPropertyValue(row.properties, 'VENDOR');
+    //             var html = '<h4>Device ' + name + '</h4>';
+    //             if (model) {
+    //                 html += '<div>(' + vendor + '-' + model + ')</div>';
+    //             }
+    //             return html;
+    //         }},
+    //         { targets: 2, data: 'enrolmentInfo.owner', className: 'fade-edge remove-padding-top'},
+    //         { targets: 3, data: 'enrolmentInfo.status', className: 'fade-edge remove-padding-top' ,
+    //             render: function ( status, type, row, meta ) {
+    //             var html;
+    //             switch (status) {
+    //                 case 'ACTIVE' :
+    //                     html = '<span><i class="fw fw-ok icon-success"></i> Active</span>';
+    //                     break;
+    //                 case 'INACTIVE' :
+    //                     html = '<span><i class="fw fw-warning icon-warning"></i> Inactive</span>';
+    //                     break;
+    //                 case 'BLOCKED' :
+    //                     html = '<span><i class="fw fw-remove icon-danger"></i> Blocked</span>';
+    //                     break;
+    //                 case 'REMOVED' :
+    //                     html = '<span><i class="fw fw-delete icon-danger"></i> Removed</span>';
+    //                     break;
+    //             }
+    //             return html;
+    //         }},
+    //         { targets: 4, data: 'type' , className: 'fade-edge remove-padding-top' },
+    //         { targets: 5, data: 'enrolmentInfo.ownership' , className: 'fade-edge remove-padding-top' },
+    //         { targets: 6, data: 'enrolmentInfo.status' , className: 'text-right content-fill text-left-on-grid-view no-wrap' ,
+    //             render: function ( status, type, row, meta ) {
+    //             var deviceType = row.type;
+    //             var deviceIdentifier = row.deviceIdentifier;
+    //             var html = '<span></span>';
+    //             return html;
+    //         }}
+    //     ],
+    //     "createdRow": function( row, data, dataIndex ) {
+    //         $(row).attr('data-type', 'selectable');
+    //         $(row).attr('data-deviceid', data.deviceIdentifier);
+    //         $(row).attr('data-devicetype', data.type);
+    //         var model = getPropertyValue(data.properties, 'DEVICE_MODEL');
+    //         var vendor = getPropertyValue(data.properties, 'VENDOR');
+    //         var owner = data.enrolmentInfo.owner;
+    //         var status = data.enrolmentInfo.status;
+    //         var ownership = data.enrolmentInfo.ownership;
+    //         var deviceType = data.type;
+    //         $.each($('td', row), function (colIndex) {
+    //             switch(colIndex) {
+    //                 case 1:
+    //                     $(this).attr('data-search', model + ',' + vendor);
+    //                     $(this).attr('data-display', model);
+    //                     break;
+    //                 case 2:
+    //                     $(this).attr('data-grid-label', "Owner");
+    //                     $(this).attr('data-search', owner);
+    //                     $(this).attr('data-display', owner);
+    //                     break;
+    //                 case 3:
+    //                     $(this).attr('data-grid-label', "Status");
+    //                     $(this).attr('data-search', status);
+    //                     $(this).attr('data-display', status);
+    //                     break;
+    //                 case 4:
+    //                     $(this).attr('data-grid-label', "Type");
+    //                     $(this).attr('data-search', deviceType);
+    //                     $(this).attr('data-display', deviceType);
+    //                     break;
+    //                 case 5:
+    //                     $(this).attr('data-grid-label', "Ownership");
+    //                     $(this).attr('data-search', ownership);
+    //                     $(this).attr('data-display', ownership);
+    //                     break;
+    //             }
+    //         });
+    //     },
+    //     "fnDrawCallback": function( oSettings ) {
+    //         $(".icon .text").res_text(0.2);
+    //     }
+    // });
     $(deviceCheckbox).click(function () {
         addDeviceSelectedClass(this);
     });

@@ -19,7 +19,7 @@
 /* ========================================================================
  * datatables_extended function
  * ======================================================================== */
-$.fn.datatables_extended_serverside_paging = function(settings ,url, dataFilter, columns){
+$.fn.datatables_extended_serverside_paging = function(settings ,url, dataFilter, columns, fnDrawCallback){
 
     var elem = $(this);
 
@@ -61,6 +61,7 @@ $.fn.datatables_extended_serverside_paging = function(settings ,url, dataFilter,
             fnCreatedRow: function( nRow, aData, iDataIndex ) {
                 $(nRow).attr('data-type', 'selectable');
             },
+            "fnDrawCallback" : fnDrawCallback,
             initComplete: function() {
 
                 this.api().columns().every(function () {
