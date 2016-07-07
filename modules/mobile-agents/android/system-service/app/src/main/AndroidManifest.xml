@@ -79,6 +79,15 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".services.BatteryChargingStateReceiver"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+            </intent-filter>
+        </receiver>
+
         <receiver android:name=".services.AlarmReceiver" />
 
         <receiver

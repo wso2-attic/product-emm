@@ -18,20 +18,27 @@
 
 package org.wso2.emm.system.service.api;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RecoverySystem;
 import android.os.SystemProperties;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.wso2.emm.system.service.MainActivity;
 import org.wso2.emm.system.service.R;
+import org.wso2.emm.system.service.services.BatteryChargingStateReceiver;
 import org.wso2.emm.system.service.utils.CommonUtils;
 import org.wso2.emm.system.service.utils.Constants;
 import org.wso2.emm.system.service.utils.FileUtils;
@@ -60,6 +67,7 @@ public class OTAServerManager {
     private static final int DEFAULT_STATE_ERROR_CODE = 0;
     private static final int DEFAULT_STATE_INFO_CODE = 0;
     private static final int DEFAULT_BYTES = 100 * 1024;
+    private static final int DEFAULT_NOTIFICATION_CODE = 100;
     private static final int DEFAULT_STREAM_LENGTH = 153600;
     private static final int DEFAULT_OFFSET = 0;
     private OTAStateChangeListener stateChangeListener;
@@ -325,8 +333,17 @@ public class OTAServerManager {
 
         try {
             wakeLock.acquire();
-            Log.d(TAG, "Installing upgrade package");
-            RecoverySystem.installPackage(context, recoveryFile);
+            if (getBatteryLevel(context) >= Constants.REQUIRED_BATTERY_LEVEL_TO_FIRMWARE_UPGRADE) {
+                Log.d(TAG, "Installing upgrade package");
+                RecoverySystem.installPackage(context, recoveryFile);
+            } else {
+                Preference.putString(context, context.getResources().getString(R.string.upgrade_install_status),
+                                     context.getResources().getString(R.string.status_failed));
+                Log.e(TAG, "Upgrade failed due to insufficient battery level.");
+                context.registerReceiver(new BatteryChargingStateReceiver(), new IntentFilter(
+                        Intent.ACTION_BATTERY_CHANGED));
+                setNotification(context, context.getResources().getString(R.string.upgrade_failed_due_to_battery));
+            }
         } catch (IOException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_INSTALL_FAILED);
             String message = "Update installation failed due to file error.";
@@ -349,6 +366,33 @@ public class OTAServerManager {
 
     }
 
+    private void setNotification(Context context, String notificationMessage) {
+        int requestID = (int) System.currentTimeMillis();
+        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Intent notificationIntent = new Intent(context, MainActivity.class);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, requestID,notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.notification)
+                .setContentTitle("Message from EMM")
+                .setStyle(new NotificationCompat.BigTextStyle()
+                                  .bigText(notificationMessage))
+                .setContentText(notificationMessage).setAutoCancel(true);
+        mBuilder.setContentIntent(contentIntent);
+        mNotificationManager.notify(DEFAULT_NOTIFICATION_CODE, mBuilder.build());
+    }
+
+    private int getBatteryLevel(Context context) {
+        Intent batteryIntent = context.registerReceiver(null,
+                                                        new IntentFilter(
+                                                                Intent.ACTION_BATTERY_CHANGED));
+        int level = 0;
+        if (batteryIntent != null) {
+            level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+        }
+
+        return level;
+    }
     /**
      * Downloads the property list from remote site, and parse it to property list.
      * The caller can parse this list and get information.

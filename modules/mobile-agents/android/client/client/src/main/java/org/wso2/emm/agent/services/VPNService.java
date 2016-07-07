@@ -54,7 +54,6 @@ public class VPNService extends VpnService implements Handler.Callback, Runnable
     private static final char ROUTE = 'r';
     private static final char DNS = 'd';
     private static final char SEARCH_DOMAIN = 's';
-    private static final String COLON = ":";
     private String serverAddress;
     private String serverPort;
     private String dnsServer;
@@ -80,18 +79,18 @@ public class VPNService extends VpnService implements Handler.Callback, Runnable
         serverAddress = intent.getStringExtra(prefix + getResources().getString(R.string.address));
         Preference.putString(this, getResources().getString(R.string.address), serverAddress);
 
-        if(intent.hasExtra(prefix + getResources().getString(R.string.port))) {
+        if (intent.hasExtra(prefix + getResources().getString(R.string.port))) {
             serverPort = intent.getStringExtra(prefix + getResources().getString(R.string.port));
             Preference.putString(this, getResources().getString(R.string.port), serverPort);
         }
 
-        if(intent.hasExtra(prefix + getResources().getString(R.string.secret))) {
+        if (intent.hasExtra(prefix + getResources().getString(R.string.secret))) {
             sharedSecret = intent.getStringExtra(prefix + getResources().getString(R.string.secret)).getBytes();
             Preference.putString(this, getResources().getString(R.string.secret), intent.getStringExtra(prefix +
-                                                                            getResources().getString(R.string.secret)));
+                                                                                                        getResources().getString(R.string.secret)));
         }
 
-        if(intent.hasExtra(prefix + getResources().getString(R.string.dns))) {
+        if (intent.hasExtra(prefix + getResources().getString(R.string.dns))) {
             dnsServer = intent.getStringExtra(prefix + getResources().getString(R.string.dns));
             Preference.putString(this, getResources().getString(R.string.dns), dnsServer);
         }
@@ -171,8 +170,8 @@ public class VPNService extends VpnService implements Handler.Callback, Runnable
             // Here we put the tunnel into non-blocking mode.
             tunnel.configureBlocking(false);
             // Authenticate and configure the virtual network interface.
-            if(sharedSecret != null) {
-                handshake(tunnel);
+            if (sharedSecret != null) {
+                doHandshake(tunnel);
             } else {
                 establishVPN();
             }
@@ -264,11 +263,11 @@ public class VPNService extends VpnService implements Handler.Callback, Runnable
         return connected;
     }
 
-    private void handshake(DatagramChannel tunnel) {
-        // To build a secured tunnel, we should perform mutual authentication
-        // and exchange session keys for encryption. We send the shared secret and wait
-        // for the server to send the parameters.
-        // Allocate the buffer for handshaking.
+    private void doHandshake(DatagramChannel tunnel) {
+        /*To build a secured tunnel, we should perform mutual authentication
+          and exchange session keys for encryption. We send the shared secret and wait
+          for the server to send the parameters.
+          Allocate the buffer for handshaking.*/
         ByteBuffer packet = ByteBuffer.allocate(HANDSHAKE_BUFFER);
         // Control messages always start with zero.
         packet.put((byte) 0).put(sharedSecret).flip();
@@ -302,14 +301,14 @@ public class VPNService extends VpnService implements Handler.Callback, Runnable
     private void establishVPN() {
         Builder builder = new Builder();
         String address;
-        if(serverPort != null) {
-            address = serverAddress + COLON + serverPort;
+        if (serverPort != null) {
+            address = serverAddress + ":" + serverPort;
         } else {
             address = serverAddress;
         }
 
         builder.addAddress(address, DEFAULT_INTENT_FLAG);
-        if(dnsServer != null) {
+        if (dnsServer != null) {
             builder.addDnsServer(dnsServer);
         }
 
@@ -329,23 +328,23 @@ public class VPNService extends VpnService implements Handler.Callback, Runnable
         for (String parameter : parameters.split(" ")) {
             String[] fields = parameter.split(",");
             switch (fields[0].charAt(0)) {
-                    case MTU:
-                        builder.setMtu(Short.parseShort(fields[1]));
-                        break;
-                    case ADDRESS:
-                        builder.addAddress(fields[1], Integer.parseInt(fields[2]));
-                        break;
-                    case ROUTE:
-                        builder.addRoute(fields[1], Integer.parseInt(fields[2]));
-                        break;
-                    case DNS:
-                        builder.addDnsServer(fields[1]);
-                        break;
-                    case SEARCH_DOMAIN:
-                        builder.addSearchDomain(fields[1]);
-                        break;
-                    default:
-                        break;
+                case MTU:
+                    builder.setMtu(Short.parseShort(fields[1]));
+                    break;
+                case ADDRESS:
+                    builder.addAddress(fields[1], Integer.parseInt(fields[2]));
+                    break;
+                case ROUTE:
+                    builder.addRoute(fields[1], Integer.parseInt(fields[2]));
+                    break;
+                case DNS:
+                    builder.addDnsServer(fields[1]);
+                    break;
+                case SEARCH_DOMAIN:
+                    builder.addSearchDomain(fields[1]);
+                    break;
+                default:
+                    break;
             }
         }
         // Close the old interface since the parameters have been changed.
