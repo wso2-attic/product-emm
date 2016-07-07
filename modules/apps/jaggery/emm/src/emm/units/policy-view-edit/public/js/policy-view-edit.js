@@ -177,8 +177,7 @@ var updateGroupedInputVisibility = function (domElement) {
 
 skipStep["policy-platform"] = function (policyPayloadObj) {
     policy["name"] = policyPayloadObj["policyName"];
-    policy["platform"] = policyPayloadObj["profile"]["deviceType"]["name"];
-    policy["platformId"] = policyPayloadObj["profile"]["deviceType"]["id"];
+    policy["platform"] = policyPayloadObj["profile"]["deviceType"];
 
     var userRoleInput = $("#user-roles-input");
     var ownershipInput = $("#ownership-input");
@@ -1983,7 +1982,7 @@ var updatePolicy = function (policy, state) {
     // traverses key by key in policy["profile"]
     var key;
     for (key in policy["profile"]) {
-        if (policy["platformId"] == platformTypeIds["WINDOWS"] &&
+        if (policy["platform"] == platformTypeConstants["WINDOWS"] &&
             key == windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]) {
             policy["profile"][windowsOperationConstants["PASSCODE_POLICY_OPERATION_CODE"]].enablePassword = true;
         }
@@ -1991,7 +1990,7 @@ var updatePolicy = function (policy, state) {
         if (policy["profile"].hasOwnProperty(key)) {
             profilePayloads.push({
                 "featureCode": key,
-                "deviceTypeId": policy["platformId"],
+                "deviceType": policy["platform"],
                 "content": policy["profile"][key]
             });
         }
@@ -2012,9 +2011,7 @@ var updatePolicy = function (policy, state) {
         "ownershipType": policy["selectedOwnership"],
         "profile": {
             "profileName": policy["policyName"],
-            "deviceType": {
-                "id": policy["platformId"]
-            },
+            "deviceType": policy["platform"],
             "profileFeaturesList": profilePayloads
         }
     };

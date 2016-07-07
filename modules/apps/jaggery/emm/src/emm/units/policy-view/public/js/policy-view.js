@@ -104,7 +104,7 @@ var updateGroupedInputVisibility = function (domElement) {
 
 skipStep["policy-platform"] = function (policyPayloadObj) {
     policy["name"] = policyPayloadObj["policyName"];
-    policy["platform"] = policyPayloadObj["profile"]["deviceType"]["name"];
+    policy["platform"] = policyPayloadObj["profile"]["deviceType"];
     var userRoleInput = $("#user-roles-input");
     var ownershipInput = $("#ownership-input");
     var userInput = $("#users-select-field");
