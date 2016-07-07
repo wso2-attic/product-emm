@@ -150,6 +150,31 @@ public class RuntimeInfo {
         return appData;
     }
 
+    /**
+     * Returns the device LogCat
+     */
+    public String getLogCat() {
+        StringBuilder builder=new StringBuilder();
+        try {
+            String[] command = new String[] { "logcat", "-t100", "-vtime" , "*:W"};
+
+            Process process = Runtime.getRuntime().exec(command);
+
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                builder.append(line);
+                builder.append("\n");
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "getLog failed", e);
+        } finally {
+            return builder.toString();
+        }
+    }
+
     public List<Device.Property> getRAMInfo() throws AndroidAgentException {
         List<Device.Property> properties = new ArrayList<>();
         Device.Property property;

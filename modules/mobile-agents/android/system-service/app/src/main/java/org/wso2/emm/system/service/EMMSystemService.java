@@ -24,6 +24,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.system.service.api.OTADownload;
 import org.wso2.emm.system.service.api.SettingsManager;
+import org.wso2.emm.system.service.services.BatteryChargingStateReceiver;
 import org.wso2.emm.system.service.utils.AlarmUtils;
 import org.wso2.emm.system.service.utils.AppUtils;
 import org.wso2.emm.system.service.utils.Constants;
@@ -385,6 +387,8 @@ public class EMMSystemService extends IntentService {
             //Prepare for upgrade
             OTADownload otaDownload = new OTADownload(context);
             otaDownload.startOTA();
+            context.registerReceiver(new BatteryChargingStateReceiver(), new IntentFilter(
+                    Intent.ACTION_BATTERY_CHANGED));
         }
     }
 

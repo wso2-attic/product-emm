@@ -30,6 +30,7 @@ public class Constants {
 	public static final String DEFAULT_OTA_SERVER_PROTOCOL = "http";
 	public static final String DEFAULT_OTA_SERVER_SUB_DIRECTORY = null;
 	public static final int DEFAULT_OTA_SERVER_PORT = 80;
+	public static final int REQUIRED_BATTERY_LEVEL_TO_FIRMWARE_UPGRADE = 50;
 	public static final String DEFAULT_OTA_BUILD_PROP_FILE = "build.prop";
 	public static final String DEFAULT_OTA_ZIP_FILE = ".ota.zip";
 	public static final String UPDATE_PACKAGE_NAME = "update.zip";
@@ -38,7 +39,7 @@ public class Constants {
 	public static final String CODE = "code";
 	public static final String SYSTEM_APP_ACTION_RESPONSE = "org.wso2.emm.system.service.MESSAGE_PROCESSED";
 	public static final String AGENT_APP_SERVICE_NAME = "org.wso2.emm.agent.START_SERVICE";
-	public static final boolean DEBUG_MODE_ENABLED = true;
+	public static final boolean DEBUG_MODE_ENABLED = false;
 	public static final String ADMIN_MESSAGE = "message";
 	public static final String IS_LOCKED = "lock";
 	public static final int FIRMWARE_UPGRADE_CONNECTIVITY_TIMEOUT = 10000;

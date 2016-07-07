@@ -52,10 +52,12 @@ import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.beans.Notification;
 import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.beans.WifiProfile;
+import org.wso2.emm.agent.events.beans.EventPayload;
 import org.wso2.emm.agent.events.listeners.WifiConfigCreationListener;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 import org.wso2.emm.agent.services.DeviceInfoPayload;
+import org.wso2.emm.agent.services.LogPublisherFactory;
 import org.wso2.emm.agent.services.NotificationService;
 import org.wso2.emm.agent.services.PolicyComplianceChecker;
 import org.wso2.emm.agent.services.PolicyOperationsMapper;
@@ -293,9 +295,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         intent.putExtra(resources.getString(R.string.intent_extra_type),
                         resources.getString(R.string.intent_extra_ring));
         intent.putExtra(resources.getString(R.string.intent_extra_message_text),
-                resources.getString(R.string.intent_extra_stop_ringing));
+                        resources.getString(R.string.intent_extra_stop_ringing));
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
 
         if (Constants.DEBUG_MODE_ENABLED) {
@@ -822,6 +824,38 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
 
         if (Constants.DEBUG_MODE_ENABLED) {
             Log.d(TAG, "VPN configured");
+        }
+        operation.setStatus(resources.getString(R.string.operation_value_completed));
+        operation.setPayLoad(result.toString());
+        resultBuilder.build(operation);
+    }
+
+    /**
+     * Get device logcat.
+     *
+     * @param operation - Operation object.
+     */
+    public void getLogcat(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+        JSONObject result = new JSONObject();
+        RuntimeInfo info = new RuntimeInfo(context);
+        LogPublisherFactory publisher = new LogPublisherFactory(context);
+        try {
+            result.put("logcat", info.getLogCat());
+            if (publisher.getLogPulisher() != null) {
+                EventPayload eventPayload = new EventPayload();
+                eventPayload.setPayload(info.getLogCat());
+                eventPayload.setType("LOGCAT");
+                publisher.getLogPulisher().publish(eventPayload);
+            }
+        } catch (JSONException e) {
+            operation.setStatus(resources.getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing VPN payload.");
+            resultBuilder.build(operation);
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
+
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "Logcat returned");
         }
         operation.setStatus(resources.getString(R.string.operation_value_completed));
         operation.setPayLoad(result.toString());

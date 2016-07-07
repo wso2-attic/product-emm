@@ -11,6 +11,10 @@
     <string name="operation_id">operationId</string>
     <string name="firmware_status_check_in_progress">firmwareStatusCheck</string>
     <string name="alarm_scheduled_operation">scheduledOperation</string>
+    <string name="upgrade_install_status">upgradeInstallStatus</string>
+    <string name="upgrade_failed_due_to_battery">Firmware upgrade failed due to insufficient battery level. Please connect your device to the charger. Upgrade will continue when the battery level reach 50%.</string>
+    <string name="status_failed">failed</string>
+    <string name="status_success">success</string>
     <string name="txt_lock_activity">Device is locked. Please contact administrator</string>
     <string name="txt_unlock_activity">Device is Unlocked</string>
     <string name="title_activity_lock">LockActivity</string>
