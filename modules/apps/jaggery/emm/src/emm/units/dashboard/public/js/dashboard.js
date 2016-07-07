@@ -37,10 +37,8 @@ var updateStats = function (serviceURL, id) {
             }
         },
 
-        function (jqXHR) {
-            if (jqXHR.status == 500) {
-                $(id).html("Error...");
-            }
+        function () {
+            $(id).html("Error...");
         }
     );
 };
