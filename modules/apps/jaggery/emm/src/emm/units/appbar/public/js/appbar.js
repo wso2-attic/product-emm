@@ -97,7 +97,7 @@ function updateNotificationCountOnError() {
     $(notificationBubble).show();
 }
 
-function loadNotificationsSideViewPanel() {
+function loadNewNotificationsOnSideViewPanel() {
     if ($("#right-sidebar").attr("is-authorized") == "false") {
         $("#notification-bubble-wrapper").remove();
     } else {
@@ -116,7 +116,7 @@ function loadNewNotifications() {
         var currentUser = notifications.data("currentUser");
 
         $.template("notification-listing", notifications.attr("src"), function (template) {
-            var serviceURL = emmAdminBasePath + "/notifications?status=NEW";
+            var serviceURL = emmAdminBasePath + "/notifications?status=NEW&offset=0&limit=6";
             invokerUtil.get(
                 serviceURL,
                 // on success
@@ -345,9 +345,14 @@ $.fn.collapse_nav_sub = function () {
 };
 
 $(document).ready(function () {
-    loadNotificationsSideViewPanel();
     $.sidebar_toggle();
+    if (typeof $.fn.collapse == 'function') {
+        $('.navbar-collapse.tiles').on('shown.bs.collapse', function () {
+            $(this).collapse_nav_sub();
+        });
+    }
 
+    loadNewNotificationsOnSideViewPanel();
     $("#right-sidebar").on("click", ".new-notification", function () {
         var notificationId = $(this).data("id");
         var redirectUrl = $(this).data("url");
@@ -370,10 +375,4 @@ $(document).ready(function () {
             }
         );
     });
-
-    if (typeof $.fn.collapse == 'function') {
-        $('.navbar-collapse.tiles').on('shown.bs.collapse', function () {
-            $(this).collapse_nav_sub();
-        });
-    }
 });
