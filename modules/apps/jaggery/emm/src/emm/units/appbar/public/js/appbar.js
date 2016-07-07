@@ -77,74 +77,75 @@ function toggleEnrollment() {
     showPopup();
 }
 
-var updateNotificationCount = function (data, textStatus, jqXHR) {
+var updateNotificationCountOnSuccess = function (data, textStatus, jqXHR) {
+    var notificationBubble = "#notification-bubble";
     if (jqXHR.status == 200 && data) {
         var responsePayload = JSON.parse(data);
-        var newNotificationsCount = responsePayload.count;
+        var newNotificationsCount = responsePayload["count"];
         if (newNotificationsCount > 0) {
-            $("#notification-bubble").html(newNotificationsCount);
+            $(notificationBubble).html(newNotificationsCount);
+            $(notificationBubble).show();
+        } else {
+            $(notificationBubble).hide();
         }
-//        } else {
-//            $("#notification-bubble").html("Error");
-//        }
     }
 };
 
-function loadNotificationsPanel() {
-    if ("true" == $("#right-sidebar").attr("is-authorized")) {
-        var serviceURL = emmAdminBasePath + "/notifications?status=NEW";
-        invokerUtil.get(serviceURL, updateNotificationCount, hideNotificationCount);
-        loadNewNotifications();
-    } else {
-        $("#notification-bubble-wrapper").remove();
-    }
+function updateNotificationCountOnError() {
+    var notificationBubble = "#notification-bubble";
+    $(notificationBubble).html("Error");
+    $(notificationBubble).show();
 }
 
-function hideNotificationCount(jqXHR) {
-    if (jqXHR.status == 404) {
-        // this means "no new notifications to show"
-        $("#notification-bubble").hide();
+function loadNotificationsSideViewPanel() {
+    if ($("#right-sidebar").attr("is-authorized") == "false") {
+        $("#notification-bubble-wrapper").remove();
     } else {
-        $("#notification-bubble").html("Error");
+        var serviceURL = emmAdminBasePath + "/notifications?status=NEW";
+        invokerUtil.get(serviceURL, updateNotificationCountOnSuccess, updateNotificationCountOnError);
+        loadNewNotifications();
     }
 }
 
 function loadNewNotifications() {
     var messageSideBar = ".sidebar-messages";
-    if ($("#right-sidebar").attr("is-authorized") == "true") {
+    if ($("#right-sidebar").attr("is-authorized") == "false") {
+        $(messageSideBar).html("<h4 class ='message-danger'>You are not authorized to view notifications.</h4>");
+    } else {
         var notifications = $("#notifications");
         var currentUser = notifications.data("currentUser");
 
         $.template("notification-listing", notifications.attr("src"), function (template) {
             var serviceURL = emmAdminBasePath + "/notifications?status=NEW";
-
-            var successCallback = function (data, textStatus, jqXHR) {
-                if (jqXHR.status == 200 && data) {
-                    var viewModel = {};
-                    var responsePayload = JSON.parse(data);
-
-                    if (responsePayload.notifications) {
-                        viewModel.notifications = responsePayload.notifications;
-                        if (responsePayload.count > 0) {
-                            $(messageSideBar).html(template(viewModel));
+            invokerUtil.get(
+                serviceURL,
+                // on success
+                function (data, textStatus, jqXHR) {
+                    if (jqXHR.status == 200 && data) {
+                        var viewModel = {};
+                        var responsePayload = JSON.parse(data);
+                        if (responsePayload["notifications"]) {
+                            if (responsePayload.count > 0) {
+                                viewModel["notifications"] = responsePayload["notifications"];
+                                $(messageSideBar).html(template(viewModel));
+                            } else {
+                                $(messageSideBar).html("<h4 class='text-center'>No new notifications found...</h4>");
+                            }
                         } else {
-                            $(messageSideBar).html("<h4 class='text-center'>No new notifications found...</h4>");
+                            $(messageSideBar).html("<h4 class ='message-danger'>Unexpected error " +
+                                "occurred while loading new notifications.</h4>");
                         }
-                    } else {
-                        $(messageSideBar).html("<h4 class ='message-danger'>Unexpected error occurred while loading new notifications.</h4>");
+                    }
+                },
+                // on error
+                function (jqXHR) {
+                    if (jqXHR.status = 500) {
+                        $(messageSideBar).html("<h4 class ='message-danger'>Unexpected error occurred while trying " +
+                            "to retrieve any new notifications.</h4>");
                     }
                 }
-            };
-            var errorCallback = function (jqXHR) {
-                if (jqXHR.status = 500) {
-                    $(messageSideBar).html("<h4 class ='message-danger'>Unexpected error occurred while trying " +
-                        "to retrieve any new notifications.</h4>");
-                }
-            };
-            invokerUtil.get(serviceURL, successCallback, errorCallback);
+            );
         });
-    } else {
-        $(messageSideBar).html("<h4 class ='message-danger'>You are not authorized to view notifications</h4>");
     }
 }
 
@@ -344,7 +345,7 @@ $.fn.collapse_nav_sub = function () {
 };
 
 $(document).ready(function () {
-    loadNotificationsPanel();
+    loadNotificationsSideViewPanel();
     $.sidebar_toggle();
 
     $("#right-sidebar").on("click", ".new-notification", function () {
