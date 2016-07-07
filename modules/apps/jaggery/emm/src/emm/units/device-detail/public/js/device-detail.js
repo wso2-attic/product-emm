@@ -228,7 +228,7 @@ var InitiateViewOption = null;
                             $("#applications-list-container").html(content);
                         } else {
                             $("#applications-list-container").
-                                html("<div class='panel-body'><br><p class='fw-warning'>No applications found. " +
+                                html("<div class='panel-body'><br><p class='fw-warning'>&nbsp;No applications found. " +
                                     "please try refreshing the list in a while.<p></div>");
                         }
                     }
@@ -236,7 +236,7 @@ var InitiateViewOption = null;
                 // error-callback
                 function () {
                     $("#applications-list-container").
-                        html("<div class='panel-body'><br><p class='fw-warning'> Loading application list " +
+                        html("<div class='panel-body'><br><p class='fw-warning'>&nbsp;Loading application list " +
                             "was not successful. please try refreshing the list in a while.<p></div>");
             });
         });
