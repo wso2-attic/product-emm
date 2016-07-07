@@ -350,11 +350,11 @@ $(document).ready(function () {
     $("#right-sidebar").on("click", ".new-notification", function () {
         var notificationId = $(this).data("id");
         var redirectUrl = $(this).data("url");
-        var markAsReadNotificationsAPI = "/mdm-admin/notifications/" + notificationId + "/CHECKED";
+        var markAsReadNotificationsEpr = emmAdminBasePath + "/notifications/" + notificationId + "/mark-checked";
         var messageSideBar = ".sidebar-messages";
 
         invokerUtil.put(
-            markAsReadNotificationsAPI,
+            markAsReadNotificationsEpr,
             null,
             function (data) {
                 data = JSON.parse(data);

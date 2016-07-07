@@ -182,7 +182,7 @@ $("#policy-name-input").focus(function(){
 
 stepForwardFrom["policy-platform"] = function (actionButton) {
     policy["platform"] = $(actionButton).data("platform");
-    policy["platformId"] = $(actionButton).data("platform-id");
+    policy["platformId"] = $(actionButton).data("platform-type");
     // updating next-page wizard title with selected platform
     $("#policy-profile-page-wizard-title").text("ADD " + policy["platform"] + " POLICY");
 
@@ -2244,7 +2244,7 @@ var savePolicy = function (policy, isActive, serviceURL) {
         if (policy["profile"].hasOwnProperty(key)) {
             profilePayloads.push({
                 "featureCode": key,
-                "deviceTypeId": policy["platformId"],
+                "deviceType": policy["platform"],
                 "content": policy["profile"][key]
             });
         }
@@ -2267,9 +2267,7 @@ var savePolicy = function (policy, isActive, serviceURL) {
         "active": isActive,
         "profile": {
             "profileName": policy["policyName"],
-            "deviceType": {
-                "id": policy["platformId"]
-            },
+            "deviceType": policy["platform"],
             "profileFeaturesList": profilePayloads
         }
     };
@@ -2507,13 +2505,13 @@ $(document).ready(function () {
     var isAndroidEnabled = enabledPlatforms.data("android");
     var isWindowsEnabled = enabledPlatforms.data("windows");
     var isIosEnabled = enabledPlatforms.data("ios");
-    var androidID = enabledPlatforms.data("android-id");
-    var windowsID = enabledPlatforms.data("windows-id");
-    var iosID = enabledPlatforms.data("ios-id");
+    var androidType = enabledPlatforms.data("android-type");
+    var windowsType = enabledPlatforms.data("windows-type");
+    var iosType = enabledPlatforms.data("ios-type");
 
     var androidLink = $(".android-platform");
     if (isAndroidEnabled) {
-        androidLink.attr("data-platform-id",androidID);
+        androidLink.attr("data-platform-type", androidType);
     } else {
         androidLink.unbind("click");
         androidLink.attr("data-validate","true");
@@ -2524,7 +2522,7 @@ $(document).ready(function () {
     }
     var windowsLink = $(".windows-platform") ;
     if (isWindowsEnabled) {
-        windowsLink.attr("data-platform-id",windowsID);
+        windowsLink.attr("data-platform-type", windowsType);
     } else {
         windowsLink.unbind("click");
         windowsLink.attr("data-validate","true");
@@ -2534,7 +2532,7 @@ $(document).ready(function () {
     }
     var iosLink = $(".ios-platform");
     if (isIosEnabled) {
-        iosLink.attr("data-platform-id",iosID);
+        iosLink.attr("data-platform-type", iosType);
     } else {
         iosLink.unbind("click");
         iosLink.attr("data-validate","true");
