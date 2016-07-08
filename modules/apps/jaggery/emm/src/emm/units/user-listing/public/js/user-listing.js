@@ -49,11 +49,9 @@ function hidePopup() {
  */
 function getSelectedUsernames() {
     var usernameList = [];
-    var userList = $("#user-grid").find('> tbody > tr');
+    var userList = $("#user-grid").find('tr.DTTT_selected');
     userList.each(function () {
-        if ($(this).hasClass('DTTT_selected')) {
-            usernameList.push($(this).attr('data-username'));
-        }
+        usernameList.push($(this).data('username'));
     });
     return usernameList;
 }
@@ -252,7 +250,9 @@ function loadUsers(searchParam) {
     }
 
     var fnCreatedRow = function( nRow, aData, iDataIndex ) {
+        console.log(JSON.stringify(aData));
         $(nRow).attr('data-type', 'selectable');
+        $(nRow).attr('data-username', aData["username"]);
     }
 
     var columns = [
