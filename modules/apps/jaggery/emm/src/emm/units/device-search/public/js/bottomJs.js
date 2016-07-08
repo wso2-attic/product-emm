@@ -44,15 +44,15 @@ $("#view-search-param").click(function () {
 
 var dynamicForm = '<div class="dynamic-search-param row"><div class="row"><a class="close-button-div icon fw fw-error">' +
                   '</a></div><div class="form-group wr-input-control col-md-2"><label class="wr-input-label ">State</label>' +
-                  '<select class="state no-tag form-control select2"><option>AND</option><option>OR</option></select></div><div ' +
+                  '<select class="state no-tag form-control select2-custom"><option>AND</option><option>OR</option></select></div><div ' +
                   'class="form-group wr-input-control col-md-4"><label class="wr-input-label ">Key</label><select class=' +
-                  '"txt-key form-control select2"><option>deviceModel</option><option>vendor</option><option>osVersion' +
+                  '"txt-key form-control select2-custom"><option>deviceModel</option><option>vendor</option><option>osVersion' +
                   '</option><option>batteryLevel</option><option>internalTotalMemory</option> <option>' +
                   'internalAvailableMemory</option> <option>externalTotalMemory</option> <option>externalAvailableMemory' +
                   '</option> <option>connectionType</option> <option>ssid</option> <option>cpuUsage</option> <option>' +
                   'totalRAMMemory</option> <option>availableRAMMemory</option> <option>pluggedIn</option></select></div>' +
                   '<div class="form-group wr-input-control col-md-2">' +
-                  '<label class="wr-input-label ">Operator</label><select class="form-control select2 no-tag operator">' +
+                  '<label class="wr-input-label ">Operator</label><select class="form-control select2-custom no-tag operator">' +
                   '<option>=</option><option> !=</option><option> <</option>' +
                   '<option> =<</option><option> ></option><option> >=</option></select></div><div class="form-group ' +
                   'wr-input-control col-md-4"><label class="wr-input-label' +
@@ -64,12 +64,8 @@ $(document).ready(function () {
         $("#customSearchParam").prepend(dynamicForm);
         $(".close-button-div").unbind("click");
         $(".close-button-div").bind("click", removeCustomParam);
-        $(".txt-key").select2({
-                                          tags: true
-                                      });
-        $(".no-tag").select2({
-                                          tags: false
-                                      });
+        $(".txt-key").select2({tags: true});
+        $(".no-tag").select2({tags: false});
     });
 
     $("#device-search-btn").click(function () {
@@ -98,7 +94,7 @@ $(document).ready(function () {
             }
         });
         payload_obj.conditions = conditions;
-        var deviceSearchAPI = "/mdm-admin/search";
+        var deviceSearchAPI = "/api/device-mgt/v1.0/devices/search-devices";
         $("#advance-search-form").addClass(" hidden");
         $("#loading-content").removeClass('hidden');
         var deviceListing = $("#device-listing");
@@ -106,7 +102,7 @@ $(document).ready(function () {
         $.template("device-listing", deviceListingSrc, function (template) {
 
             var successCallback = function (data) {
-                if (data) {
+                if (!data) {
                     $("#loading-content").addClass('hidden');
                     $("#advance-search-result").addClass("hidden");
                     $("#advance-search-form").removeClass(" hidden");
@@ -115,19 +111,20 @@ $(document).ready(function () {
                     return;
                 }
                 data = JSON.parse(data);
-                if (data.length == 0) {
+                if (data.devices.length == 0) {
                     $('#device-listing-status').removeClass('hidden');
                     $('#device-listing-status-msg').text('No Device are available to be displayed.');
                     return;
                 }
                 var viewModel = {};
                 var devices = [];
-                if (data.length > 0) {
-                    for (var tempDevice of data) {
+                if (data.devices.length > 0) {
+                    for (i = 0; i < data.devices.length; i++) {
+                        var tempDevice = data.devices[i];
                         var device = {};
-                        device.type = tempDevice.device.type;
-                        device.name = tempDevice.device.name;
-                        device.deviceIdentifier = tempDevice.device.deviceIdentifier;
+                        device.type = tempDevice.type;
+                        device.name = tempDevice.name;
+                        device.deviceIdentifier = tempDevice.deviceIdentifier;
                         var properties = {} ;
                         var enrolmentInfo = {};
                         properties.VENDOR = tempDevice.deviceInfo.vendor;
