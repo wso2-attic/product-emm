@@ -16,14 +16,7 @@
  * under the License.
  */
 
-var responseCodes = {
-    "CREATED": "Created",
-    "ACCEPTED": "202",
-    "INTERNAL_SERVER_ERROR": "Internal Server Error"
-};
-
-var base_url = "/api/device-mgt/v1.0";
-var base_url_notification_api = base_url + "/notifications";
+var deviceMgtAPIBaseURI = "/api/device-mgt/v1.0";
 
 /**
  * Following function would execute
@@ -32,6 +25,48 @@ var base_url_notification_api = base_url + "/notifications";
  */
 function InitiateViewOption() {
     $(location).attr('href', $(this).data("url"));
+}
+
+function loadNotifications() {
+    var deviceListing = $("#notification-listing");
+    var deviceListingSrc = deviceListing.attr("src");
+    var currentUser = deviceListing.data("currentUser");
+    $.template(
+        "notification-listing",
+        deviceListingSrc,
+        function (template) {
+            invokerUtil.get(
+                deviceMgtAPIBaseURI + "/notifications",
+                // on success
+                function (data, textStatus, jqXHR) {
+                    if (jqXHR.status == 200 && data) {
+                        data = JSON.parse(data);
+                        if (data["notifications"] && data["notifications"].length > 0) {
+                            var viewModel = {};
+                            viewModel["notifications"] = data["notifications"];
+                            var content = template(viewModel);
+                            $("#ast-container").html(content);
+                            $("#unread-notifications").datatables_extended();
+                            $("#all-notifications").datatables_extended();
+                        }
+                    }
+                },
+                // on error
+                function (jqXHR) {
+                    console.log(jqXHR.status);
+                }
+            );
+        }
+    );
+}
+
+// Start of HTML embedded invoke methods
+function showAdvanceOperation(operation, button) {
+    $(button).addClass('selected');
+    $(button).siblings().removeClass('selected');
+    var hiddenOperation = ".wr-hidden-operations-content > div";
+    $(hiddenOperation + '[data-operation="' + operation + '"]').show();
+    $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
 }
 
 $(document).ready(function () {
@@ -46,75 +81,31 @@ $(document).ready(function () {
 
     loadNotifications();
 
-    $("#ast-container").on("click", ".new-notification", function(e){
+    $("#ast-container").on("click", ".new-notification", function(e) {
         var notificationId = $(this).data("id");
         var redirectUrl = $(this).data("url");
-        var query = base_url_notification_api + "/" + notificationId + "/mark-checked";
+        var query = deviceMgtAPIBaseURI + "/notifications" + "/" + notificationId + "/mark-checked";
         var errorMsgWrapper = "#error-msg";
         var errorMsg = "#error-msg span";
         invokerUtil.put(
             query,
             null,
-            function (data) {
-                data = JSON.parse(data);
-                if (data.statusCode == responseCodes["ACCEPTED"]) {
+            // on success
+            function (data, textStatus, jqXHR) {
+                if (jqXHR.status == 200) {
                     $("#config-save-form").addClass("hidden");
                     location.href = redirectUrl;
-                } else if (data == 500) {
-                    $(errorMsg).text("Exception occurred at backend.");
-                } else if (data == 403) {
-                    $(errorMsg).text("Action was not permitted.");
-                } else {
-                    $(errorMsg).text("An unexpected error occurred.");
                 }
-
-                $(errorMsgWrapper).removeClass("hidden");
-            }, function (data) {
-                data = data.status;
-                if (data == 500) {
-                    $(errorMsg).text("Exception occurred at backend.");
-                } else if (data == 403) {
+            },
+            // on error
+            function (jqXHR) {
+                if (jqXHR.status == 403) {
                     $(errorMsg).text("Action was not permitted.");
-                } else {
-                    $(errorMsg).text("An unexpected error occurred.");
+                } else if (jqXHR.status == 500) {
+                    $(errorMsg).text("An unexpected error occurred. Please try refreshing the page in a while.");
                 }
                 $(errorMsgWrapper).removeClass("hidden");
             }
         );
     });
-
 });
-
-function loadNotifications(){
-    var deviceListing = $("#notification-listing");
-    var deviceListingSrc = deviceListing.attr("src");
-    var currentUser = deviceListing.data("currentUser");
-    $.template("notification-listing", deviceListingSrc, function (template) {
-        var successCallback = function (data) {
-            var viewModel = {};
-            data = JSON.parse(data);
-            viewModel.notifications = data;
-            if(data.length > 0){
-                var content = template(viewModel);
-                $("#ast-container").html(content);
-                $('#unread-notifications').datatables_extended();
-                $('#all-notifications').datatables_extended();
-            }
-
-        };
-        invokerUtil.get(base_url_notification_api,
-            successCallback, function(message){
-                console.log(message.content);
-        });
-    });
-}
-
-
-// Start of HTML embedded invoke methods
-var showAdvanceOperation = function (operation, button) {
-    $(button).addClass('selected');
-    $(button).siblings().removeClass('selected');
-    var hiddenOperation = ".wr-hidden-operations-content > div";
-    $(hiddenOperation + '[data-operation="' + operation + '"]').show();
-    $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
-};
