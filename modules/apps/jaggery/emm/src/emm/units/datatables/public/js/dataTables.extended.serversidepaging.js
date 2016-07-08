@@ -19,7 +19,7 @@
 /* ========================================================================
  * datatables_extended function
  * ======================================================================== */
-$.fn.datatables_extended_serverside_paging = function(settings ,url, dataFilter, columns, fnDrawCallback){
+$.fn.datatables_extended_serverside_paging = function(settings ,url, dataFilter, columns, fnCreatedRow, fnDrawCallback){
 
     var elem = $(this);
 
@@ -64,9 +64,7 @@ $.fn.datatables_extended_serverside_paging = function(settings ,url, dataFilter,
                 searchPlaceholder: 'Search by Role name',
                 search: ''
             },
-            fnCreatedRow: function( nRow, aData, iDataIndex ) {
-                $(nRow).attr('data-type', 'selectable');
-            },
+            fnCreatedRow: fnCreatedRow,
             "fnDrawCallback" : fnDrawCallback,
             initComplete: function() {
 

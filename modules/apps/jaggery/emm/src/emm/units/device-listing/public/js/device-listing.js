@@ -188,6 +188,10 @@ function loadDevices(searchType, searchParam){
         return {};
     }
 
+    var fnCreatedRow = function( nRow, aData, iDataIndex ) {
+        $(nRow).attr('data-type', 'selectable');
+    }
+
 
     var columns = [
         {
@@ -286,7 +290,7 @@ function loadDevices(searchType, searchParam){
     };
 
 
-    $('#device-grid').datatables_extended_serverside_paging(null, '/api/device-mgt/v1.0/devices', dataFilter, columns,
+    $('#device-grid').datatables_extended_serverside_paging(null, '/api/device-mgt/v1.0/devices', dataFilter, columns, fnCreatedRow,
         function( oSettings ) {
         $(".icon .text").res_text(0.2);
         $('#device-grid').removeClass('hidden');
