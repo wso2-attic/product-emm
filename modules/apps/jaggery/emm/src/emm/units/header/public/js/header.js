@@ -44,25 +44,25 @@ $(document).ready(function () {
                 $(errorMsgWrapper).removeClass("hidden");
             } else {
                 var changePasswordFormData = {};
-                changePasswordFormData.username = user;
-                changePasswordFormData.oldPassword = window.btoa(unescape(encodeURIComponent(oldPassword)));
-                changePasswordFormData.newPassword = window.btoa(unescape(encodeURIComponent(confirmedPassword)));
+                //changePasswordFormData.username = user;
+                changePasswordFormData.newPassword = unescape((confirmedPassword));
+                changePasswordFormData.oldPassword = unescape((oldPassword));
 
-                var changePasswordAPI = "/mdm-admin/users/change-password";
 
-                invokerUtil.post(
+                var changePasswordAPI = "/api/device-mgt/v1.0/users/"+user+"/credentials";
+
+                invokerUtil.put(
                     changePasswordAPI,
                     changePasswordFormData,
-                    function (data) {
-                        data = JSON.parse(data);
-                        if (data.statusCode == 201) {
+                    function (data, textStatus, jqXHR) {
+                        if (jqXHR.status == 200 && data) {
                             $(modalPopupContent).html($('#change-password-success-content').html());
-                            $("a#change-password-success-link").click(function () {
+                            $("#change-password-success-link").click(function () {
                                 hidePopup();
                             });
                         }
-                    }, function (data) {
-                        if (data.status == 400) {
+                    }, function (jqXHR) {
+                        if (jqXHR.status == 400) {
                             $(errorMsg).text("Old password does not match with the provided value.");
                             $(errorMsgWrapper).removeClass("hidden");
                         } else {
