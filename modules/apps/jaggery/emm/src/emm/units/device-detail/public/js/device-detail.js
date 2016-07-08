@@ -253,41 +253,45 @@ var InitiateViewOption = null;
             "policy-view",
             policyComplianceTemplate,
             function (template) {
-                //var serviceURLPolicy ="/mdm-admin/policies/"+deviceType+"/"+deviceId+"/active-policy"
-                //var serviceURLCompliance = "/mdm-admin/policies/"+deviceType+"/"+deviceId;
-                var serviceURLPolicy = "/api/device-mgt/v1.0/devices/" + deviceType + "/" + deviceId + "/effective-policy";
-                var serviceURLCompliance = "/api/device-mgt/v1.0/devices/" + deviceType + "/" + deviceId;
+                var getEffectivePolicyURL = "/api/device-mgt/v1.0/devices/" + deviceType + "/" + deviceId + "/effective-policy";
+                var getDeviceComplianceURL = "/api/device-mgt/v1.0/devices/" + deviceType + "/" + deviceId + "/compliance-data";
 
                 invokerUtil.get(
-                    serviceURLPolicy,
+                    getEffectivePolicyURL,
                     // success-callback
                     function (data, textStatus, jqXHR) {
                         if (jqXHR.status == 200 && data) {
                             data = JSON.parse(data);
                             $("#policy-spinner").addClass("hidden");
-                            if (data.active == true) {
+                            if (data["active"] == true) {
                                 activePolicy = data;
                                 invokerUtil.get(
-                                    serviceURLCompliance,
+                                    getDeviceComplianceURL,
                                     // success-callback
                                     function (data, textStatus, jqXHR) {
                                         if (jqXHR.status == 200 && data) {
                                             var viewModel = {};
                                             viewModel["policy"] = activePolicy;
                                             viewModel["deviceType"] = deviceType;
-                                            var content;
                                             data = JSON.parse(data);
-                                            if (data["complianceFeatures"] &&
-                                                data["complianceFeatures"].length > 0) {
-                                                viewModel["compliance"] = "NON-COMPLIANT";
-                                                viewModel["complianceFeatures"] = data["complianceFeatures"];
-                                                content = template(viewModel);
-                                                $("#policy-list-container").html(content);
+                                            var content;
+                                            if (data["complianceData"]) {
+                                                if (data["complianceData"]["complianceFeatures"] &&
+                                                    data["complianceData"]["complianceFeatures"].length > 0) {
+                                                    viewModel["compliance"] = "NON-COMPLIANT";
+                                                    viewModel["complianceFeatures"] = data["complianceData"]["complianceFeatures"];
+                                                    content = template(viewModel);
+                                                    $("#policy-list-container").html(content);
+                                                } else {
+                                                    viewModel["compliance"] = "COMPLIANT";
+                                                    content = template(viewModel);
+                                                    $("#policy-list-container").html(content);
+                                                    $("#policy-compliance-table").addClass("hidden");
+                                                }
                                             } else {
-                                                viewModel["compliance"] = "COMPLIANT";
-                                                content = template(viewModel);
-                                                $("#policy-list-container").html(content);
-                                                $("#policy-compliance-table").addClass("hidden");
+                                                $("#policy-list-container").
+                                                    html("<div class='panel-body'><br><p class='fw-warning'> This device " +
+                                                        "has no policy applied.<p></div>");
                                             }
                                         }
                                     },
