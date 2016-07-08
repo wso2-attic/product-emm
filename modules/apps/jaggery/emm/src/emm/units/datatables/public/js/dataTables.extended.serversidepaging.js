@@ -36,9 +36,15 @@ $.fn.datatables_extended_serverside_paging = function(settings ,url, dataFilter,
             ajax : {
                 url: "/emm/api/datatables/invoker",
                 data : function (params) {
+                    var filter = "";
+                    for (i = 0; i < params.columns.length; i++) {
+                        console.log(i);
+                        filter += "&" + params.columns[i].data + "=" + params.columns[i].search.value;
+                    }
+                    console.log(filter);
                     params.offset = params.start;
                     params.limit = params.length;
-                    params.filter = params.search.value
+                    params.filter = filter;
                     params.url = url;
                 },
                 dataFilter: dataFilter

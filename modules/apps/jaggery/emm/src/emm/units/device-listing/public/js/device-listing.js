@@ -192,7 +192,7 @@ function loadDevices(searchType, searchParam){
     var columns = [
         {
             class : 'remove-padding icon-only content-fill viewEnabledIcon',
-            data : 'name',
+            data : 'icon',
             render: function (data, type, row, meta) {
                 var deviceType = row.deviceType;
                 var deviceIdentifier = row.deviceIdentifier;
@@ -216,9 +216,9 @@ function loadDevices(searchType, searchParam){
             }
         },{
             class: 'fade-edge remove-padding-top',
-            data: 'owner',
-            render: function ( owner, type, row, meta ) {
-                return '<div><label class="label-bold">Owner</label>' + owner + '</div>';
+            data: 'user',
+            render: function ( user, type, row, meta ) {
+                return '<div><label class="label-bold">Owner</label>' + user + '</div>';
             }
         },{
             class: 'fade-edge remove-padding-top',
