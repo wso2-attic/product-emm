@@ -171,8 +171,8 @@ function resetPassword(uname) {
             $(errorMsgWrapper).removeClass("hidden");
         } else {
             var resetPasswordFormData = {};
-            resetPasswordFormData.username = user;
-            resetPasswordFormData.newPassword = window.btoa(unescape(encodeURIComponent(confirmedPassword)));
+            //resetPasswordFormData.username = user;
+            resetPasswordFormData.newPassword = unescape(confirmedPassword);
 
             var resetPasswordServiceURL = emmAdminBasePath + "/admin/users/"+ user +"/credentials";
 
