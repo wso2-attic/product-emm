@@ -65,7 +65,7 @@ function getSelectedUsernames() {
  */
 $("a.invite-user-link").click(function () {
     var usernameList = getSelectedUsernames();
-    var inviteUserAPI = emmAdminBasePath + "/users/email-invitation";
+    var inviteUserAPI = emmAdminBasePath + "/users/send-invitation";
 
     if (usernameList.length == 0) {
         $(modalPopupContent).html($("#errorUsers").html());
