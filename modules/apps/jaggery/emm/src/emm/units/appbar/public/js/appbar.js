@@ -116,7 +116,7 @@ function loadNewNotifications() {
         var currentUser = notifications.data("currentUser");
 
         $.template("notification-listing", notifications.attr("src"), function (template) {
-            var serviceURL = emmAdminBasePath + "/notifications?status=NEW&offset=0&limit=6";
+            var serviceURL = emmAdminBasePath + "/notifications?status=NEW";
             invokerUtil.get(
                 serviceURL,
                 // on success
@@ -362,12 +362,15 @@ $(document).ready(function () {
         invokerUtil.put(
             markAsReadNotificationsEpr,
             null,
+            // on success
             function (data) {
                 data = JSON.parse(data);
                 if (data.statusCode == responseCodes["ACCEPTED"]) {
                     location.href = redirectUrl;
                 }
-            }, function () {
+            },
+            // on error
+            function () {
                 var content = "<li class='message message-danger'><h4><i class='icon fw fw-error'></i>Warning</h4>" +
                     "<p>Unexpected error occurred while loading notification. Please refresh the page and" +
                         " try again</p></li>";
