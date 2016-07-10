@@ -94,6 +94,13 @@ var windowsOperationConstants = {
 };
 
 /**
+ * @namespace $
+ * The $ is just a function.
+ * It is actually an alias for the function called jQuery.
+ * For ex: $(this) means jQuery(this) and S.fn.x means jQuery.fn.x
+ */
+
+/**
  * Method to update the visibility of grouped input.
  * @param domElement HTML grouped-input element with class name "grouped-input"
  */
