@@ -17,17 +17,15 @@
  * under the License.
  */
 
+var log = new Log("api/data-tables-invoker-api.jag");
+
 var uri = request.getRequestURI();
 var uriMatcher = new URIMatcher(String(uri));
 
-var log = new Log("api/datatables-invoker-api.jag");
-
-// var deviceModule = require("/modules/device.js").deviceModule;
-var userModule = require("/modules/user.js")["userModule"];
-var serviceInvokers = require("/modules/backend-service-invoker.js")["backendServiceInvoker"];
 var mdmProps = require("/config/mdm-props.js").config();
+var serviceInvokers = require("/modules/backend-service-invoker.js")["backendServiceInvoker"];
 
-if (uriMatcher.match("/{context}/api/datatables/invoker")) {
+if (uriMatcher.match("/{context}/api/data-tables/invoker")) {
     var url = request.getParameter("url");
     var targetURL;
     var payload = request.getContent();
@@ -52,9 +50,10 @@ if (uriMatcher.match("/{context}/api/datatables/invoker")) {
 
     serviceInvokers.XMLHttp.get(
         targetURL,
+        // response callback
         function (backendResponse) {
-            response.status = backendResponse.status;
-            response.content =  backendResponse.responseText;
+            response["status"] = backendResponse["status"];
+            response["content"] =  backendResponse["responseText"];
         }
     );
 }
