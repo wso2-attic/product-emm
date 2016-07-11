@@ -84,11 +84,12 @@ var util = function () {
         xhr.setRequestHeader("Authorization", "Basic " + encodedClientKeys);
         xhr.send("grant_type=password&username=" + username + "&password=" + password + "&scope=" + scope);
         delete password, delete clientSecret, delete encodedClientKeys;
-        var tokenPair = {};
+        var tokenData = {};
         if (xhr.status == 200) {
             var data = parse(xhr.responseText);
-            tokenPair.refreshToken = data.refresh_token;
-            tokenPair.accessToken = data.access_token;
+            tokenData.refreshToken = data.refresh_token;
+            tokenData.accessToken = data.access_token;
+            tokenData.scopes = data.scope;
         } else if (xhr.status == 403) {
             log.error("Error in obtaining token with Password grant type");
             return null;
@@ -96,7 +97,7 @@ var util = function () {
             log.error("Error in obtaining token with Password grant type");
             return null;
         }
-        return tokenPair;
+        return tokenData;
     };
     module.getTokenWithSAMLGrantType = function (assertion, clientKeys, scope) {
 
@@ -124,17 +125,18 @@ var util = function () {
         xhr.setRequestHeader("Authorization", "Basic " + clientKeys);
         xhr.send("grant_type=urn:ietf:params:oauth:grant-type:saml2-bearer&assertion=" +
                  encodeURIComponent(encodedExtractedAssertion) + "&scope=" + "PRODUCTION");
-        var tokenPair = {};
+        var tokenData = {};
         if (xhr.status == 200) {
             var data = parse(xhr.responseText);
-            tokenPair.refreshToken = data.refresh_token;
-            tokenPair.accessToken = data.access_token;
+            tokenData.refreshToken = data.refresh_token;
+            tokenData.accessToken = data.access_token;
+            tokenData.scopes = data.scope;
         } else if (xhr.status == 403) {
             throw "Error in obtaining token with SAML extension grant type";
         } else {
             throw "Error in obtaining token with SAML extension grant type";
         }
-        return tokenPair;
+        return tokenData;
     };
     module.refreshToken = function (tokenPair, clientData, scope) {
         var xhr = new XMLHttpRequest();

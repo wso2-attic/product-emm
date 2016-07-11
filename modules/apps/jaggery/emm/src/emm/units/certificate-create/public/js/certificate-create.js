@@ -21,7 +21,7 @@ var errorMsg = "#certificate-create-error-msg span";
 var validateInline = {};
 var clearInline = {};
 
-var base_api_url = "/api/device-mgt/v1.0";
+var base_api_url = "/api-device-mgt-v1.0";
 
 var enableInlineError = function (inputField, errorMsg, errorSign) {
     var fieldIdentifier = "#" + inputField;

@@ -20,6 +20,7 @@ var apiWrapperUtil = function () {
     var module = {};
     var tokenUtil = require("/modules/util.js").util;
     var constants = require("/modules/constants.js");
+    var devicemgtProps = require('/config/mdm-props.js').config();
 
     module.refreshToken = function () {
         var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
@@ -31,13 +32,20 @@ var apiWrapperUtil = function () {
         var tokenPair;
         var clientData = tokenUtil.getDyanmicCredentials(properties);
         var encodedClientKeys = tokenUtil.encode(clientData.clientId + ":" + clientData.clientSecret);
+
+        // getting all scopes from config
+        var scopes = devicemgtProps.scopes;
+        var scope = "";
+        scopes.forEach(function(entry) {
+            scope += entry + " ";
+        });
         session.put(constants.ENCODED_CLIENT_KEYS_IDENTIFIER, encodedClientKeys);
         if (type == "password") {
             tokenPair =
-                tokenUtil.getTokenWithPasswordGrantType(properties.username, encodeURIComponent(properties.password), encodedClientKeys);
+                tokenUtil.getTokenWithPasswordGrantType(properties.username, encodeURIComponent(properties.password), encodedClientKeys, scope);
         } else if (type == "saml") {
             tokenPair = tokenUtil.
-            getTokenWithSAMLGrantType(properties.samlToken, encodedClientKeys, "PRODUCTION");
+            getTokenWithSAMLGrantType(properties.samlToken, encodedClientKeys, scope);
         }
         session.put(constants.ACCESS_TOKEN_PAIR_IDENTIFIER, tokenPair);
     };
