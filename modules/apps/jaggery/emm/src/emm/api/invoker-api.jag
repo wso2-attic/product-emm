@@ -27,61 +27,71 @@ var mdmProps = require("/config/mdm-props.js").config();
 var serviceInvokers = require("/modules/backend-service-invoker.js")["backendServiceInvoker"];
 
 if (uriMatcher.match("/{context}/api/invoker/execute/")) {
-    var method = request.getContent().actionMethod;
-    var url = request.getContent().actionUrl;
-    var payload = request.getContent().actionPayload;
+    var restAPIRequestDetails = request.getContent();
 
-    if (!method) {
-        method = parse(request.getContent()).actionMethod;
+    var requestMethod = restAPIRequestDetails["requestMethod"];
+    var requestURL = restAPIRequestDetails["requestURL"];
+    var requestPayload = restAPIRequestDetails["requestPayload"];
+
+    if (!requestMethod) {
+        requestMethod = parse(restAPIRequestDetails)["requestMethod"];
     }
 
-    if (!url) {
-        url = parse(request.getContent()).actionUrl;
+    if (!requestURL) {
+        requestURL = parse(restAPIRequestDetails)["requestURL"];
     }
 
-    if (!payload) {
-        payload = parse(request.getContent()).actionPayload;
+    if (!requestPayload) {
+        requestPayload = parse(restAPIRequestDetails)["requestPayload"];
     }
 
-    var targetURL = mdmProps["httpsURL"] + url;
+    var restAPIEndpoint = mdmProps["httpsURL"] + requestURL;
 
     try {
-        switch (method) {
+        switch (requestMethod) {
             case constants["HTTP_GET"]:
                 serviceInvokers.XMLHttp.get(
-                    targetURL,
-                    function (responseFromBackend) {
-                        response.status = responseFromBackend.status;
-                        response.content = responseFromBackend.responseText;
+                    restAPIEndpoint,
+                    function (restAPIResponse) {
+                        response["status"] = restAPIResponse["status"];
+                        if (restAPIResponse["responseText"]) {
+                            response["content"] = restAPIResponse["responseText"];
+                        }
                     }
                 );
                 break;
             case constants["HTTP_POST"]:
                 serviceInvokers.XMLHttp.post(
-                    targetURL,
-                    payload,
-                    function (responseFromBackend) {
-                        response.status = responseFromBackend.status;
-                        response.content = responseFromBackend.responseText;
+                    restAPIEndpoint,
+                    requestPayload,
+                    function (restAPIResponse) {
+                        response["status"] = restAPIResponse["status"];
+                        if (restAPIResponse["responseText"]) {
+                            response["content"] = restAPIResponse["responseText"];
+                        }
                     }
                 );
                 break;
             case constants["HTTP_PUT"]:
                 serviceInvokers.XMLHttp.put(
-                    targetURL,
-                    payload,
-                    function (responseFromBackend) {
-                        response.status = responseFromBackend.status;
-                        response.content = responseFromBackend.responseText;
+                    restAPIEndpoint,
+                    requestPayload,
+                    function (restAPIResponse) {
+                        response["status"] = restAPIResponse["status"];
+                        if (restAPIResponse["responseText"]) {
+                            response["content"] = restAPIResponse["responseText"];
+                        }
                     }
                 );
                 break;
             case constants["HTTP_DELETE"]:
                 serviceInvokers.XMLHttp.delete(
-                    targetURL,
-                    function (responseFromBackend) {
-                        response.status = responseFromBackend.status;
-                        response.content = responseFromBackend.responseText;
+                    restAPIEndpoint,
+                    function (restAPIResponse) {
+                        response["status"] = restAPIResponse["status"];
+                        if (restAPIResponse["responseText"]) {
+                            response["content"] = restAPIResponse["responseText"];
+                        }
                     }
                 );
                 break;

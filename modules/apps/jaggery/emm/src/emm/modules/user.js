@@ -67,14 +67,15 @@ var userModule = function () {
                     response.content = backendResponse.responseText;
                     if (backendResponse.status == 200) {
                         response.status = "success";
-                    } else {
+                    } else if (backendResponse.status == 400 || backendResponse.status == 401 ||
+                        backendResponse.status == 404 || backendResponse.status == 500) {
                         response.status = "error";
                     }
                     return response;
                 }
             );
         } else {
-            log.error("Programming error : This method only support HTTP GET requests.");
+            log.error("Runtime error : This method only support HTTP GET requests.");
         }
     };
 
@@ -471,6 +472,7 @@ var userModule = function () {
     /**
      * Get Platforms.
      */
+    //TODO Move this piece of logic out of user.js to somewhere else appropriate.
     publicMethods.getPlatforms = function () {
         var carbonUser = session.get(constants["USER_SESSION_KEY"]);
         var utility = require("/modules/utility.js")["utility"];
@@ -480,7 +482,7 @@ var userModule = function () {
         }
         try {
             utility.startTenantFlow(carbonUser);
-            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/devices/types";
+            var url = mdmProps["httpsURL"] + mdmProps["backendRestEndpoints"]["deviceMgt"] + "/admin/device-types";
             var response = privateMethods.callBackend(url, constants["HTTP_GET"]);
             if (response.status == "success") {
                 response.content = parse(response.content);

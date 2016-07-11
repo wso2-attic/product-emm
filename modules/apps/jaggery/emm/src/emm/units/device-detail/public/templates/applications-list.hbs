@@ -1,11 +1,28 @@
 <div class="wr-app-listing">
     <div class="wr-applist">
         {{#each applications}}
-                <a style="text-align: center;width: 100px;height: 100px;">
-                    {{#equal platform "android"}}<i class="fw fw-android"></i>{{/equal}}
-                    {{#equal platform "ios"}}<i class="fw fw-apple"></i>{{/equal}}
-                    {{#equal platform "windows"}}<i class="fw fw-windows"></i>{{/equal}}
-                    <span style="max-width: 90px;word-wrap: break-word;">{{name}}</span>
+                <a style="text-align: center; width: 110px; height: 140px;">
+                    {{#equal platform "android"}}<i class="icon fw fw-android"></i>{{/equal}}
+                    {{#equal platform "ios"}}<i class="icon fw fw-apple"></i>{{/equal}}
+                    {{#equal platform "windows"}}<i class="icon fw fw-windows"></i>{{/equal}}
+                    {{#equal isActive true}}
+                        <span style="word-wrap: break-word;">
+                            <i class="fw fw-ok icon-success" style="font-size: 14px;"></i>
+                            &nbsp;Active
+                        </span>
+                        <span style="word-wrap: break-word;"><b>{{name}}</b></span>
+                        {{#if memoryUsage}}
+                            <span style="word-wrap: break-word;">
+                                Memory Usage
+                            </span>
+                            <span style="word-wrap: break-word;">
+                                ( {{memoryUsage}} Bytes )
+                            </span>
+                        {{/if}}
+                    {{/equal}}
+                    {{#equal isActive false}}
+                        <span style="word-wrap: break-word;">{{name}}</span>
+                    {{/equal}}
                 </a>
         {{/each}}
     </div>

@@ -17,18 +17,18 @@
                                 General Configurations
                             </a>
                             <div id="supportedPlatforms" class="hidden"
-                                {{#each types}}
-                                    {{#equal name "android"}}
+                                {{#each deviceTypes}}
+                                    {{#equal this "android"}}
                                         data-android="true"
-                                        data-android-id={{id}}
+                                        data-android-type={{this}}
                                     {{/equal}}
-                                    {{#equal name "ios"}}
-                                        data-ios-id={{id}}
+                                    {{#equal this "ios"}}
                                         data-ios="true"
+                                        data-ios-type={{this}}
                                     {{/equal}}
-                                    {{#equal name "windows"}}
+                                    {{#equal this "windows"}}
                                         data-windows="true"
-                                        data-windows-id={{id}}
+                                        data-windows-type={{this}}
                                     {{/equal}}
                                 {{/each}}
                             ></div>

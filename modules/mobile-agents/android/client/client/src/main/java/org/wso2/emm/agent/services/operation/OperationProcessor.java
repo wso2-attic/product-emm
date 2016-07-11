@@ -178,6 +178,9 @@ public class OperationProcessor {
 			case Constants.Operation.APP_RESTRICTION:
 				operationManager.restrictAccessToApplications(operation);
 				break;
+			case Constants.Operation.LOGCAT:
+				operationManager.getLogcat(operation);
+				break;
 			default:
 				operationManager.passOperationToSystemApp(operation);
 				break;

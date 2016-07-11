@@ -17,7 +17,7 @@
  */
 
 function onRequest(context) {
-    // var log = new Log("units/policy-create/policy-create.js");
+    //var log = new Log("units/policy-create/policy-create.js");
     var userModule = require("/modules/user.js")["userModule"];
 
     var result = userModule.getRolesByUserStore();
@@ -27,8 +27,7 @@ function onRequest(context) {
 
     result = userModule.getPlatforms();
     if (result["status"] == "success") {
-        context["types"] = result["content"];
+        context["deviceTypes"] = result["content"].deviceTypes;
     }
-
     return context;
 }

@@ -505,6 +505,16 @@ select.select2 {
     outline: none;
 }
 
+select.select2-custom {
+	height:0 !important;
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+	border: none;
+	outline: none;
+	display: none;
+}
+
 .select2-container {
     width: 100% !important;
 }

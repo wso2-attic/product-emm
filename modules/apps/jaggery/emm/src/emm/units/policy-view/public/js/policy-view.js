@@ -23,6 +23,8 @@ var stepBackFrom = {};
 var policy = {};
 var configuredOperations = [];
 
+var base_api_url = "/api/device-mgt/v1.0";
+
 // Constants to define platform types available
 var platformTypeConstants = {
     "ANDROID": "android",
@@ -102,8 +104,7 @@ var updateGroupedInputVisibility = function (domElement) {
 
 skipStep["policy-platform"] = function (policyPayloadObj) {
     policy["name"] = policyPayloadObj["policyName"];
-    policy["platform"] = policyPayloadObj["profile"]["deviceType"]["name"];
-    policy["platformId"] = policyPayloadObj["profile"]["deviceType"]["id"];
+    policy["platform"] = policyPayloadObj["profile"]["deviceType"];
     var userRoleInput = $("#user-roles-input");
     var ownershipInput = $("#ownership-input");
     var userInput = $("#users-select-field");
@@ -553,7 +554,7 @@ validateStep["policy-profile"] = function () {
                         validationStatus = {
                             "error": true,
                             "subErrorMsg": "One or more permitted App ID entries in " +
-                                           "Autonomous Single App Mode are empty.",
+                                "Autonomous Single App Mode are empty.",
                             "erroneousFeature": operation
                         };
                         continueToCheckNextInputs = false;
@@ -561,7 +562,7 @@ validateStep["policy-profile"] = function () {
                         validationStatus = {
                             "error": true,
                             "subErrorMsg": "Duplicate values exist with permitted App ID entries in " +
-                                           "Autonomous Single App Mode.",
+                                "Autonomous Single App Mode.",
                             "erroneousFeature": operation
                         };
                         continueToCheckNextInputs = false;
@@ -634,7 +635,7 @@ validateStep["policy-profile"] = function () {
                                 validationStatus = {
                                     "error": true,
                                     "subErrorMsg": "Wi-Fi Proxy Port is not within the range " +
-                                                   "of valid port numbers.",
+                                        "of valid port numbers.",
                                     "erroneousFeature": operation
                                 };
                                 continueToCheckNextInputs = false;
@@ -684,7 +685,7 @@ validateStep["policy-profile"] = function () {
                                 validationStatus = {
                                     "error": true,
                                     "subErrorMsg": "One or more Payload Certificate " +
-                                                   "Anchor UUIDs are empty.",
+                                        "Anchor UUIDs are empty.",
                                     "erroneousFeature": operation
                                 };
                                 continueToCheckNextInputs = false;
@@ -692,7 +693,7 @@ validateStep["policy-profile"] = function () {
                                 validationStatus = {
                                     "error": true,
                                     "subErrorMsg": "Duplicate values exist " +
-                                                   "with Payload Certificate Anchor UUIDs.",
+                                        "with Payload Certificate Anchor UUIDs.",
                                     "erroneousFeature": operation
                                 };
                                 continueToCheckNextInputs = false;
@@ -744,7 +745,7 @@ validateStep["policy-profile"] = function () {
                                     validationStatus = {
                                         "error": true,
                                         "subErrorMsg": "Duplicate values exist " +
-                                                       "with TLS Trusted Server Names.",
+                                            "with TLS Trusted Server Names.",
                                         "erroneousFeature": operation
                                     };
                                     continueToCheckNextInputs = false;
@@ -805,7 +806,7 @@ validateStep["policy-profile"] = function () {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "One or more Roaming Consortium OIs " +
-                                               "are out of allowed length.",
+                                    "are out of allowed length.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
@@ -814,7 +815,7 @@ validateStep["policy-profile"] = function () {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "One or more Roaming Consortium OIs " +
-                                               "contain non-hexadecimal characters.",
+                                    "contain non-hexadecimal characters.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
@@ -953,7 +954,7 @@ validateStep["policy-profile"] = function () {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "One or more MCC/MNC pairs " +
-                                               "do not fulfill the accepted length of 6 digits.",
+                                    "do not fulfill the accepted length of 6 digits.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
@@ -1029,7 +1030,7 @@ validateStep["policy-profile"] = function () {
                         validationStatus = {
                             "error": true,
                             "subErrorMsg": "Incoming Mail Server Port is not within the range " +
-                                           "of valid port numbers.",
+                                "of valid port numbers.",
                             "erroneousFeature": operation
                         };
                         continueToCheckNextInputs = false;
@@ -1068,7 +1069,7 @@ validateStep["policy-profile"] = function () {
                         validationStatus = {
                             "error": true,
                             "subErrorMsg": "Outgoing Mail Server Port is not within the range " +
-                                           "of valid port numbers.",
+                                "of valid port numbers.",
                             "erroneousFeature": operation
                         };
                         continueToCheckNextInputs = false;
@@ -1148,7 +1149,7 @@ validateStep["policy-profile"] = function () {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "One or more Device Names of " +
-                                               "AirPlay Credentials are empty.",
+                                    "AirPlay Credentials are empty.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
@@ -1157,7 +1158,7 @@ validateStep["policy-profile"] = function () {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "Duplicate values exist with " +
-                                               "Device Names of AirPlay Credentials.",
+                                    "Device Names of AirPlay Credentials.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
@@ -1180,7 +1181,7 @@ validateStep["policy-profile"] = function () {
                                 // if child input field is empty
                                 emptyChildInputCount++;
                             } else if (!inputIsValidAgainstRegExp(
-                                    /([a-z|A-Z|0-9][a-z|A-Z|0-9][:]){5}([a-z|A-Z|0-9][a-z|A-Z|0-9])$/, childInput)) {
+                                /([a-z|A-Z|0-9][a-z|A-Z|0-9][:]){5}([a-z|A-Z|0-9][a-z|A-Z|0-9])$/, childInput)) {
                                 // if child input field is invalid against RegEx
                                 invalidAgainstRegExCount++
                             }
@@ -1215,7 +1216,7 @@ validateStep["policy-profile"] = function () {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "One or more AirPlay Destination fields " +
-                                               "do not fulfill expected format.",
+                                    "do not fulfill expected format.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
@@ -1317,7 +1318,7 @@ validateStep["policy-profile"] = function () {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "Duplicate values exist with " +
-                                               "Search Setting Search Base and Scope pairs.",
+                                    "Search Setting Search Base and Scope pairs.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
@@ -1374,7 +1375,7 @@ validateStep["policy-profile"] = function () {
                         validationStatus = {
                             "error": true,
                             "subErrorMsg": "Account Port is not within the range " +
-                                           "of valid port numbers.",
+                                "of valid port numbers.",
                             "erroneousFeature": operation
                         };
                         continueToCheckNextInputs = false;
@@ -1487,7 +1488,7 @@ validateStep["policy-profile"] = function () {
                         validationStatus = {
                             "error": true,
                             "subErrorMsg": "Duplicate values exist with " +
-                                           "APN fields of Configurations.",
+                                "APN fields of Configurations.",
                             "erroneousFeature": operation
                         };
                         continueToCheckNextInputs = false;
@@ -1575,7 +1576,7 @@ validateStep["policy-profile"] = function () {
                             validationStatus = {
                                 "error": true,
                                 "subErrorMsg": "Duplicate values exist with " +
-                                               "APN fields of APN Configurations.",
+                                    "APN fields of APN Configurations.",
                                 "erroneousFeature": operation
                             };
                             continueToCheckNextInputs = false;
@@ -1788,7 +1789,7 @@ var updatePolicy = function (policy, state) {
         if (policy["profile"].hasOwnProperty(key)) {
             profilePayloads.push({
                 "featureCode": key,
-                "deviceTypeId": policy["platformId"],
+                "deviceType": policy["platform"],
                 "content": policy["profile"][key]
             });
         }
@@ -1800,9 +1801,7 @@ var updatePolicy = function (policy, state) {
         "ownershipType": policy["selectedOwnership"],
         "profile": {
             "profileName": policy["policyName"],
-            "deviceType": {
-                "id": policy["platformId"]
-            },
+            "deviceType": policy["platform"],
             "profileFeaturesList": profilePayloads
         }
     };
@@ -1815,7 +1814,7 @@ var updatePolicy = function (policy, state) {
         payload["users"] = [];
         payload["roles"] = [];
     }
-    var serviceURL = "/api/device-mgt/v1.0/policies/" + getParameterByName("id");
+    var serviceURL = base_api_url + "/policies/" + getParameterByName("id");
     invokerUtil.put(
         serviceURL,
         payload,
@@ -1824,7 +1823,7 @@ var updatePolicy = function (policy, state) {
             if (state == "save") {
                 var policyList = [];
                 policyList.push(getParameterByName("id"));
-                serviceURL = "/api/device-mgt/v1.0/policies/deactivate-policy";
+                serviceURL = base_api_url + "/policies/deactivate-policy";
                 invokerUtil.put(
                     serviceURL,
                     policyList,
@@ -1841,7 +1840,7 @@ var updatePolicy = function (policy, state) {
             } else if (state == "publish") {
                 var policyList = [];
                 policyList.push(getParameterByName("id"));
-                serviceURL = "/api/device-mgt/v1.0/policies/activate-policy";
+                serviceURL = base_api_url + "/policies/activate-policy";
                 invokerUtil.put(
                     serviceURL,
                     policyList,
@@ -2002,10 +2001,10 @@ var changeAndroidWifiPolicy = function (select) {
  * @param {object} wifi type select object
  */
 var changeAndroidWifiPolicyEAP = function (select, superSelect) {
-    slideDownPaneAgainstValueSet(select, 'control-wifi-password', ['peap', 'ttls', 'pwd' ,'fast', 'leap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-password', ['peap', 'ttls', 'pwd' , 'fast', 'leap']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-phase2', ['peap', 'ttls', 'fast']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-provisioning', ['fast']);
-    slideDownPaneAgainstValueSet(select, 'control-wifi-identity', ['peap', 'tls','ttls', 'pwd', 'fast', 'leap']);
+    slideDownPaneAgainstValueSet(select, 'control-wifi-identity', ['peap', 'tls', 'ttls', 'pwd', 'fast', 'leap']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-anoidentity', ['peap', 'ttls']);
     slideDownPaneAgainstValueSet(select, 'control-wifi-cacert', ['peap', 'tls', 'ttls']);
     if (superSelect.value != '802eap') {
@@ -2034,7 +2033,7 @@ $(document).ready(function () {
 
     var policyPayloadObj;
     invokerUtil.get(
-        "/api/device-mgt/v1.0/policies/" + getParameterByName("id"),
+        base_api_url + "/policies/" + getParameterByName("id"),
         // on success
         function (data, textStatus, jqXHR) {
             if (jqXHR.status == 200 && data) {
@@ -2071,12 +2070,12 @@ $(document).ready(function () {
     $("#users-input, #user-roles-input").select2({
         "tags": true
     }).on("select2:select", function (e) {
-        if (e.params.data.id == "ANY") {
-            $(this).val("ANY").trigger("change");
-        } else {
-            $("option[value=ANY]", this).prop("selected", false).parent().trigger("change");
-        }
-    });
+            if (e.params.data.id == "ANY") {
+                $(this).val("ANY").trigger("change");
+            } else {
+                $("option[value=ANY]", this).prop("selected", false).parent().trigger("change");
+            }
+        });
 
     // Maintains an array of configured features of the profile
     var advanceOperations = ".wr-advance-operations";

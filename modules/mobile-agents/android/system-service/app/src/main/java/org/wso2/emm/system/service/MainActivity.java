@@ -18,18 +18,13 @@
 
 package org.wso2.emm.system.service;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-
-import java.io.IOException;
 
 public class MainActivity extends Activity {
     private static final int ACTIVATION_REQUEST = 47;
@@ -72,37 +67,6 @@ public class MainActivity extends Activity {
                 Log.i("onActivityResult", "Administration enabled!");
             } else {
                 Log.i("onActivityResult", "Administration enable FAILED!");
-            }
-        }
-    }
-
-    public class DeviceBootReceiver extends BroadcastReceiver {
-        private static final String TAG = "DeviceBootReceiver";
-
-        @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-        @Override
-        public void onReceive(final Context context, Intent intent) {
-            Log.i(TAG, "disableAdminPopup" + " for Applications");
-            DevicePolicyManager manager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-
-            ComponentName componentAgent = new ComponentName("org.wso2.emm.agent", "org.wso2.emm.agent.services.AgentDeviceAdminReceiver");
-            if(!manager.isAdminActive(componentAgent))
-                manager.setActiveAdmin(componentAgent, true);
-
-            ComponentName componentService = new ComponentName("org.wso2.emm.system.service", "org.wso2.emm.system.service.ServiceDeviceAdminReceiver");
-            if(!manager.isAdminActive(componentService))
-                manager.setActiveAdmin(componentService, true);
-
-            if (!manager.isDeviceOwnerApp("org.wso2.emm.system.service")){
-                Log.i(TAG, "isDeviceOwnerApp" + " setting owner");
-                try {
-                    Runtime.getRuntime().exec("dpm set-device-owner org.wso2.emm.system.service/.ServiceDeviceAdminReceiver");
-                } catch  (IOException e) {
-                    Log.e(TAG, "Shell command execution failed." + e);
-                }
-            }
-            else {
-                Log.i(TAG, "isDeviceOwnerApp" + " already owner");
             }
         }
     }

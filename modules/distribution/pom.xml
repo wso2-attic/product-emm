@@ -286,8 +286,7 @@
                                     <!--fileset
                                             file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/apimgt/h2.sql"/-->
                                     <fileset file="${basedir}/src/repository/dbscripts/apimgt/h2.sql" />
-                                    <fileset
-                                            file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/appmgt/h2.sql"/>
+                                    <fileset file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/appmgt/h2.sql" />
                                 </sql>
                                 <echo message="##################### END ####################" />
                             </tasks>

@@ -83,6 +83,10 @@ function loadRoles(searchQuery) {
         return JSON.stringify( json );
     }
 
+    var fnCreatedRow = function( nRow, aData, iDataIndex ) {
+        $(nRow).attr('data-type', 'selectable');
+    }
+
     var columns = [
         {
             class: "remove-padding icon-only content-fill",
@@ -117,7 +121,7 @@ function loadRoles(searchQuery) {
         }
     ];
 
-    $('#role-grid').datatables_extended_serverside_paging(null, '/api/device-mgt/v1.0/roles', dataFilter, columns);
+    $('#role-grid').datatables_extended_serverside_paging(null, '/api/device-mgt/v1.0/roles', dataFilter, columns, fnCreatedRow, null);
 
     loadingContent.hide();
 

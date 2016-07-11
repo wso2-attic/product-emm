@@ -55,7 +55,7 @@ public class AccessTokenHandler {
     private static final String PASSWORD_LABEL = "password";
     private static final String TENANT_DOMAIN_LABEL = "tenantDomain";
     private static final String COLON = ":";
-    private static final String SCOPE = "default appm:read";
+    private static final String SCOPE = "default appm:read device:android:enroll device:android:event:publish";
     private static final DateFormat dateFormat =
             new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
     private CredentialInfo info;

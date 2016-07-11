@@ -16,10 +16,10 @@
                 <tbody>
                 {{#each notifications}}
                     {{#equal "NEW" status }}
-                        <tr data-type="selectable" data-id="{{notificationId}}">
+                        <tr data-type="selectable" data-id="{{id}}">
                             <td data-display="{{description}}" data-grid-label="Description">{{description}}</td>
                             <td style="text-align: center;">
-                                <a href="device?type={{deviceIdentifier.type}}&id={{deviceIdentifier.id}}" data-id="{{notificationId}}" data-url="device?type={{deviceIdentifier.type}}&id={{deviceIdentifier.id}}" class="new-notification" data-click-event="remove-form">
+                                <a href="device?type={{deviceIdentifier.type}}&id={{deviceIdentifier.id}}" data-id="{{id}}" data-url="device?type={{deviceIdentifier.type}}&id={{deviceIdentifier.id}}" class="new-notification" data-click-event="remove-form">
                                      <span class="fw-stack">
                                         <i class="fw fw-ring fw-stack-2x"></i>
                                         <i class="fw fw-view fw-stack-1x"></i>
@@ -54,7 +54,7 @@
                 </thead>
                 <tbody>
                 {{#each notifications}}
-                    <tr data-type="selectable" data-id="{{notificationId}}">
+                    <tr data-type="selectable" data-id="{{id}}">
                         <td  data-display="{{description}}" data-grid-label="Description">{{description}}</td>
                         <td style="text-align: center;">
                             <a href="device?type={{deviceIdentifier.type}}&id={{deviceIdentifier.id}}" data-click-event="remove-form">

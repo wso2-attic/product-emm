@@ -1940,6 +1940,14 @@ input[type=number].form-control {
   }
 }
 
+.label-bold {
+  font-weight: 600;
+  margin-right: 8px;
+}
+.label-bold:after {
+  content: ": "
+}
+
 /* ========================================================================
  * table styles
  * ======================================================================== */
@@ -6953,8 +6961,8 @@ ul.tiles .icon {
     margin-bottom:10px;
 }
 
-.wr-applist .fw {
-    margin:10px;
+.wr-applist .icon {
+    margin: 10px;
     font-size: 28px;
 }
 
@@ -6963,10 +6971,10 @@ ul.tiles .icon {
 }
 
 @media (max-width:768px){
-    .wr-applist a { padding:0; min-width: inherit; margin-right:5px; }
+    .wr-applist a { padding:0; min-width: inherit; margin-right: 5px; }
     .wr-applist img { width: 50px; }
-    .wr-applist span { display:none; }
-    .wr-applist .fw { font-size: 25px; }
+    .wr-applist span { display: none; }
+    .wr-applist .icon { font-size: 25px; }
 }
 
 

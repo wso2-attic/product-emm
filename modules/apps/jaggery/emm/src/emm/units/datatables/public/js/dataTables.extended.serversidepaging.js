@@ -16,11 +16,21 @@
  * under the License.
  */
 
-/* ========================================================================
- * datatables_extended function
- * ======================================================================== */
-$.fn.datatables_extended_serverside_paging = function(settings ,url, dataFilter, columns){
+/*
+ * =========================================================
+ * data-tables extended function (Server-side Pagination)
+ * =========================================================
+ */
 
+/**
+ * @namespace $
+ * The $ is just a function.
+ * It is actually an alias for the function called jQuery.
+ * For ex: $(this) means jQuery(this) and S.fn.x means jQuery.fn.x
+ */
+
+ $.fn.datatables_extended_serverside_paging = function (settings , url, dataFilter,
+                                                        columns, fnCreatedRow, fnDrawCallback) {
     var elem = $(this);
 
     // EMM related function
@@ -34,11 +44,18 @@ $.fn.datatables_extended_serverside_paging = function(settings ,url, dataFilter,
             serverSide: true,
             bSortCellsTop: true,
             ajax : {
-                url: "/emm/api/datatables/invoker",
+                url: "/emm/api/data-tables/invoker",
                 data : function (params) {
+                    var filter = "";
+                    var i;
+                    for (i = 0; i < params.columns.length; i++) {
+                        // console.log(i);
+                        filter += "&" + params.columns[i].data + "=" + params.columns[i].search.value;
+                    }
+                    // console.log(filter);
                     params.offset = params.start;
                     params.limit = params.length;
-                    params.filter = params.search.value
+                    params.filter = filter;
                     params.url = url;
                 },
                 dataFilter: dataFilter
@@ -58,11 +75,9 @@ $.fn.datatables_extended_serverside_paging = function(settings ,url, dataFilter,
                 searchPlaceholder: 'Search by Role name',
                 search: ''
             },
-            fnCreatedRow: function( nRow, aData, iDataIndex ) {
-                $(nRow).attr('data-type', 'selectable');
-            },
-            initComplete: function() {
-
+            fnCreatedRow: fnCreatedRow,
+            "fnDrawCallback": fnDrawCallback,
+            initComplete: function () {
                 this.api().columns().every(function () {
 
                     var column = this;
@@ -93,7 +108,6 @@ $.fn.datatables_extended_serverside_paging = function(settings ,url, dataFilter,
                                         $("#operation-bar").show();
                                         loadOperationBar(val);
                                     }
-
                                 }
                             });
 
@@ -109,15 +123,13 @@ $.fn.datatables_extended_serverside_paging = function(settings ,url, dataFilter,
                                         }
                                     }
                                 });
-                            }
-                            else {
+                            } else {
                                 column.data().unique().sort().each(function (d, j) {
                                     select.append('<option value="' + d + '">' + d + '</option>')
                                 });
                             }
                         });
-                    }
-                    else if (filterColumn.eq(column.index()).hasClass('text-filter')) {
+                    } else if (filterColumn.eq(column.index()).hasClass('text-filter')) {
                         var title = filterColumn.eq(column.index()).attr('data-for');
                         $(filterColumn.eq(column.index()).empty()).html('<input type="text" class="form-control" placeholder="Search ' + title + '" />');
 

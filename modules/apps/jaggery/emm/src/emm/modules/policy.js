@@ -44,7 +44,7 @@ policyModule = function () {
                 policyObjectToView["id"] = policyObjectFromRestEndpoint["id"];
                 policyObjectToView["priorityId"] = policyObjectFromRestEndpoint["priorityId"];
                 policyObjectToView["name"] = policyObjectFromRestEndpoint["policyName"];
-                policyObjectToView["platform"] = policyObjectFromRestEndpoint["profile"]["deviceType"]["name"];
+                policyObjectToView["platform"] = policyObjectFromRestEndpoint["profile"]["deviceType"];
                 policyObjectToView["ownershipType"] = policyObjectFromRestEndpoint["ownershipType"];
 
                 var assignedRoleCount = policyObjectFromRestEndpoint["roles"].length;

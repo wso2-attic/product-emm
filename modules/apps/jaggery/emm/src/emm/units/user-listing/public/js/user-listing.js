@@ -49,11 +49,9 @@ function hidePopup() {
  */
 function getSelectedUsernames() {
     var usernameList = [];
-    var userList = $("#user-grid").dataTable().fnGetNodes();
+    var userList = $("#user-grid").find('tr.DTTT_selected');
     userList.each(function () {
-        if ($(this).hasClass('DTTT_selected')) {
-            usernameList.push($(this).attr('data-username'));
-        }
+        usernameList.push($(this).data('username'));
     });
     return usernameList;
 }
@@ -65,7 +63,7 @@ function getSelectedUsernames() {
  */
 $("a.invite-user-link").click(function () {
     var usernameList = getSelectedUsernames();
-    var inviteUserAPI = emmAdminBasePath + "/users/email-invitation";
+    var inviteUserAPI = emmAdminBasePath + "/users/send-invitation";
 
     if (usernameList.length == 0) {
         $(modalPopupContent).html($("#errorUsers").html());
@@ -171,8 +169,8 @@ function resetPassword(uname) {
             $(errorMsgWrapper).removeClass("hidden");
         } else {
             var resetPasswordFormData = {};
-            resetPasswordFormData.username = user;
-            resetPasswordFormData.newPassword = window.btoa(unescape(encodeURIComponent(confirmedPassword)));
+            //resetPasswordFormData.username = user;
+            resetPasswordFormData.newPassword = unescape(confirmedPassword);
 
             var resetPasswordServiceURL = emmAdminBasePath + "/admin/users/"+ user +"/credentials";
 
@@ -251,6 +249,12 @@ function loadUsers(searchParam) {
         return JSON.stringify( json );
     }
 
+    var fnCreatedRow = function( nRow, aData, iDataIndex ) {
+        console.log(JSON.stringify(aData));
+        $(nRow).attr('data-type', 'selectable');
+        $(nRow).attr('data-username', aData["username"]);
+    }
+
     var columns = [
         {
             class: "remove-padding icon-only content-fill",
@@ -305,7 +309,7 @@ function loadUsers(searchParam) {
     ];
 
    
-    $('#user-grid').datatables_extended_serverside_paging(null, '/api/device-mgt/v1.0/users', dataFilter, columns);
+    $('#user-grid').datatables_extended_serverside_paging(null, '/api/device-mgt/v1.0/users', dataFilter, columns, fnCreatedRow, null);
 
     $("#loading-content").hide();
 

@@ -61,6 +61,33 @@ public class Constants {
 	public static final boolean SKIP_WORK_PROFILE_CREATION = false;
 	public static final boolean HIDE_ERROR_DIALOG = false;
 
+	/**
+	 * Log publishers
+	 */
+	public final class LogPublisher {
+		private LogPublisher(){
+			throw new AssertionError();
+		}
+		public static final String DAS_PUBLISHER = "DAS_PULISHER";
+		public static final String SPLUNK_PUBLISHER = "SPLUNK_PUBLISHER";
+		public static final String LOG_PUBLISHER_IN_USE = "<SET_PUBLISHER>";
+	}
+
+	/**
+	 * Splunk configurations
+	 */
+	public final class SplunkConfigs {
+		private SplunkConfigs(){
+			throw new AssertionError();
+		}
+		public static final String API_KEY = "<SPLUNK_API_KEY>";
+		public static final String TYPE_HTTP = "HTTP";
+		public static final String TYPE_MINT = "MINT";
+		public static final String DATA_COLLECTOR_TYPE = TYPE_MINT;
+		public static final String HEC_TOKEN = "<SPLUNK_HEC_TOKEN>";
+		public static final String HEC_MINT_ENDPOINT_URL = "<SPLUNK_HEC_MINT_ENDPOINT_URL>";
+	}
+
 	public static final String SERVER_APP_ENDPOINT = "/api/device-mgt/android/v1.0/";
 	public static final String SERVER_AUTHENTICATION_ENDPOINT = "register/authenticate/device";
 	public static final String LICENSE_ENDPOINT = SERVER_APP_ENDPOINT + "configuration/license";
@@ -291,6 +318,7 @@ public class Constants {
 		public static final String GET_APP_DOWNLOAD_PROGRESS = "APP_DOWNLOAD_PROGRESS";
 		public static final String FAILED_FIRMWARE_UPGRADE_NOTIFICATION = "FAILED_FIRMWARE_UPGRADE_NOTIFICATION";
 		public static final String GET_FIRMWARE_BUILD_DATE = "FIRMWARE_BUILD_DATE";
+		public static final String LOGCAT = "LOGCAT";
 	}
 
 	/**

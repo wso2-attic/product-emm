@@ -17,6 +17,12 @@
  */
 apply plugin: 'com.android.application'
 
+repositories {
+    maven {
+        url "https://mint.splunk.com/gradle/"
+    }
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
@@ -65,4 +71,5 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.0-rc3'
     compile 'org.bouncycastle:bcprov-jdk16:1.45'
     compile 'com.google.code.gson:gson:2.6.2'
+    compile "com.splunk.mint:mint:5.0.0"
 }
