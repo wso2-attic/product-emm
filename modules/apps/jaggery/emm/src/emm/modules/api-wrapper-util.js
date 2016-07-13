@@ -50,8 +50,8 @@ var apiWrapperUtil = function () {
             tokenInfo = tokenUtil.
                 getTokenWithSAMLGrantType(properties.samlToken, encodedClientKeys, scope);
         }
-        tokenPair.refreshToken = tokenInfo.refresh_token;
-        tokenPair.accessToken = tokenInfo.access_token;
+        tokenPair.refreshToken = tokenInfo.refreshToken;
+        tokenPair.accessToken = tokenInfo.accessToken;
         session.put(constants.ACCESS_TOKEN_PAIR_IDENTIFIER, tokenPair);
         scopes = tokenInfo.scopes.split(" ");
         session.put(constants.ALLOWED_SCOPES, scopes);

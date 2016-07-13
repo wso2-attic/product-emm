@@ -65,7 +65,6 @@ var backendServiceInvoker = function () {
      */
     privateMethods.execute = function (httpMethod, requestPayload, endpoint, responseCallback, count) {
         var xmlHttpRequest = new XMLHttpRequest();
-
         xmlHttpRequest.open(httpMethod, endpoint);
         xmlHttpRequest.setRequestHeader(constants["CONTENT_TYPE_IDENTIFIER"], constants["APPLICATION_JSON"]);
         xmlHttpRequest.setRequestHeader(constants["ACCEPT_IDENTIFIER"], constants["APPLICATION_JSON"]);
