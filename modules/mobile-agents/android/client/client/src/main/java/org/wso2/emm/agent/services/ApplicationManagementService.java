@@ -158,15 +158,30 @@ public class ApplicationManagementService extends IntentService implements APIRe
                         getString(R.string.app_download_progress)));
                 break;
             case Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION:
-                Preference.putBoolean(context, context.getResources().
-                        getString(R.string.firmware_upgrade_failed), true);
-                if (message != null && id != 0) {
+                int retryCount = Preference.getInt(context, context.getResources().
+                        getString(R.string.firmware_upgrade_retries));
+                if (retryCount <= Constants.FIRMWARE_UPGRADE_RETRY_COUNT) {
+                    Preference.putInt(context, context.getResources().
+                            getString(R.string.firmware_upgrade_retries), ++retryCount);;
+                    Preference.putBoolean(context, context.getResources().
+                            getString(R.string.firmware_upgrade_failed), true);
+                    if (message != null && id != 0) {
+                        Preference.putBoolean(context, context.getResources().
+                                getString(R.string.firmware_upgrade_failed), false);
+                        Preference.putString(context, context.getResources().getString(R.string.firmware_upgrade_failed_message),
+                                             message);
+                        Preference.putInt(context, context.getResources().getString(R.string.firmware_upgrade_failed_id),
+                                          id);
+                    }
+                } else {
+                    Preference.putInt(context, context.getResources().
+                            getString(R.string.firmware_upgrade_retries), 0);;
                     Preference.putBoolean(context, context.getResources().
                             getString(R.string.firmware_upgrade_failed), false);
                     Preference.putString(context, context.getResources().getString(R.string.firmware_upgrade_failed_message),
-                                         message);
+                                         null);
                     Preference.putInt(context, context.getResources().getString(R.string.firmware_upgrade_failed_id),
-                                         id);
+                                      0);
                 }
                 break;
             default:
