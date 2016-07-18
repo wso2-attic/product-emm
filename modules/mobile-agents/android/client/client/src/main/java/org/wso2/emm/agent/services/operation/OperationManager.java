@@ -260,7 +260,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 Application application = applications.get(infoApp.getPackagename());
                 app.put(APP_INFO_TAG_NAME, Uri.encode(infoApp.getAppname()));
                 app.put(APP_INFO_TAG_PACKAGE, infoApp.getPackagename());
-                app.put(APP_INFO_TAG_VERSION, infoApp.getVersionCode());
+                app.put(APP_INFO_TAG_VERSION, infoApp.getVersionName());
                 app.put(APP_INFO_TAG_SYSTEM, infoApp.isSystemApp());
                 app.put(APP_INFO_TAG_RUNNING, infoApp.isRunning());
                 if (application != null) {

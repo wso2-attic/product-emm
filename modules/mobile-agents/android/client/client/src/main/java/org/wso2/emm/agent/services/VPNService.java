@@ -86,8 +86,7 @@ public class VPNService extends VpnService implements Handler.Callback, Runnable
 
         if (intent.hasExtra(prefix + getResources().getString(R.string.secret))) {
             sharedSecret = intent.getStringExtra(prefix + getResources().getString(R.string.secret)).getBytes();
-            Preference.putString(this, getResources().getString(R.string.secret), intent.getStringExtra(prefix +
-                                                                                                        getResources().getString(R.string.secret)));
+            Preference.putString(this, getResources().getString(R.string.secret), intent.getStringExtra(prefix + getResources().getString(R.string.secret)));
         }
 
         if (intent.hasExtra(prefix + getResources().getString(R.string.dns))) {
