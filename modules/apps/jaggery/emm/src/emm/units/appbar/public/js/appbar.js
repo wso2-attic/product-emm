@@ -20,7 +20,7 @@ var modalPopup = ".wr-modalpopup",
     modalPopupContainer = modalPopup + " .modalpopup-container",
     modalPopupContent = modalPopup + " .modalpopup-content";
 
-var emmAdminBasePath = "/api-device-mgt-v1.0";
+var emmAdminBasePath = "/api/device-mgt/v1.0";
 
 //function openCollapsedNav() {
 //    $(".wr-hidden-nav-toggle-btn").addClass("active");

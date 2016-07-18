@@ -50,7 +50,7 @@
   },
   "isOAuthEnabled": true,
   "backendRestEndpoints": {
-    "deviceMgt": "/api-device-mgt-v1.0"
+    "deviceMgt": "/api/device-mgt/v1.0"
   },
   "scopes": [
     "activity:view",
@@ -105,6 +105,7 @@
     "device:android:configuration:modify",
     "device:android:enroll",
     "device:android:event:publish",
-    "device:android:event:view"
+    "device:android:event:view",
+    "device-types:read"
   ]
 }

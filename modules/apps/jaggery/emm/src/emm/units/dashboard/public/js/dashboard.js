@@ -45,16 +45,16 @@ var updateStats = function (serviceURL, id) {
 
 $(document).ready(function () {
     if ($("#device-count").data("device-count")) {
-        updateStats("/api-device-mgt-v1.0/devices?offset=0&limit=1", "#device-count");
+        updateStats("/api/device-mgt/v1.0/devices?offset=0&limit=1", "#device-count");
     }
     if ($("#policy-count").data("policy-count")) {
-        updateStats("/api-device-mgt-v1.0/policies?offset=0&limit=1", "#policy-count");
+        updateStats("/api/device-mgt/v1.0/policies?offset=0&limit=1", "#policy-count");
     }
     if ($("#user-count").data("user-count")) {
-        updateStats("/api-device-mgt-v1.0/users?offset=0&limit=1", "#user-count");
+        updateStats("/api/device-mgt/v1.0/users?offset=0&limit=1", "#user-count");
     }
     if ($("#role-count").data("role-count")) {
-        updateStats("/api-device-mgt-v1.0/roles?offset=0&limit=1", "#role-count");
+        updateStats("/api/device-mgt/v1.0/roles?offset=0&limit=1", "#role-count");
     }
 });
 
