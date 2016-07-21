@@ -106,6 +106,8 @@
     "device:android:enroll",
     "device:android:event:publish",
     "device:android:event:view",
-    "device-types:read"
+    "device-types:read",
+    "role:scope:read",
+    "role:scope:write"
   ]
 }
