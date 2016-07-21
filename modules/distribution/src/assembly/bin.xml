@@ -438,14 +438,6 @@
 
         <!-- Copying EMM Jaggery app -->
         <!-- Copying mdm app from devicemgt app-->
-<!--         <fileSet>
-            <directory>
-                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/devicemgt/
-            </directory>
-            <outputDirectory>
-                ${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/emm
-             </outputDirectory>
-        </fileSet> -->
         <fileSet>
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/devicemgt-cdmf/
@@ -455,6 +447,7 @@
             </outputDirectory>
             <excludes>
                 <exclude>app/conf/app-conf.json</exclude>
+                <exclude>app/conf/config.json</exclude>
             </excludes>
         </fileSet>
 
