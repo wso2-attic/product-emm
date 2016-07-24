@@ -56,6 +56,8 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.GeneralSecurityException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * This class handles the functionality required for performing OTA updates. Basically it handles
@@ -227,6 +229,25 @@ public class OTAServerManager {
         }
     }
 
+    private class Timeout extends TimerTask {
+        private AsyncTask asyncTask;
+
+        public Timeout(AsyncTask task) {
+            asyncTask = task;
+        }
+
+        @Override
+        public void run() {
+            Log.w(TAG,"Timed out while downloading.");
+            asyncTask.cancel(false);
+            String message = "Connection failure (Socket timeout) when downloading update package.";
+            Log.e(TAG, message);
+            sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
+                          Constants.Status.CONNECTION_FAILED, message);
+            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
+        }
+    };
+
     public void startDownloadUpgradePackage(final OTAServerManager serverManager) {
         new AsyncTask<Void, Void, Void>() {
             protected Void doInBackground(Void... unused) {
@@ -256,7 +277,7 @@ public class OTAServerManager {
                     lengthOfFile = connection.getContentLength();
                     InputStream input = new BufferedInputStream(url.openStream());
                     OutputStream output = new FileOutputStream(targetFile);
-
+                    Timer timer = new Timer();
                     Log.d(TAG, "Update package file size:" + lengthOfFile);
                     byte data[] = new byte[DEFAULT_BYTES];
                     long total = 0, count;
@@ -264,8 +285,11 @@ public class OTAServerManager {
                         total += count;
                         publishDownloadProgress(lengthOfFile, total);
                         output.write(data, DEFAULT_OFFSET, (int) count);
+                        timer.cancel();
+                        timer = new Timer();
+                        timer.schedule(new Timeout(this), Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
                     }
-
+                    timer.cancel();
                     output.flush();
                     output.close();
                     input.close();
@@ -432,7 +456,7 @@ public class OTAServerManager {
 
                     int totalBufRead = 0;
                     int bytesRead;
-
+                    Timer timer = new Timer();
                     Log.d(TAG, "Start download: " + url.toString() + " to buffer");
 
                     while ((bytesRead = reader.read(buffer)) > 0) {
@@ -440,14 +464,16 @@ public class OTAServerManager {
                         writer.write(buffer, 0, bytesRead);
                         Log.d(TAG, "wrote " + bytesRead + " into byte output stream");
                         totalBufRead += bytesRead;
-
                         buffer = new byte[bufSize];
+                        timer.cancel();
+                        timer = new Timer();
+                        timer.schedule(new Timeout(this), Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
                     }
 
                     Log.d(TAG, "Download finished: " + (Integer.toString(totalBufRead)) + " bytes downloaded");
 
                     parser = new BuildPropParser(writer, context);
-
+                    timer.cancel();
                 } catch (SocketTimeoutException e) {
                     String message = "Connection failure (Socket timeout) when retrieving update package size.";
                     Log.e(TAG, message + e);
