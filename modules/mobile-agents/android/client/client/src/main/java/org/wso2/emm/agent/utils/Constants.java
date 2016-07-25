@@ -52,6 +52,7 @@ public class Constants {
 	public static final String APP_MANAGER_HOST = null;
 	public static final String SYSTEM_SERVICE_PACKAGE = "org.wso2.emm.system.service";
 	public static final String AGENT_PACKAGE = "org.wso2.emm.agent";
+	public static final int FIRMWARE_UPGRADE_RETRY_COUNT = 5;
 
 
 	// This is used to skip the license

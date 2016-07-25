@@ -63,7 +63,7 @@ public class EnrollmentService extends IntentService implements APIResultCallBac
                     EnrollmentService.this, Constants.AUTHENTICATION_REQUEST_CODE);
             authenticator.doAuthenticate();
         } else {
-            startEnrollment();
+            Log.e(TAG, "Auto enrollment failed due to network issues.");
         }
     }
 

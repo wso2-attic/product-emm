@@ -363,6 +363,7 @@
     <string name="operation_status">status</string>
     <string name="app_download_progress">app_progress</string>
     <string name="firmware_upgrade_failed">firmwareUpgradeFailed</string>
+    <string name="firmware_upgrade_retries">firmwareUpgradeRetries</string>
     <string name="firmware_upgrade_failed_message">firmwareUpgradeFailedMessage</string>
     <string name="firmware_upgrade_failed_id">firmwareUpgradeFailedId</string>
     <string name="app_install_failed_message">appInstallFailedMessage</string>
