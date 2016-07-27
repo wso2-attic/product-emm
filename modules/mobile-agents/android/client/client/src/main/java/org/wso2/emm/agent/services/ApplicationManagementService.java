@@ -184,6 +184,16 @@ public class ApplicationManagementService extends IntentService implements APIRe
                                       0);
                 }
                 break;
+            case Constants.Operation.GET_ENROLLMENT_STATUS:
+                if (Preference.getBoolean(context, Constants.PreferenceFlag.REGISTERED) && Preference.
+                        getBoolean(context, Constants.PreferenceFlag.DEVICE_ACTIVE)) {
+                    sendBroadcast(Constants.Status.SUCCESSFUL, context.getResources().getString(
+                            R.string.error_enrollment_success));
+                } else {
+                    sendBroadcast(Constants.Status.INTERNAL_SERVER_ERROR, context.getResources().
+                            getString(R.string.error_enrollment_failed));
+                }
+                break;
             default:
                 Log.e(TAG, "Invalid operation code received");
                 break;

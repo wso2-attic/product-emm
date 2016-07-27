@@ -227,6 +227,7 @@
     <string name="error_unregistration_failed">Unregistration Failed</string>
     <string name="error_authorization_failed">Access Denied</string>
     <string name="error_enrollment_failed">Enrollment Failed</string>
+    <string name="error_enrollment_success">Device is enrolled to EMM</string>
     <string name="error_enrollment_failed_detail">Enrollment failed, please contact administrator.</string>
     <string name="error_auth_failed_detail">Authentication failed due to a connection failure please check your network connection and try again.</string>
     <string name="error_authentication_failed">Incorrect login information. Please try again.</string>
