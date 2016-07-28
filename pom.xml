@@ -38,7 +38,7 @@
         <module>modules/mobile-agents</module>
         <module>modules/apps/jaggery/emm</module>
         <module>modules/apps/jaggery/emm-web-agent</module>
-        <!--<module>modules/tools</module>-->
+        <module>modules/tools</module>
         <module>modules/mdm-ui</module>
         <module>modules/features</module>
         <module>modules/p2-profile-gen</module>
@@ -930,6 +930,27 @@
                 <version>${cipher.tool.version}</version>
             </dependency>
 
+            <!--EMM QSG Dependencies-->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${apache.httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>${apache.httpcore.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpmime</artifactId>
+                <version>${apache.httpmime.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.googlecode.json-simple</groupId>
+                <artifactId>json-simple</artifactId>
+                <version>${google.json-simple.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1067,6 +1088,12 @@
         <carbon.dashboards.version>1.0.17</carbon.dashboards.version>
         <carbon.analytics.cdmf.version>1.0.1-SNAPSHOT</carbon.analytics.cdmf.version>
         <carbon.analytics.emm.version>1.0.1-SNAPSHOT</carbon.analytics.emm.version>
+
+        <!-- EMM QSG properties -->
+        <apache.httpclient.version>4.5.2</apache.httpclient.version>
+        <apache.httpcore.version>4.4.1</apache.httpcore.version>
+        <apache.httpmime.version>4.2.5</apache.httpmime.version>
+        <google.json-simple.version>1.1.1</google.json-simple.version>
     </properties>
 
     <scm>
