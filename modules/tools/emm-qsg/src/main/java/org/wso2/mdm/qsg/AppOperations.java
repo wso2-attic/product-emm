@@ -33,17 +33,17 @@ import java.io.File;
 import java.util.HashMap;
 
 /**
- * Created by harshan on 7/25/16.
+ * This class holds the app-mgt related operations.
  */
 public class AppOperations {
 
-    public static MobileApplication uploadApplication (String platform, String appName, String appContentType) {
-        String appUploadEndpoint = EMMConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.0/apps/mobile/binaries";
-        String filePath = "apps" + File.separator+ platform + File.separator + appName;
+    public static MobileApplication uploadApplication(String platform, String appName, String appContentType) {
+        String appUploadEndpoint =
+                EMMConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.0/apps/mobile/binaries";
+        String filePath = "apps" + File.separator + platform + File.separator + appName;
         HTTPResponse
                 httpResponse = HTTPInvoker.uploadFile(appUploadEndpoint, filePath, appContentType);
-        if (httpResponse.getResponseCode() == 200) {
-            System.out.println(httpResponse.getResponse());
+        if (httpResponse.getResponseCode() == Constants.HTTPStatus.OK) {
             JSONObject appMeta = null;
             MobileApplication application = new MobileApplication();
             try {
@@ -60,11 +60,11 @@ public class AppOperations {
         return null;
     }
 
-    private static String uploadAsset (String path) {
-        String resUploadEndpoint = EMMConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.0/apps/static-contents";
+    private static String uploadAsset(String path) {
+        String resUploadEndpoint =
+                EMMConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.0/apps/static-contents";
         HTTPResponse httpResponse = HTTPInvoker.uploadFile(resUploadEndpoint, path, "image/jpeg");
-        if (httpResponse.getResponseCode() == 200) {
-            System.out.println(httpResponse.getResponse());
+        if (httpResponse.getResponseCode() == Constants.HTTPStatus.OK) {
             JSONObject resp = null;
             try {
                 resp = (JSONObject) new JSONParser().parse(httpResponse.getResponse());
@@ -76,7 +76,7 @@ public class AppOperations {
         return null;
     }
 
-    public static MobileApplication uploadAssets (String platform, MobileApplication application) {
+    public static MobileApplication uploadAssets(String platform, MobileApplication application) {
         String assetDir = "apps" + File.separator + platform + File.separator + "images";
         //Upload the icon file
         String imgFile = assetDir + File.separator + "icon.jpg";
@@ -130,7 +130,7 @@ public class AppOperations {
         return application;
     }
 
-    public static boolean addApplication (String name, MobileApplication mblApp) {
+    public static boolean addApplication(String name, MobileApplication mblApp) {
         HashMap<String, String> headers = new HashMap<String, String>();
         String appEndpoint = EMMConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.0/apps/mobileapp";
         //Set the application payload
@@ -163,12 +163,12 @@ public class AppOperations {
         application.put("appmeta", appMeta);
         application.put("screenshots", screenshots);
 
-        System.out.println(application.toString());
         //Set the headers
-        headers.put(Constants.CONTENT_TYPE_HEADER, Constants.APPLICATION_JSON);
+        headers.put(Constants.Header.CONTENT_TYPE, Constants.ContentType.APPLICATION_JSON);
         HTTPResponse
-                httpResponse = HTTPInvoker.sendHTTPPostWithOAuthSecurity(appEndpoint, application.toJSONString(), headers);
-        if (httpResponse.getResponseCode() == 200) {
+                httpResponse =
+                HTTPInvoker.sendHTTPPostWithOAuthSecurity(appEndpoint, application.toJSONString(), headers);
+        if (httpResponse.getResponseCode() == Constants.HTTPStatus.OK) {
             return true;
         }
         return false;
