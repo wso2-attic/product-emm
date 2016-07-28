@@ -90,7 +90,7 @@ public class QSGExecutor {
             System.exit(0);
         }
         //Upload the android application
-        MobileApplication application = AppOperations.uploadApplication(Constants.DEVICE_TYPE_ANDROID, "skype.apk",
+        MobileApplication application = AppOperations.uploadApplication(Constants.DEVICE_TYPE_ANDROID, "catalog.apk",
                                                                         "application/vnd.android.package-archive");
         if (application == null) {
             System.out.println("Unable to upload the sample android application. Terminating the EMM QSG now.");
@@ -103,7 +103,7 @@ public class QSGExecutor {
             System.exit(0);
         }
         //Create application entry in publisher
-        status = AppOperations.addApplication("SkypeX", application);
+        status = AppOperations.addApplication("Catalog", application);
         if (!status) {
             System.out.println("Unable to create the mobile application. Terminating the EMM QSG now.");
             System.exit(0);

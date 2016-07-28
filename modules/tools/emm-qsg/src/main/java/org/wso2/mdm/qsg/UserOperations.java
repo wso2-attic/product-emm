@@ -43,11 +43,11 @@ public class UserOperations {
         if (isAdmin) {
             roles.add("admin");
             userData.put("firstname", "Tom");
-            userData.put("lastname", "Roger");
+            userData.put("lastname", "Admin");
         } else {
             userData.put("password", "kimemmtrial");
             userData.put("firstname", "Kim");
-            userData.put("lastname", "Daniel");
+            userData.put("lastname", "User");
         }
         userData.put("roles", roles);
         //Set the headers
