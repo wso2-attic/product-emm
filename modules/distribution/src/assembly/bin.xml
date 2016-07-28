@@ -141,6 +141,26 @@
             </includes>
         </fileSet>
 
+        <!-- Copy EMM-QSG -->
+        <fileSet>
+            <directory>src/emm-qsg</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/emm-qsg
+            </outputDirectory>
+            <includes>
+                <include>**/**.properties</include>
+                <include>**/**.sh</include>
+                <include>**/**.txt</include>
+                <include>**/**.apk</include>
+                <include>**/**.jpg</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../tools/qsg/target</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/emm-qsg</outputDirectory>
+            <includes>
+                <include>**.jar</include>
+            </includes>
+        </fileSet>
         <!-- Copy Documentation -->
         <fileSet>
             <directory>target/site</directory>
