@@ -19,7 +19,7 @@
 package org.wso2.mdm.qsg.dto;
 
 /**
- * Created by harshan on 7/21/16.
+ * This holds the model object of EMM configuration.
  */
 public class EMMConfig {
 

@@ -52,14 +52,14 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by harshan on 7/21/16.
+ * This class provides the utility methods to make a HTTP request.
  */
 public class HTTPInvoker {
 
     private static final String OAUTH_BEARER = "Bearer ";
     public static String oAuthToken;
 
-    private static HttpClient createHttpClient ()
+    private static HttpClient createHttpClient()
             throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
         HttpClientBuilder b = HttpClientBuilder.create();
 
@@ -90,7 +90,7 @@ public class HTTPInvoker {
         // now, we create connection-manager using our Registry.
         //      -- allows multi-threaded use
         PoolingHttpClientConnectionManager connMgr = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
-        b.setConnectionManager( connMgr);
+        b.setConnectionManager(connMgr);
 
         // finally, build the HttpClient;
         //      -- done!
@@ -98,7 +98,7 @@ public class HTTPInvoker {
         return client;
     }
 
-    public static HTTPResponse sendHTTPPostWithURLParams (String url, List<NameValuePair> params, HashMap<String, String>
+    public static HTTPResponse sendHTTPPostWithURLParams(String url, List<NameValuePair> params, HashMap<String, String>
             headers) {
         HttpPost post = null;
         HttpResponse response = null;
@@ -108,7 +108,7 @@ public class HTTPInvoker {
             httpclient = (CloseableHttpClient) createHttpClient();
             post = new HttpPost(url);
             post.setEntity(new UrlEncodedFormEntity(params));
-            for (String key :headers.keySet()) {
+            for (String key : headers.keySet()) {
                 post.setHeader(key, headers.get(key));
             }
             response = httpclient.execute(post);
@@ -125,11 +125,6 @@ public class HTTPInvoker {
         } catch (KeyManagementException e) {
             e.printStackTrace();
         }
-
-        System.out.println("\nSending 'POST' request to URL : " + url);
-        System.out.println("Post parameters : " + post.getEntity());
-        System.out.println("Response Code : " +
-                           response.getStatusLine().getStatusCode());
 
         BufferedReader rd = null;
         try {
@@ -153,7 +148,7 @@ public class HTTPInvoker {
         return httpResponse;
     }
 
-    public static HTTPResponse sendHTTPPost (String url, String payload, HashMap<String, String>
+    public static HTTPResponse sendHTTPPost(String url, String payload, HashMap<String, String>
             headers) {
         HttpPost post = null;
         HttpResponse response = null;
@@ -164,9 +159,7 @@ public class HTTPInvoker {
             StringEntity requestEntity = new StringEntity(payload, Constants.UTF_8);
             post = new HttpPost(url);
             post.setEntity(requestEntity);
-            for (String key :headers.keySet()) {
-                System.out.println(key);
-                System.out.println(headers.get(key));
+            for (String key : headers.keySet()) {
                 post.setHeader(key, headers.get(key));
             }
             response = httpclient.execute(post);
@@ -183,11 +176,6 @@ public class HTTPInvoker {
         } catch (KeyManagementException e) {
             e.printStackTrace();
         }
-
-        System.out.println("\nSending 'POST' request to URL : " + url);
-        System.out.println("Post parameters : " + post.getEntity());
-        System.out.println("Response Code : " +
-                           response.getStatusLine().getStatusCode());
 
         BufferedReader rd = null;
         try {
@@ -208,10 +196,15 @@ public class HTTPInvoker {
         }
         httpResponse.setResponseCode(response.getStatusLine().getStatusCode());
         httpResponse.setResponse(result.toString());
+        try {
+            httpclient.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return httpResponse;
     }
 
-    public static HTTPResponse sendHTTPPostWithOAuthSecurity (String url, String payload, HashMap<String, String>
+    public static HTTPResponse sendHTTPPostWithOAuthSecurity(String url, String payload, HashMap<String, String>
             headers) {
         HttpPost post = null;
         HttpResponse response = null;
@@ -222,12 +215,10 @@ public class HTTPInvoker {
             StringEntity requestEntity = new StringEntity(payload, Constants.UTF_8);
             post = new HttpPost(url);
             post.setEntity(requestEntity);
-            for (String key :headers.keySet()) {
-                System.out.println(key);
-                System.out.println(headers.get(key));
+            for (String key : headers.keySet()) {
                 post.setHeader(key, headers.get(key));
             }
-            post.setHeader(Constants.AUTH_HEADER, OAUTH_BEARER + oAuthToken);
+            post.setHeader(Constants.Header.AUTH, OAUTH_BEARER + oAuthToken);
             response = httpclient.execute(post);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -242,11 +233,6 @@ public class HTTPInvoker {
         } catch (KeyManagementException e) {
             e.printStackTrace();
         }
-
-        System.out.println("\nSending 'POST' request to URL : " + url);
-        System.out.println("Post parameters : " + post.getEntity());
-        System.out.println("Response Code : " +
-                           response.getStatusLine().getStatusCode());
 
         BufferedReader rd = null;
         try {
@@ -267,11 +253,15 @@ public class HTTPInvoker {
         }
         httpResponse.setResponseCode(response.getStatusLine().getStatusCode());
         httpResponse.setResponse(result.toString());
-        System.out.println(httpResponse.getResponse());
+        try {
+            httpclient.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return httpResponse;
     }
 
-    public static HTTPResponse uploadFile (String url, String fileName, String fileContentType) {
+    public static HTTPResponse uploadFile(String url, String fileName, String fileContentType) {
         HttpPost post = null;
         HttpResponse response = null;
         HTTPResponse httpResponse = new HTTPResponse();
@@ -285,9 +275,9 @@ public class HTTPInvoker {
             ContentBody cbFile = new FileBody(file, fileContentType);
             mpEntity.addPart("file", cbFile);
             post.setEntity(mpEntity);
-            post.setHeader(Constants.AUTH_HEADER, OAUTH_BEARER + oAuthToken);
-            post.setHeader(Constants.CONTENT_TYPE_HEADER, "multipart/form-data");
-            post.setHeader("Accept", Constants.APPLICATION_JSON);
+            post.setHeader(Constants.Header.AUTH, OAUTH_BEARER + oAuthToken);
+            post.setHeader(Constants.Header.CONTENT_TYPE, "multipart/form-data");
+            post.setHeader("Accept", Constants.ContentType.APPLICATION_JSON);
             response = httpclient.execute(post);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -302,11 +292,6 @@ public class HTTPInvoker {
         } catch (KeyManagementException e) {
             e.printStackTrace();
         }
-
-        System.out.println("\nSending 'POST' request to URL : " + url);
-        System.out.println("Post parameters : " + post.getEntity());
-        System.out.println("Response Code : " +
-                           response.getStatusLine().getStatusCode());
 
         BufferedReader rd = null;
         try {
@@ -327,6 +312,11 @@ public class HTTPInvoker {
         }
         httpResponse.setResponseCode(response.getStatusLine().getStatusCode());
         httpResponse.setResponse(result.toString());
+        try {
+            httpclient.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return httpResponse;
     }
 }

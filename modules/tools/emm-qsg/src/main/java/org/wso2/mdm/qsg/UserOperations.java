@@ -28,11 +28,11 @@ import org.wso2.mdm.qsg.utils.HTTPInvoker;
 import java.util.HashMap;
 
 /**
- * Created by harshan on 7/25/16.
+ * This class holds the user-mgt related operations like user-create, role-create and change-password.
  */
 public class UserOperations {
 
-    public static boolean createUser (String username, String email, boolean isAdmin) {
+    public static boolean createUser(String username, String email, boolean isAdmin) {
         HashMap<String, String> headers = new HashMap<String, String>();
         String userEndpoint = EMMConfig.getInstance().getEmmHost() + "/api/device-mgt/v1.0/users";
         //Set the user payload
@@ -51,32 +51,34 @@ public class UserOperations {
         }
         userData.put("roles", roles);
         //Set the headers
-        headers.put(Constants.CONTENT_TYPE_HEADER, Constants.APPLICATION_JSON);
+        headers.put(Constants.Header.CONTENT_TYPE, Constants.ContentType.APPLICATION_JSON);
         HTTPResponse httpResponse = HTTPInvoker
                 .sendHTTPPostWithOAuthSecurity(userEndpoint, userData.toJSONString(), headers);
-        if (httpResponse.getResponseCode() == 201) {
+        if (httpResponse.getResponseCode() == Constants.HTTPStatus.CREATED) {
             return true;
         }
         return false;
     }
 
-    public static boolean changePassword (String username, String pwd) {
+    public static boolean changePassword(String username, String pwd) {
         HashMap<String, String> headers = new HashMap<String, String>();
-        String pwdEndpoint = EMMConfig.getInstance().getEmmHost() + "/api/device-mgt/v1.0/admin/users/" + username + "/credentials";
+        String pwdEndpoint =
+                EMMConfig.getInstance().getEmmHost() + "/api/device-mgt/v1.0/admin/users/" + username + "/credentials";
         //Set the password payload
         JSONObject pwdData = new JSONObject();
         pwdData.put("newPassword", pwd);
 
         //Set the headers
-        headers.put(Constants.CONTENT_TYPE_HEADER,Constants.APPLICATION_JSON);
-        HTTPResponse httpResponse = HTTPInvoker.sendHTTPPostWithOAuthSecurity(pwdEndpoint, pwdData.toJSONString(), headers);
-        if (httpResponse.getResponseCode() == 200) {
+        headers.put(Constants.Header.CONTENT_TYPE, Constants.ContentType.APPLICATION_JSON);
+        HTTPResponse httpResponse =
+                HTTPInvoker.sendHTTPPostWithOAuthSecurity(pwdEndpoint, pwdData.toJSONString(), headers);
+        if (httpResponse.getResponseCode() == Constants.HTTPStatus.OK) {
             return true;
         }
         return false;
     }
 
-    private static String [] getUserPermissions () {
+    private static String[] getUserPermissions() {
         String permissions = "\"/permission/admin/device-mgt/admin/certificate\"," +
                              "\"/permission/admin/device-mgt/admin/certificate/Add\",\"/permission/admin/device-mgt/admin/certificate/GetAll\"," +
                              "\"/permission/admin/device-mgt/admin/certificate/GetSignCSR\",\"/permission/admin/device-mgt/admin/certificate/Remove\"," +
@@ -106,14 +108,14 @@ public class UserOperations {
         return permissions.split(",");
     }
 
-    public static boolean createRole (String roleName, String [] users) {
+    public static boolean createRole(String roleName, String[] users) {
         HashMap<String, String> headers = new HashMap<String, String>();
         String roleEndpoint = EMMConfig.getInstance().getEmmHost() + "/api/device-mgt/v1.0/roles";
         //Set the role payload
         JSONObject roleData = new JSONObject();
         roleData.put("roleName", roleName);
         JSONArray perms = new JSONArray();
-        String [] permissions = getUserPermissions();
+        String[] permissions = getUserPermissions();
         for (String perm : permissions) {
             perms.add(perm);
         }
@@ -124,9 +126,10 @@ public class UserOperations {
         roleData.put("permissions", perms);
         roleData.put("users", usrs);
         //Set the headers
-        headers.put(Constants.CONTENT_TYPE_HEADER,Constants.APPLICATION_JSON);
-        HTTPResponse httpResponse = HTTPInvoker.sendHTTPPostWithOAuthSecurity(roleEndpoint, roleData.toJSONString(), headers);
-        if (httpResponse.getResponseCode() == 201) {
+        headers.put(Constants.Header.CONTENT_TYPE, Constants.ContentType.APPLICATION_JSON);
+        HTTPResponse httpResponse =
+                HTTPInvoker.sendHTTPPostWithOAuthSecurity(roleEndpoint, roleData.toJSONString(), headers);
+        if (httpResponse.getResponseCode() == Constants.HTTPStatus.CREATED) {
             return true;
         }
         return false;

@@ -19,7 +19,7 @@
 package org.wso2.mdm.qsg.dto;
 
 /**
- * Created by harshan on 7/26/16.
+ * This serves as the domain-model of MobileApplication related data.
  */
 public class MobileApplication {
 

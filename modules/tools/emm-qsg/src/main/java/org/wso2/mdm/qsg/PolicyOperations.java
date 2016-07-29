@@ -28,11 +28,11 @@ import org.wso2.mdm.qsg.utils.HTTPInvoker;
 import java.util.HashMap;
 
 /**
- * Created by harshan on 7/25/16.
+ * This class holds the methods to create policies.
  */
 public class PolicyOperations {
 
-    public static boolean createPasscodePolicy (String policyName, String deviceType) {
+    public static boolean createPasscodePolicy(String policyName, String deviceType) {
         HashMap<String, String> headers = new HashMap<String, String>();
         String policyEndpoint = EMMConfig.getInstance().getEmmHost() + "/api/device-mgt/v1.0/policies";
         //Set the policy payload
@@ -43,7 +43,7 @@ public class PolicyOperations {
         policyData.put("ownershipType", "ANY");
         policyData.put("active", false);
         JSONObject profile = new JSONObject();
-        profile.put("profileName","passcode");
+        profile.put("profileName", "passcode");
         profile.put("deviceType", deviceType);
         JSONArray featureList = new JSONArray();
         JSONObject feature = new JSONObject();
@@ -65,11 +65,11 @@ public class PolicyOperations {
         policyData.put("profile", profile);
         policyData.put("roles", roles);
         //Set the headers
-        headers.put(Constants.CONTENT_TYPE_HEADER,Constants.APPLICATION_JSON);
+        headers.put(Constants.Header.CONTENT_TYPE, Constants.ContentType.APPLICATION_JSON);
         HTTPResponse
                 httpResponse = HTTPInvoker
                 .sendHTTPPostWithOAuthSecurity(policyEndpoint, policyData.toJSONString(), headers);
-        if (httpResponse.getResponseCode() == 201) {
+        if (httpResponse.getResponseCode() == Constants.HTTPStatus.CREATED) {
             return true;
         }
         return false;

@@ -39,7 +39,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by harshan on 7/25/16.
+ * This class holds the utility methods used by the EMM-QSG package.
  */
 public class QSGUtils {
 
@@ -82,9 +82,9 @@ public class QSGUtils {
         obj.put("grantType", "refresh_token password client_credentials");
         obj.put("tokenScope", "user:add,role:add,policy:add,appm:create,appm:publish,appm:update,appm:read");
         //Set the headers
-        headers.put(Constants.CONTENT_TYPE_HEADER, Constants.APPLICATION_JSON);
+        headers.put(Constants.Header.CONTENT_TYPE, Constants.ContentType.APPLICATION_JSON);
         HTTPResponse httpResponse = HTTPInvoker.sendHTTPPost(dcrEndPoint, obj.toJSONString(), headers);
-        if (httpResponse.getResponseCode() == 201) {
+        if (httpResponse.getResponseCode() == Constants.HTTPStatus.CREATED) {
             try {
                 JSONObject jsonObject = (JSONObject) new JSONParser().parse(httpResponse.getResponse());
                 clientCredentials = new ClientCredentials();
@@ -108,12 +108,14 @@ public class QSGUtils {
         urlParameters.add(new BasicNameValuePair("username", EMMConfig.getInstance().getUsername()));
         urlParameters.add(new BasicNameValuePair("password", EMMConfig.getInstance().getPassword()));
         urlParameters.add(new BasicNameValuePair("grant_type", "password"));
-        urlParameters.add(new BasicNameValuePair("scope", "user:add role:add policy:add appm:create appm:publish appm:update appm:read"));
+        urlParameters.add(new BasicNameValuePair("scope",
+                                                 "user:add role:add policy:add appm:create appm:publish appm:update appm:read"));
         //Set the headers
-        headers.put(Constants.CONTENT_TYPE_HEADER,Constants.APPLICATION_URL_ENCODED);
-        headers.put(Constants.AUTH_HEADER, authHeader);
-        HTTPResponse httpResponse = HTTPInvoker.sendHTTPPostWithURLParams(EMMConfig.getInstance().getOauthEndPoint(), urlParameters, headers);
-        if (httpResponse.getResponseCode() == 200) {
+        headers.put(Constants.Header.CONTENT_TYPE, Constants.ContentType.APPLICATION_URL_ENCODED);
+        headers.put(Constants.Header.AUTH, authHeader);
+        HTTPResponse httpResponse = HTTPInvoker
+                .sendHTTPPostWithURLParams(EMMConfig.getInstance().getOauthEndPoint(), urlParameters, headers);
+        if (httpResponse.getResponseCode() == Constants.HTTPStatus.OK) {
             try {
                 JSONObject jsonObject = (JSONObject) new JSONParser().parse(httpResponse.getResponse());
                 return (String) jsonObject.get("access_token");
@@ -125,13 +127,14 @@ public class QSGUtils {
     }
 
     public static boolean isValidEmailAddress(String email) {
-        String emailPattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        String emailPattern =
+                "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
         Pattern p = Pattern.compile(emailPattern);
         Matcher m = p.matcher(email);
         return m.matches();
     }
 
-    public static String getResourceId (String resourcePath) {
+    public static String getResourceId(String resourcePath) {
         return resourcePath.substring(resourcePath.lastIndexOf('/') + 1);
     }
 }

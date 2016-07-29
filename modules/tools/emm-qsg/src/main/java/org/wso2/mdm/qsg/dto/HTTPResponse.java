@@ -19,7 +19,7 @@
 package org.wso2.mdm.qsg.dto;
 
 /**
- * Created by harshan on 7/25/16.
+ * This holds the domain-model of HTTP Response.
  */
 public class HTTPResponse {
 
