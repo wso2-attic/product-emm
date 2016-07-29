@@ -148,7 +148,7 @@ $(document).ready(function () {
 
     var androidConfigAPI = "/api/device-mgt/android/v1.0/configuration";
     var generalConfigAPI = "/api/device-mgt/v1.0/configuration";
-    var iosConfigAPI = "/api/device-mgt/ios/v1.0/configuration";
+    var iosConfigAPI = "/ios/configuration";
     var windowsConfigAPI = "/api/device-mgt/windows/v1.0/configuration";
 
     /**
@@ -707,14 +707,14 @@ $(document).ready(function () {
             addConfigFormData.type = platformTypeConstants["IOS"];
             addConfigFormData.configuration = configList;
 
-            var addConfigAPI = "/ios/configuration";
+            var addConfigAPI = iosConfigAPI;
 
             invokerUtil.put(
                 addConfigAPI,
                 addConfigFormData,
                 function (data, textStatus, jqXHR) {
                     data = JSON.parse(data);
-                    if (jqXHR.status == 201) {
+                    if (jqXHR.status == 200) {
                         $("#config-save-form").addClass("hidden");
                         $("#record-created-msg").removeClass("hidden");
                     }
