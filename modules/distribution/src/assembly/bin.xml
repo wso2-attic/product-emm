@@ -1079,6 +1079,15 @@
         </outputDirectory>
         <fileMode>755</fileMode>
     </file>
+    <!--Copying device mgt to scopes -->
+    <file>
+        <source>
+            ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/device-mgt-scopes.xml
+        </source>
+        <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc</outputDirectory>
+        <filtered>true</filtered>
+        <fileMode>644</fileMode>
+    </file>
 
 
     <!-- copying emm analytics related webapp -->
