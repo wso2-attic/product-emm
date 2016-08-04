@@ -32,36 +32,43 @@ import org.wso2.emm.agent.utils.Preference;
  */
 public class SystemServiceResponseReceiver extends BroadcastReceiver {
 
+    private static final String TAG = SystemServiceResponseReceiver.class.getName();
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String code = intent.getStringExtra("code");
         String status = intent.getStringExtra("status");
+        JSONObject result;
         try {
-            JSONObject result = new JSONObject(intent.getStringExtra("payload"));
             switch (code) {
                 case Constants.Operation.GET_FIRMWARE_BUILD_DATE:
-                    if (Constants.Status.SUCCESSFUL.equals(status) && result != null && result.has("buildDate")) {
+                    result = new JSONObject(intent.getStringExtra("payload"));
+                    if (Constants.Status.SUCCESSFUL.equals(status) && result.has("buildDate")) {
                         Preference.putString(context, context.getResources().getString(R.string.shared_pref_os_build_date),
                                              result.getString("buildDate"));
                     }
                     break;
                 case Constants.Operation.SILENT_INSTALL_APPLICATION:
-                    if (Constants.Status.SUCCESSFUL.equals(status) && result != null && result.has("appInstallStatus")) {
+                    result = new JSONObject(intent.getStringExtra("payload"));
+                    if (Constants.Status.SUCCESSFUL.equals(status) && result.has("appInstallStatus")) {
                         Preference.putString(context, context.getResources().getString(R.string.app_install_status),
                                              result.getString("appInstallStatus"));
                     }
-
-                    if (Constants.Status.SUCCESSFUL.equals(status) && result != null && result.has("appInstallFailedMessage")) {
+                    if (Constants.Status.SUCCESSFUL.equals(status) && result.has("appInstallFailedMessage")) {
                         Preference.putString(context, context.getResources().getString(R.string.app_install_failed_message),
                                              result.getString("appInstallFailedMessage"));
                     }
                     break;
+                case Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS:
+                case Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS:
+                    Log.i(TAG, status + ": " + intent.getStringExtra("payload"));
+                    break;
                 default:
-                    Log.e(SystemServiceResponseReceiver.class.getName(), "Invalid operation code");
+                    Log.e(TAG, "Invalid operation code: " + code);
                     break;
             }
         } catch (JSONException e) {
-            Log.e(SystemServiceResponseReceiver.class.getName(), "Failed to parse response JSON" + e);
+            Log.e(TAG, "Failed to parse response JSON" + e);
         }
     }
 }
