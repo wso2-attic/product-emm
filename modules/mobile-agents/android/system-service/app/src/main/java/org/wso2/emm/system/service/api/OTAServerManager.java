@@ -202,7 +202,7 @@ public class OTAServerManager {
         broadcastIntent.putExtra(Constants.CODE, code);
         broadcastIntent.putExtra(Constants.STATUS, status);
         broadcastIntent.putExtra(Constants.PAYLOAD, payload);
-        context.sendBroadcast(broadcastIntent);
+        context.sendBroadcastAsUser(broadcastIntent, android.os.Process.myUserHandle());
     }
 
     void reportCheckingError(int error) {

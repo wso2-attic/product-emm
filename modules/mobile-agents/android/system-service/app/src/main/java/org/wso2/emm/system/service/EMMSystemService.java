@@ -506,7 +506,7 @@ public class EMMSystemService extends IntentService {
         broadcastIntent.putExtra(Constants.CODE, code);
         broadcastIntent.putExtra(Constants.STATUS, status);
         broadcastIntent.putExtra(Constants.PAYLOAD, payload);
-        context.sendBroadcast(broadcastIntent);
+        context.sendBroadcastAsUser(broadcastIntent, android.os.Process.myUserHandle());
     }
 
     private void disableHardLock() {
