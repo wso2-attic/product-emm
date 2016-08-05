@@ -43,6 +43,7 @@ public class Constants {
 	public static final String ADMIN_MESSAGE = "message";
 	public static final String IS_LOCKED = "lock";
 	public static final int FIRMWARE_UPGRADE_CONNECTIVITY_TIMEOUT = 10000;
+	public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
 	/**
 	 * Read_TIMEOUT = SO timeout(the time since the last byte has been received)
 	 */

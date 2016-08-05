@@ -62,7 +62,7 @@ public class AlarmUtils {
      * @param  time - Time that alarm should trigger.
      */
     public static void setOneTimeAlarm(Context context, String time, String operation, String packageUri) throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy hh:mm a", Locale.ENGLISH);
+        SimpleDateFormat formatter = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.ENGLISH);
         Date date = formatter.parse(time);
         long startTime = date.getTime();
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
