@@ -27,7 +27,7 @@ var userModule = function () {
     var mdmProps = require('/config/mdm-props.js').config();
     var serviceInvokers = require("/modules/backend-service-invoker.js").backendServiceInvoker;
 
-    var emmAdminBasePath = "/api/device-mgt/v1.0";
+    var emmAdminBasePath = "/api-device-mgt-v1.0";
 
     /* Initializing user manager */
     var carbon = require('carbon');
