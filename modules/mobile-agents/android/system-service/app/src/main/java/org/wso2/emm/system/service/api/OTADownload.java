@@ -55,11 +55,11 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
         this.context = context;
         try {
             otaServerManager = new OTAServerManager(this.context);
+            otaServerManager.setStateChangeListener(this);
         } catch (MalformedURLException e) {
             otaServerManager = null;
             Log.e(TAG, "OTA server manager threw exception ..." + e);
         }
-        otaServerManager.setStateChangeListener(this);
     }
 
     /**

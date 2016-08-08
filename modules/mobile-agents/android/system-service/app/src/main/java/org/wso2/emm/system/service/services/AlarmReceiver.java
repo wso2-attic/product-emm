@@ -51,8 +51,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 			//Prepare for upgrade
 			OTADownload otaDownload = new OTADownload(context);
 			otaDownload.startOTA();
-			context.registerReceiver(new BatteryChargingStateReceiver(), new IntentFilter(
-					Intent.ACTION_BATTERY_CHANGED));
 		} else if(operation != null && operation.trim().equals(Constants.Operation.SILENT_INSTALL_APPLICATION)) {
 			Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), null);
 			Preference.putString(context, context.getResources().getString(R.string.app_uri), null);

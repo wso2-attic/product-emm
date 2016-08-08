@@ -156,6 +156,8 @@ public class EMMSystemService extends IntentService {
                 }
             }
         }
+        context.registerReceiver(new BatteryChargingStateReceiver(), new IntentFilter(
+                Intent.ACTION_BATTERY_CHANGED));
     }
 
     private void startAdmin() {
@@ -387,8 +389,6 @@ public class EMMSystemService extends IntentService {
             //Prepare for upgrade
             OTADownload otaDownload = new OTADownload(context);
             otaDownload.startOTA();
-            context.registerReceiver(new BatteryChargingStateReceiver(), new IntentFilter(
-                    Intent.ACTION_BATTERY_CHANGED));
         }
     }
 
@@ -506,7 +506,7 @@ public class EMMSystemService extends IntentService {
         broadcastIntent.putExtra(Constants.CODE, code);
         broadcastIntent.putExtra(Constants.STATUS, status);
         broadcastIntent.putExtra(Constants.PAYLOAD, payload);
-        context.sendBroadcast(broadcastIntent);
+        context.sendBroadcastAsUser(broadcastIntent, android.os.Process.myUserHandle());
     }
 
     private void disableHardLock() {

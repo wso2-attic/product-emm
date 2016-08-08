@@ -111,22 +111,19 @@ public class OTAServerManager {
     }
 
     public void startCheckingVersion() {
-
         if (this.stateChangeListener != null) {
-            if (this.checkNetworkOnline()) {
-                reportCheckingError(OTAStateChangeListener.ERROR_CANNOT_FIND_SERVER);
+            if (checkNetworkOnline()) {
+                getTargetPackagePropertyList(this.serverConfig.getBuildPropURL());
             } else {
                 reportCheckingError(OTAStateChangeListener.ERROR_WIFI_NOT_AVAILABLE);
+                String message = "Connection failure when starting upgrade download.";
+                Log.e(TAG, message);
+                sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
+                        Constants.Status.CONNECTION_FAILED, message);
+                CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
             }
-        }
-        if (checkNetworkOnline()) {
-            getTargetPackagePropertyList(this.serverConfig.getBuildPropURL());
         } else {
-            String message = "Connection failure when starting upgrade download.";
-            Log.e(TAG, message);
-            sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
-                          Constants.Status.CONNECTION_FAILED, message);
-            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
+            reportCheckingError(OTAStateChangeListener.ERROR_CANNOT_FIND_SERVER);
         }
     }
 
@@ -205,7 +202,7 @@ public class OTAServerManager {
         broadcastIntent.putExtra(Constants.CODE, code);
         broadcastIntent.putExtra(Constants.STATUS, status);
         broadcastIntent.putExtra(Constants.PAYLOAD, payload);
-        context.sendBroadcast(broadcastIntent);
+        context.sendBroadcastAsUser(broadcastIntent, android.os.Process.myUserHandle());
     }
 
     void reportCheckingError(int error) {
@@ -252,6 +249,9 @@ public class OTAServerManager {
         new AsyncTask<Void, Void, Void>() {
             protected Void doInBackground(Void... unused) {
                 File targetFile = new File(FileUtils.getUpgradePackageFilePath());
+                if (targetFile.exists()) {
+                    targetFile.delete();
+                }
                 try {
                     boolean fileStatus = targetFile.createNewFile();
                     if (!fileStatus) {
@@ -354,7 +354,6 @@ public class OTAServerManager {
 
     public void startInstallUpgradePackage() {
         File recoveryFile = new File(FileUtils.getUpgradePackageFilePath());
-
         try {
             wakeLock.acquire();
             if (getBatteryLevel(context) >= Constants.REQUIRED_BATTERY_LEVEL_TO_FIRMWARE_UPGRADE) {
@@ -364,8 +363,6 @@ public class OTAServerManager {
                 Preference.putString(context, context.getResources().getString(R.string.upgrade_install_status),
                                      context.getResources().getString(R.string.status_failed));
                 Log.e(TAG, "Upgrade failed due to insufficient battery level.");
-                context.registerReceiver(new BatteryChargingStateReceiver(), new IntentFilter(
-                        Intent.ACTION_BATTERY_CHANGED));
                 setNotification(context, context.getResources().getString(R.string.upgrade_failed_due_to_battery));
             }
         } catch (IOException e) {
@@ -507,7 +504,7 @@ public class OTAServerManager {
                                                                   OTAStateChangeListener.NO_ERROR, parser, DEFAULT_STATE_INFO_CODE);
                         }
                     } else {
-                        reportCheckingError(OTAStateChangeListener.ERROR_WRITE_FILE_ERROR);
+                        reportCheckingError(OTAStateChangeListener.ERROR_CANNOT_FIND_SERVER);
                     }
                 }
                 return null;

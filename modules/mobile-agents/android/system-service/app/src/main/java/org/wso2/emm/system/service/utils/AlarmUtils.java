@@ -22,6 +22,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
+import android.util.Log;
+
 import org.wso2.emm.system.service.R;
 import org.wso2.emm.system.service.services.AlarmReceiver;
 
@@ -34,9 +36,13 @@ import java.util.Locale;
  * Utility class to hold file alarm scheduling methods.
  */
 public class AlarmUtils {
+
+    private static final String TAG = AlarmUtils.class.getSimpleName();
+
     private static final int DEFAULT_TIME_MILLISECONDS = 1000;
     private static final int RECURRING_REQUEST_CODE = 200;
     private static final int ONE_TIME_REQUEST_CODE = 300;
+
     /**
      * Initiates repeating alarm on device startup.
      * @param context - Application context.
@@ -62,22 +68,26 @@ public class AlarmUtils {
      * @param  time - Time that alarm should trigger.
      */
     public static void setOneTimeAlarm(Context context, String time, String operation, String packageUri) throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.ENGLISH);
-        Date date = formatter.parse(time);
-        long startTime = date.getTime();
-        Intent alarmIntent = new Intent(context, AlarmReceiver.class);
-        alarmIntent.putExtra(context.getResources().getString(R.string.alarm_scheduled_operation), operation);
-        if(packageUri != null){
-            alarmIntent.putExtra(context.getResources().getString(R.string.app_uri), packageUri);
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.ENGLISH);
+            Date date = formatter.parse(time);
+            long startTime = date.getTime();
+            Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+            alarmIntent.putExtra(context.getResources().getString(R.string.alarm_scheduled_operation), operation);
+            if (packageUri != null) {
+                alarmIntent.putExtra(context.getResources().getString(R.string.app_uri), packageUri);
+            }
+            PendingIntent pendingIntent =
+                    PendingIntent.getBroadcast(context,
+                            ONE_TIME_REQUEST_CODE,
+                            alarmIntent,
+                            PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager alarmManager =
+                    (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, startTime, pendingIntent);
+        } catch (ParseException e) {
+            Log.e(TAG, operation + ": Unable to parse datetime '" + time + "' to '" + Constants.DATE_FORMAT + "'");
         }
-        PendingIntent pendingIntent =
-                PendingIntent.getBroadcast(context,
-                        ONE_TIME_REQUEST_CODE,
-                        alarmIntent,
-                        PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager alarmManager =
-                (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, startTime, pendingIntent);
     }
 
 }
