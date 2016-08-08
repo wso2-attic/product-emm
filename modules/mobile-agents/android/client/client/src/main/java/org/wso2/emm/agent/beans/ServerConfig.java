@@ -81,8 +81,12 @@ public class ServerConfig {
 	public String getHostFromPreferences (Context context) {
 		if (Preference.getString(context, Constants.PreferenceFlag.IP) != null) {
 			return Preference.getString(context, Constants.PreferenceFlag.IP);
-		} else {
+		} else if (serverIP != null) {
 			return serverIP;
+		} else if (Constants.DEFAULT_HOST != null) {
+			return Constants.DEFAULT_HOST;
+		} else {
+			return "";
 		}
 	}
 
