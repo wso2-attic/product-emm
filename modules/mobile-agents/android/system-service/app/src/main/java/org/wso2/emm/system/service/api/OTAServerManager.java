@@ -28,10 +28,13 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.os.Environment;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RecoverySystem;
+import android.os.StatFs;
 import android.os.SystemProperties;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import org.json.JSONException;
@@ -58,6 +61,7 @@ import java.net.URLConnection;
 import java.security.GeneralSecurityException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executor;
 
 /**
  * This class handles the functionality required for performing OTA updates. Basically it handles
@@ -77,6 +81,10 @@ public class OTAServerManager {
     private long cacheProgress = -1;
     private Context context;
     private WakeLock wakeLock;
+    private volatile long downloadedLength = 0;
+    private volatile int lengthOfFile = 0;
+    private volatile boolean isProgressUpdateTerminated = false;
+    private static AsyncTask asyncTask = null;
 
     private RecoverySystem.ProgressListener recoveryVerifyListener = new RecoverySystem.ProgressListener() {
         public void onProgress(int progress) {
@@ -116,7 +124,7 @@ public class OTAServerManager {
                 getTargetPackagePropertyList(this.serverConfig.getBuildPropURL());
             } else {
                 reportCheckingError(OTAStateChangeListener.ERROR_WIFI_NOT_AVAILABLE);
-                String message = "Connection failure when starting upgrade download.";
+                String message = "Connection failure while downloading the update.";
                 Log.e(TAG, message);
                 sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
                         Constants.Status.CONNECTION_FAILED, message);
@@ -154,9 +162,9 @@ public class OTAServerManager {
         return upgrade;
     }
 
-    void publishDownloadProgress(long total, long downloaded) {
+    private void publishDownloadProgress(long total, long downloaded) {
         long progress = (downloaded * 100) / total;
-        long published = 0L;
+        long published = -1L;
         if (Preference.getString(context, context.getResources().getString(R.string.firmware_download_progress)) != null) {
             published = Long.valueOf(Preference.getString(context, context.getResources().getString(
                     R.string.firmware_download_progress)));
@@ -166,12 +174,10 @@ public class OTAServerManager {
             publishFirmwareDownloadProgress(progress);
             Preference.putString(context, context.getResources().getString(R.string.firmware_download_progress),
                                  String.valueOf(progress));
-            if ((progress % 5) == 0) {
-                Log.d(TAG, "Download Progress - " + progress + "% - Total: " + total + " Downloaded:" + downloaded);
-                if (progress == 100) {
-                    Preference.putString(context, context.getResources().getString(R.string.firmware_download_progress),
-                                         String.valueOf(DEFAULT_STATE_INFO_CODE));
-                }
+            Log.d(TAG, "Download Progress - " + progress + "% - Total: " + total + " Downloaded:" + downloaded);
+            if (progress == 100) {
+                Preference.putString(context, context.getResources().getString(R.string.firmware_download_progress),
+                        String.valueOf(DEFAULT_STATE_INFO_CODE));
             }
         }
 
@@ -235,18 +241,33 @@ public class OTAServerManager {
 
         @Override
         public void run() {
+            isProgressUpdateTerminated = true;
             Log.w(TAG,"Timed out while downloading.");
-            asyncTask.cancel(false);
+            asyncTask.cancel(true);
             String message = "Connection failure (Socket timeout) when downloading update package.";
             Log.e(TAG, message);
             sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
-                          Constants.Status.CONNECTION_FAILED, message);
+                    Constants.Status.CONNECTION_FAILED, message);
             CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
+            File targetFile = new File(FileUtils.getUpgradePackageFilePath());
+            if (targetFile.exists()) {
+                targetFile.delete();
+                Log.w(TAG,"Partially downloaded update has been deleted.");
+            }
         }
-    };
+    }
+
+    private class DownloadProgressUpdateExecutor implements Executor {
+        public void execute(@NonNull Runnable r) {
+            new Thread(r).start();
+        }
+    }
 
     public void startDownloadUpgradePackage(final OTAServerManager serverManager) {
-        new AsyncTask<Void, Void, Void>() {
+        if (asyncTask != null){
+            asyncTask.cancel(true);
+        }
+        asyncTask = new AsyncTask<Void, Void, Void>() {
             protected Void doInBackground(Void... unused) {
                 File targetFile = new File(FileUtils.getUpgradePackageFilePath());
                 if (targetFile.exists()) {
@@ -273,23 +294,41 @@ public class OTAServerManager {
                     URLConnection connection = url.openConnection();
                     connection.setConnectTimeout(Constants.FIRMWARE_UPGRADE_CONNECTIVITY_TIMEOUT);
                     connection.setReadTimeout(Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
-                    int lengthOfFile;
                     lengthOfFile = connection.getContentLength();
+                    downloadedLength = 0;
                     InputStream input = new BufferedInputStream(url.openStream());
                     OutputStream output = new FileOutputStream(targetFile);
-                    Timer timer = new Timer();
+                    Timer timeoutTimer = new Timer();
                     Log.d(TAG, "Update package file size:" + lengthOfFile);
-                    byte data[] = new byte[DEFAULT_BYTES];
-                    long total = 0, count;
-                    while ((count = input.read(data)) >= 0) {
-                        total += count;
-                        publishDownloadProgress(lengthOfFile, total);
-                        output.write(data, DEFAULT_OFFSET, (int) count);
-                        timer.cancel();
-                        timer = new Timer();
-                        timer.schedule(new Timeout(this), Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
+                    if (getFreeDiskSpace() < lengthOfFile){
+                        Log.e(TAG, "Device does not have enough memory to download");
                     }
-                    timer.cancel();
+                    byte data[] = new byte[DEFAULT_BYTES];
+                    long count;
+                    isProgressUpdateTerminated = false;
+                    Executor executor = new DownloadProgressUpdateExecutor();
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            while (lengthOfFile > downloadedLength && !isProgressUpdateTerminated) {
+                                publishDownloadProgress(lengthOfFile, downloadedLength);
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException ignored) {
+                                }
+                            }
+                        }
+                    });
+                    while ((count = input.read(data)) >= 0) {
+                        downloadedLength += count;
+                        output.write(data, DEFAULT_OFFSET, (int) count);
+                        timeoutTimer.cancel();
+                        timeoutTimer = new Timer();
+                        timeoutTimer.schedule(new Timeout(this), Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
+                    }
+                    publishDownloadProgress(lengthOfFile, downloadedLength);
+                    isProgressUpdateTerminated = true;
+                    timeoutTimer.cancel();
                     output.flush();
                     output.close();
                     input.close();
@@ -313,10 +352,20 @@ public class OTAServerManager {
                 } finally {
                     wakeLock.release();
                     wakeLock.acquire(2);
+                    if (targetFile.exists() && lengthOfFile != downloadedLength) {
+                        targetFile.delete();
+                    }
                 }
                 return null;
             }
         }.execute();
+    }
+
+    public long getFreeDiskSpace() {
+        StatFs statFs = new StatFs(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
+        long freeDiskSpace = (long) statFs.getAvailableBlocks() * (long) statFs.getBlockSize();
+        Log.d(TAG, "Free disk space: " + freeDiskSpace);
+        return freeDiskSpace;
     }
 
     public void startVerifyUpgradePackage() {
