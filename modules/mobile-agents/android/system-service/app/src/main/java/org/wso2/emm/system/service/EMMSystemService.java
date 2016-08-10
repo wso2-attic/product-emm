@@ -346,6 +346,19 @@ public class EMMSystemService extends IntentService {
      */
     public void upgradeFirmware(boolean isStatusCheck) {
         Log.i(TAG, "An upgrade has been requested");
+
+        if (!isStatusCheck){
+            String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
+            if (context.getResources().getString(R.string.status_connectivity_failed).equals(status)) {
+                Log.d(TAG, "Ignoring request from agent as service waiting for WiFi to start upgrade.");
+                return;
+
+            } else if (context.getResources().getString(R.string.status_started).equals(status)) {
+                Log.d(TAG, "Ignoring request from agent as download is ongoing.");
+                return;
+            }
+        }
+
         Context context = this.getApplicationContext();
         Preference.putBoolean(context, context.getResources().getString(R.string.
                                                                                 firmware_status_check_in_progress), isStatusCheck);

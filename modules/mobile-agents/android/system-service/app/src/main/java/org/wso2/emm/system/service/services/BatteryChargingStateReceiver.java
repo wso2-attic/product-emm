@@ -48,7 +48,7 @@ public class BatteryChargingStateReceiver extends BroadcastReceiver {
                 OTAServerManager manager = new OTAServerManager(context);
                 manager.startInstallUpgradePackage();
             } catch (MalformedURLException e) {
-                Log.e(BatteryChargingStateReceiver.class.getName(), "FIrmware upgrade failed due to a file URI issue" + e);
+                Log.e(BatteryChargingStateReceiver.class.getName(), "Firmware upgrade failed due to a file URI issue" + e);
             }
         }
     }
