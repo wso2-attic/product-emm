@@ -222,6 +222,8 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
                 CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
             }
         } else if (error == ERROR_WIFI_NOT_AVAILABLE) {
+            Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                    context.getResources().getString(R.string.status_connectivity_failed));
             Log.e(TAG, "OTA failed due to WIFI connection failure.");
         } else if (error == ERROR_CANNOT_FIND_SERVER) {
             String message = "OTA failed due to OTA server not accessible.";

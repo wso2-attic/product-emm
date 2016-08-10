@@ -50,7 +50,7 @@ public class CommonUtils {
             intent.putExtra("message", message);
         }
         intent.setPackage(Constants.PACKAGE_NAME);
-        context.startService(intent);
+        context.startServiceAsUser(intent, android.os.Process.myUserHandle());
     }
 
     public static Intent createExplicitFromImplicitIntent(Context context, Intent implicitIntent) {

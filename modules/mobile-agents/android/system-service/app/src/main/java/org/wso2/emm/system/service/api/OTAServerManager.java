@@ -61,7 +61,11 @@ import java.net.URLConnection;
 import java.security.GeneralSecurityException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class handles the functionality required for performing OTA updates. Basically it handles
@@ -84,7 +88,16 @@ public class OTAServerManager {
     private volatile long downloadedLength = 0;
     private volatile int lengthOfFile = 0;
     private volatile boolean isProgressUpdateTerminated = false;
-    private static AsyncTask asyncTask = null;
+    private AsyncTask asyncTask = null;
+    private Executor executor;
+
+    private int corePoolSize = 60;
+    private int maximumPoolSize = 80;
+    private int keepAliveTime = 10;
+
+    //Use our own thread pool executor for async task to schedule new tasks upon download failures.
+    private BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>(maximumPoolSize);
+    private Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
     private RecoverySystem.ProgressListener recoveryVerifyListener = new RecoverySystem.ProgressListener() {
         public void onProgress(int progress) {
@@ -254,6 +267,13 @@ public class OTAServerManager {
                 targetFile.delete();
                 Log.w(TAG,"Partially downloaded update has been deleted.");
             }
+            if (checkNetworkOnline()) {
+                Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                        context.getResources().getString(R.string.status_failed));
+            } else {
+                Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                        context.getResources().getString(R.string.status_connectivity_failed));
+            }
         }
     }
 
@@ -269,6 +289,8 @@ public class OTAServerManager {
         }
         asyncTask = new AsyncTask<Void, Void, Void>() {
             protected Void doInBackground(Void... unused) {
+                Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                        context.getResources().getString(R.string.status_started));
                 File targetFile = new File(FileUtils.getUpgradePackageFilePath());
                 if (targetFile.exists()) {
                     targetFile.delete();
@@ -306,7 +328,7 @@ public class OTAServerManager {
                     byte data[] = new byte[DEFAULT_BYTES];
                     long count;
                     isProgressUpdateTerminated = false;
-                    Executor executor = new DownloadProgressUpdateExecutor();
+                    executor = new DownloadProgressUpdateExecutor();
                     executor.execute(new Runnable() {
                         @Override
                         public void run() {
@@ -332,6 +354,8 @@ public class OTAServerManager {
                     output.flush();
                     output.close();
                     input.close();
+                    Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                            context.getResources().getString(R.string.status_success));
                     if (serverManager.stateChangeListener != null) {
                         serverManager.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_DOWNLOADING,
                                                                             DEFAULT_STATE_ERROR_CODE, null, DEFAULT_STATE_INFO_CODE);
@@ -354,15 +378,20 @@ public class OTAServerManager {
                     wakeLock.acquire(2);
                     if (targetFile.exists() && lengthOfFile != downloadedLength) {
                         targetFile.delete();
+                        String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
+                        if (context.getResources().getString(R.string.status_connectivity_failed).equals(status)) {
+                            Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                                    context.getResources().getString(R.string.status_failed));
+                        }
                     }
                 }
                 return null;
             }
-        }.execute();
+        }.executeOnExecutor(threadPoolExecutor);
     }
 
     public long getFreeDiskSpace() {
-        StatFs statFs = new StatFs(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
+        StatFs statFs = new StatFs(FileUtils.getUpgradePackageDirectory());
         long freeDiskSpace = (long) statFs.getAvailableBlocks() * (long) statFs.getBlockSize();
         Log.d(TAG, "Free disk space: " + freeDiskSpace);
         return freeDiskSpace;
@@ -463,13 +492,17 @@ public class OTAServerManager {
 
         return level;
     }
+
     /**
      * Downloads the property list from remote site, and parse it to property list.
      * The caller can parse this list and get information.
      */
     public void getTargetPackagePropertyList(final URL url) {
 
-        new AsyncTask<Void, Void, Void>() {
+        if (asyncTask != null){
+            asyncTask.cancel(true);
+        }
+        asyncTask = new AsyncTask<Void, Void, Void>() {
             protected Void doInBackground(Void... param) {
                 InputStream reader = null;
                 ByteArrayOutputStream writer = null;
@@ -558,7 +591,7 @@ public class OTAServerManager {
                 }
                 return null;
             }
-        }.execute();
+        }.executeOnExecutor(threadPoolExecutor);
     }
 
     public interface OTAStateChangeListener {
