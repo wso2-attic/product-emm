@@ -18,10 +18,11 @@
         <!ELEMENT dependencySet (outputDirectory|includes)*>
         <!ELEMENT files (file)*>
         <!ELEMENT file (source|outputDirectory|fileMode|filtered|destName)*>
-        <!ELEMENT source (#PCDATA)>s
+        <!ELEMENT source (#PCDATA)>
         <!ELEMENT destName (#PCDATA)>
         ]>
 <assembly>
+    <id>bin</id>
     <formats>
         <format>zip</format>
     </formats>
@@ -469,9 +470,7 @@
 
         <!-- Copying email templates -->
         <fileSet>
-            <directory>
-                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/resources/email-templates
-            </directory>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/resources/email-templates</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/resources/email-templates
             </outputDirectory>
         </fileSet>
@@ -479,8 +478,7 @@
 
         <!-- Copy APPM ReST APIs and OAuth artifacts-->
         <fileSet>
-            <directory>
-                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps
             </directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
             <includes>
@@ -564,31 +562,20 @@
 
     <files>
         <file>
-            <source>
-                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/api#device-mgt#android#v1.0.war
-            </source>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/api#device-mgt#android#v1.0.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>
         </file>
         <file>
-            <source>
-                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/api#device-mgt#windows#v1.0.war
-            </source>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/api#device-mgt#windows#v1.0.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>
         </file>
-        <!--<file>-->
-        <!--<source>../apps/jax-rs/mdm-admin/target/mdm-admin.war</source>-->
-        <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps-->
-        <!--</outputDirectory>-->
-        <!--<fileMode>755</fileMode>-->
-        <!--</file>-->
+
         <file>
-            <source>
-                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/api#device-mgt#v1.0.war
-            </source>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/api#device-mgt#v1.0.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>
@@ -598,8 +585,7 @@
             <source>
                 src/repository/conf/identity/identity-providers/CDMF_DEFAULT_IDP.xml
             </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity/identity-providers
-            </outputDirectory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity/identity-providers</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
@@ -618,27 +604,7 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/resources/lifecycles</outputDirectory>
             <fileMode>644</fileMode>
         </file>
-        <!--<file>-->
-        <!--<source>-->
-        <!--../tools/mdm-android-agent-archetype/target/mdm-android-agent-archetype-${mdm.android.agent.archetype.version}.jar-->
-        <!--</source>-->
-        <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/tools-->
-        <!--</outputDirectory>-->
-        <!--<fileMode>755</fileMode>-->
-        <!--</file>-->
-        <!--<file>-->
-        <!--<source>../tools/mdm-android-agent-archetype/README.txt</source>-->
-        <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/tools-->
-        <!--</outputDirectory>-->
-        <!--<fileMode>755</fileMode>-->
-        <!--</file>-->
-        <!--<file>-->
-        <!--<source>../tools/mdm-android-agent-archetype/android-agent.sh</source>-->
-        <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/tools-->
-        <!--</outputDirectory>-->
-        <!--<fileMode>755</fileMode>-->
-        <!--</file>-->
-        <!-- Copying synapse.properties file -->
+
         <file>
             <source>src/repository/conf/synapse.properties</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
@@ -654,22 +620,7 @@
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
-        <!-- <file>
-             <source>
-                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading.xml
-             </source>
-             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat</outputDirectory>
-             <filtered>true</filtered>
-             <fileMode>644</fileMode>
-         </file>
-         <file>
-             <source>
-                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading-environments.xml
-             </source>
-             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat</outputDirectory>
-             <filtered>true</filtered>
-             <fileMode>644</fileMode>
-         </file>-->
+
         <file>
             <source>src/repository/conf/tomcat/context.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat</outputDirectory>
@@ -1028,20 +979,6 @@
             <filtered>true</filtered>
         </file>
 
-        <!-- Copying identity-mgt.properties -->
-        <!--file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity/identity-mgt.properties</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity</outputDirectory>
-            <filtered>true</filtered>
-        </file-->
-
-        <!-- Copying email-admin-config.xml -->
-        <!--file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/email/email-admin-config.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/email</outputDirectory>
-            <filtered>true</filtered>
-        </file-->
-
         <!-- Copying axis2-client.xml -->
         <file>
             <source>
@@ -1079,24 +1016,25 @@
             <fileMode>644</fileMode>
         </file>
         <!-- Copying authenticators.xml -->
-        <file>
-            <source>
-                src/repository/conf/security/cipher-text.properties
-            </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
-            <filtered>true</filtered>
-            <fileMode>644</fileMode>
-        </file>
+            <file>
+                <source>
+                    src/repository/conf/security/cipher-text.properties
+                </source>
+                <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
+                <filtered>true</filtered>
+                <fileMode>644</fileMode>
+            </file>
 
-        <!-- Copying authenticators.xml -->
-        <file>
-            <source>
-                src/repository/conf/security/cipher-tool.properties
-            </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
-            <filtered>true</filtered>
-            <fileMode>644</fileMode>
-        </file>
+            <!-- Copying authenticators.xml -->
+            <file>
+                <source>
+                    src/repository/conf/security/cipher-tool.properties
+                </source>
+                <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
+                <filtered>true</filtered>
+                <fileMode>644</fileMode>
+            </file>
+
         <!-- Cipher Tool Files -->
         <file>
             <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/ciphertool.sh</source>
@@ -1130,29 +1068,14 @@
         </file>
         <file>
             <source>
-                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/social.xml
-            </source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/social.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
-        <!-- Copying Certificate management admin webapp -->
-        <!--<file>-->
-        <!--<source>-->
-        <!--../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/carbonapps/org_wso2_carbon_analytics_cdmf-1.0.0.car</source>-->
-        <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/carbonapps/</outputDirectory>-->
-        <!--<fileMode>644</fileMode>-->
-        <!--</file>-->
-        <!--&lt;!&ndash; copying emm analytics related webapp &ndash;&gt;-->
-        <!--<file>-->
-        <!--<source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/carbonapps/org_wso2_carbon_analytics_emm_android_agent-1.0.0.car</source>-->
-        <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/carbonapps/</outputDirectory>-->
-        <!--<fileMode>644</fileMode>-->
-        <!--</file>-->
+
         <file>
-            <source>
-                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/api#certificate-mgt#v1.0.war
-            </source>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/api#certificate-mgt#v1.0.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <fileMode>755</fileMode>
@@ -1167,14 +1090,6 @@
             <fileMode>644</fileMode>
         </file>
 
-
-        <!-- copying emm analytics related webapp -->
-        <!--<file>-->
-        <!--<source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/carbonapps/org_wso2_carbon_analytics_emm_android_agent-1.0.0.car</source>-->
-        <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/carbonapps/</outputDirectory>-->
-        <!--<fileMode>644</fileMode>-->
-        <!--</file>-->
     </files>
 
 </assembly>
-
