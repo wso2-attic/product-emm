@@ -391,7 +391,7 @@ public class OTAServerManager {
     }
 
     public long getFreeDiskSpace() {
-        StatFs statFs = new StatFs(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
+        StatFs statFs = new StatFs(FileUtils.getUpgradePackageDirectory());
         long freeDiskSpace = (long) statFs.getAvailableBlocks() * (long) statFs.getBlockSize();
         Log.d(TAG, "Free disk space: " + freeDiskSpace);
         return freeDiskSpace;
