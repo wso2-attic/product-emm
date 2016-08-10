@@ -18,6 +18,7 @@
     <string name="status_started">started</string>
     <string name="status_connectivity_failed">connectivityFailed</string>
     <string name="status_success">success</string>
+    <string name="status_init">init</string>
     <string name="txt_lock_activity">Device is locked. Please contact administrator</string>
     <string name="txt_unlock_activity">Device is Unlocked</string>
     <string name="title_activity_lock">LockActivity</string>

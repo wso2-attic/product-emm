@@ -267,8 +267,13 @@ public class OTAServerManager {
                 targetFile.delete();
                 Log.w(TAG,"Partially downloaded update has been deleted.");
             }
-            Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
-                    context.getResources().getString(R.string.status_failed));
+            if (checkNetworkOnline()) {
+                Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                        context.getResources().getString(R.string.status_failed));
+            } else {
+                Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                        context.getResources().getString(R.string.status_connectivity_failed));
+            }
         }
     }
 

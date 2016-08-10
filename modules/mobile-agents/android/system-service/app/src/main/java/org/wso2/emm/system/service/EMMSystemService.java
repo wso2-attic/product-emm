@@ -355,6 +355,8 @@ public class EMMSystemService extends IntentService {
 
             } else if (context.getResources().getString(R.string.status_started).equals(status)) {
                 Log.d(TAG, "Ignoring request from agent as download is ongoing.");
+                Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                        context.getResources().getString(R.string.status_init));
                 return;
             }
         }
