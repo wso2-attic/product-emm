@@ -117,7 +117,7 @@
                                     <classpath refid="maven.runtime.classpath" />
 
                                     <fileset file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/cdm/h2.sql" />
-                                    <fileset file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/cdm/certs/h2.sql" />
+                                    <fileset file="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/certMgt/h2.sql" />
                                 </sql>
                                 <echo message="##################### END ####################" />
                             </tasks>
