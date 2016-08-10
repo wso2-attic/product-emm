@@ -37,7 +37,7 @@ deviceModule = function () {
         var url;
         var license;
         if (deviceType == "windows") {
-            url = mdmProps["httpURL"] + "/mdm-windows-agent/services/device/license";
+            url = mdmProps["httpURL"] + "/api/device-mgt/windows/v1.0/services/device/license";
         } else if (deviceType == "ios") {
             url = mdmProps["httpsURL"] + "/ios-enrollment/license/";
         }
