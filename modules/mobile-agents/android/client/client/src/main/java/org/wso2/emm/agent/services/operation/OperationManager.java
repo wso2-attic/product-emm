@@ -717,13 +717,10 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                     .setSmallIcon(R.drawable.ic_launcher)
                     .setContentTitle(context.getString(R.string.alert_message))
                     .setContentText(message)
-                    .setAutoCancel(true);
-            Intent intent = new Intent(context, AlertActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-            mBuilder.setContentIntent(pendingIntent);
-            NotificationManager mNotificationManager =
-                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.notify(0, mBuilder.build());
+                    .setAutoCancel(true)
+                    .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(), 0));
+            NotificationManager notificationManager= (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(0, mBuilder.build());
             devicePolicyManager.lockNow();
         }
 
