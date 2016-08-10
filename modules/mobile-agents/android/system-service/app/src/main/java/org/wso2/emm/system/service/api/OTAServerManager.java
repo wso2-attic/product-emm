@@ -354,12 +354,12 @@ public class OTAServerManager {
                     output.flush();
                     output.close();
                     input.close();
+                    Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                            context.getResources().getString(R.string.status_success));
                     if (serverManager.stateChangeListener != null) {
                         serverManager.stateChangeListener.onStateOrProgress(OTAStateChangeListener.STATE_IN_DOWNLOADING,
                                                                             DEFAULT_STATE_ERROR_CODE, null, DEFAULT_STATE_INFO_CODE);
                     }
-                    Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
-                            context.getResources().getString(R.string.status_success));
                 } catch (SocketTimeoutException e) {
                     String message = "Connection failure (Socket timeout) when downloading update package.";
                     Log.e(TAG, message + e);
