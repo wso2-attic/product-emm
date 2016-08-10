@@ -21,7 +21,7 @@
         }
     },
     "androidAgentApp" : "android-agent.apk",
-    "windowsConfigRoot" : "%http.ip%/mdm-windows-agent/services/federated/bst/authentication",
+    "windowsConfigRoot" : "%http.ip%/api/device-mgt/windows/v1.0/services/federated/bst/authentication",
     "ssoConfiguration" : {
         "enabled" : false,
         "issuer" : "mdm",

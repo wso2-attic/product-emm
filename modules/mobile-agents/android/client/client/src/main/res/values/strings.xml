@@ -82,6 +82,7 @@
     <string name="alarm_scheduled_operation">scheduledOperation</string>
     <string name="app_uri">packageUri</string>
     <string name="alarm_schedule">schedule</string>
+    <string name="alert_message">Message</string>
 
     <!-- TEXT FIELD HINTS -->
     <string name="hint_new_pin">New PIN Code</string>
