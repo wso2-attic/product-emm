@@ -375,7 +375,7 @@ public class EMMSystemService extends IntentService {
             }
         }
         if (schedule != null && !schedule.trim().isEmpty()) {
-            Log.i(TAG, "Upgrade has been scheduled to " + schedule);
+            Log.i(TAG, "Upgrade scheduled received: " + schedule);
             Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), schedule);
             try {
                 AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.UPGRADE_FIRMWARE, null);
