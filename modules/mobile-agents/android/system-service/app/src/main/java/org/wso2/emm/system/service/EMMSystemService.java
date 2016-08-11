@@ -160,6 +160,25 @@ public class EMMSystemService extends IntentService {
         }
         context.registerReceiver(new BatteryChargingStateReceiver(), new IntentFilter(
                 Intent.ACTION_BATTERY_CHANGED));
+
+        //Checking is there any interrupted firmware download is there
+        String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
+        if (context.getResources().getString(R.string.status_started).equals(status)) {
+            Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                    context.getResources().getString(R.string.status_init));
+            Timer timeoutTimer = new Timer();
+            timeoutTimer.schedule(new TimerTask(){
+                @Override
+                public void run() {
+                    if (context.getResources().getString(R.string.status_init)
+                            .equals(Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status)))) {
+                        Log.i(TAG, "Found incomplete firmware download. Proceeding with last download request from the agent.");
+                        OTADownload otaDownload = new OTADownload(context);
+                        otaDownload.startOTA();
+                    }
+                }
+            }, Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
+        }
     }
 
     private void startAdmin() {
