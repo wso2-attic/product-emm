@@ -58,6 +58,12 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
             otaServerManager.setStateChangeListener(this);
         } catch (MalformedURLException e) {
             otaServerManager = null;
+            String message = "Firmware upgrade URL provided is not valid.";
+            sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
+                    Constants.Status.MALFORMED_OTA_URL, message);
+            CommonUtils.callAgentApp(context, Constants.Operation.
+                    FIRMWARE_UPGRADE_FAILURE, Preference.getInt(
+                    context, context.getResources().getString(R.string.operation_id)), message);
             Log.e(TAG, "OTA server manager threw exception ..." + e);
         }
     }

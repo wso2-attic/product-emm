@@ -157,6 +157,14 @@ public class ApplicationManagementService extends IntentService implements APIRe
                 sendBroadcast(Constants.Status.SUCCESSFUL, Preference.getString(context, context.getResources().
                         getString(R.string.app_download_progress)));
                 break;
+            case Constants.Operation.FIRMWARE_UPGRADE_FAILURE:
+                Preference.putInt(context, context.getResources().
+                        getString(R.string.firmware_upgrade_retries), 0);
+                Preference.putString(context, context.getResources().
+                        getString(R.string.firmware_upgrade_failed_message), message);
+                Preference.putInt(context, context.getResources().
+                        getString(R.string.firmware_upgrade_failed_id), id);
+                break;
             case Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION:
                 int retryCount = Preference.getInt(context, context.getResources().
                         getString(R.string.firmware_upgrade_retries));

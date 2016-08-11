@@ -109,6 +109,7 @@ public class Constants {
 		public static final String GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS = "FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS";
 		public static final String WIPE_DATA = "WIPE_DATA";
 		public static final String FAILED_FIRMWARE_UPGRADE_NOTIFICATION = "FAILED_FIRMWARE_UPGRADE_NOTIFICATION";
+		public static final String FIRMWARE_UPGRADE_FAILURE = "FIRMWARE_UPGRADE_FAILURE";
 		public static final String GET_FIRMWARE_BUILD_DATE = "FIRMWARE_BUILD_DATE";
 	}
 
@@ -125,6 +126,8 @@ public class Constants {
 		public static final String AUTHENTICATION_FAILED = "400";
 		public static final String CONNECTION_FAILED = "400";
 		public static final String INVALID_PACKAGE = "402";
+		public static final String MALFORMED_OTA_URL = "403";
+		public static final String LOW_DISK_SPACE = "404";
 		public static final String INTERNAL_SERVER_ERROR = "500";
 	}
 

@@ -32,6 +32,7 @@ import android.os.PowerManager;
 import android.os.SystemProperties;
 import android.os.UserManager;
 import android.util.Log;
+import android.util.Patterns;
 import android.webkit.URLUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +41,7 @@ import org.wso2.emm.system.service.api.SettingsManager;
 import org.wso2.emm.system.service.services.BatteryChargingStateReceiver;
 import org.wso2.emm.system.service.utils.AlarmUtils;
 import org.wso2.emm.system.service.utils.AppUtils;
+import org.wso2.emm.system.service.utils.CommonUtils;
 import org.wso2.emm.system.service.utils.Constants;
 import org.wso2.emm.system.service.utils.Preference;
 
@@ -379,7 +381,16 @@ public class EMMSystemService extends IntentService {
 
                 if (!upgradeData.isNull(context.getResources().getString(R.string.firmware_server))) {
                     server = (String) upgradeData.get(context.getResources().getString(R.string.firmware_server));
-                    if (URLUtil.isValidUrl(server)) {
+                    if(server.isEmpty() || (!server.isEmpty() && !Patterns.WEB_URL.matcher(server).matches())) {
+                        String message = "Firmware upgrade URL provided is not valid.";
+                        sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
+                                Constants.Status.MALFORMED_OTA_URL, message);
+                        CommonUtils.callAgentApp(context, Constants.Operation.
+                                FIRMWARE_UPGRADE_FAILURE, Preference.getInt(
+                                context, context.getResources().getString(R.string.operation_id)), message);
+                        Log.e(TAG, message);
+                        return;
+                    } else {
                         Preference.putString(context, context.getResources().getString(R.string.firmware_server), server);
                     }
                 }
