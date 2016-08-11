@@ -349,31 +349,6 @@ public class EMMSystemService extends IntentService {
     public void upgradeFirmware(final boolean isStatusCheck) {
         Log.i(TAG, "An upgrade has been requested");
 
-        if (!isStatusCheck){
-            String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
-            if (context.getResources().getString(R.string.status_connectivity_failed).equals(status)) {
-                Log.d(TAG, "Ignoring request from agent as service waiting for WiFi to start upgrade.");
-                return;
-            } else if (context.getResources().getString(R.string.status_started).equals(status)) {
-                Log.d(TAG, "Checking for existing download. Will proceed this request if current download is no longer ongoing.");
-                Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
-                        context.getResources().getString(R.string.status_init));
-                Timer timeoutTimer = new Timer();
-                timeoutTimer.schedule(new TimerTask(){
-                    @Override
-                    public void run() {
-                        if (context.getResources().getString(R.string.status_connectivity_failed)
-                                .equals(Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status)))) {
-                            Log.d(TAG, "Download is no longer ongoing. Start proceeding download request from the agent.");
-                            upgradeFirmware(isStatusCheck);
-                        }
-                    }
-                }, Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
-                return;
-            }
-        }
-
-        Context context = this.getApplicationContext();
         Preference.putBoolean(context, context.getResources().getString(R.string.
                                                                                 firmware_status_check_in_progress), isStatusCheck);
         Preference.putString(context, context.getResources().getString(R.string.firmware_download_progress),
@@ -413,6 +388,30 @@ public class EMMSystemService extends IntentService {
             } else {
                 Log.i(TAG, "Upgrade request initiated by admin.");
             }
+
+            String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
+            if (context.getResources().getString(R.string.status_connectivity_failed).equals(status)) {
+                Log.d(TAG, "Ignoring request from agent as service waiting for WiFi to start upgrade.");
+                return;
+            } else if (context.getResources().getString(R.string.status_started).equals(status)) {
+                Log.d(TAG, "Checking for existing download. Will proceed this request if current download is no longer ongoing.");
+                Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                        context.getResources().getString(R.string.status_init));
+                Timer timeoutTimer = new Timer();
+                timeoutTimer.schedule(new TimerTask(){
+                    @Override
+                    public void run() {
+                        if (context.getResources().getString(R.string.status_init)
+                                .equals(Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status)))) {
+                            Log.d(TAG, "Download is no longer ongoing. Proceeding download request from the agent.");
+                            OTADownload otaDownload = new OTADownload(context);
+                            otaDownload.startOTA();
+                        }
+                    }
+                }, Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
+                return;
+            }
+
             //Prepare for upgrade
             OTADownload otaDownload = new OTADownload(context);
             otaDownload.startOTA();
