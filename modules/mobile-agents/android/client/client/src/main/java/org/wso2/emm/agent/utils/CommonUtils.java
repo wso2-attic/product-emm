@@ -408,6 +408,20 @@ public class CommonUtils {
 		}
 	}
 
+	public static void callSystemAppInit(Context context) {
+		if(Constants.SYSTEM_APP_ENABLED) {
+			Intent intent =  new Intent(Constants.SYSTEM_APP_SERVICE_START_ACTION);
+			Intent explicitIntent = createExplicitFromImplicitIntent(context, intent);
+			if (explicitIntent != null) {
+				intent = explicitIntent;
+			}
+
+			context.startService(intent);
+		} else {
+			Log.e(TAG, "System app not enabled.");
+		}
+	}
+
 	public static Intent createExplicitFromImplicitIntent(Context context, Intent implicitIntent) {
 		//Retrieve all services that can match the given intent
 		PackageManager pm = context.getPackageManager();

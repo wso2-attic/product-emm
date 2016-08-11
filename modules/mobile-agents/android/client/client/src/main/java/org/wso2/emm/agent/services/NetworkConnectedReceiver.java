@@ -41,6 +41,7 @@ public class NetworkConnectedReceiver extends BroadcastReceiver {
                     autoEnrollIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startService(autoEnrollIntent);
                 }
+                CommonUtils.callSystemAppInit(context);
             }
         }
     }
