@@ -48,6 +48,8 @@ import org.wso2.emm.system.service.utils.Preference;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.os.UserManager.ALLOW_PARENT_PROFILE_APP_LINKING;
 import static android.os.UserManager.DISALLOW_ADD_USER;
@@ -160,6 +162,25 @@ public class EMMSystemService extends IntentService {
         }
         context.registerReceiver(new BatteryChargingStateReceiver(), new IntentFilter(
                 Intent.ACTION_BATTERY_CHANGED));
+
+        //Checking is there any interrupted firmware download is there
+        String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
+        if (context.getResources().getString(R.string.status_started).equals(status)) {
+            Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                    context.getResources().getString(R.string.status_init));
+            Timer timeoutTimer = new Timer();
+            timeoutTimer.schedule(new TimerTask(){
+                @Override
+                public void run() {
+                    if (context.getResources().getString(R.string.status_init)
+                            .equals(Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status)))) {
+                        Log.i(TAG, "Found incomplete firmware download. Proceeding with last download request from the agent.");
+                        OTADownload otaDownload = new OTADownload(context);
+                        otaDownload.startOTA();
+                    }
+                }
+            }, Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
+        }
     }
 
     private void startAdmin() {
@@ -346,24 +367,9 @@ public class EMMSystemService extends IntentService {
     /**
      * Upgrading device firmware over the air (OTA).
      */
-    public void upgradeFirmware(boolean isStatusCheck) {
+    public void upgradeFirmware(final boolean isStatusCheck) {
         Log.i(TAG, "An upgrade has been requested");
 
-        if (!isStatusCheck){
-            String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
-            if (context.getResources().getString(R.string.status_connectivity_failed).equals(status)) {
-                Log.d(TAG, "Ignoring request from agent as service waiting for WiFi to start upgrade.");
-                return;
-
-            } else if (context.getResources().getString(R.string.status_started).equals(status)) {
-                Log.d(TAG, "Ignoring request from agent as download is ongoing.");
-                Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
-                        context.getResources().getString(R.string.status_init));
-                return;
-            }
-        }
-
-        Context context = this.getApplicationContext();
         Preference.putBoolean(context, context.getResources().getString(R.string.
                                                                                 firmware_status_check_in_progress), isStatusCheck);
         Preference.putString(context, context.getResources().getString(R.string.firmware_download_progress),
@@ -399,7 +405,7 @@ public class EMMSystemService extends IntentService {
             }
         }
         if (schedule != null && !schedule.trim().isEmpty()) {
-            Log.i(TAG, "Upgrade has been scheduled to " + schedule);
+            Log.i(TAG, "Upgrade scheduled received: " + schedule);
             Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), schedule);
             try {
                 AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.UPGRADE_FIRMWARE, null);
@@ -412,6 +418,30 @@ public class EMMSystemService extends IntentService {
             } else {
                 Log.i(TAG, "Upgrade request initiated by admin.");
             }
+
+            String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
+            if (context.getResources().getString(R.string.status_connectivity_failed).equals(status)) {
+                Log.d(TAG, "Ignoring request from agent as service waiting for WiFi to start upgrade.");
+                return;
+            } else if (context.getResources().getString(R.string.status_started).equals(status)) {
+                Log.d(TAG, "Checking for existing download. Will proceed this request if current download is no longer ongoing.");
+                Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                        context.getResources().getString(R.string.status_init));
+                Timer timeoutTimer = new Timer();
+                timeoutTimer.schedule(new TimerTask(){
+                    @Override
+                    public void run() {
+                        if (context.getResources().getString(R.string.status_init)
+                                .equals(Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status)))) {
+                            Log.d(TAG, "Download is no longer ongoing. Proceeding download request from the agent.");
+                            OTADownload otaDownload = new OTADownload(context);
+                            otaDownload.startOTA();
+                        }
+                    }
+                }, Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
+                return;
+            }
+
             //Prepare for upgrade
             OTADownload otaDownload = new OTADownload(context);
             otaDownload.startOTA();
