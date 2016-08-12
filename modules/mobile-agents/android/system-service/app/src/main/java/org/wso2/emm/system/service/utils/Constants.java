@@ -44,10 +44,13 @@ public class Constants {
 	public static final String IS_LOCKED = "lock";
 	public static final int FIRMWARE_UPGRADE_CONNECTIVITY_TIMEOUT = 10000;
 	public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
+	public static final String FIRMWARE_INSTALL_ACTION = "FIRMWARE_INSTALL_ACTION";
+	public static final String FIRMWARE_CANCEL_INSTALL_ACTION = "FIRMWARE_CANCEL_INSTALL_ACTION";
 	/**
 	 * Read_TIMEOUT = SO timeout(the time since the last byte has been received)
 	 */
 	public static final int FIRMWARE_UPGRADE_READ_TIMEOUT = 60000;
+	public static final int DEFAULT_NOTIFICATION_CODE = 100;
 
 	/**
 	 * Operation IDs
@@ -111,6 +114,7 @@ public class Constants {
 		public static final String FAILED_FIRMWARE_UPGRADE_NOTIFICATION = "FAILED_FIRMWARE_UPGRADE_NOTIFICATION";
 		public static final String FIRMWARE_UPGRADE_FAILURE = "FIRMWARE_UPGRADE_FAILURE";
 		public static final String GET_FIRMWARE_BUILD_DATE = "FIRMWARE_BUILD_DATE";
+		public static final String FIRMWARE_INSTALLATION_CANCELED = "FIRMWARE_INSTALLATION_CANCELED";
 	}
 
 	/**
@@ -128,6 +132,7 @@ public class Constants {
 		public static final String INVALID_PACKAGE = "402";
 		public static final String MALFORMED_OTA_URL = "403";
 		public static final String LOW_DISK_SPACE = "404";
+		public static final String CANCELED = "405";
 		public static final String INTERNAL_SERVER_ERROR = "500";
 	}
 

@@ -46,9 +46,11 @@ public class NetworkConnectivityStatusReceiver extends BroadcastReceiver {
         if (wifi.isConnected()) {
             String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
             if (context.getResources().getString(R.string.status_connectivity_failed).equals(status)) {
-                Log.i(TAG, "Starting firmware download again upon network connectivity established.");
-                OTADownload otaDownload = new OTADownload(context);
-                otaDownload.startOTA();
+                if (Preference.getBoolean(context, context.getResources().getString(R.string.automatic_firmware_upgrade))) {
+                    Log.i(TAG, "Starting firmware download again upon network connectivity established.");
+                    OTADownload otaDownload = new OTADownload(context);
+                    otaDownload.startOTA();
+                }
             }
         }
     }

@@ -33,7 +33,7 @@ import android.os.SystemProperties;
 import android.os.UserManager;
 import android.util.Log;
 import android.util.Patterns;
-import android.webkit.URLUtil;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.system.service.api.OTADownload;
@@ -174,9 +174,11 @@ public class EMMSystemService extends IntentService {
                 public void run() {
                     if (context.getResources().getString(R.string.status_init)
                             .equals(Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status)))) {
-                        Log.i(TAG, "Found incomplete firmware download. Proceeding with last download request from the agent.");
-                        OTADownload otaDownload = new OTADownload(context);
-                        otaDownload.startOTA();
+                        if (Preference.getBoolean(context, context.getResources().getString(R.string.automatic_firmware_upgrade))) {
+                            Log.i(TAG, "Found incomplete firmware download. Proceeding with last download request from the agent.");
+                            OTADownload otaDownload = new OTADownload(context);
+                            otaDownload.startOTA();
+                        }
                     }
                 }
             }, Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
@@ -384,6 +386,16 @@ public class EMMSystemService extends IntentService {
                 if (!upgradeData.isNull(context.getResources().getString(R.string.alarm_schedule))) {
                     schedule = (String) upgradeData.get(context.getResources().getString(R.string.alarm_schedule));
                 }
+                upgradeData.put(context.getResources().getString(R.string.automatic_firmware_upgrade), "false");
+                boolean isAutomaticUpgrade = true;
+                if (!upgradeData.isNull(context.getResources().getString(R.string.automatic_firmware_upgrade))) {
+                    isAutomaticUpgrade = !"false".equals(upgradeData.get(context.getResources()
+                            .getString(R.string.automatic_firmware_upgrade)));
+                    Log.i(TAG, "Automatic update disabled.");
+                }
+
+                Preference.putBoolean(context, context.getResources()
+                        .getString(R.string.automatic_firmware_upgrade), isAutomaticUpgrade);
 
                 if (!upgradeData.isNull(context.getResources().getString(R.string.firmware_server))) {
                     server = (String) upgradeData.get(context.getResources().getString(R.string.firmware_server));
