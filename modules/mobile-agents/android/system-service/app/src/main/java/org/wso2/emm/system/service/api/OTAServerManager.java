@@ -427,7 +427,7 @@ public class OTAServerManager {
             Log.e(TAG, message + e);
             sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
                           Constants.Status.INVALID_PACKAGE, message);
-            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+            CommonUtils.callAgentApp(context, Constants.Operation.FIRMWARE_UPGRADE_FAILURE, Preference.getInt(
                     context, context.getResources().getString(R.string.operation_id)), message);
         } finally {
             wakeLock.release();

@@ -392,15 +392,27 @@ public class CommonUtils {
 			}
 			intent.putExtra("code", operation);
 			intent.setPackage(Constants.PACKAGE_NAME);
-			if (command != null) {
-				intent.putExtra("command", command);
-			}
+
 			if (appUri != null) {
 				intent.putExtra("appUri", appUri);
 			}
 
 			if (Constants.Operation.UPGRADE_FIRMWARE.equals(operation)) {
+				try {
+					JSONObject upgradeData = new JSONObject(command);
+					if(upgradeData !=null && upgradeData.isNull("automatic")){
+						boolean isAutomaticFirmwareUpgrade = Preference.getBoolean(context, context
+								.getResources().getString(R.string.is_automatic_firmware_upgrade));
+						upgradeData.put("automatic", isAutomaticFirmwareUpgrade);
+						command = upgradeData.toString();
+					}
+				} catch (JSONException e) {
+					Log.e(TAG, "Could not parse Firmware upgrade operation", e);
+				}
 				intent.putExtra("operationId", Preference.getInt(context, "firmwareOperationId"));
+			}
+			if (command != null) {
+				intent.putExtra("command", command);
 			}
 			context.startService(intent);
 		} else {
