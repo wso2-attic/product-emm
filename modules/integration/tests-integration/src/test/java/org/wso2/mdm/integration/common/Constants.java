@@ -67,7 +67,19 @@ public final class Constants {
                        "\"saasApp\": \"" + true + "\"}").toString();
         public static final String REGISTRATION_ENDPOINT = "/dynamic-client-web/register";
         public static final String TOKEN_ENDPOINT = "/oauth2/token";
-        public static final String OAUTH_TOKEN_PAYLOAD = "grant_type=password&username=admin&password=admin&scope=prod";
+        public static final String OAUTH_TOKEN_PAYLOAD = "grant_type=password&username=admin&password=admin&scope=certificate:view certificate:manage"
+                        + " application:manage configuration:view configuration:modify user:admin:reset-password"
+                        + " role:view role:manage device:view user:manage notification:view policy:view policy:manage"
+                        + " activity:view device:admin:view device-type:admin:view configuration:manage device:android:enroll"
+                        + " device:android:disenroll device:android:event:read device:android:event:write device:android:operation:applications"
+                        + " device:android:operation:blacklist-app device:android:operation:change-lock device:android:operation:clear-password"
+                        + " device:android:operation:vpn device:android:operation:wifi device:android:operation:camera "
+                        + " device:android:operation:encrypt device:android:operation:enterprise-wipe device:android:operation:info"
+                        + " device:android:operation:install-app device:android:operation:location device:android:operation:lock"
+                        + " device:android:operation:mute device:android:operation:reboot device:android:operation:ring"
+                        + " device:android:operation:notification device:android:operation:password-policy device:android:operation:webclip"
+                        + " device:android:operation:uninstall-app device:android:operation:unlock device:android:operation:update-app"
+                        + " device:android:operation:upgrade device:android:operation:wipe";
     }
 
 	public static final class AndroidEnrollment {
@@ -90,7 +102,7 @@ public final class Constants {
         public static final String ENROLLMENT_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME =
                                                                 "android-enrollment-erroneous-response-payloads.json";
         public static final String ENROLLMENT_ADDITIONAL_DEVICES_PAYLOAD_FILE_NAME = "android-enrollment-additional-devices-payloads.json";
-        public static final String ENROLLMENT_ENDPOINT = "/mdm-android-agent/enrollment/";
+        public static final String ENROLLMENT_ENDPOINT = "/api/device-mgt/android/v1.0/devices";
         public static final String ENROLLMENT_GROUP = "android-enrollment";
 	}
 
@@ -272,7 +284,8 @@ public final class Constants {
         public static final String ROLE_MANAGEMENT_GROUP = "role-mgt";
         public static final String ROLE_NAME = "administration";
         public static final String UPDATED_ROLE_NAME = "manager";
-        public static final String ROLE_ENDPOINT = "/mdm-admin/roles";
+        public static final String ROLE_ENDPOINT = "/api/device-mgt/v1.0/roles";
+        public static final String SCOPE_ROLE_ENDPOINT = "/api/device-mgt/v1.0/roles/scopes";
         public static final String ROLE_PAYLOAD_FILE_NAME = "role-payloads.json";
         public static final String ROLE_RESPONSE_PAYLOAD_FILE_NAME = "role-response-payloads.json";
         public static final String ROLE_ERRONEOUS_PAYLOAD_FILE_NAME = "role-erroneous-payloads.json";

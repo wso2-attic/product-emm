@@ -152,17 +152,13 @@ public class MDMHttpClient {
     }
 
     public MDMResponse delete(String endpoint) {
-
         HttpClient client = new HttpClient();
-
         try {
             ProtocolSocketFactory socketFactory = new EasySSLProtocolSocketFactory();
 
             Protocol https = new Protocol( "https", socketFactory, 9443);
             Protocol.registerProtocol("https", https);
-
             String url = backEndUrl + endpoint ;
-
             DeleteMethod method = new DeleteMethod(url);
             method.setRequestHeader(AUTHORIZATION, authrizationString);
             method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
