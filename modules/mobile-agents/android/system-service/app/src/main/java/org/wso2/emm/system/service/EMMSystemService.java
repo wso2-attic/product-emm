@@ -33,7 +33,7 @@ import android.os.SystemProperties;
 import android.os.UserManager;
 import android.util.Log;
 import android.util.Patterns;
-import android.webkit.URLUtil;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.system.service.api.OTADownload;
@@ -148,15 +148,27 @@ public class EMMSystemService extends IntentService {
                 }
             }
 
-            Log.d(TAG, "EMM agent has sent a command.");
             if ((operationCode != null)) {
-                Log.d(TAG, "The operation code is: " + operationCode);
-
-                Log.i(TAG, "Will now executing the command ..." + operationCode);
                 if (Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
+                    Log.d(TAG, "EMM agent has sent a command. code: " + operationCode);
                     doTask(operationCode);
-                } else if (Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS.equals(operationCode)) {
-                    doTask(operationCode);
+                } else {
+                    Log.d(TAG, "Received command from external application. code: " + operationCode + " command: " + command);
+                    switch(operationCode){
+                        case Constants.Operation.FIRMWARE_UPGRADE_AUTOMATIC_RETRY:
+                            Preference.putBoolean(context, context.getResources().
+                                    getString(R.string.firmware_upgrade_automatic_retry), !"false".equals(command));
+                            CommonUtils.callAgentApp(context, Constants.Operation.
+                                    FIRMWARE_UPGRADE_AUTOMATIC_RETRY, 0, command); //Sending command as the message
+                            break;
+                        case Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS:
+                        case Constants.Operation.GET_FIRMWARE_BUILD_DATE:
+                        case Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS:
+                            doTask(operationCode);
+                        default:
+                            Log.e(TAG, "Invalid operation code received");
+                            break;
+                    }
                 }
             }
         }
@@ -174,9 +186,11 @@ public class EMMSystemService extends IntentService {
                 public void run() {
                     if (context.getResources().getString(R.string.status_init)
                             .equals(Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status)))) {
-                        Log.i(TAG, "Found incomplete firmware download. Proceeding with last download request from the agent.");
-                        OTADownload otaDownload = new OTADownload(context);
-                        otaDownload.startOTA();
+                        if (Preference.getBoolean(context, context.getResources().getString(R.string.firmware_upgrade_automatic_retry))) {
+                            Log.i(TAG, "Found incomplete firmware download. Proceeding with last download request from the agent.");
+                            OTADownload otaDownload = new OTADownload(context);
+                            otaDownload.startOTA();
+                        }
                     }
                 }
             }, Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
@@ -385,6 +399,18 @@ public class EMMSystemService extends IntentService {
                     schedule = (String) upgradeData.get(context.getResources().getString(R.string.alarm_schedule));
                 }
 
+                boolean isAutomaticUpgrade = true;
+                if (!upgradeData.isNull(context.getResources().getString(R.string.firmware_upgrade_automatic_retry))) {
+                    isAutomaticUpgrade = upgradeData.getBoolean(context.getResources()
+                            .getString(R.string.firmware_upgrade_automatic_retry));
+                    if (!isAutomaticUpgrade){
+                        Log.i(TAG, "Automatic retry on firmware upgrade failure is disabled.");
+                    }
+                }
+
+                Preference.putBoolean(context, context.getResources()
+                        .getString(R.string.firmware_upgrade_automatic_retry), isAutomaticUpgrade);
+
                 if (!upgradeData.isNull(context.getResources().getString(R.string.firmware_server))) {
                     server = (String) upgradeData.get(context.getResources().getString(R.string.firmware_server));
                     if(server.isEmpty() || (!server.isEmpty() && !Patterns.WEB_URL.matcher(server).matches())) {
@@ -420,7 +446,9 @@ public class EMMSystemService extends IntentService {
             }
 
             String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
-            if (context.getResources().getString(R.string.status_connectivity_failed).equals(status)) {
+            boolean isAutomaticUpgrade = Preference.getBoolean(context, context.getResources()
+                    .getString(R.string.firmware_upgrade_automatic_retry));
+            if (context.getResources().getString(R.string.status_connectivity_failed).equals(status) && isAutomaticUpgrade) {
                 Log.d(TAG, "Ignoring request from agent as service waiting for WiFi to start upgrade.");
                 return;
             } else if (context.getResources().getString(R.string.status_started).equals(status)) {

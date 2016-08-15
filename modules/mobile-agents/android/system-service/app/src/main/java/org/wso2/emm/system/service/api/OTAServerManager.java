@@ -28,7 +28,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Build;
-import android.os.Environment;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RecoverySystem;
@@ -41,7 +40,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.system.service.MainActivity;
 import org.wso2.emm.system.service.R;
-import org.wso2.emm.system.service.services.BatteryChargingStateReceiver;
+import org.wso2.emm.system.service.services.NotificationActionReceiver;
 import org.wso2.emm.system.service.utils.CommonUtils;
 import org.wso2.emm.system.service.utils.Constants;
 import org.wso2.emm.system.service.utils.FileUtils;
@@ -77,7 +76,6 @@ public class OTAServerManager {
     private static final int DEFAULT_STATE_ERROR_CODE = 0;
     private static final int DEFAULT_STATE_INFO_CODE = 0;
     private static final int DEFAULT_BYTES = 100 * 1024;
-    private static final int DEFAULT_NOTIFICATION_CODE = 100;
     private static final int DEFAULT_STREAM_LENGTH = 153600;
     private static final int DEFAULT_OFFSET = 0;
     private OTAStateChangeListener stateChangeListener;
@@ -214,7 +212,7 @@ public class OTAServerManager {
         }
     }
 
-    private void sendBroadcast(String code, String status, String payload) {
+    public void sendBroadcast(String code, String status, String payload) {
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction(Constants.SYSTEM_APP_ACTION_RESPONSE);
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
@@ -444,12 +442,17 @@ public class OTAServerManager {
             wakeLock.acquire();
             if (getBatteryLevel(context) >= Constants.REQUIRED_BATTERY_LEVEL_TO_FIRMWARE_UPGRADE) {
                 Log.d(TAG, "Installing upgrade package");
-                RecoverySystem.installPackage(context, recoveryFile);
+                if (Preference.getBoolean(context, context.getResources().getString(R.string.firmware_upgrade_automatic_retry))
+                    || Constants.SILENT_FIRMWARE_INSTALLATION) {
+                    RecoverySystem.installPackage(context, recoveryFile);
+                } else {
+                    setNotification(context, context.getResources().getString(R.string.ask_from_user_to_install_firmware), true);
+                }
             } else {
                 Preference.putString(context, context.getResources().getString(R.string.upgrade_install_status),
                                      context.getResources().getString(R.string.status_failed));
                 Log.e(TAG, "Upgrade failed due to insufficient battery level.");
-                setNotification(context, context.getResources().getString(R.string.upgrade_failed_due_to_battery));
+                setNotification(context, context.getResources().getString(R.string.upgrade_failed_due_to_battery), false);
             }
         } catch (IOException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_INSTALL_FAILED);
@@ -473,7 +476,7 @@ public class OTAServerManager {
 
     }
 
-    private void setNotification(Context context, String notificationMessage) {
+    private void setNotification(Context context, String notificationMessage, boolean isUserInput) {
         int requestID = (int) System.currentTimeMillis();
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent notificationIntent = new Intent(context, MainActivity.class);
@@ -485,8 +488,21 @@ public class OTAServerManager {
                 .setStyle(new NotificationCompat.BigTextStyle()
                                   .bigText(notificationMessage))
                 .setContentText(notificationMessage).setAutoCancel(true);
+
+        if (isUserInput) {
+            Intent installReceive = new Intent(context, NotificationActionReceiver.class);
+            installReceive.setAction(Constants.FIRMWARE_INSTALL_CONFIRM_ACTION);
+            PendingIntent installIntent = PendingIntent.getBroadcast(context, requestID, installReceive, PendingIntent.FLAG_UPDATE_CURRENT);
+            mBuilder.addAction(R.drawable.ic_done_black_24dp, "Install", installIntent);
+
+            Intent cancelReceive = new Intent(context, NotificationActionReceiver.class);
+            cancelReceive.setAction(Constants.FIRMWARE_INSTALL_CANCEL_ACTION);
+            PendingIntent cancelIntent = PendingIntent.getBroadcast(context, requestID, cancelReceive, PendingIntent.FLAG_UPDATE_CURRENT);
+            mBuilder.addAction(R.drawable.ic_block_black_24dp, "Cancel", cancelIntent);
+        }
+
         mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(DEFAULT_NOTIFICATION_CODE, mBuilder.build());
+        mNotificationManager.notify(Constants.DEFAULT_NOTIFICATION_CODE, mBuilder.build());
     }
 
     private int getBatteryLevel(Context context) {
@@ -555,6 +571,8 @@ public class OTAServerManager {
                         timer.cancel();
                         timer = new Timer();
                         timer.schedule(new Timeout(this), Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
+                        Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                                context.getResources().getString(R.string.status_started));
                     }
 
                     Log.d(TAG, "Download finished: " + (Integer.toString(totalBufRead)) + " bytes downloaded");

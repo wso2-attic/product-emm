@@ -67,6 +67,8 @@
                 android:label="@string/title_activity_lock">
         </activity>
 
+        <receiver android:name=".services.NotificationActionReceiver" />
+
         <receiver
             android:name=".services.NetworkConnectivityStatusReceiver"
             android:label="NetworkConnectivityStatusReceiver" >

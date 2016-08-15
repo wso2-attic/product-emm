@@ -397,21 +397,28 @@ public class CommonUtils {
 				intent.putExtra("appUri", appUri);
 			}
 
-			if (Constants.Operation.UPGRADE_FIRMWARE.equals(operation)) {
-				try {
-					JSONObject upgradeData = new JSONObject(command);
-					if(upgradeData !=null && upgradeData.isNull("automatic")){
-						boolean isAutomaticFirmwareUpgrade = Preference.getBoolean(context, context
-								.getResources().getString(R.string.is_automatic_firmware_upgrade));
-						upgradeData.put("automatic", isAutomaticFirmwareUpgrade);
-						command = upgradeData.toString();
-					}
-				} catch (JSONException e) {
-					Log.e(TAG, "Could not parse Firmware upgrade operation", e);
-				}
-				intent.putExtra("operationId", Preference.getInt(context, "firmwareOperationId"));
-			}
 			if (command != null) {
+				if (Constants.Operation.UPGRADE_FIRMWARE.equals(operation)) {
+					try {
+						JSONObject upgradeData = new JSONObject(command);
+						if (upgradeData.isNull(context.getResources()
+								.getString(R.string.firmware_upgrade_automatic_retry))) {
+							boolean isFirmwareUpgradeAutoRetry = Preference.getBoolean(context, context
+									.getResources().getString(R.string.is_automatic_firmware_upgrade));
+							upgradeData.put(context.getResources()
+									.getString(R.string.firmware_upgrade_automatic_retry), isFirmwareUpgradeAutoRetry);
+							command = upgradeData.toString();
+							Log.d(TAG, "Updated payload: " + command);
+						} else {
+							Preference.putBoolean(context, context.getResources()
+									.getString(R.string.is_automatic_firmware_upgrade), upgradeData.getBoolean(context.getResources()
+									.getString(R.string.firmware_upgrade_automatic_retry)));
+						}
+					} catch (JSONException e) {
+						Log.e(TAG, "Could not parse Firmware upgrade operation", e);
+					}
+					intent.putExtra("operationId", Preference.getInt(context, "firmwareOperationId"));
+				}
 				intent.putExtra("command", command);
 			}
 			context.startService(intent);
