@@ -1,10 +1,9 @@
 {
   "GET": {
-    "statusCode": 200,
-    "messageFromServer": "All user roles were successfully retrieved.",
-    "responseContent": [
+    "roles": [
       "admin",
       "administration"
-    ]
+    ],
+    "count": 2
   }
 }
