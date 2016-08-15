@@ -44,8 +44,9 @@ public class Constants {
 	public static final String IS_LOCKED = "lock";
 	public static final int FIRMWARE_UPGRADE_CONNECTIVITY_TIMEOUT = 10000;
 	public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
-	public static final String FIRMWARE_INSTALL_ACTION = "FIRMWARE_INSTALL_ACTION";
-	public static final String FIRMWARE_CANCEL_INSTALL_ACTION = "FIRMWARE_CANCEL_INSTALL_ACTION";
+	public static final String FIRMWARE_INSTALL_CONFIRM_ACTION = "FIRMWARE_INSTALL_CONFIRM_ACTION";
+	public static final String FIRMWARE_INSTALL_CANCEL_ACTION = "FIRMWARE_INSTALL_CANCEL_ACTION";
+	public static final boolean SILENT_FIRMWARE_INSTALLATION = true;
 	/**
 	 * Read_TIMEOUT = SO timeout(the time since the last byte has been received)
 	 */

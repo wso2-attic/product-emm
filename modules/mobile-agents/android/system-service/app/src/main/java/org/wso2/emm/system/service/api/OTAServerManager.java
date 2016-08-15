@@ -20,7 +20,6 @@ package org.wso2.emm.system.service.api;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -29,6 +28,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.os.Environment;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RecoverySystem;
@@ -443,7 +443,8 @@ public class OTAServerManager {
             wakeLock.acquire();
             if (getBatteryLevel(context) >= Constants.REQUIRED_BATTERY_LEVEL_TO_FIRMWARE_UPGRADE) {
                 Log.d(TAG, "Installing upgrade package");
-                if (Preference.getBoolean(context, context.getResources().getString(R.string.automatic_firmware_upgrade))) {
+                if (Preference.getBoolean(context, context.getResources().getString(R.string.automatic_firmware_upgrade))
+                    || Constants.SILENT_FIRMWARE_INSTALLATION) {
                     RecoverySystem.installPackage(context, recoveryFile);
                 } else {
                     setNotification(context, context.getResources().getString(R.string.ask_from_user_to_install_firmware), true);
@@ -491,12 +492,12 @@ public class OTAServerManager {
 
         if (isUserInput) {
             Intent installReceive = new Intent(context, NotificationActionReceiver.class);
-            installReceive.setAction(Constants.FIRMWARE_INSTALL_ACTION);
+            installReceive.setAction(Constants.FIRMWARE_INSTALL_CONFIRM_ACTION);
             PendingIntent installIntent = PendingIntent.getBroadcast(context, requestID, installReceive, PendingIntent.FLAG_UPDATE_CURRENT);
             mBuilder.addAction(R.drawable.ic_done_black_24dp, "Install", installIntent);
 
             Intent cancelReceive = new Intent(context, NotificationActionReceiver.class);
-            cancelReceive.setAction(Constants.FIRMWARE_CANCEL_INSTALL_ACTION);
+            cancelReceive.setAction(Constants.FIRMWARE_INSTALL_CANCEL_ACTION);
             PendingIntent cancelIntent = PendingIntent.getBroadcast(context, requestID, cancelReceive, PendingIntent.FLAG_UPDATE_CURRENT);
             mBuilder.addAction(R.drawable.ic_block_black_24dp, "Cancel", cancelIntent);
         }
@@ -571,6 +572,8 @@ public class OTAServerManager {
                         timer.cancel();
                         timer = new Timer();
                         timer.schedule(new Timeout(this), Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
+                        Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                                context.getResources().getString(R.string.status_started));
                     }
 
                     Log.d(TAG, "Download finished: " + (Integer.toString(totalBufRead)) + " bytes downloaded");
