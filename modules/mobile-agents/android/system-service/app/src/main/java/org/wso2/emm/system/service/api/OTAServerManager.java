@@ -28,7 +28,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Build;
-import android.os.Environment;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RecoverySystem;
@@ -443,7 +442,7 @@ public class OTAServerManager {
             wakeLock.acquire();
             if (getBatteryLevel(context) >= Constants.REQUIRED_BATTERY_LEVEL_TO_FIRMWARE_UPGRADE) {
                 Log.d(TAG, "Installing upgrade package");
-                if (Preference.getBoolean(context, context.getResources().getString(R.string.automatic_firmware_upgrade))
+                if (Preference.getBoolean(context, context.getResources().getString(R.string.firmware_upgrade_automatic_retry))
                     || Constants.SILENT_FIRMWARE_INSTALLATION) {
                     RecoverySystem.installPackage(context, recoveryFile);
                 } else {

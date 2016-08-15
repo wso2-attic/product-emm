@@ -369,6 +369,7 @@
     <string name="firmware_upgrade_failed_message">firmwareUpgradeFailedMessage</string>
     <string name="firmware_upgrade_failed_id">firmwareUpgradeFailedId</string>
     <string name="is_automatic_firmware_upgrade">isAutomaticFirmwareUpgrade</string>
+    <string name="firmware_upgrade_automatic_retry">autoRetry</string>
     <string name="app_install_failed_message">appInstallFailedMessage</string>
     <string name="app_install_id">appInstallOperationId</string>
     <string name="app_install_code">appInstallOperationCode</string>

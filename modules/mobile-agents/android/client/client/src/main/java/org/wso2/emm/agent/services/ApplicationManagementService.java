@@ -49,7 +49,6 @@ public class ApplicationManagementService extends IntentService implements APIRe
     private static final String INTENT_KEY_APP_NAME = "appName";
     private static final String INTENT_KEY_MESSAGE = "message";
     private static final String INTENT_KEY_ID = "id";
-    private static final String INTENT_KEY_AUTOMATIC_FIRMWARE_UPGRADE = "isAutomaticFirmwareUpgrade";
     private String operationCode = null;
     private String appUri = null;
     private String appName = null;
@@ -68,18 +67,6 @@ public class ApplicationManagementService extends IntentService implements APIRe
         utils = new ServerConfig();
         if (extras != null) {
             operationCode = extras.getString(INTENT_KEY_CODE);
-
-            if (extras.containsKey(INTENT_KEY_AUTOMATIC_FIRMWARE_UPGRADE)) {
-                boolean isAutomaticFirmwareUpgrade = extras
-                        .getBoolean(INTENT_KEY_AUTOMATIC_FIRMWARE_UPGRADE);
-                if(isAutomaticFirmwareUpgrade) {
-                    Preference.putBoolean(context, context.getResources().
-                            getString(R.string.is_automatic_firmware_upgrade), true);
-                } else {
-                    Preference.putBoolean(context, context.getResources().
-                            getString(R.string.is_automatic_firmware_upgrade), false);
-                }
-            }
 
             if (extras.containsKey(INTENT_KEY_APP_URI)) {
                 appUri = extras.getString(INTENT_KEY_APP_URI);
@@ -182,9 +169,11 @@ public class ApplicationManagementService extends IntentService implements APIRe
             case Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION:
                 int retryCount = Preference.getInt(context, context.getResources().
                         getString(R.string.firmware_upgrade_retries));
-                if (retryCount <= Constants.FIRMWARE_UPGRADE_RETRY_COUNT) {
+                boolean isFirmwareUpgradeAutoRetry = Preference.getBoolean(context, context
+                        .getResources().getString(R.string.is_automatic_firmware_upgrade));
+                if (retryCount <= Constants.FIRMWARE_UPGRADE_RETRY_COUNT && isFirmwareUpgradeAutoRetry) {
                     Preference.putInt(context, context.getResources().
-                            getString(R.string.firmware_upgrade_retries), ++retryCount);;
+                            getString(R.string.firmware_upgrade_retries), ++retryCount);
                     Preference.putBoolean(context, context.getResources().
                             getString(R.string.firmware_upgrade_failed), true);
                     if (message != null && id != 0) {
@@ -197,7 +186,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
                     }
                 } else {
                     Preference.putInt(context, context.getResources().
-                            getString(R.string.firmware_upgrade_retries), 0);;
+                            getString(R.string.firmware_upgrade_retries), 0);
                     Preference.putBoolean(context, context.getResources().
                             getString(R.string.firmware_upgrade_failed), false);
                     Preference.putString(context, context.getResources().getString(R.string.firmware_upgrade_failed_message),
@@ -215,6 +204,10 @@ public class ApplicationManagementService extends IntentService implements APIRe
                     sendBroadcast(Constants.Status.INTERNAL_SERVER_ERROR, context.getResources().
                             getString(R.string.error_enrollment_failed));
                 }
+                break;
+            case Constants.Operation.FIRMWARE_UPGRADE_AUTOMATIC_RETRY:
+                Preference.putBoolean(context, context.getResources().
+                        getString(R.string.is_automatic_firmware_upgrade), !"false".equals(message));
                 break;
             default:
                 Log.e(TAG, "Invalid operation code received");

@@ -53,6 +53,8 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
 
     public OTADownload(Context context) {
         this.context = context;
+        Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                context.getResources().getString(R.string.status_init));
         try {
             otaServerManager = new OTAServerManager(this.context);
             otaServerManager.setStateChangeListener(this);
