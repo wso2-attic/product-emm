@@ -40,11 +40,11 @@ public class RoleManagement extends TestBase {
 
     @Test(description = "Test add role.")
     public void testAddRole() throws Exception {
-        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.ROLE_NAME);
-        MDMResponse response = client.post(url,
-                PayloadGenerator.getJsonPayload(Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString());
-        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        String url = GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.ROLE_NAME);
+        MDMResponse response = client.post(url, PayloadGenerator
+                .getJsonPayload(Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME, Constants.HTTP_METHOD_POST)
+                .toString());
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
     }
 
     @Test(description = "Test view roles")
@@ -52,8 +52,8 @@ public class RoleManagement extends TestBase {
         MDMResponse response = client.get(Constants.RoleManagement.ROLE_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.RoleManagement.
-                        ROLE_RESPONSE_PAYLOAD_FILE_NAME,
-                Constants.HTTP_METHOD_GET).toString(), response.getBody(), true);
+                        ROLE_RESPONSE_PAYLOAD_FILE_NAME, Constants.HTTP_METHOD_GET).toString(),
+                response.getBody(), true);
     }
 
     @Test(description = "Test add role with erroneous payload.")
@@ -62,12 +62,12 @@ public class RoleManagement extends TestBase {
         MDMResponse response = client.post(url,
                 PayloadGenerator.getJsonPayload(Constants.RoleManagement.ROLE_ERRONEOUS_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString());
-        Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_BAD_REQUEST, response.getStatus());
     }
 
     @Test(description = "Test update role.", dependsOnMethods = { "testAddRole"})
     public void testUpdateUser() throws Exception {
-        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.ROLE_NAME);
+        String url=ConstructURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.ROLE_NAME);
         MDMResponse response = client.put(url, PayloadGenerator.getJsonPayload(Constants.RoleManagement.
                 ROLE_UPDATE_PAYLOAD_FILE_NAME, Constants.HTTP_METHOD_PUT).toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
@@ -75,47 +75,42 @@ public class RoleManagement extends TestBase {
 
     @Test(description = "Test update role with erroneous payload.", dependsOnMethods = { "testAddRole"})
     public void testUpdateRoleWithErroneousPayload() throws Exception {
-        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.ROLE_NAME);
+        String url=ConstructURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.ROLE_NAME);
         MDMResponse response = client.put(url,
                 PayloadGenerator.getJsonPayload(Constants.RoleManagement.ROLE_ERRONEOUS_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_PUT).toString());
-        Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_BAD_REQUEST, response.getStatus());
     }
 
-    @Test(description = "Test update permission role.", dependsOnMethods = { "testUpdateUser"})
+    @Test(description = "Test update scopes to a role.", dependsOnMethods = { "testUpdateUser"})
     public void testUpdateRolePermission() throws Exception {
-        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.UPDATED_ROLE_NAME);
+        String url=GetURL(Constants.RoleManagement.SCOPE_ROLE_ENDPOINT, Constants.RoleManagement.UPDATED_ROLE_NAME);
         MDMResponse response = client.put(url,
                     PayloadGenerator.getJsonPayload(Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME,
                             Constants.HTTP_METHOD_PUT).toString());
             Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
-    @Test(description = "Test update role with erroneous payload.", dependsOnMethods = { "testUpdateUser"})
-    public void testUpdateRolePermissionWithErroneousPayload() throws Exception {
-        String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.UPDATED_ROLE_NAME);
-        MDMResponse response = client.put(url,
-                PayloadGenerator.getJsonPayload(Constants.RoleManagement.ROLE_ERRONEOUS_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_PUT).toString());
-        Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
-    }
-
-    @Test(description = "Test remove role.", dependsOnMethods = { "testUpdateRolePermission" })
+    /*@Test(description = "Test remove role.", dependsOnMethods = { "testUpdateRolePermission" })
     public void testRemoveRole() throws Exception {
         String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.UPDATED_ROLE_NAME);
         MDMResponse response = client.delete(url);
             Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-    }
+    }*/
 
-    @Test(description = "Test remove role without roles.", dependsOnMethods = { "testUpdateRolePermission" })
+    /*@Test(description = "Test remove role without roles.", dependsOnMethods = { "testUpdateRolePermission" })
     public void testRemoveRoleWithoutRoles() throws Exception {
         String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.UPDATED_ROLE_NAME);
         MDMResponse response = client.delete(url);
         Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
-    }
+    }*/
 
     private String GetURL(String endPoint,String param){
-        return endPoint+"?rolename="+param;
+        return endPoint+"?roleName="+param;
+    }
+
+    private String ConstructURL(String endPoint,String param){
+        return endPoint+"/"+param;
     }
 
 }

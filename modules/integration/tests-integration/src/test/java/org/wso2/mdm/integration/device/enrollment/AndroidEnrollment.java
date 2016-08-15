@@ -42,8 +42,7 @@ public class AndroidEnrollment extends TestBase {
     @Test(description = "Test an Android device enrollment.")
     public void testEnrollment() throws Exception {
         JsonObject enrollmentData = PayloadGenerator.getJsonPayload(
-                Constants.AndroidEnrollment.ENROLLMENT_PAYLOAD_FILE_NAME,
-                Constants.HTTP_METHOD_POST);
+                Constants.AndroidEnrollment.ENROLLMENT_PAYLOAD_FILE_NAME, Constants.HTTP_METHOD_POST);
         enrollmentData.addProperty(Constants.DEVICE_IDENTIFIER_KEY, Constants.DEVICE_ID);
         MDMResponse response = client.post(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT, enrollmentData.toString());
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
