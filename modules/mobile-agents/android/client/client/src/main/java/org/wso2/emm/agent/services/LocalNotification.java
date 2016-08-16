@@ -22,6 +22,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
+import android.util.Log;
+
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.utils.Preference;
 
@@ -30,6 +32,9 @@ import org.wso2.emm.agent.utils.Preference;
  * polls to server based on a predefined to retrieve pending data.
  */
 public class LocalNotification {
+
+	private static final String TAG = LocalNotification.class.getSimpleName();
+
 	public static final int DEFAULT_INTERVAL = 30000;
 	public static final int DEFAULT_INDEX = 0;
 	public static final int DEFAULT_BUFFER = 1000;
@@ -52,6 +57,7 @@ public class LocalNotification {
 			AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 			alarms.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, currentTime, interval,
 					recurringAlarm);
+			Log.d(TAG, "Polling started!");
 		}
 	}
 
@@ -62,6 +68,7 @@ public class LocalNotification {
 			PendingIntent sender = PendingIntent.getBroadcast(context, REQUEST_CODE, alarm, DEFAULT_INDEX);
 			AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 			alarmManager.cancel(sender);
+			Log.d(TAG, "Polling stopped!");
 		}
 	}
 }

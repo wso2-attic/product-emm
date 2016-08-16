@@ -86,7 +86,7 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 				OperationProcessor operationProcessor = new OperationProcessor(context);
                 operationProcessor.doTask(lockOperation);
             } catch (AndroidAgentException e) {
-                Log.e(TAG, "Error occurred while executing hard lock operaton at the device startup");
+                Log.e(TAG, "Error occurred while executing hard lock operation at the device startup");
             } catch (JSONException e) {
 				Log.e(TAG, "Error occurred while building hard lock operation payload");
 			}
@@ -115,6 +115,7 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 					(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 			alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, startTime,
 			                          interval, recurringAlarmIntent);
+			Log.d(TAG, "Setting up alarm manager for polling every " + interval + " milliseconds.");
 		}
 	}
 
