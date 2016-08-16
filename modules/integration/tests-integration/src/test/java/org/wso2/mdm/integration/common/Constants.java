@@ -73,7 +73,7 @@ public final class Constants {
                         + " activity:view device:admin:view device-type:admin:view configuration:manage device:android:enroll"
                         + " device:android:disenroll device:android:event:read device:android:event:write device:android:operation:applications"
                         + " device:android:operation:blacklist-app device:android:operation:change-lock device:android:operation:clear-password"
-                        + " device:android:operation:vpn device:android:operation:wifi device:android:operation:camera "
+                        + " device:android:operation:vpn device:android:operation:wifi device:android:operation:camera"
                         + " device:android:operation:encrypt device:android:operation:enterprise-wipe device:android:operation:info"
                         + " device:android:operation:install-app device:android:operation:location device:android:operation:lock"
                         + " device:android:operation:mute device:android:operation:reboot device:android:operation:ring"
@@ -102,7 +102,7 @@ public final class Constants {
         public static final String ENROLLMENT_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME =
                                                                 "android-enrollment-erroneous-response-payloads.json";
         public static final String ENROLLMENT_ADDITIONAL_DEVICES_PAYLOAD_FILE_NAME = "android-enrollment-additional-devices-payloads.json";
-        public static final String ENROLLMENT_ENDPOINT = "/api/device-mgt/android/v1.0/devices";
+        public static final String ENROLLMENT_ENDPOINT = "/api/device-mgt/android/v1.0/devices/";
         public static final String ENROLLMENT_GROUP = "android-enrollment";
 	}
 
@@ -237,7 +237,7 @@ public final class Constants {
         }
 
         public static final String DEVICE_CONFIGURATION_GROUP = "android-config-mgt";
-        public static final String CONFIG_MGT_ENDPOINT = "/mdm-android-agent/configuration/";
+        public static final String CONFIG_MGT_ENDPOINT = "/api/device-mgt/android/v1.0/configuration/";
         public static final String PAYLOAD_FILE_NAME = "android-configuration-payloads.json";
         public static final String RESPONSE_PAYLOAD_FILE_NAME = "android-config-response-payloads.json";
     }
@@ -255,7 +255,7 @@ public final class Constants {
     public static final class MobileDeviceManagement {
         private MobileDeviceManagement(){ throw new AssertionError();}
         public static final String MOBILE_DEVICE_MANAGEMENT_GROUP = "mobile-device-mgt";
-        public static final String GET_DEVICE_COUNT_ENDPOINT = "/mdm-admin/devices/count";
+        public static final String GET_DEVICE_COUNT_ENDPOINT = "/api/device-mgt/v1.0";
         public static final String NO_OF_DEVICES = "10";
         public static final String GET_ALL_DEVICES_ENDPOINT ="/mdm-admin/devices";
         public static final String VIEW_DEVICE_TYPES_ENDPOINT = "/mdm-admin/devices/types";
