@@ -21,7 +21,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
 import android.util.Log;
 
 import org.wso2.emm.agent.R;
@@ -37,7 +36,7 @@ public class LocalNotification {
 
 	public static final int DEFAULT_INTERVAL = 30000;
 	public static final int DEFAULT_INDEX = 0;
-	public static final int DEFAULT_BUFFER = 1000;
+	public static final int DEFAULT_BUFFER = 0;
 	public static final int REQUEST_CODE = 0;
 	public static final String LOCAL_NOTIFIER_INVOKED_PREF_KEY = "localNoticicationInvoked";
 
@@ -46,8 +45,7 @@ public class LocalNotification {
 		if(interval == DEFAULT_INDEX){
 			interval = DEFAULT_INTERVAL;
 		}
-		long currentTime = SystemClock.elapsedRealtime();
-		currentTime += DEFAULT_BUFFER;
+		long currentTime = DEFAULT_BUFFER;
 		stopPolling(context);
 		if (!Preference.getBoolean(context, LOCAL_NOTIFIER_INVOKED_PREF_KEY)) {
 			Preference.putBoolean(context, LOCAL_NOTIFIER_INVOKED_PREF_KEY, true);
