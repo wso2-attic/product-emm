@@ -17,9 +17,14 @@
  */
 package org.wso2.emm.agent.services;
 
-import java.util.Locale;
-
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
@@ -30,20 +35,14 @@ import org.wso2.emm.agent.services.operation.OperationProcessor;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.os.SystemClock;
+import java.util.Locale;
 
 /**
  * Broadcast receiver for device boot action used to start agent local
  * notification service at device startup.
  */
 public class DeviceStartupIntentReceiver extends BroadcastReceiver {
-	private static final int DEFAULT_TIME_MILLISECONDS = 1000;
+	private static final int DEFAULT_TIME_MILLISECONDS = 0;
 	private static final int DEFAULT_REQUEST_CODE = 0;
 	public static final int DEFAULT_INDEX = 0;
 	public static final int DEFAULT_ID = -1;
@@ -103,7 +102,7 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 
 		if (Preference.getBoolean(context, Constants.PreferenceFlag.REGISTERED) && Constants.NOTIFIER_LOCAL.equals(
 				mode.trim().toUpperCase(Locale.ENGLISH))) {
-			long startTime = SystemClock.elapsedRealtime() + DEFAULT_TIME_MILLISECONDS;
+			long startTime =  DEFAULT_TIME_MILLISECONDS;
 
 			Intent alarmIntent = new Intent(context, AlarmReceiver.class);
 			PendingIntent recurringAlarmIntent =
