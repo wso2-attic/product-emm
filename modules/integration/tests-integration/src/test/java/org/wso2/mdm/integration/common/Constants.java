@@ -98,6 +98,8 @@ public final class Constants {
 
         public static final String ENROLLMENT_PAYLOAD_FILE_NAME = "android-enrollment-payloads.json";
         public static final String ENROLLMENT_ERRONEOUS_PAYLOAD_FILE_NAME = "android-enrollment-erroneous-payloads.json";
+        public static final String ENROLLMENT_RESPONSE_PAYLOAD_FOR_DELETE = "Android device that carries id \\u00271234\\u0027 has successfully dis-enrolled";
+        public static final String ENROLLMENT_RESPONSE_PAYLOAD_FOR_POST = "Android device, which carries the id \\u00271234\\u0027 has successfully been enrolled";
         public static final String ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME = "android-enrollment-response-payloads.json";
         public static final String ENROLLMENT_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME =
                                                                 "android-enrollment-erroneous-response-payloads.json";
@@ -347,11 +349,11 @@ public final class Constants {
         private ConfigurationManagement() { throw new AssertionError(); }
 
         public static final String CONFIGURATION_MANAGEMENT_GROUP = "configuration-mgt";
-        public static final String CONFIGURATION_ENDPOINT = "/mdm-admin/configuration";
-        public static final String CONFIGURATION_ERRONEOUS_ENDPOINT = "/mdm-admin/configuration/android";
+        public static final String CONFIGURATION_ENDPOINT = "/api/device-mgt/v1.0/configuration";
+        public static final String CONFIGURATION_ERRONEOUS_ENDPOINT = "/api/device-mgt/v1.0/configuration/android";
         public static final String CONFIGURATION_PAYLOAD_FILE_NAME = "configuration-payloads.json";
         public static final String CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME = "configuration-response-payloads.json";
-        public static final String CONFIGURATION_ERRONEOUS_RESPONSE = "Scope validation failed";
+        public static final String CONFIGURATION_ERRONEOUS_RESPONSE = "Authorization failed. Requested API resource does not exist";
     }
 
     public static final class NotificationManagement {
@@ -371,9 +373,9 @@ public final class Constants {
 
         public static final String CERTIFICATE_MANAGEMENT_GROUP = "certificate-mgt";
         public static final String CERTIFICATE_ADD_PAYLOAD= "[{\"serial\" : \"12438035315552875930\",  \"pem\" :\"MIIFlTCCA32gAwIBAgIJAKycxzhPSvWjMA0GCSqGSIb3DQEBBQUAMFkxCzAJBgNVBAYTAnNsMQwwCgYDVQQIDANhc2QxDDAKBgNVBAcMA2FzZDELMAkGA1UECgwCYXMxCzAJBgNVBAsMAnNhMRQwEgYDVQQDDAsxMC4xMC4xMC4yNDAeFw0xNjAyMTUwNTU5MDFaFw0xNzAyMTQwNTU5MDFaMFkxCzAJBgNVBAYTAnNsMQwwCgYDVQQIDANhc2QxDDAKBgNVBAcMA2FzZDELMAkGA1UECgwCYXMxCzAJBgNVBAsMAnNhMRQwEgYDVQQDDAsxMC4xMC4xMC4yNDCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBAOAg4JBfnZ1x/c/ktkuq7Wj8HQIm5CrwwYj+h2GDSDyqUKpyd3NJReNqUnhsL7MYR85tmP0SpBlD4X8KSBOuohVw4/cupmk0AlctINaTLRab0aN7ux43fTglD2O5ATdtlH+xLHuLMKcREV+ZedrwjiqzbUX/J/5EYNxW3fAh9pk/PB31Jbv0UTv7dTghsiecYQb6ENlP0sID6gAi9Br9oKKz/mPQFGafIUXZYEiuc2ugYeNQsnTnteAwIR/0LeedsRTUk4sM/z9EZ/NJ/RALwrZ8SPcA90grWkl3m6+GWYvjbyg4T47m9Vy6YD7p56QYitaGgooo2Tyj/tc2UrtPfJhmmkjs3dHDrvZLRskU2YXU+89qiuhfGulQG6Jz76Tf26gAX3tvhRACG8rbduSjvkyGJde5ig//RC+JeUrdm+m3XwEbjFyGzVHaKjxIlQ/JXx1ffvZ+g2NLQUI/g3RbPQESTys0qWP25FYoJSv3i1w6C7akX2DwWUM+KzzCGRVRpNBaDai/mkVI0IVcb5X2pfqMygS+SA0pXtl1x/5YFhdQe2uoVvukb1cNcuOpBL6BMsFAd9CVDs21e7wDo74Sf879ve8bZF2M5WAQoKG9cbYrA8KdX0vInEcYs1VwSuMaTABQSOw+LI+ubmeO9zZ0HrtU9okzQ8JaVeX/NRDP4JYDAgMBAAGjYDBeMB0GA1UdDgQWBBT6TvCK/V/RfWuOP5boEG500eLe4TAfBgNVHSMEGDAWgBT6TvCK/V/RfWuOP5boEG500eLe4TAPBgNVHRMBAf8EBTADAQH/MAsGA1UdDwQEAwIBhjANBgkqhkiG9w0BAQUFAAOCAgEAdheZlPw+QSN6HbVaXJTE/N272iz02HWz+5wREIHi31fAFCQs3KP/ozOSC6mmlRkJ1ry7SRslCXVI7CqFJsuc0xR/cLb8Ti3CuzNRHd3N81tLtW8GdEU8wItQTJTkXBPiG2ZM6d7Un1daL1T5VTHONE/n2rQqpCREQvqJnLuCxdyrGGRHrtM/wOSQ+s2yIFdYOdG6GiuBIz4ML8runEb2cpSxJrILvqOV3GakBwz9OARhrtowztH8WaC93WeMFAJHyzFBcnmjKozpJTKqZ4oF+5o8o2ENly6+a/PExu7uhU9eDKMzc/rGVKOGF+NqxIiDJbGlCcAsQ9+uo3Xkh2T1rBsM0/COfRHz1jpRJy5YpHCKDyv1rrE7plNXEtejjHxj2iwu8mzfCwznH0B06ThjEPUHWS0GrTjWWCjaP0R3hIU/s/H8b8KabryRwezFINOWAN8CZNoMtR8b5YzlktFxKbe6E5H3v39s2xg1fvwwZKwZU3DbSWpwybGaBBUsNgTtT3ZhCm3eXkdESvAmp4+jm+M+nCuiwnJ0Sdv1azjPv4Jvie7ObHv7soN18bsiooYUyksw0YRcVDFckHK0tm2vZT+XC57P/c3IeVso1K7S0+Q9GHW/2OMQXHldXVywQB3RZ1dRO3qXLDh26DiJi0d/mJgI+8LooHOmreXTZLfwWsc=\", \"tenantId\":\"-1234\"}]";
-        public static final String CERTIFICATE_ADD_ENDPOINT = "/mdm-admin/certificates/";
-        public static final String CERTIFICATE_GET_ENDPOINT = "/mdm-admin/certificates/12438035315552875930";
-        public static final String CERTIFICATE_GET_ALL_ENDPOINT = "/mdm-admin/certificates/paginate?start=0&length=1";
+        public static final String CERTIFICATE_ADD_ENDPOINT = "/api/certificate-mgt/v1.0/admin/certificates/";
+        public static final String CERTIFICATE_GET_ENDPOINT = "/api/certificate-mgt/v1.0/admin/certificates/12438035315552875930";
+        public static final String CERTIFICATE_GET_ALL_ENDPOINT = "/api/certificate-mgt/v1.0/admin/certificates?offset=0&limit=1";
         public static final String CERTIFICATE_PAYLOAD= "\"serialNumber\":\"12438035315552875930\"";
 
     }
