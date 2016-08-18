@@ -402,7 +402,8 @@ public class CommonUtils {
 					try {
 						JSONObject upgradeData = new JSONObject(command);
 						if (upgradeData.isNull(context.getResources()
-								.getString(R.string.firmware_upgrade_automatic_retry))) {
+								.getString(R.string.firmware_upgrade_automatic_retry)) && Preference.hasPreferenceKey(context, context
+								.getResources().getString(R.string.is_automatic_firmware_upgrade))) {
 							boolean isFirmwareUpgradeAutoRetry = Preference.getBoolean(context, context
 									.getResources().getString(R.string.is_automatic_firmware_upgrade));
 							upgradeData.put(context.getResources()

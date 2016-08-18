@@ -339,6 +339,8 @@ public class OTAServerManager {
                         @Override
                         public void run() {
                             while (lengthOfFile > downloadedLength && !isProgressUpdateTerminated) {
+                                Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                                        context.getResources().getString(R.string.status_started));
                                 publishDownloadProgress(lengthOfFile, downloadedLength);
                                 try {
                                     Thread.sleep(1000);

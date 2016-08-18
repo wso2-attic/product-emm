@@ -149,4 +149,13 @@ public class Preference {
 		mainPref.edit().clear().commit();
 	}
 
+	public static boolean hasPreferenceKey(Context context, String key){
+		SharedPreferences mainPref =
+				context.getSharedPreferences(context.getResources()
+								.getString(R.string.shared_pref_package),
+						Context.MODE_PRIVATE
+				);
+		return mainPref.contains(key);
+	}
+
 }
