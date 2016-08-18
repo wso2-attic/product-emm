@@ -1,6 +1,6 @@
 {
   "POST": {
-    "responseMessage": "Android device, which carries the id '1234' has successfully been enrolled"
+    "responseMessage":"Android device, which carries the id '1234' has successfully been enrolled"
   },
   "PUT": {
     "responseCode": "Accepted",

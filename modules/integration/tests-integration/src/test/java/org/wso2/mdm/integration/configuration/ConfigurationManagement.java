@@ -40,22 +40,22 @@ public class ConfigurationManagement extends TestBase {
     }
     @Test(description = "Test save configuration.")
     public void testSaveConfiguration() throws Exception {
-        MDMResponse response = client.post(Constants.ConfigurationManagement.CONFIGURATION_ENDPOINT,
+        MDMResponse response = client.put(Constants.ConfigurationManagement.CONFIGURATION_ENDPOINT,
                 PayloadGenerator.getJsonPayload(
                         Constants.ConfigurationManagement.CONFIGURATION_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString());
-        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
+                        Constants.HTTP_METHOD_PUT).toString());
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
                         Constants.ConfigurationManagement.CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
+                        Constants.HTTP_METHOD_PUT).toString(), response.getBody(), true);
     }
     @Test(description = "Test get configuration.", dependsOnMethods = { "testSaveConfiguration"})
     public void testGetConfiguration() throws Exception {
         MDMResponse response = client.get(Constants.ConfigurationManagement.CONFIGURATION_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                        Constants.ConfigurationManagement.CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME ,
-                        Constants.HTTP_METHOD_GET).toString(), response.getBody(), false);
+                        Constants.ConfigurationManagement.CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_GET).toString(), response.getBody(), true);
     }
 
     @Test(description = "Test get configuration with erroneous end point.",

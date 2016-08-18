@@ -1,10 +1,23 @@
 {
-  "POST":{
-    "statusCode":201,
-    "messageFromServer":"Tenant configuration saved successfully."
+  "PUT":{
+    "type": "android",
+    "configuration": [
+      {
+        "name": "notifierFrequency",
+        "contentType": "text",
+        "value": "60000"
+      }
+    ]
   },
+
   "GET":{
-    "configuration":[{"name":"notifierFrequency",
-      "contentType":"text","value":60000}]
+    "type": "android",
+    "configuration": [
+      {
+        "name": "notifierFrequency",
+        "contentType": "text",
+        "value": "60000"
+      }
+    ]
   }
 }

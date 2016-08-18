@@ -1,6 +1,12 @@
 {
-  "POST":{
-    "configuration":[{"name":"notifierFrequency","value":"60000",
-      "contentType":"text"}]
+  "PUT":{
+    "type": "android",
+    "configuration":[
+      {
+        "name":"notifierFrequency",
+        "contentType":"text",
+        "value":"60000"
+      }
+    ]
   }
 }
