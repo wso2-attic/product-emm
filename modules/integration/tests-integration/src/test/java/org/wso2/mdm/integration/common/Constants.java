@@ -331,8 +331,8 @@ public final class Constants {
         private FeatureManagement() { throw new AssertionError(); }
 
         public static final String FEATURE_MANAGEMENT_GROUP = "feature-mgt";
-        public static final String VIEW_FEATURES_ENDPOINT = "/mdm-admin/features/android";
-        public static final String VIEW_FEATURES_ERRONEOUS_ENDPOINT = "/mdm-admin/features";
+        public static final String VIEW_FEATURES_ENDPOINT = "/api/device-mgt/v1.0/devices";
+        public static final String VIEW_FEATURES_ERRONEOUS_ENDPOINT = "/api/device-mgt/v1.0/devices/features";
     }
 
     public static final class LicenseManagement {
