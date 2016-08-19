@@ -17,7 +17,8 @@
  */
 package org.wso2.emm.agent.services.operation;
 
-import android.annotation.TargetApi;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -26,7 +27,7 @@ import android.content.res.Resources;
 import android.location.Location;
 import android.media.AudioManager;
 import android.net.Uri;
-import android.os.Build;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -39,9 +40,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AlertActivity;
 import org.wso2.emm.agent.AndroidAgentException;
-import org.wso2.emm.agent.LockActivity;
 import org.wso2.emm.agent.R;
-import org.wso2.emm.agent.ServerDetails;
 import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.RuntimeInfo;
 import org.wso2.emm.agent.api.WiFiConfig;
@@ -714,6 +713,14 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         } else {
             operation.setStatus(resources.getString(R.string.operation_value_completed));
             resultBuilder.build(operation);
+            NotificationCompat.Builder mBuilder =   new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setContentTitle(context.getString(R.string.alert_message))
+                    .setContentText(message)
+                    .setAutoCancel(true)
+                    .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(), 0));
+            NotificationManager notificationManager= (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(0, mBuilder.build());
             devicePolicyManager.lockNow();
         }
 

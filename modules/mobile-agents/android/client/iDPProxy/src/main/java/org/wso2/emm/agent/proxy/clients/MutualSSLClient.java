@@ -103,10 +103,13 @@ public class MutualSSLClient implements CommunicationClient {
                 HurlStack hurlStack = new HurlStack() {
                     @Override
                     protected HttpURLConnection createConnection(URL url) throws IOException {
-                        HttpsURLConnection httpsURLConnection = (HttpsURLConnection) super.createConnection(url);
-                        httpsURLConnection.setSSLSocketFactory(socketFactory);
-                        httpsURLConnection.setHostnameVerifier(getHostnameVerifier());
-                        return httpsURLConnection;
+                        HttpURLConnection connection = super.createConnection(url);
+                        if (connection instanceof HttpsURLConnection) {
+                            HttpsURLConnection httpsURLConnection = (HttpsURLConnection) connection;
+                            httpsURLConnection.setSSLSocketFactory(socketFactory);
+                            httpsURLConnection.setHostnameVerifier(getHostnameVerifier());
+                        }
+                        return connection;
                     }
                 };
                 client = Volley.newRequestQueue(IdentityProxy.getInstance().getContext(), hurlStack);

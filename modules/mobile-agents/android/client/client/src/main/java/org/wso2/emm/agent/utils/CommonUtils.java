@@ -392,16 +392,50 @@ public class CommonUtils {
 			}
 			intent.putExtra("code", operation);
 			intent.setPackage(Constants.PACKAGE_NAME);
-			if (command != null) {
-				intent.putExtra("command", command);
-			}
+
 			if (appUri != null) {
 				intent.putExtra("appUri", appUri);
 			}
 
-			if (Constants.Operation.UPGRADE_FIRMWARE.equals(operation)) {
-				intent.putExtra("operationId", Preference.getInt(context, "firmwareOperationId"));
+			if (command != null) {
+				if (Constants.Operation.UPGRADE_FIRMWARE.equals(operation)) {
+					try {
+						JSONObject upgradeData = new JSONObject(command);
+						if (upgradeData.isNull(context.getResources()
+								.getString(R.string.firmware_upgrade_automatic_retry)) && Preference.hasPreferenceKey(context, context
+								.getResources().getString(R.string.is_automatic_firmware_upgrade))) {
+							boolean isFirmwareUpgradeAutoRetry = Preference.getBoolean(context, context
+									.getResources().getString(R.string.is_automatic_firmware_upgrade));
+							upgradeData.put(context.getResources()
+									.getString(R.string.firmware_upgrade_automatic_retry), isFirmwareUpgradeAutoRetry);
+							command = upgradeData.toString();
+							Log.d(TAG, "Updated payload: " + command);
+						} else {
+							Preference.putBoolean(context, context.getResources()
+									.getString(R.string.is_automatic_firmware_upgrade), upgradeData.getBoolean(context.getResources()
+									.getString(R.string.firmware_upgrade_automatic_retry)));
+						}
+					} catch (JSONException e) {
+						Log.e(TAG, "Could not parse Firmware upgrade operation", e);
+					}
+					intent.putExtra("operationId", Preference.getInt(context, "firmwareOperationId"));
+				}
+				intent.putExtra("command", command);
 			}
+			context.startService(intent);
+		} else {
+			Log.e(TAG, "System app not enabled.");
+		}
+	}
+
+	public static void callSystemAppInit(Context context) {
+		if(Constants.SYSTEM_APP_ENABLED) {
+			Intent intent =  new Intent(Constants.SYSTEM_APP_SERVICE_START_ACTION);
+			Intent explicitIntent = createExplicitFromImplicitIntent(context, intent);
+			if (explicitIntent != null) {
+				intent = explicitIntent;
+			}
+
 			context.startService(intent);
 		} else {
 			Log.e(TAG, "System app not enabled.");

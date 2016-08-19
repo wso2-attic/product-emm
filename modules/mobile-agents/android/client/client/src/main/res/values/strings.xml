@@ -82,6 +82,7 @@
     <string name="alarm_scheduled_operation">scheduledOperation</string>
     <string name="app_uri">packageUri</string>
     <string name="alarm_schedule">schedule</string>
+    <string name="alert_message">Message</string>
 
     <!-- TEXT FIELD HINTS -->
     <string name="hint_new_pin">New PIN Code</string>
@@ -367,6 +368,8 @@
     <string name="firmware_upgrade_retries">firmwareUpgradeRetries</string>
     <string name="firmware_upgrade_failed_message">firmwareUpgradeFailedMessage</string>
     <string name="firmware_upgrade_failed_id">firmwareUpgradeFailedId</string>
+    <string name="is_automatic_firmware_upgrade">isAutomaticFirmwareUpgrade</string>
+    <string name="firmware_upgrade_automatic_retry">autoRetry</string>
     <string name="app_install_failed_message">appInstallFailedMessage</string>
     <string name="app_install_id">appInstallOperationId</string>
     <string name="app_install_code">appInstallOperationCode</string>

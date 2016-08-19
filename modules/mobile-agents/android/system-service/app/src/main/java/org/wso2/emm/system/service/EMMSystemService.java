@@ -32,7 +32,8 @@ import android.os.PowerManager;
 import android.os.SystemProperties;
 import android.os.UserManager;
 import android.util.Log;
-import android.webkit.URLUtil;
+import android.util.Patterns;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.system.service.api.OTADownload;
@@ -40,12 +41,15 @@ import org.wso2.emm.system.service.api.SettingsManager;
 import org.wso2.emm.system.service.services.BatteryChargingStateReceiver;
 import org.wso2.emm.system.service.utils.AlarmUtils;
 import org.wso2.emm.system.service.utils.AppUtils;
+import org.wso2.emm.system.service.utils.CommonUtils;
 import org.wso2.emm.system.service.utils.Constants;
 import org.wso2.emm.system.service.utils.Preference;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.os.UserManager.ALLOW_PARENT_PROFILE_APP_LINKING;
 import static android.os.UserManager.DISALLOW_ADD_USER;
@@ -144,20 +148,53 @@ public class EMMSystemService extends IntentService {
                 }
             }
 
-            Log.d(TAG, "EMM agent has sent a command.");
             if ((operationCode != null)) {
-                Log.d(TAG, "The operation code is: " + operationCode);
-
-                Log.i(TAG, "Will now executing the command ..." + operationCode);
                 if (Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
+                    Log.d(TAG, "EMM agent has sent a command. code: " + operationCode);
                     doTask(operationCode);
-                } else if (Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS.equals(operationCode)) {
-                    doTask(operationCode);
+                } else {
+                    Log.d(TAG, "Received command from external application. code: " + operationCode + " command: " + command);
+                    switch(operationCode){
+                        case Constants.Operation.FIRMWARE_UPGRADE_AUTOMATIC_RETRY:
+                            Preference.putBoolean(context, context.getResources().
+                                    getString(R.string.firmware_upgrade_automatic_retry), !"false".equals(command));
+                            CommonUtils.callAgentApp(context, Constants.Operation.
+                                    FIRMWARE_UPGRADE_AUTOMATIC_RETRY, 0, command); //Sending command as the message
+                            break;
+                        case Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS:
+                        case Constants.Operation.GET_FIRMWARE_BUILD_DATE:
+                        case Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS:
+                            doTask(operationCode);
+                        default:
+                            Log.e(TAG, "Invalid operation code received");
+                            break;
+                    }
                 }
             }
         }
         context.registerReceiver(new BatteryChargingStateReceiver(), new IntentFilter(
                 Intent.ACTION_BATTERY_CHANGED));
+
+        //Checking is there any interrupted firmware download is there
+        String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
+        if (context.getResources().getString(R.string.status_started).equals(status)) {
+            Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                    context.getResources().getString(R.string.status_init));
+            Timer timeoutTimer = new Timer();
+            timeoutTimer.schedule(new TimerTask(){
+                @Override
+                public void run() {
+                    if (context.getResources().getString(R.string.status_init)
+                            .equals(Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status)))) {
+                        if (Preference.getBoolean(context, context.getResources().getString(R.string.firmware_upgrade_automatic_retry))) {
+                            Log.i(TAG, "Found incomplete firmware download. Proceeding with last download request from the agent.");
+                            OTADownload otaDownload = new OTADownload(context);
+                            otaDownload.startOTA();
+                        }
+                    }
+                }
+            }, Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
+        }
     }
 
     private void startAdmin() {
@@ -344,9 +381,9 @@ public class EMMSystemService extends IntentService {
     /**
      * Upgrading device firmware over the air (OTA).
      */
-    public void upgradeFirmware(boolean isStatusCheck) {
+    public void upgradeFirmware(final boolean isStatusCheck) {
         Log.i(TAG, "An upgrade has been requested");
-        Context context = this.getApplicationContext();
+
         Preference.putBoolean(context, context.getResources().getString(R.string.
                                                                                 firmware_status_check_in_progress), isStatusCheck);
         Preference.putString(context, context.getResources().getString(R.string.firmware_download_progress),
@@ -362,9 +399,30 @@ public class EMMSystemService extends IntentService {
                     schedule = (String) upgradeData.get(context.getResources().getString(R.string.alarm_schedule));
                 }
 
+                boolean isAutomaticUpgrade = true;
+                if (!upgradeData.isNull(context.getResources().getString(R.string.firmware_upgrade_automatic_retry))) {
+                    isAutomaticUpgrade = upgradeData.getBoolean(context.getResources()
+                            .getString(R.string.firmware_upgrade_automatic_retry));
+                    if (!isAutomaticUpgrade){
+                        Log.i(TAG, "Automatic retry on firmware upgrade failure is disabled.");
+                    }
+                }
+
+                Preference.putBoolean(context, context.getResources()
+                        .getString(R.string.firmware_upgrade_automatic_retry), isAutomaticUpgrade);
+
                 if (!upgradeData.isNull(context.getResources().getString(R.string.firmware_server))) {
                     server = (String) upgradeData.get(context.getResources().getString(R.string.firmware_server));
-                    if (URLUtil.isValidUrl(server)) {
+                    if(server.isEmpty() || (!server.isEmpty() && !Patterns.WEB_URL.matcher(server).matches())) {
+                        String message = "Firmware upgrade URL provided is not valid.";
+                        sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
+                                Constants.Status.MALFORMED_OTA_URL, message);
+                        CommonUtils.callAgentApp(context, Constants.Operation.
+                                FIRMWARE_UPGRADE_FAILURE, Preference.getInt(
+                                context, context.getResources().getString(R.string.operation_id)), message);
+                        Log.e(TAG, message);
+                        return;
+                    } else {
                         Preference.putString(context, context.getResources().getString(R.string.firmware_server), server);
                     }
                 }
@@ -373,7 +431,7 @@ public class EMMSystemService extends IntentService {
             }
         }
         if (schedule != null && !schedule.trim().isEmpty()) {
-            Log.i(TAG, "Upgrade has been scheduled to " + schedule);
+            Log.i(TAG, "Upgrade scheduled received: " + schedule);
             Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), schedule);
             try {
                 AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.UPGRADE_FIRMWARE, null);
@@ -386,6 +444,32 @@ public class EMMSystemService extends IntentService {
             } else {
                 Log.i(TAG, "Upgrade request initiated by admin.");
             }
+
+            String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
+            boolean isAutomaticUpgrade = Preference.getBoolean(context, context.getResources()
+                    .getString(R.string.firmware_upgrade_automatic_retry));
+            if (context.getResources().getString(R.string.status_connectivity_failed).equals(status) && isAutomaticUpgrade) {
+                Log.d(TAG, "Ignoring request from agent as service waiting for WiFi to start upgrade.");
+                return;
+            } else if (context.getResources().getString(R.string.status_started).equals(status)) {
+                Log.d(TAG, "Checking for existing download. Will proceed this request if current download is no longer ongoing.");
+                Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                        context.getResources().getString(R.string.status_init));
+                Timer timeoutTimer = new Timer();
+                timeoutTimer.schedule(new TimerTask(){
+                    @Override
+                    public void run() {
+                        if (context.getResources().getString(R.string.status_init)
+                                .equals(Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status)))) {
+                            Log.d(TAG, "Download is no longer ongoing. Proceeding download request from the agent.");
+                            OTADownload otaDownload = new OTADownload(context);
+                            otaDownload.startOTA();
+                        }
+                    }
+                }, Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
+                return;
+            }
+
             //Prepare for upgrade
             OTADownload otaDownload = new OTADownload(context);
             otaDownload.startOTA();
