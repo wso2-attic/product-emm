@@ -219,7 +219,9 @@ public final class Constants {
         public static final String DEVICE_MANAGEMENT_GROUP = "device-mgt";
         public static final String KEY_DEVICE_ID = "deviceIdentifier";
         public static final String KEY_DEVICE_NAME = "name";
-        public static final String DEVICE_MGT_ENDPOINT = "/mdm-android-agent/device/";
+        public static final String DEVICE_TYPE = "android";
+        public static final String DEVICE_MGT_ENDPOINT = "/api/device-mgt/v1.0/devices/";
+        public static final String DEVICE_MGT_ANDROID_UPDATE_ENDPOINT = "/api/device-mgt/android/v1.0/devices/";
         public static final String LICENSE_SECTION = "This";
         public static final String LICENSE_ENDPOINT = DEVICE_MGT_ENDPOINT + "license";
         public static final String APP_LIST_ENDPOINT = DEVICE_MGT_ENDPOINT + "appList/" +
@@ -339,10 +341,10 @@ public final class Constants {
         private LicenseManagement() { throw new AssertionError(); }
 
         public static final String LICENSE_MANAGEMENT_GROUP = "license-mgt";
-        public static final String GET_LICENSE_ENDPOINT = "/mdm-admin/license/android/en_US";
+        public static final String GET_LICENSE_ENDPOINT = "/api/device-mgt/android/v1.0/configuration/license";
         public static final String GET_LICENSE_ERRONEOUS_ENDPOINT = "/mdm-admin/license";
         public static final String LICENSE_RESPONSE_PAYLOAD_FILE_NAME = "license-response-payloads.json";
-
+        public static final String LICENSE_RESPONSE_PAYLOAD = "This End User License Agreement is Eula.";
     }
 
     public static final class ConfigurationManagement {
