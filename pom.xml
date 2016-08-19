@@ -1018,12 +1018,12 @@
         <carbon.governance.version>4.5.8</carbon.governance.version>
 
         <!-- Carbon Device Management -->
-        <carbon.device.mgt.version>1.1.2</carbon.device.mgt.version>
+        <carbon.device.mgt.version>1.1.3-SNAPSHOT</carbon.device.mgt.version>
         <carbon.device.mgt.version.range>[1.1.1, 2.0.0)</carbon.device.mgt.version.range>
 
         <!-- Carbon Mobile Device Management -->
-        <carbon.mobile.device.mgt.version>2.1.2</carbon.mobile.device.mgt.version>
-        <mdm.version>2.1.0-SNAPSHOT</mdm.version>
+        <carbon.mobile.device.mgt.version>2.1.3-SNAPSHOT</carbon.mobile.device.mgt.version>
+        <mdm.version>2.2.0-SNAPSHOT</mdm.version>
 
         <!-- Carbon API Management -->
         <carbon.api.mgt.version>5.0.4</carbon.api.mgt.version>
@@ -1069,7 +1069,7 @@
         <caramel.version>1.0.1</caramel.version>
 
         <!-- App manager version-->
-        <appmgt.feature.version>1.1.5</appmgt.feature.version>
+        <appmgt.feature.version>1.1.6-SNAPSHOT</appmgt.feature.version>
 
         <!-- Carbon Store version-->
         <carbon.store.version>1.4.1</carbon.store.version>
@@ -1086,8 +1086,8 @@
 
         <!-- Carbon Dashboards version-->
         <carbon.dashboards.version>1.0.17</carbon.dashboards.version>
-        <carbon.analytics.cdmf.version>1.0.0</carbon.analytics.cdmf.version>
-        <carbon.analytics.emm.version>1.0.0</carbon.analytics.emm.version>
+        <carbon.analytics.cdmf.version>1.0.1-SNAPSHOT</carbon.analytics.cdmf.version>
+        <carbon.analytics.emm.version>1.0.1-SNAPSHOT</carbon.analytics.emm.version>
 
         <!-- EMM QSG properties -->
         <apache.httpclient.version>4.5.2</apache.httpclient.version>
