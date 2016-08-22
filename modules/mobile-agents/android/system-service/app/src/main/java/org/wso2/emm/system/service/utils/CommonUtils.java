@@ -77,4 +77,17 @@ public class CommonUtils {
 
         return explicitIntent;
     }
+
+    public static void sendBroadcast(Context context, String operation, String code, String status, String payload) {
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(Constants.SYSTEM_APP_ACTION_RESPONSE);
+        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        broadcastIntent.putExtra(Constants.OPERATION, operation);
+        broadcastIntent.putExtra(Constants.CODE, code);
+        broadcastIntent.putExtra(Constants.STATUS, status);
+        if (payload != null){
+            broadcastIntent.putExtra(Constants.PAYLOAD, payload);
+        }
+        context.sendBroadcastAsUser(broadcastIntent, android.os.Process.myUserHandle());
+    }
 }

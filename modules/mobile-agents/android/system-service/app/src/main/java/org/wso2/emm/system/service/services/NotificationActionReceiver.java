@@ -32,8 +32,8 @@ public class NotificationActionReceiver extends BroadcastReceiver {
                 Log.d(TAG, "Installing firmware upon user's confirmation.");
             } else if (Constants.FIRMWARE_INSTALL_CANCEL_ACTION.equals(action)) {
                 String message = "Firmware upgrade has been canceled by the user.";
-                otaServerManager.sendBroadcast(Constants.Operation.FIRMWARE_INSTALLATION_CANCELED,
-                        Constants.Status.CANCELED, message);
+                CommonUtils.sendBroadcast(context, Constants.Operation.FIRMWARE_INSTALLATION_CANCELED, Constants.Code.SUCCESS,
+                        Constants.Status.USER_CANCELED, message);
                 CommonUtils.callAgentApp(context, Constants.Operation.FIRMWARE_INSTALLATION_CANCELED, Preference.getInt(
                         context, context.getResources().getString(R.string.operation_id)), message);
                 Log.d(TAG, message);

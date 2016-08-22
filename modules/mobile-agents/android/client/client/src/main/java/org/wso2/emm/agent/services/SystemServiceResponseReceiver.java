@@ -36,11 +36,12 @@ public class SystemServiceResponseReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        String operation = intent.getStringExtra(Constants.OPERATION_CODE);
         String code = intent.getStringExtra("code");
         String status = intent.getStringExtra("status");
         JSONObject result;
         try {
-            switch (code) {
+            switch (operation) {
                 case Constants.Operation.GET_FIRMWARE_BUILD_DATE:
                     result = new JSONObject(intent.getStringExtra("payload"));
                     if (Constants.Status.SUCCESSFUL.equals(status) && result.has("buildDate")) {
@@ -59,12 +60,12 @@ public class SystemServiceResponseReceiver extends BroadcastReceiver {
                                              result.getString("appInstallFailedMessage"));
                     }
                     break;
-                case Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS:
+                case Constants.Operation.UPGRADE_FIRMWARE:
                 case Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS:
                     Log.i(TAG, status + ": " + intent.getStringExtra("payload"));
                     break;
                 default:
-                    Log.e(TAG, "Invalid operation code: " + code);
+                    Log.e(TAG, "Invalid operation code: " + operation);
                     break;
             }
         } catch (JSONException e) {

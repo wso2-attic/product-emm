@@ -128,7 +128,7 @@ public class EMMSystemService extends IntentService {
             Log.d(TAG, "Entered onHandleIntent of the Command Runner Service.");
             Bundle extras = intent.getExtras();
             if (extras != null) {
-                operationCode = extras.getString("code");
+                operationCode = extras.getString("operation");
 
                 if (extras.containsKey("command")) {
                     command = extras.getString("command");
@@ -150,10 +150,10 @@ public class EMMSystemService extends IntentService {
 
             if ((operationCode != null)) {
                 if (Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
-                    Log.d(TAG, "EMM agent has sent a command. code: " + operationCode);
+                    Log.d(TAG, "EMM agent has sent a command with operation code: " + operationCode);
                     doTask(operationCode);
                 } else {
-                    Log.d(TAG, "Received command from external application. code: " + operationCode + " command: " + command);
+                    Log.d(TAG, "Received command from external application. operation code: " + operationCode + " command: " + command);
                     switch(operationCode){
                         case Constants.Operation.FIRMWARE_UPGRADE_AUTOMATIC_RETRY:
                             Preference.putBoolean(context, context.getResources().
@@ -161,6 +161,22 @@ public class EMMSystemService extends IntentService {
                             CommonUtils.callAgentApp(context, Constants.Operation.
                                     FIRMWARE_UPGRADE_AUTOMATIC_RETRY, 0, command); //Sending command as the message
                             break;
+                        case Constants.Operation.UPGRADE_FIRMWARE:
+                            try {
+                                JSONObject upgradeData = new JSONObject(command);
+                                boolean isAutomaticUpgrade = true;
+                                if (!upgradeData.isNull(context.getResources().getString(R.string.firmware_upgrade_automatic_retry))) {
+                                    isAutomaticUpgrade = upgradeData.getBoolean(context.getResources()
+                                            .getString(R.string.firmware_upgrade_automatic_retry));
+                                }
+                                CommonUtils.callAgentApp(context, Constants.Operation.
+                                        FIRMWARE_UPGRADE_AUTOMATIC_RETRY, 0, (isAutomaticUpgrade ? "true": "false"));
+                            } catch (JSONException e) {
+                                String error = "Failed to build JSON object form the request: " + command;
+                                Log.e(TAG, error);
+                                CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE, Constants.Status.MALFORMED_REQUEST, error);
+                                break;
+                            }
                         case Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS:
                         case Constants.Operation.GET_FIRMWARE_BUILD_DATE:
                         case Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS:
@@ -177,7 +193,7 @@ public class EMMSystemService extends IntentService {
 
         //Checking is there any interrupted firmware download is there
         String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
-        if (context.getResources().getString(R.string.status_started).equals(status)) {
+        if (Constants.Status.OTA_UPGRADE_ONGOING.equals(status)) {
             Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
                     context.getResources().getString(R.string.status_init));
             Timer timeoutTimer = new Timer();
@@ -206,10 +222,10 @@ public class EMMSystemService extends IntentService {
     /**
      * Executes device management operations on the device.
      *
-     * @param code - Operation object.
+     * @param operationCode - Operation object.
      */
-    public void doTask(String code) {
-        switch (code) {
+    public void doTask(String operationCode) {
+        switch (operationCode) {
             case Constants.Operation.DEVICE_LOCK:
                 enableHardLock();
                 break;
@@ -354,8 +370,6 @@ public class EMMSystemService extends IntentService {
                 SettingsManager.setStatusBarDisabled(restrictionCode);
                 break;
             case Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS:
-                Preference.putBoolean(context, context.getResources().getString(R.string.
-                                                                                        firmware_status_check_in_progress), true);
                 upgradeFirmware(true);
                 break;
             case Constants.Operation.WIPE_DATA:
@@ -415,7 +429,7 @@ public class EMMSystemService extends IntentService {
                     server = (String) upgradeData.get(context.getResources().getString(R.string.firmware_server));
                     if(server.isEmpty() || (!server.isEmpty() && !Patterns.WEB_URL.matcher(server).matches())) {
                         String message = "Firmware upgrade URL provided is not valid.";
-                        sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS,
+                        CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
                                 Constants.Status.MALFORMED_OTA_URL, message);
                         CommonUtils.callAgentApp(context, Constants.Operation.
                                 FIRMWARE_UPGRADE_FAILURE, Preference.getInt(
@@ -428,6 +442,7 @@ public class EMMSystemService extends IntentService {
                 }
             } catch (JSONException e) {
                 Log.e(TAG, "Firmware upgrade payload parsing failed." + e);
+                return;
             }
         }
         if (schedule != null && !schedule.trim().isEmpty()) {
@@ -436,38 +451,49 @@ public class EMMSystemService extends IntentService {
             try {
                 AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.UPGRADE_FIRMWARE, null);
             } catch (ParseException e) {
-                Log.e(TAG, "One time alarm time string parsing failed." + e);
+                CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
+                        Constants.Status.MALFORMED_REQUEST, e.getMessage());
             }
         } else {
             if (isStatusCheck) {
                 Log.i(TAG, "Firmware status check is initiated by admin.");
             } else {
                 Log.i(TAG, "Upgrade request initiated by admin.");
-            }
 
-            String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
-            boolean isAutomaticUpgrade = Preference.getBoolean(context, context.getResources()
-                    .getString(R.string.firmware_upgrade_automatic_retry));
-            if (context.getResources().getString(R.string.status_connectivity_failed).equals(status) && isAutomaticUpgrade) {
-                Log.d(TAG, "Ignoring request from agent as service waiting for WiFi to start upgrade.");
-                return;
-            } else if (context.getResources().getString(R.string.status_started).equals(status)) {
-                Log.d(TAG, "Checking for existing download. Will proceed this request if current download is no longer ongoing.");
-                Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
-                        context.getResources().getString(R.string.status_init));
-                Timer timeoutTimer = new Timer();
-                timeoutTimer.schedule(new TimerTask(){
-                    @Override
-                    public void run() {
-                        if (context.getResources().getString(R.string.status_init)
-                                .equals(Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status)))) {
-                            Log.d(TAG, "Download is no longer ongoing. Proceeding download request from the agent.");
-                            OTADownload otaDownload = new OTADownload(context);
-                            otaDownload.startOTA();
+                String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
+                boolean isAutomaticUpgrade = Preference.getBoolean(context, context.getResources()
+                        .getString(R.string.firmware_upgrade_automatic_retry));
+
+                if (Constants.Status.WIFI_OFF.equals(status) && isAutomaticUpgrade) {
+                    String msg = "Ignoring request from agent as service waiting for WiFi to start upgrade.";
+                    Log.d(TAG, msg);
+                    CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.PENDING,
+                            Constants.Status.OTA_UPGRADE_PENDING, msg);
+                    return;
+                } else if (Constants.Status.OTA_UPGRADE_ONGOING.equals(status)) {
+                    String msg = "Checking for existing download. Will proceed this request if current download is no longer ongoing.";
+                    Log.d(TAG, msg);
+                    CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.PENDING, Constants.Status.OTA_UPGRADE_ONGOING, msg);
+                    Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                            context.getResources().getString(R.string.status_init));
+                    Timer timeoutTimer = new Timer();
+                    timeoutTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (context.getResources().getString(R.string.status_init)
+                                    .equals(Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status)))) {
+                                Log.d(TAG, "Download is no longer ongoing. Proceeding download request from the agent.");
+                                OTADownload otaDownload = new OTADownload(context);
+                                otaDownload.startOTA();
+                            } else {
+                                String msg = "Request ignored because another download is ongoing.";
+                                Log.d(TAG, msg);
+                                CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE, Constants.Status.OTA_UPGRADE_ONGOING, msg);
+                            }
                         }
-                    }
-                }, Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
-                return;
+                    }, Constants.FIRMWARE_UPGRADE_READ_TIMEOUT);
+                    return;
+                }
             }
 
             //Prepare for upgrade
@@ -564,33 +590,48 @@ public class EMMSystemService extends IntentService {
     }
 
     private void publishFirmwareDownloadProgress() {
-        long progress;
-        JSONObject result = new JSONObject();
-        if (Preference.getString(context, context.getResources().getString(R.string.firmware_download_progress)) != null) {
-            progress = Long.valueOf(Preference.getString(context, context.getResources().getString(
-                    R.string.firmware_download_progress)));
-        } else {
-            progress = DEFAULT_STATE_INFO_CODE;
+        String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
+        switch (status){
+            case Constants.Status.WIFI_OFF:
+                if (Preference.getBoolean(context, context.getResources()
+                        .getString(R.string.firmware_upgrade_automatic_retry))) {
+                    CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
+                            Constants.Code.PENDING, Constants.Status.WIFI_OFF, null);
+                } else {
+                    CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
+                            Constants.Code.FAILURE, Constants.Status.WIFI_OFF, null);
+                }
+                break;
+            case Constants.Status.NETWORK_UNREACHABLE:
+                CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
+                        Constants.Code.PENDING, Constants.Status.NETWORK_UNREACHABLE, null);
+                break;
+            case Constants.Status.BATTERY_LEVEL_INSUFFICIENT_TO_DOWNLOAD:
+                CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
+                        Constants.Code.PENDING, Constants.Status.NETWORK_UNREACHABLE, null);
+                break;
+            case Constants.Status.OTA_UPGRADE_ONGOING:
+                long progress;
+                JSONObject result = new JSONObject();
+                if (Preference.getString(context, context.getResources().getString(R.string.firmware_download_progress)) != null) {
+                    progress = Long.valueOf(Preference.getString(context, context.getResources().getString(
+                            R.string.firmware_download_progress)));
+                } else {
+                    progress = DEFAULT_STATE_INFO_CODE;
+                }
+                try {
+                    result.put("progress", String.valueOf(progress));
+                    CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
+                            Constants.Code.SUCCESS, Constants.Status.OTA_UPGRADE_ONGOING,
+                            result.toString());
+                } catch (JSONException e) {
+                    String error = "Failed to create JSON object when publishing OTA progress.";
+                    Log.e(TAG, error, e);
+                    CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
+                            Constants.Code.FAILURE, Constants.Status.INTERNAL_ERROR, error);
+                }
+                break;
         }
-        try {
-            result.put("progress", String.valueOf(progress));
-            sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS, Constants.Status.SUCCESSFUL,
-                          result.toString());
-        } catch (JSONException e) {
-            Log.e(TAG, "Failed to create JSON object when publishing OTA progress.");
-            sendBroadcast(Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS, Constants.Status.SUCCESSFUL,
-                          String.valueOf(DEFAULT_STATE_INFO_CODE));
-        }
-    }
-
-    private void sendBroadcast(String code, String status, String payload) {
-        Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(Constants.SYSTEM_APP_ACTION_RESPONSE);
-        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        broadcastIntent.putExtra(Constants.CODE, code);
-        broadcastIntent.putExtra(Constants.STATUS, status);
-        broadcastIntent.putExtra(Constants.PAYLOAD, payload);
-        context.sendBroadcastAsUser(broadcastIntent, android.os.Process.myUserHandle());
     }
 
     private void disableHardLock() {
@@ -607,11 +648,12 @@ public class EMMSystemService extends IntentService {
         buildDate = SystemProperties.get(BUILD_DATE_UTC_PROPERTY);
         try {
             result.put("buildDate", buildDate);
-            sendBroadcast(Constants.Operation.GET_FIRMWARE_BUILD_DATE, Constants.Status.SUCCESSFUL,
+            CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_BUILD_DATE, Constants.Code.SUCCESS, Constants.Status.SUCCESSFUL,
                           result.toString());
         } catch (JSONException e) {
-            Log.e(TAG, "Failed to create JSON object when publishing OTA progress.");
-            sendBroadcast(Constants.Operation.GET_FIRMWARE_BUILD_DATE, Constants.Status.SUCCESSFUL,
+            String error = "Failed to create JSON object when publishing OTA progress.";
+            Log.e(TAG, error, e);
+            CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_BUILD_DATE, Constants.Code.FAILURE, Constants.Status.INTERNAL_ERROR,
                           String.valueOf(DEFAULT_STATE_INFO_CODE));
         }
     }

@@ -44,7 +44,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
     private static final String INTENT_KEY_PAYLOAD = "payload";
     private static final String INTENT_KEY_STATUS = "status";
     private static final String INTENT_KEY_SERVER = "server";
-    private static final String INTENT_KEY_CODE = "code";
+    private static final String INTENT_KEY_OPERATION_CODE = "operation";
     private static final String INTENT_KEY_APP_URI = "appUri";
     private static final String INTENT_KEY_APP_NAME = "appName";
     private static final String INTENT_KEY_MESSAGE = "message";
@@ -66,7 +66,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
         context = this.getApplicationContext();
         utils = new ServerConfig();
         if (extras != null) {
-            operationCode = extras.getString(INTENT_KEY_CODE);
+            operationCode = extras.getString(INTENT_KEY_OPERATION_CODE);
 
             if (extras.containsKey(INTENT_KEY_APP_URI)) {
                 appUri = extras.getString(INTENT_KEY_APP_URI);
@@ -104,11 +104,11 @@ public class ApplicationManagementService extends IntentService implements APIRe
     /**
      * Executes device management operations on the device.
      *
-     * @param code - Operation object.
+     * @param operation - Operation object.
      */
-    public void doTask(String code) {
+    public void doTask(String operation) {
         ApplicationManager applicationManager = new ApplicationManager(context);
-        switch (code) {
+        switch (operation) {
             case Constants.Operation.GET_APPLICATION_LIST:
                 getAppListFromServer();
                 break;
