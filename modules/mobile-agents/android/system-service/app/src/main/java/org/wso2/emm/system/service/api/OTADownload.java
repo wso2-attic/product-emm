@@ -56,7 +56,7 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
     public OTADownload(Context context) {
         this.context = context;
         Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
-                context.getResources().getString(R.string.status_init));
+                Constants.Status.REQUEST_PLACED);
         try {
             otaServerManager = new OTAServerManager(this.context);
             otaServerManager.setStateChangeListener(this);
@@ -218,28 +218,32 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
 
                         } else {
                             if (checkNetworkOnline()) {
-                                boolean isAutomaticRetryEnabled = Preference.getBoolean(context, context.getResources().getString(R.string.firmware_upgrade_automatic_retry));
+                                Boolean isAutomaticRetry = (Preference.hasPreferenceKey(context, context.getResources()
+                                        .getString(R.string.firmware_upgrade_automatic_retry)) && Preference.getBoolean(context, context.getResources()
+                                        .getString(R.string.firmware_upgrade_automatic_retry))) || !Preference.hasPreferenceKey(context, context.getResources()
+                                        .getString(R.string.firmware_upgrade_automatic_retry));
+
                                 if (getBatteryLevel(context) >= Constants.REQUIRED_BATTERY_LEVEL_TO_FIRMWARE_UPGRADE) {
                                     otaServerManager.startDownloadUpgradePackage(otaServerManager);
-                                } else if (isAutomaticRetryEnabled) {
-                                    Preference.putString(context, context.getResources().getString(R.string.upgrade_install_status),
+                                } else if (isAutomaticRetry) {
+                                    Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
                                             Constants.Status.BATTERY_LEVEL_INSUFFICIENT_TO_DOWNLOAD);
                                     Log.e(TAG, "Upgrade download has been differed due to insufficient battery level.");
                                 } else {
                                     String message = "Upgrade download has been failed due to insufficient battery level.";
-                                    Preference.putString(context, context.getResources().getString(R.string.upgrade_install_status),
+                                    Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
                                             Constants.Status.BATTERY_LEVEL_INSUFFICIENT_TO_DOWNLOAD);
                                     Log.e(TAG, message);
                                     CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
                                             Constants.Status.BATTERY_LEVEL_INSUFFICIENT_TO_DOWNLOAD, message);
-                                    CommonUtils.callAgentApp(context, Constants.Operation.UPGRADE_FIRMWARE, 0, message);
+                                    CommonUtils.callAgentApp(context, Constants.Operation.FIRMWARE_UPGRADE_FAILURE, 0, message);
                                 }
                             } else {
                                 String message = "Connection failure when starting upgrade download.";
                                 Log.e(TAG, message);
                                 CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
                                               Constants.Status.NETWORK_UNREACHABLE, message);
-                                CommonUtils.callAgentApp(context, Constants.Operation.UPGRADE_FIRMWARE, 0, message);
+                                CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, message);
                             }
                         }
                     }

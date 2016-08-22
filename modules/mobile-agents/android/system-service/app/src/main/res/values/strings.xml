@@ -19,7 +19,6 @@
     <string name="upgrade_differed_due_to_battery">Firmware upgrade differed due to insufficient battery level. Please connect your device to the charger. Upgrade will continue when the battery level reach 50%.</string>
     <string name="status_failed">failed</string>
     <string name="status_success">success</string>
-    <string name="status_init">init</string>
     <string name="txt_lock_activity">Device is locked. Please contact administrator</string>
     <string name="txt_unlock_activity">Device is Unlocked</string>
     <string name="title_activity_lock">LockActivity</string>

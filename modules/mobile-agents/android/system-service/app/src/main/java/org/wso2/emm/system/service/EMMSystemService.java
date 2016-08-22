@@ -181,8 +181,9 @@ public class EMMSystemService extends IntentService {
                         case Constants.Operation.GET_FIRMWARE_BUILD_DATE:
                         case Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS:
                             doTask(operationCode);
+                            break;
                         default:
-                            Log.e(TAG, "Invalid operation code received");
+                            Log.e(TAG, "Invalid operation code: " + operationCode);
                             break;
                     }
                 }
@@ -195,12 +196,12 @@ public class EMMSystemService extends IntentService {
         String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
         if (Constants.Status.OTA_UPGRADE_ONGOING.equals(status)) {
             Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
-                    context.getResources().getString(R.string.status_init));
+                    Constants.Status.REQUEST_PLACED);
             Timer timeoutTimer = new Timer();
             timeoutTimer.schedule(new TimerTask(){
                 @Override
                 public void run() {
-                    if (context.getResources().getString(R.string.status_init)
+                    if (Constants.Status.REQUEST_PLACED
                             .equals(Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status)))) {
                         if (Preference.getBoolean(context, context.getResources().getString(R.string.firmware_upgrade_automatic_retry))) {
                             Log.i(TAG, "Found incomplete firmware download. Proceeding with last download request from the agent.");
@@ -413,17 +414,20 @@ public class EMMSystemService extends IntentService {
                     schedule = (String) upgradeData.get(context.getResources().getString(R.string.alarm_schedule));
                 }
 
-                boolean isAutomaticUpgrade = true;
+                boolean isAutomaticRetry = (Preference.hasPreferenceKey(context, context.getResources()
+                        .getString(R.string.firmware_upgrade_automatic_retry)) && Preference.getBoolean(context, context.getResources()
+                        .getString(R.string.firmware_upgrade_automatic_retry))) || !Preference.hasPreferenceKey(context, context.getResources()
+                        .getString(R.string.firmware_upgrade_automatic_retry));
                 if (!upgradeData.isNull(context.getResources().getString(R.string.firmware_upgrade_automatic_retry))) {
-                    isAutomaticUpgrade = upgradeData.getBoolean(context.getResources()
+                    isAutomaticRetry = upgradeData.getBoolean(context.getResources()
                             .getString(R.string.firmware_upgrade_automatic_retry));
-                    if (!isAutomaticUpgrade){
+                    if (!isAutomaticRetry){
                         Log.i(TAG, "Automatic retry on firmware upgrade failure is disabled.");
                     }
                 }
 
                 Preference.putBoolean(context, context.getResources()
-                        .getString(R.string.firmware_upgrade_automatic_retry), isAutomaticUpgrade);
+                        .getString(R.string.firmware_upgrade_automatic_retry), isAutomaticRetry);
 
                 if (!upgradeData.isNull(context.getResources().getString(R.string.firmware_server))) {
                     server = (String) upgradeData.get(context.getResources().getString(R.string.firmware_server));
@@ -475,12 +479,12 @@ public class EMMSystemService extends IntentService {
                     Log.d(TAG, msg);
                     CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.PENDING, Constants.Status.OTA_UPGRADE_ONGOING, msg);
                     Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
-                            context.getResources().getString(R.string.status_init));
+                            Constants.Status.REQUEST_PLACED);
                     Timer timeoutTimer = new Timer();
                     timeoutTimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            if (context.getResources().getString(R.string.status_init)
+                            if (Constants.Status.REQUEST_PLACED
                                     .equals(Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status)))) {
                                 Log.d(TAG, "Download is no longer ongoing. Proceeding download request from the agent.");
                                 OTADownload otaDownload = new OTADownload(context);
@@ -591,24 +595,33 @@ public class EMMSystemService extends IntentService {
 
     private void publishFirmwareDownloadProgress() {
         String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
+        Log.d(TAG, "Current status: " + status);
+        boolean isAutomaticRetry = (Preference.hasPreferenceKey(context, context.getResources()
+                .getString(R.string.firmware_upgrade_automatic_retry)) && Preference.getBoolean(context, context.getResources()
+                .getString(R.string.firmware_upgrade_automatic_retry))) || !Preference.hasPreferenceKey(context, context.getResources()
+                .getString(R.string.firmware_upgrade_automatic_retry));
+        String statusCode = isAutomaticRetry ? Constants.Code.PENDING : Constants.Code.FAILURE;
+
         switch (status){
             case Constants.Status.WIFI_OFF:
-                if (Preference.getBoolean(context, context.getResources()
-                        .getString(R.string.firmware_upgrade_automatic_retry))) {
-                    CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
-                            Constants.Code.PENDING, Constants.Status.WIFI_OFF, null);
-                } else {
-                    CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
-                            Constants.Code.FAILURE, Constants.Status.WIFI_OFF, null);
-                }
+                CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
+                            statusCode, Constants.Status.WIFI_OFF, null);
                 break;
             case Constants.Status.NETWORK_UNREACHABLE:
                 CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
-                        Constants.Code.PENDING, Constants.Status.NETWORK_UNREACHABLE, null);
+                        statusCode, Constants.Status.NETWORK_UNREACHABLE, null);
                 break;
             case Constants.Status.BATTERY_LEVEL_INSUFFICIENT_TO_DOWNLOAD:
                 CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
-                        Constants.Code.PENDING, Constants.Status.NETWORK_UNREACHABLE, null);
+                        statusCode, Constants.Status.BATTERY_LEVEL_INSUFFICIENT_TO_DOWNLOAD, null);
+                break;
+            case Constants.Status.LOW_DISK_SPACE:
+                CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
+                        Constants.Code.FAILURE, Constants.Status.LOW_DISK_SPACE, null);
+                break;
+            case Constants.Status.REQUEST_PLACED:
+                CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
+                        Constants.Code.PENDING, Constants.Status.REQUEST_PLACED, null);
                 break;
             case Constants.Status.OTA_UPGRADE_ONGOING:
                 long progress;

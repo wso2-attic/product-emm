@@ -130,7 +130,7 @@ public class Constants {
 
 		public static final String SUCCESSFUL = "2000";
 		public static final String OTA_UPGRADE_ONGOING = "2001";
-		public static final String ACCEPT = "2002";
+		public static final String REQUEST_PLACED = "2002";
 		public static final String USER_CANCELED = "3000";
 		public static final String MALFORMED_REQUEST = "4000";
 		public static final String BATTERY_LEVEL_INSUFFICIENT_TO_DOWNLOAD = "4001";

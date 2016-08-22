@@ -212,6 +212,18 @@ public class Constants {
 	/**
 	 * Status codes
 	 */
+	public final class Code {
+		private Code(){
+			throw new AssertionError();
+		}
+		public static final String SUCCESS = "200";
+		public static final String PENDING = "300";
+		public static final String FAILURE = "400";
+	}
+
+	/**
+	 * Sub Status codes
+	 */
 	public final class Status {
 		private Status(){
 			throw new AssertionError();
