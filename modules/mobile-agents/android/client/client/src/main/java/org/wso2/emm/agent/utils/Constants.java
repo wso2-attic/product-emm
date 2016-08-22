@@ -121,7 +121,7 @@ public class Constants {
 	public static final String STATUS = "status";
 	public static final String RESPONSE = "response";
 	public static final String PAYLOAD = "payLoad";
-	public static final String CODE = "code";
+	public static final String OPERATION_CODE = "operation";
 	public static final String TYPE = "type";
 	public static final String ID = "id";
 	public static final String TYPE_COMMAND = "COMMAND";

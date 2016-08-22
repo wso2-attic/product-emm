@@ -37,6 +37,7 @@ public class Constants {
 	public static final String STATUS = "status";
 	public static final String PAYLOAD = "payload";
 	public static final String CODE = "code";
+	public static final String OPERATION = "operation";
 	public static final String SYSTEM_APP_ACTION_RESPONSE = "org.wso2.emm.system.service.MESSAGE_PROCESSED";
 	public static final String AGENT_APP_SERVICE_NAME = "org.wso2.emm.agent.START_SERVICE";
 	public static final boolean DEBUG_MODE_ENABLED = false;
@@ -120,22 +121,44 @@ public class Constants {
 	}
 
 	/**
-	 * Status codes
+	 * Sub Status codes
 	 */
 	public final class Status {
 		private Status(){
 			throw new AssertionError();
 		}
-		public static final String SUCCESSFUL = "200";
-		public static final String CREATED = "201";
-		public static final String ACCEPT = "202";
-		public static final String AUTHENTICATION_FAILED = "400";
-		public static final String CONNECTION_FAILED = "400";
-		public static final String INVALID_PACKAGE = "402";
-		public static final String MALFORMED_OTA_URL = "403";
-		public static final String LOW_DISK_SPACE = "404";
-		public static final String CANCELED = "405";
-		public static final String INTERNAL_SERVER_ERROR = "500";
+
+		public static final String SUCCESSFUL = "2000";
+		public static final String OTA_UPGRADE_ONGOING = "2001";
+		public static final String ACCEPT = "2002";
+		public static final String USER_CANCELED = "3000";
+		public static final String MALFORMED_REQUEST = "4000";
+		public static final String BATTERY_LEVEL_INSUFFICIENT_TO_DOWNLOAD = "4001";
+		public static final String WIFI_OFF = "4002";
+		public static final String NETWORK_UNREACHABLE = "4003";
+		public static final String NO_UPGRADE_FOUND = "4004";
+		public static final String UPDATE_INFO_NOT_READABLE = "4005";
+		public static final String OTA_DOWNLOAD_FAILED = "4006";
+		public static final String OTA_IMAGE_INSTALL_FAILED = "4007";
+		public static final String LOW_DISK_SPACE = "4008";
+		public static final String MALFORMED_OTA_URL = "4009";
+		public static final String OTA_UPGRADE_PENDING = "4010";
+		public static final String BATTERY_LEVEL_INSUFFICIENT_TO_INSTALL = "4011";
+		public static final String OTA_IMAGE_VERIFICATION_FAILED = "4012";
+		public static final String CONNECTION_FAILED = "4013";
+		public static final String INTERNAL_ERROR = "5001";
+	}
+
+	/**
+	 * Status codes
+	 */
+	public final class Code {
+		private Code(){
+			throw new AssertionError();
+		}
+		public static final String SUCCESS = "200";
+		public static final String PENDING = "300";
+		public static final String FAILURE = "400";
 	}
 
 }

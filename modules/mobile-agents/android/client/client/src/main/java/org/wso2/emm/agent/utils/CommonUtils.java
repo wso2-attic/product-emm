@@ -390,7 +390,7 @@ public class CommonUtils {
 			if (explicitIntent != null) {
 				intent = explicitIntent;
 			}
-			intent.putExtra("code", operation);
+			intent.putExtra(Constants.OPERATION_CODE, operation);
 			intent.setPackage(Constants.PACKAGE_NAME);
 
 			if (appUri != null) {

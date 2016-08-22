@@ -87,7 +87,9 @@ public class AlarmUtils {
             alarmManager.set(AlarmManager.RTC_WAKEUP, startTime, pendingIntent);
             Log.i(TAG, "Upgrade has been scheduled to " + formatter.format(date));
         } catch (ParseException e) {
-            Log.e(TAG, operation + ": Unable to parse datetime '" + time + "' to '" + Constants.DATE_FORMAT + "'");
+            String error = operation + ": Unable to parse datetime '" + time + "' to '" + Constants.DATE_FORMAT + "'";
+            Log.e(TAG, error, e);
+            throw e;
         }
     }
 
