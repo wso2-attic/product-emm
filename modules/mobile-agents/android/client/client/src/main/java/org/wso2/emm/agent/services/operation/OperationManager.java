@@ -616,7 +616,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             operation.setPayLoad(result.toString());
 
             if (status.equals(resources.getString(R.string.shared_pref_default_status))) {
-                operation.setStatus(resources.getString(R.string.operation_value_completed));
+                operation.setStatus(resources.getString(R.string.operation_value_progress));
                 resultBuilder.build(operation);
 
                 if (Constants.DEBUG_MODE_ENABLED) {

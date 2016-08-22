@@ -51,11 +51,11 @@ public class SystemServiceResponseReceiver extends BroadcastReceiver {
                     break;
                 case Constants.Operation.SILENT_INSTALL_APPLICATION:
                     result = new JSONObject(intent.getStringExtra("payload"));
-                    if (Constants.Code.FAILURE.equals(code) && result.has("appInstallStatus")) {
+                    if (Constants.Code.SUCCESS.equals(code) && result.has("appInstallStatus")) {
                         Preference.putString(context, context.getResources().getString(R.string.app_install_status),
                                              result.getString("appInstallStatus"));
                     }
-                    if (Constants.Status.SUCCESSFUL.equals(status) && result.has("appInstallFailedMessage")) {
+                    if (Constants.Code.FAILURE.equals(code) && result.has("appInstallFailedMessage")) {
                         Preference.putString(context, context.getResources().getString(R.string.app_install_failed_message),
                                              result.getString("appInstallFailedMessage"));
                     }

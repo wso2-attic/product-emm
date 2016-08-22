@@ -410,10 +410,17 @@ public class CommonUtils {
 									.getString(R.string.firmware_upgrade_automatic_retry), isFirmwareUpgradeAutoRetry);
 							command = upgradeData.toString();
 							Log.d(TAG, "Updated payload: " + command);
-						} else {
+						} else if (!upgradeData.isNull(context.getResources()
+								.getString(R.string.firmware_upgrade_automatic_retry))){
 							Preference.putBoolean(context, context.getResources()
 									.getString(R.string.is_automatic_firmware_upgrade), upgradeData.getBoolean(context.getResources()
 									.getString(R.string.firmware_upgrade_automatic_retry)));
+						} else {
+							upgradeData.put(context.getResources()
+									.getString(R.string.firmware_upgrade_automatic_retry), true);
+							Preference.putBoolean(context, context.getResources()
+									.getString(R.string.is_automatic_firmware_upgrade), true);
+							Log.d(TAG, "Updated payload: " + command);
 						}
 					} catch (JSONException e) {
 						Log.e(TAG, "Could not parse Firmware upgrade operation", e);
