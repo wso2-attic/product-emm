@@ -27,7 +27,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -40,9 +39,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toast;
+
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,6 +63,7 @@ import org.wso2.emm.agent.utils.CommonDialogUtils;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
@@ -449,7 +451,10 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 				!= PackageManager.PERMISSION_GRANTED) {
 
 			ActivityCompat.requestPermissions(AuthenticationActivity.this,
-					new String[]{android.Manifest.permission.READ_PHONE_STATE},
+					new String[]{android.Manifest.permission.READ_PHONE_STATE,
+							android.Manifest.permission.ACCESS_COARSE_LOCATION,
+							android.Manifest.permission.ACCESS_FINE_LOCATION,
+							android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
 					110);
 		}else{
 			getConfigurationsFromServer();
