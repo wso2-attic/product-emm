@@ -1,5 +1,62 @@
 {
   "PUT" : {
     "responseMessage": "Device information has modified successfully."
+  },
+  "GET" : {
+    "devices":[
+      {
+        "id":1,
+        "name":"milan",
+        "type":"android",
+        "description":"milan123",
+        "deviceIdentifier":"1234",
+        "enrolmentInfo":{
+          "id":1,
+          "dateOfEnrolment":1471614410121,
+          "dateOfLastUpdate":1471614410373,
+          "ownership":"BYOD",
+          "status":"REMOVED",
+          "owner":"admin"
+        },
+        "properties":[
+          {
+            "name":"IMEI",
+            "value":"123123123"
+          },
+          {
+            "name":"IMSI",
+            "value":"123123123"
+          },
+          {
+            "name":"DEVICE_MODEL"
+          },
+          {
+            "name":"OS_VERSION"
+          },
+          {
+            "name":"OS_BUILD_DATE"
+          },
+          {
+            "name":"VENDOR"
+          },
+          {
+            "name":"SERIAL"
+          },
+          {
+            "name":"DEVICE_INFO"
+          },
+          {
+            "name":"DEVICE_NAME"
+          },
+          {
+            "name":"GCM_TOKEN"
+          }
+        ],
+        "applications":[
+
+        ]
+      }
+    ],
+    "count":1
   }
 }
