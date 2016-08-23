@@ -46,42 +46,13 @@ public class NotificationManagement extends TestBase {
         client.post(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT, enrollmentData.toString());
     }
 
-    @Test(description = "Test add notification.")
-    public void testAddNotification() throws Exception {
-        MDMResponse response = client.post(Constants.NotificationManagement.NOTIFICATION_ENDPOINT,
-                PayloadGenerator.getJsonPayload(
-                        Constants.NotificationManagement.NOTIFICATION_PAYLOAD_FILE_NAME ,
-                        Constants.HTTP_METHOD_POST).toString());
-        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                        Constants.NotificationManagement.NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_POST).toString(),
-                response.getBody(), true);
-    }
-
-    @Test(description = "Test add notification with erroneous payload.")
-    public void testAddNotificationWithErroneousPayload() throws Exception {
-        MDMResponse response = client.post(Constants.NotificationManagement.NOTIFICATION_ENDPOINT,
-                PayloadGenerator.getJsonPayload(
-                        Constants.NotificationManagement.NOTIFICATION_ERRONEOUS_PAYLOAD_FILE_NAME ,
-                        Constants.HTTP_METHOD_POST).toString());
-        Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
-    }
-
-    @Test(description = "Test update notification.", dependsOnMethods = { "testAddNotification"})
+    @Test(description = "Test update notification.")
     public void testUpdateNotification() throws Exception {
-        MDMResponse response = client.put(Constants.NotificationManagement.NOTIFICATION_UPDATE_ENDPOINT,
-                PayloadGenerator.getJsonPayload(
-                        Constants.NotificationManagement.NOTIFICATION_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_PUT).toString());
-        Assert.assertEquals(HttpStatus.SC_ACCEPTED, response.getStatus());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.NotificationManagement.NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_PUT).toString(),
-                response.getBody(), true);
-
+        MDMResponse response = client.put(Constants.NotificationManagement.NOTIFICATION_UPDATE_ENDPOINT, "");
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
-    @Test(description = "Test get notification.", dependsOnMethods = { "testUpdateNotification"})
+    @Test(description = "Test get notification.")
     public void testGetNotification() throws Exception {
         MDMResponse response = client.get(Constants.NotificationManagement.NOTIFICATION_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());

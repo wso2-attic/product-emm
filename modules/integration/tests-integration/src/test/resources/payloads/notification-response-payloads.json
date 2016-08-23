@@ -4,7 +4,7 @@
     "messageFromServer":"Notification has added successfully."
   },
   "PUT":{
-    "statusCode":202,
+    "statusCode":200,
     "messageFromServer":"Notification status updated successfully."
   }
 }
