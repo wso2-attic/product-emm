@@ -170,13 +170,13 @@ public class OperationManagerDeviceOwner extends OperationManager {
                     if(data.has(getContextResources().getString(R.string.app_schedule))){
                         schedule = data.getString(getContextResources().getString(R.string.app_schedule));
                     }
-                    operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+                    operation.setStatus(getContextResources().getString(R.string.operation_value_progress));
                     getResultBuilder().build(operation);
                     getAppList().installApp(appUrl, schedule);
 
                 } else if (type.equalsIgnoreCase(getContextResources().getString(R.string.intent_extra_public))) {
                     appUrl = data.getString(getContextResources().getString(R.string.app_identifier));
-                    operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+                    operation.setStatus(getContextResources().getString(R.string.operation_value_progress));
                     getResultBuilder().build(operation);
                     triggerGooglePlayApp(appUrl);
 

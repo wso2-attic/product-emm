@@ -121,7 +121,7 @@ public class Constants {
 	public static final String STATUS = "status";
 	public static final String RESPONSE = "response";
 	public static final String PAYLOAD = "payLoad";
-	public static final String CODE = "code";
+	public static final String OPERATION_CODE = "operation";
 	public static final String TYPE = "type";
 	public static final String ID = "id";
 	public static final String TYPE_COMMAND = "COMMAND";
@@ -211,6 +211,18 @@ public class Constants {
 
 	/**
 	 * Status codes
+	 */
+	public final class Code {
+		private Code(){
+			throw new AssertionError();
+		}
+		public static final String SUCCESS = "200";
+		public static final String PENDING = "300";
+		public static final String FAILURE = "400";
+	}
+
+	/**
+	 * Sub Status codes
 	 */
 	public final class Status {
 		private Status(){

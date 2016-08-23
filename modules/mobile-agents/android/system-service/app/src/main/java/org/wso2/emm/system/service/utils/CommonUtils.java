@@ -42,7 +42,7 @@ public class CommonUtils {
         if (explicitIntent != null) {
             intent = explicitIntent;
         }
-        intent.putExtra("code", operation);
+        intent.putExtra("operation", operation);
         if (operationId != 0) {
             intent.putExtra("id", operationId);
         }
@@ -76,5 +76,18 @@ public class CommonUtils {
         explicitIntent.setComponent(component);
 
         return explicitIntent;
+    }
+
+    public static void sendBroadcast(Context context, String operation, String code, String status, String payload) {
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(Constants.SYSTEM_APP_ACTION_RESPONSE);
+        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        broadcastIntent.putExtra(Constants.OPERATION, operation);
+        broadcastIntent.putExtra(Constants.CODE, code);
+        broadcastIntent.putExtra(Constants.STATUS, status);
+        if (payload != null){
+            broadcastIntent.putExtra(Constants.PAYLOAD, payload);
+        }
+        context.sendBroadcastAsUser(broadcastIntent, android.os.Process.myUserHandle());
     }
 }
