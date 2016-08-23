@@ -17,15 +17,8 @@
  */
 package org.wso2.emm.agent.api;
 
-import java.util.List;
-
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
-import org.wso2.emm.agent.R;
-import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
-import org.wso2.emm.agent.utils.CommonUtils;
-import org.wso2.emm.agent.utils.Constants;
-import org.wso2.emm.agent.utils.Preference;
 import android.content.Context;
 import android.content.res.Resources;
 import android.hardware.Sensor;
@@ -35,6 +28,14 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
+
+import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.utils.CommonUtils;
+import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
+
+import java.util.List;
 
 /**
  * This class represents all the device information related APIs.

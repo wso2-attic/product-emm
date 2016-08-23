@@ -45,10 +45,17 @@ public class NotificationDAO {
 
     public void open() throws SQLException {
         db = dbHelper.getWritableDatabase();
+        if(db != null){
+            db.beginTransaction();
+        }
     }
 
     public void close() {
-        dbHelper.close();
+        if(db != null){
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            db.close();
+        }
     }
 
     public void addNotification(Notification notification) {
