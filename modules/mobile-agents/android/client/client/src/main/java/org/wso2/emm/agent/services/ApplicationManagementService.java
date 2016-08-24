@@ -171,7 +171,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
                         getString(R.string.firmware_upgrade_retries));
                 boolean isFirmwareUpgradeAutoRetry = Preference.getBoolean(context, context
                         .getResources().getString(R.string.is_automatic_firmware_upgrade));
-                if (retryCount <= Constants.FIRMWARE_UPGRADE_RETRY_COUNT && isFirmwareUpgradeAutoRetry) {
+                if (retryCount < Constants.FIRMWARE_UPGRADE_RETRY_COUNT && isFirmwareUpgradeAutoRetry) {
                     Preference.putInt(context, context.getResources().
                             getString(R.string.firmware_upgrade_retries), ++retryCount);
                     Preference.putBoolean(context, context.getResources().
