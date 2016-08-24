@@ -25,6 +25,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -471,8 +473,8 @@ public class EMMSystemService extends IntentService {
                 boolean isAutomaticUpgrade = Preference.getBoolean(context, context.getResources()
                         .getString(R.string.firmware_upgrade_automatic_retry));
 
-                if (Constants.Status.WIFI_OFF.equals(status) && isAutomaticUpgrade) {
-                    String msg = "Ignoring request from agent as service waiting for WiFi to start upgrade.";
+                if (Constants.Status.WIFI_OFF.equals(status) && isAutomaticUpgrade && !checkNetworkOnline()) {
+                    String msg = "Ignoring request as service waiting for WiFi to start upgrade.";
                     Log.d(TAG, msg);
                     CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.PENDING,
                             Constants.Status.OTA_UPGRADE_PENDING, msg);
@@ -507,6 +509,17 @@ public class EMMSystemService extends IntentService {
             OTADownload otaDownload = new OTADownload(context);
             otaDownload.startOTA();
         }
+    }
+
+    private boolean checkNetworkOnline() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+        boolean status = false;
+        if (info != null && info.isConnectedOrConnecting()) {
+            status = true;
+        }
+
+        return status;
     }
 
     /**
