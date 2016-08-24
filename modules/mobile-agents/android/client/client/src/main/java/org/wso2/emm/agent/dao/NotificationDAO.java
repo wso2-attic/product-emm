@@ -37,10 +37,12 @@ import java.util.List;
 public class NotificationDAO {
 
     private SQLiteDatabase db;
-    private DatabaseHelper dbHelper;
+    private static DatabaseHelper dbHelper;
 
     public NotificationDAO(Context context) {
-        dbHelper = new DatabaseHelper(context);
+        if(dbHelper == null){
+            dbHelper = new DatabaseHelper(context);
+        }
     }
 
     public void open() throws SQLException {
