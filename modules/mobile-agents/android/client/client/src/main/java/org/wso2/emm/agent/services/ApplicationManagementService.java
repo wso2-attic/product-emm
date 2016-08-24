@@ -243,7 +243,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
         broadcastIntent.putExtra(INTENT_KEY_STATUS, status);
         broadcastIntent.putExtra(INTENT_KEY_PAYLOAD, payload);
         broadcastIntent.putExtra(INTENT_KEY_SERVER, utils.getAPIServerURL(context));
-        sendBroadcast(broadcastIntent);
+        sendBroadcastAsUser(broadcastIntent, android.os.Process.myUserHandle());
     }
 
     @Override
