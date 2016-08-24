@@ -175,7 +175,7 @@ public final class Constants {
         public static final String OPERATION_ENDPOINT = "/mdm-android-agent/operation/";
         public static final String LOCK_ENDPOINT = "/mdm-android-agent/operation/lock";
         public static final String UNLOCK_ENDPOINT = "/mdm-android-agent/operation/unlock";
-        public static final String LOCATION_ENDPOINT = "/mdm-android-agent/operation/location";
+        public static final String LOCATION_ENDPOINT = "/api/device-mgt/android/v1.0/admin/devices/location";
         public static final String CLEAR_PASSWORD_ENDPOINT = "/mdm-android-agent/operation/clear-password";
         public static final String CAMERA_ENDPOINT = "/mdm-android-agent/operation/camera";
         public static final String DEVICE_INFO_ENDPOINT = "/mdm-android-agent/operation/device-info";
@@ -190,7 +190,7 @@ public final class Constants {
         public static final String INSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/install-application";
         public static final String UNINSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/uninstall-application";
         public static final String BLACKLIST_APPS_ENDPOINT = "/mdm-android-agent/operation/blacklist-applications";
-        public static final String NOTIFICATION_ENDPOINT = "/mdm-android-agent/operation/notification";
+        public static final String NOTIFICATION_ENDPOINT = "/api/device-mgt/android/v1.0/admin/devices/send-notification";
         public static final String WIFI_ENDPOINT = "/mdm-android-agent/operation/wifi";
         public static final String ENCRYPT_ENDPOINT = "/mdm-android-agent/operation/encrypt";
         public static final String CHANGE_LOCK_ENDPOINT = "/mdm-android-agent/operation/change-lock-code";
@@ -219,7 +219,9 @@ public final class Constants {
         public static final String DEVICE_MANAGEMENT_GROUP = "device-mgt";
         public static final String KEY_DEVICE_ID = "deviceIdentifier";
         public static final String KEY_DEVICE_NAME = "name";
-        public static final String DEVICE_MGT_ENDPOINT = "/mdm-android-agent/device/";
+        public static final String DEVICE_TYPE = "android";
+        public static final String DEVICE_MGT_ENDPOINT = "/api/device-mgt/v1.0/devices/";
+        public static final String DEVICE_MGT_ANDROID_UPDATE_ENDPOINT = "/api/device-mgt/android/v1.0/devices/";
         public static final String LICENSE_SECTION = "This";
         public static final String LICENSE_ENDPOINT = DEVICE_MGT_ENDPOINT + "license";
         public static final String APP_LIST_ENDPOINT = DEVICE_MGT_ENDPOINT + "appList/" +
@@ -339,10 +341,10 @@ public final class Constants {
         private LicenseManagement() { throw new AssertionError(); }
 
         public static final String LICENSE_MANAGEMENT_GROUP = "license-mgt";
-        public static final String GET_LICENSE_ENDPOINT = "/mdm-admin/license/android/en_US";
+        public static final String GET_LICENSE_ENDPOINT = "/api/device-mgt/android/v1.0/configuration/license";
         public static final String GET_LICENSE_ERRONEOUS_ENDPOINT = "/mdm-admin/license";
         public static final String LICENSE_RESPONSE_PAYLOAD_FILE_NAME = "license-response-payloads.json";
-
+        public static final String LICENSE_RESPONSE_PAYLOAD = "This End User License Agreement is Eula.";
     }
 
     public static final class ConfigurationManagement {
@@ -360,11 +362,12 @@ public final class Constants {
         private NotificationManagement() { throw new AssertionError(); }
 
         public static final String NOTIFICATION_MANAGEMENT_GROUP = "notification-mgt";
-        public static final String NOTIFICATION_ENDPOINT = "/mdm-admin/notifications";
+        public static final String NOTIFICATION_ENDPOINT = "/api/device-mgt/v1.0/notifications";
+        public static final String NOTIFICATION_ERRONEOUS_ENDPOINT = "/api/device-mgt/notifications";
         public static final String NOTIFICATION_PAYLOAD_FILE_NAME = "notification-payloads.json";
         public static final String NOTIFICATION_ERRONEOUS_PAYLOAD_FILE_NAME = "notification-erroneous-payloads.json";
         public static final String NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME = "notification-response-payloads.json";
-        public static final String NOTIFICATION_UPDATE_ENDPOINT = "/mdm-admin/notifications/1234567/NEW";
+        public static final String NOTIFICATION_UPDATE_ENDPOINT = "/api/device-mgt/v1.0/notifications/1/mark-checked";
 
     }
 
