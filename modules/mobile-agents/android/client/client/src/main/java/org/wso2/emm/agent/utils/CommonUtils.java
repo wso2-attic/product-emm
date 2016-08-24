@@ -429,7 +429,7 @@ public class CommonUtils {
 				}
 				intent.putExtra("command", command);
 			}
-			context.startService(intent);
+			context.startServiceAsUser(intent, android.os.Process.myUserHandle());
 		} else {
 			Log.e(TAG, "System app not enabled.");
 		}
@@ -442,8 +442,7 @@ public class CommonUtils {
 			if (explicitIntent != null) {
 				intent = explicitIntent;
 			}
-
-			context.startService(intent);
+			context.startServiceAsUser(intent, android.os.Process.myUserHandle());
 		} else {
 			Log.e(TAG, "System app not enabled.");
 		}

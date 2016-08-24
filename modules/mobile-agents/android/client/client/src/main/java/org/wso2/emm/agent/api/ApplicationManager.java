@@ -411,7 +411,7 @@ public class ApplicationManager {
             bookmarkIntent.
                     setAction(resources.getString(R.string.application_package_launcher_install_action));
         }
-        context.sendBroadcast(bookmarkIntent);
+        context.sendBroadcastAsUser(bookmarkIntent, android.os.Process.myUserHandle());
     }
 
     public List<ApplicationInfo> getInstalledApplications() {
