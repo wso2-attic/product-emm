@@ -99,6 +99,6 @@ public class AndroidPolicyManagement extends TestBase {
     public void testRemovePolicyWithoutPolicies() throws Exception {
         MDMResponse response = client.post(Constants.PolicyManagement.REMOVE_POLICY_ENDPOINT,
                 Constants.PolicyManagement.REMOVE_ANDROID_POLICY_PAYLOAD_FILE_NAME);
-        Assert.assertEquals(HttpStatus.SC_NOT_FOUND, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_BAD_REQUEST, response.getStatus());
     }
 }
