@@ -164,13 +164,16 @@ public class EMMSystemService extends IntentService {
                         case Constants.Operation.UPGRADE_FIRMWARE:
                             try {
                                 JSONObject upgradeData = new JSONObject(command);
-                                boolean isAutomaticUpgrade = true;
+                                boolean isAutomaticRetry = (Preference.hasPreferenceKey(context, context.getResources()
+                                        .getString(R.string.firmware_upgrade_automatic_retry)) && Preference.getBoolean(context, context.getResources()
+                                        .getString(R.string.firmware_upgrade_automatic_retry))) || !Preference.hasPreferenceKey(context, context.getResources()
+                                        .getString(R.string.firmware_upgrade_automatic_retry));
                                 if (!upgradeData.isNull(context.getResources().getString(R.string.firmware_upgrade_automatic_retry))) {
-                                    isAutomaticUpgrade = upgradeData.getBoolean(context.getResources()
+                                    isAutomaticRetry = upgradeData.getBoolean(context.getResources()
                                             .getString(R.string.firmware_upgrade_automatic_retry));
                                 }
                                 CommonUtils.callAgentApp(context, Constants.Operation.
-                                        FIRMWARE_UPGRADE_AUTOMATIC_RETRY, 0, (isAutomaticUpgrade ? "true": "false"));
+                                        FIRMWARE_UPGRADE_AUTOMATIC_RETRY, 0, (isAutomaticRetry ? "true": "false"));
                             } catch (JSONException e) {
                                 String error = "Failed to build JSON object form the request: " + command;
                                 Log.e(TAG, error);
