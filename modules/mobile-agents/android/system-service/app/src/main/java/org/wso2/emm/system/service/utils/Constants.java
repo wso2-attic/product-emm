@@ -146,6 +146,7 @@ public class Constants {
 		public static final String BATTERY_LEVEL_INSUFFICIENT_TO_INSTALL = "4011";
 		public static final String OTA_IMAGE_VERIFICATION_FAILED = "4012";
 		public static final String CONNECTION_FAILED = "4013";
+		public static final String FILE_NOT_FOUND = "4014";
 		public static final String INTERNAL_ERROR = "5001";
 	}
 
