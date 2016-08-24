@@ -602,6 +602,12 @@ public class EMMSystemService extends IntentService {
                 .getString(R.string.firmware_upgrade_automatic_retry));
         String statusCode = isAutomaticRetry ? Constants.Code.PENDING : Constants.Code.FAILURE;
 
+        if (status == null) {
+            CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
+                    Constants.Code.SUCCESS, Constants.Status.NO_HISTORY, "History not found");
+            return;
+        }
+
         switch (status){
             case Constants.Status.WIFI_OFF:
                 CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
