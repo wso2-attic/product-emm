@@ -4,23 +4,23 @@
     "description": "Optional",
     "compliance": "enforce",
     "ownershipType": "ANY",
+    "active": false,
     "profile": {
       "profileName": "Camera",
-      "deviceType": {
-        "id": 1
-      },
+      "deviceType": "android",
       "profileFeaturesList": [
         {
           "featureCode": "CAMERA",
-          "deviceTypeId": 1,
+          "deviceType": "android",
           "content": {
-            "enabled": true
+            "enabled": false
           }
         }
       ]
     },
-    "users": [],
-    "roles": []
+    "roles": [
+      "ANY"
+    ]
   },
   "PUT": {
     "policyName": "Camera",
@@ -29,26 +29,26 @@
     "ownershipType": "ANY",
     "profile": {
       "profileName": "Camera",
-      "deviceType": {
-        "id": 1
-      },
+      "deviceType": "android",
       "profileFeaturesList": [
         {
           "featureCode": "CAMERA",
-          "deviceTypeId": 1,
+          "deviceType": "android",
           "content": {
-            "enabled": true
+            "enabled": false
           }
         },
         {
-          "featureCode": "ENCRYPT_STORAGE",
-          "deviceTypeId": 1,
+          "featureCode": "DISALLOW_ADJUST_VOLUME",
+          "deviceType": "android",
           "content": {
-            "encrypted": true
+            "enabled": true
           }
         }
       ]
     },
+    "users": [
+    ],
     "roles": [
       "ANY"
     ]
