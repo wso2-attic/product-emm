@@ -619,6 +619,14 @@ public class EMMSystemService extends IntentService {
                 CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
                         Constants.Code.FAILURE, Constants.Status.LOW_DISK_SPACE, null);
                 break;
+            case Constants.Status.FILE_NOT_FOUND:
+                CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
+                        Constants.Code.FAILURE, Constants.Status.FILE_NOT_FOUND, null);
+                break;
+            case Constants.Status.CONNECTION_FAILED:
+                CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
+                        Constants.Code.FAILURE, Constants.Status.CONNECTION_FAILED, null);
+                break;
             case Constants.Status.REQUEST_PLACED:
                 CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
                         Constants.Code.PENDING, Constants.Status.REQUEST_PLACED, null);
