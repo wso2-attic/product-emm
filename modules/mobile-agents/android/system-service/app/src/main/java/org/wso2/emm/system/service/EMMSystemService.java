@@ -156,17 +156,29 @@ public class EMMSystemService extends IntentService {
                     doTask(operationCode);
                 } else {
                     Log.d(TAG, "Received command from external application. operation code: " + operationCode + " command: " + command);
-                    switch(operationCode){
+                    boolean isAutomaticRetry;
+                    switch (operationCode) {
                         case Constants.Operation.FIRMWARE_UPGRADE_AUTOMATIC_RETRY:
+                            isAutomaticRetry = !"false".equals(command);
                             Preference.putBoolean(context, context.getResources().
-                                    getString(R.string.firmware_upgrade_automatic_retry), !"false".equals(command));
+                                    getString(R.string.firmware_upgrade_automatic_retry), isAutomaticRetry);
+                            if (isAutomaticRetry) {
+                                String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
+                                if (Constants.Status.WIFI_OFF.equals(status) && !checkNetworkOnline()) {
+                                    Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status), Constants.Status.FAILED);
+                                } else if (Constants.Status.BATTERY_LEVEL_INSUFFICIENT_TO_DOWNLOAD.equals(status)) {
+                                    Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status), Constants.Status.FAILED);
+                                } else if (Constants.Status.BATTERY_LEVEL_INSUFFICIENT_TO_INSTALL.equals(Preference.getString(context, context.getResources().getString(R.string.upgrade_install_status)))) {
+                                    Preference.putString(context, context.getResources().getString(R.string.upgrade_install_status), Constants.Status.FAILED);
+                                }
+                            }
                             CommonUtils.callAgentApp(context, Constants.Operation.
                                     FIRMWARE_UPGRADE_AUTOMATIC_RETRY, 0, command); //Sending command as the message
                             break;
                         case Constants.Operation.UPGRADE_FIRMWARE:
                             try {
                                 JSONObject upgradeData = new JSONObject(command);
-                                boolean isAutomaticRetry = (Preference.hasPreferenceKey(context, context.getResources()
+                                isAutomaticRetry = (Preference.hasPreferenceKey(context, context.getResources()
                                         .getString(R.string.firmware_upgrade_automatic_retry)) && Preference.getBoolean(context, context.getResources()
                                         .getString(R.string.firmware_upgrade_automatic_retry))) || !Preference.hasPreferenceKey(context, context.getResources()
                                         .getString(R.string.firmware_upgrade_automatic_retry));
