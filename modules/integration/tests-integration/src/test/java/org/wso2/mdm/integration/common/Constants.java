@@ -301,7 +301,7 @@ public final class Constants {
         private PolicyManagement() { throw new AssertionError();}
 
         public static final String POLICY_MANAGEMENT_GROUP = "policy-mgt";
-        public static final String ADD_POLICY_ENDPOINT= "/mdm-admin/policies/active-policy";
+        public static final String ADD_POLICY_ENDPOINT= "/api/device-mgt/v1.0/policies";
         public static final String GET_ALL_POLICIES_ENDPOINT = "/mdm-admin/policies";
         public static final String POLICY_PRIORITIES_ENDPOINT = "/mdm-admin/policies/priorities";
 
@@ -319,14 +319,16 @@ public final class Constants {
         public static final String POLICY_RESPONSE_PAYLOAD_FILE_NAME = "policy-response-payloads.json";
         public static final String POLICY_PRIORITIES_RESPONSE_PAYLOAD_FILE_NAME = "policy-priories-response-payloads.json";
 
-        public static final String UPDATE_ANDROID_POLICY_ENDPOINT = "/mdm-admin/policies/1";
+        public static final String UPDATE_ANDROID_POLICY_ENDPOINT = "/api/device-mgt/v1.0/policies/1";
         public static String UPDATE_WINDOWS_POLICY_ENDPOINT = "";
+        public static final String UPDATE_POLICY_RESPONSE = "\"Policy has successfully been updated.\"";
 
-        public static final String REMOVE_POLICY_ENDPOINT = "/mdm-admin/policies/bulk-remove";
+        public static final String REMOVE_POLICY_ENDPOINT = "/api/device-mgt/v1.0/policies/remove-policy";
         public static final String REMOVE_ANDROID_POLICY_PAYLOAD_FILE_NAME = "[1]";
         public static String REMOVE_WINDOWS_POLICY_PAYLOAD_FILE_NAME = "";
+        public static final String REMOVE_POLICY_RESPONSE = "\"Policies have been successfully deleted\"";
 
-        public static final String VIEW_POLICY_LIST_ENDPOINT = "/mdm-admin/policies";
+        public static final String VIEW_POLICY_LIST_ENDPOINT = "/api/device-mgt/v1.0/policies";
     }
 
     public static final class FeatureManagement {
