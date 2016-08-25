@@ -96,11 +96,11 @@
             <class name="org.wso2.mdm.integration.role.RoleManagement"/>
         </classes>
     </test>
-    <!--<test name="policy-mgt" preserve-order="true" parallel="false">-->
-        <!--<classes>-->
-            <!--<class name="org.wso2.mdm.integration.policy.AndroidPolicyManagement"/>-->
-        <!--</classes>-->
-    <!--</test>-->
+    <test name="policy-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.policy.AndroidPolicyManagement"/>
+        </classes>
+    </test>
     <!--<test name="windows-policy-mgt" preserve-order="true" parallel="false">-->
         <!--<classes>-->
             <!--<class name="org.wso2.mdm.integration.policy.WindowsPolicyManagement"/>-->
@@ -121,11 +121,11 @@
             <class name="org.wso2.mdm.integration.configuration.ConfigurationManagement"/>
         </classes>
     </test>
-    <!--<test name="notification-mgt" preserve-order="true" parallel="false">-->
-        <!--<classes>-->
-            <!--<class name="org.wso2.mdm.integration.notification.NotificationManagement"/>-->
-        <!--</classes>-->
-    <!--</test>-->
+    <test name="notification-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.notification.NotificationManagement"/>
+        </classes>
+    </test>
     <test name="certificate-mgt" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.mdm.integration.certificate.CertificateManagement"/>
