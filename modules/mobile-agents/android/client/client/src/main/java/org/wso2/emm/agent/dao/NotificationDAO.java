@@ -37,18 +37,27 @@ import java.util.List;
 public class NotificationDAO {
 
     private SQLiteDatabase db;
-    private DatabaseHelper dbHelper;
+    private static DatabaseHelper dbHelper;
 
     public NotificationDAO(Context context) {
-        dbHelper = new DatabaseHelper(context);
+        if(dbHelper == null){
+            dbHelper = new DatabaseHelper(context);
+        }
     }
 
     public void open() throws SQLException {
         db = dbHelper.getWritableDatabase();
+        if(db != null){
+            db.beginTransaction();
+        }
     }
 
     public void close() {
-        dbHelper.close();
+        if(db != null){
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            db.close();
+        }
     }
 
     public void addNotification(Notification notification) {

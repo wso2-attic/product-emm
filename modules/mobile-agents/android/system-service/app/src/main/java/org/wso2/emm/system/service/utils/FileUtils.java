@@ -27,10 +27,14 @@ import java.io.File;
  * Utility class to hold file manipulation methods.
  */
 public class FileUtils {
+
+    public static String getUpgradePackageDirectory(){
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+    }
+
     public static String getUpgradePackageFilePath() {
-        Log.d(FileUtils.class.getName(), "FilePath: " + Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOWNLOADS).getPath() + File.separator + Constants.UPDATE_PACKAGE_NAME);
-        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() +
-               File.separator + Constants.UPDATE_PACKAGE_NAME;
+        String path = getUpgradePackageDirectory();
+        Log.d(FileUtils.class.getName(), path + File.separator + Constants.UPDATE_PACKAGE_NAME);
+        return getUpgradePackageDirectory() + File.separator + Constants.UPDATE_PACKAGE_NAME;
     }
 }

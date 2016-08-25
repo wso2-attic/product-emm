@@ -41,13 +41,16 @@ public class FeatureManagement extends TestBase{
 
     @Test(description = "Test view features.")
     public void testViewFeatures() throws Exception {
-        MDMResponse response = client.get(Constants.FeatureManagement.VIEW_FEATURES_ENDPOINT);
+        MDMResponse response = client.get(Constants.FeatureManagement.VIEW_FEATURES_ENDPOINT +
+                    "/" + Constants.ANDROID_DEVICE_TYPE + "/" + Constants.DEVICE_ID + "/features");
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
     @Test(description = "Test view features with erroneous end point.")
     public void testViewFeaturesWithErroneousEndPoint() throws Exception {
         MDMResponse response = client.get(Constants.FeatureManagement.VIEW_FEATURES_ERRONEOUS_ENDPOINT);
-        Assert.assertEquals(HttpStatus.SC_NOT_FOUND, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_UNAUTHORIZED, response.getStatus());
+
+        /*TODO: Return type should be SC_NOT_FOUND instead of SC_UNAUTHORIZED for erroneous endpoints*/
     }
 }

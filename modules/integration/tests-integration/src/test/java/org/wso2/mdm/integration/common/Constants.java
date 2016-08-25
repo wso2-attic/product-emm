@@ -175,7 +175,7 @@ public final class Constants {
         public static final String OPERATION_ENDPOINT = "/mdm-android-agent/operation/";
         public static final String LOCK_ENDPOINT = "/mdm-android-agent/operation/lock";
         public static final String UNLOCK_ENDPOINT = "/mdm-android-agent/operation/unlock";
-        public static final String LOCATION_ENDPOINT = "/mdm-android-agent/operation/location";
+        public static final String LOCATION_ENDPOINT = "/api/device-mgt/android/v1.0/admin/devices/location";
         public static final String CLEAR_PASSWORD_ENDPOINT = "/mdm-android-agent/operation/clear-password";
         public static final String CAMERA_ENDPOINT = "/mdm-android-agent/operation/camera";
         public static final String DEVICE_INFO_ENDPOINT = "/mdm-android-agent/operation/device-info";
@@ -190,7 +190,7 @@ public final class Constants {
         public static final String INSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/install-application";
         public static final String UNINSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/uninstall-application";
         public static final String BLACKLIST_APPS_ENDPOINT = "/mdm-android-agent/operation/blacklist-applications";
-        public static final String NOTIFICATION_ENDPOINT = "/mdm-android-agent/operation/notification";
+        public static final String NOTIFICATION_ENDPOINT = "/api/device-mgt/android/v1.0/admin/devices/send-notification";
         public static final String WIFI_ENDPOINT = "/mdm-android-agent/operation/wifi";
         public static final String ENCRYPT_ENDPOINT = "/mdm-android-agent/operation/encrypt";
         public static final String CHANGE_LOCK_ENDPOINT = "/mdm-android-agent/operation/change-lock-code";
@@ -305,7 +305,7 @@ public final class Constants {
         private PolicyManagement() { throw new AssertionError();}
 
         public static final String POLICY_MANAGEMENT_GROUP = "policy-mgt";
-        public static final String ADD_POLICY_ENDPOINT= "/mdm-admin/policies/active-policy";
+        public static final String ADD_POLICY_ENDPOINT= "/api/device-mgt/v1.0/policies";
         public static final String GET_ALL_POLICIES_ENDPOINT = "/mdm-admin/policies";
         public static final String POLICY_PRIORITIES_ENDPOINT = "/mdm-admin/policies/priorities";
 
@@ -323,22 +323,24 @@ public final class Constants {
         public static final String POLICY_RESPONSE_PAYLOAD_FILE_NAME = "policy-response-payloads.json";
         public static final String POLICY_PRIORITIES_RESPONSE_PAYLOAD_FILE_NAME = "policy-priories-response-payloads.json";
 
-        public static final String UPDATE_ANDROID_POLICY_ENDPOINT = "/mdm-admin/policies/1";
+        public static final String UPDATE_ANDROID_POLICY_ENDPOINT = "/api/device-mgt/v1.0/policies/1";
         public static String UPDATE_WINDOWS_POLICY_ENDPOINT = "";
+        public static final String UPDATE_POLICY_RESPONSE = "\"Policy has successfully been updated.\"";
 
-        public static final String REMOVE_POLICY_ENDPOINT = "/mdm-admin/policies/bulk-remove";
+        public static final String REMOVE_POLICY_ENDPOINT = "/api/device-mgt/v1.0/policies/remove-policy";
         public static final String REMOVE_ANDROID_POLICY_PAYLOAD_FILE_NAME = "[1]";
         public static String REMOVE_WINDOWS_POLICY_PAYLOAD_FILE_NAME = "";
+        public static final String REMOVE_POLICY_RESPONSE = "\"Policies have been successfully deleted\"";
 
-        public static final String VIEW_POLICY_LIST_ENDPOINT = "/mdm-admin/policies";
+        public static final String VIEW_POLICY_LIST_ENDPOINT = "/api/device-mgt/v1.0/policies";
     }
 
     public static final class FeatureManagement {
         private FeatureManagement() { throw new AssertionError(); }
 
         public static final String FEATURE_MANAGEMENT_GROUP = "feature-mgt";
-        public static final String VIEW_FEATURES_ENDPOINT = "/mdm-admin/features/android";
-        public static final String VIEW_FEATURES_ERRONEOUS_ENDPOINT = "/mdm-admin/features";
+        public static final String VIEW_FEATURES_ENDPOINT = "/api/device-mgt/v1.0/devices";
+        public static final String VIEW_FEATURES_ERRONEOUS_ENDPOINT = "/api/device-mgt/v1.0/devices/features";
     }
 
     public static final class LicenseManagement {
@@ -366,11 +368,12 @@ public final class Constants {
         private NotificationManagement() { throw new AssertionError(); }
 
         public static final String NOTIFICATION_MANAGEMENT_GROUP = "notification-mgt";
-        public static final String NOTIFICATION_ENDPOINT = "/mdm-admin/notifications";
+        public static final String NOTIFICATION_ENDPOINT = "/api/device-mgt/v1.0/notifications";
+        public static final String NOTIFICATION_ERRONEOUS_ENDPOINT = "/api/device-mgt/notifications";
         public static final String NOTIFICATION_PAYLOAD_FILE_NAME = "notification-payloads.json";
         public static final String NOTIFICATION_ERRONEOUS_PAYLOAD_FILE_NAME = "notification-erroneous-payloads.json";
         public static final String NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME = "notification-response-payloads.json";
-        public static final String NOTIFICATION_UPDATE_ENDPOINT = "/mdm-admin/notifications/1234567/NEW";
+        public static final String NOTIFICATION_UPDATE_ENDPOINT = "/api/device-mgt/v1.0/notifications/1/mark-checked";
 
     }
 

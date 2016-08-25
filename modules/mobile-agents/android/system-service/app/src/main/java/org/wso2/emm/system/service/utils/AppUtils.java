@@ -100,22 +100,13 @@ public class AppUtils {
             if (error != null) {
                 result.put("appInstallFailedMessage", error);
             }
-            sendBroadcast(context, Constants.Operation.SILENT_INSTALL_APPLICATION, Constants.Status.SUCCESSFUL,
+            CommonUtils.sendBroadcast(context, Constants.Operation.SILENT_INSTALL_APPLICATION, Constants.Code.SUCCESS, Constants.Status.SUCCESSFUL,
                           result.toString());
         } catch (JSONException e) {
             Log.e(TAG, "Failed to create JSON object when publishing OTA progress.");
-            sendBroadcast(context, Constants.Operation.SILENT_INSTALL_APPLICATION, Constants.Status.SUCCESSFUL,
+            CommonUtils.sendBroadcast(context, Constants.Operation.SILENT_INSTALL_APPLICATION, Constants.Code.FAILURE, Constants.Status.INTERNAL_ERROR,
                           String.valueOf(DEFAULT_STATE_INFO_CODE));
         }
     }
 
-    private static void sendBroadcast(Context context, String code, String status, String payload) {
-        Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(Constants.SYSTEM_APP_ACTION_RESPONSE);
-        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        broadcastIntent.putExtra(Constants.CODE, code);
-        broadcastIntent.putExtra(Constants.STATUS, status);
-        broadcastIntent.putExtra(Constants.PAYLOAD, payload);
-        context.sendBroadcast(broadcastIntent);
-    }
 }
