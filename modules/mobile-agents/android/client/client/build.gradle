@@ -29,7 +29,7 @@ android {
 
     defaultConfig {
         applicationId "org.wso2.emm.agent"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 23
         multiDexEnabled true
     }

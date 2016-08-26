@@ -46,7 +46,7 @@ public class AndroidEnrollment extends TestBase {
         enrollmentData.addProperty(Constants.DEVICE_IDENTIFIER_KEY, Constants.DEVICE_ID);
         MDMResponse response = client.post(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT,
                 enrollmentData.toString());
-        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         Assert.assertTrue(response.getBody().contains(Constants.AndroidEnrollment.ENROLLMENT_RESPONSE_PAYLOAD_FOR_POST));
     }
 

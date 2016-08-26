@@ -39,7 +39,7 @@ public class NetworkConnectedReceiver extends BroadcastReceiver {
                     Intent autoEnrollIntent = new Intent(context, EnrollmentService.class);
                     autoEnrollIntent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                     autoEnrollIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startService(autoEnrollIntent);
+                    context.startServiceAsUser(intent, android.os.Process.myUserHandle());
                 }
                 CommonUtils.callSystemAppInit(context);
             }

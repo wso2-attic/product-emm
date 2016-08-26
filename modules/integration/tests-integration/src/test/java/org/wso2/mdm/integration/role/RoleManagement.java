@@ -49,7 +49,7 @@ public class RoleManagement extends TestBase {
 
     @Test(description = "Test view roles")
     public void testViewRoles() throws Exception {
-        MDMResponse response = client.get(Constants.RoleManagement.ROLE_ENDPOINT);
+        MDMResponse response = client.get(Constants.RoleManagement.ROLE_ENDPOINT_WITH_PAGINATION);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.RoleManagement.
                         ROLE_RESPONSE_PAYLOAD_FILE_NAME, Constants.HTTP_METHOD_GET).toString(),
@@ -82,15 +82,14 @@ public class RoleManagement extends TestBase {
         Assert.assertEquals(HttpStatus.SC_BAD_REQUEST, response.getStatus());
     }
 
-    @Test(description = "Test update scopes to a role.", dependsOnMethods = { "testUpdateUser"})
+    /*@Test(description = "Test update scopes to a role.", dependsOnMethods = { "testUpdateUser"})
     public void testUpdateRolePermission() throws Exception {
         String url=GetURL(Constants.RoleManagement.SCOPE_ROLE_ENDPOINT, Constants.RoleManagement.UPDATED_ROLE_NAME);
-        MDMResponse response = client.put(url,
-                    PayloadGenerator.getJsonPayload(Constants.RoleManagement.ROLE_PAYLOAD_FILE_NAME,
-                            Constants.HTTP_METHOD_PUT).toString());
-            Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-    }
+        MDMResponse response = client.put(url, Constants.RoleManagement.ROLE_RESPONSE_PAYLOAD);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }*/
 
+    /*TODO Role detele endpoint currently expecting a payload, this has to be changed
     /*@Test(description = "Test remove role.", dependsOnMethods = { "testUpdateRolePermission" })
     public void testRemoveRole() throws Exception {
         String url=GetURL(Constants.RoleManagement.ROLE_ENDPOINT, Constants.RoleManagement.UPDATED_ROLE_NAME);
