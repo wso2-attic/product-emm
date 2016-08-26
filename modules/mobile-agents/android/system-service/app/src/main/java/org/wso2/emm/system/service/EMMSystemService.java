@@ -176,7 +176,6 @@ public class EMMSystemService extends IntentService {
                                 CommonUtils.callAgentApp(context, Constants.Operation.
                                         FIRMWARE_UPGRADE_AUTOMATIC_RETRY, 0, command); //Sending command as the message
                             } else {
-                                Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status), Constants.Status.MALFORMED_REQUEST);
                                 CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
                                         Constants.Status.MALFORMED_REQUEST, "Invalid command argument.");
                             }
