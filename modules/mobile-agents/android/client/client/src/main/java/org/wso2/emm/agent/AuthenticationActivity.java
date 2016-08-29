@@ -170,6 +170,13 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			Preference.putString(context, Constants.DEVICE_TYPE, deviceType);
 		}
 
+		// This is added so that in case due to an agent customisation, if the authentication
+		// activity is called the AUTO_ENROLLMENT_BACKGROUND_SERVICE_ENABLED is set, the activity
+		// must be finished.
+		if (Constants.AUTO_ENROLLMENT_BACKGROUND_SERVICE_ENABLED == true) {
+			finish();
+		}
+
 	}
 
 	private OnClickListener onClickAuthenticate = new OnClickListener() {
