@@ -113,7 +113,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         AGENT_PACKAGE_NAME = context.getPackageName();
         AUTHORIZED_PINNING_APPS = new String[]{AGENT_PACKAGE_NAME};
         applicationManager = new ApplicationManager(context);
-        notificationService = NotificationService.getInstance(context);
+        notificationService = NotificationService.getInstance(context.getApplicationContext());
     }
 
     /**

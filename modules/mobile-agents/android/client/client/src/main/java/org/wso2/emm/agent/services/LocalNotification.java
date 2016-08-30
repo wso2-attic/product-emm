@@ -36,7 +36,7 @@ public class LocalNotification {
 
 	public static final int DEFAULT_INTERVAL = 30000;
 	public static final int DEFAULT_INDEX = 0;
-	public static final int DEFAULT_BUFFER = 0;
+	public static final int DEFAULT_BUFFER = 10000;
 	public static final int REQUEST_CODE = 0;
 	public static final String LOCAL_NOTIFIER_INVOKED_PREF_KEY = "localNoticicationInvoked";
 
