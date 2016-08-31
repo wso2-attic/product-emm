@@ -36,11 +36,15 @@ import android.os.Environment;
 import android.provider.Browser;
 import android.util.Base64;
 import android.util.Log;
+
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
@@ -52,6 +56,7 @@ import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.StreamHandler;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -646,6 +651,19 @@ public class ApplicationManager {
                 headers.put("Accept", "*/*");
                 headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
                 return headers;
+            }
+
+            @Override
+            protected Response<byte[]> parseNetworkResponse(NetworkResponse response) {
+                //Initialise local responseHeaders map with response headers received
+                responseHeaders = response.headers;
+                //Pass the response data here
+                if ("application/octet-stream".equals(responseHeaders.get("Content-Type"))) {
+                    return Response.success(response.data, HttpHeaderParser.parseCacheHeaders(response));
+                } else {
+                    VolleyError error = new VolleyError("Invalid application file URL.");
+                    return Response.error(error);
+                }
             }
         };
         queue.add(request);
