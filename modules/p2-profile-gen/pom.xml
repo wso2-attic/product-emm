@@ -636,6 +636,10 @@
                                     <id>org.wso2.carbon.device.mgt.server.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.orbit.org.apache.pdfbox.feature.group</id>-->
+                                    <!--<version>${orbit.version.pdfbox}</version>-->
+                                <!--</feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.device.mgt.extensions.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
@@ -1232,6 +1236,10 @@
                                     <id>org.wso2.carbon.device.mgt.server.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>
                                 </feature>
+                                <!--<feature>-->
+                                    <!--<id>org.wso2.orbit.org.apache.pdfbox.feature.group</id>-->
+                                    <!--<version>${orbit.version.pdfbox}</version>-->
+                                <!--</feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.device.mgt.extensions.feature.group</id>
                                     <version>${carbon.device.mgt.version}</version>

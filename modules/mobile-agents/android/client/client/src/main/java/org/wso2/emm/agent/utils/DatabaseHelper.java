@@ -30,6 +30,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
+    private static DatabaseHelper helper;
+
     private static final String DATABASE_NAME = "emm_db";
     private static final int DATABASE_VERSION = 1;
 
@@ -43,6 +45,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                                             Constants.NotificationTable.RESPONSE_TIME + " text)";
     private static final String DROP_NOTIFICATION_TABLE = "DROP TABLE IF EXISTS " + Constants.NotificationTable.NAME;
 
+    public static synchronized DatabaseHelper getInstance(Context context){
+        if(helper == null){
+            helper = new DatabaseHelper(context);
+        }
+        return helper;
+    }
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

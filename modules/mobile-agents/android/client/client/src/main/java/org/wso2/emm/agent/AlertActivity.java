@@ -261,7 +261,7 @@ public class AlertActivity extends SherlockActivity {
 	}
 
 	private void updateNotification (int id) {
-		NotificationService notificationService = NotificationService.getInstance(context);
+		NotificationService notificationService = NotificationService.getInstance(context.getApplicationContext());
 		if (notificationService == null) {
 			Log.e(TAG, "Cannot update notification status");
 		}
