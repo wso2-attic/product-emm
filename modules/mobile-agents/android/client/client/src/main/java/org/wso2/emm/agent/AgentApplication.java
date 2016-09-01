@@ -23,7 +23,11 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.SyncStateContract;
 import android.util.Log;
+
+import org.wso2.emm.agent.services.EnrollmentService;
+import org.wso2.emm.agent.utils.Constants;
 
 public class AgentApplication extends Application {
 
@@ -37,17 +41,22 @@ public class AgentApplication extends Application {
         Thread.UncaughtExceptionHandler _unCaughtExceptionHandler = new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable ex) {
-
-                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),
-                        requestCode, new Intent(getApplicationContext(), AgentReceptionActivity.class),
-                        PendingIntent.FLAG_ONE_SHOT);
-
+                PendingIntent pendingIntent;
+                if (Constants.AUTO_ENROLLMENT_BACKGROUND_SERVICE_ENABLED) {
+                    pendingIntent = PendingIntent.getService(getApplicationContext(),
+                            requestCode, new Intent(getApplicationContext(), EnrollmentService.class),
+                            PendingIntent.FLAG_ONE_SHOT);
+                } else {
+                    pendingIntent = PendingIntent.getActivity(getApplicationContext(),
+                            requestCode, new Intent(getApplicationContext(), AgentReceptionActivity.class),
+                            PendingIntent.FLAG_ONE_SHOT);
+                }
                 AlarmManager alarmManager;
                 alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                         relaunchDelay, pendingIntent);
 
-                Log.e("AgentApplication","UncaughtExceptionHandler got an exception", ex);
+                Log.e("AgentApplication", "UncaughtExceptionHandler got an exception", ex);
                 System.exit(2);
             }
         };
