@@ -159,21 +159,28 @@ public class EMMSystemService extends IntentService {
                     boolean isAutomaticRetry;
                     switch (operationCode) {
                         case Constants.Operation.FIRMWARE_UPGRADE_AUTOMATIC_RETRY:
-                            isAutomaticRetry = !"false".equals(command);
-                            Preference.putBoolean(context, context.getResources().
-                                    getString(R.string.firmware_upgrade_automatic_retry), isAutomaticRetry);
-                            if (isAutomaticRetry) {
-                                String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
-                                if (Constants.Status.WIFI_OFF.equals(status) && !checkNetworkOnline()) {
-                                    Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status), Constants.Status.FAILED);
-                                } else if (Constants.Status.BATTERY_LEVEL_INSUFFICIENT_TO_DOWNLOAD.equals(status)) {
-                                    Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status), Constants.Status.FAILED);
-                                } else if (Constants.Status.BATTERY_LEVEL_INSUFFICIENT_TO_INSTALL.equals(Preference.getString(context, context.getResources().getString(R.string.upgrade_install_status)))) {
-                                    Preference.putString(context, context.getResources().getString(R.string.upgrade_install_status), Constants.Status.FAILED);
+                            if ("false".equals(command) || "true".equals(command)) {
+                                isAutomaticRetry = "true".equals(command);
+                                Preference.putBoolean(context, context.getResources().
+                                        getString(R.string.firmware_upgrade_automatic_retry), isAutomaticRetry);
+                                if (isAutomaticRetry) {
+                                    String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
+                                    if (Constants.Status.WIFI_OFF.equals(status) && !checkNetworkOnline()) {
+                                        Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status), Constants.Status.FAILED);
+                                    } else if (Constants.Status.BATTERY_LEVEL_INSUFFICIENT_TO_DOWNLOAD.equals(status)) {
+                                        Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status), Constants.Status.FAILED);
+                                    } else if (Constants.Status.BATTERY_LEVEL_INSUFFICIENT_TO_INSTALL.equals(Preference.getString(context, context.getResources().getString(R.string.upgrade_install_status)))) {
+                                        Preference.putString(context, context.getResources().getString(R.string.upgrade_install_status), Constants.Status.FAILED);
+                                    }
                                 }
+                                CommonUtils.callAgentApp(context, Constants.Operation.
+                                        FIRMWARE_UPGRADE_AUTOMATIC_RETRY, 0, command); //Sending command as the message
+                                CommonUtils.sendBroadcast(context, Constants.Operation.FIRMWARE_UPGRADE_AUTOMATIC_RETRY, Constants.Code.SUCCESS,
+                                        Constants.Status.SUCCESSFUL, "Updated");
+                            } else {
+                                CommonUtils.sendBroadcast(context, Constants.Operation.FIRMWARE_UPGRADE_AUTOMATIC_RETRY, Constants.Code.FAILURE,
+                                        Constants.Status.MALFORMED_REQUEST, "Invalid command argument.");
                             }
-                            CommonUtils.callAgentApp(context, Constants.Operation.
-                                    FIRMWARE_UPGRADE_AUTOMATIC_RETRY, 0, command); //Sending command as the message
                             break;
                         case Constants.Operation.UPGRADE_FIRMWARE:
                             try {
@@ -191,6 +198,7 @@ public class EMMSystemService extends IntentService {
                             } catch (JSONException e) {
                                 String error = "Failed to build JSON object form the request: " + command;
                                 Log.e(TAG, error);
+                                Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status), Constants.Status.MALFORMED_REQUEST);
                                 CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE, Constants.Status.MALFORMED_REQUEST, error);
                                 break;
                             }
@@ -637,9 +645,13 @@ public class EMMSystemService extends IntentService {
         }
 
         switch (status){
+            case Constants.Status.MALFORMED_REQUEST:
+                CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
+                        Constants.Code.FAILURE, Constants.Status.MALFORMED_REQUEST, null);
+                break;
             case Constants.Status.WIFI_OFF:
                 CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,
-                            statusCode, Constants.Status.WIFI_OFF, null);
+                        statusCode, Constants.Status.WIFI_OFF, null);
                 break;
             case Constants.Status.NETWORK_UNREACHABLE:
                 CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS,

@@ -37,7 +37,8 @@ public class ServerUtilities {
 	private final static String TAG = "ServerUtilities";
 	private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss",
 	                                                                  Locale.getDefault());
-
+	private static CommunicationClient communicationClient;
+	private static RequestQueue requestQueue;
 
 	/**
 	 * Validate the token expiration date.
@@ -74,10 +75,12 @@ public class ServerUtilities {
 	}
 
 	public static void addHeaders(Map<String, String> headers) {
-		CommunicationClientFactory communicationClientFactory = new CommunicationClientFactory();
-		CommunicationClient communicationClient = communicationClientFactory.
-				getClient(Constants.HttpClient.HTTP_CLIENT_IN_USE);
-		if(communicationClient != null) {
+		if (communicationClient == null) {
+			CommunicationClientFactory communicationClientFactory = new CommunicationClientFactory();
+			communicationClient = communicationClientFactory.
+					getClient(Constants.HttpClient.HTTP_CLIENT_IN_USE);
+		}
+		if (communicationClient != null) {
 			communicationClient.addAdditionalHeader(headers);
 		}
 	}
@@ -86,10 +89,15 @@ public class ServerUtilities {
 	 * Get HTTP client object according to the calling protocol type.
 	 */
 	public static RequestQueue getCertifiedHttpClient() throws IDPTokenManagerException {
-		CommunicationClientFactory communicationClientFactory = new CommunicationClientFactory();
-		CommunicationClient communicationClient = communicationClientFactory.
-				getClient(Constants.HttpClient.HTTP_CLIENT_IN_USE);
-		return communicationClient.getHttpClient();
+		if (communicationClient == null) {
+			CommunicationClientFactory communicationClientFactory = new CommunicationClientFactory();
+			communicationClient = communicationClientFactory.
+					getClient(Constants.HttpClient.HTTP_CLIENT_IN_USE);
+		}
+		if (requestQueue == null) {
+			requestQueue = communicationClient.getHttpClient();
+		}
+		return requestQueue;
 	}
 
 }
