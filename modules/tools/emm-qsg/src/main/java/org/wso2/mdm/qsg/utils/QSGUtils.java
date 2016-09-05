@@ -80,7 +80,7 @@ public class QSGUtils {
         obj.put("owner", "admin");
         obj.put("clientName", "qsg");
         obj.put("grantType", "refresh_token password client_credentials");
-        obj.put("tokenScope", "user:add,role:add,policy:add,appm:create,appm:publish,appm:update,appm:read");
+        obj.put("tokenScope", "user:view,user:manage,user:admin:reset-password,role:view,role:manage,policy:view,policy:manage,application:manage,appm:create,appm:publish,appm:update,appm:read");
         //Set the headers
         headers.put(Constants.Header.CONTENT_TYPE, Constants.ContentType.APPLICATION_JSON);
         HTTPResponse httpResponse = HTTPInvoker.sendHTTPPost(dcrEndPoint, obj.toJSONString(), headers);
@@ -109,7 +109,8 @@ public class QSGUtils {
         urlParameters.add(new BasicNameValuePair("password", EMMConfig.getInstance().getPassword()));
         urlParameters.add(new BasicNameValuePair("grant_type", "password"));
         urlParameters.add(new BasicNameValuePair("scope",
-                                                 "user:add role:add policy:add appm:create appm:publish appm:update appm:read"));
+                                                 "user:view user:manage user:admin:reset-password role:view role:manage policy:view policy:manage " +
+                                                 "application:manage appm:create appm:publish appm:update appm:read"));
         //Set the headers
         headers.put(Constants.Header.CONTENT_TYPE, Constants.ContentType.APPLICATION_URL_ENCODED);
         headers.put(Constants.Header.AUTH, authHeader);

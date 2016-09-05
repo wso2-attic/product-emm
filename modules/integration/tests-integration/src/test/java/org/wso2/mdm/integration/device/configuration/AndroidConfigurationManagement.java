@@ -40,45 +40,23 @@ public class AndroidConfigurationManagement extends TestBase {
         this.client = new RestClient(backendHTTPURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
-    @Test(description = "Test add android platform configuration.")
-    public void testAddConfiguration() throws Exception {
-        HttpResponse response = client.post(Constants.AndroidConfigurationManagement.CONFIG_MGT_ENDPOINT,
-                                            PayloadGenerator.getJsonPayload(
-                                                    Constants.AndroidConfigurationManagement.PAYLOAD_FILE_NAME,
-                                                    Constants.HTTP_METHOD_POST).toString()
-        );
-        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                                              Constants.AndroidConfigurationManagement.RESPONSE_PAYLOAD_FILE_NAME,
-                                              Constants.HTTP_METHOD_POST).toString(),
-                                      response.getData().toString(), true
-        );
-    }
-
-    @Test(description = "Test update android configuration.", dependsOnMethods = { "testAddConfiguration" })
+    @Test(description = "Test android configuration update.")
     public void testModifyConfiguration() throws Exception {
         HttpResponse response = client.put(Constants.AndroidConfigurationManagement.CONFIG_MGT_ENDPOINT,
-                                           PayloadGenerator.getJsonPayload(
-                                                   Constants.AndroidConfigurationManagement.PAYLOAD_FILE_NAME,
-                                                   Constants.HTTP_METHOD_PUT).toString()
-        );
+                PayloadGenerator.getJsonPayload(Constants.AndroidConfigurationManagement.PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_PUT).toString());
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                                              Constants.AndroidConfigurationManagement.RESPONSE_PAYLOAD_FILE_NAME,
-                                              Constants.HTTP_METHOD_PUT).toString(),
-                                      response.getData().toString(), true
-        );
+        AssertUtil.jsonPayloadCompare(PayloadGenerator
+                .getJsonPayload(Constants.AndroidConfigurationManagement.RESPONSE_PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_PUT).toString(), response.getData().toString(), true);
     }
 
-    @Test(description = "Test get android configuration.",
-          dependsOnMethods = { "testAddConfiguration", "testModifyConfiguration" })
+    @Test(description = "Test get android configuration.", dependsOnMethods = { "testModifyConfiguration" })
     public void testGetConfiguration() throws Exception {
         HttpResponse response = client.get(Constants.AndroidConfigurationManagement.CONFIG_MGT_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-        AssertUtil.jsonPayloadCompare(
-                PayloadGenerator.getJsonPayload(Constants.AndroidConfigurationManagement.PAYLOAD_FILE_NAME,
-                                                Constants.HTTP_METHOD_PUT).toString(),
-                response.getData().toString(), true
-        );
+        AssertUtil.jsonPayloadCompare(PayloadGenerator
+                .getJsonPayload(Constants.AndroidConfigurationManagement.PAYLOAD_FILE_NAME,
+                        Constants.HTTP_METHOD_PUT).toString(), response.getData().toString(), true);
     }
 }

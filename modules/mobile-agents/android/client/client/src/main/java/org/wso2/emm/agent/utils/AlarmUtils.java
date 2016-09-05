@@ -22,6 +22,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
+import android.util.Log;
 
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.services.AlarmReceiver;
@@ -45,6 +46,7 @@ public class AlarmUtils {
      * @param  time - Time that alarm should trigger.
      */
     public static void setOneTimeAlarm(Context context, String time, String operation, String packageUri) throws ParseException {
+        Log.d("AlarmUtils", "Setting one time alarm: " + time);
         SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy hh:mm a", Locale.ENGLISH);
         Date date = formatter.parse(time);
         long startTime = date.getTime();

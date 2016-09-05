@@ -43,21 +43,21 @@ public class CertificateManagement extends TestBase {
     @Test(description = "Test certificate adding.")
     public void testAddCertificate() throws Exception {
         MDMResponse response = client.post(Constants.CertificateManagement.CERTIFICATE_ADD_ENDPOINT,
-                                           Constants.CertificateManagement.CERTIFICATE_ADD_PAYLOAD);
-        Assert.assertEquals(HttpStatus.SC_CREATED ,response.getStatus());
+                Constants.CertificateManagement.CERTIFICATE_ADD_PAYLOAD);
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
     }
 
     @Test(description = "Test get certificate.")
     public void testGetCertificate() throws Exception {
         MDMResponse response = client.get(Constants.CertificateManagement.CERTIFICATE_GET_ENDPOINT);
-        org.testng.Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         Assert.assertTrue(response.getBody().contains(Constants.CertificateManagement.CERTIFICATE_PAYLOAD));
     }
 
     @Test(description = "Test get all certificate.")
     public void testGetAllCertificate() throws Exception {
         MDMResponse response = client.get(Constants.CertificateManagement.CERTIFICATE_GET_ALL_ENDPOINT);
-        org.testng.Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         Assert.assertTrue(response.getBody().contains(Constants.CertificateManagement.CERTIFICATE_PAYLOAD));
     }
 

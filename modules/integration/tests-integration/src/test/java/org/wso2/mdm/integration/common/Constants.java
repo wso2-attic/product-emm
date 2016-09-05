@@ -67,7 +67,19 @@ public final class Constants {
                        "\"saasApp\": \"" + true + "\"}").toString();
         public static final String REGISTRATION_ENDPOINT = "/dynamic-client-web/register";
         public static final String TOKEN_ENDPOINT = "/oauth2/token";
-        public static final String OAUTH_TOKEN_PAYLOAD = "grant_type=password&username=admin&password=admin&scope=prod";
+        public static final String OAUTH_TOKEN_PAYLOAD = "grant_type=password&username=admin&password=admin&scope=certificate:view certificate:manage"
+                        + " application:manage configuration:view configuration:modify user:admin:reset-password"
+                        + " role:view role:manage device:view user:manage notification:view policy:view policy:manage"
+                        + " activity:view device:admin:view device-type:admin:view configuration:manage device:android:enroll"
+                        + " device:android:disenroll device:android:event:read device:android:event:write device:android:operation:applications"
+                        + " device:android:operation:blacklist-app device:android:operation:change-lock device:android:operation:clear-password"
+                        + " device:android:operation:vpn device:android:operation:wifi device:android:operation:camera"
+                        + " device:android:operation:encrypt device:android:operation:enterprise-wipe device:android:operation:info"
+                        + " device:android:operation:install-app device:android:operation:location device:android:operation:lock"
+                        + " device:android:operation:mute device:android:operation:reboot device:android:operation:ring"
+                        + " device:android:operation:notification device:android:operation:password-policy device:android:operation:webclip"
+                        + " device:android:operation:uninstall-app device:android:operation:unlock device:android:operation:update-app"
+                        + " device:android:operation:upgrade device:android:operation:wipe";
     }
 
 	public static final class AndroidEnrollment {
@@ -86,11 +98,13 @@ public final class Constants {
 
         public static final String ENROLLMENT_PAYLOAD_FILE_NAME = "android-enrollment-payloads.json";
         public static final String ENROLLMENT_ERRONEOUS_PAYLOAD_FILE_NAME = "android-enrollment-erroneous-payloads.json";
+        public static final String ENROLLMENT_RESPONSE_PAYLOAD_FOR_DELETE = "Android device that carries id \\u00271234\\u0027 has successfully dis-enrolled";
+        public static final String ENROLLMENT_RESPONSE_PAYLOAD_FOR_POST = "Android device, which carries the id \\u00271234\\u0027 has successfully been enrolled";
         public static final String ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME = "android-enrollment-response-payloads.json";
         public static final String ENROLLMENT_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME =
                                                                 "android-enrollment-erroneous-response-payloads.json";
         public static final String ENROLLMENT_ADDITIONAL_DEVICES_PAYLOAD_FILE_NAME = "android-enrollment-additional-devices-payloads.json";
-        public static final String ENROLLMENT_ENDPOINT = "/mdm-android-agent/enrollment/";
+        public static final String ENROLLMENT_ENDPOINT = "/api/device-mgt/android/v1.0/devices/";
         public static final String ENROLLMENT_GROUP = "android-enrollment";
 	}
 
@@ -161,7 +175,7 @@ public final class Constants {
         public static final String OPERATION_ENDPOINT = "/mdm-android-agent/operation/";
         public static final String LOCK_ENDPOINT = "/mdm-android-agent/operation/lock";
         public static final String UNLOCK_ENDPOINT = "/mdm-android-agent/operation/unlock";
-        public static final String LOCATION_ENDPOINT = "/mdm-android-agent/operation/location";
+        public static final String LOCATION_ENDPOINT = "/api/device-mgt/android/v1.0/admin/devices/location";
         public static final String CLEAR_PASSWORD_ENDPOINT = "/mdm-android-agent/operation/clear-password";
         public static final String CAMERA_ENDPOINT = "/mdm-android-agent/operation/camera";
         public static final String DEVICE_INFO_ENDPOINT = "/mdm-android-agent/operation/device-info";
@@ -176,7 +190,7 @@ public final class Constants {
         public static final String INSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/install-application";
         public static final String UNINSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/uninstall-application";
         public static final String BLACKLIST_APPS_ENDPOINT = "/mdm-android-agent/operation/blacklist-applications";
-        public static final String NOTIFICATION_ENDPOINT = "/mdm-android-agent/operation/notification";
+        public static final String NOTIFICATION_ENDPOINT = "/api/device-mgt/android/v1.0/admin/devices/send-notification";
         public static final String WIFI_ENDPOINT = "/mdm-android-agent/operation/wifi";
         public static final String ENCRYPT_ENDPOINT = "/mdm-android-agent/operation/encrypt";
         public static final String CHANGE_LOCK_ENDPOINT = "/mdm-android-agent/operation/change-lock-code";
@@ -205,7 +219,9 @@ public final class Constants {
         public static final String DEVICE_MANAGEMENT_GROUP = "device-mgt";
         public static final String KEY_DEVICE_ID = "deviceIdentifier";
         public static final String KEY_DEVICE_NAME = "name";
-        public static final String DEVICE_MGT_ENDPOINT = "/mdm-android-agent/device/";
+        public static final String DEVICE_TYPE = "android";
+        public static final String DEVICE_MGT_ENDPOINT = "/api/device-mgt/v1.0/devices/";
+        public static final String DEVICE_MGT_ANDROID_UPDATE_ENDPOINT = "/api/device-mgt/android/v1.0/devices/";
         public static final String LICENSE_SECTION = "This";
         public static final String LICENSE_ENDPOINT = DEVICE_MGT_ENDPOINT + "license";
         public static final String APP_LIST_ENDPOINT = DEVICE_MGT_ENDPOINT + "appList/" +
@@ -225,7 +241,7 @@ public final class Constants {
         }
 
         public static final String DEVICE_CONFIGURATION_GROUP = "android-config-mgt";
-        public static final String CONFIG_MGT_ENDPOINT = "/mdm-android-agent/configuration/";
+        public static final String CONFIG_MGT_ENDPOINT = "/api/device-mgt/android/v1.0/configuration/";
         public static final String PAYLOAD_FILE_NAME = "android-configuration-payloads.json";
         public static final String RESPONSE_PAYLOAD_FILE_NAME = "android-config-response-payloads.json";
     }
@@ -243,7 +259,7 @@ public final class Constants {
     public static final class MobileDeviceManagement {
         private MobileDeviceManagement(){ throw new AssertionError();}
         public static final String MOBILE_DEVICE_MANAGEMENT_GROUP = "mobile-device-mgt";
-        public static final String GET_DEVICE_COUNT_ENDPOINT = "/mdm-admin/devices/count";
+        public static final String GET_DEVICE_COUNT_ENDPOINT = "/api/device-mgt/v1.0";
         public static final String NO_OF_DEVICES = "10";
         public static final String GET_ALL_DEVICES_ENDPOINT ="/mdm-admin/devices";
         public static final String VIEW_DEVICE_TYPES_ENDPOINT = "/mdm-admin/devices/types";
@@ -272,7 +288,8 @@ public final class Constants {
         public static final String ROLE_MANAGEMENT_GROUP = "role-mgt";
         public static final String ROLE_NAME = "administration";
         public static final String UPDATED_ROLE_NAME = "manager";
-        public static final String ROLE_ENDPOINT = "/mdm-admin/roles";
+        public static final String ROLE_ENDPOINT = "/api/device-mgt/v1.0/roles";
+        public static final String SCOPE_ROLE_ENDPOINT = "/api/device-mgt/v1.0/roles/scopes";
         public static final String ROLE_PAYLOAD_FILE_NAME = "role-payloads.json";
         public static final String ROLE_RESPONSE_PAYLOAD_FILE_NAME = "role-response-payloads.json";
         public static final String ROLE_ERRONEOUS_PAYLOAD_FILE_NAME = "role-erroneous-payloads.json";
@@ -316,40 +333,41 @@ public final class Constants {
         private FeatureManagement() { throw new AssertionError(); }
 
         public static final String FEATURE_MANAGEMENT_GROUP = "feature-mgt";
-        public static final String VIEW_FEATURES_ENDPOINT = "/mdm-admin/features/android";
-        public static final String VIEW_FEATURES_ERRONEOUS_ENDPOINT = "/mdm-admin/features";
+        public static final String VIEW_FEATURES_ENDPOINT = "/api/device-mgt/v1.0/devices";
+        public static final String VIEW_FEATURES_ERRONEOUS_ENDPOINT = "/api/device-mgt/v1.0/devices/features";
     }
 
     public static final class LicenseManagement {
         private LicenseManagement() { throw new AssertionError(); }
 
         public static final String LICENSE_MANAGEMENT_GROUP = "license-mgt";
-        public static final String GET_LICENSE_ENDPOINT = "/mdm-admin/license/android/en_US";
+        public static final String GET_LICENSE_ENDPOINT = "/api/device-mgt/android/v1.0/configuration/license";
         public static final String GET_LICENSE_ERRONEOUS_ENDPOINT = "/mdm-admin/license";
         public static final String LICENSE_RESPONSE_PAYLOAD_FILE_NAME = "license-response-payloads.json";
-
+        public static final String LICENSE_RESPONSE_PAYLOAD = "This End User License Agreement is Eula.";
     }
 
     public static final class ConfigurationManagement {
         private ConfigurationManagement() { throw new AssertionError(); }
 
         public static final String CONFIGURATION_MANAGEMENT_GROUP = "configuration-mgt";
-        public static final String CONFIGURATION_ENDPOINT = "/mdm-admin/configuration";
-        public static final String CONFIGURATION_ERRONEOUS_ENDPOINT = "/mdm-admin/configuration/android";
+        public static final String CONFIGURATION_ENDPOINT = "/api/device-mgt/v1.0/configuration";
+        public static final String CONFIGURATION_ERRONEOUS_ENDPOINT = "/api/device-mgt/v1.0/configuration/android";
         public static final String CONFIGURATION_PAYLOAD_FILE_NAME = "configuration-payloads.json";
         public static final String CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME = "configuration-response-payloads.json";
-        public static final String CONFIGURATION_ERRONEOUS_RESPONSE = "Scope validation failed";
+        public static final String CONFIGURATION_ERRONEOUS_RESPONSE = "Authorization failed. Requested API resource does not exist";
     }
 
     public static final class NotificationManagement {
         private NotificationManagement() { throw new AssertionError(); }
 
         public static final String NOTIFICATION_MANAGEMENT_GROUP = "notification-mgt";
-        public static final String NOTIFICATION_ENDPOINT = "/mdm-admin/notifications";
+        public static final String NOTIFICATION_ENDPOINT = "/api/device-mgt/v1.0/notifications";
+        public static final String NOTIFICATION_ERRONEOUS_ENDPOINT = "/api/device-mgt/notifications";
         public static final String NOTIFICATION_PAYLOAD_FILE_NAME = "notification-payloads.json";
         public static final String NOTIFICATION_ERRONEOUS_PAYLOAD_FILE_NAME = "notification-erroneous-payloads.json";
         public static final String NOTIFICATION_RESPONSE_PAYLOAD_FILE_NAME = "notification-response-payloads.json";
-        public static final String NOTIFICATION_UPDATE_ENDPOINT = "/mdm-admin/notifications/1234567/NEW";
+        public static final String NOTIFICATION_UPDATE_ENDPOINT = "/api/device-mgt/v1.0/notifications/1/mark-checked";
 
     }
 
@@ -358,9 +376,9 @@ public final class Constants {
 
         public static final String CERTIFICATE_MANAGEMENT_GROUP = "certificate-mgt";
         public static final String CERTIFICATE_ADD_PAYLOAD= "[{\"serial\" : \"12438035315552875930\",  \"pem\" :\"MIIFlTCCA32gAwIBAgIJAKycxzhPSvWjMA0GCSqGSIb3DQEBBQUAMFkxCzAJBgNVBAYTAnNsMQwwCgYDVQQIDANhc2QxDDAKBgNVBAcMA2FzZDELMAkGA1UECgwCYXMxCzAJBgNVBAsMAnNhMRQwEgYDVQQDDAsxMC4xMC4xMC4yNDAeFw0xNjAyMTUwNTU5MDFaFw0xNzAyMTQwNTU5MDFaMFkxCzAJBgNVBAYTAnNsMQwwCgYDVQQIDANhc2QxDDAKBgNVBAcMA2FzZDELMAkGA1UECgwCYXMxCzAJBgNVBAsMAnNhMRQwEgYDVQQDDAsxMC4xMC4xMC4yNDCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBAOAg4JBfnZ1x/c/ktkuq7Wj8HQIm5CrwwYj+h2GDSDyqUKpyd3NJReNqUnhsL7MYR85tmP0SpBlD4X8KSBOuohVw4/cupmk0AlctINaTLRab0aN7ux43fTglD2O5ATdtlH+xLHuLMKcREV+ZedrwjiqzbUX/J/5EYNxW3fAh9pk/PB31Jbv0UTv7dTghsiecYQb6ENlP0sID6gAi9Br9oKKz/mPQFGafIUXZYEiuc2ugYeNQsnTnteAwIR/0LeedsRTUk4sM/z9EZ/NJ/RALwrZ8SPcA90grWkl3m6+GWYvjbyg4T47m9Vy6YD7p56QYitaGgooo2Tyj/tc2UrtPfJhmmkjs3dHDrvZLRskU2YXU+89qiuhfGulQG6Jz76Tf26gAX3tvhRACG8rbduSjvkyGJde5ig//RC+JeUrdm+m3XwEbjFyGzVHaKjxIlQ/JXx1ffvZ+g2NLQUI/g3RbPQESTys0qWP25FYoJSv3i1w6C7akX2DwWUM+KzzCGRVRpNBaDai/mkVI0IVcb5X2pfqMygS+SA0pXtl1x/5YFhdQe2uoVvukb1cNcuOpBL6BMsFAd9CVDs21e7wDo74Sf879ve8bZF2M5WAQoKG9cbYrA8KdX0vInEcYs1VwSuMaTABQSOw+LI+ubmeO9zZ0HrtU9okzQ8JaVeX/NRDP4JYDAgMBAAGjYDBeMB0GA1UdDgQWBBT6TvCK/V/RfWuOP5boEG500eLe4TAfBgNVHSMEGDAWgBT6TvCK/V/RfWuOP5boEG500eLe4TAPBgNVHRMBAf8EBTADAQH/MAsGA1UdDwQEAwIBhjANBgkqhkiG9w0BAQUFAAOCAgEAdheZlPw+QSN6HbVaXJTE/N272iz02HWz+5wREIHi31fAFCQs3KP/ozOSC6mmlRkJ1ry7SRslCXVI7CqFJsuc0xR/cLb8Ti3CuzNRHd3N81tLtW8GdEU8wItQTJTkXBPiG2ZM6d7Un1daL1T5VTHONE/n2rQqpCREQvqJnLuCxdyrGGRHrtM/wOSQ+s2yIFdYOdG6GiuBIz4ML8runEb2cpSxJrILvqOV3GakBwz9OARhrtowztH8WaC93WeMFAJHyzFBcnmjKozpJTKqZ4oF+5o8o2ENly6+a/PExu7uhU9eDKMzc/rGVKOGF+NqxIiDJbGlCcAsQ9+uo3Xkh2T1rBsM0/COfRHz1jpRJy5YpHCKDyv1rrE7plNXEtejjHxj2iwu8mzfCwznH0B06ThjEPUHWS0GrTjWWCjaP0R3hIU/s/H8b8KabryRwezFINOWAN8CZNoMtR8b5YzlktFxKbe6E5H3v39s2xg1fvwwZKwZU3DbSWpwybGaBBUsNgTtT3ZhCm3eXkdESvAmp4+jm+M+nCuiwnJ0Sdv1azjPv4Jvie7ObHv7soN18bsiooYUyksw0YRcVDFckHK0tm2vZT+XC57P/c3IeVso1K7S0+Q9GHW/2OMQXHldXVywQB3RZ1dRO3qXLDh26DiJi0d/mJgI+8LooHOmreXTZLfwWsc=\", \"tenantId\":\"-1234\"}]";
-        public static final String CERTIFICATE_ADD_ENDPOINT = "/mdm-admin/certificates/";
-        public static final String CERTIFICATE_GET_ENDPOINT = "/mdm-admin/certificates/12438035315552875930";
-        public static final String CERTIFICATE_GET_ALL_ENDPOINT = "/mdm-admin/certificates/paginate?start=0&length=1";
+        public static final String CERTIFICATE_ADD_ENDPOINT = "/api/certificate-mgt/v1.0/admin/certificates/";
+        public static final String CERTIFICATE_GET_ENDPOINT = "/api/certificate-mgt/v1.0/admin/certificates/12438035315552875930";
+        public static final String CERTIFICATE_GET_ALL_ENDPOINT = "/api/certificate-mgt/v1.0/admin/certificates?offset=0&limit=1";
         public static final String CERTIFICATE_PAYLOAD= "\"serialNumber\":\"12438035315552875930\"";
 
     }

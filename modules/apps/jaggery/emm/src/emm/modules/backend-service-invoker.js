@@ -65,7 +65,6 @@ var backendServiceInvoker = function () {
      */
     privateMethods.execute = function (httpMethod, requestPayload, endpoint, responseCallback, count) {
         var xmlHttpRequest = new XMLHttpRequest();
-
         xmlHttpRequest.open(httpMethod, endpoint);
         xmlHttpRequest.setRequestHeader(constants["CONTENT_TYPE_IDENTIFIER"], constants["APPLICATION_JSON"]);
         xmlHttpRequest.setRequestHeader(constants["ACCEPT_IDENTIFIER"], constants["APPLICATION_JSON"]);
@@ -91,10 +90,10 @@ var backendServiceInvoker = function () {
         log.debug("Service Invoker-URL: " + endpoint);
         log.debug("Service Invoker-Method: " + httpMethod);
 
-        /*log.info("Request : " + httpMethod + " " + endpoint);
+        log.info("Request : " + httpMethod + " " + endpoint);
         log.info("Request payload if any : " + stringify(requestPayload));
         log.info("Response status : " + xmlHttpRequest.status);
-        log.info("Response payload : " + xmlHttpRequest.responseText);*/
+        log.info("Response payload if any : " + xmlHttpRequest.responseText);
         //log.info("Response headers : " + xmlHttpRequest.getAllResponseHeaders());
 
         if (xmlHttpRequest.status == 401 && (xmlHttpRequest.responseText == TOKEN_EXPIRED ||

@@ -1,17 +1,15 @@
 {
-  "POST" : {
-      "responseMessage" : "Device enrollment succeeded."
+  "POST": {
+    "responseMessage":"Android device, which carries the id '1234' has successfully been enrolled"
   },
-  "PUT" : {
-    "responseCode" : "Accepted",
-    "responseMessage" : "Device enrollment has updated successfully"
+  "PUT": {
+    "responseCode": "Accepted",
+    "responseMessage": "Device enrollment has updated successfully"
   },
-  "GET" : {
-    "responseCode" : "Accepted",
-    "responseMessage" : "Device has already enrolled"
+  "GET": {
+    "responseMessage": "Android device that carries the id '1234' is enrolled"
   },
-  "DELETE" : {
-    "responseCode" : "Accepted",
-    "responseMessage" : "Device has removed successfully"
+  "DELETE": {
+    "responseMessage": "Android device that carries id '1234' has successfully dis-enrolled"
   }
 }

@@ -23,7 +23,7 @@
     <groupId>org.wso2.mdm</groupId>
     <artifactId>wso2mdm-parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.1.0-SNAPSHOT</version>
+    <version>2.2.0-SNAPSHOT</version>
     <name>WSO2 MDM - Parent</name>
     <url>http://wso2.org</url>
     <description>WSO2 Mobile Device Manager</description>
@@ -467,6 +467,18 @@
                 </exclusions>
             </dependency>
 
+            <!--Mediation dependency dependencies-->
+            <dependency>
+                <groupId>org.wso2.carbon.mediation</groupId>
+                <artifactId>org.wso2.carbon.rest.api.stub</artifactId>
+                <version>{carbon.mediation.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.registry</groupId>
+                <artifactId>org.wso2.carbon.registry.properties.stub</artifactId>
+                <version>${carbon.registry.version}</version>
+            </dependency>
+
             <!--CDM core dependencies-->
             <dependency>
                 <groupId>org.wso2.carbon.devicemgt</groupId>
@@ -620,10 +632,10 @@
                         <groupId>org.wso2.carbon</groupId>
                         <artifactId>org.wso2.carbon.identity.oauth</artifactId>
                     </exclusion>
-                    <exclusion>
-                        <groupId>org.wso2.carbon</groupId>
-                        <artifactId>org.wso2.carbon.apimgt.keymgt.client</artifactId>
-                    </exclusion>
+                    <!--<exclusion>-->
+                        <!--<groupId>org.wso2.carbon</groupId>-->
+                        <!--<artifactId>org.wso2.carbon.apimgt.keymgt.client</artifactId>-->
+                    <!--</exclusion>-->
                     <exclusion>
                         <groupId>org.apache.poi</groupId>
                         <artifactId>poi-ooxml</artifactId>
@@ -951,6 +963,11 @@
                 <artifactId>json-simple</artifactId>
                 <version>${google.json-simple.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.orbit.org.apache.pdfbox</groupId>
+                <artifactId>org.apache.pdfbox</artifactId>
+                <version>${orbit.version.pdfbox}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -966,11 +983,12 @@
         <maven-buildnumber-plugin.version>1.3</maven-buildnumber-plugin.version>
 
         <!--Jaggery -->
-        <jaggery.version>0.13.0</jaggery.version>
+        <jaggery.version>0.12.6</jaggery.version>
         <jaggery.extensions.version>1.5.2</jaggery.extensions.version>
         <jaggery.extensions.sso.version>1.5.2</jaggery.extensions.sso.version>
         <jaggery.extensions.carbon.version>1.5.2</jaggery.extensions.carbon.version>
         <jaggery.extensions.test.version>1.5.2</jaggery.extensions.test.version>
+        <javax.xml.parsers.import.pkg.version>[0.0.0, 1.0.0)</javax.xml.parsers.import.pkg.version>
 
         <!--Testing -->
         <test.framework.version>4.4.2</test.framework.version>
@@ -1026,12 +1044,12 @@
         <carbon.governance.version>4.6.4</carbon.governance.version>
 
         <!-- Carbon Device Management -->
-        <carbon.device.mgt.version>1.1.2-SNAPSHOT</carbon.device.mgt.version>
+        <carbon.device.mgt.version>1.1.3-SNAPSHOT</carbon.device.mgt.version>
         <carbon.device.mgt.version.range>[1.1.1, 2.0.0)</carbon.device.mgt.version.range>
 
         <!-- Carbon Mobile Device Management -->
-        <carbon.mobile.device.mgt.version>2.1.2-SNAPSHOT</carbon.mobile.device.mgt.version>
-        <mdm.version>2.1.0-SNAPSHOT</mdm.version>
+        <carbon.mobile.device.mgt.version>2.1.3-SNAPSHOT</carbon.mobile.device.mgt.version>
+        <mdm.version>2.2.0-SNAPSHOT</mdm.version>
 
         <!-- Carbon API Management -->
         <carbon.api.mgt.version>6.0.4</carbon.api.mgt.version>
@@ -1059,6 +1077,7 @@
         <wss4j.security.version>1.6.17</wss4j.security.version>
         <wss4j.security.common.version>2.0.0</wss4j.security.common.version>
         <axiom-api.version>1.2.14</axiom-api.version>
+        <axiom.wso2.version>1.2.11.wso2v10</axiom.wso2.version>
         <log4j.version>1.2.17</log4j.version>
         <spring-web.version>3.0.5.RELEASE</spring-web.version>
         <spring-ws-security.version>2.1.0.RELEASE</spring-ws-security.version>
@@ -1072,6 +1091,7 @@
         <jsr311-api.version>1.1.1</jsr311-api.version>
         <google.gson.version>2.3.1</google.gson.version>
 
+
         <!-- Caramel version-->
 
         <caramel.version>1.0.1</caramel.version>
@@ -1080,13 +1100,13 @@
         <appmgt.feature.version>1.2.2</appmgt.feature.version>
 
         <!-- Carbon Store version-->
-        <carbon.store.version>1.4.1</carbon.store.version>
+        <carbon.store.version>1.4.2</carbon.store.version>
         <!-- Cipher tool version-->
         <cipher.tool.version>1.0.0-wso2v3</cipher.tool.version>
 
         <!-- Carbon-analytics version-->
-        <carbon.analytics.version>1.2.2</carbon.analytics.version>
-        <carbon.data.version>4.3.4</carbon.data.version>
+        <carbon.analytics.version>1.2.3</carbon.analytics.version>
+        <carbon.data.version>4.3.5</carbon.data.version>
 
 
         <!-- Release plugin ID for github-->
@@ -1102,6 +1122,9 @@
         <apache.httpcore.version>4.4.1</apache.httpcore.version>
         <apache.httpmime.version>4.2.5</apache.httpmime.version>
         <google.json-simple.version>1.1.1</google.json-simple.version>
+
+        <!-- apache pdfbox version -->
+        <orbit.version.pdfbox>1.8.10.wso2v2</orbit.version.pdfbox>
     </properties>
 
     <scm>

@@ -20,6 +20,8 @@ var apiWrapperUtil = function () {
     var module = {};
     var tokenUtil = require("/modules/util.js").util;
     var constants = require("/modules/constants.js");
+    var devicemgtProps = require('/config/mdm-props.js').config();
+    var log = new Log("/modules/api-wrapper-util.js");
 
     module.refreshToken = function () {
         var tokenPair = session.get(constants.ACCESS_TOKEN_PAIR_IDENTIFIER);
@@ -28,18 +30,32 @@ var apiWrapperUtil = function () {
         session.put(constants.ACCESS_TOKEN_PAIR_IDENTIFIER, tokenPair);
     };
     module.setupAccessTokenPair = function (type, properties) {
-        var tokenPair;
+        var tokenInfo;
+        var tokenPair = {};
         var clientData = tokenUtil.getDyanmicCredentials(properties);
         var encodedClientKeys = tokenUtil.encode(clientData.clientId + ":" + clientData.clientSecret);
         session.put(constants.ENCODED_CLIENT_KEYS_IDENTIFIER, encodedClientKeys);
+
+        // getting all scopes from config
+        var scopes = devicemgtProps.scopes;
+        var scope = "";
+        scopes.forEach(function(entry) {
+            scope += entry + " ";
+        });
+
         if (type == "password") {
-            tokenPair =
-                tokenUtil.getTokenWithPasswordGrantType(properties.username, encodeURIComponent(properties.password), encodedClientKeys);
+            tokenInfo = tokenUtil.
+                getTokenWithPasswordGrantType(properties.username, encodeURIComponent(properties.password), encodedClientKeys, scope);
         } else if (type == "saml") {
-            tokenPair = tokenUtil.
-                getTokenWithSAMLGrantType(properties.samlToken, encodedClientKeys, "PRODUCTION");
+            tokenInfo = tokenUtil.
+                getTokenWithSAMLGrantType(properties.samlToken, encodedClientKeys, scope);
         }
+        tokenPair.refreshToken = tokenInfo.refreshToken;
+        tokenPair.accessToken = tokenInfo.accessToken;
         session.put(constants.ACCESS_TOKEN_PAIR_IDENTIFIER, tokenPair);
+        scopes = tokenInfo.scopes.split(" ");
+        session.put(constants.ALLOWED_SCOPES, scopes);
+
     };
     return module;
 }();
