@@ -54,12 +54,8 @@ public class NotificationDAO {
 
     public void close() {
         if(db != null && db.isOpen()){
-            try {
-                db.setTransactionSuccessful();
-                db.endTransaction();
-            } finally {
-                db.close();
-            }
+            db.setTransactionSuccessful();
+            db.endTransaction();
         }
     }
 
