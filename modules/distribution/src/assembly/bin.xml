@@ -411,12 +411,8 @@
         <!-- End of EMM app construction -->
         <!-- Copying EMM-WEB-AGENT jaggery app -->
         <fileSet>
-            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/emm-web-agent/</directory>
+            <directory>../apps/jaggery/emm-web-agent/src/emm-web-agent</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/emm-web-agent/</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/uuf-template-app/</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/emm-web-agent</outputDirectory>
         </fileSet>
         <!-- Copying email templates -->
         <fileSet>
