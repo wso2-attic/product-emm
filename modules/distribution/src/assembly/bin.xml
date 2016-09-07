@@ -397,15 +397,15 @@
         <!-- Copying EMM Jaggery app -->
         <!-- Copying mdm app from devicemgt app-->
         <fileSet>
-            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/devicemgt-cdmf/</directory>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/devicemgt/</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/emm</outputDirectory>
-            <excludes>
-                <exclude>app/conf/app-conf.json</exclude>
-                <exclude>app/conf/config.json</exclude>
-            </excludes>
         </fileSet>
         <fileSet>
-            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/devicemgt/</directory>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/devicemgt-cdmf/</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/emm</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/uuf-template-app/</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/emm</outputDirectory>
         </fileSet>
         <!-- End of EMM app construction -->
