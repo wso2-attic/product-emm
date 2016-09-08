@@ -407,7 +407,6 @@ public class OTAServerManager {
     public void startVerifyUpgradePackage() {
         Preference.putBoolean(context, context.getResources().getString(R.string.verification_failed_flag), false);
         File recoveryFile = new File(FileUtils.getUpgradePackageFilePath());
-        boolean doRetry = false;
         try {
             wakeLock.acquire();
             Log.d(TAG, "Verifying upgrade package");
@@ -420,23 +419,16 @@ public class OTAServerManager {
                     Constants.Status.OTA_IMAGE_VERIFICATION_FAILED, message);
             CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
                     context, context.getResources().getString(R.string.operation_id)), message);
-            doRetry = true;
         } catch (GeneralSecurityException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_VERIFY_FAILED);
             String message = "Update verification failed due to security check failure.";
             Log.e(TAG, message + e);
             CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
                     Constants.Status.OTA_IMAGE_VERIFICATION_FAILED, message);
-            CommonUtils.callAgentApp(context, Constants.Operation.FIRMWARE_UPGRADE_FAILURE, Preference.getInt(
+            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
                     context, context.getResources().getString(R.string.operation_id)), message);
-            doRetry = true;
         } finally {
             wakeLock.release();
-        }
-
-        if(doRetry){
-            Log.d(TAG, "Retry downloading package after error");
-            startDownloadUpgradePackage(this);
         }
     }
 
