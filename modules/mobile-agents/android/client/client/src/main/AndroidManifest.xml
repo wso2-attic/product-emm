@@ -76,6 +76,11 @@
             android:name=".DisplayDeviceInfoActivity"
             android:label="@string/title_activity_display_device_info"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".EnableDeviceAdminActivity"
+            android:label="@string/title_activity_display_device_info"
+            android:screenOrientation="unspecified"
+            android:excludeFromRecents="true"></activity>
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
