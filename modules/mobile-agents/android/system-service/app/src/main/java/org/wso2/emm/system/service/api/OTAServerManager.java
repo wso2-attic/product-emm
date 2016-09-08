@@ -414,19 +414,11 @@ public class OTAServerManager {
         } catch (IOException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_VERIFY_FAILED);
             String message = "Update verification failed due to file error.";
-            Log.e(TAG, message + e);
-            CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
-                    Constants.Status.OTA_IMAGE_VERIFICATION_FAILED, message);
-            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
-                    context, context.getResources().getString(R.string.operation_id)), message);
+            Log.e(TAG, message);
         } catch (GeneralSecurityException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_VERIFY_FAILED);
             String message = "Update verification failed due to security check failure.";
-            Log.e(TAG, message + e);
-            CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
-                    Constants.Status.OTA_IMAGE_VERIFICATION_FAILED, message);
-            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
-                    context, context.getResources().getString(R.string.operation_id)), message);
+            Log.e(TAG, message);
         } finally {
             wakeLock.release();
         }
