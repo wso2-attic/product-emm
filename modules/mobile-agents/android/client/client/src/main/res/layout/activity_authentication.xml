@@ -114,6 +114,15 @@
             android:background="@drawable/repeat_bg"
             android:gravity="center"
             android:orientation="vertical"></LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Enterprise"
+            android:id="@+id/buttonCreateEnterprise"
+            android:layout_below="@+id/errorLayout"
+            android:layout_toStartOf="@+id/footer"
+            android:layout_alignEnd="@+id/footer" />
     </RelativeLayout>
 
 </ScrollView>
