@@ -94,7 +94,7 @@ public class DeviceInfoPayload {
      */
     private void getInfo() throws AndroidAgentException {
 
-        Location deviceLocation = locationService.getLocation();
+        Location deviceLocation = locationService.getLastKnownLocation();
         if (device == null) {
             device = new Device();
         }

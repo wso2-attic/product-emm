@@ -114,6 +114,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         AUTHORIZED_PINNING_APPS = new String[]{AGENT_PACKAGE_NAME};
         applicationManager = new ApplicationManager(context);
         notificationService = NotificationService.getInstance(context.getApplicationContext());
+        if(Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "New OperationManager created.");
+        }
     }
 
     /**
@@ -189,6 +192,10 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         operation.setOperationResponse(replyPayload);
         operation.setStatus(resources.getString(R.string.operation_value_completed));
         resultBuilder.build(operation);
+
+        if(Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "getDeviceInfo executed.");
+        }
     }
 
     /**
@@ -240,6 +247,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             operation.setStatus(resources.getString(R.string.operation_value_error));
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
+        }
+        if(Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "getLocationInfo executed.");
         }
     }
 
@@ -387,6 +397,10 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
 
             }
         });
+
+        if(Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "configureWifi executed.");
+        }
     }
 
     /**
@@ -459,10 +473,16 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param packageName - Application package name.
      */
     public void triggerGooglePlayApp(String packageName) {
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "triggerGooglePlayApp started.");
+        }
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setData(Uri.parse(Constants.GOOGLE_PLAY_APP_URI + packageName));
         context.startActivity(intent);
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "triggerGooglePlayApp called app store.");
+        }
     }
 
     /**
@@ -471,6 +491,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param operation - Operation object.
      */
     public void monitorPolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "monitorPolicy started.");
+        }
         String payload = Preference.getString(context, Constants.PreferenceFlag.APPLIED_POLICY);
         PolicyOperationsMapper operationsMapper = new PolicyOperationsMapper();
         ObjectMapper mapper = new ObjectMapper();
@@ -500,6 +523,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             resultBuilder.build(operation);
             throw new AndroidAgentException("Error occurred while parsing stream.", e);
         }
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "monitorPolicy completed.");
+        }
     }
 
     /**
@@ -508,9 +534,15 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param operation - Operation object.
      */
     public void revokePolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "revokePolicy started.");
+        }
         CommonUtils.revokePolicy(context);
         operation.setStatus(resources.getString(R.string.operation_value_completed));
         resultBuilder.build(operation);
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "revokePolicy completed.");
+        }
     }
 
     /**
@@ -531,6 +563,10 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         String packageName;
         String type;
         String schedule = null;
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "uninstallApplication started. Payload - " +
+                    operation.getPayLoad().toString());
+        }
         try {
             JSONObject appData = new JSONObject(operation.getPayLoad().toString());
             type = appData.getString(getContextResources().getString(R.string.app_type));
