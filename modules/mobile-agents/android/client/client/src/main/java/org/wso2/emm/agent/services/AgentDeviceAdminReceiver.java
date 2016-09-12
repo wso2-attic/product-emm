@@ -56,13 +56,6 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 
 		Resources resources = context.getResources();
 		Preference.putBoolean(context, Constants.PreferenceFlag.DEVICE_ACTIVE, true);
-
-//		MessageProcessor processor = new MessageProcessor(context);
-//		try {
-//			processor.getMessages();
-//		} catch (AndroidAgentException e) {
-//			Log.e(TAG, "Failed to perform operation", e);
-//		}
 		String notifier = Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE);
 		if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
 			LocalNotification.startPolling(context);
@@ -154,15 +147,10 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 
 	@Override
 	public void onProfileProvisioningComplete(Context context, Intent intent) {
+		Log.i(TAG, "Provisioning Completed");
 		Intent launch = new Intent(context, EnableProfileActivity.class);
 		launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		context.startActivity(launch);
-
 	}
 
 	/**

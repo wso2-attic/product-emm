@@ -24,6 +24,7 @@ import android.content.Context;
 import android.os.Build;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.ProvisioningStateUtils;
 
 /**
  * This class produce the matching Operation Manager according to the Device Configurations.
@@ -54,7 +55,7 @@ public class OperationManagerFactory {
         if (manager.isProfileOwnerApp(Constants.PACKAGE_NAME)) {
             return new OperationManagerWorkProfile(context);
         }
-        else if (manager.isDeviceOwnerApp(Constants.SERVICE_PACKAGE_NAME)) {
+        else if (manager.isDeviceOwnerApp(Constants.PACKAGE_NAME)) {
             return new OperationManagerDeviceOwner(context);
         }
         else {
