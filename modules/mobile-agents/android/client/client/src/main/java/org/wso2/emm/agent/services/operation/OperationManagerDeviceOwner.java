@@ -126,7 +126,8 @@ public class OperationManagerDeviceOwner extends OperationManager {
     @Override
     public void installAppBundle(Operation operation) throws AndroidAgentException {
         try {
-            if (operation.getCode().equals(Constants.Operation.INSTALL_APPLICATION)) {
+            if (operation.getCode().equals(Constants.Operation.INSTALL_APPLICATION)||
+                    operation.getCode().equals(Constants.Operation.UPDATE_APPLICATION)) {
                 JSONObject appData = new JSONObject(operation.getPayLoad().toString());
                 installApplication(appData, operation);
             } else if (operation.getCode().equals(Constants.Operation.INSTALL_APPLICATION_BUNDLE)) {

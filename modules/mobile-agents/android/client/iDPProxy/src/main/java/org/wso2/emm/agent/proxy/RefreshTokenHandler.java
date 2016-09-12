@@ -62,6 +62,9 @@ public class RefreshTokenHandler {
 	}
 
 	public void obtainNewAccessToken() {
+		if(Constants.DEBUG_ENABLED) {
+			Log.d(TAG, "Renewing tokens.");
+		}
 		RequestQueue queue =  null;
 		try {
 			queue = ServerUtilities.getCertifiedHttpClient();
@@ -96,6 +99,9 @@ public class RefreshTokenHandler {
 				requestParams.put(Constants.GRANT_TYPE, Constants.REFRESH_TOKEN);
 				requestParams.put(Constants.REFRESH_TOKEN, token.getRefreshToken());
 				requestParams.put(SCOPE_LABEL, PRODUCTION_LABEL);
+				if(Constants.DEBUG_ENABLED && token.getRefreshToken() == null) {
+					Log.d(TAG, "Refresh token is null.");
+				}
 				return requestParams;
 			}
 
