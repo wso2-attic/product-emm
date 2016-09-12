@@ -75,6 +75,7 @@ import org.wso2.emm.agent.utils.CommonDialogUtils;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
+import org.wso2.emm.agent.utils.ProvisioningStateUtils;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -95,6 +96,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	private EditText etDomain;
 	private EditText etPassword;
 	private RadioButton radioBYOD;
+	private RadioButton radioCOPE;
 	private String deviceType;
 	private Context context;
 	private String username;
@@ -125,6 +127,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		etUsername = (EditText) findViewById(R.id.etUsername);
 		etPassword = (EditText) findViewById(R.id.etPassword);
 		radioBYOD = (RadioButton) findViewById(R.id.radioBYOD);
+		radioCOPE = (RadioButton) findViewById(R.id.radioCOPE);
 		loginLayout = (LinearLayout) findViewById(R.id.errorLayout);
 		etDomain.setFocusable(true);
 		etDomain.requestFocus();
@@ -195,6 +198,19 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			finish();
 		}
 
+		// if the device is provisioned as a profile owner or device owner,
+		// these buttons will no longer valid
+		if (ProvisioningStateUtils.isManagedByAgent(context)) {
+			radioCOPE.setVisibility(View.GONE);
+			radioBYOD.setVisibility(View.GONE);
+
+			if (ProvisioningStateUtils.isDeviceOwner(context)) {
+				deviceType = Constants.OWNERSHIP_COPE;
+			} else {
+				deviceType = Constants.OWNERSHIP_BYOD;
+			}
+		}
+
 		buttonCreateEnterprise = (Button) findViewById(R.id.buttonCreateEnterprise);
 		buttonCreateEnterprise.setOnClickListener(new OnClickListener() {
 
@@ -237,7 +253,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		androidEnterprise.enterprises()
 				.setAccount(result.getId(), enterpriseAccount)
 				.execute();
-		Log.d("Enrolled", "Enrolled" + androidEnterprise.devices().toString());
+		Log.d(TAG, "Enrolled" + androidEnterprise.devices().toString());
 	}
 
 

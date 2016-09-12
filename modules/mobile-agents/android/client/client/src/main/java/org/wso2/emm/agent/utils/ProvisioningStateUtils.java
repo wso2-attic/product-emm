@@ -55,13 +55,29 @@ public class ProvisioningStateUtils {
     /**
      * @return true if the device or profile is already owned by TestDPC
      */
-    public static boolean isManagedByTestDPC(Context context) {
+    public static boolean isManagedByAgent(Context context) {
         DevicePolicyManager devicePolicyManager = (DevicePolicyManager) context.getSystemService(
                 Context.DEVICE_POLICY_SERVICE);
         String packageName = context.getPackageName();
 
         return devicePolicyManager.isProfileOwnerApp(packageName)
                || devicePolicyManager.isDeviceOwnerApp(packageName);
+    }
+
+    public static boolean isDeviceOwner(Context context) {
+        DevicePolicyManager devicePolicyManager = (DevicePolicyManager) context.getSystemService(
+                Context.DEVICE_POLICY_SERVICE);
+        String packageName = context.getPackageName();
+
+        return devicePolicyManager.isDeviceOwnerApp(packageName);
+    }
+
+    public static boolean isProfileOwner(Context context) {
+        DevicePolicyManager devicePolicyManager = (DevicePolicyManager) context.getSystemService(
+                Context.DEVICE_POLICY_SERVICE);
+        String packageName = context.getPackageName();
+
+        return devicePolicyManager.isProfileOwnerApp(packageName);
     }
 
     /**
