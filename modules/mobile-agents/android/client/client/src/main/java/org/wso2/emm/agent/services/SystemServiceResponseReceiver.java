@@ -63,6 +63,7 @@ public class SystemServiceResponseReceiver extends BroadcastReceiver {
                 case Constants.Operation.UPGRADE_FIRMWARE:
                 case Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS:
                 case Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS:
+                case Constants.Operation.FIRMWARE_UPGRADE_AUTOMATIC_RETRY:
                     Log.i(TAG, status + ": " + intent.getStringExtra("payload"));
                     break;
                 default:
