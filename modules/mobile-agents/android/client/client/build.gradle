@@ -18,6 +18,7 @@
 apply plugin: 'com.android.application'
 
 repositories {
+    mavenCentral()
     maven {
         url "https://mint.splunk.com/gradle/"
     }
@@ -72,4 +73,5 @@ dependencies {
     compile 'org.bouncycastle:bcprov-jdk16:1.45'
     compile 'com.google.code.gson:gson:2.6.2'
     compile "com.splunk.mint:mint:5.0.0"
+    compile 'com.google.apis:google-api-services-androidenterprise:v1-rev51-1.22.0'
 }
