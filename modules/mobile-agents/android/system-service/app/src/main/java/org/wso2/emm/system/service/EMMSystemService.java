@@ -152,7 +152,7 @@ public class EMMSystemService extends IntentService {
 
             if ((operationCode != null)) {
                 if (Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
-                    Log.d(TAG, "EMM agent has sent a command with operation code: " + operationCode);
+                    Log.d(TAG, "EMM agent has sent a command with operation code: " + operationCode + " command: " + command);
                     doTask(operationCode);
                 } else {
                     Log.d(TAG, "Received command from external application. operation code: " + operationCode + " command: " + command);

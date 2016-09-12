@@ -111,6 +111,10 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
         }
     }
 
+    public Location getLastKnownLocation() {
+        return location;
+    }
+
     @Override
     public Location getLocation() {
         class LooperThread extends Thread {

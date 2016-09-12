@@ -33,4 +33,12 @@ public interface LocationService {
      */
     Location getLocation();
 
+    /**
+     * This method is used to retrieve the last known location information
+     * of the device.
+     *
+     * @return Returns location details including latitude and longitude.
+     */
+    Location getLastKnownLocation();
+
 }
