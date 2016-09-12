@@ -94,6 +94,7 @@ public class DeviceInfoPayload {
      */
     private void getInfo() throws AndroidAgentException {
 
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         Location deviceLocation = locationService.getLastKnownLocation();
         if (device == null) {
             device = new Device();
@@ -113,7 +114,7 @@ public class DeviceInfoPayload {
 
         property = new Device.Property();
         property.setName(Constants.Device.IMEI);
-        property.setValue(deviceInfo.getDeviceId());
+        property.setValue(telephonyManager.getImei());
         properties.add(property);
 
         property = new Device.Property();
@@ -221,9 +222,7 @@ public class DeviceInfoPayload {
         deviceInfoProperties.add(property);
 
         DeviceNetworkStatus deviceNetworkStatus = DeviceNetworkStatus.getInstance(context);
-        if(deviceNetworkStatus.isConnectedMobile()){
-            TelephonyManager telephonyManager = (TelephonyManager)
-                    context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (deviceNetworkStatus.isConnectedMobile()) {
             telephonyManager.listen(deviceNetworkStatus, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
         }
 

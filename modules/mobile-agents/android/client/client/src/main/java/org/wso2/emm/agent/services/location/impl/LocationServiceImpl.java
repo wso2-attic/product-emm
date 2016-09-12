@@ -21,14 +21,17 @@ package org.wso2.emm.agent.services.location.impl;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import com.google.gson.Gson;
 import org.wso2.emm.agent.R;
@@ -51,6 +54,22 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
     private LocationServiceImpl() {}
 
     private LocationServiceImpl(Context context) {
+        class LooperThread extends Thread {
+            public Handler mHandler;
+
+            public void run() {
+                if (Looper.myLooper() == null) {
+                    Looper.prepare();
+                }
+                LocationServiceImpl.this.setLocation();
+                mHandler = new Handler() {
+                    public void handleMessage(Message msg) {
+                        Log.e(TAG, "No network/GPS Switched off." + msg);
+                    }
+                };
+            }
+        }
+        new LooperThread().run();
         this.context = context;
         locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
     }
@@ -72,6 +91,12 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
     private void setLocation() {
         if (locationManager != null) {
             try {
+                if (Build.VERSION.SDK_INT >= 23 &&
+                        ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+
                 boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                 boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
@@ -117,23 +142,6 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
 
     @Override
     public Location getLocation() {
-        class LooperThread extends Thread {
-            public Handler mHandler;
-
-            public void run() {
-                if (Looper.myLooper() == null)
-                {
-                    Looper.prepare();
-                }
-                LocationServiceImpl.this.setLocation();
-                mHandler = new Handler() {
-                    public void handleMessage(Message msg) {
-                        Log.e(TAG, "No network/GPS Switched off." + msg);
-                    }
-                };
-            }
-        }
-        new LooperThread().run();
         if (location == null) {
             location = new Gson().fromJson(Preference.getString(context, context.getResources().getString(
                     R.string.shared_pref_location)), Location.class);
