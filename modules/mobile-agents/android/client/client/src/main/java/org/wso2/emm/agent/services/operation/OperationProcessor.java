@@ -181,6 +181,8 @@ public class OperationProcessor {
 			case Constants.Operation.LOGCAT:
 				operationManager.getLogcat(operation);
 				break;
+			case Constants.Operation.DISALLOW_SAFE_BOOT:
+				operationManager.handleUserRestriction(operation);
 			default:
 				operationManager.passOperationToSystemApp(operation);
 				break;

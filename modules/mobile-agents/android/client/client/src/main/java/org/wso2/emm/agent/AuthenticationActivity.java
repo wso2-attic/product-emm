@@ -63,6 +63,7 @@ import org.wso2.emm.agent.utils.CommonDialogUtils;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
+import org.wso2.emm.agent.utils.ProvisioningStateUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -80,6 +81,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	private EditText etDomain;
 	private EditText etPassword;
 	private RadioButton radioBYOD;
+	private RadioButton radioCOPE;
 	private String deviceType;
 	private Context context;
 	private String username;
@@ -107,6 +109,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 		etUsername = (EditText) findViewById(R.id.etUsername);
 		etPassword = (EditText) findViewById(R.id.etPassword);
 		radioBYOD = (RadioButton) findViewById(R.id.radioBYOD);
+		radioCOPE = (RadioButton) findViewById(R.id.radioCOPE);
 		loginLayout = (LinearLayout) findViewById(R.id.errorLayout);
 		etDomain.setFocusable(true);
 		etDomain.requestFocus();
@@ -177,10 +180,10 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			finish();
 		}
 
+
 	}
 
 	private OnClickListener onClickAuthenticate = new OnClickListener() {
-
 		@Override
 		public void onClick(View view) {
 

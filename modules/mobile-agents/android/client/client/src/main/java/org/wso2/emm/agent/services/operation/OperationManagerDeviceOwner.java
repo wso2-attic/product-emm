@@ -554,20 +554,31 @@ public class OperationManagerDeviceOwner extends OperationManager {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void handleUserRestriction(Operation operation) throws AndroidAgentException {
-        boolean isEnable = operation.isEnabled();
-        String key = operation.getCode();
-        operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
-        getResultBuilder().build(operation);
-        if (isEnable) {
-            getDevicePolicyManager().addUserRestriction(getCdmDeviceAdmin(), key);
-            if (Constants.DEBUG_MODE_ENABLED) {
-                Log.d(TAG, "Restriction added: " + key);
+        try {
+            boolean isEnable;
+            JSONObject payload = new JSONObject(operation.getPayLoad().toString());
+            if (payload != null) {
+                isEnable = payload.getBoolean("enabled");
+                String key = operation.getCode();
+                operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+                getResultBuilder().build(operation);
+                if (isEnable) {
+                    getDevicePolicyManager().addUserRestriction(getCdmDeviceAdmin(), key);
+                    if (Constants.DEBUG_MODE_ENABLED) {
+                        Log.d(TAG, "Restriction added: " + key);
+                    }
+                } else {
+                    getDevicePolicyManager().clearUserRestriction(getCdmDeviceAdmin(), key);
+                    if (Constants.DEBUG_MODE_ENABLED) {
+                        Log.d(TAG, "Restriction cleared: " + key);
+                    }
+                }
             }
-        } else {
-            getDevicePolicyManager().clearUserRestriction(getCdmDeviceAdmin(), key);
-            if (Constants.DEBUG_MODE_ENABLED) {
-                Log.d(TAG, "Restriction cleared: " + key);
-            }
+        } catch (JSONException e) {
+            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing restriction payload.");
+            getResultBuilder().build(operation);
+            throw new AndroidAgentException("Invalid JSON format.", e);
         }
     }
 

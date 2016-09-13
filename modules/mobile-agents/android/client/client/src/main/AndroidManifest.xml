@@ -24,7 +24,7 @@
 
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="22" />
+        android:targetSdkVersion="23" />
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
@@ -41,13 +41,16 @@
     <uses-permission android:name="android.permisssion.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <uses-permission android:name="org.wso2.emm.system.service.permission.ACCESS"/>
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+
     <permission android:name="android.permission.READ_LOGS" />
     <permission android:name="org.wso2.emm.agent.permission.ACCESS"
         android:protectionLevel="signature"></permission>
@@ -96,16 +99,18 @@
         <receiver
             android:name=".services.AgentDeviceAdminReceiver"
             android:permission="android.permission.BIND_DEVICE_ADMIN"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
 
                 <!-- This action is required -->
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+                <action android:name="android.app.action.PROFILE_PROVISIONING_COMPLETE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.app.device_admin"
-                android:resource="@xml/agent_device_admin"></meta-data>
+                android:resource="@xml/agent_device_admin">
+            </meta-data>
         </receiver>
         <receiver android:name=".services.AlarmReceiver" />
         <receiver android:name=".events.EventAlarmReceiver" />
