@@ -114,7 +114,7 @@ public class DeviceInfoPayload {
 
         property = new Device.Property();
         property.setName(Constants.Device.IMEI);
-        property.setValue(telephonyManager.getImei());
+        property.setValue(telephonyManager.getDeviceId());
         properties.add(property);
 
         property = new Device.Property();
