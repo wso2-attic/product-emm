@@ -155,7 +155,8 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	/**
 	 * Loads Already registered activity.
 	 */
-	private void loadAlreadyRegisteredActivity(){
+	private void loadAlreadyRegisteredActivity() {
+		Preference.putBoolean(context, Constants.PreferenceFlag.DEVICE_ACTIVE, true);
 		Intent intent =
 				new Intent(RegistrationActivity.this,
 				           AlreadyRegisteredActivity.class);

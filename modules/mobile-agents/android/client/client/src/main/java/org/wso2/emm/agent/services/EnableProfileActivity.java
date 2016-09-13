@@ -24,30 +24,36 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import org.wso2.emm.agent.ServerDetails;
+import org.wso2.emm.agent.utils.ApplicationUtils;
 import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.ProvisioningStateUtils;
 
 /**
  * This activity is started after the provisioning is complete in {@link AgentDeviceAdminReceiver}.
  */
 public class EnableProfileActivity extends Activity {
 
+    DevicePolicyManager manager;
+    ComponentName adminReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        manager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        adminReceiver = AgentDeviceAdminReceiver.getComponentName(this);
         if (savedInstanceState == null) {
             enableProfile();
+            ApplicationUtils.disableGooglePlay(this);
             startEnrollment();
         }
     }
 
     private void enableProfile() {
-        DevicePolicyManager manager =
-                (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-        ComponentName componentName = AgentDeviceAdminReceiver.getComponentName(this);
         // This is the name for the newly created managed profile.
-        manager.setProfileName(componentName, Constants.TAG);
+        manager.setProfileName(adminReceiver, Constants.TAG);
         // Enable the profile.
-        manager.setProfileEnabled(componentName);
+        manager.setProfileEnabled(adminReceiver);
     }
 
     private void startEnrollment(){

@@ -62,6 +62,7 @@ public class Constants {
 	public static final boolean SKIP_WORK_PROFILE_CREATION = false;
 	public static final boolean HIDE_ERROR_DIALOG = false;
 
+
 	/**
 	 * Log publishers
 	 */
@@ -473,6 +474,7 @@ public class Constants {
 		public static final String APPLIED_POLICY = "appliedPolicy";
 		public static final String IS_AGREED = "isAgreed";
 		public static final String NOTIFIER_TYPE = "notifierType";
+		public static final String SKIP_DEVICE_ACTIVATION = "skipDeviceActive";
 	}
 
 	public final class AppRestriction {
@@ -486,6 +488,14 @@ public class Constants {
 		public static final String BLACK_LIST = "black-list";
 		public static final String PACKAGE_NAME = "packageName";
 		public static final String APP_LIST = "appList";
+	}
+
+	public final class SystemApp {
+		private SystemApp() {
+			throw new AssertionError();
+		}
+
+		public static final String PLAY_STORE = "com.android.vending";
 	}
 
 }

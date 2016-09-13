@@ -10,7 +10,6 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.wso2.emm.agent.AlreadyRegisteredActivity;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.EnableDeviceAdminActivity;
 import org.wso2.emm.agent.GCMRegistrationManager;
@@ -25,6 +24,7 @@ import org.wso2.emm.agent.proxy.interfaces.AuthenticationCallback;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
+
 import java.util.Map;
 
 /**

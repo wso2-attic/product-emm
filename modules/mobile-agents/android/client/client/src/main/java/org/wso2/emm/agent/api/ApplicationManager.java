@@ -19,12 +19,15 @@
 package org.wso2.emm.agent.api;
 
 import android.app.DownloadManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -55,16 +58,19 @@ import org.wso2.emm.agent.utils.AlarmUtils;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
+import org.wso2.emm.agent.utils.ProvisioningStateUtils;
 import org.wso2.emm.agent.utils.StreamHandler;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -279,10 +285,39 @@ public class ApplicationManager {
      * @param fileUri - File URI should be passed in as a String.
      */
     public void startInstallerIntent(Uri fileUri) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(fileUri, resources.getString(R.string.application_mgr_mime));
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+        if (ProvisioningStateUtils.isDeviceOwner(context)) {
+            installPackage(fileUri, )
+        } else {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(fileUri, resources.getString(R.string.application_mgr_mime));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }
+    }
+
+    public boolean installPackage(Uri fileUri, String packageName)
+            throws IOException {
+        File application = new File(fileUri.getPath());
+        InputStream in = new FileInputStream(application);
+        PackageInstaller packageInstaller = context.getPackageManager().getPackageInstaller();
+        PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(
+                PackageInstaller.SessionParams.MODE_FULL_INSTALL);
+        params.setAppPackageName(packageName);
+        // set params
+        int sessionId = packageInstaller.createSession(params);
+        PackageInstaller.Session session = packageInstaller.openSession(sessionId);
+        OutputStream out = session.openWrite(packageName, 0, -1);
+        byte[] buffer = new byte[65536];
+        int c;
+        while ((c = in.read(buffer)) != -1) {
+            out.write(buffer, 0, c);
+        }
+        session.fsync(out);
+        in.close();
+        out.close();
+
+        session.commit(null);
+        return true;
     }
 
     /**
