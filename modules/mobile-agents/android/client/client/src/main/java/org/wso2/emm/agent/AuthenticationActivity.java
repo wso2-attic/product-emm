@@ -25,7 +25,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.text.Editable;
@@ -44,17 +43,6 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.androidenterprise.AndroidEnterprise;
-import com.google.api.services.androidenterprise.AndroidEnterpriseScopes;
-import com.google.api.services.androidenterprise.model.Enterprise;
-import com.google.api.services.androidenterprise.model.EnterpriseAccount;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,9 +64,6 @@ import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
@@ -107,9 +92,6 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 	private DeviceInfo deviceInfo;
 	private static final String TAG = AuthenticationActivity.class.getSimpleName();
 	private ClientAuthenticator authenticator;
-
-	AndroidEnterprise androidEnterprise;
-	Button buttonCreateEnterprise;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -195,67 +177,9 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			finish();
 		}
 
-		buttonCreateEnterprise = (Button) findViewById(R.id.buttonCreateEnterprise);
-		buttonCreateEnterprise.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                new EnterpriseCreator().execute();
-            }
-        });
-
 	}
 
-
-	public void bind(String primaryDomainName, String serviceAccountEmail,
-					 String authenticationToken) throws IOException {
-
-		HttpTransport httpTransport = new NetHttpTransport();
-		JsonFactory jsonFactory = new JacksonFactory();
-
-		InputStream is = new BufferedInputStream(getApplicationContext().getAssets().open("wso2-emm.json"));
-		final GoogleCredential credential = GoogleCredential.fromStream(is, httpTransport, jsonFactory)
-				.createScoped(AndroidEnterpriseScopes.all());
-
-		HttpRequestInitializer httpRequestInitializer = new HttpRequestInitializer() {
-
-			public void initialize(HttpRequest request) throws IOException {
-				credential.initialize(request);
-			}
-		};
-		androidEnterprise = new AndroidEnterprise.Builder(httpTransport, jsonFactory, httpRequestInitializer).build();
-
-		Enterprise enterprise = new Enterprise();
-		enterprise.setPrimaryDomain(primaryDomainName);
-
-		Enterprise result = androidEnterprise.enterprises()
-				.enroll(authenticationToken, enterprise)
-				.execute();
-
-		EnterpriseAccount enterpriseAccount = new EnterpriseAccount();
-		enterpriseAccount.setAccountEmail(serviceAccountEmail);
-		androidEnterprise.enterprises()
-				.setAccount(result.getId(), enterpriseAccount)
-				.execute();
-		Log.d("Enrolled", "Enrolled" + androidEnterprise.devices().toString());
-	}
-
-
-    private class EnterpriseCreator extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                AuthenticationActivity.this.bind("wso2support.com", "wso2emm@wso2-emm-142710.iam.gserviceaccount.com", "CE2426B5682DBFA8");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
-
-
-    private OnClickListener onClickAuthenticate = new OnClickListener() {
+	private OnClickListener onClickAuthenticate = new OnClickListener() {
 
 		@Override
 		public void onClick(View view) {
