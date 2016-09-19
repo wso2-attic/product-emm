@@ -171,7 +171,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
                         getString(R.string.firmware_upgrade_retries));
                 boolean isFirmwareUpgradeAutoRetry = Preference.getBoolean(context, context
                         .getResources().getString(R.string.is_automatic_firmware_upgrade));
-                if (retryCount <= Constants.FIRMWARE_UPGRADE_RETRY_COUNT && isFirmwareUpgradeAutoRetry) {
+                if (retryCount < Constants.FIRMWARE_UPGRADE_RETRY_COUNT && isFirmwareUpgradeAutoRetry) {
                     Preference.putInt(context, context.getResources().
                             getString(R.string.firmware_upgrade_retries), ++retryCount);
                     Preference.putBoolean(context, context.getResources().
@@ -243,7 +243,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
         broadcastIntent.putExtra(INTENT_KEY_STATUS, status);
         broadcastIntent.putExtra(INTENT_KEY_PAYLOAD, payload);
         broadcastIntent.putExtra(INTENT_KEY_SERVER, utils.getAPIServerURL(context));
-        sendBroadcast(broadcastIntent);
+        sendBroadcastAsUser(broadcastIntent, android.os.Process.myUserHandle());
     }
 
     @Override

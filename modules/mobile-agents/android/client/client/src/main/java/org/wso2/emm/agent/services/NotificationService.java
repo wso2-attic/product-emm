@@ -62,9 +62,9 @@ public class NotificationService extends BroadcastReceiver {
     private static final String DEVICE_UNLOCKED = "unlocked";
 
     private NotificationService(Context context) {
-        this.context = context;
-        notificationDAO = new NotificationDAO(context);
-        notifyManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        this.context = context.getApplicationContext();
+        notificationDAO = new NotificationDAO(context.getApplicationContext());
+        notifyManager = (NotificationManager) context.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     public static NotificationService getInstance(Context context) {
@@ -93,11 +93,14 @@ public class NotificationService extends BroadcastReceiver {
         notification.setMessageText(messageText);
         notification.setStatus(status);
         notification.setReceivedTime(Calendar.getInstance().getTime().toString());
-        notificationDAO.open();
-        if (notificationDAO.getNotification(notificationId) == null) {
-            notificationDAO.addNotification(notification);
+        try {
+            notificationDAO.open();
+            if (notificationDAO.getNotification(notificationId) == null) {
+                notificationDAO.addNotification(notification);
+            }
+        } finally {
+            notificationDAO.close();
         }
-        notificationDAO.close();
     }
 
     /**
@@ -105,9 +108,12 @@ public class NotificationService extends BroadcastReceiver {
      * @param notificationId notification id (operation id).
      */
     public void updateNotification (int notificationId) {
-        notificationDAO.open();
-        notificationDAO.updateNotification(notificationId, Notification.Status.DISMISSED);
-        notificationDAO.close();
+        try {
+            notificationDAO.open();
+            notificationDAO.updateNotification(notificationId, Notification.Status.DISMISSED);
+        } finally {
+            notificationDAO.close();
+        }
     }
 
     /**
@@ -157,21 +163,25 @@ public class NotificationService extends BroadcastReceiver {
      * and send if found any.
      */
     public List<org.wso2.emm.agent.beans.Operation> checkPreviousNotifications() throws AndroidAgentException {
-        notificationDAO.open();
-        List<Notification> dismissedNotifications = notificationDAO.getAllDismissedNotifications();
-        List<Operation> notificationOperations = new ArrayList<>();
-        org.wso2.emm.agent.beans.Operation operation;
-        for (Notification notification : dismissedNotifications) {
-            operation = new org.wso2.emm.agent.beans.Operation();
-            operation.setId(notification.getId());
-            operation.setCode(Constants.Operation.NOTIFICATION);
-            operation.setStatus(context.getResources().getString(R.string.operation_value_completed));
-            operation.setOperationResponse(buildResponse(Notification.Status.DISMISSED));
-            notificationOperations.add(operation);
-            notificationDAO.updateNotification(notification.getId(), Notification.Status.SENT);
+        List<Operation> notificationOperations;
+        try {
+            notificationDAO.open();
+            List<Notification> dismissedNotifications = notificationDAO.getAllDismissedNotifications();
+            notificationOperations = new ArrayList<>();
+            org.wso2.emm.agent.beans.Operation operation;
+            for (Notification notification : dismissedNotifications) {
+                operation = new org.wso2.emm.agent.beans.Operation();
+                operation.setId(notification.getId());
+                operation.setCode(Constants.Operation.NOTIFICATION);
+                operation.setStatus(context.getResources().getString(R.string.operation_value_completed));
+                operation.setOperationResponse(buildResponse(Notification.Status.DISMISSED));
+                notificationOperations.add(operation);
+                notificationDAO.updateNotification(notification.getId(), Notification.Status.SENT);
+            }
+            return notificationOperations;
+        } finally {
+            notificationDAO.close();
         }
-        notificationDAO.close();
-        return notificationOperations;
     }
 
     @Override

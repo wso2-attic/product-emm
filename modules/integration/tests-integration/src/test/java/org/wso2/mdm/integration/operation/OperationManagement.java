@@ -49,8 +49,7 @@ public class OperationManagement extends TestBase {
     @Test(description = "Add an Android device.")
     public void enrollAndroidDevice() throws Exception {
         JsonObject enrollmentData = PayloadGenerator.getJsonPayload(
-                Constants.AndroidEnrollment.ENROLLMENT_PAYLOAD_FILE_NAME,
-                Constants.HTTP_METHOD_POST);
+                Constants.AndroidEnrollment.ENROLLMENT_PAYLOAD_FILE_NAME, Constants.HTTP_METHOD_POST);
         enrollmentData.addProperty(Constants.DEVICE_IDENTIFIER_KEY, Constants.DEVICE_ID);
         MDMResponse response = client.post(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT, enrollmentData.toString());
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
@@ -59,7 +58,8 @@ public class OperationManagement extends TestBase {
                 Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
     }
 
-    @Test(dependsOnMethods = {"enrollAndroidDevice"}, description = "Install an app to enrolled android device")
+    @Test(dependsOnMethods = {
+            "enrollAndroidDevice" }, description = "Install an app to enrolled android device")
     public void testInstallApps() throws Exception {
         JsonObject operationData = PayloadGenerator.getJsonPayload(
                 Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
@@ -70,7 +70,7 @@ public class OperationManagement extends TestBase {
         operationData.add(Constants.DEVICE_IDENTIFIERS_KEY, deviceIds);
         HttpResponse response = rclient.post(Constants.AndroidOperations.INSTALL_APPS_ENDPOINT,
                 operationData.toString());
-           Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
+        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 
     @Test(dependsOnMethods = {"testInstallApps"}, description = "Test get device apps with wrong Device ID")

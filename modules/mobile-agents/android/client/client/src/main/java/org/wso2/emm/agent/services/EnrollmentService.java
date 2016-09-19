@@ -1,6 +1,8 @@
 package org.wso2.emm.agent.services;
 
 import android.app.IntentService;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -8,7 +10,9 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.wso2.emm.agent.AlreadyRegisteredActivity;
 import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.EnableDeviceAdminActivity;
 import org.wso2.emm.agent.GCMRegistrationManager;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.DeviceInfo;
@@ -33,6 +37,7 @@ public class EnrollmentService extends IntentService implements APIResultCallBac
     private Context context;
     private DeviceInfoPayload deviceInfoBuilder;
     private DeviceInfo info;
+    private ComponentName cdmDeviceAdmin;
 
     public EnrollmentService() {
         super(TAG);
@@ -42,6 +47,7 @@ public class EnrollmentService extends IntentService implements APIResultCallBac
     protected void onHandleIntent(Intent intent) {
         context = this.getApplicationContext();
         info = new DeviceInfo(context);
+        cdmDeviceAdmin = new ComponentName(this, AgentDeviceAdminReceiver.class);
         if (Constants.DEFAULT_HOST != null) {
             startEnrollment();
         } else {
@@ -115,9 +121,27 @@ public class EnrollmentService extends IntentService implements APIResultCallBac
         }
         Preference.putBoolean(context, Constants.PreferenceFlag.REGISTERED, true);
         Preference.putBoolean(context, Constants.PreferenceFlag.DEVICE_ACTIVE, true);
+        if (!isDeviceAdminActive()) {
+            startDeviceAdminPrompt();
+        }
         startEvents();
         startPolling();
     }
+
+    /**
+     * Start device admin activation request.
+     */
+    private void startDeviceAdminPrompt() {
+        Intent intent = new Intent(EnrollmentService.this, EnableDeviceAdminActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    private boolean isDeviceAdminActive() {
+        DevicePolicyManager devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        return devicePolicyManager.isAdminActive(cdmDeviceAdmin);
+    }
+
 
     private void startEvents() {
         if(!EventRegistry.eventListeningStarted) {

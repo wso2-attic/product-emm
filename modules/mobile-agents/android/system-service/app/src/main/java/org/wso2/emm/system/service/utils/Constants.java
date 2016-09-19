@@ -132,6 +132,7 @@ public class Constants {
 		public static final String OTA_UPGRADE_ONGOING = "2001";
 		public static final String REQUEST_PLACED = "2002";
 		public static final String USER_CANCELED = "3000";
+		public static final String NO_HISTORY = "3001";
 		public static final String MALFORMED_REQUEST = "4000";
 		public static final String BATTERY_LEVEL_INSUFFICIENT_TO_DOWNLOAD = "4001";
 		public static final String WIFI_OFF = "4002";
@@ -146,6 +147,8 @@ public class Constants {
 		public static final String BATTERY_LEVEL_INSUFFICIENT_TO_INSTALL = "4011";
 		public static final String OTA_IMAGE_VERIFICATION_FAILED = "4012";
 		public static final String CONNECTION_FAILED = "4013";
+		public static final String FILE_NOT_FOUND = "4014";
+		public static final String FAILED = "5000";
 		public static final String INTERNAL_ERROR = "5001";
 	}
 

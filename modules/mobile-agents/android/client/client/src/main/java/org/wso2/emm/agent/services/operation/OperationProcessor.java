@@ -256,7 +256,7 @@ public class OperationProcessor {
 	 * and send if found any.
 	 */
 	public void checkPreviousNotifications() throws AndroidAgentException {
-		List<Operation> operations = NotificationService.getInstance(context).checkPreviousNotifications();
+		List<Operation> operations = NotificationService.getInstance(context.getApplicationContext()).checkPreviousNotifications();
 		for (Operation operation : operations) {
 			operationManager.getResultBuilder().build(operation);
 		}

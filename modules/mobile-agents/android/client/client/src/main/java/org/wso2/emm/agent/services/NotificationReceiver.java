@@ -41,7 +41,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         if (Constants.DEBUG_MODE_ENABLED) {
             Log.d(TAG, "NotificationId: " + operationId);
         }
-        NotificationService.getInstance(context).updateNotification(operationId); // updating notification state to DISMISSED
+        NotificationService.getInstance(context.getApplicationContext()).updateNotification(operationId); // updating notification state to DISMISSED
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(operationId);
     }

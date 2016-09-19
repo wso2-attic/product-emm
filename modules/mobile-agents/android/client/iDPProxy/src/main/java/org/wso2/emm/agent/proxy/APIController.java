@@ -59,6 +59,9 @@ public class APIController implements TokenCallBack {
 	public APIController(String clientKey, String clientSecret){
 		this.clientKey = clientKey;
 		this.clientSecret = clientSecret;
+		if (Constants.DEBUG_ENABLED) {
+			Log.d(TAG, "APIController created.");
+		}
 	}
 
 	public APIController() {
@@ -75,6 +78,9 @@ public class APIController implements TokenCallBack {
 	 */
 	public void invokeAPI(EndPointInfo apiEndPointInfo, APIResultCallBack apiResultCallBack,
 	                      int requestCode, Context context) {
+		if (Constants.DEBUG_ENABLED) {
+			Log.d(TAG, "invokeAPI called");
+		}
 
 		this.apiResultCallback = apiResultCallBack;
 		this.apiEndPointInfo = apiEndPointInfo;

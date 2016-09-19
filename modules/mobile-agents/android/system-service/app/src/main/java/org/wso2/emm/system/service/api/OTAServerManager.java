@@ -372,14 +372,14 @@ public class OTAServerManager {
                     Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
                             Constants.Status.CONNECTION_FAILED);
                 } catch (IOException e) {
-                    String message = "Connection failure when downloading update package.";
+                    String message = "Unable to find firmware upgrade package " + serverConfig.getPackageURL().toString();
                     Log.e(TAG, message + e);
                     CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
-                            Constants.Status.CONNECTION_FAILED, message);
+                            Constants.Status.FILE_NOT_FOUND, message);
                     CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
                     reportDownloadError(OTAStateChangeListener.ERROR_WRITE_FILE_ERROR);
                     Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
-                            Constants.Status.CONNECTION_FAILED);
+                            Constants.Status.FILE_NOT_FOUND);
                 } finally {
                     wakeLock.release();
                     wakeLock.acquire(2);
@@ -407,7 +407,6 @@ public class OTAServerManager {
     public void startVerifyUpgradePackage() {
         Preference.putBoolean(context, context.getResources().getString(R.string.verification_failed_flag), false);
         File recoveryFile = new File(FileUtils.getUpgradePackageFilePath());
-
         try {
             wakeLock.acquire();
             Log.d(TAG, "Verifying upgrade package");
@@ -415,19 +414,11 @@ public class OTAServerManager {
         } catch (IOException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_VERIFY_FAILED);
             String message = "Update verification failed due to file error.";
-            Log.e(TAG, message + e);
-            CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
-                    Constants.Status.OTA_IMAGE_VERIFICATION_FAILED, message);
-            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
-                    context, context.getResources().getString(R.string.operation_id)), message);
+            Log.e(TAG, message);
         } catch (GeneralSecurityException e) {
             reportInstallError(OTAStateChangeListener.ERROR_PACKAGE_VERIFY_FAILED);
             String message = "Update verification failed due to security check failure.";
-            Log.e(TAG, message + e);
-            CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
-                    Constants.Status.OTA_IMAGE_VERIFICATION_FAILED, message);
-            CommonUtils.callAgentApp(context, Constants.Operation.FIRMWARE_UPGRADE_FAILURE, Preference.getInt(
-                    context, context.getResources().getString(R.string.operation_id)), message);
+            Log.e(TAG, message);
         } finally {
             wakeLock.release();
         }
@@ -594,9 +585,9 @@ public class OTAServerManager {
                     CommonUtils.sendBroadcast(context, operation, Constants.Code.FAILURE, Constants.Status.CONNECTION_FAILED, message);
                     CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
                 } catch (IOException e) {
-                    String message = "Property list (build.prop) download failed due to connection failure.";
+                    String message = "Property list (build.prop) not found in the server.";
                     Log.e(TAG, message + e);
-                    CommonUtils.sendBroadcast(context, operation, Constants.Code.FAILURE, Constants.Status.CONNECTION_FAILED, message);
+                    CommonUtils.sendBroadcast(context, operation, Constants.Code.FAILURE, Constants.Status.FILE_NOT_FOUND, message);
                     CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
                 } finally {
                     if (reader != null) {

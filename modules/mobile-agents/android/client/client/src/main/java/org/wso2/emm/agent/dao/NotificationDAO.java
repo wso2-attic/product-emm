@@ -23,6 +23,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
 import org.wso2.emm.agent.beans.Notification;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.DatabaseHelper;
@@ -40,10 +42,10 @@ public class NotificationDAO {
     private DatabaseHelper dbHelper;
 
     public NotificationDAO(Context context) {
-        dbHelper = new DatabaseHelper(context);
+        dbHelper = DatabaseHelper.getInstance(context);
     }
 
-    public void open() throws SQLException {
+    public synchronized void open() throws SQLException {
         db = dbHelper.getWritableDatabase();
         if(db != null){
             db.beginTransaction();
@@ -51,10 +53,9 @@ public class NotificationDAO {
     }
 
     public void close() {
-        if(db != null){
+        if(db != null && db.isOpen()){
             db.setTransactionSuccessful();
             db.endTransaction();
-            db.close();
         }
     }
 
