@@ -101,6 +101,7 @@ public class OperationManagerWorkProfile extends OperationManager {
         String name;
         String operationType;
         String schedule = null;
+        String packageName = null;
 
         try {
             if (!data.isNull(getContextResources().getString(R.string.app_type))) {
@@ -108,12 +109,15 @@ public class OperationManagerWorkProfile extends OperationManager {
 
                 if (type.equalsIgnoreCase(getContextResources().getString(R.string.intent_extra_enterprise))) {
                     appUrl = data.getString(getContextResources().getString(R.string.app_url));
-                    if(data.has(getContextResources().getString(R.string.app_schedule))){
+                    if (data.has(getContextResources().getString(R.string.app_schedule))) {
                         schedule = data.getString(getContextResources().getString(R.string.app_schedule));
+                    }
+                    if (data.has(Constants.LABEL_PACKAGE_NAME)) {
+                        packageName = data.getString(Constants.LABEL_PACKAGE_NAME);
                     }
                     operation.setStatus(getContextResources().getString(R.string.operation_value_progress));
                     getResultBuilder().build(operation);
-                    getAppList().installApp(appUrl, schedule);
+                    getAppList().installApp(appUrl, packageName, schedule);
 
                 } else if (type.equalsIgnoreCase(getContextResources().getString(R.string.intent_extra_public))) {
                     appUrl = data.getString(getContextResources().getString(R.string.app_identifier));
@@ -438,6 +442,14 @@ public class OperationManagerWorkProfile extends OperationManager {
     @Override
     public void setPolicyBundle(Operation operation) throws AndroidAgentException {
         getResultBuilder().build(operation);
+    }
+
+    @Override
+    public void setSystemUpdatePolicy(Operation operation) throws AndroidAgentException {
+        operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+        operation.setOperationResponse("Operation not supported.");
+        getResultBuilder().build(operation);
+        Log.d(TAG, "Operation not supported.");
     }
 
     private void enableGooglePlayApps(String packageName) {

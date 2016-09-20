@@ -90,6 +90,7 @@ public class ApplicationManager {
     private static final int BUFFER_OFFSET = 0;
     private static final int DOWNLOAD_PERCENTAGE_TOTAL = 100;
     private static final int DOWNLOADER_INCREMENT = 10;
+    private static final String ACTION_INSTALL_COMPLETE = "INSTALL_COMPLETED";
     private static final String APP_STATE_DOWNLOAD_STARTED = "DOWNLOAD_STARTED";
     private static final String APP_STATE_DOWNLOAD_COMPLETED = "DOWNLOAD_COMPLETED";
     private static final String APP_STATE_DOWNLOAD_FAILED = "DOWNLOAD_FAILED";
@@ -108,6 +109,8 @@ public class ApplicationManager {
         public void onReceive(Context context, Intent intent) {
             long referenceId = intent.getLongExtra(
                     DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+
+            String packageName = intent.getStringExtra(Constants.LABEL_PACKAGE_NAME);
 
             if (downloadReference == referenceId) {
                 String downloadDirectoryPath = Environment.getExternalStoragePublicDirectory(Environment.
@@ -286,7 +289,7 @@ public class ApplicationManager {
      */
     public void startInstallerIntent(Uri fileUri) {
         if (ProvisioningStateUtils.isDeviceOwner(context)) {
-            installPackage(fileUri, )
+            installPackage(fileUri);
         } else {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(fileUri, resources.getString(R.string.application_mgr_mime));
@@ -295,29 +298,48 @@ public class ApplicationManager {
         }
     }
 
-    public boolean installPackage(Uri fileUri, String packageName)
-            throws IOException {
-        File application = new File(fileUri.getPath());
-        InputStream in = new FileInputStream(application);
-        PackageInstaller packageInstaller = context.getPackageManager().getPackageInstaller();
-        PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(
-                PackageInstaller.SessionParams.MODE_FULL_INSTALL);
-        params.setAppPackageName(packageName);
-        // set params
-        int sessionId = packageInstaller.createSession(params);
-        PackageInstaller.Session session = packageInstaller.openSession(sessionId);
-        OutputStream out = session.openWrite(packageName, 0, -1);
-        byte[] buffer = new byte[65536];
-        int c;
-        while ((c = in.read(buffer)) != -1) {
-            out.write(buffer, 0, c);
-        }
-        session.fsync(out);
-        in.close();
-        out.close();
+    public boolean installPackage(Uri fileUri) {
 
-        session.commit(null);
-        return true;
+        InputStream in;
+        OutputStream out;
+        String packageName = Preference.getString(context, Constants.PreferenceFlag.CURRENT_INSTALLING_APP);
+        try {
+            File application = new File(fileUri.getPath());
+            in = new FileInputStream(application);
+            PackageInstaller packageInstaller = context.getPackageManager().getPackageInstaller();
+            PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(
+                    PackageInstaller.SessionParams.MODE_FULL_INSTALL);
+            params.setAppPackageName(packageName);
+            // set params
+            int sessionId = packageInstaller.createSession(params);
+            PackageInstaller.Session session = packageInstaller.openSession(sessionId);
+            out = session.openWrite("COSU", 0, -1);
+            byte[] buffer = new byte[65536];
+            int c;
+            while ((c = in.read(buffer)) != -1) {
+                out.write(buffer, 0, c);
+            }
+            session.fsync(out);
+            in.close();
+            out.close();
+
+            session.commit(createIntentSender(context, sessionId));
+            return true;
+        } catch (IOException e) {
+            Log.e(TAG, "Error occurred while installing application '" + packageName + "'", e);
+        } catch (Exception e) {
+            Log.e(TAG, "Error occurred while installing application '" + packageName + "'", e);
+        }
+        return false;
+    }
+
+    private static IntentSender createIntentSender(Context context, int sessionId) {
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context,
+                sessionId,
+                new Intent(ACTION_INSTALL_COMPLETE),
+                0);
+        return pendingIntent.getIntentSender();
     }
 
     /**
@@ -353,7 +375,7 @@ public class ApplicationManager {
      * @param url - APK Url should be passed in as a String.
      * @param schedule - If update/installation is scheduled, schedule information should be passed.
      */
-    public void installApp(String url, String schedule) {
+    public void installApp(String url, String packageName, String schedule) {
         if (url.contains(Constants.APP_DOWNLOAD_ENDPOINT) && Constants.APP_MANAGER_HOST != null) {
             url = url.substring(url.lastIndexOf("/"), url.length());
             this.appUrl = Constants.APP_MANAGER_HOST + Constants.APP_DOWNLOAD_ENDPOINT + url;
@@ -385,7 +407,7 @@ public class ApplicationManager {
             removeExistingFile();
             downloadViaDownloadManager(this.appUrl, resources.getString(R.string.download_mgr_download_file_name));
         } else {
-            downloadApp(this.appUrl);
+            downloadApp(this.appUrl, packageName);
         }
     }
 
@@ -397,6 +419,13 @@ public class ApplicationManager {
     public void uninstallApplication(String packageName, String schedule) {
         if (Constants.SYSTEM_APP_ENABLED) {
             CommonUtils.callSystemApp(context, Constants.Operation.SILENT_UNINSTALL_APPLICATION, schedule, packageName);
+
+        } else if (ProvisioningStateUtils.isDeviceOwner(context)) {
+            Intent intent = new Intent(context, context.getClass());
+            PendingIntent sender = PendingIntent.getActivity(context, 0, intent, 0);
+            PackageInstaller mPackageInstaller = context.getPackageManager().getPackageInstaller();
+            mPackageInstaller.uninstall(packageName, sender.getIntentSender());
+
         } else {
             if (packageName != null &&
                 !packageName.contains(resources.getString(R.string.application_package_prefix))) {
@@ -595,7 +624,7 @@ public class ApplicationManager {
      *
      * @param url - APK Url should be passed in as a String.
      */
-    private void downloadApp(String url) {
+    private void downloadApp(String url, final String packageName) {
         RequestQueue queue = null;
         try {
             queue = ServerUtilities.getCertifiedHttpClient();

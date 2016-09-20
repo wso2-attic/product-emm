@@ -46,6 +46,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.wso2.emm.agent.utils.ProvisioningStateUtils;
 
 /**
  * This class handles all the functionalities related to coordinating the retrieval
@@ -258,7 +259,7 @@ public class MessageProcessor implements APIResultCallBack {
 		String response;
 		if (requestCode == Constants.NOTIFICATION_REQUEST_CODE) {
 			if (isWipeTriggered) {
-				if(Constants.SYSTEM_APP_ENABLED) {
+				if(!ProvisioningStateUtils.isDeviceOwner(context) && Constants.SYSTEM_APP_ENABLED) {
 					CommonUtils.callSystemApp(context, Constants.Operation.WIPE_DATA, null, null);
 				} else {
 					Log.i(TAG, "Not the device owner.");

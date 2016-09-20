@@ -17,8 +17,13 @@
  */
 package org.wso2.emm.agent.services;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.ServerConfig;
@@ -159,6 +164,19 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		Intent launch = new Intent(context, EnableProfileActivity.class);
 		launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(launch);
+	}
+
+	@TargetApi(Build.VERSION_CODES.M)
+	@Override
+	public void onSystemUpdatePending(Context context, Intent intent, long receivedTime) {
+		if (receivedTime != -1) {
+			DateFormat sdf = new SimpleDateFormat("hh:mm:ss dd/MM/yyyy");
+			String timeString = sdf.format(new Date(receivedTime));
+			Toast.makeText(context, "System update received at: " + timeString,
+			               Toast.LENGTH_LONG).show();
+		} else {
+			// No system update is currently available on this device.
+		}
 	}
 
 	/**

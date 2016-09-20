@@ -173,4 +173,11 @@ public interface VersionBasedOperations {
      */
     void setPolicyBundle(Operation operation) throws AndroidAgentException;
 
+    /**
+     * Set system update policy
+     * @param operation operation object
+     * @throws AndroidAgentException
+     */
+    void setSystemUpdatePolicy(Operation operation) throws AndroidAgentException;
+
 }

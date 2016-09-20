@@ -728,8 +728,12 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         try {
             if (operation.getPayLoad() != null) {
                 inputData = new JSONObject(operation.getPayLoad().toString());
-                message = inputData.getString(Constants.ADMIN_MESSAGE);
-                isHardLockEnabled = inputData.getBoolean(Constants.IS_HARD_LOCK_ENABLED);
+                if (inputData.has(Constants.ADMIN_MESSAGE)) {
+                    message = inputData.getString(Constants.ADMIN_MESSAGE);
+                }
+                if (inputData.has(Constants.IS_HARD_LOCK_ENABLED)) {
+                    isHardLockEnabled = inputData.getBoolean(Constants.IS_HARD_LOCK_ENABLED);
+                }
             }
         } catch (JSONException e) {
             operation.setStatus(resources.getString(R.string.operation_value_error));
@@ -747,6 +751,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             resultBuilder.build(operation);
             enableHardLock(message, operation);
         } else {
+            if (message == null || message.isEmpty()) {
+                message = context.getString(R.string.txt_lock_activity);
+            }
             operation.setStatus(resources.getString(R.string.operation_value_completed));
             resultBuilder.build(operation);
             NotificationCompat.Builder mBuilder =   new NotificationCompat.Builder(context)

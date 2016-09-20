@@ -20,6 +20,7 @@ package org.wso2.emm.agent.services.operation;
 
 import android.annotation.TargetApi;
 import android.app.admin.DevicePolicyManager;
+import android.app.admin.SystemUpdatePolicy;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -34,6 +35,7 @@ import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.ServerDetails;
 import org.wso2.emm.agent.beans.AppRestriction;
 import org.wso2.emm.agent.beans.Operation;
+import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
@@ -70,6 +72,8 @@ public class OperationManagerDeviceOwner extends OperationManager {
             if (Constants.OWNERSHIP_COPE.equals(ownershipType.trim())) {
                 status = getContextResources().getString(R.string.shared_pref_default_status);
                 result.put(getContextResources().getString(R.string.operation_status), status);
+                getDevicePolicyManager().
+                        wipeData(DevicePolicyManager.WIPE_EXTERNAL_STORAGE | DevicePolicyManager.WIPE_RESET_PROTECTION_DATA);
             } else if (Constants.OWNERSHIP_BYOD.equals(ownershipType.trim()) ||
                        (inputPin != null && savedPin != null && inputPin.trim().equals(savedPin.trim()))) {
                 status = getContextResources().getString(R.string.shared_pref_default_status);
@@ -160,6 +164,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
         String type;
         String name;
         String operationType;
+        String packageName = null;
         String schedule = null;
 
         try {
@@ -168,12 +173,16 @@ public class OperationManagerDeviceOwner extends OperationManager {
 
                 if (type.equalsIgnoreCase(getContextResources().getString(R.string.intent_extra_enterprise))) {
                     appUrl = data.getString(getContextResources().getString(R.string.app_url));
-                    if(data.has(getContextResources().getString(R.string.app_schedule))){
+                    if (data.has(getContextResources().getString(R.string.app_schedule))) {
                         schedule = data.getString(getContextResources().getString(R.string.app_schedule));
+                    }
+                    if (data.has(Constants.LABEL_PACKAGE_NAME)) {
+                        packageName = data.getString(Constants.LABEL_PACKAGE_NAME);
+                        Preference.putString(getContext(), Constants.PreferenceFlag.CURRENT_INSTALLING_APP, packageName);
                     }
                     operation.setStatus(getContextResources().getString(R.string.operation_value_progress));
                     getResultBuilder().build(operation);
-                    getAppList().installApp(appUrl, schedule);
+                    getAppList().installApp(appUrl, packageName, schedule);
 
                 } else if (type.equalsIgnoreCase(getContextResources().getString(R.string.intent_extra_public))) {
                     appUrl = data.getString(getContextResources().getString(R.string.app_identifier));
@@ -630,6 +639,49 @@ public class OperationManagerDeviceOwner extends OperationManager {
     @Override
     public void setPolicyBundle(Operation operation) throws AndroidAgentException {
         getResultBuilder().build(operation);
+    }
+
+    public void setSystemUpdatePolicy(Operation operation) throws AndroidAgentException {
+        int maintenanceStart;
+        int maintenanceEnd;
+        String systemUpdatePolicySelection;
+        try {
+            SystemUpdatePolicy newPolicy;
+            JSONObject payload = new JSONObject(operation.getPayLoad().toString());
+            if (payload != null) {
+                systemUpdatePolicySelection = payload.getString(Constants.TYPE);
+                switch (systemUpdatePolicySelection) {
+                    case Constants.SystemUpdatePolicyType.AUTOMATIC:
+                        newPolicy = SystemUpdatePolicy.createAutomaticInstallPolicy();
+                        break;
+                    case Constants.SystemUpdatePolicyType.WINDOWED:
+                        maintenanceStart = payload.getInt(Constants.START_TIME);
+                        maintenanceEnd = payload.getInt(Constants.END_TIME);
+                        newPolicy = SystemUpdatePolicy.createWindowedInstallPolicy(maintenanceStart, maintenanceEnd);
+                        break;
+                    case Constants.SystemUpdatePolicyType.POSTPONE:
+                        newPolicy = SystemUpdatePolicy.createPostponeInstallPolicy();
+                        break;
+                    default:
+                        newPolicy = null;
+                }
+                getDevicePolicyManager().
+                        setSystemUpdatePolicy(AgentDeviceAdminReceiver.getComponentName(getContext()), newPolicy);
+                operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+                getResultBuilder().build(operation);
+            } else {
+                operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+                operation.setOperationResponse("Error in parsing system update policy payload.");
+                getResultBuilder().build(operation);
+                throw new AndroidAgentException("System update policy payload is null");
+            }
+
+        } catch (JSONException e) {
+            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing system update policy payload.");
+            getResultBuilder().build(operation);
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
     }
 
 }

@@ -44,7 +44,7 @@ public class EnableProfileActivity extends Activity {
         adminReceiver = AgentDeviceAdminReceiver.getComponentName(this);
         if (savedInstanceState == null) {
             enableProfile();
-            ApplicationUtils.disableGooglePlay(this);
+            //ApplicationUtils.disableGooglePlay(this);
             startEnrollment();
         }
     }

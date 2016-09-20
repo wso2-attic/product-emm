@@ -181,8 +181,12 @@ public class OperationProcessor {
 			case Constants.Operation.LOGCAT:
 				operationManager.getLogcat(operation);
 				break;
+			case Constants.Operation.SYSTEM_UPDATE_POLICY:
+				operationManager.setSystemUpdatePolicy(operation);
+				break;
 			case Constants.Operation.DISALLOW_SAFE_BOOT:
 				operationManager.handleUserRestriction(operation);
+				break;
 			default:
 				operationManager.passOperationToSystemApp(operation);
 				break;

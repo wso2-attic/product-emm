@@ -180,7 +180,13 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			finish();
 		}
 
+		// if the device is provisioned as a profile owner or device owner,
+		// these buttons will no longer valid
+		if (ProvisioningStateUtils.isManagedByAgent(context)) {
+			radioCOPE.setVisibility(View.GONE);
+			radioBYOD.setVisibility(View.GONE);
 
+		}
 	}
 
 	private OnClickListener onClickAuthenticate = new OnClickListener() {
@@ -202,6 +208,12 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					deviceType = Constants.OWNERSHIP_BYOD;
 				} else {
 					deviceType = Constants.OWNERSHIP_COPE;
+				}
+
+				if (ProvisioningStateUtils.isDeviceOwner(context)) {
+					deviceType = Constants.OWNERSHIP_COPE;
+				} else {
+					deviceType = Constants.OWNERSHIP_BYOD;
 				}
 
 				showAuthenticationDialog();

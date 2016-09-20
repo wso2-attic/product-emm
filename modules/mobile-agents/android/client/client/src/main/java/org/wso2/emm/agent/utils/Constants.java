@@ -62,6 +62,9 @@ public class Constants {
 	public static final boolean SKIP_WORK_PROFILE_CREATION = false;
 	public static final boolean HIDE_ERROR_DIALOG = false;
 
+	public static final String LABEL_PACKAGE_NAME = "packageName";
+	public static final String START_TIME = "startTime";
+	public static final String END_TIME = "endTime";
 
 	/**
 	 * Log publishers
@@ -338,6 +341,7 @@ public class Constants {
 		public static final String GET_FIRMWARE_BUILD_DATE = "FIRMWARE_BUILD_DATE";
 		public static final String LOGCAT = "LOGCAT";
 		public static final String FIRMWARE_UPGRADE_AUTOMATIC_RETRY = "FIRMWARE_UPGRADE_AUTOMATIC_RETRY";
+		public static final String SYSTEM_UPDATE_POLICY = "FIRMWARE_UPGRADE_AUTOMATIC_RETRY";
 	}
 
 	/**
@@ -475,6 +479,7 @@ public class Constants {
 		public static final String IS_AGREED = "isAgreed";
 		public static final String NOTIFIER_TYPE = "notifierType";
 		public static final String SKIP_DEVICE_ACTIVATION = "skipDeviceActive";
+		public static final String CURRENT_INSTALLING_APP = "installingApplication";
 	}
 
 	public final class AppRestriction {
@@ -496,6 +501,15 @@ public class Constants {
 		}
 
 		public static final String PLAY_STORE = "com.android.vending";
+	}
+
+	public final class SystemUpdatePolicyType {
+		private SystemUpdatePolicyType() {
+			throw new AssertionError();
+		}
+		public static final String AUTOMATIC = "automatic";
+		public static final String WINDOWED = "windowed";
+		public static final String POSTPONE = "postpone";
 	}
 
 }

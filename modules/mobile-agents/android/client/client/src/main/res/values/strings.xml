@@ -83,6 +83,8 @@
     <string name="app_uri">packageUri</string>
     <string name="alarm_schedule">schedule</string>
     <string name="alert_message">Message</string>
+    <string name="exit_kiosk_mode">Exit Kiosk Mode</string>
+
 
     <!-- TEXT FIELD HINTS -->
     <string name="hint_new_pin">New PIN Code</string>
