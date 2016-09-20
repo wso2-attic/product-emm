@@ -103,7 +103,7 @@ public class AppUtils {
             CommonUtils.sendBroadcast(context, Constants.Operation.SILENT_INSTALL_APPLICATION, Constants.Code.SUCCESS, Constants.Status.SUCCESSFUL,
                           result.toString());
         } catch (JSONException e) {
-            Log.e(TAG, "Failed to create JSON object when publishing OTA progress.");
+            Log.e(TAG, "Failed to create JSON object when publishing App install status.");
             CommonUtils.sendBroadcast(context, Constants.Operation.SILENT_INSTALL_APPLICATION, Constants.Code.FAILURE, Constants.Status.INTERNAL_ERROR,
                           String.valueOf(DEFAULT_STATE_INFO_CODE));
         }

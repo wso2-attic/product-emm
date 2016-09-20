@@ -95,6 +95,8 @@ public class ApplicationManagementService extends IntentService implements APIRe
                 doTask(operationCode);
             } else if (isRegistered && Constants.SYSTEM_SERVICE_PACKAGE.equals(intent.getPackage())) {
                 doTask(operationCode);
+            } else if (operationCode.equals(Constants.Operation.GET_ENROLLMENT_STATUS)) {
+                doTask(operationCode);
             } else {
                 sendBroadcast(Constants.Status.AUTHENTICATION_FAILED, null);
             }
