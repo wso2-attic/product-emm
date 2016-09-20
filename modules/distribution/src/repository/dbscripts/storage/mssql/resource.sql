@@ -1,0 +1,2 @@
+IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE OBJECT_ID = OBJECT_ID(N'[DBO].[RESOURCE]') AND TYPE IN (N'U'))
+CREATE TABLE resource ( uuid VARCHAR(250), tenantId VARCHAR(250),fileName VARCHAR(250), contentLength INT,contentType VARCHAR(150), content varbinary(MAX));
