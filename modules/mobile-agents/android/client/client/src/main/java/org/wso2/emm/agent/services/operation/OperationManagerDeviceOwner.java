@@ -21,8 +21,10 @@ package org.wso2.emm.agent.services.operation;
 import android.annotation.TargetApi;
 import android.app.admin.DevicePolicyManager;
 import android.app.admin.SystemUpdatePolicy;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
@@ -31,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AlertActivity;
 import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.KioskAppActivity;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.ServerDetails;
 import org.wso2.emm.agent.beans.AppRestriction;
@@ -41,7 +44,9 @@ import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OperationManagerDeviceOwner extends OperationManager {
     private static final String TAG = OperationManagerDeviceOwner.class.getSimpleName();
@@ -682,6 +687,68 @@ public class OperationManagerDeviceOwner extends OperationManager {
             getResultBuilder().build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
+    }
+
+    public void enableKioskMode(Operation operation) throws AndroidAgentException {
+        List<String> appList = new ArrayList<>();
+        List<String> unavailableApps = new ArrayList<>();
+        PackageManager pm = getContext().getPackageManager();
+        try {
+            JSONObject payload = new JSONObject(operation.getPayLoad().toString());
+            if (payload != null) {
+                if (!payload.isNull(Constants.WHITE_LISTED_APPS)) {
+                    JSONArray whiteListedApps = payload.getJSONArray(Constants.WHITE_LISTED_APPS);
+                    JSONObject whiteListedApp;
+                    for (int i = 0; i < whiteListedApps.length(); i++) {
+                        whiteListedApp = whiteListedApps.getJSONObject(i);
+                        appList.add(whiteListedApp.getString(Constants.AppRestriction.PACKAGE_NAME));
+                    }
+
+                    for (String packageName : appList) {
+                        if (!pm.isPackageAvailable(packageName)) {
+                            unavailableApps.add(packageName);
+                        }
+                    }
+                    if (unavailableApps.size() != 0) {
+                        String msg = "Cannot initiate KIOSK mode. Following packages are not installed: ";
+                        for (String appName : unavailableApps) {
+                            msg += appName + ", ";
+                        }
+                        Log.e(TAG, msg);
+                        operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+                        operation.setOperationResponse(msg);
+                        getResultBuilder().build(operation);
+                        throw new AndroidAgentException(msg);
+                    }
+                    switchToKioskMode(appList);
+                    operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+                    getResultBuilder().build(operation);
+                    return;
+                }
+            }
+            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            String msg = "Error in executing kiosk operation due to invalid/empty payload";
+            operation.setOperationResponse(msg);
+            getResultBuilder().build(operation);
+            throw new AndroidAgentException("Invalid JSON format.");
+        } catch (JSONException e) {
+            operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+            operation.setOperationResponse("Error in parsing kiosk operation payload.");
+            getResultBuilder().build(operation);
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
+    }
+
+    private void switchToKioskMode(List<String> appList) {
+        Intent kioskIntent = new Intent(getContext(), KioskAppActivity.class);
+        kioskIntent.putExtra(KioskAppActivity.LOCKED_APP_PACKAGE_LIST, appList.toArray());
+        getContext().getPackageManager().setComponentEnabledSetting(
+                new ComponentName(getContext().getPackageName(), KioskAppActivity.class.getName()),
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+        kioskIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getContext().startActivity(kioskIntent);
+        Toast.makeText(getContext(), R.string.setup_cosu_success, Toast.LENGTH_LONG).show();
     }
 
 }

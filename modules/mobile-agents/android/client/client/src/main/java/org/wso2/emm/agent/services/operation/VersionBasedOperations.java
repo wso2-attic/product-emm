@@ -180,4 +180,6 @@ public interface VersionBasedOperations {
      */
     void setSystemUpdatePolicy(Operation operation) throws AndroidAgentException;
 
+    void enableKioskMode(Operation operation) throws AndroidAgentException;
+
 }

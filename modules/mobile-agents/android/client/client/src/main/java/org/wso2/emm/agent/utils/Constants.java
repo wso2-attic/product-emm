@@ -65,6 +65,8 @@ public class Constants {
 	public static final String LABEL_PACKAGE_NAME = "packageName";
 	public static final String START_TIME = "startTime";
 	public static final String END_TIME = "endTime";
+	public static final String WHITE_LISTED_APPS = "whitelistedApplications";
+
 
 	/**
 	 * Log publishers
@@ -341,7 +343,8 @@ public class Constants {
 		public static final String GET_FIRMWARE_BUILD_DATE = "FIRMWARE_BUILD_DATE";
 		public static final String LOGCAT = "LOGCAT";
 		public static final String FIRMWARE_UPGRADE_AUTOMATIC_RETRY = "FIRMWARE_UPGRADE_AUTOMATIC_RETRY";
-		public static final String SYSTEM_UPDATE_POLICY = "FIRMWARE_UPGRADE_AUTOMATIC_RETRY";
+		public static final String SYSTEM_UPDATE_POLICY = "SYSTEM_UPDATE_POLICY";
+		public static final String KIOSK_APPS = "KIOSK_APPS";
 	}
 
 	/**

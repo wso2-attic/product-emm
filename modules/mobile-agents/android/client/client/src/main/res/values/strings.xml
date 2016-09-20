@@ -407,4 +407,6 @@
     <string name="split_delimiter">,</string>
     <!-- Android For Work User Restrictions -->
     <string name="allow_parent_profile_app_linking">ALLOW_PARENT_PROFILE_APP_LINKING</string>
+
+    <string name="setup_cosu_success">COSU mode is enabled</string>
 </resources>

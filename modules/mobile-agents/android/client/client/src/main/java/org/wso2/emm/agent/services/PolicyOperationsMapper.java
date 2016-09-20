@@ -90,6 +90,8 @@ public class PolicyOperationsMapper {
 			case Constants.Operation.ENABLE_ADMIN:
 			case Constants.Operation.SET_SCREEN_CAPTURE_DISABLED:
 			case Constants.Operation.SET_STATUS_BAR_DISABLED:
+			case Constants.Operation.KIOSK_APPS:
+			case Constants.Operation.SYSTEM_UPDATE_POLICY:
 				return buildRestrictionOperation(operation);
 			default:
 				throw new AndroidAgentException("Invalid operation code received");

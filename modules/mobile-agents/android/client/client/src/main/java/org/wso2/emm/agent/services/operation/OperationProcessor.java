@@ -187,6 +187,9 @@ public class OperationProcessor {
 			case Constants.Operation.DISALLOW_SAFE_BOOT:
 				operationManager.handleUserRestriction(operation);
 				break;
+			case Constants.Operation.KIOSK_APPS:
+				operationManager.handleUserRestriction(operation);
+				break;
 			default:
 				operationManager.passOperationToSystemApp(operation);
 				break;
