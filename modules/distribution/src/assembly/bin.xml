@@ -285,13 +285,13 @@
                 <include>*/**</include>
             </includes>
         </fileSet>
-        <fileSet>
+        <!-- <fileSet>
             <directory>src/repository/modules/encode</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/modules/encode</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
-        </fileSet>
+        </fileSet> -->
         <fileSet>
             <directory>src/repository/modules/sso</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/modules/sso</outputDirectory>
