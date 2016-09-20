@@ -24,6 +24,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -163,6 +164,63 @@ public class HTTPInvoker {
                 post.setHeader(key, headers.get(key));
             }
             response = httpclient.execute(post);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+
+        BufferedReader rd = null;
+        try {
+            rd = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        StringBuffer result = new StringBuffer();
+        String line = "";
+        try {
+            while ((line = rd.readLine()) != null) {
+                result.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        httpResponse.setResponseCode(response.getStatusLine().getStatusCode());
+        httpResponse.setResponse(result.toString());
+        try {
+            httpclient.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return httpResponse;
+    }
+
+    public static HTTPResponse sendHTTPPutWithOAuthSecurity(String url, String payload, HashMap<String, String>
+            headers) {
+        HttpPut put = null;
+        HttpResponse response = null;
+        HTTPResponse httpResponse = new HTTPResponse();
+        CloseableHttpClient httpclient = null;
+        try {
+            httpclient = (CloseableHttpClient) createHttpClient();
+            StringEntity requestEntity = new StringEntity(payload, Constants.UTF_8);
+            put = new HttpPut(url);
+            put.setEntity(requestEntity);
+            for (String key : headers.keySet()) {
+                put.setHeader(key, headers.get(key));
+            }
+            put.setHeader(Constants.Header.AUTH, OAUTH_BEARER + oAuthToken);
+            response = httpclient.execute(put);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (ClientProtocolException e) {
