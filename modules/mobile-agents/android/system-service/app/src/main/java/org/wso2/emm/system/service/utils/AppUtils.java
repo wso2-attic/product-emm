@@ -92,7 +92,6 @@ public class AppUtils {
     }
 
     private static void publishAppInstallStatus(Context context, String status, String error) {
-        String buildDate;
         JSONObject result = new JSONObject();
 
         try {

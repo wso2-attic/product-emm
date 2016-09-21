@@ -46,6 +46,7 @@ public class Constants {
 	// OWNERSHIP_BYOD or OWNERSHIP_COPE. If you are using the mutual SSL authentication
 	// This value must be set to a value other than null.
 	public static final String DEFAULT_OWNERSHIP = null;
+	public static final String PENDING_APP_INSTALLATIONS = "PENDING_APP_INSTALLATIONS";
 	// This is set to override the server host name retrieving screen. If overriding is not
 	// needed, set this to null.
 	public static final String DEFAULT_HOST = null;
@@ -53,6 +54,7 @@ public class Constants {
 	public static final String SYSTEM_SERVICE_PACKAGE = "org.wso2.emm.system.service";
 	public static final String AGENT_PACKAGE = "org.wso2.emm.agent";
 	public static final int FIRMWARE_UPGRADE_RETRY_COUNT = 5;
+	public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 
 
 	// This is used to skip the license
