@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,6 +43,7 @@ import org.wso2.emm.agent.AlertActivity;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.ApplicationManager;
+import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.api.RuntimeInfo;
 import org.wso2.emm.agent.api.WiFiConfig;
 import org.wso2.emm.agent.beans.Address;
@@ -879,29 +881,22 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param operation - Operation object.
      */
     public void getLogcat(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-        JSONObject result = new JSONObject();
         RuntimeInfo info = new RuntimeInfo(context);
-        LogPublisherFactory publisher = new LogPublisherFactory(context);
-        try {
-            result.put("logcat", info.getLogCat());
-            if (publisher.getLogPulisher() != null) {
-                EventPayload eventPayload = new EventPayload();
-                eventPayload.setPayload(info.getLogCat());
-                eventPayload.setType("LOGCAT");
-                publisher.getLogPulisher().publish(eventPayload);
-            }
-        } catch (JSONException e) {
-            operation.setStatus(resources.getString(R.string.operation_value_error));
-            operation.setOperationResponse("Error in parsing VPN payload.");
-            resultBuilder.build(operation);
-            throw new AndroidAgentException("Invalid JSON format.", e);
-        }
-
+        DeviceInfo deviceInfo = new DeviceInfo(context);
+        EventPayload eventPayload = new EventPayload();
+        eventPayload.setPayload(info.getLogCat());
+        eventPayload.setType("LOGCAT");
+        eventPayload.setDeviceIdentifier(deviceInfo.getDeviceId());
         if (Constants.DEBUG_MODE_ENABLED) {
             Log.d(TAG, "Logcat returned");
         }
+        LogPublisherFactory publisher = new LogPublisherFactory(context);
+        if (publisher.getLogPublisher() != null) {
+            publisher.getLogPublisher().publish(eventPayload);
+        }
         operation.setStatus(resources.getString(R.string.operation_value_completed));
-        operation.setPayLoad(result.toString());
+        Gson logcatResponse = new Gson();
+        operation.setOperationResponse(logcatResponse.toJson(eventPayload));
         resultBuilder.build(operation);
     }
 
