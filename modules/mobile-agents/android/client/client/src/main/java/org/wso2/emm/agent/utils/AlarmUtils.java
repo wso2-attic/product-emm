@@ -25,6 +25,7 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.services.AlarmReceiver;
 
 import java.text.ParseException;
@@ -36,30 +37,39 @@ import java.util.Locale;
  * Utility class to hold file alarm scheduling methods.
  */
 public class AlarmUtils {
-    private static final int DEFAULT_TIME_MILLISECONDS = 1000;
-    private static final int RECURRING_REQUEST_CODE = 200;
-    private static final int ONE_TIME_REQUEST_CODE = 300;
 
     /**
      * Initiates one time alarm device startup.
      * @param context - Application context.
-     * @param  time - Time that alarm should trigger.
+     * @param time - Time that alarm should trigger.
+     * @param operation - Requested operation to schedule.
      */
-    public static void setOneTimeAlarm(Context context, String time, String operation, String packageUri) throws ParseException {
+    public static void setOneTimeAlarm(Context context, String time, String operationCode,
+                                       Operation operation, String appUrl, String packageUri) throws ParseException {
         Log.d("AlarmUtils", "Setting one time alarm: " + time);
-        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy hh:mm a", Locale.ENGLISH);
+        SimpleDateFormat formatter = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.ENGLISH);
         Date date = formatter.parse(time);
         long startTime = date.getTime();
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
-        alarmIntent.putExtra(context.getResources().getString(R.string.alarm_scheduled_operation), operation);
-        if(packageUri != null){
+        alarmIntent.putExtra(context.getResources().getString(R.string.alarm_scheduled_operation), operationCode);
+        if (operation != null) {
+            alarmIntent.putExtra(context.getResources().getString(R.string.alarm_scheduled_operation_payload), operation);
+        }
+        if (appUrl != null) {
+            alarmIntent.putExtra(context.getResources().getString(R.string.app_url), appUrl);
+        }
+        if (packageUri != null) {
             alarmIntent.putExtra(context.getResources().getString(R.string.app_uri), packageUri);
+        }
+        int requestCode = 0;
+        if(operation != null){
+            requestCode = operation.getId();
         }
         PendingIntent pendingIntent =
                 PendingIntent.getBroadcast(context,
-                        ONE_TIME_REQUEST_CODE,
+                        requestCode,
                         alarmIntent,
-                        PendingIntent.FLAG_CANCEL_CURRENT);
+                        PendingIntent.FLAG_ONE_SHOT);
         AlarmManager alarmManager =
                 (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, startTime, pendingIntent);

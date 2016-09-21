@@ -274,17 +274,17 @@ public class EMMSystemService extends IntentService {
                 break;
             case Constants.Operation.SILENT_INSTALL_APPLICATION:
                 if (appUri != null) {
-                    silentInstallApp(getApplicationContext(), appUri, command);
+                    silentInstallApp(getApplicationContext(), appUri);
                 }
                 break;
             case Constants.Operation.SILENT_UPDATE_APPLICATION:
                 if (appUri != null) {
-                    silentInstallApp(getApplicationContext(), appUri, command);
+                    silentInstallApp(getApplicationContext(), appUri);
                 }
                 break;
             case Constants.Operation.SILENT_UNINSTALL_APPLICATION:
                 if (appUri != null) {
-                    silentUninstallApp(getApplicationContext(), appUri, command);
+                    silentUninstallApp(getApplicationContext(), appUri);
                 }
                 break;
             case Constants.Operation.REMOVE_DEVICE_OWNER:
@@ -575,37 +575,15 @@ public class EMMSystemService extends IntentService {
     /**
      * Silently installs the app resides in the provided URI.
      */
-    private void silentInstallApp(Context context, String packageUri, String schedule) {
-        if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
-            Log.i(TAG, "Silent install has been scheduled to " + schedule);
-            Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), schedule);
-            Preference.putString(context, context.getResources().getString(R.string.app_uri), packageUri);
-            try {
-                AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.SILENT_INSTALL_APPLICATION, packageUri);
-            } catch (ParseException e) {
-                Log.e(TAG, "One time alarm time string parsing failed." + e);
-            }
-        } else {
-            AppUtils.silentInstallApp(context, Uri.parse(packageUri));
-        }
+    private void silentInstallApp(Context context, String packageUri) {
+        AppUtils.silentInstallApp(context, Uri.parse(packageUri));
     }
 
     /**
      * Silently uninstalls the app resides in the provided URI.
      */
-    private void silentUninstallApp(Context context, final String packageName, String schedule) {
-        if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
-            Log.i(TAG, "Silent install has been scheduled to " + schedule);
-            Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), schedule);
-            Preference.putString(context, context.getResources().getString(R.string.app_uri), packageName);
-            try {
-                AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.SILENT_UNINSTALL_APPLICATION, packageName);
-            } catch (ParseException e) {
-                Log.e(TAG, "One time alarm time string parsing failed." + e);
-            }
-        } else {
-            AppUtils.silentUninstallApp(context, packageName);
-        }
+    private void silentUninstallApp(Context context, final String packageName) {
+        AppUtils.silentUninstallApp(context, packageName);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

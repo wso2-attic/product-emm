@@ -93,20 +93,8 @@ public class OperationProcessor {
 				operationManager.disableCamera(operation);
 				break;
 			case Constants.Operation.INSTALL_APPLICATION:
-				Preference.putInt(context, context.getResources().getString(
-						R.string.app_install_id), operation.getId());
-				Preference.putString(context, context.getResources().getString(
-						R.string.app_install_code), Constants.Operation.INSTALL_APPLICATION);
-				operationManager.installAppBundle(operation);
-				break;
 			case Constants.Operation.INSTALL_APPLICATION_BUNDLE:
-				operationManager.installAppBundle(operation);
-				break;
 			case Constants.Operation.UPDATE_APPLICATION:
-				Preference.putInt(context, context.getResources().getString(
-						R.string.app_install_id), operation.getId());
-				Preference.putString(context, context.getResources().getString(
-						R.string.app_install_code), Constants.Operation.UPDATE_APPLICATION);
 				operationManager.installAppBundle(operation);
 				break;
 			case Constants.Operation.UNINSTALL_APPLICATION:
