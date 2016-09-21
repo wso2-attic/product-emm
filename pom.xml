@@ -806,7 +806,7 @@
                 <version>${saaj-impl.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.bouncycastle.wso2</groupId>
+                <groupId>org.wso2.orbit.org.bouncycastle</groupId>
                 <artifactId>bcpkix-jdk15on</artifactId>
                 <version>${bcpkix-jdk15on.version}</version>
             </dependency>
@@ -1052,11 +1052,11 @@
         <mdm.version>2.2.0-SNAPSHOT</mdm.version>
 
         <!-- Carbon API Management -->
-        <carbon.api.mgt.version>6.0.4</carbon.api.mgt.version>
+        <carbon.api.mgt.version>6.0.5-SNAPSHOT</carbon.api.mgt.version>
         <carbon.api.mgt.version.range>(5.0.0,7.0.0]</carbon.api.mgt.version.range>
 
         <!-- Carbon Mediation -->
-        <carbon.mediation.version>4.6.1</carbon.mediation.version>
+        <carbon.mediation.version>4.6.6</carbon.mediation.version>
 
         <!-- Carbon Analytics Common -->
         <carbon.analytics.common.version>5.0.12-alpha</carbon.analytics.common.version>
@@ -1104,7 +1104,7 @@
         <cipher.tool.version>1.0.0-wso2v3</cipher.tool.version>
 
         <!-- Carbon-analytics version-->
-        <carbon.analytics.version>1.2.6-SNAPSHOT</carbon.analytics.version>
+        <carbon.analytics.version>1.2.8-SNAPSHOT</carbon.analytics.version>
         <carbon.data.version>4.4.0-SNAPSHOT</carbon.data.version>
 
 
