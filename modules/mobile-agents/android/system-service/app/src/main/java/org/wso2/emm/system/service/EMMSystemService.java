@@ -47,8 +47,10 @@ import org.wso2.emm.system.service.utils.CommonUtils;
 import org.wso2.emm.system.service.utils.Constants;
 import org.wso2.emm.system.service.utils.Preference;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -412,9 +414,36 @@ public class EMMSystemService extends IntentService {
             case Constants.Operation.GET_FIRMWARE_BUILD_DATE:
                 publishFirmwareBuildDate();
                 break;
+            case Constants.Operation.LOGCAT:
+                getLogCat(Integer.parseInt(command));
+                break;
             default:
                 Log.e(TAG, "Invalid operation code received");
                 break;
+        }
+    }
+
+    /**
+     * Returns the device LogCat
+     */
+    public void getLogCat(int operationId) {
+        StringBuilder builder=new StringBuilder();
+        try {
+            String[] command = new String[] { "logcat", "-t100", "-vtime" , "*:W"};
+
+            Process process = Runtime.getRuntime().exec(command);
+
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                builder.append(line);
+                builder.append("\n");
+            }
+            CommonUtils.callAgentApp(context, Constants.Operation.LOGCAT, operationId, builder.toString());
+        } catch (IOException e) {
+            Log.e(TAG, "getLog failed", e);
         }
     }
 
