@@ -79,35 +79,35 @@ public class UserOperations {
     }
 
     private static String[] getUserPermissions() {
-        String permissions = "\"/permission/admin/device-mgt/certificates/manage\"," +
-                             "\"/permission/admin/device-mgt/certificates/view\"," +
-                             "\"/permission/admin/device-mgt/configurations/view\"," +
-                             "\"/permission/admin/device-mgt/devices/enroll/android\"," +
-                             "\"/permission/admin/device-mgt/devices/owning/view\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/applications\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/blacklist-app\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/camera\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/change-lock\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/clear-password\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/encrypt\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/enterprise-wipe\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/info\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/install-app\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/location\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/lock\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/mute\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/notification\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/ring\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/unlock\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/password-policy\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/uninstall-app\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/update-app\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/webclip\"," +
-                             "\"/permission/admin/device-mgt/devices/owning-device/operations/android/wifi\"," +
-                             "\"/permission/admin/device-mgt/notifications/view\"," +
-                             "\"/permission/admin/device-mgt/platform-configurations/view\"," +
-                             "\"/permission/admin/device-mgt/policies/view\"," +
-                             "\"/permission/admin/login\"";
+        String permissions = "/permission/admin/device-mgt/certificates/manage," +
+                             "/permission/admin/device-mgt/certificates/view," +
+                             "/permission/admin/device-mgt/configurations/view," +
+                             "/permission/admin/device-mgt/devices/enroll/android," +
+                             "/permission/admin/device-mgt/devices/owning/view," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/applications," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/blacklist-app," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/camera," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/change-lock," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/clear-password," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/encrypt," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/enterprise-wipe," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/info," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/install-app," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/location," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/lock," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/mute," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/notification," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/ring," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/unlock," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/password-policy," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/uninstall-app," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/update-app," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/webclip," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/wifi," +
+                             "/permission/admin/device-mgt/notifications/view," +
+                             "/permission/admin/device-mgt/platform-configurations/view," +
+                             "/permission/admin/device-mgt/policies/view," +
+                             "/permission/admin/login";
         return permissions.split(",");
     }
 
@@ -122,6 +122,7 @@ public class UserOperations {
         for (String perm : permissions) {
             perms.add(perm);
         }
+        roleData.put("permissions", perms);
         JSONArray usrs = new JSONArray();
         for (String usr : users) {
             usrs.add(usr);
