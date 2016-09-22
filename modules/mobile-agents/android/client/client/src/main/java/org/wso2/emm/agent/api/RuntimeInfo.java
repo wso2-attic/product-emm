@@ -159,7 +159,7 @@ public class RuntimeInfo {
             String[] command = new String[]{
                     "logcat",
                     "-t", String.valueOf(Constants.LogPublisher.NUMBER_OF_LOG_LINES),
-                    "-v", "time", "*:W"};
+                    "-v", "time", Constants.LogPublisher.LOG_LEVEL};
 
             Process process = Runtime.getRuntime().exec(command);
 
