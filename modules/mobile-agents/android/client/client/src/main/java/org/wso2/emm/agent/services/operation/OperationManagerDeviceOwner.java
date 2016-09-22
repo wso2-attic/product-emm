@@ -139,7 +139,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
                 }
             }
             if (Constants.DEBUG_MODE_ENABLED) {
-                Log.d(TAG, "Application bundle installation started");
+                Log.d(TAG, "Application bundle installation triggered.");
             }
 
         } catch (JSONException e) {
@@ -200,7 +200,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
                 }
 
                 if (Constants.DEBUG_MODE_ENABLED) {
-                    Log.d(TAG, "Application installation started");
+                    Log.d(TAG, "Application installation triggered.");
                 }
             }
         } catch (JSONException e) {

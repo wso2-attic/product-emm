@@ -93,6 +93,8 @@ public class ApplicationManager {
     private static final String APP_STATE_INSTALL_FAILED = "INSTALL_FAILED";
     private static final String APP_STATE_INSTALLED = "INSTALLED";
     private static final String TAG = ApplicationManager.class.getName();
+    private static final String APP_INSTALLATION_ATTEMPT = "APP_INSTALLATION_ATTEMPT";
+    private static volatile boolean downloadOngoing = false;
     private Context context;
     private Resources resources;
     private PackageManager packageManager;
@@ -337,10 +339,26 @@ public class ApplicationManager {
                 appInstallRequest.setAppUrl(url);
                 AppInstallRequestUtil.addPending(context, appInstallRequest);
                 Log.d(TAG, "Added request to pending queue as there is another installation ongoing.");
+                if (!downloadOngoing) {
+                    // Probably installation might ongoing
+                    int attempt = Preference.getInt(context, APP_INSTALLATION_ATTEMPT);
+                    if (attempt >= 1) {
+                        Preference.putInt(context, APP_INSTALLATION_ATTEMPT, 0);
+                        Preference.putInt(context, context.getResources().getString(
+                                R.string.app_install_id), 0);
+                        Preference.putString(context, context.getResources().getString(
+                                R.string.app_install_code), null);
+                    } else {
+                        Preference.putInt(context, APP_INSTALLATION_ATTEMPT, ++attempt);
+                    }
+                } else {
+                    downloadOngoing = false; //Let's check whether it is actually ongoing or not.
+                }
                 return; //Will call installApp method again once current installation completed.
             }
             operationId = operation.getId();
             operationCode = operation.getCode();
+            Preference.putInt(context, APP_INSTALLATION_ATTEMPT, 0);
         }
 
         setupAppDownload(url, operationId, operationCode);
@@ -553,6 +571,7 @@ public class ApplicationManager {
                 boolean downloading = true;
                 int progress = 0;
                 while (downloading) {
+                    downloadOngoing = true;
                     DownloadManager.Query query = new DownloadManager.Query();
                     query.setFilterById(downloadReference);
                     Cursor cursor = downloadManager.query(query);
@@ -590,6 +609,7 @@ public class ApplicationManager {
                                          String.valueOf(progress));
                     cursor.close();
                 }
+                downloadOngoing = false;
             }
         }).start();
     }
@@ -635,6 +655,7 @@ public class ApplicationManager {
 
                             while ((lengthFile = inStream.read(buffer)) != READ_FAILED) {
                                 outStream.write(buffer, BUFFER_OFFSET, lengthFile);
+                                downloadOngoing = true;
                             }
 
                             String filePath = directory + resources.getString(R.string.application_mgr_download_file_name);
@@ -661,6 +682,7 @@ public class ApplicationManager {
                         } finally {
                             StreamHandler.closeOutputStream(outStream, TAG);
                             StreamHandler.closeInputStream(inStream, TAG);
+                            downloadOngoing = false;
                         }
                     } else {
                         Preference.putString(context, context.getResources().getString(
@@ -680,6 +702,7 @@ public class ApplicationManager {
                             R.string.app_status_value_download_failed));
                     Preference.putString(context, context.getResources().getString(
                             R.string.app_install_failed_message), error.toString());
+                    downloadOngoing = false;
                 }
             }, null)
         {
