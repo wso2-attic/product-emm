@@ -432,7 +432,7 @@ public class EMMSystemService extends IntentService {
             String[] command = new String[]{
                     "logcat",
                     "-t", String.valueOf(Constants.NUMBER_OF_LOG_LINES),
-                    "-v", "time", "*:W"};
+                    "-v", "time", Constants.LOG_LEVEL};
             Process process = Runtime.getRuntime().exec(command);
 
             BufferedReader bufferedReader = new BufferedReader(
