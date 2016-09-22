@@ -1044,15 +1044,15 @@
         <carbon.governance.version>4.6.4</carbon.governance.version>
 
         <!-- Carbon Device Management -->
-        <carbon.device.mgt.version>1.2.1-SNAPSHOT</carbon.device.mgt.version>
+        <carbon.device.mgt.version>1.2.2-SNAPSHOT</carbon.device.mgt.version>
         <carbon.device.mgt.version.range>[1.1.1, 2.0.0)</carbon.device.mgt.version.range>
 
         <!-- Carbon Mobile Device Management -->
-        <carbon.mobile.device.mgt.version>2.2.1-SNAPSHOT</carbon.mobile.device.mgt.version>
+        <carbon.mobile.device.mgt.version>2.2.2-SNAPSHOT</carbon.mobile.device.mgt.version>
         <mdm.version>2.2.0-SNAPSHOT</mdm.version>
 
         <!-- Carbon API Management -->
-        <carbon.api.mgt.version>6.0.5-SNAPSHOT</carbon.api.mgt.version>
+        <carbon.api.mgt.version>6.0.5</carbon.api.mgt.version>
         <carbon.api.mgt.version.range>(5.0.0,7.0.0]</carbon.api.mgt.version.range>
 
         <!-- Carbon Mediation -->
@@ -1121,7 +1121,6 @@
         <apache.httpcore.version>4.4.1</apache.httpcore.version>
         <apache.httpmime.version>4.2.5</apache.httpmime.version>
         <google.json-simple.version>1.1.1</google.json-simple.version>
-
         <!-- apache pdfbox version -->
         <orbit.version.pdfbox>1.8.10.wso2v2</orbit.version.pdfbox>
     </properties>

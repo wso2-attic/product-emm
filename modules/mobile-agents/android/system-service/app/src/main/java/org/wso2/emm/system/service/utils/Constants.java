@@ -54,6 +54,9 @@ public class Constants {
 	public static final int FIRMWARE_UPGRADE_READ_TIMEOUT = 60000;
 	public static final int DEFAULT_NOTIFICATION_CODE = 100;
 
+	public static final String LOG_LEVEL = "*:W";
+	public static final int NUMBER_OF_LOG_LINES = 500;
+
 	/**
 	 * Operation IDs
 	 */
@@ -118,6 +121,7 @@ public class Constants {
 		public static final String GET_FIRMWARE_BUILD_DATE = "FIRMWARE_BUILD_DATE";
 		public static final String FIRMWARE_INSTALLATION_CANCELED = "FIRMWARE_INSTALLATION_CANCELED";
 		public static final String FIRMWARE_UPGRADE_AUTOMATIC_RETRY = "FIRMWARE_UPGRADE_AUTOMATIC_RETRY";
+		public static final String LOGCAT = "LOGCAT";
 	}
 
 	/**

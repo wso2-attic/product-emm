@@ -277,6 +277,22 @@
                 <include>*/**</include>
             </includes>
         </fileSet>
+        <!-- Copying Social plugin related MSSQL dbscripts from distribution src-->
+        <fileSet>
+            <directory>src/repository/dbscripts/social</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/social</outputDirectory>
+            <includes>
+                <include>*/**</include>
+            </includes>
+        </fileSet>
+        <!-- Copying storage related MSSQL dbscripts from distribution src-->
+        <fileSet>
+            <directory>src/repository/dbscripts/storage</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/storage</outputDirectory>
+            <includes>
+                <include>*/**</include>
+            </includes>
+        </fileSet>
         <!--Copying modules-->
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/modules</directory>

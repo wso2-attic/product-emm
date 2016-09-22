@@ -47,8 +47,10 @@ import org.wso2.emm.system.service.utils.CommonUtils;
 import org.wso2.emm.system.service.utils.Constants;
 import org.wso2.emm.system.service.utils.Preference;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -274,17 +276,17 @@ public class EMMSystemService extends IntentService {
                 break;
             case Constants.Operation.SILENT_INSTALL_APPLICATION:
                 if (appUri != null) {
-                    silentInstallApp(getApplicationContext(), appUri, command);
+                    silentInstallApp(getApplicationContext(), appUri);
                 }
                 break;
             case Constants.Operation.SILENT_UPDATE_APPLICATION:
                 if (appUri != null) {
-                    silentInstallApp(getApplicationContext(), appUri, command);
+                    silentInstallApp(getApplicationContext(), appUri);
                 }
                 break;
             case Constants.Operation.SILENT_UNINSTALL_APPLICATION:
                 if (appUri != null) {
-                    silentUninstallApp(getApplicationContext(), appUri, command);
+                    silentUninstallApp(getApplicationContext(), appUri);
                 }
                 break;
             case Constants.Operation.REMOVE_DEVICE_OWNER:
@@ -412,9 +414,38 @@ public class EMMSystemService extends IntentService {
             case Constants.Operation.GET_FIRMWARE_BUILD_DATE:
                 publishFirmwareBuildDate();
                 break;
+            case Constants.Operation.LOGCAT:
+                getLogCat(Integer.parseInt(command));
+                break;
             default:
                 Log.e(TAG, "Invalid operation code received");
                 break;
+        }
+    }
+
+    /**
+     * Returns the device LogCat
+     */
+    public void getLogCat(int operationId) {
+        StringBuilder builder=new StringBuilder();
+        try {
+            String[] command = new String[]{
+                    "logcat",
+                    "-t", String.valueOf(Constants.NUMBER_OF_LOG_LINES),
+                    "-v", "time", Constants.LOG_LEVEL};
+            Process process = Runtime.getRuntime().exec(command);
+
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                builder.append(line);
+                builder.append("\n");
+            }
+            CommonUtils.callAgentApp(context, Constants.Operation.LOGCAT, operationId, builder.toString());
+        } catch (IOException e) {
+            Log.e(TAG, "getLog failed", e);
         }
     }
 
@@ -575,37 +606,15 @@ public class EMMSystemService extends IntentService {
     /**
      * Silently installs the app resides in the provided URI.
      */
-    private void silentInstallApp(Context context, String packageUri, String schedule) {
-        if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
-            Log.i(TAG, "Silent install has been scheduled to " + schedule);
-            Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), schedule);
-            Preference.putString(context, context.getResources().getString(R.string.app_uri), packageUri);
-            try {
-                AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.SILENT_INSTALL_APPLICATION, packageUri);
-            } catch (ParseException e) {
-                Log.e(TAG, "One time alarm time string parsing failed." + e);
-            }
-        } else {
-            AppUtils.silentInstallApp(context, Uri.parse(packageUri));
-        }
+    private void silentInstallApp(Context context, String packageUri) {
+        AppUtils.silentInstallApp(context, Uri.parse(packageUri));
     }
 
     /**
      * Silently uninstalls the app resides in the provided URI.
      */
-    private void silentUninstallApp(Context context, final String packageName, String schedule) {
-        if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
-            Log.i(TAG, "Silent install has been scheduled to " + schedule);
-            Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), schedule);
-            Preference.putString(context, context.getResources().getString(R.string.app_uri), packageName);
-            try {
-                AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.SILENT_UNINSTALL_APPLICATION, packageName);
-            } catch (ParseException e) {
-                Log.e(TAG, "One time alarm time string parsing failed." + e);
-            }
-        } else {
-            AppUtils.silentUninstallApp(context, packageName);
-        }
+    private void silentUninstallApp(Context context, final String packageName) {
+        AppUtils.silentUninstallApp(context, packageName);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

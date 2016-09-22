@@ -80,7 +80,8 @@ public class QSGUtils {
         obj.put("owner", "admin");
         obj.put("clientName", "qsg");
         obj.put("grantType", "refresh_token password client_credentials");
-        obj.put("tokenScope", "user:view,user:manage,user:admin:reset-password,role:view,role:manage,policy:view,policy:manage,application:manage,appm:create,appm:publish,appm:update,appm:read");
+        obj.put("tokenScope", "user:view,user:manage,user:admin:reset-password,role:view,role:manage,policy:view," +
+                              "policy:manage,application:manage,appm:create,appm:publish,appm:update,appm:read");
         //Set the headers
         headers.put(Constants.Header.CONTENT_TYPE, Constants.ContentType.APPLICATION_JSON);
         HTTPResponse httpResponse = HTTPInvoker.sendHTTPPost(dcrEndPoint, obj.toJSONString(), headers);

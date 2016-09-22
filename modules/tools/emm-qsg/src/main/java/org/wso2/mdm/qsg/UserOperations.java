@@ -79,32 +79,35 @@ public class UserOperations {
     }
 
     private static String[] getUserPermissions() {
-        String permissions = "\"/permission/admin/device-mgt/admin/certificate\"," +
-                             "\"/permission/admin/device-mgt/admin/certificate/Add\",\"/permission/admin/device-mgt/admin/certificate/GetAll\"," +
-                             "\"/permission/admin/device-mgt/admin/certificate/GetSignCSR\",\"/permission/admin/device-mgt/admin/certificate/Remove\"," +
-                             "\"/permission/admin/device-mgt/admin/certificate/View\"," +
-                             "\"/permission/admin/device-mgt/admin/device/android/operation/get-info\"," +
-                             "\"/permission/admin/device-mgt/admin/device/android/operation/get-installed-applications\"," +
-                             "\"/permission/admin/device-mgt/admin/device/android/operation/install-application\"," +
-                             "\"/permission/admin/device-mgt/admin/device/android/operation/location\"," +
-                             "\"/permission/admin/device-mgt/admin/device/android/operation/lock-device\"," +
-                             "\"/permission/admin/device-mgt/admin/device/android/operation/mute\"," +
-                             "\"/permission/admin/device-mgt/admin/device/android/operation/reboot\"," +
-                             "\"/permission/admin/device-mgt/admin/device/android/operation/ring\"," +
-                             "\"/permission/admin/device-mgt/admin/device/android/operation/send-notification\"," +
-                             "\"/permission/admin/device-mgt/admin/device/android/operation/uninstall-application\"," +
-                             "\"/permission/admin/device-mgt/admin/device/android/operation/unlock-device\"," +
-                             "\"/permission/admin/device-mgt/admin/device/android/operation/update-application\"," +
-                             "/permission/admin/device-mgt/admin/devices/List\"," +
-                             "\"/permission/admin/device-mgt/admin/devices/Search\",\"/permission/admin/device-mgt/admin/devices/View\"," +
-                             "\"/permission/admin/device-mgt/admin/devices/View-Applications\"," +
-                             "\"/permission/admin/device-mgt/admin/devices/View-Compliance-Data\"," +
-                             "\"/permission/admin/device-mgt/admin/devices/View-Features\"," +
-                             "\"/permission/admin/device-mgt/admin/devices/View-Operations\"," +
-                             "\"/permission/admin/device-mgt/admin/notifications\",\"/permission/admin/device-mgt/admin/notifications/View\"," +
-                             "\"/permission/admin/device-mgt/user\",\"/permission/admin/device-mgt/user/device\"," +
-                             "\"/permission/admin/device-mgt/user/device/android\",\"/permission/admin/device-mgt/user/device/android/enroll\"," +
-                             "\"/permission/admin/login\"";
+        String permissions = "/permission/admin/device-mgt/certificates/manage," +
+                             "/permission/admin/device-mgt/certificates/view," +
+                             "/permission/admin/device-mgt/configurations/view," +
+                             "/permission/admin/device-mgt/devices/enroll/android," +
+                             "/permission/admin/device-mgt/devices/owning/view," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/applications," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/blacklist-app," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/camera," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/change-lock," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/clear-password," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/encrypt," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/enterprise-wipe," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/info," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/install-app," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/location," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/lock," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/mute," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/notification," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/ring," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/unlock," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/password-policy," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/uninstall-app," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/update-app," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/webclip," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/wifi," +
+                             "/permission/admin/device-mgt/notifications/view," +
+                             "/permission/admin/device-mgt/platform-configurations/view," +
+                             "/permission/admin/device-mgt/policies/view," +
+                             "/permission/admin/login";
         return permissions.split(",");
     }
 
@@ -119,6 +122,7 @@ public class UserOperations {
         for (String perm : permissions) {
             perms.add(perm);
         }
+        roleData.put("permissions", perms);
         JSONArray usrs = new JSONArray();
         for (String usr : users) {
             usrs.add(usr);

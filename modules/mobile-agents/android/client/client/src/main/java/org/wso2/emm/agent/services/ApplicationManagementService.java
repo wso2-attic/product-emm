@@ -23,11 +23,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.ApplicationManager;
+import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
+import org.wso2.emm.agent.services.operation.OperationManager;
+import org.wso2.emm.agent.services.operation.OperationManagerFactory;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
@@ -95,6 +101,8 @@ public class ApplicationManagementService extends IntentService implements APIRe
                 doTask(operationCode);
             } else if (isRegistered && Constants.SYSTEM_SERVICE_PACKAGE.equals(intent.getPackage())) {
                 doTask(operationCode);
+            } else if (operationCode.equals(Constants.Operation.GET_ENROLLMENT_STATUS)) {
+                doTask(operationCode);
             } else {
                 sendBroadcast(Constants.Status.AUTHENTICATION_FAILED, null);
             }
@@ -114,7 +122,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
                 break;
             case Constants.Operation.INSTALL_APPLICATION:
                 if (appUri != null) {
-                    applicationManager.installApp(appUri, null);
+                    applicationManager.installApp(appUri, null, null);
                 } else {
                     Toast.makeText(context, context.getResources().getString(R.string.toast_app_installation_failed),
                                    Toast.LENGTH_LONG).show();
@@ -208,6 +216,15 @@ public class ApplicationManagementService extends IntentService implements APIRe
             case Constants.Operation.FIRMWARE_UPGRADE_AUTOMATIC_RETRY:
                 Preference.putBoolean(context, context.getResources().
                         getString(R.string.is_automatic_firmware_upgrade), !"false".equals(message));
+                break;
+            case Constants.Operation.LOGCAT:
+                Operation logcatOperation = new Operation();
+                logcatOperation.setId(id);
+                logcatOperation.setCode(Constants.Operation.LOGCAT);
+                logcatOperation.setOperationResponse(OperationManager.getOperationResponseFromLogcat(context, message));
+                logcatOperation.setStatus(context.getResources().getString(R.string.operation_value_completed));
+                Gson operationGson = new Gson();
+                Preference.putString(context, Constants.Operation.LOGCAT, operationGson.toJson(logcatOperation));
                 break;
             default:
                 Log.e(TAG, "Invalid operation code received");
