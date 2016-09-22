@@ -39,7 +39,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AlertActivity;
+import org.wso2.emm.agent.AlreadyRegisteredActivity;
 import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.LockActivity;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.RuntimeInfo;
@@ -65,6 +67,7 @@ import org.wso2.emm.agent.services.location.DeviceLocation;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
+import org.wso2.emm.agent.utils.ProvisioningStateUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -741,7 +744,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
-        if (isHardLockEnabled && Constants.SYSTEM_APP_ENABLED) {
+        if (isHardLockEnabled && (ProvisioningStateUtils.isDeviceOwner(context) || Constants.SYSTEM_APP_ENABLED)) {
             if (message == null || message.isEmpty()) {
                 message = resources.getString(R.string.txt_lock_activity);
             }
@@ -774,7 +777,13 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
 
     public void enableHardLock(String message, Operation operation) {
         String payload = "false";
-        if (getApplicationManager().isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
+        if (ProvisioningStateUtils.isDeviceOwner(context)) {
+            Intent i = new Intent(context, LockActivity.class);
+            i.putExtra(Constants.ADMIN_MESSAGE, message);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getContext().startActivity(i);
+
+        } else if (getApplicationManager().isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
             operation.setStatus(resources.getString(R.string.operation_value_completed));
             CommonUtils.callSystemApp(getContext(), Constants.Operation.DEVICE_LOCK, payload, message);
         } else {
@@ -795,7 +804,13 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             boolean isLocked = Preference.getBoolean(context, Constants.IS_LOCKED);
             if (isLocked) {
                 Preference.putBoolean(context, Constants.IS_LOCKED, false);
-                CommonUtils.callSystemApp(getContext(), Constants.Operation.DEVICE_UNLOCK, null, null);
+                if (ProvisioningStateUtils.isDeviceOwner(context)) {
+                    Intent i = new Intent(context, AlreadyRegisteredActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(i);
+                } else {
+                    CommonUtils.callSystemApp(getContext(), Constants.Operation.DEVICE_UNLOCK, null, null);
+                }
             }
             if (Constants.DEBUG_MODE_ENABLED) {
                 Log.d(TAG, "Device unlocked");

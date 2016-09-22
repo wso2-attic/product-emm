@@ -27,7 +27,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,9 +43,7 @@ import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class OperationManagerDeviceOwner extends OperationManager {
     private static final String TAG = OperationManagerDeviceOwner.class.getSimpleName();
@@ -741,14 +738,14 @@ public class OperationManagerDeviceOwner extends OperationManager {
 
     private void switchToKioskMode(List<String> appList) {
         Intent kioskIntent = new Intent(getContext(), KioskAppActivity.class);
-        kioskIntent.putExtra(KioskAppActivity.LOCKED_APP_PACKAGE_LIST, appList.toArray());
+        String listOfApps[] = appList.toArray(new String[appList.size()]);
+        kioskIntent.putExtra(KioskAppActivity.LOCKED_APP_PACKAGE_LIST, listOfApps);
         getContext().getPackageManager().setComponentEnabledSetting(
                 new ComponentName(getContext().getPackageName(), KioskAppActivity.class.getName()),
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
         kioskIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getContext().startActivity(kioskIntent);
-        Toast.makeText(getContext(), R.string.setup_cosu_success, Toast.LENGTH_LONG).show();
     }
 
 }

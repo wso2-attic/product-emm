@@ -246,6 +246,12 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
 
+        <activity
+                android:name=".KioskAppActivity"
+                android:label="@string/kiosk_mode"
+                android:screenOrientation="portrait"
+                android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+
         <service
             android:name=".services.AppLockService"
             android:permission="org.wso2.emm.agent.permission.ACCESS"

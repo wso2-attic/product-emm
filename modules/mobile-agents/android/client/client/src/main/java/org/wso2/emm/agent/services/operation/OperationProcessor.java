@@ -188,7 +188,7 @@ public class OperationProcessor {
 				operationManager.handleUserRestriction(operation);
 				break;
 			case Constants.Operation.KIOSK_APPS:
-				operationManager.handleUserRestriction(operation);
+				operationManager.enableKioskMode(operation);
 				break;
 			default:
 				operationManager.passOperationToSystemApp(operation);

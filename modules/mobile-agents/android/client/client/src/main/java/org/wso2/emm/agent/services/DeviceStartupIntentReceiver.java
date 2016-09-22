@@ -20,14 +20,17 @@ package org.wso2.emm.agent.services;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.KioskAppActivity;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.events.EventRegistry;
@@ -53,6 +56,7 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(final Context context, Intent intent) {
 		setRecurringAlarm(context.getApplicationContext());
+		enableKioskMode(context);
 		if(!EventRegistry.eventListeningStarted) {
 			EventRegistry registerEvent = new EventRegistry(context.getApplicationContext());
 			registerEvent.register();
@@ -116,6 +120,19 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 			                          interval, recurringAlarmIntent);
 			Log.d(TAG, "Setting up alarm manager for polling every " + interval + " milliseconds.");
 		}
+	}
+
+	private void enableKioskMode(Context context) {
+		if (Preference.getBoolean(context, Constants.PreferenceFlag.KIOSK_MODE)) {
+			Intent kioskIntent = new Intent(context, KioskAppActivity.class);
+			context.getPackageManager().setComponentEnabledSetting(
+					new ComponentName(context.getPackageName(), KioskAppActivity.class.getName()),
+					PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+					PackageManager.DONT_KILL_APP);
+			kioskIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			context.startActivity(kioskIntent);
+		}
+
 	}
 
 }

@@ -39,6 +39,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -73,6 +75,13 @@ public class KioskAppActivity extends Activity {
         devicePolicyManager = (DevicePolicyManager) getSystemService(
                 Context.DEVICE_POLICY_SERVICE);
         packageManager = getPackageManager();
+
+        if (Preference.getBoolean(this, Constants.PreferenceFlag.KIOSK_MODE)) {
+            boolean isKioskDisabled = getIntent().getBooleanExtra(Constants.DISABLE_KIOSK_MODE, false);
+            if (isKioskDisabled) {
+                onBackPressed();
+            }
+        }
 
         // check if a new list of apps was sent, otherwise fall back to saved list
         String[] packageArray = getIntent().getStringArrayExtra(LOCKED_APP_PACKAGE_LIST);
@@ -122,16 +131,32 @@ public class KioskAppActivity extends Activity {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             if (!am.isInLockTaskMode()) {
                 startLockTask();
+                enableKioskMode();
             }
         } else {
             if (am.getLockTaskModeState() == ActivityManager.LOCK_TASK_MODE_NONE) {
                 startLockTask();
+                enableKioskMode();
             }
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        // do nothing
+    }
+
+    private void enableKioskMode() {
+        Preference.putBoolean(this, Constants.PreferenceFlag.KIOSK_MODE, true);
+    }
+
+    private void disableKioskMode() {
+        Preference.putBoolean(this, Constants.PreferenceFlag.KIOSK_MODE, false);
+    }
+
     public void onBackdoorClicked() {
         stopLockTask();
+        disableKioskMode();
         setDefaultKioskPolicies(false);
         packageManager.setComponentEnabledSetting(
                 new ComponentName(getPackageName(), getClass().getName()),

@@ -18,15 +18,19 @@
 package org.wso2.emm.agent.services;
 
 import android.app.admin.DevicePolicyManager;
+import android.app.admin.SystemUpdatePolicy;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.KioskAppActivity;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.WiFiConfig;
@@ -34,6 +38,8 @@ import org.wso2.emm.agent.beans.AppRestriction;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
+import org.wso2.emm.agent.utils.ProvisioningStateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +91,10 @@ public class PolicyRevokeHandler {
             case Constants.Operation.WIFI:
                 revokeWifiPolicy(operation);
                 break;
+            case Constants.Operation.KIOSK_APPS:
+            case Constants.Operation.SYSTEM_UPDATE_POLICY:
+                revokeKioskMode();
+                break;
             case Constants.Operation.DISALLOW_ADJUST_VOLUME:
             case Constants.Operation.DISALLOW_CONFIG_BLUETOOTH:
             case Constants.Operation.DISALLOW_CONFIG_CELL_BROADCASTS:
@@ -122,6 +132,8 @@ public class PolicyRevokeHandler {
                 if(applicationManager.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
                     CommonUtils.callSystemApp(context, operation.getCode(),
                                               Boolean.toString(false), null);
+                } else if (ProvisioningStateUtils.isDeviceOwner(context)) {
+                    revokeRestrictions(operation.getCode());
                 } else {
                     throw new AndroidAgentException("Invalid operation code received");
                 }
@@ -264,5 +276,23 @@ public class PolicyRevokeHandler {
         } catch (JSONException e) {
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
+    }
+
+    private void revokeKioskMode() {
+        boolean isKioskEnabled = Preference.getBoolean(context, Constants.PreferenceFlag.KIOSK_MODE);
+        if (isKioskEnabled) {
+            Intent kioskIntent = new Intent(context, KioskAppActivity.class);
+            kioskIntent.putExtra(Constants.DISABLE_KIOSK_MODE, true);
+            context.getPackageManager().setComponentEnabledSetting(
+                    new ComponentName(context.getPackageName(), KioskAppActivity.class.getName()),
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP);
+            kioskIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(kioskIntent);
+        }
+    }
+
+    private void revokeRestrictions(String restrictionCode) {
+        devicePolicyManager.clearUserRestriction(deviceAdmin, restrictionCode);
     }
 }
