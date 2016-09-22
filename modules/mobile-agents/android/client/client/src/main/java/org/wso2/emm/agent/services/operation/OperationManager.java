@@ -881,10 +881,23 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param operation - Operation object.
      */
     public void getLogcat(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-        RuntimeInfo info = new RuntimeInfo(context);
+        if (Constants.SYSTEM_APP_ENABLED){
+            operation.setStatus(resources.getString(R.string.operation_value_progress));
+            Gson operationGson = new Gson();
+            Preference.putString(context, Constants.Operation.LOGCAT, operationGson.toJson(operation));
+            CommonUtils.callSystemApp(context, Constants.Operation.LOGCAT, String.valueOf(operation.getId()),
+                    null);
+            resultBuilder.build(operation);
+        } else {
+            RuntimeInfo info = new RuntimeInfo(context);
+            publishLogcat(operation, info.getLogCat());
+        }
+    }
+
+    public void publishLogcat(Operation operation, String logcat) {
         DeviceInfo deviceInfo = new DeviceInfo(context);
         EventPayload eventPayload = new EventPayload();
-        eventPayload.setPayload(info.getLogCat());
+        eventPayload.setPayload(logcat);
         eventPayload.setType("LOGCAT");
         eventPayload.setDeviceIdentifier(deviceInfo.getDeviceId());
         if (Constants.DEBUG_MODE_ENABLED) {

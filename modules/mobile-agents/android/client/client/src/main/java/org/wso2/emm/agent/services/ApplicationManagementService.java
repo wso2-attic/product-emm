@@ -23,11 +23,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.ApplicationManager;
+import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
+import org.wso2.emm.agent.services.operation.OperationManager;
+import org.wso2.emm.agent.services.operation.OperationManagerFactory;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
@@ -210,6 +216,16 @@ public class ApplicationManagementService extends IntentService implements APIRe
             case Constants.Operation.FIRMWARE_UPGRADE_AUTOMATIC_RETRY:
                 Preference.putBoolean(context, context.getResources().
                         getString(R.string.is_automatic_firmware_upgrade), !"false".equals(message));
+                break;
+            case Constants.Operation.LOGCAT:
+                if (Preference.hasPreferenceKey(context, Constants.Operation.LOGCAT)) {
+                    Gson operationGson = new Gson();
+                    Operation logcatOperation = operationGson.fromJson(Preference
+                            .getString(context, Constants.Operation.LOGCAT), Operation.class);
+                    OperationManagerFactory operationManagerFactory = new OperationManagerFactory(context);
+                    OperationManager operationManager = operationManagerFactory.getOperationManager();
+                    operationManager.publishLogcat(logcatOperation, message);
+                }
                 break;
             default:
                 Log.e(TAG, "Invalid operation code received");
