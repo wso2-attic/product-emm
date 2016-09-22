@@ -198,7 +198,7 @@ public class NotificationService extends BroadcastReceiver {
     public String buildResponse(Notification.Status status) throws AndroidAgentException {
         JSONObject response = new JSONObject();
         try {
-            boolean isLocked = Preference.getBoolean(context, Constants.IS_LOCKED);
+            boolean isLocked = Preference.getBoolean(context, Constants.PreferenceFlag.IS_LOCKED);
             response.put(STATUS, status);
             response.put(TIMESTAMP, Calendar.getInstance().getTime().toString());
             if (Notification.Status.RECEIVED.equals(status)) {

@@ -30,6 +30,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.UserManager;
 import android.util.Base64;
 import android.util.Log;
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -589,6 +590,20 @@ public class CommonUtils {
 				return String.valueOf(org.wso2.emm.agent.proxy.utils.Constants.HTTPS);
 			}
 		}
+	}
+
+	public static String getUserRestriction(String restrictionCode) {
+		switch (restrictionCode) {
+			case Constants.Operation.DISALLOW_SAFE_BOOT:
+				return UserManager.DISALLOW_SAFE_BOOT;
+			case Constants.Operation.DISALLOW_INSTALL_APPS:
+				return UserManager.DISALLOW_INSTALL_APPS;
+			case Constants.Operation.DISALLOW_CONFIG_VPN:
+				return UserManager.DISALLOW_CONFIG_VPN;
+			case Constants.Operation.ALLOW_PARENT_PROFILE_APP_LINKING:
+				return UserManager.ALLOW_PARENT_PROFILE_APP_LINKING;
+		}
+		return null;
 	}
 
 }

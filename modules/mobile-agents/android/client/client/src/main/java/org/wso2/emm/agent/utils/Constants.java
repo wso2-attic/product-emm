@@ -67,6 +67,7 @@ public class Constants {
 	public static final String END_TIME = "endTime";
 	public static final String WHITE_LISTED_APPS = "whitelistedApplications";
 	public static final String DISABLE_KIOSK_MODE = "disableKioskMode";
+	public static final String DISABLE_HARD_LOCK = "disableHardLock";
 
 
 	/**
@@ -148,7 +149,6 @@ public class Constants {
 	public static final String USER_AGENT = "Mozilla/5.0 ( compatible ), Android";
 	public static final String PACKAGE_NAME = "org.wso2.emm.agent";
 	public static final String ADMIN_MESSAGE = "message";
-	public static final String IS_LOCKED = "lock";
 	public static final String LOCK_MESSAGE = "lockMessage";
 	public static final String OPERATION_ID = "operationId";
 	public static final String IS_HARD_LOCK_ENABLED = "isHardLockEnabled";
@@ -485,6 +485,7 @@ public class Constants {
 		public static final String SKIP_DEVICE_ACTIVATION = "skipDeviceActive";
 		public static final String CURRENT_INSTALLING_APP = "installingApplication";
 		public static final String KIOSK_MODE = "kiosk";
+		public static final String IS_LOCKED = "lock";
 	}
 
 	public final class AppRestriction {

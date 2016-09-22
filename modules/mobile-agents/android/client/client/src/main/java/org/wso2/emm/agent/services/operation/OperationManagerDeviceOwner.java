@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.UserManager;
 import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -570,19 +571,27 @@ public class OperationManagerDeviceOwner extends OperationManager {
             JSONObject payload = new JSONObject(operation.getPayLoad().toString());
             if (payload != null) {
                 isEnable = payload.getBoolean("enabled");
-                String key = operation.getCode();
-                operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
-                getResultBuilder().build(operation);
-                if (isEnable) {
-                    getDevicePolicyManager().addUserRestriction(getCdmDeviceAdmin(), key);
-                    if (Constants.DEBUG_MODE_ENABLED) {
-                        Log.d(TAG, "Restriction added: " + key);
+                String key = CommonUtils.getUserRestriction(operation.getCode());
+                if (key != null) {
+                    operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
+                    getResultBuilder().build(operation);
+                    if (isEnable) {
+                        getDevicePolicyManager().addUserRestriction(getCdmDeviceAdmin(), key);
+                        if (Constants.DEBUG_MODE_ENABLED) {
+                            Log.d(TAG, "Restriction added: " + operation.getCode());
+                        }
+                    } else {
+                        getDevicePolicyManager().clearUserRestriction(getCdmDeviceAdmin(), key);
+                        if (Constants.DEBUG_MODE_ENABLED) {
+                            Log.d(TAG, "Restriction cleared: " + operation.getCode());
+                        }
                     }
                 } else {
-                    getDevicePolicyManager().clearUserRestriction(getCdmDeviceAdmin(), key);
-                    if (Constants.DEBUG_MODE_ENABLED) {
-                        Log.d(TAG, "Restriction cleared: " + key);
-                    }
+                    operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+                    String msg = "Invalid restriction code";
+                    operation.setOperationResponse(msg);
+                    getResultBuilder().build(operation);
+                    throw new AndroidAgentException(msg);
                 }
             }
         } catch (JSONException e) {

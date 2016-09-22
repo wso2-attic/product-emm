@@ -19,6 +19,8 @@ package org.wso2.emm.agent;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,9 +33,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.wso2.emm.agent.api.DeviceState;
+import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.utils.ApplicationUtils;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
+import org.wso2.emm.agent.utils.ProvisioningStateUtils;
 import org.wso2.emm.agent.utils.Response;
 
 /**
@@ -46,6 +51,8 @@ public class ServerDetails extends Activity {
 	private Context context;
 	private DeviceState state;
 	private TextView txtSeverAddress;
+	private ComponentName cdmDeviceAdmin;
+	private DevicePolicyManager devicePolicyManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +66,9 @@ public class ServerDetails extends Activity {
 		btnStartRegistration.setBackground(getResources().getDrawable(R.drawable.btn_grey));
 		btnStartRegistration.setTextColor(getResources().getColor(R.color.black));
 		Response deviceCompatibility = state.evaluateCompatibility();
+
+		cdmDeviceAdmin = new ComponentName(this, AgentDeviceAdminReceiver.class);
+		devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
 
 		if (!deviceCompatibility.getCode()) {
 			txtSeverAddress.setText(deviceCompatibility.getDescriptionResourceID());
@@ -85,6 +95,11 @@ public class ServerDetails extends Activity {
 				startAuthenticationActivity();
 			}
 			boolean isDeviceActive = Preference.getBoolean(context, Constants.PreferenceFlag.DEVICE_ACTIVE);
+
+			if (!isDeviceActive && ProvisioningStateUtils.isDeviceOwner(context) &&
+			    devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
+				ApplicationUtils.disableGooglePlay(context);
+			}
 
 			if (isDeviceActive) {
 				Intent intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);

@@ -25,6 +25,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,10 +45,12 @@ import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 import org.wso2.emm.agent.services.LocalNotification;
+import org.wso2.emm.agent.utils.ApplicationUtils;
 import org.wso2.emm.agent.utils.CommonDialogUtils;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
+import org.wso2.emm.agent.utils.ProvisioningStateUtils;
 
 import java.util.Map;
 
@@ -277,6 +280,18 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		}
 
 		boolean isRegistered = Preference.getBoolean(context, Constants.PreferenceFlag.REGISTERED);
+
+		// if it needs to block playstore from a policy or whatever the method,
+		// we need to set and check a shared pref here.
+		// until then we can use this as it is.
+		boolean isDeviceActive = Preference.getBoolean(context, Constants.PreferenceFlag.DEVICE_ACTIVE);
+		if (isDeviceActive && ProvisioningStateUtils.isDeviceOwner(context) &&
+		    devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
+			PackageManager pm = getPackageManager();
+			if (!pm.isPackageAvailable(Constants.SystemApp.PLAY_STORE)) {
+				ApplicationUtils.enableGooglePlay(context);
+			}
+		}
 
 		if (isRegistered) {
 			if (CommonUtils.isNetworkAvailable(context)) {

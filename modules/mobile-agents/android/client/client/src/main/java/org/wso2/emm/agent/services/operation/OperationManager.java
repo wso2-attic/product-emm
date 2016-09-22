@@ -23,6 +23,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
 import android.media.AudioManager;
@@ -748,7 +749,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             if (message == null || message.isEmpty()) {
                 message = resources.getString(R.string.txt_lock_activity);
             }
-            Preference.putBoolean(context, Constants.IS_LOCKED, true);
+            Preference.putBoolean(context, Constants.PreferenceFlag.IS_LOCKED, true);
             Preference.putString(context, Constants.LOCK_MESSAGE, message);
             operation.setStatus(resources.getString(R.string.operation_value_completed));
             resultBuilder.build(operation);
@@ -800,17 +801,18 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param operation - Operabtion object.
      */
     public void unlockDevice(org.wso2.emm.agent.beans.Operation operation) {
-        if (getApplicationManager().isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
-            boolean isLocked = Preference.getBoolean(context, Constants.IS_LOCKED);
+        if (getApplicationManager().isPackageInstalled(Constants.SERVICE_PACKAGE_NAME) ||
+            ProvisioningStateUtils.isDeviceOwner(context)) {
+            boolean isLocked = Preference.getBoolean(context, Constants.PreferenceFlag.IS_LOCKED);
             if (isLocked) {
-                Preference.putBoolean(context, Constants.IS_LOCKED, false);
                 if (ProvisioningStateUtils.isDeviceOwner(context)) {
                     Intent i = new Intent(context, AlreadyRegisteredActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(i);
+                    getContext().startActivity(i);
                 } else {
                     CommonUtils.callSystemApp(getContext(), Constants.Operation.DEVICE_UNLOCK, null, null);
                 }
+
             }
             if (Constants.DEBUG_MODE_ENABLED) {
                 Log.d(TAG, "Device unlocked");

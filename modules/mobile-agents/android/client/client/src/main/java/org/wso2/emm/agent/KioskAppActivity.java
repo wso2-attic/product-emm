@@ -38,6 +38,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
@@ -79,7 +80,7 @@ public class KioskAppActivity extends Activity {
         if (Preference.getBoolean(this, Constants.PreferenceFlag.KIOSK_MODE)) {
             boolean isKioskDisabled = getIntent().getBooleanExtra(Constants.DISABLE_KIOSK_MODE, false);
             if (isKioskDisabled) {
-                onBackPressed();
+                onBackdoorClicked();
             }
         }
 
@@ -144,6 +145,7 @@ public class KioskAppActivity extends Activity {
     @Override
     public void onBackPressed() {
         // do nothing
+        Toast.makeText(this, "KIOSK mode enabled", Toast.LENGTH_LONG).show();
     }
 
     private void enableKioskMode() {
@@ -176,7 +178,6 @@ public class KioskAppActivity extends Activity {
     private void setDefaultKioskPolicies(boolean active) {
         // set user restrictions
         setUserRestriction(DISALLOW_SAFE_BOOT, active);
-        setUserRestriction(DISALLOW_FACTORY_RESET, active);
         setUserRestriction(DISALLOW_ADD_USER, active);
         setUserRestriction(DISALLOW_MOUNT_PHYSICAL_MEDIA, active);
         setUserRestriction(DISALLOW_ADJUST_VOLUME, active);

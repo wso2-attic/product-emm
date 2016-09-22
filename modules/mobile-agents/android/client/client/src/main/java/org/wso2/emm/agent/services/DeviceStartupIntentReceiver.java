@@ -70,7 +70,7 @@ public class DeviceStartupIntentReceiver extends BroadcastReceiver {
 	private void setRecurringAlarm(Context context) {
 		this.resources = context.getApplicationContext().getResources();
 		String mode = Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE);
-		boolean isLocked = Preference.getBoolean(context, Constants.IS_LOCKED);
+		boolean isLocked = Preference.getBoolean(context, Constants.PreferenceFlag.IS_LOCKED);
 		String lockMessage = Preference.getString(context, Constants.LOCK_MESSAGE);
 
 		if (lockMessage == null || lockMessage.isEmpty()) {
