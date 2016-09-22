@@ -218,14 +218,13 @@ public class ApplicationManagementService extends IntentService implements APIRe
                         getString(R.string.is_automatic_firmware_upgrade), !"false".equals(message));
                 break;
             case Constants.Operation.LOGCAT:
-                if (Preference.hasPreferenceKey(context, Constants.Operation.LOGCAT)) {
-                    Gson operationGson = new Gson();
-                    Operation logcatOperation = operationGson.fromJson(Preference
-                            .getString(context, Constants.Operation.LOGCAT), Operation.class);
-                    OperationManagerFactory operationManagerFactory = new OperationManagerFactory(context);
-                    OperationManager operationManager = operationManagerFactory.getOperationManager();
-                    operationManager.publishLogcat(logcatOperation, message);
-                }
+                Operation logcatOperation = new Operation();
+                logcatOperation.setId(id);
+                logcatOperation.setCode(Constants.Operation.LOGCAT);
+                logcatOperation.setOperationResponse(OperationManager.getOperationResponseFromLogcat(context, message));
+                logcatOperation.setStatus(context.getResources().getString(R.string.operation_value_completed));
+                Gson operationGson = new Gson();
+                Preference.putString(context, Constants.Operation.LOGCAT, operationGson.toJson(logcatOperation));
                 break;
             default:
                 Log.e(TAG, "Invalid operation code received");

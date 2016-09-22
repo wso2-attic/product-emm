@@ -883,18 +883,17 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
     public void getLogcat(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
         if (Constants.SYSTEM_APP_ENABLED){
             operation.setStatus(resources.getString(R.string.operation_value_progress));
-            Gson operationGson = new Gson();
-            Preference.putString(context, Constants.Operation.LOGCAT, operationGson.toJson(operation));
             CommonUtils.callSystemApp(context, Constants.Operation.LOGCAT, String.valueOf(operation.getId()),
                     null);
-            resultBuilder.build(operation);
         } else {
             RuntimeInfo info = new RuntimeInfo(context);
-            publishLogcat(operation, info.getLogCat());
+            operation.setOperationResponse(getOperationResponseFromLogcat(context, info.getLogCat()));
+            operation.setStatus(context.getResources().getString(R.string.operation_value_completed));
+            resultBuilder.build(operation);
         }
     }
 
-    public void publishLogcat(Operation operation, String logcat) {
+    public static String getOperationResponseFromLogcat(Context context, String logcat) {
         DeviceInfo deviceInfo = new DeviceInfo(context);
         EventPayload eventPayload = new EventPayload();
         eventPayload.setPayload(logcat);
@@ -907,10 +906,8 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         if (publisher.getLogPublisher() != null) {
             publisher.getLogPublisher().publish(eventPayload);
         }
-        operation.setStatus(resources.getString(R.string.operation_value_completed));
         Gson logcatResponse = new Gson();
-        operation.setOperationResponse(logcatResponse.toJson(eventPayload));
-        resultBuilder.build(operation);
+        return logcatResponse.toJson(eventPayload);
     }
 
     @Override

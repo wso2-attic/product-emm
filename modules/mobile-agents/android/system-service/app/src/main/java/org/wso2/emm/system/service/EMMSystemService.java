@@ -429,8 +429,10 @@ public class EMMSystemService extends IntentService {
     public void getLogCat(int operationId) {
         StringBuilder builder=new StringBuilder();
         try {
-            String[] command = new String[] { "logcat", "-t100", "-vtime" , "*:W"};
-
+            String[] command = new String[]{
+                    "logcat",
+                    "-t", String.valueOf(Constants.NUMBER_OF_LOG_LINES),
+                    "-v", "time", "*:W"};
             Process process = Runtime.getRuntime().exec(command);
 
             BufferedReader bufferedReader = new BufferedReader(

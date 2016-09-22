@@ -73,6 +73,7 @@ public class Constants {
 		}
 		public static final String DAS_PUBLISHER = "DAS_PULISHER";
 		public static final String SPLUNK_PUBLISHER = "SPLUNK_PUBLISHER";
+		public static final int NUMBER_OF_LOG_LINES = 500;
 		public static final String LOG_PUBLISHER_IN_USE = "<SET_PUBLISHER>";
 	}
 

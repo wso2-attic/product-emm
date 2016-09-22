@@ -53,6 +53,7 @@ public class Constants {
 	 */
 	public static final int FIRMWARE_UPGRADE_READ_TIMEOUT = 60000;
 	public static final int DEFAULT_NOTIFICATION_CODE = 100;
+	public static final int NUMBER_OF_LOG_LINES = 500;
 
 	/**
 	 * Operation IDs
