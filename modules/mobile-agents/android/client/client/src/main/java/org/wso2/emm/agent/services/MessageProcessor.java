@@ -49,6 +49,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.Gson;
 
 /**
  * This class handles all the functionalities related to coordinating the retrieval
@@ -234,6 +235,19 @@ public class MessageProcessor implements APIResultCallBack {
 				}
 			} else {
 				startPendingInstallation();
+			}
+
+			if (Preference.hasPreferenceKey(context, Constants.Operation.LOGCAT)){
+				if (Preference.hasPreferenceKey(context, Constants.Operation.LOGCAT)) {
+					Gson operationGson = new Gson();
+					Operation logcatOperation = operationGson.fromJson(Preference
+							.getString(context, Constants.Operation.LOGCAT), Operation.class);
+					if (replyPayload == null) {
+						replyPayload = new ArrayList<>();
+					}
+					replyPayload.add(logcatOperation);
+					Preference.removePreference(context, Constants.Operation.LOGCAT);
+				}
 			}
 			requestParams =  mapper.writeValueAsString(replyPayload);
 		} catch (JsonMappingException e) {

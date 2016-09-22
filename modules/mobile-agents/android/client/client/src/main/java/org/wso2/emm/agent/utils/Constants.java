@@ -18,6 +18,8 @@
 
 package org.wso2.emm.agent.utils;
 
+import android.util.Log;
+
 /**
  * This class holds all the constants used throughout the application.
  */
@@ -74,6 +76,8 @@ public class Constants {
 		public static final String DAS_PUBLISHER = "DAS_PULISHER";
 		public static final String SPLUNK_PUBLISHER = "SPLUNK_PUBLISHER";
 		public static final String LOG_PUBLISHER_IN_USE = "<SET_PUBLISHER>";
+		public static final String LOG_LEVEL = "*:W";
+		public static final int NUMBER_OF_LOG_LINES = 500;
 	}
 
 	/**
