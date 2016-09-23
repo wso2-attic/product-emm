@@ -73,7 +73,10 @@
                 <exclude>**/plugins/org.wso2.carbon.rest.api.ui*</exclude>
                 <!-- resolving esb not starting issue -->
                 <exclude>**/asm-all_4.1.0.wso2v1.jar</exclude>
+		<exclude>**/slf4j.api_1.6.1.jar</exclude>
+		<exclude>**/slf4j.log4j12_1.6.1.jar</exclude>
                 <exclude>**/json_1.0.0.wso2v1.jar</exclude>
+		<exclude>**/slf4j_1.5.10.wso2v1.jar</exclude>
                 <exclude>**/json_2.0.0.wso2v1.jar</exclude>
             </excludes>
         </fileSet>
@@ -170,6 +173,7 @@
                 <include>**/i18n/</include>
                 <include>**/ws/</include>
                 <include>**/appmgtpublisher/</include>
+                <include>**/store/</include>
                 <include>**/lifecycle/</include>
                 <include>**/utils/</include>
                 <include>**/caramel/</include>
@@ -297,16 +301,25 @@
                 <include>*/**</include>
             </includes>
         </fileSet>
-        <fileSet>
+        <!-- <fileSet>
             <directory>src/repository/modules/encode</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/modules/encode</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
-        </fileSet>
+        </fileSet> -->
         <fileSet>
             <directory>src/repository/modules/sso</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/modules/sso</outputDirectory>
+            <includes>
+                <include>*/**</include>
+            </includes>
+        </fileSet>
+        <!-- This is for APPM -->
+        <!-- This has been done to address a flaw in the APPM publisher feature -->
+        <fileSet>
+            <directory>src/repository/modules/lifecycle</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/modules/lifecycle</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -604,13 +617,13 @@
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
-        <!--        <file>
-                  <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/event-broker.xml
-                  </source>
-                  <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
-                  <filtered>true</filtered>
-                  <fileMode>644</fileMode>
-              </file>-->
+        <file>
+              <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/registry-event-broker.xml
+              </source>
+              <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
+              <filtered>true</filtered>
+              <fileMode>644</fileMode>
+        </file>
         <file>
             <source>README.txt</source>
             <outputDirectory>${pom.artifactId}-${pom.version}</outputDirectory>
