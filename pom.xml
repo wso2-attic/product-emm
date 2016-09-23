@@ -1104,7 +1104,7 @@
         <cipher.tool.version>1.0.0-wso2v3</cipher.tool.version>
 
         <!-- Carbon-analytics version-->
-        <carbon.analytics.version>1.2.8-SNAPSHOT</carbon.analytics.version>
+        <carbon.analytics.version>1.2.8</carbon.analytics.version>
         <carbon.data.version>4.3.6</carbon.data.version>
 
 
