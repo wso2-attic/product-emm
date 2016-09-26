@@ -565,7 +565,9 @@
                                 <!--</featureArtifactDef>-->
 
                                 <!-- End of EMM analytics Features -->
-
+                                <featureArtifactDef>
+                                    org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.appmgt.mdm.osgiconnector.feature:${carbon.mobile.device.mgt.version}
+                                </featureArtifactDef>
                             </featureArtifacts>
                         </configuration>
                     </execution>
@@ -656,6 +658,10 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.device.mgt.mobile.windows.feature.group</id>
+                                    <version>${carbon.mobile.device.mgt.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.appmgt.mdm.osgiconnector.feature.group</id>
                                     <version>${carbon.mobile.device.mgt.version}</version>
                                 </feature>
                                 <feature>
@@ -1264,6 +1270,10 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.device.mgt.mobile.windows.feature.group</id>
+                                    <version>${carbon.mobile.device.mgt.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.appmgt.mdm.osgiconnector.feature.group</id>
                                     <version>${carbon.mobile.device.mgt.version}</version>
                                 </feature>
                                 <feature>
