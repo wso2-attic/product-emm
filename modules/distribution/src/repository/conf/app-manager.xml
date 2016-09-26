@@ -7,6 +7,9 @@
     This data source should be defined in the master-datasources.xml file in conf/datasources directory.
     -->
     <DataSourceName>jdbc/WSO2AM_DB</DataSourceName>
+    <DataSources>
+        <Storage>jdbc/ES_Storage</Storage>
+    </DataSources>
 
     <APPStoreConfiguration>
         <!--
@@ -28,7 +31,7 @@
         <!--
         Server URL of the Authentication service
         -->
-        <ServerURL>https://${carbon.local.ip}:${mgt.transport.https.port}/services/</ServerURL>
+        <ServerURL>https://localhost:${mgt.transport.https.port}/services/</ServerURL>
 
         <!--
         Admin username for the Authentication manager.
@@ -60,6 +63,9 @@
     Configuration parameters for security handlers of the relevant proxy web apps.
     -->
     <AppConsumerAuthConfiguration>
+
+        <!-- Timeout (in seconds) for the gateway session cache. -->
+        <SessionTimeout>1800</SessionTimeout>
 
         <!--
         Enable/Disable JWT generation. Default is false.
@@ -106,7 +112,7 @@
         <!--
         Add SAML response as transport header in outgoing message.
         -->
-        <AddSAMLResponseHeaderToOutMessage>true</AddSAMLResponseHeaderToOutMessage>
+        <AddSAMLResponseHeaderToOutMessage>false</AddSAMLResponseHeaderToOutMessage>
 
     </AppConsumerAuthConfiguration>
 
@@ -147,7 +153,7 @@
     </APIGateway>
 
     <!--
-    API usage tracker configuration used by the BAM data publisher and
+    API usage tracker configuration used by the DAS data publisher and
     Google Analytics publisher in API gateway.
     -->
     <Analytics>
@@ -155,14 +161,14 @@
 
         <!--
         This data source is used to write/read UI Activity changes (eg: App Hit count)
-        to seperate database. When using BAM to analyze the changes it needs to configure this data source appropriately.
+        to seperate database. When using DAS to analyze the changes it needs to configure this data source appropriately.
         -->
         <UIActivityPublishDataSourceName>jdbc/WSO2AM_DB</UIActivityPublishDataSourceName>
 
         <!--
-        Enable UI Activity Data publish to BAM
+        Enable UI Activity Data publish to DAS
         -->
-        <UIActivityBAMPublishEnabled>false</UIActivityBAMPublishEnabled>
+        <UIActivityDASPublishEnabled>false</UIActivityDASPublishEnabled>
 
         <!--
         Enable/Disable the API usage tracker.
@@ -170,22 +176,22 @@
         <Enabled>false</Enabled>
 
         <!--
-        Enable/Disable Publishing Cache Hit/Miss Statistics
-        -->
-        <CacheStatsEnabled>false</CacheStatsEnabled>
-
-        <!--
         API Usage Data Publisher.
         -->
         <PublisherClass>org.wso2.carbon.appmgt.usage.publisher.APIMgtUsageDataBridgeDataPublisher</PublisherClass>
 
         <!--
-        Thrift port of the remote BAM server.
+        App usage data retrieval client implementation class.
+        -->
+        <StatisticClientProvider>org.wso2.carbon.appmgt.usage.client.impl.AppUsageStatisticsRdbmsClient</StatisticClientProvider>
+
+        <!--
+        Thrift port of the remote DAS server.
         -->
         <ThriftPort>7612</ThriftPort>
 
         <!--
-        Server URL of the remote BAM/CEP server used to collect statistics.
+        Server URL of the remote DAS/CEP server used to collect statistics.
         Must be specified in protocol://hostname:port/ format.
 
         An event can also be published to multiple Receiver Groups each having 1 or more receivers.
@@ -197,19 +203,19 @@
         e.g. - Multiple Receiver Groups with two receivers each
                  {tcp://localhost:7612/,tcp://localhost:7613},{tcp://localhost:7712/,tcp://localhost:7713/}
         -->
-        <BAMServerURL>tcp://localhost:7612/</BAMServerURL>
+        <DASServerURL>tcp://localhost:7612</DASServerURL>
 
         <!--
-        Administrator username to login to the remote BAM server.
+        Administrator username to login to the remote DAS server.
         -->
-        <BAMUsername>admin</BAMUsername>
+        <DASUsername>admin</DASUsername>
 
         <!--
-        Administrator password to login to the remote BAM server.
+        Administrator password to login to the remote DAS server.
         -->
-        <BAMPassword>admin</BAMPassword>
+        <DASPassword>admin</DASPassword>
 
-        <BAMEventStreams>
+        <DASEventStreams>
 
             <RequestStreamName>org.wso2.appmgt.statistics.request</RequestStreamName>
             <RequestStreamVersion>1.0.0</RequestStreamVersion>
@@ -223,15 +229,15 @@
             <CacheStatStreamName>org.wso2.appmgt.statistics.cache</CacheStatStreamName>
             <CacheStatStreamVersion>1.0.0</CacheStatStreamVersion>
 
-            <!-- Used when publishing AppManager UI activities to BAM   -->
+            <!-- Used when publishing AppManager UI activities to DAS   -->
             <UIActivityStreamName>org.wso2.appmgt.bam.uiactivitypublish</UIActivityStreamName>
             <UIActivityStreamVersion>1.1.0</UIActivityStreamVersion>
 
-        </BAMEventStreams>
+        </DASEventStreams>
 
 
         <!--
-        JNDI name of the data source to be used for getting BAM statistics.
+        JNDI name of the data source to be used for getting DAS statistics.
         This data source should be defined in the master-datasources.xml file in conf/datasources directory.
         -->
         <!--DataSourceName>jdbc/WSO2AM_STATS_DB</DataSourceName-->
@@ -270,35 +276,6 @@
 
     </TierManagement>
 
-    <!--
-    Use this configuration to control the self-sign-up capability in API store.
-    -->
-    <SelfSignUp>
-
-        <!--
-        Enable or disable the self-sign-up feature.
-        -->
-        <Enabled>true</Enabled>
-
-        <!--
-        Self signed up users should be associated with a suitable subscriber role
-        for them to be able to access the API store portal.
-        This required parameter specifies which role should be used for that purpose.
-        The role specified here must have the '/permission/admin/manage/api/subscribe' permission.
-        -->
-        <SubscriberRoleName>internal/subscriber</SubscriberRoleName>
-
-        <!--
-        This parameter specifies whether the subscriber role specified above
-        should be created in the local user store or not.
-        This only makes sense when the API subscribers are authenticated against the local user store.
-        That is the local Carbon server is acting as the AuthManager.
-        If a remote Carbon server is acting as the AuthManager, this parameter should be turned off for the local server.
-        -->
-        <CreateSubscriberRole>true</CreateSubscriberRole>
-
-    </SelfSignUp>
-
     <!--Configuration to enable/disable sending CORS headers in the Gateway response
         and define the Access-Control-Allow-Origin header value.-->
     <CORSConfiguration>
@@ -326,8 +303,17 @@
     -->
     <SSOConfiguration>
 
+        <!--Is service providers are created for skip-gateway enabled apps -->
+        <CreateServiceProviderForSkipGatewayApps>false</CreateServiceProviderForSkipGatewayApps>
+
         <!-- URL of the IDP use for SSO -->
-        <IdentityProviderUrl>https://localhost:9443/samlsso</IdentityProviderUrl>
+        <IdentityProviderUrl>https://${carbon.local.ip}:${mgt.transport.https.port}/samlsso</IdentityProviderUrl>
+
+        <!-- Postfix of the ACS URL -->
+        <ACSURLPostfix>appm/acs</ACSURLPostfix>
+
+        <!-- This alias is used to validate the signature of the responses form the IDP -->
+        <ResponseSigningKeyAlias>wso2carbon</ResponseSigningKeyAlias>
 
         <Configurators>
             <Configurator>
@@ -335,7 +321,7 @@
                 <version>5.0.0</version>
                 <providerClass>org.wso2.carbon.appmgt.impl.idp.sso.configurator.IS500SAMLSSOConfigurator</providerClass>
                 <parameters>
-                    <providerURL>https://localhost:9443</providerURL>
+                    <providerURL>https://${carbon.local.ip}:${mgt.transport.https.port}</providerURL>
                     <username>admin</username>
                     <password>admin</password>
                 </parameters>
@@ -350,7 +336,7 @@
     <EntitlementServiceConfiguration>
 
         <Parameters>
-            <ServerUrl>https://localhost:9443</ServerUrl>
+            <ServerUrl>https://${carbon.local.ip}:${mgt.transport.https.port}</ServerUrl>
             <Username>admin</Username>
             <Password>admin</Password>
         </Parameters>
@@ -378,13 +364,13 @@
             Name of the MDM, which is currently active. You need to define the MDM within the <MDMProperties> element.
             For information on defining a MDM to integrate it with WSO2 AppM, see Integrating a Mobile Device Manager
             -->
-            <Config name="ActiveMDM">WSO2MDM_INTERNAL</Config>
+            <Config name="ActiveMDM">WSO2EMM</Config>
 
             <!-- Ability for users to self-unsubscribe from mobile apps -->
             <Config name="EnableSelfUnsubscription">false</Config>
 
             <!-- Ability for users to subscribe to mobile apps using mobile devices -->
-            <Config name="EnableSubscriptionFromDevices">true</Config>
+            <Config name="EnableSubscriptionFromDevices">false</Config>
 
             <!-- Enables the sample devices for testing purposes -->
             <Config name="EnableSampleDevices">false</Config>
@@ -396,7 +382,7 @@
             <Config name="AppDownloadURLHost">%http%</Config>
 
             <!-- Path of the Property List file generated using the PLIST template for iOS apps. -->
-            <Config name="IosPlistPath">publisher/api/mobileapp/getplist</Config>
+            <Config name="IosPlistPath">/api/appm/store/v1.1/apps/mobile/plist</Config>
 
             <!-- Ability to enable the enterprise-wide operations on mobile apps -->
             <Config name="EnterpriseOperations_Enabled">true</Config>
@@ -446,12 +432,12 @@
             </MDM>
             -->
         </MDMProperties>
-        <BinaryFileStorage>
-            <FilePreciseLocation>repository/resources/mobileapps/</FilePreciseLocation>
-            <FileAPILocation>/api/mobileapp/getfile/</FileAPILocation>
-        </BinaryFileStorage>
 
     </MobileAppsConfiguration>
+
+    <BinaryFileStorage>
+        <AbsoluteLocation>${carbon.home}/repository/resources/mobileapps/</AbsoluteLocation>
+    </BinaryFileStorage>
 
     <!-- Configuration to secure mobile app services.-->
     <ServicesAPI>
@@ -461,9 +447,29 @@
     <!--These types in the configuration provides a list of enabled types in the APP Manager.
     If web app is commented, it will be hidden from APP Manager. These type values can be read as artifact types in RXT template -->
     <EnabledAssetTypeList>
-        <!--Type>webapp</Type-->
         <Type>mobileapp</Type>
-        <!--Type>site</Type-->
     </EnabledAssetTypeList>
+
+    <RESTAPI>
+        <!--Configure publisher and store REST API context path-->
+        <PublisherAPIContextPath>/api/appm/publisher/v1.1</PublisherAPIContextPath>
+        <StoreAPIContextPath>/api/appm/store/v1.1</StoreAPIContextPath>
+
+        <!--Configure white-listed URIs of REST API. Accessing white-listed URIs does not require credentials (does not require Authorization header). -->
+        <WhiteListedURIs>
+            <WhiteListedURI>
+                <URI>/api/appm/store/{version}/apps/mobile/binaries/one-time/{uuid}</URI>
+                <HTTPMethods>GET,HEAD</HTTPMethods>
+            </WhiteListedURI>
+            <WhiteListedURI>
+                <URI>/api/appm/store/{version}/apps/static-contents/{fileName}</URI>
+                <HTTPMethods>GET,HEAD</HTTPMethods>
+            </WhiteListedURI>
+            <WhiteListedURI>
+                <URI>/api/appm/store/{version}/apps/mobile/plist/{appId}/{uuid}</URI>
+                <HTTPMethods>GET,HEAD</HTTPMethods>
+            </WhiteListedURI>
+        </WhiteListedURIs>
+    </RESTAPI>
 
 </AppManager>

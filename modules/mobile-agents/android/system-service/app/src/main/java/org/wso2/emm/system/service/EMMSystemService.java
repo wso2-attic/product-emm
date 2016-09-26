@@ -30,6 +30,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.PowerManager;
 import android.os.SystemProperties;
 import android.os.UserManager;
@@ -411,7 +412,7 @@ public class EMMSystemService extends IntentService {
                 publishFirmwareBuildDate();
                 break;
             case Constants.Operation.LOGCAT:
-                getLogCat(Integer.parseInt(command));
+                getLogCat(command);
                 break;
             default:
                 Log.e(TAG, "Invalid operation code received");
@@ -422,26 +423,20 @@ public class EMMSystemService extends IntentService {
     /**
      * Returns the device LogCat
      */
-    public void getLogCat(int operationId) {
-        StringBuilder builder=new StringBuilder();
+    public void getLogCat(String command) {
         try {
-            String[] command = new String[]{
-                    "logcat",
-                    "-t", String.valueOf(Constants.NUMBER_OF_LOG_LINES),
-                    "-v", "time", Constants.LOG_LEVEL};
-            Process process = Runtime.getRuntime().exec(command);
-
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
-
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                builder.append(line);
-                builder.append("\n");
-            }
-            CommonUtils.callAgentApp(context, Constants.Operation.LOGCAT, operationId, builder.toString());
+            JSONObject commandObj = new JSONObject(command);
+            String filePath = Environment.getLegacyExternalStorageDirectory() + "/logcat-" + commandObj.getInt("operation_id") + ".log";
+            String[] cmd = new String[]{
+                    "logcat", "-d",
+                    "-f", filePath,
+                    "-v", "time", commandObj.getString("log_level")};
+            Runtime.getRuntime().exec(cmd);
+            CommonUtils.callAgentApp(context, Constants.Operation.LOGCAT, commandObj.getInt("operation_id"), filePath);
         } catch (IOException e) {
             Log.e(TAG, "getLog failed", e);
+        } catch (JSONException e) {
+            Log.e(TAG, "Unable to parse command string", e);
         }
     }
 

@@ -36,6 +36,8 @@ import org.wso2.emm.agent.services.operation.OperationManager;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
+
+import java.io.FileNotFoundException;
 import java.util.Map;
 
 /**
@@ -220,8 +222,13 @@ public class ApplicationManagementService extends IntentService implements APIRe
                 Operation logcatOperation = new Operation();
                 logcatOperation.setId(id);
                 logcatOperation.setCode(Constants.Operation.LOGCAT);
-                logcatOperation.setOperationResponse(OperationManager.getOperationResponseFromLogcat(context, message));
-                logcatOperation.setStatus(context.getResources().getString(R.string.operation_value_completed));
+                try {
+                    logcatOperation.setOperationResponse(OperationManager.getOperationResponseFromLogcat(context, message));
+                    logcatOperation.setStatus(context.getResources().getString(R.string.operation_value_completed));
+                } catch (java.io.IOException e) {
+                    logcatOperation.setOperationResponse("Unable to get logs. " + e.getMessage());
+                    logcatOperation.setStatus(context.getResources().getString(R.string.operation_value_error));
+                }
                 Gson operationGson = new Gson();
                 Preference.putString(context, Constants.Operation.LOGCAT, operationGson.toJson(logcatOperation));
                 break;
