@@ -107,6 +107,14 @@ public class UserOperations {
                              "/permission/admin/device-mgt/notifications/view," +
                              "/permission/admin/device-mgt/platform-configurations/view," +
                              "/permission/admin/device-mgt/policies/view," +
+                             "/permission/admin/device-mgt/applications/manage," +
+                             "/permission/admin/manage/mobileapp/create," +
+                             "/permission/admin/manage/mobileapp/install," +
+                             "/permission/admin/manage/resources/browse," +
+                             "/permission/admin/manage/webapp/subscribe," +
+                             "/permission/admin/manage/search/advanced-search," +
+                             "/permission/admin/manage/search/resources," +
+                             "/permission/admin/manage/resources/govern/mobileapp/list," +
                              "/permission/admin/login";
         return permissions.split(",");
     }
