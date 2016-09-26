@@ -275,10 +275,6 @@ public class EMMSystemService extends IntentService {
                 }
                 break;
             case Constants.Operation.SILENT_INSTALL_APPLICATION:
-                if (appUri != null) {
-                    silentInstallApp(getApplicationContext(), appUri);
-                }
-                break;
             case Constants.Operation.SILENT_UPDATE_APPLICATION:
                 if (appUri != null) {
                     silentInstallApp(getApplicationContext(), appUri);

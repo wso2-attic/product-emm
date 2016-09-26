@@ -37,7 +37,6 @@ public class AppUtils {
     private static final String TAG = "AppUtils";
     private static final int DELETE_ALL_USERS = 0x00000002;
     private static final int INSTALL_ALL_USERS = 0x00000040;
-    private static final int INSTALL_FORWARD_LOCK = 0x00000001;
     private static final int INSTALL_ALLOW_DOWNGRADE = 0x00000080;
     private static final int INSTALL_REPLACE_EXISTING = 0x00000002;
     public static final int INSTALL_SUCCEEDED = 1;
@@ -67,7 +66,7 @@ public class AppUtils {
                 }
             }
         };
-        pm.installPackage(packageUri, observer, INSTALL_ALL_USERS | INSTALL_FORWARD_LOCK | INSTALL_ALLOW_DOWNGRADE |
+        pm.installPackage(packageUri, observer, INSTALL_ALL_USERS | INSTALL_ALLOW_DOWNGRADE |
                                            INSTALL_REPLACE_EXISTING, null);
     }
 
