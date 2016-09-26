@@ -364,13 +364,13 @@
             Name of the MDM, which is currently active. You need to define the MDM within the <MDMProperties> element.
             For information on defining a MDM to integrate it with WSO2 AppM, see Integrating a Mobile Device Manager
             -->
-            <Config name="ActiveMDM">WSO2EMM</Config>
+            <Config name="ActiveMDM">WSO2MDM_INTERNAL</Config>
 
             <!-- Ability for users to self-unsubscribe from mobile apps -->
             <Config name="EnableSelfUnsubscription">false</Config>
 
             <!-- Ability for users to subscribe to mobile apps using mobile devices -->
-            <Config name="EnableSubscriptionFromDevices">false</Config>
+            <Config name="EnableSubscriptionFromDevices">true</Config>
 
             <!-- Enables the sample devices for testing purposes -->
             <Config name="EnableSampleDevices">false</Config>
