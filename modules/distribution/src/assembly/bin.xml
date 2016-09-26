@@ -46,6 +46,7 @@
                 <exclude>**/carbon.xml</exclude>
                 <exclude>**/registry.xml</exclude>
                 <exclude>**/client-truststore.jks</exclude>
+                <exclude>**/conf/security/Owasp.CsrfGuard.Carbon.properties</exclude>
                 <exclude>**/wso2carbon.jks</exclude>
                 <exclude>**/WSO2AM_DB.h2.db</exclude>
                 <exclude>**/WSO2DM_DB.h2.db</exclude>
@@ -183,6 +184,7 @@
                 <include>**/claims/</include>
                 <include>**/permission/</include>
                 <include>**/registration/</include>
+                <include>**/apistore/</include>
             </includes>
         </fileSet>
         <fileSet>
@@ -929,6 +931,13 @@
         <!-- Copying authenticators.xml -->
         <file>
             <source>src/repository/conf/security/cipher-tool.properties</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <!-- Copying Owasp Configs -->
+        <file>
+            <source>src/repository/conf/security/Owasp.CsrfGuard.Carbon.properties</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
