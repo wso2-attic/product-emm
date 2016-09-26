@@ -36,6 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 
+import org.apache.commons.io.input.ReversedLinesFileReader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,7 +69,10 @@ import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -882,32 +886,75 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      */
     public void getLogcat(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
         if (Constants.SYSTEM_APP_ENABLED){
-            operation.setStatus(resources.getString(R.string.operation_value_progress));
-            CommonUtils.callSystemApp(context, Constants.Operation.LOGCAT, String.valueOf(operation.getId()),
-                    null);
+            try {
+                JSONObject commandObj = new JSONObject();
+                commandObj.put("operation_id", operation.getId());
+                commandObj.put("log_level", Constants.LogPublisher.LOG_LEVEL);
+                CommonUtils.callSystemApp(context, Constants.Operation.LOGCAT, commandObj.toString(),
+                        null);
+                operation.setStatus(resources.getString(R.string.operation_value_progress));
+            } catch (JSONException e) {
+                Log.e(TAG, "Error occurred. " + e.getMessage());
+                operation.setOperationResponse(e.getMessage());
+                operation.setStatus(context.getResources().getString(R.string.operation_value_error));
+                resultBuilder.build(operation);
+            }
         } else {
             RuntimeInfo info = new RuntimeInfo(context);
-            operation.setOperationResponse(getOperationResponseFromLogcat(context, info.getLogCat()));
-            operation.setStatus(context.getResources().getString(R.string.operation_value_completed));
+            try {
+                operation.setOperationResponse(getOperationResponseFromLogcat(context, info.getLogCat()));
+                operation.setStatus(context.getResources().getString(R.string.operation_value_completed));
+            } catch (IOException e) {
+                operation.setOperationResponse("Unable to get logs. " + e.getMessage());
+                operation.setStatus(context.getResources().getString(R.string.operation_value_error));
+            }
             resultBuilder.build(operation);
         }
     }
 
-    public static String getOperationResponseFromLogcat(Context context, String logcat) {
-        DeviceInfo deviceInfo = new DeviceInfo(context);
-        EventPayload eventPayload = new EventPayload();
-        eventPayload.setPayload(logcat);
-        eventPayload.setType("LOGCAT");
-        eventPayload.setDeviceIdentifier(deviceInfo.getDeviceId());
-        if (Constants.DEBUG_MODE_ENABLED) {
-            Log.d(TAG, "Logcat returned");
+    public static String getOperationResponseFromLogcat(Context context, String logcat) throws IOException {
+        File logcatFile = new File(logcat);
+        if (logcatFile.exists() && logcatFile.canRead()) {
+            DeviceInfo deviceInfo = new DeviceInfo(context);
+            EventPayload eventPayload = new EventPayload();
+            eventPayload.setPayload(logcat);
+            eventPayload.setType("LOGCAT");
+            eventPayload.setDeviceIdentifier(deviceInfo.getDeviceId());
+
+            if (Constants.DEBUG_MODE_ENABLED) {
+                Log.d(TAG, "Logcat returned");
+            }
+
+            StringBuilder emmBuilder = new StringBuilder();
+            LogPublisherFactory publisher = new LogPublisherFactory(context);
+            if (publisher.getLogPublisher() != null) {
+                StringBuilder publisherBuilder = new StringBuilder();
+                int index = 0;
+                String line;
+                ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(logcatFile, Charset.forName("US-ASCII"));
+                while ((line = reversedLinesFileReader.readLine()) != null) {
+                    publisherBuilder.insert(0, "\n");
+                    publisherBuilder.insert(0, line);
+                    //OPERATION_RESPONSE filed in the DM_DEVICE_OPERATION_RESPONSE is declared as a blob and hence can only hold 64Kb.
+                    //So we don't want to throw exceptions in the server. Limiting the response in here to limit the server traffic also.
+                    if (emmBuilder.length() < Character.MAX_VALUE - 4096) { //Keeping 4kB for rest of the response payload.
+                        emmBuilder.insert(0, "\n");
+                        emmBuilder.insert(0, line);
+                    }
+                    if (++index >= Constants.LogPublisher.NUMBER_OF_LOG_LINES) {
+                        break;
+                    }
+                }
+                eventPayload.setPayload(publisherBuilder.toString());
+                publisher.getLogPublisher().publish(eventPayload);
+            }
+            eventPayload.setPayload(emmBuilder.toString());
+            Gson logcatResponse = new Gson();
+            logcatFile.delete();
+            return logcatResponse.toJson(eventPayload);
+        } else {
+            throw new IOException("Unable to find or read log file.");
         }
-        LogPublisherFactory publisher = new LogPublisherFactory(context);
-        if (publisher.getLogPublisher() != null) {
-            publisher.getLogPublisher().publish(eventPayload);
-        }
-        Gson logcatResponse = new Gson();
-        return logcatResponse.toJson(eventPayload);
     }
 
     @Override

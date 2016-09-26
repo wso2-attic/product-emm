@@ -63,6 +63,7 @@ dependencies {
     compile('com.googlecode.json-simple:json-simple:1.1.1') {
         exclude module: 'junit'
     }
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
     compile 'com.google.android.gms:play-services-gcm:7.5.0'
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
     compile 'com.android.support:support-v4:23.1.1'

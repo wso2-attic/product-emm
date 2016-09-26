@@ -20,6 +20,7 @@ package org.wso2.emm.agent.api;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -154,28 +155,18 @@ public class RuntimeInfo {
      * Returns the device LogCat
      */
     public String getLogCat() {
-        StringBuilder builder=new StringBuilder();
+        String filePath = Environment.getLegacyExternalStorageDirectory() + "/logcat.log";
         try {
-            String[] command = new String[]{
-                    "logcat",
-                    "-t", String.valueOf(Constants.LogPublisher.NUMBER_OF_LOG_LINES),
+            String[] cmd = new String[]{
+                    "logcat", "-d",
+                    "-f", filePath,
                     "-v", "time", Constants.LogPublisher.LOG_LEVEL};
 
-            Process process = Runtime.getRuntime().exec(command);
-
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
-
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                builder.append(line);
-                builder.append("\n");
-            }
+            Runtime.getRuntime().exec(cmd);
         } catch (IOException e) {
             Log.e(TAG, "getLog failed", e);
-        } finally {
-            return builder.toString();
         }
+        return filePath;
     }
 
     public List<Device.Property> getRAMInfo() throws AndroidAgentException {
