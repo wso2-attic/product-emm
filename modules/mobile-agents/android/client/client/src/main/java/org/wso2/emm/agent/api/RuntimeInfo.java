@@ -33,6 +33,7 @@ import org.wso2.emm.agent.utils.Constants;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -154,15 +155,19 @@ public class RuntimeInfo {
     /**
      * Returns the device LogCat
      */
-    public String getLogCat() {
+    public String getLogCat(String logLevel) {
         String filePath = Environment.getLegacyExternalStorageDirectory() + "/logcat.log";
         try {
-            String[] cmd = new String[]{
-                    "logcat", "-d",
-                    "-f", filePath,
-                    "-v", "time", Constants.LogPublisher.LOG_LEVEL};
-
-            Runtime.getRuntime().exec(cmd);
+            String[] cmd = new String[]{"logcat", "-d", "-v", "time", logLevel};
+            Process process = Runtime.getRuntime().exec(cmd);
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
+            String line;
+            PrintWriter writer = new PrintWriter(filePath, "UTF-8");
+            while ((line = bufferedReader.readLine()) != null) {
+                writer.println(line);
+            }
+            writer.close();
         } catch (IOException e) {
             Log.e(TAG, "getLog failed", e);
         }
