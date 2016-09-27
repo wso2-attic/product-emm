@@ -36,7 +36,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 
-import org.apache.commons.io.input.ReversedLinesFileReader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -69,10 +68,10 @@ import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -921,28 +920,29 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             eventPayload.setType("LOGCAT");
             eventPayload.setDeviceIdentifier(deviceInfo.getDeviceId());
 
-            if (Constants.DEBUG_MODE_ENABLED) {
-                Log.d(TAG, "Logcat returned");
-            }
-
             StringBuilder emmBuilder = new StringBuilder();
             LogPublisherFactory publisher = new LogPublisherFactory(context);
             if (publisher.getLogPublisher() != null) {
                 StringBuilder publisherBuilder = new StringBuilder();
-                int index = 0;
-                String line;
-                ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(logcatFile, Charset.forName("US-ASCII"));
-                while ((line = reversedLinesFileReader.readLine()) != null) {
+                List<String> logLines = new ArrayList<>();
+                try(BufferedReader br = new BufferedReader(new FileReader(logcat))) {
+                    for (String line; (line = br.readLine()) != null; ) {
+                        logLines.add(line);
+                        if (logLines.size() > Constants.LogPublisher.NUMBER_OF_LOG_LINES) {
+                            logLines.remove(0);
+                        }
+                    }
+                }
+
+                for (int i = logLines.size() - 1; i >= 0; i--) {
+                    String line = logLines.get(i);
                     publisherBuilder.insert(0, "\n");
                     publisherBuilder.insert(0, line);
                     //OPERATION_RESPONSE filed in the DM_DEVICE_OPERATION_RESPONSE is declared as a blob and hence can only hold 64Kb.
                     //So we don't want to throw exceptions in the server. Limiting the response in here to limit the server traffic also.
-                    if (emmBuilder.length() < Character.MAX_VALUE - 4096) { //Keeping 4kB for rest of the response payload.
+                    if (emmBuilder.length() < Character.MAX_VALUE - 8192) { //Keeping 8kB for rest of the response payload.
                         emmBuilder.insert(0, "\n");
                         emmBuilder.insert(0, line);
-                    }
-                    if (++index >= Constants.LogPublisher.NUMBER_OF_LOG_LINES) {
-                        break;
                     }
                 }
                 eventPayload.setPayload(publisherBuilder.toString());
@@ -951,6 +951,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             eventPayload.setPayload(emmBuilder.toString());
             Gson logcatResponse = new Gson();
             logcatFile.delete();
+            if (Constants.DEBUG_MODE_ENABLED) {
+                Log.d(TAG, "Logcat returned");
+            }
             return logcatResponse.toJson(eventPayload);
         } else {
             throw new IOException("Unable to find or read log file.");
