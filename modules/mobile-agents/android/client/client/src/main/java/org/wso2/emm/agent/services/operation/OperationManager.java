@@ -27,6 +27,7 @@ import android.content.res.Resources;
 import android.location.Location;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -36,6 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 
+import org.apache.commons.io.input.ReversedLinesFileReader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,10 +70,10 @@ import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -884,11 +886,12 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param operation - Operation object.
      */
     public void getLogcat(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+        String logLevel = Constants.LogPublisher.LOG_LEVEL;
         if (Constants.SYSTEM_APP_ENABLED){
             try {
                 JSONObject commandObj = new JSONObject();
                 commandObj.put("operation_id", operation.getId());
-                commandObj.put("log_level", Constants.LogPublisher.LOG_LEVEL);
+                commandObj.put("log_level", logLevel);
                 CommonUtils.callSystemApp(context, Constants.Operation.LOGCAT, commandObj.toString(),
                         null);
                 operation.setStatus(resources.getString(R.string.operation_value_progress));
@@ -901,7 +904,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         } else {
             RuntimeInfo info = new RuntimeInfo(context);
             try {
-                operation.setOperationResponse(getOperationResponseFromLogcat(context, info.getLogCat()));
+                operation.setOperationResponse(getOperationResponseFromLogcat(context, info.getLogCat(logLevel)));
                 operation.setStatus(context.getResources().getString(R.string.operation_value_completed));
             } catch (IOException e) {
                 operation.setOperationResponse("Unable to get logs. " + e.getMessage());
@@ -921,38 +924,42 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             eventPayload.setDeviceIdentifier(deviceInfo.getDeviceId());
 
             StringBuilder emmBuilder = new StringBuilder();
+            StringBuilder publisherBuilder = new StringBuilder();
+            int index = 0;
+            String line;
+            ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(logcatFile, Charset.forName("US-ASCII"));
+            while ((line = reversedLinesFileReader.readLine()) != null) {
+                publisherBuilder.insert(0, "\n");
+                publisherBuilder.insert(0, line);
+                //OPERATION_RESPONSE filed in the DM_DEVICE_OPERATION_RESPONSE is declared as a blob and hence can only hold 64Kb.
+                //So we don't want to throw exceptions in the server. Limiting the response in here to limit the server traffic also.
+                if (emmBuilder.length() < Character.MAX_VALUE - 8192) { //Keeping 8kB for rest of the response payload.
+                    emmBuilder.insert(0, "\n");
+                    emmBuilder.insert(0, line);
+                }
+                if (++index >= Constants.LogPublisher.NUMBER_OF_LOG_LINES) {
+                    break;
+                }
+            }
             LogPublisherFactory publisher = new LogPublisherFactory(context);
             if (publisher.getLogPublisher() != null) {
-                StringBuilder publisherBuilder = new StringBuilder();
-                List<String> logLines = new ArrayList<>();
-                try(BufferedReader br = new BufferedReader(new FileReader(logcat))) {
-                    for (String line; (line = br.readLine()) != null; ) {
-                        logLines.add(line);
-                        if (logLines.size() > Constants.LogPublisher.NUMBER_OF_LOG_LINES) {
-                            logLines.remove(0);
-                        }
-                    }
-                }
-
-                for (int i = logLines.size() - 1; i >= 0; i--) {
-                    String line = logLines.get(i);
-                    publisherBuilder.insert(0, "\n");
-                    publisherBuilder.insert(0, line);
-                    //OPERATION_RESPONSE filed in the DM_DEVICE_OPERATION_RESPONSE is declared as a blob and hence can only hold 64Kb.
-                    //So we don't want to throw exceptions in the server. Limiting the response in here to limit the server traffic also.
-                    if (emmBuilder.length() < Character.MAX_VALUE - 8192) { //Keeping 8kB for rest of the response payload.
-                        emmBuilder.insert(0, "\n");
-                        emmBuilder.insert(0, line);
-                    }
-                }
                 eventPayload.setPayload(publisherBuilder.toString());
                 publisher.getLogPublisher().publish(eventPayload);
+                if (Constants.DEBUG_MODE_ENABLED) {
+                    PrintWriter writer = new PrintWriter(Environment.getLegacyExternalStorageDirectory() + "/published-log.txt", "UTF-8");
+                    writer.print(eventPayload.getPayload());
+                    writer.close();
+                    Log.d(TAG, "Logcat published size: " + eventPayload.getPayload().length());
+                }
             }
             eventPayload.setPayload(emmBuilder.toString());
             Gson logcatResponse = new Gson();
             logcatFile.delete();
             if (Constants.DEBUG_MODE_ENABLED) {
-                Log.d(TAG, "Logcat returned");
+                PrintWriter writer = new PrintWriter(Environment.getLegacyExternalStorageDirectory() + "/emm-log.txt", "UTF-8");
+                writer.print(eventPayload.getPayload());
+                writer.close();
+                Log.d(TAG, "Logcat payload size: " + eventPayload.getPayload().length());
             }
             return logcatResponse.toJson(eventPayload);
         } else {

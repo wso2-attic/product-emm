@@ -52,6 +52,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -426,12 +427,19 @@ public class EMMSystemService extends IntentService {
     public void getLogCat(String command) {
         try {
             JSONObject commandObj = new JSONObject(command);
-            String filePath = Environment.getLegacyExternalStorageDirectory() + "/logcat-" + commandObj.getInt("operation_id") + ".log";
+            String filePath = Environment.getLegacyExternalStorageDirectory() + "/logcat" + commandObj.getInt("operation_id") + ".log";
             String[] cmd = new String[]{
                     "logcat", "-d",
-                    "-f", filePath,
                     "-v", "time", commandObj.getString("log_level")};
-            Runtime.getRuntime().exec(cmd);
+            Process process = Runtime.getRuntime().exec(cmd);
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
+            String line;
+            PrintWriter writer = new PrintWriter(filePath, "UTF-8");
+            while ((line = bufferedReader.readLine()) != null) {
+                writer.println(line);
+            }
+            writer.close();
             CommonUtils.callAgentApp(context, Constants.Operation.LOGCAT, commandObj.getInt("operation_id"), filePath);
         } catch (IOException e) {
             Log.e(TAG, "getLog failed", e);
