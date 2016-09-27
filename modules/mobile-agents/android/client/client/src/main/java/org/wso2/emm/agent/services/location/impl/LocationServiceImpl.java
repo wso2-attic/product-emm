@@ -54,9 +54,10 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
     private LocationServiceImpl() {}
 
     private LocationServiceImpl(Context context) {
+        this.context = context;
+        locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
         class LooperThread extends Thread {
             public Handler mHandler;
-
             public void run() {
                 if (Looper.myLooper() == null) {
                     Looper.prepare();
@@ -70,8 +71,6 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
             }
         }
         new LooperThread().run();
-        this.context = context;
-        locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
     }
 
     public static LocationServiceImpl getInstance(Context context) {
