@@ -312,6 +312,22 @@
         <!-- Postfix of the ACS URL -->
         <ACSURLPostfix>appm/acs</ACSURLPostfix>
 
+        <!-- Enable SAML Response Signing when adding Service Provider and validate response signature in gateway.
+             If you are switching from false to true, then already created services providers should be updated manully to have response signing true.
+        -->
+	<EnableResponseSigning>true</EnableResponseSigning>
+
+        <!-- Enable SAML Assertion Signing when adding Service Provider and validate assertion signature in gateway.
+             If you are switching from false to true, then already created services providers should be updated manully to have assertion signing true.
+        -->
+	<EnableAssertionSigning>true</EnableAssertionSigning>
+
+        <!-- Validates Assertion expiry time of SAML Response -->
+        <ValidateAssertionExpiry>true</ValidateAssertionExpiry>
+
+	<!-- Timestamp skew applied to SAML Response Validity period. Default set to 5min --> 
+        <SAMLResponseValidityTimeStampSkew>300</SAMLResponseValidityTimeStampSkew>
+
         <!-- This alias is used to validate the signature of the responses form the IDP -->
         <ResponseSigningKeyAlias>wso2carbon</ResponseSigningKeyAlias>
 
@@ -382,7 +398,7 @@
             <Config name="AppDownloadURLHost">%http%</Config>
 
             <!-- Path of the Property List file generated using the PLIST template for iOS apps. -->
-            <Config name="IosPlistPath">/api/appm/store/v1.1/apps/mobile/plist</Config>
+            <Config name="IosPlistPath">publisher/api/mobileapp/getplist</Config>
 
             <!-- Ability to enable the enterprise-wide operations on mobile apps -->
             <Config name="EnterpriseOperations_Enabled">true</Config>
@@ -400,8 +416,8 @@
             -->
             <MDM name="WSO2MDM" bundle="org.wso2.carbon.appmgt.mdm.restconnector">
                 <Property name="ImageURL">/store/extensions/assets/mobileapp/resources/models/%s.png</Property>
-                <Property name="ServerURL">https://localhost:9450/mdm-admin</Property>
-                <Property name="TokenApiURL">https://localhost:9448/oauth2/token</Property>
+                <Property name="ServerURL">https://localhost:9443/mdm-admin</Property>
+                <Property name="TokenApiURL">https://localhost:9443/oauth2/token</Property>
                 <Property name="ClientKey">WjLm24IxBVLF0oz0VJfmtJbjJbka</Property>
                 <Property name="ClientSecret">v3KkIQXkJ1SDp_Bf8uUQxu5p7TQa</Property>
                 <Property name="AuthUser">admin</Property>
@@ -410,8 +426,8 @@
 
             <!-- Old EMM, Calls EMM using REST API -->
             <MDM name="WSO2EMM" bundle="org.wso2.carbon.appmgt.mdm.wso2emm">
-                <Property name="ServerURL">https://localhost:9451</Property>
-                <Property name="ImageURL">https://localhost:9451/emm/assets/wso2mobile/img/models/%s.png</Property>
+                <Property name="ServerURL">https://localhost:9443</Property>
+                <Property name="ImageURL">https://localhost:9443/emm/assets/wso2mobile/img/models/%s.png</Property>
                 <Property name="AuthUser">admin</Property>
                 <Property name="AuthPass">admin</Property>
             </MDM>
@@ -432,6 +448,10 @@
             </MDM>
             -->
         </MDMProperties>
+        <BinaryFileStorage>        
+            <FilePreciseLocation>repository/resources/mobileapps/</FilePreciseLocation>       
+            <FileAPILocation>/api/appm/store/v1.1/apps/mobile/binaries/one-time/</FileAPILocation>       
+        </BinaryFileStorage>
 
     </MobileAppsConfiguration>
 
