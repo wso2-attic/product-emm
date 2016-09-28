@@ -23,12 +23,12 @@ public class Constants {
     public static final String MDM_LOGIN_PATH = "/emm/login";
     public static final String LOGIN_GROUP = "login-group";
     public static final String MDM_ROLES_URL = "/emm/roles";
-    public static final String MDM_USER_ADD_URL = "/emm/users/add-user";
+    public static final String MDM_USER_ADD_URL = "/emm/user/add";
     public static final String MDM_POLICY_URL = "/emm/policies";
     public static final String MDM_POLICY_ADD_URL = "/emm/policies/add-policy";
     public static final String MDM_POLICY_EDIT_URL = "/emm/policies/view-edit-policy";
     public static final String MDM_USER_URL = "/emm/users/";
-    public static final String MDM_ROLES_EDIT_URL = "/emm/roles/edit-role/";
+    public static final String MDM_ROLES_EDIT_URL = "/emm/role/edit-permission/";
     public static final String MDM_PLATFORM_CONFIG_URL = "/emm/platform-configuration";
     public static final String MDM_NOTIFICATION_URL = "/emm/notification-listing";
     public static final String MDM_HOME_URL = "/emm";

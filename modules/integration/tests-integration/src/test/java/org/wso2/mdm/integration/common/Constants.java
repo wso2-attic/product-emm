@@ -244,6 +244,7 @@ public final class Constants {
         public static final String CONFIG_MGT_ENDPOINT = "/api/device-mgt/android/v1.0/configuration/";
         public static final String PAYLOAD_FILE_NAME = "android-configuration-payloads.json";
         public static final String RESPONSE_PAYLOAD_FILE_NAME = "android-config-response-payloads.json";
+        public static final String RESPONSE_PAYLOAD = "\"Android platform configuration has been updated successfully.\"";
     }
 
     public static final class OperationManagement {

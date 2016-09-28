@@ -51,9 +51,9 @@
 
             <!-- Type of the browser selenium tests are running" -->
             <browser>
-                <browserType>firefox</browserType>
+                <browserType>chrome</browserType>
                 <!-- path to webDriver executable - required only for chrome-->
-                <webdriverPath enable="false">/home/test/name/webDriver</webdriverPath>
+                <webdriverPath enable="true">/home/sameerag/WSO2/iot/selenium_driver/chromedriver</webdriverPath>
             </browser>
         </selenium>
     </tools>

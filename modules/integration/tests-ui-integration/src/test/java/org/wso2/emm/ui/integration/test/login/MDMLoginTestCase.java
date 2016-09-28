@@ -44,6 +44,7 @@ public class MDMLoginTestCase extends EMMIntegrationUiBaseTestCase {
         MDMLoginPage test = new MDMLoginPage(driver);
         MDMHomePage home = test.loginAs(automationContext.getSuperTenant().getTenantAdmin().getUserName(),
                                         automationContext.getSuperTenant().getTenantAdmin().getPassword());
+        home.logout();
         driver.close();
     }
 
