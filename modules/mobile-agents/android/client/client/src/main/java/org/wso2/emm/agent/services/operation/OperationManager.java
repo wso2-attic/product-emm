@@ -27,7 +27,6 @@ import android.content.res.Resources;
 import android.location.Location;
 import android.media.AudioManager;
 import android.net.Uri;
-import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -72,7 +71,6 @@ import org.wso2.emm.agent.utils.Preference;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -946,9 +944,6 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
                 eventPayload.setPayload(publisherBuilder.toString());
                 publisher.getLogPublisher().publish(eventPayload);
                 if (Constants.DEBUG_MODE_ENABLED) {
-                    PrintWriter writer = new PrintWriter(Environment.getLegacyExternalStorageDirectory() + "/published-log.txt", "UTF-8");
-                    writer.print(eventPayload.getPayload());
-                    writer.close();
                     Log.d(TAG, "Logcat published size: " + eventPayload.getPayload().length());
                 }
             }
@@ -956,9 +951,6 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             Gson logcatResponse = new Gson();
             logcatFile.delete();
             if (Constants.DEBUG_MODE_ENABLED) {
-                PrintWriter writer = new PrintWriter(Environment.getLegacyExternalStorageDirectory() + "/emm-log.txt", "UTF-8");
-                writer.print(eventPayload.getPayload());
-                writer.close();
                 Log.d(TAG, "Logcat payload size: " + eventPayload.getPayload().length());
             }
             return logcatResponse.toJson(eventPayload);
