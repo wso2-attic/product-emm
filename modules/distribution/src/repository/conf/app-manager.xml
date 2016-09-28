@@ -449,8 +449,8 @@
             -->
         </MDMProperties>
         <BinaryFileStorage>        
-            <FilePreciseLocation>repository/resources/mobileapps/</FilePreciseLocation>       
-            <FileAPILocation>/api/appm/store/v1.1/apps/mobile/binaries/one-time/</FileAPILocation>       
+            <FilePreciseLocation>repository/resources/mobileapps/</FilePreciseLocation>     
+            <FileAPILocation>/api/mobileapp/getfile/</FileAPILocation>      
         </BinaryFileStorage>
 
     </MobileAppsConfiguration>
