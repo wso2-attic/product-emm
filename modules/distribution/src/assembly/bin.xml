@@ -461,8 +461,8 @@
             <includes>
                 <include>oauth2.war</include>
                 <include>api#appm#oauth#v1.0.war</include>
-                <include>api#appm#store#v1.0.war</include>
-                <include>api#appm#publisher#v1.0.war</include>
+                <include>api#appm#store#v1.1.war</include>
+                <include>api#appm#publisher#v1.1.war</include>
             </includes>
         </fileSet>
         <!-- Copy Certificate Management API -->
