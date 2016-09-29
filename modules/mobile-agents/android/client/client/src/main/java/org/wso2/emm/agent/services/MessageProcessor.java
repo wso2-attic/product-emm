@@ -29,10 +29,13 @@ import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.DeviceInfo;
+import org.wso2.emm.agent.beans.AppInstallRequest;
+import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
 import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 import org.wso2.emm.agent.services.operation.OperationProcessor;
+import org.wso2.emm.agent.utils.AppInstallRequestUtil;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.CommonUtils;
@@ -46,6 +49,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.Gson;
 
 /**
  * This class handles all the functionalities related to coordinating the retrieval
@@ -207,22 +211,43 @@ public class MessageProcessor implements APIResultCallBack {
 			String applicationOperationMessage = Preference.getString(context, context.getResources().getString(
 					R.string.app_install_failed_message));
 			if (applicationOperationStatus != null && applicationOperationId != 0 && applicationOperationCode != null) {
-				org.wso2.emm.agent.beans.Operation applicationOperation = new org.wso2.emm.agent.beans.Operation();
+				Operation applicationOperation = new Operation();
 				ApplicationManager appMgt = new ApplicationManager(context);
 				applicationOperation.setId(applicationOperationId);
 				applicationOperation.setCode(applicationOperationCode);
 				applicationOperation = appMgt.getApplicationInstallationStatus(
 						applicationOperation, applicationOperationStatus, applicationOperationMessage);
-				if (replyPayload != null) {
-					replyPayload.add(applicationOperation);
-				} else {
+				if (replyPayload == null) {
 					replyPayload = new ArrayList<>();
-					replyPayload.add(applicationOperation);
 				}
+				replyPayload.add(applicationOperation);
 				Preference.putString(context, context.getResources().getString(
 						R.string.app_install_status), null);
 				Preference.putString(context, context.getResources().getString(
 						R.string.app_install_failed_message), null);
+				if (context.getResources().getString(R.string.operation_value_error).equals(applicationOperation.getStatus()) ||
+						context.getResources().getString(R.string.operation_value_completed).equals(applicationOperation.getStatus())){
+					Preference.putInt(context, context.getResources().getString(
+							R.string.app_install_id), 0);
+					Preference.putString(context, context.getResources().getString(
+							R.string.app_install_code), null);
+					startPendingInstallation();
+				}
+			} else {
+				startPendingInstallation();
+			}
+
+			if (Preference.hasPreferenceKey(context, Constants.Operation.LOGCAT)){
+				if (Preference.hasPreferenceKey(context, Constants.Operation.LOGCAT)) {
+					Gson operationGson = new Gson();
+					Operation logcatOperation = operationGson.fromJson(Preference
+							.getString(context, Constants.Operation.LOGCAT), Operation.class);
+					if (replyPayload == null) {
+						replyPayload = new ArrayList<>();
+					}
+					replyPayload.add(logcatOperation);
+					Preference.removePreference(context, Constants.Operation.LOGCAT);
+				}
 			}
 			requestParams =  mapper.writeValueAsString(replyPayload);
 		} catch (JsonMappingException e) {
@@ -248,6 +273,18 @@ public class MessageProcessor implements APIResultCallBack {
 			);
 		} else {
 			Log.e(TAG, "There is no valid IP to contact the server");
+		}
+	}
+
+	private void startPendingInstallation(){
+		AppInstallRequest appInstallRequest = AppInstallRequestUtil.getPending(context);
+		if (appInstallRequest != null) {
+			ApplicationManager applicationManager = new ApplicationManager(context.getApplicationContext());
+			Operation applicationOperation = new Operation();
+			applicationOperation.setId(appInstallRequest.getApplicationOperationId());
+			applicationOperation.setCode(appInstallRequest.getApplicationOperationCode());
+			Log.d(TAG, "Try to start app installation from queue.");
+			applicationManager.installApp(appInstallRequest.getAppUrl(), null, applicationOperation);
 		}
 	}
 

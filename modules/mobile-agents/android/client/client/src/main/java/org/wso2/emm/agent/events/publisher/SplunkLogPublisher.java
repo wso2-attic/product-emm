@@ -36,16 +36,11 @@ public class SplunkLogPublisher implements DataPublisher {
     public SplunkLogPublisher(Context context) {
         DeviceInfo deviceInfo = new DeviceInfo(context);
         deviceIdentifier = deviceInfo.getDeviceId();
-        if (Constants.SplunkConfigs.TYPE_MINT.equals(Constants.SplunkConfigs.DATA_COLLECTOR_TYPE)) {
-            Mint.initAndStartSession(context, Constants.SplunkConfigs.API_KEY);
-        } else {
-            Mint.initAndStartSessionHEC(context, Constants.SplunkConfigs.HEC_MINT_ENDPOINT_URL, Constants.SplunkConfigs.HEC_TOKEN);
-        }
     }
 
     @Override
     public void publish(EventPayload eventPayload) {
-        HashMap<String, Object> payload = new HashMap<String, Object>();
+        HashMap<String, Object> payload = new HashMap<>();
         payload.put("deviceId", deviceIdentifier);
         payload.put("log", eventPayload.getPayload());
         Mint.logEvent("EMM Logs", MintLogLevel.Info, payload);

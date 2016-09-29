@@ -55,7 +55,7 @@ public class OperationManagerFactory {
             return new OperationManagerWorkProfile(context);
         }
         else if (manager.isDeviceOwnerApp(Constants.SERVICE_PACKAGE_NAME)) {
-            return new OperationManagerDeviceOwner(context);
+                return new OperationManagerDeviceOwner(context);
         }
         else {
             return new OperationManagerOlderSdk(context);

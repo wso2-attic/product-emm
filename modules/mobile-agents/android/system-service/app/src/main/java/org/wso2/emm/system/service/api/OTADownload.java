@@ -302,14 +302,12 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
             Log.e(TAG, message);
             Preference.putBoolean(context, context.getResources().getString(R.string.verification_failed_flag), true);
             CommonUtils.sendBroadcast(context, operation, Constants.Code.FAILURE, Constants.Status.OTA_IMAGE_VERIFICATION_FAILED, message);
-            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
-                    context, context.getResources().getString(R.string.operation_id)), message);
+            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
         } else if (error == ERROR_PACKAGE_INSTALL_FAILED) {
             String message = "Package installation Failed.";
             Log.e(TAG, message);
             CommonUtils.sendBroadcast(context, operation, Constants.Code.FAILURE, Constants.Status.OTA_IMAGE_INSTALL_FAILED, message);
-            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
-                    context, context.getResources().getString(R.string.operation_id)), message);
+            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
         }
     }
 

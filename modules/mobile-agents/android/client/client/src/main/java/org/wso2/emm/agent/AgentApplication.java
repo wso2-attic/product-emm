@@ -26,6 +26,8 @@ import android.content.Intent;
 import android.provider.SyncStateContract;
 import android.util.Log;
 
+import com.splunk.mint.Mint;
+
 import org.wso2.emm.agent.services.EnrollmentService;
 import org.wso2.emm.agent.utils.Constants;
 
@@ -61,5 +63,19 @@ public class AgentApplication extends Application {
             }
         };
         Thread.setDefaultUncaughtExceptionHandler(_unCaughtExceptionHandler);
+    }
+
+    public void onCreate(){
+        super.onCreate();
+
+        if (Constants.LogPublisher.LOG_PUBLISHER_IN_USE.equals(Constants.LogPublisher.SPLUNK_PUBLISHER)) {
+            if (Constants.SplunkConfigs.TYPE_MINT.equals(Constants.SplunkConfigs.DATA_COLLECTOR_TYPE)) {
+                Mint.initAndStartSession(getApplicationContext(), Constants.SplunkConfigs.API_KEY);
+            } else if (Constants.SplunkConfigs.TYPE_HTTP.equals(Constants.SplunkConfigs.DATA_COLLECTOR_TYPE)) {
+                Mint.initAndStartSessionHEC(getApplicationContext(), Constants.SplunkConfigs.HEC_MINT_ENDPOINT_URL, Constants.SplunkConfigs.HEC_TOKEN);
+            }
+            Mint.enableLogging(true);
+            Mint.setLogging("*:D");
+        }
     }
 }

@@ -126,7 +126,8 @@ public class OperationManagerDeviceOwner extends OperationManager {
     @Override
     public void installAppBundle(Operation operation) throws AndroidAgentException {
         try {
-            if (operation.getCode().equals(Constants.Operation.INSTALL_APPLICATION)) {
+            if (operation.getCode().equals(Constants.Operation.INSTALL_APPLICATION)||
+                    operation.getCode().equals(Constants.Operation.UPDATE_APPLICATION)) {
                 JSONObject appData = new JSONObject(operation.getPayLoad().toString());
                 installApplication(appData, operation);
             } else if (operation.getCode().equals(Constants.Operation.INSTALL_APPLICATION_BUNDLE)) {
@@ -138,7 +139,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
                 }
             }
             if (Constants.DEBUG_MODE_ENABLED) {
-                Log.d(TAG, "Application bundle installation started");
+                Log.d(TAG, "Application bundle installation triggered.");
             }
 
         } catch (JSONException e) {
@@ -172,7 +173,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
                     }
                     operation.setStatus(getContextResources().getString(R.string.operation_value_progress));
                     getResultBuilder().build(operation);
-                    getAppList().installApp(appUrl, schedule);
+                    getAppList().installApp(appUrl, schedule, operation);
 
                 } else if (type.equalsIgnoreCase(getContextResources().getString(R.string.intent_extra_public))) {
                     appUrl = data.getString(getContextResources().getString(R.string.app_identifier));
@@ -199,7 +200,7 @@ public class OperationManagerDeviceOwner extends OperationManager {
                 }
 
                 if (Constants.DEBUG_MODE_ENABLED) {
-                    Log.d(TAG, "Application installation started");
+                    Log.d(TAG, "Application installation triggered.");
                 }
             }
         } catch (JSONException e) {

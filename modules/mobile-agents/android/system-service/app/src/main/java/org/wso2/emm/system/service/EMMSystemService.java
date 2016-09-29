@@ -30,6 +30,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.PowerManager;
 import android.os.SystemProperties;
 import android.os.UserManager;
@@ -47,8 +48,11 @@ import org.wso2.emm.system.service.utils.CommonUtils;
 import org.wso2.emm.system.service.utils.Constants;
 import org.wso2.emm.system.service.utils.Preference;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -152,7 +156,7 @@ public class EMMSystemService extends IntentService {
 
             if ((operationCode != null)) {
                 if (Constants.AGENT_APP_PACKAGE_NAME.equals(intent.getPackage())) {
-                    Log.d(TAG, "EMM agent has sent a command with operation code: " + operationCode);
+                    Log.d(TAG, "EMM agent has sent a command with operation code: " + operationCode + " command: " + command);
                     doTask(operationCode);
                 } else {
                     Log.d(TAG, "Received command from external application. operation code: " + operationCode + " command: " + command);
@@ -273,18 +277,14 @@ public class EMMSystemService extends IntentService {
                 }
                 break;
             case Constants.Operation.SILENT_INSTALL_APPLICATION:
-                if (appUri != null) {
-                    silentInstallApp(getApplicationContext(), appUri, command);
-                }
-                break;
             case Constants.Operation.SILENT_UPDATE_APPLICATION:
                 if (appUri != null) {
-                    silentInstallApp(getApplicationContext(), appUri, command);
+                    silentInstallApp(getApplicationContext(), appUri);
                 }
                 break;
             case Constants.Operation.SILENT_UNINSTALL_APPLICATION:
                 if (appUri != null) {
-                    silentUninstallApp(getApplicationContext(), appUri, command);
+                    silentUninstallApp(getApplicationContext(), appUri);
                 }
                 break;
             case Constants.Operation.REMOVE_DEVICE_OWNER:
@@ -412,9 +412,39 @@ public class EMMSystemService extends IntentService {
             case Constants.Operation.GET_FIRMWARE_BUILD_DATE:
                 publishFirmwareBuildDate();
                 break;
+            case Constants.Operation.LOGCAT:
+                getLogCat(command);
+                break;
             default:
                 Log.e(TAG, "Invalid operation code received");
                 break;
+        }
+    }
+
+    /**
+     * Returns the device LogCat
+     */
+    public void getLogCat(String command) {
+        try {
+            JSONObject commandObj = new JSONObject(command);
+            String filePath = Environment.getLegacyExternalStorageDirectory() + "/logcat" + commandObj.getInt("operation_id") + ".log";
+            String[] cmd = new String[]{
+                    "logcat", "-d",
+                    "-v", "time", commandObj.getString("log_level")};
+            Process process = Runtime.getRuntime().exec(cmd);
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
+            String line;
+            PrintWriter writer = new PrintWriter(filePath, "UTF-8");
+            while ((line = bufferedReader.readLine()) != null) {
+                writer.println(line);
+            }
+            writer.close();
+            CommonUtils.callAgentApp(context, Constants.Operation.LOGCAT, commandObj.getInt("operation_id"), filePath);
+        } catch (IOException e) {
+            Log.e(TAG, "getLog failed", e);
+        } catch (JSONException e) {
+            Log.e(TAG, "Unable to parse command string", e);
         }
     }
 
@@ -575,37 +605,15 @@ public class EMMSystemService extends IntentService {
     /**
      * Silently installs the app resides in the provided URI.
      */
-    private void silentInstallApp(Context context, String packageUri, String schedule) {
-        if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
-            Log.i(TAG, "Silent install has been scheduled to " + schedule);
-            Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), schedule);
-            Preference.putString(context, context.getResources().getString(R.string.app_uri), packageUri);
-            try {
-                AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.SILENT_INSTALL_APPLICATION, packageUri);
-            } catch (ParseException e) {
-                Log.e(TAG, "One time alarm time string parsing failed." + e);
-            }
-        } else {
-            AppUtils.silentInstallApp(context, Uri.parse(packageUri));
-        }
+    private void silentInstallApp(Context context, String packageUri) {
+        AppUtils.silentInstallApp(context, Uri.parse(packageUri));
     }
 
     /**
      * Silently uninstalls the app resides in the provided URI.
      */
-    private void silentUninstallApp(Context context, final String packageName, String schedule) {
-        if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
-            Log.i(TAG, "Silent install has been scheduled to " + schedule);
-            Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), schedule);
-            Preference.putString(context, context.getResources().getString(R.string.app_uri), packageName);
-            try {
-                AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.SILENT_UNINSTALL_APPLICATION, packageName);
-            } catch (ParseException e) {
-                Log.e(TAG, "One time alarm time string parsing failed." + e);
-            }
-        } else {
-            AppUtils.silentUninstallApp(context, packageName);
-        }
+    private void silentUninstallApp(Context context, final String packageName) {
+        AppUtils.silentUninstallApp(context, packageName);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
