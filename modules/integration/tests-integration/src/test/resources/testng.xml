@@ -56,7 +56,6 @@
             <!--<class name="org.wso2.mdm.integration.device.operation.WindowsOperation"/>-->
         <!--</classes>-->
     <!--</test>-->
-
     <test name="android-device-mgt" preserve-order="false" parallel="true">
         <classes>
             <class name="org.wso2.mdm.integration.device.mgt.AndroidDeviceManagement"/>
@@ -67,7 +66,6 @@
             <class name="org.wso2.mdm.integration.device.configuration.AndroidConfigurationManagement"/>
         </classes>
     </test>
-
      <!--<test name="operation-mgt" preserve-order="true" parallel="false">-->
         <!--<classes>-->
             <!--<class name="org.wso2.mdm.integration.operation.OperationManagement"/>-->
@@ -93,7 +91,6 @@
             <!--<class name="org.wso2.mdm.integration.user.UserManagement"/>-->
         <!--</classes>-->
     <!--</test>-->
-
     <test name="role-mgt" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.mdm.integration.role.RoleManagement"/>
@@ -104,7 +101,6 @@
             <class name="org.wso2.mdm.integration.policy.AndroidPolicyManagement"/>
         </classes>
     </test>
-
     <!--<test name="windows-policy-mgt" preserve-order="true" parallel="false">-->
         <!--<classes>-->
             <!--<class name="org.wso2.mdm.integration.policy.WindowsPolicyManagement"/>-->
@@ -115,7 +111,6 @@
             <!--<class name="org.wso2.mdm.integration.feature.FeatureManagement"/>-->
         <!--</classes>-->
     <!--</test>-->
-
     <test name="license-mgt" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.mdm.integration.license.LicenseManagement"/>
@@ -136,7 +131,6 @@
             <class name="org.wso2.mdm.integration.certificate.CertificateManagement"/>
         </classes>
     </test>
-
     <!--<test name="seach-mgt" preserve-order="true" parallel="false">-->
         <!--<classes>-->
             <!--<class name="org.wso2.mdm.integration.search.AddDeviceInfoOperation"/>-->

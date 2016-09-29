@@ -16,6 +16,7 @@
             <class name="org.wso2.emm.ui.integration.test.RoleTestCases"/>
             <class name="org.wso2.emm.ui.integration.test.GeneralConfigurationTestCases"/>
             <!--<class name="org.wso2.emm.ui.integration.test.NotificationValidationTestCase"/>-->
+            <class name="org.wso2.emm.ui.integration.test.CertificateConfigurationTestCase"/>
         </classes>
 
     </test>

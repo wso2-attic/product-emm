@@ -31,5 +31,7 @@ public class Constants {
     public static final String MDM_ROLES_EDIT_URL = "/emm/role/edit-permission/";
     public static final String MDM_PLATFORM_CONFIG_URL = "/emm/platform-configuration";
     public static final String MDM_NOTIFICATION_URL = "/emm/notification-listing";
+    public static final String MDM_CERTIFICATE_CONFIG_URL = "/emm/certificates/add";
     public static final String MDM_HOME_URL = "/emm";
+    public static final String SAMPLE_DEVICE_SERIAL_NO = "RF8FZXGH7JS2KP";
 }
