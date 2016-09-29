@@ -19,7 +19,9 @@ package org.wso2.emm.integration.ui.pages.policy;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.wso2.emm.integration.ui.pages.CommonUtil;
 import org.wso2.emm.integration.ui.pages.UIElementMapper;
 
 import java.io.IOException;
@@ -28,23 +30,37 @@ public class RemovePolicyPage {
     private WebDriver driver;
     private UIElementMapper uiElementMapper;
 
-    public RemovePolicyPage(WebDriver driver) throws IOException{
+    public RemovePolicyPage(WebDriver driver) throws IOException {
         this.driver = driver;
         this.uiElementMapper = UIElementMapper.getInstance();
         // Check that we're on the right page.
-        if (!(driver.getCurrentUrl().contains("policies"))) {
+        if (!(driver.getCurrentUrl().contains("/emm/policies"))) {
             throw new IllegalStateException("This is not the policy list");
         }
     }
 
-    public void PolicyList() throws IOException {
-
-        driver.findElement(By.xpath(uiElementMapper.getElement("emm.remove.policy.file"))).click();
-        driver.findElement(By.xpath(uiElementMapper.getElement("emm.remove.policy.button"))).click();
-        driver.findElement(By.xpath(uiElementMapper.getElement("emm.remove.policy.yes"))).click();
-        String resultText = driver.findElement(By.xpath(uiElementMapper.getElement("emm.remove.policy.removed.msg")
-        )).getText();
-        if(!resultText.contains("Done. Selected policy was successfully removed.")){
+    /**
+     * Imitates remove policy action.
+     *
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void removePolicy() throws IOException, InterruptedException {
+        driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.remove.select.button.xpath"))).click();
+        driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.remove.file"))).click();
+        driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.unpublish.button.xpath"))).click();
+        CommonUtil.waitAndClick(driver, By.xpath(uiElementMapper.getElement("emm.policy.unpublish.yes.button.xpath")));
+        CommonUtil.waitAndClick(driver, By.xpath(uiElementMapper.getElement("emm.policy.unpublish.ok.button.xpath")));
+        driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.remove.select.button.xpath"))).click();
+        driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.remove.file"))).click();
+        driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.remove.button"))).click();
+        CommonUtil.waitAndClick(driver, By.xpath(uiElementMapper.getElement("emm.policy.remove.yes.link.xpath")));
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        By successMessageLocator = By.xpath(uiElementMapper.getElement("emm.policy.remove.removed.msg"));
+        wait.until(ExpectedConditions.invisibilityOfElementWithText(successMessageLocator,
+                "Do you really want to remove the selected policy(s)?"));
+        String resultText = driver.findElement(successMessageLocator).getText();
+        if (!resultText.contains("Done. Selected policy was successfully removed.")) {
             throw new IllegalStateException("Policy was not removed");
         }
     }

@@ -25,8 +25,9 @@ public class Constants {
     public static final String MDM_ROLES_URL = "/emm/roles";
     public static final String MDM_USER_ADD_URL = "/emm/user/add";
     public static final String MDM_POLICY_URL = "/emm/policies";
-    public static final String MDM_POLICY_ADD_URL = "/emm/policies/add-policy";
-    public static final String MDM_POLICY_EDIT_URL = "/emm/policies/view-edit-policy";
+    public static final String MDM_POLICY_ADD_URL = "/emm/policy/add";
+    public static final String MDM_POLICY_EDIT_URL = "/emm/policy/edit?id=1";
+    public static final String MDM_POLICY_PRIORITY_URL = "/emm/policy/priority";
     public static final String MDM_USER_URL = "/emm/users/";
     public static final String MDM_ROLES_EDIT_URL = "/emm/role/edit-permission/";
     public static final String MDM_PLATFORM_CONFIG_URL = "/emm/platform-configuration";

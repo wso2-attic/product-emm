@@ -20,35 +20,49 @@ package org.wso2.emm.integration.ui.pages.policy;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.wso2.emm.integration.ui.pages.CommonUtil;
 import org.wso2.emm.integration.ui.pages.UIElementMapper;
 
 import java.io.IOException;
 
 public class EditPolicyPage {
     private WebDriver driver;
+    private Actions actions;
     private UIElementMapper uiElementMapper;
 
-    public EditPolicyPage (WebDriver driver) throws IOException{
+    public EditPolicyPage(WebDriver driver) throws IOException {
         this.driver = driver;
+        this.actions = new Actions(driver);
         this.uiElementMapper = UIElementMapper.getInstance();
         // Check that we're on the right page.
-        if (!(driver.getCurrentUrl().contains(uiElementMapper.getElement("emm.edit.policy.url")))) {
+        if (!(driver.getCurrentUrl().contains("/policy/edit"))) {
             throw new IllegalStateException("This is not the edit policy");
         }
     }
 
-    public void editPolicy(String policyName) throws IOException {
-
-        driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.profile.encryption"))).click();
-        driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.profile.checkbox.encryption"))).click();
-        driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.profile.edit.continue"))).click();
-        driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.groups.continue"))).click();
-        WebElement policyNameField = driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.name")));
+    /**
+     * Imitates edit policy action.
+     *
+     * @param policyName new policy name to be appended.
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void editPolicy(String policyName) throws IOException, InterruptedException {
+        driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.add.profile.encryption"))).click();
+        WebElement enableElement = driver
+                .findElement(By.xpath(uiElementMapper.getElement("emm.policy.add.profile.encryption.enable")));
+        actions.moveToElement(enableElement).click().perform();
+        CommonUtil.waitAndClick(driver, By.xpath(uiElementMapper.getElement("emm.policy.add.profile.edit.continue")));
+        CommonUtil.waitAndClick(driver,
+                By.xpath(uiElementMapper.getElement("emm.policy.add.groups.continue.button.xpath")));
+        WebElement policyNameField = driver
+                .findElement(By.xpath(uiElementMapper.getElement("emm.policy.add.name.input.xpath")));
         policyNameField.sendKeys(policyName);
-        driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.publish"))).click();
-        String resultText = driver.findElement(By.id(uiElementMapper.getElement("emm.add.policy.publish.created.msg.div")
-        )).getText();
-        if(!resultText.contains("POLICY IS SUCCESSFULLY RE-CONFIGURED.")){
+        driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.add.publish.button.xpath"))).click();
+        String resultText = driver.findElement(By.id(uiElementMapper.getElement("emm.policy.add.publish.created.msg")))
+                .getText();
+        if (!resultText.contains("POLICY IS SUCCESSFULLY RE-CONFIGURED.")) {
             throw new IllegalStateException("Policy was not updated");
         }
     }
