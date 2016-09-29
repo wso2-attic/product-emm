@@ -170,13 +170,10 @@
                                     org.wso2.carbon.analytics:org.wso2.carbon.analytics.core.server.feature:${carbon.analytics.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon.analytics:org.wso2.carbon.analytics.datasource.feature:${carbon.analytics.version}
+                                    org.wso2.carbon.analytics:org.wso2.carbon.analytics.datasource.rdbms.server.feature:${carbon.analytics.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.analytics-common:org.wso2.carbon.event.output.adapter.server.feature:${carbon.analytics.common.version}
-                                </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon.data:org.wso2.carbon.datasource.reader.hadoop.server.feature:${carbon.data.version}
                                 </featureArtifactDef>
 
                                 <!-- End of Device Management Features -->
@@ -1174,12 +1171,8 @@
                                     <version>${carbon.analytics.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.analytics.datasource.feature.group</id>
+                                    <id>org.wso2.carbon.analytics.datasource.rdbms.server.feature.group</id>
                                     <version>${carbon.analytics.version}</version>
-                                </feature>
-                                <feature>
-                                    <id>org.wso2.carbon.datasource.reader.hadoop.server.feature.group</id>
-                                    <version>${carbon.data.version}</version>
                                 </feature>
 
                                 <feature>
@@ -1742,12 +1735,8 @@
                                     <version>${carbon.analytics.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.analytics.datasource.feature.group</id>
+                                    <id>org.wso2.carbon.analytics.datasource.rdbms.server.feature.group</id>
                                     <version>${carbon.analytics.version}</version>
-                                </feature>
-                                <feature>
-                                    <id>org.wso2.carbon.datasource.reader.hadoop.server.feature.group</id>
-                                    <version>${carbon.data.version}</version>
                                 </feature>
                                 <!--<feature>-->
                                     <!--<id>org.wso2.carbon.analytics.emm.feature.group</id>-->
