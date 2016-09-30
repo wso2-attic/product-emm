@@ -1,3 +1,0 @@
-<%
-var userModule = require("/modules/user.js").userModule;
-%>
