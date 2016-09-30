@@ -42,7 +42,7 @@ public class CommonUtils {
         if (explicitIntent != null) {
             intent = explicitIntent;
         }
-        intent.putExtra("code", operation);
+        intent.putExtra("operation", operation);
         if (operationId != 0) {
             intent.putExtra("id", operationId);
         }

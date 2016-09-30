@@ -19,14 +19,12 @@ package org.wso2.emm.system.service.utils;
 
 import android.app.PackageInstallObserver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.IPackageDeleteObserver;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.os.SystemProperties;
 import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,13 +37,13 @@ public class AppUtils {
     private static final String TAG = "AppUtils";
     private static final int DELETE_ALL_USERS = 0x00000002;
     private static final int INSTALL_ALL_USERS = 0x00000040;
-    private static final int INSTALL_FORWARD_LOCK = 0x00000001;
     private static final int INSTALL_ALLOW_DOWNGRADE = 0x00000080;
     private static final int INSTALL_REPLACE_EXISTING = 0x00000002;
     public static final int INSTALL_SUCCEEDED = 1;
     private static final int DEFAULT_STATE_INFO_CODE = 0;
     private static final String INSTALL_FAILED_STATUS = "INSTALL_FAILED";
     private static final String INSTALL_SUCCESS_STATUS = "INSTALLED";
+    private static final String PACKAGE_PREFIX = "package:";
 
     /**
      * Silently installs the app resides in the provided URI.
@@ -58,15 +56,17 @@ public class AppUtils {
             @Override
             public void onPackageInstalled(String basePackageName, int returnCode, String msg, Bundle extras) {
                 if (INSTALL_SUCCEEDED == returnCode) {
+                    Log.d(TAG, "Installation succeeded!");
                     publishAppInstallStatus(context, INSTALL_SUCCESS_STATUS, null);
                 } else {
+                    Log.e(TAG, "Package installation failed due to an internal error with code: " + returnCode + " and message: " + msg);
                     publishAppInstallStatus(context, INSTALL_FAILED_STATUS, "Package installation failed due to an " +
                                                                             "internal error with code " + returnCode + " " +
                                                                             "and message " + msg);
                 }
             }
         };
-        pm.installPackage(packageUri, observer, INSTALL_ALL_USERS | INSTALL_FORWARD_LOCK | INSTALL_ALLOW_DOWNGRADE |
+        pm.installPackage(packageUri, observer, INSTALL_ALL_USERS | INSTALL_ALLOW_DOWNGRADE |
                                            INSTALL_REPLACE_EXISTING, null);
     }
 
@@ -75,12 +75,16 @@ public class AppUtils {
      * @param context - Application context.
      * @param  packageName - App package name.
      */
-    public static void silentUninstallApp(Context context, final String packageName) {
+    public static void silentUninstallApp(Context context, String packageName) {
+        if (packageName != null && packageName.contains(PACKAGE_PREFIX)) {
+            packageName = packageName.replace(PACKAGE_PREFIX, "");
+        }
+        final String _packageName = packageName;
         PackageManager pm = context.getPackageManager();
         IPackageDeleteObserver observer = new IPackageDeleteObserver() {
             @Override
             public void packageDeleted(String s, int i) throws RemoteException {
-                Log.d(TAG, packageName + " deleted successfully.");
+                Log.d(TAG, _packageName + " deleted successfully.");
             }
 
             @Override
@@ -92,7 +96,6 @@ public class AppUtils {
     }
 
     private static void publishAppInstallStatus(Context context, String status, String error) {
-        String buildDate;
         JSONObject result = new JSONObject();
 
         try {
@@ -100,22 +103,13 @@ public class AppUtils {
             if (error != null) {
                 result.put("appInstallFailedMessage", error);
             }
-            sendBroadcast(context, Constants.Operation.SILENT_INSTALL_APPLICATION, Constants.Status.SUCCESSFUL,
+            CommonUtils.sendBroadcast(context, Constants.Operation.SILENT_INSTALL_APPLICATION, Constants.Code.SUCCESS, Constants.Status.SUCCESSFUL,
                           result.toString());
         } catch (JSONException e) {
-            Log.e(TAG, "Failed to create JSON object when publishing OTA progress.");
-            sendBroadcast(context, Constants.Operation.SILENT_INSTALL_APPLICATION, Constants.Status.SUCCESSFUL,
+            Log.e(TAG, "Failed to create JSON object when publishing App install status.");
+            CommonUtils.sendBroadcast(context, Constants.Operation.SILENT_INSTALL_APPLICATION, Constants.Code.FAILURE, Constants.Status.INTERNAL_ERROR,
                           String.valueOf(DEFAULT_STATE_INFO_CODE));
         }
     }
 
-    private static void sendBroadcast(Context context, String code, String status, String payload) {
-        Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(Constants.SYSTEM_APP_ACTION_RESPONSE);
-        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        broadcastIntent.putExtra(Constants.CODE, code);
-        broadcastIntent.putExtra(Constants.STATUS, status);
-        broadcastIntent.putExtra(Constants.PAYLOAD, payload);
-        context.sendBroadcast(broadcastIntent);
-    }
 }

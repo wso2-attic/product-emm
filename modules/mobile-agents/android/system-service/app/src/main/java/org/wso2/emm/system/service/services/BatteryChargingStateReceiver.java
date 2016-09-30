@@ -47,14 +47,15 @@ public class BatteryChargingStateReceiver extends BroadcastReceiver {
                 REQUIRED_BATTERY_LEVEL_TO_FIRMWARE_UPGRADE) {
             String status = Preference.getString(context, context.getResources().getString(R.string.upgrade_install_status));
             if (Constants.Status.BATTERY_LEVEL_INSUFFICIENT_TO_INSTALL.equals(status)){
-                Preference.putString(context, context.getResources().getString(R.string.upgrade_install_status), Constants.Status.SUCCESSFUL);
                 try {
                     OTAServerManager manager = new OTAServerManager(context);
                     manager.startInstallUpgradePackage();
                 } catch (MalformedURLException e) {
                     Log.e(TAG, "Firmware upgrade failed due to a file URI issue" + e);
                 }
-            } else if (Constants.Status.BATTERY_LEVEL_INSUFFICIENT_TO_DOWNLOAD.equals(status)){
+            }
+            status = Preference.getString(context, context.getResources().getString(R.string.upgrade_download_status));
+            if (Constants.Status.BATTERY_LEVEL_INSUFFICIENT_TO_DOWNLOAD.equals(status)){
                 Log.i(TAG, "Starting firmware download again upon network connectivity established.");
                 OTADownload otaDownload = new OTADownload(context);
                 otaDownload.startOTA();

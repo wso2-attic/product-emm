@@ -23,14 +23,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.ApplicationManager;
+import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
+import org.wso2.emm.agent.services.operation.OperationManager;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
+
+import java.io.FileNotFoundException;
 import java.util.Map;
 
 /**
@@ -95,6 +102,8 @@ public class ApplicationManagementService extends IntentService implements APIRe
                 doTask(operationCode);
             } else if (isRegistered && Constants.SYSTEM_SERVICE_PACKAGE.equals(intent.getPackage())) {
                 doTask(operationCode);
+            } else if (operationCode.equals(Constants.Operation.GET_ENROLLMENT_STATUS)) {
+                doTask(operationCode);
             } else {
                 sendBroadcast(Constants.Status.AUTHENTICATION_FAILED, null);
             }
@@ -114,7 +123,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
                 break;
             case Constants.Operation.INSTALL_APPLICATION:
                 if (appUri != null) {
-                    applicationManager.installApp(appUri, null);
+                    applicationManager.installApp(appUri, null, null);
                 } else {
                     Toast.makeText(context, context.getResources().getString(R.string.toast_app_installation_failed),
                                    Toast.LENGTH_LONG).show();
@@ -171,7 +180,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
                         getString(R.string.firmware_upgrade_retries));
                 boolean isFirmwareUpgradeAutoRetry = Preference.getBoolean(context, context
                         .getResources().getString(R.string.is_automatic_firmware_upgrade));
-                if (retryCount <= Constants.FIRMWARE_UPGRADE_RETRY_COUNT && isFirmwareUpgradeAutoRetry) {
+                if (retryCount < Constants.FIRMWARE_UPGRADE_RETRY_COUNT && isFirmwareUpgradeAutoRetry) {
                     Preference.putInt(context, context.getResources().
                             getString(R.string.firmware_upgrade_retries), ++retryCount);
                     Preference.putBoolean(context, context.getResources().
@@ -209,6 +218,20 @@ public class ApplicationManagementService extends IntentService implements APIRe
                 Preference.putBoolean(context, context.getResources().
                         getString(R.string.is_automatic_firmware_upgrade), !"false".equals(message));
                 break;
+            case Constants.Operation.LOGCAT:
+                Operation logcatOperation = new Operation();
+                logcatOperation.setId(id);
+                logcatOperation.setCode(Constants.Operation.LOGCAT);
+                try {
+                    logcatOperation.setOperationResponse(OperationManager.getOperationResponseFromLogcat(context, message));
+                    logcatOperation.setStatus(context.getResources().getString(R.string.operation_value_completed));
+                } catch (java.io.IOException e) {
+                    logcatOperation.setOperationResponse("Unable to get logs. " + e.getMessage());
+                    logcatOperation.setStatus(context.getResources().getString(R.string.operation_value_error));
+                }
+                Gson operationGson = new Gson();
+                Preference.putString(context, Constants.Operation.LOGCAT, operationGson.toJson(logcatOperation));
+                break;
             default:
                 Log.e(TAG, "Invalid operation code received");
                 break;
@@ -243,7 +266,7 @@ public class ApplicationManagementService extends IntentService implements APIRe
         broadcastIntent.putExtra(INTENT_KEY_STATUS, status);
         broadcastIntent.putExtra(INTENT_KEY_PAYLOAD, payload);
         broadcastIntent.putExtra(INTENT_KEY_SERVER, utils.getAPIServerURL(context));
-        sendBroadcast(broadcastIntent);
+        sendBroadcastAsUser(broadcastIntent, android.os.Process.myUserHandle());
     }
 
     @Override

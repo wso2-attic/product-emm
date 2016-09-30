@@ -36,22 +36,30 @@ import android.os.Environment;
 import android.provider.Browser;
 import android.util.Base64;
 import android.util.Log;
+
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.beans.AppInstallRequest;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
+import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.beans.ServerConfig;
 import org.wso2.emm.agent.proxy.IDPTokenManagerException;
 import org.wso2.emm.agent.proxy.utils.ServerUtilities;
 import org.wso2.emm.agent.utils.AlarmUtils;
+import org.wso2.emm.agent.utils.AppInstallRequestUtil;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.StreamHandler;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -85,12 +93,13 @@ public class ApplicationManager {
     private static final String APP_STATE_INSTALL_FAILED = "INSTALL_FAILED";
     private static final String APP_STATE_INSTALLED = "INSTALLED";
     private static final String TAG = ApplicationManager.class.getName();
+    private static final String APP_INSTALLATION_ATTEMPT = "APP_INSTALLATION_ATTEMPT";
+    private static volatile boolean downloadOngoing = false;
     private Context context;
     private Resources resources;
     private PackageManager packageManager;
     private long downloadReference;
     private String appUrl;
-    private String schedule;
 
     private BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
         @Override
@@ -247,24 +256,15 @@ public class ApplicationManager {
         return false;
     }
 
-    public void triggerInstallation(Uri fileUri) {
+    private void triggerInstallation(Uri fileUri) {
         if (Constants.SYSTEM_APP_ENABLED) {
-            CommonUtils.callSystemApp(context, Constants.Operation.SILENT_INSTALL_APPLICATION, schedule,
-                                      fileUri.toString());
+            CommonUtils.callSystemApp(context, Constants.Operation.SILENT_INSTALL_APPLICATION, "",
+                    fileUri.toString());
         } else {
-            if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
-                try {
-                    AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.INSTALL_APPLICATION,
-                                               fileUri.toString());
-                } catch (ParseException e) {
-                    Log.e(TAG, "One time alarm time string parsing failed." + e);
-                }
-            } else {
-                Preference.putString(context, context.getResources().getString(
-                        R.string.app_install_status), context.getResources().getString(
-                        R.string.app_status_value_installed));
-                startInstallerIntent(fileUri);
-            }
+            Preference.putString(context, context.getResources().getString(
+                    R.string.app_install_status), context.getResources().getString(
+                    R.string.app_status_value_installed));
+            startInstallerIntent(fileUri);
         }
     }
 
@@ -312,8 +312,71 @@ public class ApplicationManager {
      *
      * @param url - APK Url should be passed in as a String.
      * @param schedule - If update/installation is scheduled, schedule information should be passed.
+     * @param  operation - App installation operation.
      */
-    public void installApp(String url, String schedule) {
+    public void installApp(String url, String schedule, Operation operation) {
+        if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
+            try {
+                AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.INSTALL_APPLICATION, operation, url, null);
+            } catch (ParseException e) {
+                Log.e(TAG, "One time alarm time string parsing failed." + e);
+            }
+            return; //Will call installApp method again upon alarm.
+        }
+
+        int operationId = 0;
+        String operationCode = Constants.Operation.INSTALL_APPLICATION;
+
+        if (operation != null) {
+            operationId = Preference.getInt(context, context.getResources().getString(
+                    R.string.app_install_id));
+            operationCode = Preference.getString(context, context.getResources().getString(
+                    R.string.app_install_code));
+            if (operationId != 0 && operationCode != null) {
+                AppInstallRequest appInstallRequest = new AppInstallRequest();
+                appInstallRequest.setApplicationOperationId(operation.getId());
+                appInstallRequest.setApplicationOperationCode(operation.getCode());
+                appInstallRequest.setAppUrl(url);
+                AppInstallRequestUtil.addPending(context, appInstallRequest);
+                Log.d(TAG, "Added request to pending queue as there is another installation ongoing.");
+                if (!downloadOngoing) {
+                    // Probably installation might ongoing
+                    int attempt = Preference.getInt(context, APP_INSTALLATION_ATTEMPT);
+                    if (attempt >= 1) {
+                        Preference.putInt(context, APP_INSTALLATION_ATTEMPT, 0);
+                        Preference.putInt(context, context.getResources().getString(
+                                R.string.app_install_id), 0);
+                        Preference.putString(context, context.getResources().getString(
+                                R.string.app_install_code), null);
+                    } else {
+                        Preference.putInt(context, APP_INSTALLATION_ATTEMPT, ++attempt);
+                    }
+                } else {
+                    downloadOngoing = false; //Let's check whether it is actually ongoing or not.
+                }
+                return; //Will call installApp method again once current installation completed.
+            }
+            operationId = operation.getId();
+            operationCode = operation.getCode();
+            Preference.putInt(context, APP_INSTALLATION_ATTEMPT, 0);
+        }
+
+        setupAppDownload(url, operationId, operationCode);
+    }
+
+    /**
+     * Start app download for install on device.
+     *
+     * @param url           - APK Url should be passed in as a String.
+     * @param operationId   - Id of the operation.
+     * @param operationCode - Requested operation code.
+     */
+    public void setupAppDownload(String url, int operationId, String operationCode) {
+        Preference.putInt(context, context.getResources().getString(
+                R.string.app_install_id), operationId);
+        Preference.putString(context, context.getResources().getString(
+                R.string.app_install_code), operationCode);
+
         if (url.contains(Constants.APP_DOWNLOAD_ENDPOINT) && Constants.APP_MANAGER_HOST != null) {
             url = url.substring(url.lastIndexOf("/"), url.length());
             this.appUrl = Constants.APP_MANAGER_HOST + Constants.APP_DOWNLOAD_ENDPOINT + url;
@@ -334,7 +397,7 @@ public class ApplicationManager {
         } else {
             this.appUrl = url;
         }
-        this.schedule = schedule;
+
         Preference.putString(context, context.getResources().getString(
                 R.string.app_install_status), context.getResources().getString(
                 R.string.app_status_value_download_started));
@@ -355,25 +418,25 @@ public class ApplicationManager {
      * @param packageName - Application package name should be passed in as a String.
      */
     public void uninstallApplication(String packageName, String schedule) {
-        if (Constants.SYSTEM_APP_ENABLED) {
-            CommonUtils.callSystemApp(context, Constants.Operation.SILENT_UNINSTALL_APPLICATION, schedule, packageName);
-        } else {
-            if (packageName != null &&
+        if (packageName != null &&
                 !packageName.contains(resources.getString(R.string.application_package_prefix))) {
-                packageName = resources.getString(R.string.application_package_prefix) + packageName;
+            packageName = resources.getString(R.string.application_package_prefix) + packageName;
+        }
+        if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
+            try {
+                AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.UNINSTALL_APPLICATION, null, null, packageName);
+            } catch (ParseException e) {
+                Log.e(TAG, "One time alarm time string parsing failed." + e);
             }
-            if (schedule != null && !schedule.trim().isEmpty() && !schedule.equals("undefined")) {
-                try {
-                    AlarmUtils.setOneTimeAlarm(context, schedule, Constants.Operation.UNINSTALL_APPLICATION, packageName);
-                } catch (ParseException e) {
-                    Log.e(TAG, "One time alarm time string parsing failed." + e);
-                }
-            } else {
-                Uri packageURI = Uri.parse(packageName);
-                Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
-                uninstallIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(uninstallIntent);
-            }
+            return; //Will call uninstallApplication method again upon alarm.
+        }
+        if (Constants.SYSTEM_APP_ENABLED) {
+            CommonUtils.callSystemApp(context, Constants.Operation.SILENT_UNINSTALL_APPLICATION, "", packageName);
+        } else {
+            Uri packageURI = Uri.parse(packageName);
+            Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
+            uninstallIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(uninstallIntent);
         }
     }
 
@@ -411,15 +474,14 @@ public class ApplicationManager {
             bookmarkIntent.
                     setAction(resources.getString(R.string.application_package_launcher_install_action));
         }
-        context.sendBroadcast(bookmarkIntent);
+        context.sendBroadcastAsUser(bookmarkIntent, android.os.Process.myUserHandle());
     }
 
     public List<ApplicationInfo> getInstalledApplications() {
         return packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
     }
 
-    public org.wso2.emm.agent.beans.Operation getApplicationInstallationStatus(org.wso2.emm.agent.beans.Operation operation,
-                                                                               String status, String message) {
+    public Operation getApplicationInstallationStatus(Operation operation, String status, String message) {
         switch (status) {
             case APP_STATE_DOWNLOAD_STARTED:
                 operation.setStatus(context.getResources().getString(R.string.operation_value_progress));
@@ -509,6 +571,7 @@ public class ApplicationManager {
                 boolean downloading = true;
                 int progress = 0;
                 while (downloading) {
+                    downloadOngoing = true;
                     DownloadManager.Query query = new DownloadManager.Query();
                     query.setFilterById(downloadReference);
                     Cursor cursor = downloadManager.query(query);
@@ -546,6 +609,7 @@ public class ApplicationManager {
                                          String.valueOf(progress));
                     cursor.close();
                 }
+                downloadOngoing = false;
             }
         }).start();
     }
@@ -591,6 +655,7 @@ public class ApplicationManager {
 
                             while ((lengthFile = inStream.read(buffer)) != READ_FAILED) {
                                 outStream.write(buffer, BUFFER_OFFSET, lengthFile);
+                                downloadOngoing = true;
                             }
 
                             String filePath = directory + resources.getString(R.string.application_mgr_download_file_name);
@@ -617,6 +682,7 @@ public class ApplicationManager {
                         } finally {
                             StreamHandler.closeOutputStream(outStream, TAG);
                             StreamHandler.closeInputStream(inStream, TAG);
+                            downloadOngoing = false;
                         }
                     } else {
                         Preference.putString(context, context.getResources().getString(
@@ -636,6 +702,7 @@ public class ApplicationManager {
                             R.string.app_status_value_download_failed));
                     Preference.putString(context, context.getResources().getString(
                             R.string.app_install_failed_message), error.toString());
+                    downloadOngoing = false;
                 }
             }, null)
         {
@@ -646,6 +713,19 @@ public class ApplicationManager {
                 headers.put("Accept", "*/*");
                 headers.put("User-Agent", "Mozilla/5.0 ( compatible ), Android");
                 return headers;
+            }
+
+            @Override
+            protected Response<byte[]> parseNetworkResponse(NetworkResponse response) {
+                //Initialise local responseHeaders map with response headers received
+                responseHeaders = response.headers;
+                //Pass the response data here
+                if ("application/octet-stream".equals(responseHeaders.get("Content-Type"))) {
+                    return Response.success(response.data, HttpHeaderParser.parseCacheHeaders(response));
+                } else {
+                    VolleyError error = new VolleyError("Invalid application file URL.");
+                    return Response.error(error);
+                }
             }
         };
         queue.add(request);

@@ -149,7 +149,7 @@ public class OperationManagerOlderSdk extends OperationManager {
                 }
             }
             if (Constants.DEBUG_MODE_ENABLED) {
-                Log.d(TAG, "Application bundle installation started");
+                Log.d(TAG, "Application bundle installation triggered.");
             }
 
         } catch (JSONException e) {
@@ -183,7 +183,7 @@ public class OperationManagerOlderSdk extends OperationManager {
                     }
                     operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
                     getResultBuilder().build(operation);
-                    getAppList().installApp(appUrl, schedule);
+                    getAppList().installApp(appUrl, schedule, operation);
 
                 } else if (type.equalsIgnoreCase(getContextResources().getString(R.string.intent_extra_public))) {
                     appUrl = data.getString(getContextResources().getString(R.string.app_identifier));
@@ -210,7 +210,7 @@ public class OperationManagerOlderSdk extends OperationManager {
                 }
 
                 if (Constants.DEBUG_MODE_ENABLED) {
-                    Log.d(TAG, "Application installation started");
+                    Log.d(TAG, "Application installation triggered.");
                 }
             }
         } catch (JSONException e) {

@@ -187,9 +187,11 @@ public class ServerDetails extends Activity {
 	 * This method is called to open AuthenticationActivity.
 	 */
 	private void startAuthenticationActivity() {
-		Intent intent = new Intent(ServerDetails.this, AuthenticationActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);
+		if (Constants.AUTO_ENROLLMENT_BACKGROUND_SERVICE_ENABLED == false) {
+			Intent intent = new Intent(ServerDetails.this, AuthenticationActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+		}
 	}
 
 	@Override

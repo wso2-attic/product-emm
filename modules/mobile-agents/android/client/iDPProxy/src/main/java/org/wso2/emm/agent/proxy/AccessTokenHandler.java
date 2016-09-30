@@ -55,13 +55,17 @@ public class AccessTokenHandler {
     private static final String PASSWORD_LABEL = "password";
     private static final String TENANT_DOMAIN_LABEL = "tenantDomain";
     private static final String COLON = ":";
-    private static final String SCOPE = "default appm:read device:android:enroll device:android:event:publish";
+    private static final String SCOPES = "default appm:read device:android:enroll device:android:event:manage " +
+            "configuration:view device:android:disenroll";
     private static final DateFormat dateFormat =
             new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
     private CredentialInfo info;
 
     public AccessTokenHandler(CredentialInfo info, CallBack callBack) {
         this.info = info;
+        if (Constants.DEBUG_ENABLED) {
+            Log.d(TAG, "AccessTokenHandler");
+        }
     }
 
     /**
@@ -70,6 +74,9 @@ public class AccessTokenHandler {
      */
     public void obtainAccessToken() {
         RequestQueue queue =  null;
+        if(Constants.DEBUG_ENABLED) {
+            Log.d(TAG, "Fetching a new tokens.");
+        }
         try {
             queue = ServerUtilities.getCertifiedHttpClient();
         } catch (IDPTokenManagerException e) {
@@ -79,9 +86,7 @@ public class AccessTokenHandler {
         StringRequest request = new StringRequest(Request.Method.POST, info.getTokenEndPoint(),
                                                   new Response.Listener<String>() {
                                                       @Override
-                                                      public void onResponse(String response) {
-                                                          Log.d(TAG, response);
-                                                      }
+                                                      public void onResponse(String response) {}
                                                   },
                                                   new Response.ErrorListener() {
                                                       @Override
@@ -90,6 +95,11 @@ public class AccessTokenHandler {
                                                           JSONObject errorObj = new JSONObject();
                                                           try {
                                                               errorObj.put(Constants.ERROR_DESCRIPTION_LABEL, error.toString());
+                                                              if(Constants.DEBUG_ENABLED) {
+                                                                  Log.d(TAG, "Error obtaining " +
+                                                                          "access token "+
+                                                                          error.toString());
+                                                              }
                                                           } catch (JSONException e) {
                                                               Log.e(TAG, "Invalid JSON format", e);
                                                           } finally {
@@ -101,6 +111,10 @@ public class AccessTokenHandler {
         {
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                if(Constants.DEBUG_ENABLED) {
+                    Log.d(TAG, "Response status"+
+                            String.valueOf(response.statusCode));
+                }
                 processTokenResponse(String.valueOf(response.statusCode), new String(response.data));
                 return super.parseNetworkResponse(response);
             }
@@ -114,7 +128,7 @@ public class AccessTokenHandler {
                 if (info.getTenantDomain() != null) {
                     requestParams.put(TENANT_DOMAIN_LABEL, info.getTenantDomain());
                 }
-                requestParams.put(Constants.SCOPE, SCOPE);
+                requestParams.put(Constants.SCOPE, SCOPES);
                 return requestParams;
             }
 
