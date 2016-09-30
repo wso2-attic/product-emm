@@ -20,6 +20,7 @@ package org.wso2.emm.agent.api;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,6 +33,7 @@ import org.wso2.emm.agent.utils.Constants;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -153,26 +155,23 @@ public class RuntimeInfo {
     /**
      * Returns the device LogCat
      */
-    public String getLogCat() {
-        StringBuilder builder=new StringBuilder();
+    public String getLogCat(String logLevel) {
+        String filePath = Environment.getLegacyExternalStorageDirectory() + "/logcat.log";
         try {
-            String[] command = new String[] { "logcat", "-t100", "-vtime" , "*:W"};
-
-            Process process = Runtime.getRuntime().exec(command);
-
+            String[] cmd = new String[]{"logcat", "-d", "-v", "time", logLevel};
+            Process process = Runtime.getRuntime().exec(cmd);
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(process.getInputStream()));
-
             String line;
+            PrintWriter writer = new PrintWriter(filePath, "UTF-8");
             while ((line = bufferedReader.readLine()) != null) {
-                builder.append(line);
-                builder.append("\n");
+                writer.println(line);
             }
+            writer.close();
         } catch (IOException e) {
             Log.e(TAG, "getLog failed", e);
-        } finally {
-            return builder.toString();
         }
+        return filePath;
     }
 
     public List<Device.Property> getRAMInfo() throws AndroidAgentException {

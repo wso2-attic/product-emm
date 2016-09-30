@@ -158,4 +158,17 @@ public class Preference {
 		return mainPref.contains(key);
 	}
 
+	public static void removePreference(Context context, String key){
+		SharedPreferences mainPref =
+				context.getSharedPreferences(context.getResources()
+								.getString(R.string.shared_pref_package),
+						Context.MODE_PRIVATE
+				);
+		if (mainPref.contains(key)) {
+			Editor editor = mainPref.edit();
+			editor.remove(key);
+			editor.commit();
+		}
+	}
+
 }

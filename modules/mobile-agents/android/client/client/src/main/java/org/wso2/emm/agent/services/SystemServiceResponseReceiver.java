@@ -36,35 +36,38 @@ public class SystemServiceResponseReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        String operation = intent.getStringExtra(Constants.OPERATION_CODE);
         String code = intent.getStringExtra("code");
         String status = intent.getStringExtra("status");
         JSONObject result;
         try {
-            switch (code) {
+            switch (operation) {
                 case Constants.Operation.GET_FIRMWARE_BUILD_DATE:
                     result = new JSONObject(intent.getStringExtra("payload"));
-                    if (Constants.Status.SUCCESSFUL.equals(status) && result.has("buildDate")) {
+                    if (Constants.Code.SUCCESS.equals(code) && result.has("buildDate")) {
                         Preference.putString(context, context.getResources().getString(R.string.shared_pref_os_build_date),
                                              result.getString("buildDate"));
                     }
                     break;
                 case Constants.Operation.SILENT_INSTALL_APPLICATION:
                     result = new JSONObject(intent.getStringExtra("payload"));
-                    if (Constants.Status.SUCCESSFUL.equals(status) && result.has("appInstallStatus")) {
+                    if (Constants.Code.SUCCESS.equals(code) && result.has("appInstallStatus")) {
                         Preference.putString(context, context.getResources().getString(R.string.app_install_status),
                                              result.getString("appInstallStatus"));
                     }
-                    if (Constants.Status.SUCCESSFUL.equals(status) && result.has("appInstallFailedMessage")) {
+                    if (Constants.Code.FAILURE.equals(code) && result.has("appInstallFailedMessage")) {
                         Preference.putString(context, context.getResources().getString(R.string.app_install_failed_message),
                                              result.getString("appInstallFailedMessage"));
                     }
                     break;
-                case Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS:
+                case Constants.Operation.UPGRADE_FIRMWARE:
                 case Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS:
+                case Constants.Operation.GET_FIRMWARE_UPGRADE_DOWNLOAD_PROGRESS:
+                case Constants.Operation.FIRMWARE_UPGRADE_AUTOMATIC_RETRY:
                     Log.i(TAG, status + ": " + intent.getStringExtra("payload"));
                     break;
                 default:
-                    Log.e(TAG, "Invalid operation code: " + code);
+                    Log.e(TAG, "Invalid operation code: " + operation);
                     break;
             }
         } catch (JSONException e) {

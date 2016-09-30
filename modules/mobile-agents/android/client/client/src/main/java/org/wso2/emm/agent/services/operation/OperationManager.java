@@ -34,7 +34,9 @@ import android.widget.Toast;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.Gson;
 
+import org.apache.commons.io.input.ReversedLinesFileReader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +44,7 @@ import org.wso2.emm.agent.AlertActivity;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.ApplicationManager;
+import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.api.RuntimeInfo;
 import org.wso2.emm.agent.api.WiFiConfig;
 import org.wso2.emm.agent.beans.Address;
@@ -66,7 +69,9 @@ import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -113,7 +118,10 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         AGENT_PACKAGE_NAME = context.getPackageName();
         AUTHORIZED_PINNING_APPS = new String[]{AGENT_PACKAGE_NAME};
         applicationManager = new ApplicationManager(context);
-        notificationService = NotificationService.getInstance(context);
+        notificationService = NotificationService.getInstance(context.getApplicationContext());
+        if(Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "New OperationManager created.");
+        }
     }
 
     /**
@@ -189,6 +197,10 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         operation.setOperationResponse(replyPayload);
         operation.setStatus(resources.getString(R.string.operation_value_completed));
         resultBuilder.build(operation);
+
+        if(Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "getDeviceInfo executed.");
+        }
     }
 
     /**
@@ -240,6 +252,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             operation.setStatus(resources.getString(R.string.operation_value_error));
             resultBuilder.build(operation);
             throw new AndroidAgentException("Invalid JSON format.", e);
+        }
+        if(Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "getLocationInfo executed.");
         }
     }
 
@@ -387,6 +402,10 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
 
             }
         });
+
+        if(Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "configureWifi executed.");
+        }
     }
 
     /**
@@ -459,10 +478,16 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param packageName - Application package name.
      */
     public void triggerGooglePlayApp(String packageName) {
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "triggerGooglePlayApp started.");
+        }
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setData(Uri.parse(Constants.GOOGLE_PLAY_APP_URI + packageName));
         context.startActivity(intent);
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "triggerGooglePlayApp called app store.");
+        }
     }
 
     /**
@@ -471,6 +496,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param operation - Operation object.
      */
     public void monitorPolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "monitorPolicy started.");
+        }
         String payload = Preference.getString(context, Constants.PreferenceFlag.APPLIED_POLICY);
         PolicyOperationsMapper operationsMapper = new PolicyOperationsMapper();
         ObjectMapper mapper = new ObjectMapper();
@@ -500,6 +528,9 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             resultBuilder.build(operation);
             throw new AndroidAgentException("Error occurred while parsing stream.", e);
         }
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "monitorPolicy completed.");
+        }
     }
 
     /**
@@ -508,9 +539,15 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param operation - Operation object.
      */
     public void revokePolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "revokePolicy started.");
+        }
         CommonUtils.revokePolicy(context);
         operation.setStatus(resources.getString(R.string.operation_value_completed));
         resultBuilder.build(operation);
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "revokePolicy completed.");
+        }
     }
 
     /**
@@ -531,6 +568,10 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         String packageName;
         String type;
         String schedule = null;
+        if (Constants.DEBUG_MODE_ENABLED) {
+            Log.d(TAG, "uninstallApplication started. Payload - " +
+                    operation.getPayLoad().toString());
+        }
         try {
             JSONObject appData = new JSONObject(operation.getPayLoad().toString());
             type = appData.getString(getContextResources().getString(R.string.app_type));
@@ -616,7 +657,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             operation.setPayLoad(result.toString());
 
             if (status.equals(resources.getString(R.string.shared_pref_default_status))) {
-                operation.setStatus(resources.getString(R.string.operation_value_completed));
+                operation.setStatus(resources.getString(R.string.operation_value_progress));
                 resultBuilder.build(operation);
 
                 if (Constants.DEBUG_MODE_ENABLED) {
@@ -843,30 +884,79 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
      * @param operation - Operation object.
      */
     public void getLogcat(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-        JSONObject result = new JSONObject();
-        RuntimeInfo info = new RuntimeInfo(context);
-        LogPublisherFactory publisher = new LogPublisherFactory(context);
-        try {
-            result.put("logcat", info.getLogCat());
-            if (publisher.getLogPulisher() != null) {
-                EventPayload eventPayload = new EventPayload();
-                eventPayload.setPayload(info.getLogCat());
-                eventPayload.setType("LOGCAT");
-                publisher.getLogPulisher().publish(eventPayload);
+        String logLevel = Constants.LogPublisher.LOG_LEVEL;
+        if (Constants.SYSTEM_APP_ENABLED){
+            try {
+                JSONObject commandObj = new JSONObject();
+                commandObj.put("operation_id", operation.getId());
+                commandObj.put("log_level", logLevel);
+                CommonUtils.callSystemApp(context, Constants.Operation.LOGCAT, commandObj.toString(),
+                        null);
+                operation.setStatus(resources.getString(R.string.operation_value_progress));
+            } catch (JSONException e) {
+                Log.e(TAG, "Error occurred. " + e.getMessage());
+                operation.setOperationResponse(e.getMessage());
+                operation.setStatus(context.getResources().getString(R.string.operation_value_error));
+                resultBuilder.build(operation);
             }
-        } catch (JSONException e) {
-            operation.setStatus(resources.getString(R.string.operation_value_error));
-            operation.setOperationResponse("Error in parsing VPN payload.");
+        } else {
+            RuntimeInfo info = new RuntimeInfo(context);
+            try {
+                operation.setOperationResponse(getOperationResponseFromLogcat(context, info.getLogCat(logLevel)));
+                operation.setStatus(context.getResources().getString(R.string.operation_value_completed));
+            } catch (IOException e) {
+                operation.setOperationResponse("Unable to get logs. " + e.getMessage());
+                operation.setStatus(context.getResources().getString(R.string.operation_value_error));
+            }
             resultBuilder.build(operation);
-            throw new AndroidAgentException("Invalid JSON format.", e);
         }
+    }
 
-        if (Constants.DEBUG_MODE_ENABLED) {
-            Log.d(TAG, "Logcat returned");
+    public static String getOperationResponseFromLogcat(Context context, String logcat) throws IOException {
+        File logcatFile = new File(logcat);
+        if (logcatFile.exists() && logcatFile.canRead()) {
+            DeviceInfo deviceInfo = new DeviceInfo(context);
+            EventPayload eventPayload = new EventPayload();
+            eventPayload.setPayload(logcat);
+            eventPayload.setType("LOGCAT");
+            eventPayload.setDeviceIdentifier(deviceInfo.getDeviceId());
+
+            StringBuilder emmBuilder = new StringBuilder();
+            StringBuilder publisherBuilder = new StringBuilder();
+            int index = 0;
+            String line;
+            ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(logcatFile, Charset.forName("US-ASCII"));
+            while ((line = reversedLinesFileReader.readLine()) != null) {
+                publisherBuilder.insert(0, "\n");
+                publisherBuilder.insert(0, line);
+                //OPERATION_RESPONSE filed in the DM_DEVICE_OPERATION_RESPONSE is declared as a blob and hence can only hold 64Kb.
+                //So we don't want to throw exceptions in the server. Limiting the response in here to limit the server traffic also.
+                if (emmBuilder.length() < Character.MAX_VALUE - 8192) { //Keeping 8kB for rest of the response payload.
+                    emmBuilder.insert(0, "\n");
+                    emmBuilder.insert(0, line);
+                }
+                if (++index >= Constants.LogPublisher.NUMBER_OF_LOG_LINES) {
+                    break;
+                }
+            }
+            LogPublisherFactory publisher = new LogPublisherFactory(context);
+            if (publisher.getLogPublisher() != null) {
+                eventPayload.setPayload(publisherBuilder.toString());
+                publisher.getLogPublisher().publish(eventPayload);
+                if (Constants.DEBUG_MODE_ENABLED) {
+                    Log.d(TAG, "Logcat published size: " + eventPayload.getPayload().length());
+                }
+            }
+            eventPayload.setPayload(emmBuilder.toString());
+            Gson logcatResponse = new Gson();
+            logcatFile.delete();
+            if (Constants.DEBUG_MODE_ENABLED) {
+                Log.d(TAG, "Logcat payload size: " + eventPayload.getPayload().length());
+            }
+            return logcatResponse.toJson(eventPayload);
+        } else {
+            throw new IOException("Unable to find or read log file.");
         }
-        operation.setStatus(resources.getString(R.string.operation_value_completed));
-        operation.setPayLoad(result.toString());
-        resultBuilder.build(operation);
     }
 
     @Override

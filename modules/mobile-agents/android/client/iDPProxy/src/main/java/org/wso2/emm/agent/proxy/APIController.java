@@ -20,6 +20,7 @@ package org.wso2.emm.agent.proxy;
 import android.content.Context;
 import android.util.Log;
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -58,6 +59,9 @@ public class APIController implements TokenCallBack {
 	public APIController(String clientKey, String clientSecret){
 		this.clientKey = clientKey;
 		this.clientSecret = clientSecret;
+		if (Constants.DEBUG_ENABLED) {
+			Log.d(TAG, "APIController created.");
+		}
 	}
 
 	public APIController() {
@@ -74,6 +78,9 @@ public class APIController implements TokenCallBack {
 	 */
 	public void invokeAPI(EndPointInfo apiEndPointInfo, APIResultCallBack apiResultCallBack,
 	                      int requestCode, Context context) {
+		if (Constants.DEBUG_ENABLED) {
+			Log.d(TAG, "invokeAPI called");
+		}
 
 		this.apiResultCallback = apiResultCallBack;
 		this.apiEndPointInfo = apiEndPointInfo;
@@ -246,7 +253,10 @@ public class APIController implements TokenCallBack {
 				return headers;
 			}
 		};
-
+		request.setRetryPolicy(new DefaultRetryPolicy(
+				Constants.HttpClient.DEFAULT_TIME_OUT,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 		queue.add(request);
 	}
 
@@ -310,6 +320,11 @@ public class APIController implements TokenCallBack {
 		} catch (JSONException e) {
 			Log.e(TAG, "Failed to parse request JSON", e);
 		}
+
+		request.setRetryPolicy(new DefaultRetryPolicy(
+				Constants.HttpClient.DEFAULT_TIME_OUT,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
 		queue.add(request);
 	}
@@ -375,6 +390,10 @@ public class APIController implements TokenCallBack {
 			Log.e(TAG, "Failed to parse request JSON", e);
 		}
 
+		request.setRetryPolicy(new DefaultRetryPolicy(
+				Constants.HttpClient.DEFAULT_TIME_OUT,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 		queue.add(request);
 	}
 

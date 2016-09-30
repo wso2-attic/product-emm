@@ -21,6 +21,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.api.ApplicationManager;
+import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
@@ -37,7 +39,6 @@ import android.widget.Toast;
 public class AlarmReceiver extends BroadcastReceiver {
 
 	private static final String TAG = AlarmReceiver.class.getName();
-	private String operation = null;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -46,63 +47,23 @@ public class AlarmReceiver extends BroadcastReceiver {
 		}
 
 		if (intent.hasExtra(context.getResources().getString(R.string.alarm_scheduled_operation))) {
-			operation = intent.getStringExtra(context.getResources().getString(R.string.alarm_scheduled_operation));
-
-			if(operation != null && operation.trim().equals(Constants.Operation.INSTALL_APPLICATION)) {
-				Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), null);
-				Preference.putString(context, context.getResources().getString(R.string.app_uri), null);
-				Toast.makeText(context, "App install request initiated by admin.",
-						Toast.LENGTH_SHORT).show();
-				//Prepare for install
-				String packageUri;
-				if (intent.hasExtra(context.getResources().getString(R.string.app_uri))) {
-					Preference.putString(context, context.getResources().getString(
-							R.string.app_install_status), context.getResources().getString(
-							R.string.app_status_value_installed));
-					packageUri = intent.getStringExtra(context.getResources().getString(R.string.app_uri));
-					Intent installIntent = new Intent(Intent.ACTION_VIEW);
-					installIntent.setDataAndType(Uri.parse(packageUri), context.getResources().getString(R.string.application_mgr_mime));
-					installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					context.startActivity(installIntent);
-				} else {
-					String error = "Scheduled install failed due to incorrect package URI";
-					Preference.putString(context, context.getResources().getString(
-							R.string.app_install_status), context.getResources().getString(
-							R.string.app_status_value_install_failed));
-					Preference.putString(context, context.getResources().getString(
-							R.string.app_install_failed_message), error);
-					Log.e(TAG, error);
-
+			String operationCode = intent.getStringExtra(context.getResources().getString(R.string.alarm_scheduled_operation));
+			ApplicationManager applicationManager = new ApplicationManager(context.getApplicationContext());
+			if(operationCode != null && operationCode.trim().equals(Constants.Operation.INSTALL_APPLICATION)) {
+				String appUrl = intent.getStringExtra(context.getResources().getString(R.string.app_url));
+				Operation operation = null;
+				if (intent.hasExtra(context.getResources().getString(R.string.alarm_scheduled_operation_payload)))				{
+					operation = (Operation) intent.getExtra(context.getResources().getString(R.string.alarm_scheduled_operation_payload));
 				}
-			} else if(operation != null && operation.trim().equals(Constants.Operation.UNINSTALL_APPLICATION)) {
-				Preference.putString(context, context.getResources().getString(R.string.alarm_schedule), null);
-				Preference.putString(context, context.getResources().getString(R.string.app_uri), null);
-				Toast.makeText(context, "App uninstall request initiated by admin.",
-						Toast.LENGTH_SHORT).show();
-				//Prepare for uninstall
-				String packageName;
-				if (intent.hasExtra(context.getResources().getString(R.string.app_uri))) {
-					packageName = intent.getStringExtra(context.getResources().getString(R.string.app_uri));
-					Uri packageURI = Uri.parse(packageName);
-					Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
-					uninstallIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					context.startActivity(uninstallIntent);
-				} else {
-					Toast.makeText(context, "App uninstallation failed.",
-							Toast.LENGTH_SHORT).show();
-				}
+				applicationManager.installApp(appUrl, null, operation);
+			} else if(operationCode != null && operationCode.trim().equals(Constants.Operation.UNINSTALL_APPLICATION)) {
+				String packageUri = intent.getStringExtra(context.getResources().getString(R.string.app_uri));
+				applicationManager.uninstallApplication(packageUri, null);
 			}
 
 		} else {
 			OperationTask operationTask = new OperationTask();
 			operationTask.execute(context);
-		}
-
-		if (Constants.SYSTEM_APP_ENABLED && Preference.getBoolean(context, context.getResources().
-				getString(R.string.firmware_upgrade_failed))) {
-			Preference.putBoolean(context, context.getResources().
-					getString(R.string.firmware_upgrade_failed), false);
-			CommonUtils.callSystemApp(context, Constants.Operation.UPGRADE_FIRMWARE, null, null);
 		}
 
 	}

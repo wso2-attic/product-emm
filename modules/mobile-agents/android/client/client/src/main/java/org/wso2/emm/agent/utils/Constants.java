@@ -18,12 +18,14 @@
 
 package org.wso2.emm.agent.utils;
 
+import android.util.Log;
+
 /**
  * This class holds all the constants used throughout the application.
  */
 public class Constants {
 
-	public static final boolean DEBUG_MODE_ENABLED = false;
+	public static final boolean DEBUG_MODE_ENABLED = true;
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
 	public static final boolean SYSTEM_APP_ENABLED = false;
@@ -46,6 +48,7 @@ public class Constants {
 	// OWNERSHIP_BYOD or OWNERSHIP_COPE. If you are using the mutual SSL authentication
 	// This value must be set to a value other than null.
 	public static final String DEFAULT_OWNERSHIP = null;
+	public static final String PENDING_APP_INSTALLATIONS = "PENDING_APP_INSTALLATIONS";
 	// This is set to override the server host name retrieving screen. If overriding is not
 	// needed, set this to null.
 	public static final String DEFAULT_HOST = null;
@@ -53,6 +56,7 @@ public class Constants {
 	public static final String SYSTEM_SERVICE_PACKAGE = "org.wso2.emm.system.service";
 	public static final String AGENT_PACKAGE = "org.wso2.emm.agent";
 	public static final int FIRMWARE_UPGRADE_RETRY_COUNT = 5;
+	public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 
 
 	// This is used to skip the license
@@ -72,6 +76,8 @@ public class Constants {
 		public static final String DAS_PUBLISHER = "DAS_PULISHER";
 		public static final String SPLUNK_PUBLISHER = "SPLUNK_PUBLISHER";
 		public static final String LOG_PUBLISHER_IN_USE = "<SET_PUBLISHER>";
+		public static final String LOG_LEVEL = "*:W";
+		public static final int NUMBER_OF_LOG_LINES = 500;
 	}
 
 	/**
@@ -121,7 +127,7 @@ public class Constants {
 	public static final String STATUS = "status";
 	public static final String RESPONSE = "response";
 	public static final String PAYLOAD = "payLoad";
-	public static final String CODE = "code";
+	public static final String OPERATION_CODE = "operation";
 	public static final String TYPE = "type";
 	public static final String ID = "id";
 	public static final String TYPE_COMMAND = "COMMAND";
@@ -211,6 +217,18 @@ public class Constants {
 
 	/**
 	 * Status codes
+	 */
+	public final class Code {
+		private Code(){
+			throw new AssertionError();
+		}
+		public static final String SUCCESS = "200";
+		public static final String PENDING = "300";
+		public static final String FAILURE = "400";
+	}
+
+	/**
+	 * Sub Status codes
 	 */
 	public final class Status {
 		private Status(){
