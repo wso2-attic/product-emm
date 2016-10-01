@@ -36,8 +36,6 @@
 
     <modules>
         <module>modules/mobile-agents</module>
-        <module>modules/apps/jaggery/emm</module>
-        <module>modules/apps/jaggery/emm-web-agent</module>
         <module>modules/tools</module>
         <module>modules/mdm-ui</module>
         <module>modules/features</module>
@@ -1044,11 +1042,11 @@
         <carbon.governance.version>4.6.4</carbon.governance.version>
 
         <!-- Carbon Device Management -->
-        <carbon.device.mgt.version>1.2.2-SNAPSHOT</carbon.device.mgt.version>
+        <carbon.device.mgt.version>1.2.3-SNAPSHOT</carbon.device.mgt.version>
         <carbon.device.mgt.version.range>[1.1.1, 2.0.0)</carbon.device.mgt.version.range>
 
         <!-- Carbon Mobile Device Management -->
-        <carbon.mobile.device.mgt.version>2.2.2-SNAPSHOT</carbon.mobile.device.mgt.version>
+        <carbon.mobile.device.mgt.version>2.2.3-SNAPSHOT</carbon.mobile.device.mgt.version>
         <mdm.version>2.2.0-SNAPSHOT</mdm.version>
 
         <!-- Carbon API Management -->
@@ -1059,7 +1057,7 @@
         <carbon.mediation.version>4.6.6</carbon.mediation.version>
 
         <!-- Carbon Analytics Common -->
-        <carbon.analytics.common.version>5.0.12-alpha</carbon.analytics.common.version>
+        <carbon.analytics.common.version>5.1.3</carbon.analytics.common.version>
 
         <!-- Tomcat -->
         <orbit.tomcat.version>7.0.59.wso2v1</orbit.tomcat.version>
@@ -1096,10 +1094,10 @@
         <caramel.version>1.0.1</caramel.version>
 
         <!-- App manager version-->
-        <appmgt.feature.version>1.2.3-SNAPSHOT</appmgt.feature.version>
+        <appmgt.feature.version>1.2.4-SNAPSHOT</appmgt.feature.version>
 
         <!-- Carbon Store version-->
-        <carbon.store.version>1.4.3-SNAPSHOT</carbon.store.version>
+        <carbon.store.version>1.4.3</carbon.store.version>
         <!-- Cipher tool version-->
         <cipher.tool.version>1.0.0-wso2v3</cipher.tool.version>
 
