@@ -29,8 +29,6 @@
                 <Claim>http://wso2.org/claims/role</Claim>
                 <Claim>http://wso2.org/claims/emailaddress</Claim>
             </Claims>
-            <EnableSingleLogout>false</EnableSingleLogout>
-            <SingleLogoutUrl></SingleLogoutUrl>
             <EnableAudienceRestriction>true</EnableAudienceRestriction>
             <AudiencesList>
                 <Audience>carbonServer</Audience>
@@ -51,8 +49,6 @@
                 <Claim>http://wso2.org/claims/role</Claim>
                 <Claim>http://wso2.org/claims/emailaddress</Claim>
             </Claims>
-            <EnableSingleLogout>false</EnableSingleLogout>
-            <SingleLogoutUrl></SingleLogoutUrl>
             <EnableAudienceRestriction>true</EnableAudienceRestriction>
             <EnableRecipients>true</EnableRecipients>
             <AudiencesList>

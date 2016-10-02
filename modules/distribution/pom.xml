@@ -352,8 +352,6 @@
                         </goals>
                         <configuration>
                             <tasks>
-                                <!-- Turning off SAML assertion signature validation in SAML2 authenticator -->
-                                <replace file="../../p2-profile/product/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security/authenticators.xml" token="&lt;!-- &lt;Parameter name=&quot;LoginAttributeName&quot;&gt;&lt;/Parameter&gt; --&gt;" value="&lt;Parameter name=&quot;AssertionSignatureValidationEnabled&quot;&gt;false&lt;/Parameter&gt;" />
                                 <property name="tempdir" value="target/docs-temp" />
                                 <property name="jardir" value="target/jars" />
                                 <!--<property name="shindig.version" value="2.5.0-beta5" />-->
