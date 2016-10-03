@@ -29,8 +29,6 @@
                 <Claim>http://wso2.org/claims/role</Claim>
                 <Claim>http://wso2.org/claims/emailaddress</Claim>
             </Claims>
-            <EnableSingleLogout>false</EnableSingleLogout>
-            <SingleLogoutUrl></SingleLogoutUrl>
             <EnableAudienceRestriction>true</EnableAudienceRestriction>
             <AudiencesList>
                 <Audience>carbonServer</Audience>
@@ -38,11 +36,11 @@
             <ConsumingServiceIndex></ConsumingServiceIndex>
         </ServiceProvider>
         <ServiceProvider>
-            <Issuer>mdm</Issuer>
-	        <AssertionConsumerServiceURLs>
-     		    <AssertionConsumerServiceURL>https://localhost:9443/emm/sso/acs</AssertionConsumerServiceURL>
-   	        </AssertionConsumerServiceURLs>
-            <DefaultAssertionConsumerServiceURL>https://localhost:9443/emm/sso/acs</DefaultAssertionConsumerServiceURL>
+            <Issuer>emm</Issuer>
+            <AssertionConsumerServiceURLs>
+                <AssertionConsumerServiceURL>https://localhost:9443/emm/uuf/sso/acs</AssertionConsumerServiceURL>
+            </AssertionConsumerServiceURLs>
+            <DefaultAssertionConsumerServiceURL>https://localhost:9443/emm/uuf/sso/acs</DefaultAssertionConsumerServiceURL>
             <SignAssertion>true</SignAssertion>
             <SignResponse>true</SignResponse>
             <EnableAttributeProfile>false</EnableAttributeProfile>
@@ -51,8 +49,6 @@
                 <Claim>http://wso2.org/claims/role</Claim>
                 <Claim>http://wso2.org/claims/emailaddress</Claim>
             </Claims>
-            <EnableSingleLogout>false</EnableSingleLogout>
-            <SingleLogoutUrl></SingleLogoutUrl>
             <EnableAudienceRestriction>true</EnableAudienceRestriction>
             <EnableRecipients>true</EnableRecipients>
             <AudiencesList>
@@ -89,6 +85,10 @@
             <DefaultAssertionConsumerServiceURL>https://localhost:9443/publisher/acs</DefaultAssertionConsumerServiceURL>
             <SignResponse>true</SignResponse>
             <CustomLoginPage>/publisher/controllers/login.jag</CustomLoginPage>
+            <EnableAudienceRestriction>true</EnableAudienceRestriction>
+            <AudiencesList>
+                <Audience>carbonServer</Audience>
+            </AudiencesList>
         </ServiceProvider>
     </ServiceProviders>
 </SSOIdentityProviderConfig>
