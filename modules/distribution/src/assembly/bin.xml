@@ -224,6 +224,9 @@
             <includes>
                 <include>*/**</include>
             </includes>
+            <excludes>
+                <exclude>synapse-configs/**</exclude>
+            </excludes>
         </fileSet>
         <fileSet>
             <directory>src/repository/conf/identity/service-providers</directory>
