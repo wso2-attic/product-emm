@@ -48,20 +48,19 @@ public class OperationManagement extends TestBase {
 
     @Test(description = "Add an Android device.")
     public void enrollAndroidDevice() throws Exception {
-        JsonObject enrollmentData = PayloadGenerator.getJsonPayload(
-                Constants.AndroidEnrollment.ENROLLMENT_PAYLOAD_FILE_NAME, Constants.HTTP_METHOD_POST);
+        JsonObject enrollmentData = PayloadGenerator
+                .getJsonPayload(Constants.AndroidEnrollment.ENROLLMENT_PAYLOAD_FILE_NAME, Constants.HTTP_METHOD_POST);
         enrollmentData.addProperty(Constants.DEVICE_IDENTIFIER_KEY, Constants.DEVICE_ID);
         MDMResponse response = client.post(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT, enrollmentData.toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         Assert.assertTrue(response.getBody().contains(Constants.AndroidEnrollment.ENROLLMENT_RESPONSE_PAYLOAD_FOR_POST));
     }
 
-    @Test(dependsOnMethods = {
-            "enrollAndroidDevice" }, description = "Install an app to enrolled android device")
+    @Test(dependsOnMethods = { "enrollAndroidDevice" }, description = "Install an app to enrolled android device")
     public void testInstallApps() throws Exception {
-        JsonObject operationData = PayloadGenerator.getJsonPayload(
-                Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
-                Constants.AndroidOperations.INSTALL_APPS_OPERATION);
+        JsonObject operationData = PayloadGenerator
+                .getJsonPayload(Constants.AndroidOperations.OPERATION_PAYLOAD_FILE_NAME,
+                        Constants.AndroidOperations.INSTALL_APPS_OPERATION);
         JsonArray deviceIds = new JsonArray();
         JsonPrimitive deviceID = new JsonPrimitive(Constants.DEVICE_ID);
         deviceIds.add(deviceID);
@@ -71,32 +70,32 @@ public class OperationManagement extends TestBase {
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
     }
 
-    @Test(dependsOnMethods = {"testInstallApps"}, description = "Test get device apps with wrong Device ID")
-    public void testGetDeviceAppsWithWrongDeviceID() throws Exception{
-        MDMResponse response = client.get(Constants.OperationManagement.GET_DEVICE_APPS_ENDPOINT+
-                Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID+Constants.OperationManagement.PATH_APPS);
+    @Test(dependsOnMethods = { "testInstallApps" }, description = "Test get device apps with wrong Device ID")
+    public void testGetDeviceAppsWithWrongDeviceID() throws Exception {
+        MDMResponse response = client.get(Constants.OperationManagement.GET_DEVICE_APPS_ENDPOINT +
+                Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID + Constants.OperationManagement.PATH_APPS);
         Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
 
     }
 
-    @Test(dependsOnMethods = {"testInstallApps"}, description = "Test get operations for device with wrong Device ID")
-    public void testGetDeviceOperationsWithWrongDeviceID() throws Exception{
-        MDMResponse response = client.get(Constants.OperationManagement.GET_DEVICE_OPERATIONS_ENDPOINT+
-                                                                            Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
+    @Test(dependsOnMethods = { "testInstallApps" }, description = "Test get operations for device with wrong Device ID")
+    public void testGetDeviceOperationsWithWrongDeviceID() throws Exception {
+        MDMResponse response = client.get(Constants.OperationManagement.GET_DEVICE_OPERATIONS_ENDPOINT
+                + Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
     }
 
-    @Test(dependsOnMethods = {"testInstallApps"}, description = "Test get operations for android device")
-    public void testGetDeviceOperations() throws Exception{
-        MDMResponse response = client.get(Constants.OperationManagement.GET_DEVICE_OPERATIONS_ENDPOINT +
-                Constants.DEVICE_ID);
+    @Test(dependsOnMethods = { "testInstallApps" }, description = "Test get operations for android device")
+    public void testGetDeviceOperations() throws Exception {
+        MDMResponse response = client
+                .get(Constants.OperationManagement.GET_DEVICE_OPERATIONS_ENDPOINT + Constants.DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
-    @Test(dependsOnMethods = {"testInstallApps"}, description = "Test get device apps for android deviceD")
-    public void testGetDeviceApps() throws Exception{
-        MDMResponse response = client.get(Constants.OperationManagement.GET_DEVICE_APPS_ENDPOINT+
-                Constants.DEVICE_ID+Constants.OperationManagement.PATH_APPS);
+    @Test(dependsOnMethods = { "testInstallApps" }, description = "Test get device apps for android deviceD")
+    public void testGetDeviceApps() throws Exception {
+        MDMResponse response = client.get(Constants.OperationManagement.GET_DEVICE_APPS_ENDPOINT +
+                Constants.DEVICE_ID + Constants.OperationManagement.PATH_APPS);
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
 
     }

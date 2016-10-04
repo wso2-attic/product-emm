@@ -48,9 +48,10 @@ public class FeatureManagement extends TestBase{
 
     @Test(description = "Test view features with erroneous end point.")
     public void testViewFeaturesWithErroneousEndPoint() throws Exception {
-        MDMResponse response = client.get(Constants.FeatureManagement.VIEW_FEATURES_ERRONEOUS_ENDPOINT);
-        Assert.assertEquals(HttpStatus.SC_UNAUTHORIZED, response.getStatus());
-
-        /*TODO: Return type should be SC_NOT_FOUND instead of SC_UNAUTHORIZED for erroneous endpoints*/
+        try {
+            client.get(Constants.FeatureManagement.VIEW_FEATURES_ERRONEOUS_ENDPOINT);
+        } catch (Exception e) {
+            Assert.assertTrue(e.getMessage().contains("HTTP response code: 400"));
+        }
     }
 }
