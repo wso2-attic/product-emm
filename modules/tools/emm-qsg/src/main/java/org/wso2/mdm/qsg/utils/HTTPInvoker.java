@@ -18,6 +18,7 @@
 
 package org.wso2.mdm.qsg.utils;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -319,6 +320,62 @@ public class HTTPInvoker {
         return httpResponse;
     }
 
+    public static HTTPResponse sendHTTPPostWithOAuthSecurity(String url, HttpEntity entity, HashMap<String, String>
+            headers) {
+        HttpPost post = null;
+        HttpResponse response = null;
+        HTTPResponse httpResponse = new HTTPResponse();
+        CloseableHttpClient httpclient = null;
+        try {
+            httpclient = (CloseableHttpClient) createHttpClient();
+            post = new HttpPost(url);
+            post.setEntity(entity);
+            for (String key : headers.keySet()) {
+                post.setHeader(key, headers.get(key));
+            }
+            post.setHeader(Constants.Header.AUTH, OAUTH_BEARER + oAuthToken);
+            response = httpclient.execute(post);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+
+        BufferedReader rd = null;
+        try {
+            rd = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        StringBuffer result = new StringBuffer();
+        String line = "";
+        try {
+            while ((line = rd.readLine()) != null) {
+                result.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        httpResponse.setResponseCode(response.getStatusLine().getStatusCode());
+        httpResponse.setResponse(result.toString());
+        try {
+            httpclient.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return httpResponse;
+    }
+
     public static HTTPResponse uploadFile(String url, String fileName, String fileContentType) {
         HttpPost post = null;
         HttpResponse response = null;
@@ -334,7 +391,7 @@ public class HTTPInvoker {
             mpEntity.addPart("file", cbFile);
             post.setEntity(mpEntity);
             post.setHeader(Constants.Header.AUTH, OAUTH_BEARER + oAuthToken);
-            post.setHeader(Constants.Header.CONTENT_TYPE, "multipart/form-data");
+            //post.setHeader(Constants.Header.CONTENT_TYPE, "multipart/form-data");
             post.setHeader("Accept", Constants.ContentType.APPLICATION_JSON);
             response = httpclient.execute(post);
         } catch (UnsupportedEncodingException e) {
