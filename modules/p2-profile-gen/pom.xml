@@ -560,7 +560,7 @@
                                     org.wso2.carbon.analytics.cdmf:org.wso2.carbon.analytics.cdmf.feature:${carbon.analytics.cdmf.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon.analytics.cdmf:org.wso2.carbon.analytics.emm.feature:${carbon.analytics.emm.version}
+                                    org.wso2.carbon.analytics.cdmf:org.wso2.carbon.analytics.emm.dashboard.feature:${carbon.analytics.cdmf.version}
                                 </featureArtifactDef>
 
                                 <!-- EMM Analytics Features -->
@@ -1220,11 +1220,9 @@
                                     <version>${carbon.analytics.cdmf.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.analytics.emm.feature.group</id>
-                                    <version>${carbon.analytics.emm.version}</version>
+                                    <id>org.wso2.carbon.analytics.emm.dashboard.feature.group</id>
+                                    <version>${carbon.analytics.cdmf.version}</version>
                                 </feature>
-                                <!-- End of EMM Analytics Features -->
-
                                 <!-- End of Dashboard Features -->
 
                             </features>
