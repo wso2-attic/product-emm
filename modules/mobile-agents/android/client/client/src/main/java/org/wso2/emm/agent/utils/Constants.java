@@ -27,7 +27,7 @@ public class Constants {
 	public static final boolean LOCAL_NOTIFICATIONS_ENABLED = true;
 	public static final boolean GCM_ENABLED = false;
 	public static final boolean SYSTEM_APP_ENABLED = false;
-	public static final boolean AUTO_ENROLLMENT_BACKGROUND_SERVICE_ENABLED = false;
+	public static final boolean AUTO_ENROLLMENT_BACKGROUND_SERVICE_ENABLED = true;
 	public static final boolean ALLOW_SYSTEM_APPS_IN_APPS_LIST_RESPONSE = false;
 	public static final String SYSTEM_APP_SERVICE_START_ACTION = "org.wso2.emm.system.service.START_SERVICE";
 	public static final String SYSTEM_APP_BROADCAST_ACTION = "org.wso2.emm.system.service.MESSAGE_PROCESSED";
@@ -37,7 +37,7 @@ public class Constants {
 	public static final String NOTIFIER_LOCAL = "LOCAL";
 	public static final String NOTIFIER_GCM = "GCM";
 	public static final String SERVER_PORT = "80";
-	public static final String SERVER_PROTOCOL = "http://";
+	public static final String SERVER_PROTOCOL = "https://";
 	public static final String API_VERSION = "1.0.0/";
 	public static final String API_SERVER_PORT = "80";
 	public static final String OWNERSHIP_BYOD = "BYOD";
@@ -45,10 +45,10 @@ public class Constants {
 	// Set DEFAULT_OWNERSHIP to null if no overiding is needed. Other possible values are,
 	// OWNERSHIP_BYOD or OWNERSHIP_COPE. If you are using the mutual SSL authentication
 	// This value must be set to a value other than null.
-	public static final String DEFAULT_OWNERSHIP = null;
+	public static final String DEFAULT_OWNERSHIP = OWNERSHIP_COPE;
 	// This is set to override the server host name retrieving screen. If overriding is not
 	// needed, set this to null.
-	public static final String DEFAULT_HOST = null;
+	public static final String DEFAULT_HOST = "https://ec2-54-82-248-230.compute-1.amazonaws.com:9443";
 	public static final String APP_MANAGER_HOST = null;
 	public static final String SYSTEM_SERVICE_PACKAGE = "org.wso2.emm.system.service";
 	public static final String AGENT_PACKAGE = "org.wso2.emm.agent";
@@ -56,9 +56,9 @@ public class Constants {
 
 
 	// This is used to skip the license
-	public static final boolean SKIP_LICENSE = false;
-	public static final boolean HIDE_LOGIN_UI = false;
-	public static final boolean HIDE_UNREGISTER_BUTTON = false;
+	public static final boolean SKIP_LICENSE = true;
+	public static final boolean HIDE_LOGIN_UI = true;
+	public static final boolean HIDE_UNREGISTER_BUTTON = true;
 	public static final boolean SKIP_WORK_PROFILE_CREATION = false;
 	public static final boolean HIDE_ERROR_DIALOG = false;
 

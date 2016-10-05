@@ -28,7 +28,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
 import org.wso2.emm.agent.api.DeviceState;
+import org.wso2.emm.agent.services.EnrollmentService;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
@@ -41,6 +43,7 @@ public class AgentReceptionActivity extends Activity {
     private static final int TAG_BTN_ENABLE_PROFILE = 0;
     private static final int TAG_BTN_SKIP_PROFILE = 2;
     DevicePolicyManager manager;
+    private static final String FRESH_BOOTUP_FLAG = "fresh_bootup";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +61,19 @@ public class AgentReceptionActivity extends Activity {
             }
             if (androidForWorkCompatibility.getCode()) {
                 manageAndroidForWorkReceiption();
-            } else {
-                skipToEnrollment();
+                if (Constants.AUTO_ENROLLMENT_BACKGROUND_SERVICE_ENABLED) {
+                    Preference.putBoolean(context, FRESH_BOOTUP_FLAG, true);
+                    Intent autoEnrollIntent = new Intent(context, EnrollmentService.class);
+                    autoEnrollIntent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    autoEnrollIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startServiceAsUser(autoEnrollIntent, android.os.Process.myUserHandle());
+                } else {
+                    skipToEnrollment();
+                }
             }
         } else {
             Toast.makeText(context, context.getResources().getString(R.string.network_not_available_message),
-                           Toast.LENGTH_LONG).show();
+                    Toast.LENGTH_LONG).show();
             finish();
         }
     }
@@ -76,6 +86,7 @@ public class AgentReceptionActivity extends Activity {
             skipToEnrollment();
         }
     }
+
     private View.OnClickListener onClickListenerButtonClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -115,7 +126,7 @@ public class AgentReceptionActivity extends Activity {
     /**
      * Display Manage-profile provisioning prompt
      */
-    private void displayProfileProvisionPromptScreen(){
+    private void displayProfileProvisionPromptScreen() {
         Button btnEnableMngProfile;
         Button btnSkipProfile;
 

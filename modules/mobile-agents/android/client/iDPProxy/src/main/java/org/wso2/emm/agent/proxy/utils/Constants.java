@@ -35,7 +35,7 @@ public class Constants {
 		public static final String MUTUAL_SSL_AUTHENTICATOR = "MUTUAL_SSL_AUTHENTICATOR";
 		public static final String MUTUAL_AUTH_HEADER = "mutual-auth-header";
 		public static final String MUTUAL_AUTH_HEADER_VALUE = "mutual-auth-enabled";
-		public static final String AUTHENTICATOR_IN_USE = OAUTH_AUTHENTICATOR;
+		public static final String AUTHENTICATOR_IN_USE = MUTUAL_SSL_AUTHENTICATOR;
 	}
 
 	/**
@@ -47,11 +47,11 @@ public class Constants {
 		}
 		public static final String OAUTH_HTTP_CLIENT = "OAUTH_HTTP_CLIENT";
 		public static final String MUTUAL_HTTP_CLIENT = "MUTUAL_HTTP_CLIENT";
-		public static final String HTTP_CLIENT_IN_USE = OAUTH_HTTP_CLIENT;
+		public static final String HTTP_CLIENT_IN_USE = MUTUAL_HTTP_CLIENT;
 		public static final int DEFAULT_TIME_OUT = 30000;
 	}
 
-	public static final String SERVER_PROTOCOL = "http://";
+	public static final String SERVER_PROTOCOL = "https://";
 	public static final String TRUSTSTORE_PASSWORD = "wso2carbon";
 	public static final String KEYSTORE_PASSWORD = "wso2carbon";
 	public static final String TRUSTSTORE_LOCATION = null;
@@ -89,8 +89,8 @@ public class Constants {
 	public static final String INTERNAL_SERVER_ERROR = "500";
 	public static final String ACCESS_FAILURE = "400";
 	public static final String REQUEST_SUCCESSFUL = "200";
-	public static final int HTTP = 80;
-	public static final int HTTPS = 443;
+	public static final int HTTP = 9763;
+	public static final int HTTPS = 9443;
 	public static final String BKS = "BKS";
 
 
