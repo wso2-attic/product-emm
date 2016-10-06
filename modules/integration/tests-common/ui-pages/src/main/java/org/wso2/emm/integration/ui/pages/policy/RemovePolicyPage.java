@@ -19,6 +19,8 @@ package org.wso2.emm.integration.ui.pages.policy;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.wso2.emm.integration.ui.pages.CommonUtil;
@@ -46,13 +48,16 @@ public class RemovePolicyPage {
      * @throws InterruptedException
      */
     public void removePolicy() throws IOException, InterruptedException {
+        Actions actions = new Actions(driver);
         driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.remove.select.button.xpath"))).click();
-        driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.remove.file"))).click();
+        WebElement policyFile = driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.remove.file")));
+        actions.moveToElement(policyFile, 0 , 10).click().build().perform();
         driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.unpublish.button.xpath"))).click();
         CommonUtil.waitAndClick(driver, By.xpath(uiElementMapper.getElement("emm.policy.unpublish.yes.button.xpath")));
         CommonUtil.waitAndClick(driver, By.xpath(uiElementMapper.getElement("emm.policy.unpublish.ok.button.xpath")));
         driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.remove.select.button.xpath"))).click();
-        driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.remove.file"))).click();
+        policyFile = driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.remove.file")));
+        actions.moveToElement(policyFile, 0 , 10).click().build().perform();
         driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.remove.button"))).click();
         CommonUtil.waitAndClick(driver, By.xpath(uiElementMapper.getElement("emm.policy.remove.yes.link.xpath")));
         WebDriverWait wait = new WebDriverWait(driver, 10);
