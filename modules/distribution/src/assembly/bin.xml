@@ -191,11 +191,12 @@
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security</outputDirectory>
             <includes>
-                <include>**/sso-sp-config.properties</include>
-                <include>**/entitlement.properties</include>
-                <include>**/trusted-idp-config.xml</include>
                 <include>**/cipher-text.properties</include>
                 <include>**/cipher-tool.properties</include>
+                <include>**/identity_log_token.properties</include>
+                <include>**/Owasp.CsrfGuard.Carbon.properties</include>
+                <include>**/sso-sp-config.properties</include>
+                <include>**/xss-patterns.properties</include>
             </includes>
             <excludes>
                 <exclude>authenticators.xml</exclude>
@@ -416,7 +417,8 @@
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity</outputDirectory>
             <includes>
-                <include>**/saml1-assertion-config</include>
+                <include>**/saml1-assertion-config.xml</include>
+                <include>**/oidc-scope-config.xml</include>
                 <include>**/msg-mgt.properties</include>
                 <include>**/entitlement.properties</include>
             </includes>
