@@ -137,7 +137,7 @@ public class AppOperations {
         JSONObject application = new JSONObject();
         application.put("name", name);
         application.put("description", "Sample application");
-        application.put("type", "mobileapp");
+        application.put("type", "enterprise");
         application.put("marketType", "enterprise");
         application.put("provider", "admin");
         application.put("displayName", name);
