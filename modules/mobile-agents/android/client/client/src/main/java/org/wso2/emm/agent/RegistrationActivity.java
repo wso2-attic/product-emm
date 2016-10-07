@@ -74,7 +74,29 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		DeviceInfo deviceInfo = new DeviceInfo(context);
 		deviceIdentifier = deviceInfo.getDeviceId();
 		Preference.putString(context, Constants.PreferenceFlag.REG_ID, deviceIdentifier);
-		registerDevice();
+
+		// If the notification type is gcm, before registering the device, make sure that particular device has google
+		// play services installed
+		if (Constants.NOTIFIER_GCM.equals(Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE))) {
+			String senderId = Preference.getString(context, context.getResources().
+					getString(R.string.shared_pref_sender_id));
+			GCMRegistrationManager registrationManager = new GCMRegistrationManager(context, RegistrationActivity.this,
+					senderId);
+			if (registrationManager.isPlayServicesInstalled()) {
+				registerDevice();
+			} else {
+				try {
+					CommonDialogUtils.stopProgressDialog(progressDialog);
+					CommonUtils.clearAppData(context);
+					displayGooglePlayServicesError();
+				} catch(AndroidAgentException e){
+					Log.e(TAG, "Failed to clear app data", e);
+				}
+			}
+		} else {
+			registerDevice();
+		}
+
 	}
 
 	private void registerDevice() {
@@ -196,6 +218,22 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		});
 	}
 
+	/**
+	 * Display google play services error
+	 */
+	private void displayGooglePlayServicesError() {
+		RegistrationActivity.this.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				alertDialog = CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
+						getResources().getString(R.string.title_head_registration_error),
+						getResources().getString(R.string.error_for_gcm_unavailability),
+						getResources().getString(R.string.button_ok),
+						registrationFailedOKBtnClickListerner);
+			}
+		});
+	}
+
 	@Override
 	public void onReceiveAPIResult(Map<String, String> result, int requestCode) {
 		DeviceInfo info = new DeviceInfo(context);
@@ -261,7 +299,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 				} else {
 					try {
 						CommonUtils.clearAppData(context);
-						displayInternalServerError();
+						displayGooglePlayServicesError();
 					} catch (AndroidAgentException e) {
 						Log.e(TAG, "Failed to clear app data", e);
 					}

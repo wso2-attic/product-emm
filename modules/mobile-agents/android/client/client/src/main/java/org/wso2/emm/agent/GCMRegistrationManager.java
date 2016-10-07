@@ -26,6 +26,7 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -161,19 +162,15 @@ public class GCMRegistrationManager implements APIResultCallBack {
 	 * 
 	 * @return if Google play services are installed return true, otherwise false.
 	 */
-	private boolean isPlayServicesInstalled() {
-		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getContext());
-		if (resultCode != ConnectionResult.SUCCESS) {
-			// if not installed try to see if it can be fixed by a user action.
-			if (getActivity() != null && GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-				GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), REQUEST_CODE).show();
-			} else {
-				Log.e(TAG, "GCM registration failed, Google play services not available.");
-			}
-			return false;
-		}
-		return true;
-	}
+	protected boolean isPlayServicesInstalled() {
+        GoogleApiAvailability api = GoogleApiAvailability.getInstance();
+        int resultCode = api.isGooglePlayServicesAvailable(getContext());
+        if (resultCode != ConnectionResult.SUCCESS) {
+            Log.e(TAG, "GCM registration failed, Google play services not available.");
+            return false;
+        }
+        return true;
+    }
 
 	/**
 	 * Handles the response returned for GCM registration Id sent to MDM.
