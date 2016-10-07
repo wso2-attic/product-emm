@@ -432,10 +432,10 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 				}
 
 			} else {
-				checkManifestPermissions();
+				//checkManifestPermissions();
 			}
 		} else if (deviceType != null){
-			checkManifestPermissions();
+			//checkManifestPermissions();
 		}
 
 	}

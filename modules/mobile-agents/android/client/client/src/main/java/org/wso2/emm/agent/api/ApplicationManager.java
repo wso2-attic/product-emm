@@ -400,15 +400,15 @@ public class ApplicationManager {
         Preference.putString(context, context.getResources().getString(
                 R.string.app_install_status), context.getResources().getString(
                 R.string.app_status_value_download_started));
-        if (isDownloadManagerAvailable(context)) {
-            IntentFilter filter = new IntentFilter(
-                    DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-            context.registerReceiver(downloadReceiver, filter);
-            removeExistingFile();
-            downloadViaDownloadManager(this.appUrl, resources.getString(R.string.download_mgr_download_file_name));
-        } else {
+//        if (isDownloadManagerAvailable(context)) {
+//            IntentFilter filter = new IntentFilter(
+//                    DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+//            context.registerReceiver(downloadReceiver, filter);
+//            removeExistingFile();
+//            downloadViaDownloadManager(this.appUrl, resources.getString(R.string.download_mgr_download_file_name));
+//        } else {
             downloadApp(this.appUrl, packageName);
-        }
+ //       }
     }
 
     /**

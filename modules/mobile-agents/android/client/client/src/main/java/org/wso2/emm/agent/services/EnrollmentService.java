@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -126,6 +127,8 @@ public class EnrollmentService extends IntentService implements APIResultCallBac
         }
         startEvents();
         startPolling();
+
+
     }
 
     /**

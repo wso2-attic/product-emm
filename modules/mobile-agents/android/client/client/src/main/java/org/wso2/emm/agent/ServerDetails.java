@@ -24,6 +24,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,6 +33,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import org.wso2.emm.agent.api.DeviceState;
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 import org.wso2.emm.agent.utils.ApplicationUtils;
@@ -69,6 +71,22 @@ public class ServerDetails extends Activity {
 
 		cdmDeviceAdmin = new ComponentName(this, AgentDeviceAdminReceiver.class);
 		devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, "org.wso2.emm.agent", "android.permission.READ_PHONE_STATE",
+					DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED);
+			devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, "org.wso2.emm.agent", "android.permission.READ_EXTERNAL_STORAGE",
+					DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED);
+
+			devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, "org.wso2.emm.agent", "android.permission.ACCESS_COARSE_LOCATION",
+					DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED);
+
+			devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, "org.wso2.emm.agent", "android.permission.WRITE_EXTERNAL_STORAGE",
+					DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED);
+
+			devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, "org.wso2.emm.agent", "android.permission.ACCESS_FINE_LOCATION",
+					DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED);
+		}
 
 		if (!deviceCompatibility.getCode()) {
 			txtSeverAddress.setText(deviceCompatibility.getDescriptionResourceID());
@@ -214,4 +232,6 @@ public class ServerDetails extends Activity {
 		context = null;
 		super.onDestroy();
 	}
+
+
 }

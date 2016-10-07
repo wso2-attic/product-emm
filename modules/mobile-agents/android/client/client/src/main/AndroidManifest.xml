@@ -97,7 +97,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".services.AgentDeviceAdminReceiver"
+            android:name=".services.DeviceAdminReceiver"
             android:permission="android.permission.BIND_DEVICE_ADMIN"
             android:exported="true">
             <intent-filter>
@@ -105,6 +105,7 @@
                 <!-- This action is required -->
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
                 <action android:name="android.app.action.PROFILE_PROVISIONING_COMPLETE"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
 
             <meta-data
@@ -234,11 +235,7 @@
         <activity
             android:name=".AgentReceptionActivity"
             android:label="WSO2 Agent">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".AppLockActivity"
@@ -250,7 +247,15 @@
                 android:name=".KioskAppActivity"
                 android:label="@string/kiosk_mode"
                 android:screenOrientation="portrait"
-                android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+                android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
 
         <service
             android:name=".services.AppLockService"
