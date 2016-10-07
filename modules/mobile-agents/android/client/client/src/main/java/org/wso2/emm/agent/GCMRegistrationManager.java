@@ -159,18 +159,18 @@ public class GCMRegistrationManager implements APIResultCallBack {
 	/**
 	 * Check the device to see if it has Google play services installed. If not
 	 * prompt user to install.
-	 * 
+	 *
 	 * @return if Google play services are installed return true, otherwise false.
 	 */
 	protected boolean isPlayServicesInstalled() {
-        GoogleApiAvailability api = GoogleApiAvailability.getInstance();
-        int resultCode = api.isGooglePlayServicesAvailable(getContext());
-        if (resultCode != ConnectionResult.SUCCESS) {
-            Log.e(TAG, "GCM registration failed, Google play services not available.");
-            return false;
-        }
-        return true;
-    }
+		GoogleApiAvailability api = GoogleApiAvailability.getInstance();
+		int resultCode = api.isGooglePlayServicesAvailable(getContext());
+		if (resultCode != ConnectionResult.SUCCESS) {
+			Log.e(TAG, "GCM registration failed, Google play services not available.");
+			return false;
+		}
+		return true;
+	}
 
 	/**
 	 * Handles the response returned for GCM registration Id sent to MDM.

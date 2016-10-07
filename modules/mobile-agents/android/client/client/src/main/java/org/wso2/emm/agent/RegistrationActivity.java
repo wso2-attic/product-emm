@@ -89,7 +89,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 					CommonDialogUtils.stopProgressDialog(progressDialog);
 					CommonUtils.clearAppData(context);
 					displayGooglePlayServicesError();
-				} catch(AndroidAgentException e){
+				} catch (AndroidAgentException e) {
 					Log.e(TAG, "Failed to clear app data", e);
 				}
 			}
@@ -223,13 +223,11 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	 */
 	private void displayGooglePlayServicesError() {
 		RegistrationActivity.this.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
+			@Override public void run() {
 				alertDialog = CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
 						getResources().getString(R.string.title_head_registration_error),
 						getResources().getString(R.string.error_for_gcm_unavailability),
-						getResources().getString(R.string.button_ok),
-						registrationFailedOKBtnClickListerner);
+						getResources().getString(R.string.button_ok), registrationFailedOKBtnClickListerner);
 			}
 		});
 	}
