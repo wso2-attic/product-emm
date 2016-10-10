@@ -250,6 +250,7 @@
 
     <!-- DIALOG TITLES AND MESSAGES -->
     <string name="dialog_authenticate">Authenticating</string>
+    <string name="dialog_title_system_app_required">SystemApp required</string>
     <string name="dialog_gps_settings">GPS Settings</string>
     <string name="dialog_gps_message">GPS is not enabled. Do you want to go to settings menu to enable GPS?</string>
     <string name="dialog_please_wait">Please wait</string>
@@ -265,6 +266,7 @@
     <string name="dialog_init_end"> device, are you sure you want to proceed ?</string>
     <string name="dialog_init_end_general"> are you sure you want to proceed ?</string>
     <string name="dialog_unregister">You are trying to unregister from EMM. Are you sure you want to proceed ?</string>
+    <string name="dialog_system_app_required">Please install the WSO2 System App to continue enrollment as a COPE user.</string>
 
 
     <!-- REGISTRATION -->
@@ -291,6 +293,7 @@
     <string name="info_label_rooted">Rooted:</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="ok">Ok</string>
     <string name="info_label_settings">Settings</string>
     <string name="info_label_cancel">Cancel</string>
 

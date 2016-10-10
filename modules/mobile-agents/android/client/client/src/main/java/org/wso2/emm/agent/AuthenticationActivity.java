@@ -201,7 +201,13 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					deviceType = Constants.OWNERSHIP_COPE;
 				}
 
-				showAuthenticationDialog();
+				if (Constants.OWNERSHIP_COPE.equals(deviceType) &&
+						!CommonUtils.isSystemAppInstalled(context)) {
+					showNoSystemAppDialog();
+				} else {
+					showAuthenticationDialog();
+				}
+
 			} else {
 				if (etUsername.getText() != null && !etUsername.getText().toString().trim().isEmpty()) {
 					Toast.makeText(context,
@@ -224,11 +230,12 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					getClientCredentials();
 					dialog.dismiss();
 					break;
-
 				case DialogInterface.BUTTON_NEGATIVE:
 					dialog.dismiss();
 					break;
-
+				case DialogInterface.BUTTON_NEUTRAL:
+					dialog.dismiss();
+					break;
 				default:
 					break;
 			}
@@ -705,6 +712,16 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 				                                                      getResources().getString(R.string.yes),
 				                                                      getResources().getString(R.string.no),
 				                                                      dialogClickListener, dialogClickListener);
+		alertDialog.show();
+	}
+
+	private void showNoSystemAppDialog(){
+		AlertDialog.Builder alertDialog =
+				CommonDialogUtils.getAlertDialogWithNeutralButtonAndTitle(context,
+						getResources().getString(R.string.dialog_title_system_app_required),
+						getResources().getString(R.string.dialog_system_app_required),
+						getResources().getString(R.string.ok),
+						dialogClickListener);
 		alertDialog.show();
 	}
 
