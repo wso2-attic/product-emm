@@ -39,7 +39,7 @@ public class AppOperations {
 
     public static MobileApplication uploadApplication(String platform, String appName, String appContentType) {
         String appUploadEndpoint =
-                EMMConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.0/apps/mobile/binaries";
+                EMMConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.1/apps/mobile/binaries";
         String filePath = "apps" + File.separator + platform + File.separator + appName;
         HTTPResponse
                 httpResponse = HTTPInvoker.uploadFile(appUploadEndpoint, filePath, appContentType);
@@ -62,13 +62,13 @@ public class AppOperations {
 
     private static String uploadAsset(String path) {
         String resUploadEndpoint =
-                EMMConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.0/apps/static-contents";
+                EMMConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.1/apps/static-contents?appType=mobileapp";
         HTTPResponse httpResponse = HTTPInvoker.uploadFile(resUploadEndpoint, path, "image/jpeg");
         if (httpResponse.getResponseCode() == Constants.HTTPStatus.OK) {
             JSONObject resp = null;
             try {
                 resp = (JSONObject) new JSONParser().parse(httpResponse.getResponse());
-                return QSGUtils.getResourceId((String) resp.get("path"));
+                return (String) resp.get("id");
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -132,12 +132,12 @@ public class AppOperations {
 
     public static boolean addApplication(String name, MobileApplication mblApp) {
         HashMap<String, String> headers = new HashMap<String, String>();
-        String appEndpoint = EMMConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.0/apps/mobileapp";
+        String appEndpoint = EMMConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.1/apps/mobileapp";
         //Set the application payload
         JSONObject application = new JSONObject();
         application.put("name", name);
         application.put("description", "Sample application");
-        application.put("type", "mobileapp");
+        application.put("type", "enterprise");
         application.put("marketType", "enterprise");
         application.put("provider", "admin");
         application.put("displayName", name);

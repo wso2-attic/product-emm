@@ -235,6 +235,7 @@
     <string name="error_authentication_failed">Incorrect login information. Please try again.</string>
     <string name="error_network_unavailable">Network connectivity is unavailable. Please check your network connectivity.</string>
     <string name="error_for_all_unknown_registration_failures">Cannot proceed the registration. Please contact administrator.</string>
+    <string name="error_for_gcm_unavailability">Google Play Services is unavailable. This program requires google play services to function. Please contact administrator.</string>
     <string name="error_for_all_unknown_authentication_failures">Cannot proceed the authentication. Please contact administrator.</string>
     <string name="error_for_all_unknown_unregister_failures">Cannot unregister the device. Please contact administrator.</string>
     <string name="error_for_all_unknown_notification_failures">Cannot execute the notification. Please contact administrator.</string>

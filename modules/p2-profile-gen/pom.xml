@@ -170,13 +170,10 @@
                                     org.wso2.carbon.analytics:org.wso2.carbon.analytics.core.server.feature:${carbon.analytics.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon.analytics:org.wso2.carbon.analytics.datasource.feature:${carbon.analytics.version}
+                                    org.wso2.carbon.analytics:org.wso2.carbon.analytics.datasource.rdbms.server.feature:${carbon.analytics.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.analytics-common:org.wso2.carbon.event.output.adapter.server.feature:${carbon.analytics.common.version}
-                                </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon.data:org.wso2.carbon.datasource.reader.hadoop.server.feature:${carbon.data.version}
                                 </featureArtifactDef>
 
                                 <!-- End of Device Management Features -->
@@ -554,7 +551,17 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.dashboards:org.wso2.carbon.dashboards.portal.feature:${carbon.dashboards.version}
                                 </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.dashboards:org.wso2.carbon.dashboards.deployment.feature:${carbon.dashboards.version}
+                                </featureArtifactDef>
                                 <!-- End of Dashboards Features -->
+
+                                <featureArtifactDef>
+                                    org.wso2.carbon.analytics.cdmf:org.wso2.carbon.analytics.cdmf.feature:${carbon.analytics.cdmf.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.analytics.cdmf:org.wso2.carbon.analytics.emm.dashboard.feature:${carbon.analytics.cdmf.version}
+                                </featureArtifactDef>
 
                                 <!-- EMM Analytics Features -->
                                 <!--<featureArtifactDef>-->
@@ -1174,12 +1181,8 @@
                                     <version>${carbon.analytics.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.analytics.datasource.feature.group</id>
+                                    <id>org.wso2.carbon.analytics.datasource.rdbms.server.feature.group</id>
                                     <version>${carbon.analytics.version}</version>
-                                </feature>
-                                <feature>
-                                    <id>org.wso2.carbon.datasource.reader.hadoop.server.feature.group</id>
-                                    <version>${carbon.data.version}</version>
                                 </feature>
 
                                 <feature>
@@ -1208,16 +1211,18 @@
                                     <id>org.wso2.carbon.dashboards.portal.feature.group</id>
                                     <version>${carbon.dashboards.version}</version>
                                 </feature>
-                                <!--<feature>-->
-                                    <!--<id>org.wso2.carbon.analytics.emm.feature.group</id>-->
-                                    <!--<version>${carbon.analytics.emm.version}</version>-->
-                                <!--</feature>-->
-                                <!--<feature>-->
-                                    <!--<id>org.wso2.carbon.analytics.emm.feature.group</id>-->
-                                    <!--<version>${carbon.analytics.emm.version}</version>-->
-                                <!--</feature>-->
-                                <!-- End of EMM Analytics Features -->
-
+                                <feature>
+                                    <id>org.wso2.carbon.dashboard.deployment.feature.group</id>
+                                    <version>${carbon.dashboards.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.analytics.cdmf.feature.group</id>
+                                    <version>${carbon.analytics.cdmf.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.analytics.emm.dashboard.feature.group</id>
+                                    <version>${carbon.analytics.cdmf.version}</version>
+                                </feature>
                                 <!-- End of Dashboard Features -->
 
                             </features>
@@ -1742,12 +1747,8 @@
                                     <version>${carbon.analytics.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.analytics.datasource.feature.group</id>
+                                    <id>org.wso2.carbon.analytics.datasource.rdbms.server.feature.group</id>
                                     <version>${carbon.analytics.version}</version>
-                                </feature>
-                                <feature>
-                                    <id>org.wso2.carbon.datasource.reader.hadoop.server.feature.group</id>
-                                    <version>${carbon.data.version}</version>
                                 </feature>
                                 <!--<feature>-->
                                     <!--<id>org.wso2.carbon.analytics.emm.feature.group</id>-->
