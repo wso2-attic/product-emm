@@ -332,6 +332,12 @@ public class ApplicationManager {
                     R.string.app_install_id));
             operationCode = Preference.getString(context, context.getResources().getString(
                     R.string.app_install_code));
+
+            if (operationId == operation.getId()) {
+                Log.w(TAG, "Ignoring received operation as it has the same operation ID with ongoing operation.");
+                return; //No point of putting same operation again to the pending queue. Hence ignoring.
+            }
+
             if (operationId != 0 && operationCode != null) {
                 AppInstallRequest appInstallRequest = new AppInstallRequest();
                 appInstallRequest.setApplicationOperationId(operation.getId());
