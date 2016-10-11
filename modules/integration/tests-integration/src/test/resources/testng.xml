@@ -76,21 +76,21 @@
             <!--<class name="org.wso2.mdm.integration.operation.OracleOperationManagement"/>-->
         <!--</classes>-->
     <!--</test>-->
-    <!--<test name="mobile-device-mgt" preserve-order="true" parallel="false">-->
-        <!--<classes>-->
-            <!--<class name="org.wso2.mdm.integration.mobileDevice.MobileDeviceManagement"/>-->
-        <!--</classes>-->
-    <!--</test>-->
-    <!--<test name="mobile-device-mgt-oracle" preserve-order="true" parallel="false">-->
-        <!--<classes>-->
-            <!--<class name="org.wso2.mdm.integration.mobileDevice.OracleMobileDeviceManagement"/>-->
-        <!--</classes>-->
-    <!--</test>-->
-    <!--<test name="user-mgt" preserve-order="true" parallel="false">-->
-        <!--<classes>-->
-            <!--<class name="org.wso2.mdm.integration.user.UserManagement"/>-->
-        <!--</classes>-->
-    <!--</test>-->
+    <test name="mobile-device-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.mobileDevice.MobileDeviceManagement"/>
+        </classes>
+    </test>
+    <test name="mobile-device-mgt-oracle" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.mobileDevice.OracleMobileDeviceManagement"/>
+        </classes>
+    </test>
+    <test name="user-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.mdm.integration.user.UserManagement"/>
+        </classes>
+    </test>
     <test name="role-mgt" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.mdm.integration.role.RoleManagement"/>

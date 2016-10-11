@@ -187,7 +187,7 @@ public final class Constants {
         public static final String UPGRADE_FIRMWARE_ENDPOINT = "/mdm-android-agent/operation/upgrade-firmware";
         public static final String VPN_ENDPOINT = "/mdm-android-agent/operation/vpn";
         public static final String MUTE_ENDPOINT = "/mdm-android-agent/operation/mute";
-        public static final String INSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/install-application";
+        public static final String INSTALL_APPS_ENDPOINT = "/api/device-mgt/android/v1.0/admin/devices/install-application";
         public static final String UNINSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/uninstall-application";
         public static final String BLACKLIST_APPS_ENDPOINT = "/mdm-android-agent/operation/blacklist-applications";
         public static final String NOTIFICATION_ENDPOINT = "/api/device-mgt/android/v1.0/admin/devices/send-notification";
@@ -260,9 +260,9 @@ public final class Constants {
     public static final class MobileDeviceManagement {
         private MobileDeviceManagement(){ throw new AssertionError();}
         public static final String MOBILE_DEVICE_MANAGEMENT_GROUP = "mobile-device-mgt";
-        public static final String GET_DEVICE_COUNT_ENDPOINT = "/api/device-mgt/v1.0";
+        public static final String GET_DEVICE_COUNT_ENDPOINT = "/api/device-mgt/v1.0/devices";
         public static final String NO_OF_DEVICES = "10";
-        public static final String GET_ALL_DEVICES_ENDPOINT ="/mdm-admin/devices";
+        public static final String GET_ALL_DEVICES_ENDPOINT ="/api/device-mgt/v1.0/devices";
         public static final String VIEW_DEVICE_TYPES_ENDPOINT = "/mdm-admin/devices/types";
         public static final String VIEW_DEVICE_RESPONSE_PAYLOAD_FILE_NAME =
                                                         "mobile-device-mgt-view-device-types-response-payloads.json";
@@ -274,12 +274,12 @@ public final class Constants {
 
         public static final String USER_MANAGEMENT_GROUP = "user-mgt";
         public static final String USER_NAME = "username123";
-        public static final String USER_ENDPOINT = "/mdm-admin/users";
+        public static final String USER_ENDPOINT = "/api/device-mgt/v1.0/users";
         public static final String USER_PAYLOAD_FILE_NAME = "user-payloads.json";
         public static final String USER_ERRONEOUS_PAYLOAD_FILE_NAME = "user-erroneous-payloads.json";
         public static final String USER_RESPONSE_PAYLOAD_FILE_NAME = "user-response-payloads.json";
         public static final String USER_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME = "user-erroneous-response-payloads.json";
-        public static final String VIEW_USER_ENDPOINT = "/mdm-admin/users/view";
+        public static final String VIEW_USER_ENDPOINT = "/api/device-mgt/v1.0/users";
 
     }
 
