@@ -59,6 +59,7 @@ public class EnrollmentService extends IntentService implements APIResultCallBac
 
     private void startEnrollment() {
         Log.i(TAG, "EMM auto enrollment initiated.");
+        startDeviceAdminPrompt();
         if (CommonUtils.
                 isNetworkAvailable(context)) {
             CommonUtils.saveHostDeatils(context, Constants.DEFAULT_HOST);
@@ -69,6 +70,7 @@ public class EnrollmentService extends IntentService implements APIResultCallBac
                     org.wso2.emm.agent.proxy.utils.Constants.Authenticator.AUTHENTICATOR_IN_USE,
                     EnrollmentService.this, Constants.AUTHENTICATION_REQUEST_CODE);
             authenticator.doAuthenticate();
+            LocalNotification.startPolling(context);
         } else {
             Log.e(TAG, "Auto enrollment failed due to network issues.");
         }
@@ -171,6 +173,7 @@ public class EnrollmentService extends IntentService implements APIResultCallBac
         if (requestCode == Constants.AUTHENTICATION_REQUEST_CODE) {
             if (authenticated) {
                 Log.i(TAG, "EMM auto enrollment, authentication successful.");
+                startPolling();
                 getConfigurationsFromServer();
             } else {
                 Log.e(TAG, "EMM auto enrollment authentication failed, please check your certificates and try again.");

@@ -35,7 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.wso2.emm.agent.api.DeviceState;
-import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.services.DeviceAdminReceiver;
 import org.wso2.emm.agent.utils.ApplicationUtils;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
@@ -69,7 +69,7 @@ public class ServerDetails extends Activity {
 		btnStartRegistration.setTextColor(getResources().getColor(R.color.black));
 		Response deviceCompatibility = state.evaluateCompatibility();
 
-		cdmDeviceAdmin = new ComponentName(this, AgentDeviceAdminReceiver.class);
+		cdmDeviceAdmin = DeviceAdminReceiver.getComponentName(context);
 		devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

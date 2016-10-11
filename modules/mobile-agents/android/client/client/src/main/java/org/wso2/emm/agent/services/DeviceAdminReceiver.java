@@ -12,6 +12,7 @@ import android.os.Build;
 import android.util.Log;
 
 import org.wso2.emm.agent.KioskAppActivity;
+import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
@@ -41,10 +42,17 @@ public class DeviceAdminReceiver extends android.app.admin.DeviceAdminReceiver {
     @Override
     public void onProfileProvisioningComplete(Context context, Intent intent) {
 
+        Preference.putString(context, Constants.PreferenceFlag.NOTIFIER_TYPE, Constants.NOTIFIER_LOCAL);
+        Preference.putInt(context, context.getResources().getString(R.string.shared_pref_frequency),
+                Constants.DEFAULT_INTERVAL);
+
         DevicePolicyManager devicePolicyManager =
                 (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
 
+
         ComponentName cdmDeviceAdmin = DeviceAdminReceiver.getComponentName(context);
+
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, "org.wso2.emm.agent", "android.permission.READ_PHONE_STATE",
@@ -68,13 +76,13 @@ public class DeviceAdminReceiver extends android.app.admin.DeviceAdminReceiver {
         devicePolicyManager.setApplicationHidden(cdmDeviceAdmin, Constants.SystemApp.PLAY_STORE, true);
 
         Log.i(TAG, "Provisioning Completed");
-        Preference.putBoolean(context, FRESH_BOOTUP_FLAG, true);
+
         Intent autoEnrollIntent = new Intent(context, EnrollmentService.class);
         autoEnrollIntent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         autoEnrollIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startServiceAsUser(autoEnrollIntent, android.os.Process.myUserHandle());
 
-        Preference.putBoolean(context, Constants.PreferenceFlag.SKIP_DEVICE_ACTIVATION, true);
+       //Preference.putBoolean(context, Constants.PreferenceFlag.SKIP_DEVICE_ACTIVATION, true);
         Intent launch = new Intent(context, KioskAppActivity.class);
         launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(launch);
@@ -97,6 +105,16 @@ public class DeviceAdminReceiver extends android.app.admin.DeviceAdminReceiver {
             devicePolicyManager.addUserRestriction(adminComponentName, restriction);
         } else {
             devicePolicyManager.clearUserRestriction(adminComponentName, restriction);
+        }
+    }
+
+    @Override
+    public void onEnabled(final Context context, Intent intent) {
+        super.onEnabled(context, intent);
+
+        String notifier = Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE);
+        if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
+            LocalNotification.startPolling(context);
         }
     }
 

@@ -24,6 +24,7 @@ import android.app.admin.SystemUpdatePolicy;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.UserManager;
@@ -44,7 +45,12 @@ import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
+import static org.wso2.emm.agent.KioskAppActivity.KIOSK_APPS_KEY;
+import static org.wso2.emm.agent.KioskAppActivity.KIOSK_PREFERENCE_FILE;
 
 public class OperationManagerDeviceOwner extends OperationManager {
     private static final String TAG = OperationManagerDeviceOwner.class.getSimpleName();
@@ -746,15 +752,22 @@ public class OperationManagerDeviceOwner extends OperationManager {
     }
 
     private void switchToKioskMode(List<String> appList) {
-        Intent kioskIntent = new Intent(getContext(), KioskAppActivity.class);
-        String listOfApps[] = appList.toArray(new String[appList.size()]);
-        kioskIntent.putExtra(KioskAppActivity.LOCKED_APP_PACKAGE_LIST, listOfApps);
-        getContext().getPackageManager().setComponentEnabledSetting(
-                new ComponentName(getContext().getPackageName(), KioskAppActivity.class.getName()),
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
-        kioskIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getContext().startActivity(kioskIntent);
+//        Intent kioskIntent = new Intent(getContext(), KioskAppActivity.class);
+//        String listOfApps[] = appList.toArray(new String[appList.size()]);
+//        kioskIntent.putExtra(KioskAppActivity.LOCKED_APP_PACKAGE_LIST, listOfApps);
+//        getContext().getPackageManager().setComponentEnabledSetting(
+//                new ComponentName(getContext().getPackageName(), KioskAppActivity.class.getName()),
+//                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+//                PackageManager.DONT_KILL_APP);
+//        kioskIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        getContext().startActivity(kioskIntent);
+
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(KioskAppActivity.KIOSK_PREFERENCE_FILE,
+                MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet(KioskAppActivity.KIOSK_APPS_KEY, new HashSet<String>(appList));
+        editor.commit();
+
     }
 
 }

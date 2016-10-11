@@ -23,7 +23,6 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
 import android.media.AudioManager;
@@ -57,7 +56,7 @@ import org.wso2.emm.agent.beans.WifiProfile;
 import org.wso2.emm.agent.events.beans.EventPayload;
 import org.wso2.emm.agent.events.listeners.WifiConfigCreationListener;
 import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
-import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.services.DeviceAdminReceiver;
 import org.wso2.emm.agent.services.DeviceInfoPayload;
 import org.wso2.emm.agent.services.LogPublisherFactory;
 import org.wso2.emm.agent.services.NotificationService;
@@ -111,7 +110,7 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         this.resources = context.getResources();
         this.devicePolicyManager =
                 (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-        this.cdmDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
+        this.cdmDeviceAdmin = DeviceAdminReceiver.getComponentName(context);
         this.appList = new ApplicationManager(context.getApplicationContext());
         this.resultBuilder = new ResultPayload();
         AGENT_PACKAGE_NAME = context.getPackageName();

@@ -19,7 +19,8 @@ limitations under the License.
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:padding="10dip">
+    android:padding="10dip"
+    android:keepScreenOn="true">
 
     <ImageView
         android:id="@+id/pkg_icon"

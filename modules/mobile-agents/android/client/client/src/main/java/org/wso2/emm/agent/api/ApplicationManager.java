@@ -23,7 +23,6 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -323,7 +322,7 @@ public class ApplicationManager {
             in.close();
             out.close();
 
-            session.commit(createIntentSender(context, sessionId));
+            session.commit(createIntentSender(context, sessionId, packageName));
             return true;
         } catch (IOException e) {
             Log.e(TAG, "Error occurred while installing application '" + packageName + "'", e);
@@ -333,11 +332,13 @@ public class ApplicationManager {
         return false;
     }
 
-    private static IntentSender createIntentSender(Context context, int sessionId) {
+    private static IntentSender createIntentSender(Context context, int sessionId, String packageName) {
+        Intent intent = new Intent(ACTION_INSTALL_COMPLETE);
+        intent.putExtra("packageName", packageName);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context,
                 sessionId,
-                new Intent(ACTION_INSTALL_COMPLETE),
+                intent,
                 0);
         return pendingIntent.getIntentSender();
     }

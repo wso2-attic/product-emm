@@ -18,16 +18,10 @@
 package org.wso2.emm.agent.services;
 
 import android.app.admin.DevicePolicyManager;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
-import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
@@ -64,7 +58,7 @@ public class PolicyComplianceChecker {
         this.resources = context.getResources();
         this.devicePolicyManager =
                 (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-        this.deviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
+        this.deviceAdmin = DeviceAdminReceiver.getComponentName(context);
         this.applicationManager = new ApplicationManager(context.getApplicationContext());
     }
 

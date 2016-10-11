@@ -20,6 +20,7 @@ package org.wso2.emm.agent;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.admin.DevicePolicyManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -39,7 +40,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.services.DeviceAdminReceiver;
+import org.wso2.emm.agent.services.EnrollmentService;
+import org.wso2.emm.agent.services.LocalNotification;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
@@ -49,16 +54,16 @@ import java.util.List;
 
 import static android.os.UserManager.DISALLOW_ADD_USER;
 import static android.os.UserManager.DISALLOW_ADJUST_VOLUME;
-import static android.os.UserManager.DISALLOW_FACTORY_RESET;
 import static android.os.UserManager.DISALLOW_MOUNT_PHYSICAL_MEDIA;
 import static android.os.UserManager.DISALLOW_SAFE_BOOT;
+import static org.wso2.emm.agent.events.EventRegistry.context;
 
 public class KioskAppActivity extends Activity {
 
     private static final String TAG = "KioskModeActivity";
 
-    private static final String KIOSK_PREFERENCE_FILE = "kiosk_preference_file";
-    private static final String KIOSK_APPS_KEY = "kiosk_apps";
+    public static final String KIOSK_PREFERENCE_FILE = "kiosk_preference_file";
+    public static final String KIOSK_APPS_KEY = "kiosk_apps";
 
     public static final String LOCKED_APP_PACKAGE_LIST
             = "com.afwsamples.testdpc.policy.locktask.LOCKED_APP_PACKAGE_LIST";
@@ -68,43 +73,40 @@ public class KioskAppActivity extends Activity {
     private DevicePolicyManager devicePolicyManager;
     private PackageManager packageManager;
 
+    AppInstallationBroadcastReceiver appInstallationBroadcastReceiver;
+    boolean isAppInstallationBroadcastReceiverRegistered = false;
+
+    private static final String ACTION_INSTALL_COMPLETE = "INSTALL_COMPLETED";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adminComponentName = AgentDeviceAdminReceiver.getComponentName(this);
+        updateKioskList(null);
+
+    }
+
+
+    public void updateKioskList(String packageName){
+        adminComponentName = DeviceAdminReceiver.getComponentName(context);
         devicePolicyManager = (DevicePolicyManager) getSystemService(
                 Context.DEVICE_POLICY_SERVICE);
         packageManager = getPackageManager();
 
-        if (Preference.getBoolean(this, Constants.PreferenceFlag.KIOSK_MODE)) {
-            boolean isKioskDisabled = getIntent().getBooleanExtra(Constants.DISABLE_KIOSK_MODE, false);
-            if (isKioskDisabled) {
-                onBackdoorClicked();
-            }
-        }
 
         // check if a new list of apps was sent, otherwise fall back to saved list
-        String[] packageArray = getIntent().getStringArrayExtra(LOCKED_APP_PACKAGE_LIST);
-        if (packageArray != null) {
-            kioskPackages = new ArrayList<>();
-            for (String pkg : packageArray) {
-                kioskPackages.add(pkg);
-            }
-            kioskPackages.remove(getPackageName());
-            kioskPackages.add(getPackageName());
-            setDefaultKioskPolicies(true);
-        } else {
-            // after a reboot there is no need to set the policies again
-            SharedPreferences sharedPreferences = getSharedPreferences(KIOSK_PREFERENCE_FILE,
-                                                                       MODE_PRIVATE);
-            kioskPackages = new ArrayList<>(sharedPreferences.getStringSet(KIOSK_APPS_KEY,
-                                                                            new HashSet<String>()));
-        }
+        SharedPreferences sharedPreferences = getSharedPreferences(KIOSK_PREFERENCE_FILE,
+                MODE_PRIVATE);
+        kioskPackages = new ArrayList<>(sharedPreferences.getStringSet(KIOSK_APPS_KEY,
+                new HashSet<String>()));
 
         // remove TestDPC package and add to end of list; it will act as back door
         kioskPackages.remove(getPackageName());
         kioskPackages.add(getPackageName());
+
+        if(packageName != null){
+            kioskPackages.add(packageName);
+        }
 
         // create list view with all kiosk packages
         final KioskAppsArrayAdapter kioskAppsArrayAdapter =
@@ -121,6 +123,9 @@ public class KioskAppActivity extends Activity {
                 });
         setContentView(listView);
     }
+
+
+
 
     @Override
     protected void onStart() {
@@ -146,6 +151,10 @@ public class KioskAppActivity extends Activity {
     public void onBackPressed() {
         // do nothing
         Toast.makeText(this, "KIOSK mode enabled", Toast.LENGTH_LONG).show();
+        String notifier = Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE);
+        if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
+            LocalNotification.startPolling(context);
+        }
     }
 
     private void enableKioskMode() {
@@ -249,6 +258,45 @@ public class KioskAppActivity extends Activity {
             }
             PackageManager pm = getPackageManager();
             startActivity(pm.getLaunchIntentForPackage(getItem(position)));
+        }
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!isAppInstallationBroadcastReceiverRegistered) {
+            if (appInstallationBroadcastReceiver == null)
+                appInstallationBroadcastReceiver = new AppInstallationBroadcastReceiver();
+            registerReceiver(appInstallationBroadcastReceiver, new IntentFilter(ACTION_INSTALL_COMPLETE));
+            isAppInstallationBroadcastReceiverRegistered = true;
+        }
+        //updateKioskList();
+
+    }
+
+    @Override
+    protected void onPause() {
+        if (isAppInstallationBroadcastReceiverRegistered) {
+            unregisterReceiver(appInstallationBroadcastReceiver);
+            appInstallationBroadcastReceiver = null;
+            isAppInstallationBroadcastReceiverRegistered = false;
+        }
+
+        super.onPause();
+    }
+
+
+    private class AppInstallationBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String packageName =  intent.getStringExtra("packageName");
+           //updateKioskList(packageName);
+            Intent launchIntent = getPackageManager().getLaunchIntentForPackage(packageName);
+            if (launchIntent != null) {
+                startActivity(launchIntent);
+            }
         }
     }
 }

@@ -61,7 +61,7 @@ public class PolicyRevokeHandler {
         this.resources = context.getResources();
         this.devicePolicyManager =
                 (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-        this.deviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
+        this.deviceAdmin = DeviceAdminReceiver.getComponentName(context);
         this.applicationManager = new ApplicationManager(context.getApplicationContext());
     }
 
