@@ -1110,7 +1110,7 @@
         <project.scm.id>github-scm</project.scm.id>
 
         <!-- Carbon Dashboards version-->
-        <carbon.dashboards.version>1.0.17</carbon.dashboards.version>
+        <carbon.dashboards.version>2.0.3</carbon.dashboards.version>
         <carbon.analytics.cdmf.version>1.0.1-SNAPSHOT</carbon.analytics.cdmf.version>
         <carbon.analytics.emm.version>1.0.1-SNAPSHOT</carbon.analytics.emm.version>
 
