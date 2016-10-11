@@ -33,8 +33,7 @@ public class AndroidEnrollment extends TestBase {
     private MDMHttpClient client;
 
     @BeforeClass(alwaysRun = true, groups = { Constants.AndroidEnrollment.ENROLLMENT_GROUP })
-    public void initTest()
-            throws Exception {
+    public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL);
         this.client = new MDMHttpClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
@@ -52,8 +51,7 @@ public class AndroidEnrollment extends TestBase {
     }
 
     @Test(description = "Test an Android device enrollment with no device identifier")
-    public void testEnrollmentWithErroneousInfo()
-            throws Exception {
+    public void testEnrollmentWithErroneousInfo() throws Exception {
         JsonObject enrollmentData = PayloadGenerator
                 .getJsonPayload(Constants.AndroidEnrollment.ENROLLMENT_ERRONEOUS_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST);
@@ -62,8 +60,7 @@ public class AndroidEnrollment extends TestBase {
         Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
     }
 
-    @Test(description = "Test an Android device is enrolled.", dependsOnMethods = {
-            "testEnrollment" })
+    @Test(description = "Test an Android device is enrolled.", dependsOnMethods = { "testEnrollment" })
     public void testIsEnrolled() throws Exception {
         MDMResponse response = client
                 .get(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID + "/status");
@@ -74,8 +71,7 @@ public class AndroidEnrollment extends TestBase {
                         Constants.HTTP_METHOD_GET).toString(), response.getBody(), true);
     }
 
-    @Test(description = "Test modify enrollment.", dependsOnMethods = {
-            "testIsEnrolled" })
+    @Test(description = "Test modify enrollment.", dependsOnMethods = { "testIsEnrolled" })
     public void testModifyEnrollment() throws Exception {
         JsonObject enrollmentData = PayloadGenerator
                 .getJsonPayload(Constants.AndroidEnrollment.ENROLLMENT_PAYLOAD_FILE_NAME, Constants.HTTP_METHOD_PUT);
@@ -87,8 +83,7 @@ public class AndroidEnrollment extends TestBase {
         //                                              Constants.HTTP_METHOD_PUT).toString(), response.getBody(), true);
     }
 
-    @Test(description = "Test disenrollment.", dependsOnMethods = {
-            "testIsEnrolled" })
+    @Test(description = "Test disenrollment.", dependsOnMethods = { "testIsEnrolled" })
     public void testDisEnrollDevice() throws Exception {
         MDMResponse response = client.delete(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
@@ -96,16 +91,15 @@ public class AndroidEnrollment extends TestBase {
                 response.getBody().contains(Constants.AndroidEnrollment.ENROLLMENT_RESPONSE_PAYLOAD_FOR_DELETE));
     }
 
-    @Test(description = "Test disenrollment with wrong device ID.", dependsOnMethods = {
-            "testIsEnrolled" })
+    @Test(description = "Test disenrollment with wrong device ID.", dependsOnMethods = { "testIsEnrolled" })
     public void testDisEnrollDeviceWithWrongDeviceId() throws Exception {
         MDMResponse response = client
                 .delete(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT + Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_NOT_FOUND, response.getStatus());
     }
 
-    @Test(description = "Test disenrollment for already disenrolled device.", dependsOnMethods = {
-            "testDisEnrollDevice" })
+    @Test(description = "Test disenrollment for already disenrolled device.",
+            dependsOnMethods = { "testDisEnrollDevice" })
     public void testDisEnrollDeviceSameDeviceTwice() throws Exception {
         MDMResponse response = client.delete(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT + Constants.DEVICE_ID);
         Assert.assertEquals(HttpStatus.SC_NOT_FOUND, response.getStatus());
