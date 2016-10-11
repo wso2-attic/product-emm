@@ -913,6 +913,15 @@
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
+        <!-- Copying output-event-adapters.xml -->
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/output-event-adapters.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
         <!-- Copying axis2.xml -->
         <file>
             <source>src/repository/conf/axis2/axis2.xml</source>
