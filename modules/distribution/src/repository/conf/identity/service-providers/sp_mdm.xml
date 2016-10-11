@@ -1,5 +1,5 @@
 <ServiceProvider>
-	<ApplicationID>2</ApplicationID>
+	<ApplicationID>7</ApplicationID>
 	<ApplicationName>wso2_mdm</ApplicationName>
 	<Description>MDM</Description>
 	<InboundAuthenticationConfig>

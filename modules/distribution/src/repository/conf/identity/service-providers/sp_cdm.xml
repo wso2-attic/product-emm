@@ -1,5 +1,5 @@
 <ServiceProvider>
-	<ApplicationID>2</ApplicationID>
+	<ApplicationID>6</ApplicationID>
 	<ApplicationName>wso2_cdm</ApplicationName>
 	<Description>CDM</Description>
 	<InboundAuthenticationConfig>

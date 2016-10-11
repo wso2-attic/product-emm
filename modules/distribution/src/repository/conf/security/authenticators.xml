@@ -46,6 +46,8 @@
             <Parameter name="ServiceProviderID">carbonServer</Parameter>
             <Parameter name="IdentityProviderSSOServiceURL">https://localhost:9443/samlsso</Parameter>
             <Parameter name="NameIDPolicyFormat">urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</Parameter>
+            <Parameter name="ResponseSignatureValidationEnabled">false</Parameter>
+            <Parameter name="AssertionSignatureValidationEnabled">false</Parameter>
 	</Config>
 	
 	<!-- If this authenticator should skip any URI from authentication, specify it under "SkipAuthentication"

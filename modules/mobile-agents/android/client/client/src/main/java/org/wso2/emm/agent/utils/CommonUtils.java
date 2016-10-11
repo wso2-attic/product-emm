@@ -448,6 +448,19 @@ public class CommonUtils {
 		}
 	}
 
+	public static boolean isSystemAppInstalled(Context context) {
+		PackageManager packageManager = context.getPackageManager();
+		boolean systemAppInstalled;
+		try {
+			packageManager.getPackageInfo(Constants.SYSTEM_SERVICE_PACKAGE, PackageManager.GET_ACTIVITIES);
+			systemAppInstalled = true;
+		}
+		catch (PackageManager.NameNotFoundException e) {
+			systemAppInstalled = false;
+		}
+		return systemAppInstalled;
+	}
+
 	public static Intent createExplicitFromImplicitIntent(Context context, Intent implicitIntent) {
 		//Retrieve all services that can match the given intent
 		PackageManager pm = context.getPackageManager();

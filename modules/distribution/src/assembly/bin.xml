@@ -191,11 +191,12 @@
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security</outputDirectory>
             <includes>
-                <include>**/sso-sp-config.properties</include>
-                <include>**/entitlement.properties</include>
-                <include>**/trusted-idp-config.xml</include>
                 <include>**/cipher-text.properties</include>
                 <include>**/cipher-tool.properties</include>
+                <include>**/identity_log_token.properties</include>
+                <include>**/Owasp.CsrfGuard.Carbon.properties</include>
+                <include>**/sso-sp-config.properties</include>
+                <include>**/xss-patterns.properties</include>
             </includes>
             <excludes>
                 <exclude>authenticators.xml</exclude>
@@ -221,6 +222,16 @@
         <fileSet>
             <directory>src/repository/resources</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/resources</outputDirectory>
+            <includes>
+                <include>*/**</include>
+            </includes>
+            <excludes>
+                <exclude>synapse-configs/**</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>src/repository/conf/identity/service-providers</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity/service-providers</outputDirectory>
             <includes>
                 <include>*/**</include>
             </includes>
@@ -406,7 +417,8 @@
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity</outputDirectory>
             <includes>
-                <include>**/saml1-assertion-config</include>
+                <include>**/saml1-assertion-config.xml</include>
+                <include>**/oidc-scope-config.xml</include>
                 <include>**/msg-mgt.properties</include>
                 <include>**/entitlement.properties</include>
             </includes>
@@ -422,7 +434,7 @@
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity/service-providers</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity/service-providers</outputDirectory>
             <includes>
-                <include>**/default.xml</include>
+                <include>**/*</include>
             </includes>
         </fileSet>
         <!-- Copying EMM Jaggery app -->
@@ -490,19 +502,19 @@
                 <include>shindig.war</include>
             </includes>
         </fileSet>
+        <fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/portal</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
         <!-- Copying API application-registration related files-->
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
             <includes>
                 <include>api-application-registration.war</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/portal</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal</outputDirectory>
-            <includes>
-                <include>**/*</include>
             </includes>
         </fileSet>
     </fileSets>
@@ -901,6 +913,15 @@
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
+        <!-- Copying output-event-adapters.xml -->
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/output-event-adapters.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
         <!-- Copying axis2.xml -->
         <file>
             <source>src/repository/conf/axis2/axis2.xml</source>
@@ -1003,5 +1024,16 @@
         <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/carbonapps/</outputDirectory>-->
         <!--<fileMode>644</fileMode>-->
         <!--</file>-->
+        <!-- Adding EMM Analytics Dashboard and gadget CApps -->
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/carbonapps/org_wso2_carbon_analytics_cdmf-1.0.0.car</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/carbonapps/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/carbonapps/org_wso2_carbon_analytics_emm-1.0.0.car</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/carbonapps/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
     </files>
 </assembly>

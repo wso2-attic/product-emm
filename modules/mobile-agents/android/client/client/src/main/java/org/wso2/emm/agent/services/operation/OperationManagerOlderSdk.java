@@ -424,11 +424,6 @@ public class OperationManagerOlderSdk extends OperationManager {
     }
 
     @Override
-    public void monitorPolicy(Operation operation) throws AndroidAgentException {
-
-    }
-
-    @Override
     public void enterpriseWipe(Operation operation) throws AndroidAgentException {
         operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
         getResultBuilder().build(operation);

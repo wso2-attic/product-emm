@@ -22,10 +22,10 @@
 </head>
 
 <body>
-<h1>WSO2 Enterprise Mobility Manager 2.0.0</h1>
+<h1>WSO2 Enterprise Mobility Manager 2.2.0</h1>
 
 <p>
-    WSO2 Enterprise Mobility Manager (WSO2 MDM) is a comprehensive platform that helps solve mobile computing challenges
+    WSO2 Enterprise Mobility Manager (WSO2 EMM) is a comprehensive platform that helps solve mobile computing challenges
     enterprises face today when dealing with both corporate owned, personally enabled (COPE) devices and employee owned
     devices as part of a bring your own device (BYOD) program.
 
@@ -37,9 +37,11 @@
 
 <h3>Mobile Device Management</h3>
 <ul>
-    <li>Self-service device enrollment and management with end-user MDM console</li>
+    <li>Facilitate device-owner operations such as registering and unregistering devices, installing, rating, sorting
+        mobile apps, etc.</li>
+    <li>Self-service device enrollment and management with end-user EMM console</li>
     <li>Manage both employee and corporate owned devices (BYOD, COPE)</li>
-    <li>Support for Android, iOS and Windows Mobile</li>
+    <li>Support for Android, iOS and Windows Platforms</li>
     <li>Integrates to enterprise identity systems for device ownership: LDAP, Microsoft AD</li>
     <li>Policy-driven device management for security, data, and device features (Camera, Password Policy)</li>
     <li>Deploy policies over-the-air</li>
@@ -48,13 +50,38 @@
     <li>Securely wipe enterprise configurations from Enterprise Wipe</li>
     <li>Track locations of enrolled devices</li>
     <li>Get reports and analytics</li>
+    <li>Retrieve device information.</li>
+    <li>Facilitate device-owner operations such as registering and unregistering devices, installing, rating, sorting
+        mobile apps, etc.
+    </li>
 </ul>
-<h3>Mobile Data Security</h3>
+<h3>Mobile App Management</h3>
 <ul>
+    <li>Supports App management</li>
+    <li>App approval process through a lifecycle</li>
+    <li>Provision and de-provisioning apps to enrolled devices</li>
+    <li>Provision apps to enrolled devices based on roles</li>
+    <li>Provision apps to multiple enrolled devices per user</li>
+    <li>Retrieve the list of apps</li>
+    <li>Install new apps and update existing apps on iOS devices via REST APIs, enabling automation of application
+        installation/updates for third-party systems/vendors
+    </li>
+    <li>Install Web Clips on devices</li>
+    <li>Enterprise App Store</li>
+    <li>Discover mobile apps through an Enterprise App Store</li>
+    <li>Self-provisioning of mobile apps to devices</li>
+    <li>Rating and Sorting Applications</li>
+    <li>Password reset</li>
+</ul>
+<h3>Device and Data Security</h3>
+<ul>
+    <li>Multi-tenancy to ensure data isolation across all tenants</li>
     <li>Enforce built-in security features of passcode and encryption</li>
     <li>Encryption of data storage</li>
+    <li>Device lock and reset</li>
+    <li>Managed APIs to perform administrative functions</li>
+    <li>Ring and GPS to locate device remotely if lost/stolen</li>
 </ul>
-
 <br/>
 <p>EMM Known issues can be found at <a href="https://wso2.org/jira/browse/EMM">https://wso2.org/jira/browse/EMM</a></p>
 </body>
