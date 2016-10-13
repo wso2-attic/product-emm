@@ -27,6 +27,7 @@ import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.mdm.integration.common.*;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -88,6 +89,16 @@ public class UserManagement extends TestBase {
 //                Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
 //
 //    }
+
+    @Test(description = "Test search user names", dependsOnMethods = {"testAddUser"})
+    public void  testSearchUser() throws Exception {
+        String url = Constants.UserManagement.USER_SEARCH_ENDPOINT + Constants.UserManagement.USER_NAME;
+        MDMResponse response = client.get(url);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.
+                        USER_RESPONSE_PAYLOAD_FILE_NAME,
+                Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
+    }
 
     @Test(description = "Test update user.", dependsOnMethods = {"testAddUser"})
     public void testUpdateUser() throws Exception {

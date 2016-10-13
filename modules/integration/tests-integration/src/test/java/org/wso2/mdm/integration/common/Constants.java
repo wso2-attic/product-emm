@@ -275,6 +275,7 @@ public final class Constants {
         public static final String USER_MANAGEMENT_GROUP = "user-mgt";
         public static final String USER_NAME = "username123";
         public static final String USER_ENDPOINT = "/api/device-mgt/v1.0/users";
+        public static final String USER_SEARCH_ENDPOINT = "/api/device-mgt/v1.0/users/search/usernames?filter=";
         public static final String USER_PAYLOAD_FILE_NAME = "user-payloads.json";
         public static final String USER_ERRONEOUS_PAYLOAD_FILE_NAME = "user-erroneous-payloads.json";
         public static final String USER_RESPONSE_PAYLOAD_FILE_NAME = "user-response-payloads.json";
