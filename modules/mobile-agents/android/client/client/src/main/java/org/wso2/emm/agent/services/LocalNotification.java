@@ -21,9 +21,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.util.Log;
 
-import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.utils.Preference;
 
 /**
@@ -34,17 +34,17 @@ public class LocalNotification {
 
 	private static final String TAG = LocalNotification.class.getSimpleName();
 
-	public static final int DEFAULT_INTERVAL = 30000;
+	public static final int DEFAULT_INTERVAL = 10000;
 	public static final int DEFAULT_INDEX = 0;
-	public static final int DEFAULT_BUFFER = 10000;
+	public static final int DEFAULT_BUFFER = 0;
 	public static final int REQUEST_CODE = 0;
 	public static final String LOCAL_NOTIFIER_INVOKED_PREF_KEY = "localNoticicationInvoked";
 
 	public static void startPolling(Context context) {
-		int interval = Preference.getInt(context, context.getResources().getString(R.string.shared_pref_frequency));
-		if(interval == DEFAULT_INDEX){
-			interval = DEFAULT_INTERVAL;
-		}
+		//int interval = Preference.getInt(context, context.getResources().getString(R.string.shared_pref_frequency));
+		//if(interval == DEFAULT_INDEX){
+			int interval = DEFAULT_INTERVAL;
+		//}
 		long currentTime = DEFAULT_BUFFER;
 		stopPolling(context);
 		if (!Preference.getBoolean(context, LOCAL_NOTIFIER_INVOKED_PREF_KEY)) {
@@ -53,7 +53,7 @@ public class LocalNotification {
 			PendingIntent recurringAlarm = PendingIntent.getBroadcast(context, REQUEST_CODE, alarm,
 							PendingIntent.FLAG_CANCEL_CURRENT);
 			AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-			alarms.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, currentTime, interval, recurringAlarm);
+			alarms.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), interval, recurringAlarm);
 			Log.d(TAG, "Polling started!");
 		}
 	}

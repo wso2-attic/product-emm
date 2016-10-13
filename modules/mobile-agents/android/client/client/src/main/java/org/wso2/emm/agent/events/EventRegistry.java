@@ -22,7 +22,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import org.wso2.emm.agent.events.listeners.ApplicationStateListener;
+
 import org.wso2.emm.agent.utils.Constants;
 
 /**
@@ -46,27 +46,27 @@ public class EventRegistry {
      * Registering events and starting happen here.
      */
     public void register() {
-        eventListeningStarted = true;
-        // First, check if event listening is enabled. If so, check each event is enabled and
-        // Start event listening.
-        if (Constants.EventListeners.EVENT_LISTENING_ENABLED) {
-            if (Constants.EventListeners.APPLICATION_STATE_LISTENER) {
-                // If the listener is implementing broadcast listener, calling start listener
-                // should start listening for events.
-                ApplicationStateListener applicationState = new ApplicationStateListener();
-                applicationState.startListening();
-            }
-            if (Constants.EventListeners.RUNTIME_STATE_LISTENER) {
-                // If the event is running on a scheduled polling, it is only necessary to schedule
-                // the alarm manager. If the same DEFAULT_START_TIME and DEFAULT_INTERVAL
-                // can be used for any new event, there is no need to create a new
-                // scheduled alarm here.
-                EventRegistry.startAlarm(Constants.EventListeners.DEFAULT_LISTENER_CODE,
-                                         Constants.EventListeners.DEFAULT_START_TIME,
-                                         Constants.EventListeners.DEFAULT_INTERVAL);
-            }
-
-        }
+//        eventListeningStarted = true;
+//        // First, check if event listening is enabled. If so, check each event is enabled and
+//        // Start event listening.
+//        if (Constants.EventListeners.EVENT_LISTENING_ENABLED) {
+//            if (Constants.EventListeners.APPLICATION_STATE_LISTENER) {
+//                // If the listener is implementing broadcast listener, calling start listener
+//                // should start listening for events.
+//                ApplicationStateListener applicationState = new ApplicationStateListener();
+//                applicationState.startListening();
+//            }
+//            if (Constants.EventListeners.RUNTIME_STATE_LISTENER) {
+//                // If the event is running on a scheduled polling, it is only necessary to schedule
+//                // the alarm manager. If the same DEFAULT_START_TIME and DEFAULT_INTERVAL
+//                // can be used for any new event, there is no need to create a new
+//                // scheduled alarm here.
+////                EventRegistry.startAlarm(Constants.EventListeners.DEFAULT_LISTENER_CODE,
+////                                         Constants.EventListeners.DEFAULT_START_TIME,
+////                                         Constants.EventListeners.DEFAULT_INTERVAL);
+//            }
+//
+//        }
     }
 
     private static void startAlarm(int requestCode, long startTime, long interval) {

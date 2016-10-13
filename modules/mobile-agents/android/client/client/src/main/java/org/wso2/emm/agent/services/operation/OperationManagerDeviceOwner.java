@@ -746,15 +746,26 @@ public class OperationManagerDeviceOwner extends OperationManager {
     }
 
     private void switchToKioskMode(List<String> appList) {
-        Intent kioskIntent = new Intent(getContext(), KioskAppActivity.class);
-        String listOfApps[] = appList.toArray(new String[appList.size()]);
-        kioskIntent.putExtra(KioskAppActivity.LOCKED_APP_PACKAGE_LIST, listOfApps);
-        getContext().getPackageManager().setComponentEnabledSetting(
-                new ComponentName(getContext().getPackageName(), KioskAppActivity.class.getName()),
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
-        kioskIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getContext().startActivity(kioskIntent);
+
+        DevicePolicyManager devicePolicyManager =
+                (DevicePolicyManager) getContext().getSystemService(Context.DEVICE_POLICY_SERVICE);
+
+
+        ComponentName cdmDeviceAdmin = AgentDeviceAdminReceiver.getComponentName(getContext());
+
+        devicePolicyManager.setLockTaskPackages(cdmDeviceAdmin, appList.toArray(new String[0]));
+
+//        Intent kioskIntent = new Intent(getContext(), KioskAppActivity.class);
+//        String listOfApps[] = appList.toArray(new String[appList.size()]);
+//        kioskIntent.putExtra(KioskAppActivity.LOCKED_APP_PACKAGE_LIST, listOfApps);
+//        getContext().getPackageManager().setComponentEnabledSetting(
+//                new ComponentName(getContext().getPackageName(), KioskAppActivity.class.getName()),
+//                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+//                PackageManager.DONT_KILL_APP);
+//        kioskIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        getContext().startActivity(kioskIntent);
+
+
     }
 
 }

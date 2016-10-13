@@ -48,7 +48,7 @@ public class Constants {
 	public static final String DEFAULT_OWNERSHIP = OWNERSHIP_COPE;
 	// This is set to override the server host name retrieving screen. If overriding is not
 	// needed, set this to null.
-	public static final String DEFAULT_HOST = "ec2-54-82-248-230.compute-1.amazonaws.com";
+	public static final String DEFAULT_HOST = "https://ec2-54-82-248-230.compute-1.amazonaws.com:9443";
 	public static final String APP_MANAGER_HOST = null;
 	public static final String SYSTEM_SERVICE_PACKAGE = "org.wso2.emm.system.service";
 	public static final String AGENT_PACKAGE = "org.wso2.emm.agent";

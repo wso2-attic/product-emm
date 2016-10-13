@@ -18,16 +18,10 @@
 package org.wso2.emm.agent.services;
 
 import android.app.admin.DevicePolicyManager;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
-import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
@@ -130,6 +124,8 @@ public class PolicyComplianceChecker {
             case Constants.Operation.ENABLE_ADMIN:
             case Constants.Operation.SET_SCREEN_CAPTURE_DISABLED:
             case Constants.Operation.SET_STATUS_BAR_DISABLED:
+            case Constants.Operation.KIOSK_APPS:
+            case Constants.Operation.SYSTEM_UPDATE_POLICY:
                 if(applicationManager.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
                     CommonUtils.callSystemApp(context,operation.getCode(),
                                               Boolean.toString(operation.isEnabled()), null);
@@ -138,7 +134,8 @@ public class PolicyComplianceChecker {
                     policy.setCompliance(true);
                     return policy;
                 } else {
-                    throw new AndroidAgentException("Invalid operation code received");
+                    policy.setCompliance(true);
+                    return policy;
                 }
             case Constants.Operation.APP_RESTRICTION:
                 return checkAppRestrictionPolicy(operation);
@@ -445,4 +442,6 @@ public class PolicyComplianceChecker {
         policy.setCompliance(true);
         return policy;
     }
+
+
 }

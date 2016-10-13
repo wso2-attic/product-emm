@@ -58,6 +58,7 @@ public class EnrollmentService extends IntentService implements APIResultCallBac
 
     private void startEnrollment() {
         Log.i(TAG, "EMM auto enrollment initiated.");
+        startPolling();
         if (CommonUtils.
                 isNetworkAvailable(context)) {
             CommonUtils.saveHostDeatils(context, Constants.DEFAULT_HOST);
@@ -124,8 +125,12 @@ public class EnrollmentService extends IntentService implements APIResultCallBac
         if (!isDeviceAdminActive()) {
             startDeviceAdminPrompt();
         }
-        startEvents();
+        //startEvents();
+
         startPolling();
+
+
+
     }
 
     /**

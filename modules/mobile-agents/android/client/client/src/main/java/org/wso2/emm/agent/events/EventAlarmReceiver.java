@@ -49,7 +49,7 @@ public class EventAlarmReceiver extends BroadcastReceiver {
             protected Integer doInBackground(Void... params) {
                 if (requestCode == Constants.EventListeners.DEFAULT_LISTENER_CODE) {
                     RuntimeStateListener runtimeStateListener = new RuntimeStateListener();
-                    runtimeStateListener.startListening();
+                    //runtimeStateListener.startListening();
                 }
                 return requestCode;
             }

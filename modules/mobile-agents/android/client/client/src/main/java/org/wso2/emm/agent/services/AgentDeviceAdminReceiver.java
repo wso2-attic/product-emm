@@ -17,29 +17,32 @@
  */
 package org.wso2.emm.agent.services;
 
+import android.annotation.TargetApi;
+import android.app.admin.DeviceAdminReceiver;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.util.Log;
+import android.widget.Toast;
+
+import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.KioskEnrollmentActivity;
+import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.beans.ServerConfig;
+import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
+import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
+import org.wso2.emm.agent.utils.CommonUtils;
+import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import android.annotation.TargetApi;
-import android.os.Build;
-import org.wso2.emm.agent.AndroidAgentException;
-import org.wso2.emm.agent.R;
-import org.wso2.emm.agent.beans.ServerConfig;
-import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
-import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
-import org.wso2.emm.agent.utils.Constants;
-import org.wso2.emm.agent.utils.Preference;
-import org.wso2.emm.agent.utils.CommonUtils;
-
-import android.app.admin.DeviceAdminReceiver;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.util.Log;
-import android.widget.Toast;
+import static android.security.KeyStore.getApplicationContext;
 
 /**
  * This is the component that is responsible for actual device administration.
@@ -51,6 +54,7 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 
 	private static final String TAG = AgentDeviceAdminReceiver.class.getName();
 	private String regId;
+	public static final String DISALLOW_SAFE_BOOT = "no_safe_boot";
 
 	/**
 	 * Called when this application is approved to be a device administrator.
@@ -159,12 +163,73 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 
 	@Override
 	public void onProfileProvisioningComplete(Context context, Intent intent) {
-		Log.i(TAG, "Provisioning Completed");
-		Preference.putBoolean(context, Constants.PreferenceFlag.SKIP_DEVICE_ACTIVATION, true);
-		Intent launch = new Intent(context, EnableProfileActivity.class);
+//		Log.i(TAG, "Provisioning Completed");
+//		Preference.putBoolean(context, Constants.PreferenceFlag.SKIP_DEVICE_ACTIVATION, true);
+//		Intent launch = new Intent(context, EnableProfileActivity.class);
+//		launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//		context.startActivity(launch);
+
+
+		Preference.putString(context, Constants.PreferenceFlag.NOTIFIER_TYPE, Constants.NOTIFIER_LOCAL);
+		Preference.putInt(context, context.getResources().getString(R.string.shared_pref_frequency),
+				Constants.DEFAULT_INTERVAL);
+
+		DevicePolicyManager devicePolicyManager =
+				(DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+
+
+		ComponentName cdmDeviceAdmin = AgentDeviceAdminReceiver.getComponentName(context);
+
+
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, "org.wso2.emm.agent", "android.permission.READ_PHONE_STATE",
+					DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED);
+			devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, "org.wso2.emm.agent", "android.permission.READ_EXTERNAL_STORAGE",
+					DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED);
+
+			devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, "org.wso2.emm.agent", "android.permission.ACCESS_COARSE_LOCATION",
+					DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED);
+
+			devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, "org.wso2.emm.agent", "android.permission.WRITE_EXTERNAL_STORAGE",
+					DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED);
+
+			devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, "org.wso2.emm.agent", "android.permission.ACCESS_FINE_LOCATION",
+					DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED);
+
+			devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, "org.wso2.emm.agent", "android.permission.ACCESS_FINE_LOCATION",
+					DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED);
+		}
+
+		setUserRestriction(devicePolicyManager, cdmDeviceAdmin, DISALLOW_SAFE_BOOT, true);
+
+
+		devicePolicyManager.setApplicationHidden(cdmDeviceAdmin, Constants.SystemApp.PLAY_STORE, true);
+
+
+
+		//Preference.putBoolean(context, Constants.PreferenceFlag.SKIP_DEVICE_ACTIVATION, true);
+
+		Intent launch = new Intent(context, KioskEnrollmentActivity.class);
 		launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(launch);
+
+
+
+
 	}
+
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+	private void setUserRestriction(DevicePolicyManager devicePolicyManager, ComponentName adminComponentName
+			, String restriction, boolean disallow) {
+		if (disallow) {
+			devicePolicyManager.addUserRestriction(adminComponentName, restriction);
+		} else {
+			devicePolicyManager.clearUserRestriction(adminComponentName, restriction);
+		}
+	}
+
+
 
 	@TargetApi(Build.VERSION_CODES.M)
 	@Override

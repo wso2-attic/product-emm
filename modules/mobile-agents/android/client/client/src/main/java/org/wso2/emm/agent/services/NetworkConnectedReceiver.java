@@ -20,29 +20,43 @@ package org.wso2.emm.agent.services;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import org.wso2.emm.agent.utils.CommonUtils;
-import org.wso2.emm.agent.utils.Constants;
-import org.wso2.emm.agent.utils.Preference;
 
 public class NetworkConnectedReceiver extends BroadcastReceiver {
     private static final String FRESH_BOOTUP_FLAG = "fresh_bootup";
     private static final String TAG = NetworkConnectedReceiver.class.getName();
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "Network change event triggered.");
-        if(!Preference.getBoolean(context, FRESH_BOOTUP_FLAG))	{
-            if (!Preference.getBoolean(context, Constants.PreferenceFlag.REGISTERED) && CommonUtils.
-                    isNetworkAvailable(context)) {
-                if (Constants.AUTO_ENROLLMENT_BACKGROUND_SERVICE_ENABLED) {
-                    Preference.putBoolean(context, FRESH_BOOTUP_FLAG, true);
-                    Intent autoEnrollIntent = new Intent(context, EnrollmentService.class);
-                    autoEnrollIntent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                    autoEnrollIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startServiceAsUser(autoEnrollIntent, android.os.Process.myUserHandle());
-                }
-                CommonUtils.callSystemAppInit(context);
-            }
-        }
+//        Log.i(TAG, "Network change event triggered.");
+//        if(!Preference.getBoolean(context, FRESH_BOOTUP_FLAG))	{
+//            if (!Preference.getBoolean(context, Constants.PreferenceFlag.REGISTERED) && CommonUtils.
+//                    isNetworkAvailable(context)) {
+//                if (Constants.AUTO_ENROLLMENT_BACKGROUND_SERVICE_ENABLED) {
+//                    Preference.putBoolean(context, FRESH_BOOTUP_FLAG, true);
+//                    Intent autoEnrollIntent = new Intent(context, EnrollmentService.class);
+//                    autoEnrollIntent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+//                    autoEnrollIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    context.startServiceAsUser(autoEnrollIntent, android.os.Process.myUserHandle());
+//                }
+//                CommonUtils.callSystemAppInit(context);
+//            }
+//        }
+
+
+
+     //   if (CommonUtils.isNetworkAvailable(context)) {
+         //   Preference.putBoolean(context, FRESH_BOOTUP_FLAG, true);
+//            Intent autoEnrollIntent = new Intent(context, EnrollmentService.class);
+//            autoEnrollIntent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+//            autoEnrollIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            context.startServiceAsUser(autoEnrollIntent, android.os.Process.myUserHandle());
+
+//            Intent launch = new Intent(context, KioskAppActivity.class);
+//            launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            context.startActivity(launch);
+
+       // }
+
+
+
     }
 }

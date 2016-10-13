@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ WSO2 Inc. licenses this file to you under the Apache License,
@@ -410,4 +409,5 @@
     <string name="allow_parent_profile_app_linking">ALLOW_PARENT_PROFILE_APP_LINKING</string>
 
     <string name="setup_cosu_success">COSU mode is enabled</string>
+    <string name="title_activity_kiosk_enrollment">KioskEnrollmentActivity</string>
 </resources>

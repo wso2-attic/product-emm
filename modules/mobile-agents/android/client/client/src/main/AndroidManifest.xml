@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ WSO2 Inc. licenses this file to you under the Apache License,
@@ -46,15 +45,18 @@
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
-    <uses-permission android:name="org.wso2.emm.system.service.permission.ACCESS"/>
-
+    <uses-permission android:name="android.permission.REBOOT" />
+    <uses-permission android:name="org.wso2.emm.system.service.permission.ACCESS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
 
     <permission android:name="android.permission.READ_LOGS" />
-    <permission android:name="org.wso2.emm.agent.permission.ACCESS"
-        android:protectionLevel="signature"></permission>
-    <uses-permission android:name="org.wso2.emm.agent.permission.ACCESS"/>
+    <permission
+        android:name="org.wso2.emm.agent.permission.ACCESS"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="org.wso2.emm.agent.permission.ACCESS" />
+
     <permission
         android:name="org.wso2.emm.agent.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -74,16 +76,16 @@
         <activity
             android:name=".RegistrationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/TopBarTheme"></activity>
+            android:theme="@style/TopBarTheme" />
         <activity
             android:name=".DisplayDeviceInfoActivity"
             android:label="@string/title_activity_display_device_info"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".EnableDeviceAdminActivity"
+            android:excludeFromRecents="true"
             android:label="@string/title_activity_display_device_info"
-            android:screenOrientation="unspecified"
-            android:excludeFromRecents="true"></activity>
+            android:screenOrientation="unspecified" />
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -98,19 +100,18 @@
         </receiver>
         <receiver
             android:name=".services.AgentDeviceAdminReceiver"
-            android:permission="android.permission.BIND_DEVICE_ADMIN"
-            android:exported="true">
+            android:exported="true"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
             <intent-filter>
 
                 <!-- This action is required -->
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
-                <action android:name="android.app.action.PROFILE_PROVISIONING_COMPLETE"/>
+                <action android:name="android.app.action.PROFILE_PROVISIONING_COMPLETE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.app.device_admin"
-                android:resource="@xml/agent_device_admin">
-            </meta-data>
+                android:resource="@xml/agent_device_admin"></meta-data>
         </receiver>
         <receiver android:name=".services.AlarmReceiver" />
         <receiver android:name=".events.EventAlarmReceiver" />
@@ -136,14 +137,14 @@
         </receiver>
         <receiver
             android:name=".services.NotificationReceiver"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
         <receiver
             android:name=".services.SystemServiceResponseReceiver"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -158,19 +159,29 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".events.listeners.AppInstallationListener"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="INSTALL_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".services.ApplicationManagementService"
             android:enabled="true"
-            android:permission="org.wso2.emm.agent.permission.ACCESS"
-            android:exported="true" >
+            android:exported="true"
+            android:permission="org.wso2.emm.agent.permission.ACCESS">
             <intent-filter>
                 <action android:name="org.wso2.emm.agent.START_SERVICE" />
             </intent-filter>
         </service>
-        <service android:name=".services.EnrollmentService"
+        <service
+            android:name=".services.EnrollmentService"
             android:enabled="true"
-            android:permission="org.wso2.emm.agent.permission.ACCESS"
-            android:exported="true">
+            android:exported="true"
+            android:permission="org.wso2.emm.agent.permission.ACCESS">
             <intent-filter>
                 <action android:name="org.wso2.emm.agent.enrollment.START_SERVICE" />
             </intent-filter>
@@ -193,68 +204,79 @@
         <activity
             android:name=".AlreadyRegisteredActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Sherlock"></activity>
+            android:theme="@style/Theme.Sherlock" />
         <activity
             android:name=".AuthenticationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Sherlock"
-            android:windowSoftInputMode="stateUnchanged|adjustPan"></activity>
+            android:windowSoftInputMode="stateUnchanged|adjustPan" />
         <activity
             android:name=".AuthenticationErrorActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".NotifyActivity"
             android:label="@string/title_activity_notify"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ServerDetails"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateUnchanged|adjustPan"></activity>
+            android:windowSoftInputMode="stateUnchanged|adjustPan" />
         <activity
             android:name=".PinCodeActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateUnchanged|adjustPan"></activity>
+            android:windowSoftInputMode="stateUnchanged|adjustPan" />
         <activity
             android:name=".AlertActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"></activity>
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity
             android:name=".LockActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_lock"></activity>
+            android:label="@string/title_activity_lock" />
         <!-- Managed Profile Manifest items -->
         <activity
             android:name=".services.EnableProfileActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".WorkProfileManager"
             android:label="@string/title_activity_notify"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AgentReceptionActivity"
-            android:label="WSO2 Agent">
+            android:label="WSO2 Agent"></activity>
+        <activity
+            android:name=".AppLockActivity"
+            android:label="@string/title_activity_alert"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name=".KioskAppActivity"
+            android:label="@string/kiosk_mode"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+
+        </activity>
+
+        <service
+            android:name=".services.AppLockService"
+            android:exported="false"
+            android:permission="org.wso2.emm.agent.permission.ACCESS" />
+
+        <activity
+            android:name=".KioskEnrollmentActivity"
+            android:label="@string/title_activity_kiosk_enrollment"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
         </activity>
-        <activity
-            android:name=".AppLockActivity"
-            android:label="@string/title_activity_alert"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
-
-        <activity
-                android:name=".KioskAppActivity"
-                android:label="@string/kiosk_mode"
-                android:screenOrientation="portrait"
-                android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
-
-        <service
-            android:name=".services.AppLockService"
-            android:permission="org.wso2.emm.agent.permission.ACCESS"
-            android:exported="false" />
     </application>
+
 </manifest>

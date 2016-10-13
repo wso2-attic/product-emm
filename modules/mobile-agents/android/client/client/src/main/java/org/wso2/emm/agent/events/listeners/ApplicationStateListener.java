@@ -22,13 +22,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
-import org.wso2.emm.agent.AndroidAgentException;
+
 import org.wso2.emm.agent.events.EventRegistry;
-import org.wso2.emm.agent.events.beans.ApplicationStatus;
 import org.wso2.emm.agent.events.beans.EventPayload;
 import org.wso2.emm.agent.events.publisher.HttpDataPublisher;
-import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 
 /**
@@ -71,38 +68,38 @@ public class ApplicationStateListener extends BroadcastReceiver implements Alert
 
     @Override
     public void onReceive(Context context, final Intent intent) {
-        String status = null;
-        ApplicationStatus applicationState;
-        switch (intent.getAction()) {
-            case Intent.ACTION_PACKAGE_ADDED:
-                status = "added";
-                break;
-            case Intent.ACTION_PACKAGE_REMOVED:
-                status = "removed";
-                break;
-            case Intent.ACTION_PACKAGE_REPLACED:
-                status = "upgraded";
-                break;
-            case Intent.ACTION_PACKAGE_DATA_CLEARED:
-                status = "dataCleared";
-                break;
-            default:
-                Log.i(TAG, "Invalid intent received");
-        }
-        if (status != null) {
-            String packageName = intent.getData().getEncodedSchemeSpecificPart();
-            applicationState = new ApplicationStatus();
-            applicationState.setState(status);
-            applicationState.setPackageName(packageName);
-            try {
-                String appState = CommonUtils.toJSON(applicationState);
-                publishEvent(appState, Constants.EventListeners.APPLICATION_STATE);
-                if (Constants.DEBUG_MODE_ENABLED) {
-                    Log.d(TAG, appState);
-                }
-            } catch (AndroidAgentException e) {
-                Log.e(TAG, "Could not convert to JSON");
-            }
-        }
+//        String status = null;
+//        ApplicationStatus applicationState;
+//        switch (intent.getAction()) {
+//            case Intent.ACTION_PACKAGE_ADDED:
+//                status = "added";
+//                break;
+//            case Intent.ACTION_PACKAGE_REMOVED:
+//                status = "removed";
+//                break;
+//            case Intent.ACTION_PACKAGE_REPLACED:
+//                status = "upgraded";
+//                break;
+//            case Intent.ACTION_PACKAGE_DATA_CLEARED:
+//                status = "dataCleared";
+//                break;
+//            default:
+//                Log.i(TAG, "Invalid intent received");
+//        }
+//        if (status != null) {
+//            String packageName = intent.getData().getEncodedSchemeSpecificPart();
+//            applicationState = new ApplicationStatus();
+//            applicationState.setState(status);
+//            applicationState.setPackageName(packageName);
+//            try {
+//                String appState = CommonUtils.toJSON(applicationState);
+//                publishEvent(appState, Constants.EventListeners.APPLICATION_STATE);
+//                if (Constants.DEBUG_MODE_ENABLED) {
+//                    Log.d(TAG, appState);
+//                }
+//            } catch (AndroidAgentException e) {
+//                Log.e(TAG, "Could not convert to JSON");
+//            }
+//        }
     }
 }
