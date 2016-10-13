@@ -40,6 +40,7 @@ public class Constants {
 	public static final String NOTIFIER_GCM = "GCM";
 	public static final String SERVER_PORT = "80";
 	public static final String SERVER_PROTOCOL = "http://";
+	public static final String HTTPS_PROTOCOL = "https://";
 	public static final String API_VERSION = "1.0.0/";
 	public static final String API_SERVER_PORT = "80";
 	public static final String OWNERSHIP_BYOD = "BYOD";

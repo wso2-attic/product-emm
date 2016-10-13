@@ -407,7 +407,7 @@ public class ApplicationManager {
         Preference.putString(context, context.getResources().getString(
                 R.string.app_install_status), context.getResources().getString(
                 R.string.app_status_value_download_started));
-        if (isDownloadManagerAvailable(context)) {
+        if (isDownloadManagerAvailable(context) && !url.contains(Constants.HTTPS_PROTOCOL)) {
             IntentFilter filter = new IntentFilter(
                     DownloadManager.ACTION_DOWNLOAD_COMPLETE);
             context.registerReceiver(downloadReceiver, filter);
