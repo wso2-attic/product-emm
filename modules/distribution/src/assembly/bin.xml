@@ -412,6 +412,10 @@
                 <exclude>styles-layout.css</exclude>
             </excludes>
         </fileSet>
+        <fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/social/</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/social</outputDirectory>
+        </fileSet>
         <!-- Copying synapse-config directory -->
         <fileSet>
             <directory>src/repository/resources</directory>
