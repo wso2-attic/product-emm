@@ -192,15 +192,12 @@
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security</outputDirectory>
             <includes>
-                <include>**/cipher-text.properties</include>
-                <include>**/cipher-tool.properties</include>
                 <include>**/identity_log_token.properties</include>
-                <include>**/Owasp.CsrfGuard.Carbon.properties</include>
                 <include>**/sso-sp-config.properties</include>
                 <include>**/xss-patterns.properties</include>
             </includes>
             <excludes>
-                <exclude>authenticators.xml</exclude>
+                <exclude>**/authenticators.xml</exclude>
             </excludes>
         </fileSet>
         <!-- <fileSet>
@@ -751,6 +748,12 @@
         <file>
             <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity/EndpointConfig.properties</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <!-- Copying sec.policy file -->
+        <file>
+            <source>src/repository/conf/sec.policy</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
             <fileMode>644</fileMode>
         </file>
         <!-- Copying governance.xml -->

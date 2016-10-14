@@ -158,7 +158,6 @@ public abstract class CommonDialogUtils {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(title);
 		builder.setMessage(message).setNeutralButton(neutralBtnLabel, neutralClickListener);
-		builder.show();
 		return builder;
 	}
 
