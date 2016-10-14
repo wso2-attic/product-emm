@@ -344,6 +344,7 @@
                             </tasks>
                         </configuration>
                     </execution>
+
                     <execution>
                         <id>3-extract-docs-from-components</id>
                         <phase>package</phase>
@@ -439,6 +440,62 @@
                         <goals>
                             <goal>run</goal>
                         </goals>
+                    </execution>
+
+                    <execution>
+                        <id>overlay-authentication-endpoint-war</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <echo message="########### Creating APP Authentication Endpoint ##############"/>
+                                <mkdir dir="${basedir}/target/authenticationendpoint/"/>
+                                <mkdir dir="${basedir}/target/authenticationendpoint-dist/"/>
+                                <unzip src="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/authenticationendpoint.war"
+                                       dest="${basedir}/target/authenticationendpoint/">
+                                </unzip>
+                                <copy toDir="${basedir}/target/authenticationendpoint-dist/">
+                                    <fileset dir="${basedir}/target/authenticationendpoint/"/>
+                                </copy>
+                                <copy todir="${basedir}/target/authenticationendpoint-dist/" overwrite="true">
+                                    <fileset dir="${basedir}/src/repository/deployment/server/webapps/authenticationendpoint-overlay/" />
+                                </copy>
+                                <zip destfile="${basedir}/target/authenticationendpoint.war"
+                                     basedir="${basedir}/target/authenticationendpoint-dist"/>
+                                <echo message="######### Done creating APP Authentication Endpoint ###########"/>
+                            </tasks>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+
+            <plugin>
+                <groupId>com.google.code.maven-config-processor-plugin</groupId>
+                <artifactId>config-processor-maven-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>add-custom-security-headers</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <configuration>
+                            <failOnMissingXpath>false</failOnMissingXpath>
+                            <transformations>
+                                <transformation>
+                                    <input>${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/carbon/WEB-INF/web.xml</input>
+                                    <output>../../../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/carbon/WEB-INF/web.xml</output>
+                                    <config>src/repository/conf/custom_security_header_conf.xml</config>
+                                </transformation>
+                            </transformations>
+                            <namespaceContexts>
+                            </namespaceContexts>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
