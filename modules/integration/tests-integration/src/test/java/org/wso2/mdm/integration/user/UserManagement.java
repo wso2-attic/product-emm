@@ -27,9 +27,6 @@ import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.mdm.integration.common.*;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 /**
  * This class contains integration tests for user management backend services.
  */
@@ -54,47 +51,12 @@ public class UserManagement extends TestBase {
         Assert.assertEquals(Constants.EMPTY_ARRAY, jsonObject.get("users").toString());
     }
 
-//    @Test(description = "Test update user without a user", dependsOnMethods = {"testViewUserWithoutUsers"})
-//    public void testUpdateUserWithoutUser() throws Exception {
-//        String url = GetURL(Constants.UserManagement.USER_ENDPOINT);
-//        MDMResponse response = client.put(url,
-//                PayloadGenerator.getJsonPayload(Constants.UserManagement.USER_ERRONEOUS_PAYLOAD_FILE_NAME,
-//                        Constants.HTTP_METHOD_PUT).toString());
-//        Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatus());
-//        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.
-//                        USER_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME,
-//                Constants.HTTP_METHOD_PUT).toString(), response.getBody(), true);
-//
-//    }
-
     @Test(description = "Test add user.")
     public void testAddUser() throws Exception {
         MDMResponse response = client.post(Constants.UserManagement.USER_ENDPOINT,
                 PayloadGenerator.getJsonPayload(Constants.UserManagement.USER_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_POST).toString());
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.
-                        USER_RESPONSE_PAYLOAD_FILE_NAME,
-                Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
-    }
-
-//    @Test(description = "Test add user with erroneous payload")
-//    public void testAddUserWithErroneousPayload() throws IOException {
-//        MDMResponse response = client.post(Constants.UserManagement.USER_ENDPOINT,
-//                PayloadGenerator.getJsonPayload(Constants.UserManagement.USER_ERRONEOUS_PAYLOAD_FILE_NAME,
-//                        Constants.HTTP_METHOD_POST).toString());
-//        Assert.assertEquals(HttpStatus.SC_FORBIDDEN, response.getStatus());
-//        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.
-//                        USER_ERRONEOUS_RESPONSE_PAYLOAD_FILE_NAME,
-//                Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
-//
-//    }
-
-    @Test(description = "Test search user names", dependsOnMethods = {"testAddUser"})
-    public void  testSearchUser() throws Exception {
-        String url = Constants.UserManagement.USER_SEARCH_ENDPOINT + Constants.UserManagement.USER_NAME;
-        MDMResponse response = client.get(url);
-        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(Constants.UserManagement.
                         USER_RESPONSE_PAYLOAD_FILE_NAME,
                 Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
