@@ -40,9 +40,17 @@ public class MDMHomePage {
         this.driver = driver;
         this.uiElementMapper = UIElementMapper.getInstance();
         // Check that we're on the right page.
-        if (!driver.findElement(By.xpath(uiElementMapper.getElement("emm.dashboard.device.div.xpath"))).getText().
-                contains("DEVICES")) {
+        if (!driver.findElement(By.xpath(uiElementMapper.getElement("emm.home.navbar.header.li.xpath"))).getText().toUpperCase().
+                contains("RESOURCE DASHBOARD")) {
             throw new IllegalStateException("This is not the home page");
         }
     }
+
+    public MDMLoginPage logout() throws IOException {
+        driver.findElement(By.xpath(uiElementMapper.getElement("emm.home.navbar.logged.in.user.span"))).click();
+        driver.findElement(By.xpath(uiElementMapper.getElement("emm.home.sign.out.button.xpath"))).click();
+        return new MDMLoginPage(driver);
+    }
+
 }
+

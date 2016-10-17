@@ -72,6 +72,7 @@
                 <exclude>**/plugins/org.wso2.carbon.endpoint.ui*</exclude>
                 <exclude>**/plugins/org.wso2.carbon.inbound.ui*</exclude>
                 <exclude>**/plugins/org.wso2.carbon.rest.api.ui*</exclude>
+                <exclude>**/conf/tomcat/carbon/WEB-INF/web.xml</exclude>
                 <!-- resolving esb not starting issue -->
                 <exclude>**/asm-all_4.1.0.wso2v1.jar</exclude>
 		<exclude>**/slf4j.api_1.6.1.jar</exclude>
@@ -367,9 +368,21 @@
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
             <includes>
-                <include>authenticationendpoint.war</include>
+                <!--<include>authenticationendpoint.war</include>-->
                 <include>oauth2.war</include>
                 <include>dynamic-client-web.war</include>
+            </includes>
+        </fileSet>
+
+        <!-- EMM keeps authenticationendpoint.war itself, since login page has customized. -->
+        <fileSet>
+            <directory>
+                target
+            </directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
+            </outputDirectory>
+            <includes>
+                <include>authenticationendpoint.war</include>
             </includes>
         </fileSet>
         <!--copy jaxrs web app for OAuth feature-->
@@ -395,6 +408,10 @@
                 <exclude>login/**</exclude>
                 <exclude>styles-layout.css</exclude>
             </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/social/</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/social</outputDirectory>
         </fileSet>
         <!-- Copying synapse-config directory -->
         <fileSet>
@@ -531,6 +548,11 @@
         </dependencySet>
     </dependencySets>
     <files>
+        <file>
+            <source>../../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/carbon/WEB-INF/web.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat/carbon/WEB-INF</outputDirectory>
+            <fileMode>755</fileMode>
+        </file>
         <file>
             <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/api#device-mgt#android#v1.0.war</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>

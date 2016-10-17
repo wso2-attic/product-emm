@@ -19,7 +19,10 @@
 package org.wso2.emm.integration.ui.pages.user;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.wso2.emm.integration.ui.pages.UIElementMapper;
 
 import java.io.IOException;
@@ -31,9 +34,18 @@ public class UserAddedPage {
     public UserAddedPage(WebDriver driver) throws IOException {
         this.driver = driver;
         this.uiElementMapper = UIElementMapper.getInstance();
-        // Check that we're on the right page.
-        if (driver.findElement(By.tagName("canvas")) == null) {
-            throw new IllegalStateException("This is not the user added success page");
+        WebDriverWait waitLoad = new WebDriverWait(driver, 10);
+        try {
+            By userCreateMsg  = By.xpath(uiElementMapper.getElement(("emm.users.add.user.created.msg")));
+            waitLoad.until(ExpectedConditions.visibilityOfElementLocated(userCreateMsg));
+            // Check that we're on the right page.
+            String resultText = driver.findElement(userCreateMsg
+            ).getText();
+            if(!resultText.contains("USER WAS ADDED SUCCESSFULLY")){
+                throw new IllegalStateException("User was not created");
+            }
+        } catch (TimeoutException e) {
+            throw new IllegalStateException("User was not created");
         }
     }
 }
