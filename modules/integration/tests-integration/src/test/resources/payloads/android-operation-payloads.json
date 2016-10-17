@@ -14,9 +14,9 @@
   "install_apps" : {
     "operation": {
       "appIdentifier": "package_name",
-      "type": "enterprise/public/webapp",
-      "url": "https://www.youtube.com",
-      "name": "youtube"
+      "type": "application/octet-stream",
+      "url": "file:///home/sameerag/Downloads/androidsense.apk",
+      "name": "androidSense"
     },
     "deviceIDs": []
   },

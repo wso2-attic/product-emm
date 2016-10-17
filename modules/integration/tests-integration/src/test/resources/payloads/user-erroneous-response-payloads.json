@@ -3,11 +3,11 @@
     "errorMessage": "Exception in trying to add user by username: null"
   },
   "PUT": {
-    "errorMessage": "Exception in trying to update user by username: null"
+    "message":"Error occurred while trying to update user \u0027username123\u0027","errorItems":[]
   },
   "DELETE": {
-    "statusCode": 400,
-    "messageFromServer": "User by username: username123 does not exist for removal."
+    "message":"User \u0027username123\u0027 does not exist for removal.",
+    "errorItems":[]
   },
   "GET": {
     "statusCode": 400,

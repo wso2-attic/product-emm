@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -15,8 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.wso2.emm.ui.integration.test.login;
+package org.wso2.emm.ui.integration.test;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
@@ -24,28 +23,23 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.extensions.selenium.BrowserManager;
 import org.wso2.emm.integration.ui.pages.EMMIntegrationUiBaseTestCase;
-import org.wso2.emm.integration.ui.pages.home.MDMHomePage;
-import org.wso2.emm.integration.ui.pages.login.MDMLoginPage;
-import org.wso2.emm.ui.integration.test.Constants;
+import org.wso2.emm.integration.ui.pages.certificateConfiguration.AddCertificatePage;
 
-public class MDMLoginTestCase extends EMMIntegrationUiBaseTestCase {
-
+public class CertificateConfigurationTestCase extends EMMIntegrationUiBaseTestCase{
     private WebDriver driver;
 
-    @BeforeClass(alwaysRun = true, groups = { Constants.LOGIN_GROUP })
+    @BeforeClass(alwaysRun = true)
     public void setUp() throws Exception {
         super.init();
         driver = BrowserManager.getWebDriver();
-        driver.get(getWebAppURL() + Constants.MDM_LOGIN_PATH);
+        LoginUtils.login(driver, automationContext, getWebAppURL());
     }
 
-    @Test(groups = { Constants.LOGIN_GROUP }, description = "verify login to emm console")
-    public void testLogin() throws Exception {
-        MDMLoginPage test = new MDMLoginPage(driver);
-        MDMHomePage home = test.loginAs(automationContext.getSuperTenant().getTenantAdmin().getUserName(),
-                                        automationContext.getSuperTenant().getTenantAdmin().getPassword());
-        home.logout();
-        driver.close();
+    @Test (description = "verify add certificate to emm")
+    public void testAddCertificate() throws Exception {
+        driver.get(getWebAppURL() + Constants.MDM_CERTIFICATE_CONFIG_URL);
+        AddCertificatePage addCertificatePage = new AddCertificatePage(driver);
+        addCertificatePage.addCertificate(Constants.SAMPLE_DEVICE_SERIAL_NO);
     }
 
     @AfterClass(alwaysRun = true)

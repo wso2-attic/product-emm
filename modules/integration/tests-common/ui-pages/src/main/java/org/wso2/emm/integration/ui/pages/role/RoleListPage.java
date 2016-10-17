@@ -43,7 +43,7 @@ public class RoleListPage {
     }
 
     public void addRole(String role) throws  Exception{
-        WebElement addButton = driver.findElement(By.id(uiElementMapper.getElement("emm.roles.add.button")));
+        WebElement addButton = driver.findElement(By.xpath(uiElementMapper.getElement("emm.roles.add.button")));
         addButton.click();
         AddRolePage rolePage = new AddRolePage(driver);
         rolePage.addRole(role);

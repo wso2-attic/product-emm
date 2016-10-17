@@ -56,10 +56,7 @@ public class OracleMobileDeviceManagement extends TestBase {
                 Constants.HTTP_METHOD_POST);
         enrollmentData.addProperty(Constants.DEVICE_IDENTIFIER_KEY, Constants.DEVICE_ID);
         MDMResponse response = client.post(Constants.AndroidEnrollment.ENROLLMENT_ENDPOINT, enrollmentData.toString());
-        Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
-        AssertUtil.jsonPayloadCompare(PayloadGenerator.getJsonPayload(
-                Constants.AndroidEnrollment.ENROLLMENT_RESPONSE_PAYLOAD_FILE_NAME,
-                Constants.HTTP_METHOD_POST).toString(), response.getBody(), true);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         //enroll additional 9 devices
         enrollDevice(Constants.DEVICE_ID_2, Constants.AndroidEnrollment.DEVICE_TWO_ENROLLMENT_DATA);
         enrollDevice(Constants.DEVICE_ID_3, Constants.AndroidEnrollment.DEVICE_THREE_ENROLLMENT_DATA);
