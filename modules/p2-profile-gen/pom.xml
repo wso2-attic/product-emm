@@ -29,6 +29,13 @@
     <name>WSO2 Mobile Device Manager (MDM) - P2 Profile Gen</name>
     <packaging>pom</packaging>
 
+    <repositories>
+        <repository>
+            <id>isCustom</id>
+            <url>https://maven.wso2.org/nexus/content/repositories/orgwso2carbonidentity-1242</url>
+        </repository>
+    </repositories>
+
     <build>
         <plugins>
             <plugin>
@@ -468,6 +475,10 @@
                                 <!-- End of Mediation Features -->
 
                                 <!-- App Manager features-->
+
+                                <featureArtifactDef>
+                                    org.wso2.carbon.identity:org.wso2.carbon.identity.auth.server.feature:1.0.0
+                                </featureArtifactDef>
 
                                 <featureArtifactDef>
                                     org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.core.feature:${appmgt.feature.version}
@@ -1074,6 +1085,11 @@
                                 <!-- End of Mediation Features -->
 
                                 <!-- App management features-->
+
+                                <feature>
+                                    <id>org.wso2.carbon.identity.auth.server.feature.group</id>
+                                    <version>1.0.0</version>
+                                </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.appmgt.core.feature.group</id>
