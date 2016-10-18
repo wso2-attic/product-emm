@@ -11,7 +11,7 @@
 <Server xmlns="http://wso2.org/projects/carbon/carbon.xml">
 
     <ResourceAccessControl>
-      <Resource context="/api/appm/publisher/*" secured="true" http-method="all"/>
+      <Resource context="/api/appm/*" secured="true" http-method="all"/>
     </ResourceAccessControl>
 
     <JDBCPersistenceManager>
