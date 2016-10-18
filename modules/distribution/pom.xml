@@ -22,13 +22,13 @@
     <parent>
         <groupId>org.wso2.mdm</groupId>
         <artifactId>wso2mdm-parent</artifactId>
-        <version>2.2.0-SNAPSHOT</version>
+        <version>2.2.0-BETA2</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wso2emm</artifactId>
-    <version>2.2.0-SNAPSHOT</version>
+    <version>2.2.0-BETA2</version>
     <packaging>pom</packaging>
     <name>WSO2 Mobile Device Manager (MDM) - Distribution</name>
     <description>WSO2 Mobile Device Manager (MDM) Distribution</description>
@@ -450,21 +450,19 @@
                         </goals>
                         <configuration>
                             <tasks>
-                                <echo message="########### Creating APP Authentication Endpoint ##############"/>
-                                <mkdir dir="${basedir}/target/authenticationendpoint/"/>
-                                <mkdir dir="${basedir}/target/authenticationendpoint-dist/"/>
-                                <unzip src="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/authenticationendpoint.war"
-                                       dest="${basedir}/target/authenticationendpoint/">
+                                <echo message="########### Creating APP Authentication Endpoint ##############" />
+                                <mkdir dir="${basedir}/target/authenticationendpoint/" />
+                                <mkdir dir="${basedir}/target/authenticationendpoint-dist/" />
+                                <unzip src="${basedir}/../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/authenticationendpoint.war" dest="${basedir}/target/authenticationendpoint/">
                                 </unzip>
                                 <copy toDir="${basedir}/target/authenticationendpoint-dist/">
-                                    <fileset dir="${basedir}/target/authenticationendpoint/"/>
+                                    <fileset dir="${basedir}/target/authenticationendpoint/" />
                                 </copy>
                                 <copy todir="${basedir}/target/authenticationendpoint-dist/" overwrite="true">
                                     <fileset dir="${basedir}/src/repository/deployment/server/webapps/authenticationendpoint-overlay/" />
                                 </copy>
-                                <zip destfile="${basedir}/target/authenticationendpoint.war"
-                                     basedir="${basedir}/target/authenticationendpoint-dist"/>
-                                <echo message="######### Done creating APP Authentication Endpoint ###########"/>
+                                <zip destfile="${basedir}/target/authenticationendpoint.war" basedir="${basedir}/target/authenticationendpoint-dist" />
+                                <echo message="######### Done creating APP Authentication Endpoint ###########" />
                             </tasks>
                         </configuration>
                     </execution>
