@@ -39,6 +39,7 @@ public class AddPolicyPage {
 
     /**
      * Imitate the create policy function.
+     *
      * @param policyName name of the policy to be added.
      * @throws IOException
      */
@@ -51,8 +52,8 @@ public class AddPolicyPage {
         WebElement policyNameField = driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.name")));
         policyNameField.sendKeys(policyName);
         driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.publish"))).click();
-        String resultText = driver.findElement(By.id(uiElementMapper.getElement("emm.add.policy.publish.created.msg.div")
-        )).getText();
+        String resultText = driver
+                .findElement(By.id(uiElementMapper.getElement("emm.add.policy.publish.created.msg.div"))).getText();
         if (!resultText.contains("POLICY CREATION IS SUCCESSFUL.")) {
             throw new IllegalStateException("Policy was not added");
         }

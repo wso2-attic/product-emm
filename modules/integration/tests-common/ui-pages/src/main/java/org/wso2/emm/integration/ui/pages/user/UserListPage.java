@@ -21,8 +21,11 @@ package org.wso2.emm.integration.ui.pages.user;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.wso2.emm.integration.ui.pages.UIElementMapper;
 
 import java.io.IOException;
@@ -42,10 +45,19 @@ public class UserListPage {
     }
 
     public void deleteUser() throws IOException {
-        WebElement deleteButton = driver.findElement(By.xpath(uiElementMapper.getElement("emm.user.delete.button")));
-        deleteButton.click();
-        WebElement deleteConfirmButton = driver.findElement(By.id(uiElementMapper.getElement("emm.user.delete.button" +
-                                                                                             ".confirm")));
-        deleteConfirmButton.click();
+        WebDriverWait waitLoad = new WebDriverWait(driver, 10);
+        try {
+            By deleteBtnElement = By.xpath(uiElementMapper.getElement(("emm.user.delete.button")));
+            By deleteConfirmBtnElement = By.id(uiElementMapper.getElement(("emm.user.delete.button.confirm")));
+            waitLoad.until(ExpectedConditions.visibilityOfElementLocated(deleteBtnElement));
+            WebElement deleteButton = driver.findElement(deleteBtnElement);
+            deleteButton.click();
+            WebElement deleteConfirmButton = driver
+                    .findElement(deleteConfirmBtnElement);
+            waitLoad.until(ExpectedConditions.visibilityOfElementLocated(deleteConfirmBtnElement));
+            deleteConfirmButton.click();
+        } catch (TimeoutException e) {
+            throw new IllegalStateException("User was not deleted");
+        }
     }
 }

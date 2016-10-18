@@ -21,8 +21,11 @@ package org.wso2.emm.integration.ui.pages.role;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.wso2.emm.integration.ui.pages.UIElementMapper;
 
 import java.io.IOException;
@@ -36,20 +39,29 @@ public class EditRolePage {
         this.driver = driver;
         this.uiElementMapper = UIElementMapper.getInstance();
         // Check that we're on the right page.
-        if (!(driver.getCurrentUrl().contains("roles/edit-role"))) {
+        if (!(driver.getCurrentUrl().contains("role/edit-permission"))) {
             throw new IllegalStateException("This is not the edit role page");
         }
     }
 
     public void editRole(String role){
-        WebElement roleName = driver.findElement(By.id(uiElementMapper.getElement("emm.roles.update.rolename.input")));
-        roleName.sendKeys(role);
-        WebElement addRoleButton = driver.findElement(By.id(uiElementMapper.getElement("emm.roles.update.role.button")));
-        addRoleButton.click();
-        String resultText = driver.findElement(By.id(uiElementMapper.getElement("emm.roles.update.role.created.msg.div")
-        )).getText();
-        if(!resultText.contains("ROLE WAS UPDATED SUCCESSFULLY")){
+        WebDriverWait waitLoad = new WebDriverWait(driver, 10);
+        WebElement permissionItem = driver.findElement(By.xpath(uiElementMapper.getElement("emm.roles.update.permissionItemLogin")));
+        permissionItem.click();
+        WebElement editRoleButton = driver.findElement(By.id(uiElementMapper.getElement("emm.roles.update.role.button")));
+        editRoleButton.click();
+        try {
+            By roleCreatedMsg  = By.xpath(uiElementMapper.getElement(("emm.roles.update.role.created.msg.div")));
+            waitLoad.until(ExpectedConditions.visibilityOfElementLocated(roleCreatedMsg));
+            String resultText = driver.findElement(roleCreatedMsg
+            ).getText();
+
+            if(!resultText.contains("PERMISSIONS WERE ASSIGNED TO THE ROLE SUCCESSFULLY")){
+                throw new IllegalStateException("Role was not edited");
+            }
+        } catch (TimeoutException e) {
             throw new IllegalStateException("Role was not edited");
         }
+
     }
 }
