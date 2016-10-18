@@ -1046,7 +1046,7 @@
 
         <!-- Carbon Mobile Device Management -->
         <carbon.mobile.device.mgt.version>2.2.3</carbon.mobile.device.mgt.version>
-        <mdm.version>2.2.0-SNAPSHOT</mdm.version>
+        <mdm.version>2.2.0-BETA2</mdm.version>
 
         <!-- Carbon API Management -->
         <carbon.api.mgt.version>6.0.5</carbon.api.mgt.version>
