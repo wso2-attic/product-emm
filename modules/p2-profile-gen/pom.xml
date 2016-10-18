@@ -477,7 +477,7 @@
                                 <!-- App Manager features-->
 
                                 <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.identity.auth.server.feature:1.0.0
+                                    org.wso2.carbon.identity:org.wso2.carbon.identity.auth.server.feature:${identity.auth.server.version}
                                 </featureArtifactDef>
 
                                 <featureArtifactDef>
@@ -1088,7 +1088,7 @@
 
                                 <feature>
                                     <id>org.wso2.carbon.identity.auth.server.feature.group</id>
-                                    <version>1.0.0</version>
+                                    <version>${identity.auth.server.version}</version>
                                 </feature>
 
                                 <feature>

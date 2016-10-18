@@ -73,6 +73,7 @@
                 <exclude>**/plugins/org.wso2.carbon.inbound.ui*</exclude>
                 <exclude>**/plugins/org.wso2.carbon.rest.api.ui*</exclude>
                 <exclude>**/conf/tomcat/carbon/WEB-INF/web.xml</exclude>
+		<exclude>**/conf/tomcat/catalina-server.xml</exclude>
                 <!-- resolving esb not starting issue -->
                 <exclude>**/asm-all_4.1.0.wso2v1.jar</exclude>
 		<exclude>**/slf4j.api_1.6.1.jar</exclude>
@@ -1058,6 +1059,12 @@
         <file>
             <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/carbonapps/org_wso2_carbon_analytics_emm-1.0.0.car</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/carbonapps/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <!-- Tomcat catalina-server.xml with changes specific to EMM -->
+        <file>
+            <source>src/repository/conf/tomcat/catalina-server.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat</outputDirectory>
             <fileMode>644</fileMode>
         </file>
     </files>

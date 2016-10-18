@@ -1120,6 +1120,7 @@
         <google.json-simple.version>1.1.1</google.json-simple.version>
         <!-- apache pdfbox version -->
         <orbit.version.pdfbox>1.8.10.wso2v2</orbit.version.pdfbox>
+	<identity.auth.server.version>1.0.0</identity.auth.server.version>
     </properties>
 
     <scm>
