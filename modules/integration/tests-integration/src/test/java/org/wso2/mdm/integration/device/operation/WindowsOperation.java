@@ -18,46 +18,46 @@ import org.wso2.mdm.integration.common.*;
 public class WindowsOperation extends TestBase {
     private RestClient client;
 
-//    @BeforeTest(alwaysRun = true, groups = { Constants.WindowsOperation.WINDOWS_OPERATION_GROUP })
-//    public void initTest() throws Exception {
-//        super.init(TestUserMode.SUPER_TENANT_ADMIN);
-//        String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL);
-//        this.client = new RestClient(backendHTTPURL, Constants.APPLICATION_JSON, accessTokenString);
+    @BeforeTest(alwaysRun = true, groups = { Constants.WindowsOperation.WINDOWS_OPERATION_GROUP })
+    public void initTest() throws Exception {
+        super.init(TestUserMode.SUPER_TENANT_ADMIN);
+        String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL);
+        this.client = new RestClient(backendHTTPURL, Constants.APPLICATION_JSON, accessTokenString);
 
-//    }
-//
-//    @Test(groups = Constants.WindowsOperation.WINDOWS_OPERATION_GROUP, description = "Test Windows device lock operation.")
-//    public void testLock() throws Exception {
-//        HttpResponse response = client.post(Constants.WindowsOperation.LOCK_ENDPOINT,
-//                Constants.WindowsOperation.DEVICE_ID);
-//        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-//    }
-//
-//    @Test(groups = Constants.WindowsOperation.WINDOWS_OPERATION_GROUP, description = "Test Windows device wipe operation.")
-//    public void testWipe() throws Exception {
-//        HttpResponse response = client.post(Constants.WindowsOperation.WIPE_ENDPOINT,
-//                Constants.WindowsOperation.DEVICE_ID);
-//        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-//    }
-//
-//    @Test(groups = Constants.WindowsOperation.WINDOWS_OPERATION_GROUP, description = "Test Windows device ring operation.")
-//    public void testRing() throws Exception {
-//        HttpResponse response = client.post(Constants.WindowsOperation.RING_ENDPOINT,
-//                Constants.WindowsOperation.DEVICE_ID);
-//        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-//    }
-//
-//    @Test(groups = Constants.WindowsOperation.WINDOWS_OPERATION_GROUP, description = "Test Windows device disEnroll operation.")
-//    public void testDisEnroll() throws Exception {
-//        HttpResponse response = client.post(Constants.WindowsOperation.DISENROLL_ENDPOINT,
-//                Constants.WindowsOperation.DEVICE_ID);
-//        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-//    }
-//
-//    @Test(groups = Constants.WindowsOperation.WINDOWS_OPERATION_GROUP, description = "Test Windows device reset operation.")
-//    public void testReset() throws Exception {
-//        HttpResponse response = client.post(Constants.WindowsOperation.RESET_ENDPOINT,
-//                Constants.WindowsOperation.DEVICE_ID);
-//        Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
-//    }
+    }
+
+    @Test(groups = Constants.WindowsOperation.WINDOWS_OPERATION_GROUP, description = "Test Windows device lock operation.")
+    public void testLock() throws Exception {
+        HttpResponse response = client.post(Constants.WindowsOperation.LOCK_ENDPOINT,
+                Constants.WindowsOperation.DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_ACCEPTED, response.getResponseCode());
+    }
+
+    @Test(groups = Constants.WindowsOperation.WINDOWS_OPERATION_GROUP, description = "Test Windows device wipe operation.")
+    public void testWipe() throws Exception {
+        HttpResponse response = client.post(Constants.WindowsOperation.WIPE_ENDPOINT,
+                Constants.WindowsOperation.DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_ACCEPTED, response.getResponseCode());
+    }
+
+    @Test(groups = Constants.WindowsOperation.WINDOWS_OPERATION_GROUP, description = "Test Windows device ring operation.")
+    public void testRing() throws Exception {
+        HttpResponse response = client.post(Constants.WindowsOperation.RING_ENDPOINT,
+                Constants.WindowsOperation.DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_ACCEPTED, response.getResponseCode());
+    }
+
+    @Test(groups = Constants.WindowsOperation.WINDOWS_OPERATION_GROUP, description = "Test Windows device disEnroll operation.")
+    public void testDisEnroll() throws Exception {
+        HttpResponse response = client.post(Constants.WindowsOperation.DISENROLL_ENDPOINT,
+                Constants.WindowsOperation.DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_ACCEPTED, response.getResponseCode());
+    }
+
+    @Test(groups = Constants.WindowsOperation.WINDOWS_OPERATION_GROUP, description = "Test Windows device reset operation.")
+    public void testReset() throws Exception {
+        HttpResponse response = client.post(Constants.WindowsOperation.RESET_ENDPOINT,
+                Constants.WindowsOperation.DEVICE_ID);
+        Assert.assertEquals(HttpStatus.SC_ACCEPTED, response.getResponseCode());
+    }
 }

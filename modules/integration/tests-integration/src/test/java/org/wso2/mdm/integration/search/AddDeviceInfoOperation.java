@@ -31,8 +31,8 @@ import org.wso2.mdm.integration.common.RestClient;
 import org.wso2.mdm.integration.common.TestBase;
 
 public class AddDeviceInfoOperation extends TestBase {
-
     private RestClient client;
+    private static final String ANDROID_DEVICE_MGT_API = "/api/device-mgt/android/v1.0";
 
     @BeforeTest(alwaysRun = true, groups = { Constants.AndroidEnrollment.ENROLLMENT_GROUP })
     public void initTest() throws Exception {
@@ -42,9 +42,10 @@ public class AddDeviceInfoOperation extends TestBase {
     }
 
 
-    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device location operation.")
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device location "
+            + "operation.")
     public void testLocation() throws Exception {
-        HttpResponse response = client.post(Constants.AndroidOperations.LOCATION_ENDPOINT,
+        HttpResponse response = client.post(ANDROID_DEVICE_MGT_API + Constants.AndroidOperations.LOCATION_ENDPOINT,
                 Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD);
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
@@ -52,16 +53,17 @@ public class AddDeviceInfoOperation extends TestBase {
     @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android device information " +
             "operation.")
     public void testDeviceInfo() throws Exception {
-
-        HttpResponse response = client.post(Constants.AndroidOperations.DEVICE_INFO_ENDPOINT,
+        HttpResponse response = client.post(ANDROID_DEVICE_MGT_API + Constants.AndroidOperations.DEVICE_INFO_ENDPOINT,
                 Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD);
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 
-    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android application list operation.")
+    @Test(groups = Constants.AndroidOperations.OPERATIONS_GROUP, description = "Test Android application list "
+            + "operation.")
     public void testApplicationList() throws Exception {
-        HttpResponse response = client.post(Constants.AndroidOperations.APPLICATION_LIST_ENDPOINT,
-                Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD);
+        HttpResponse response = client
+                .post(ANDROID_DEVICE_MGT_API + Constants.AndroidOperations.APPLICATION_LIST_ENDPOINT,
+                        Constants.AndroidOperations.COMMAND_OPERATION_PAYLOAD);
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getResponseCode());
     }
 }

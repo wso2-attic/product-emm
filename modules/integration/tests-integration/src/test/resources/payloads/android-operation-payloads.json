@@ -28,7 +28,6 @@
   },
   "upgrade-firmware" : {
       "operation": {
-        "schedule": "schedule"
       },
       "deviceIDs": []
     },

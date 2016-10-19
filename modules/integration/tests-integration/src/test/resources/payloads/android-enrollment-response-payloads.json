@@ -1,13 +1,15 @@
 {
   "POST": {
-    "responseMessage":"Android device, which carries the id '1234' has successfully been enrolled"
+    "responseCode": "OK",
+    "responseMessage": "Android device, which carries the id \u00271234\u0027 has successfully been enrolled"
   },
   "PUT": {
     "responseCode": "Accepted",
     "responseMessage": "Device enrollment has updated successfully"
   },
   "GET": {
-    "responseMessage": "Android device that carries the id '1234' is enrolled"
+    "responseCode": "OK",
+    "responseMessage": "Android device that carries the id \u00271234\u0027 is enrolled"
   },
   "DELETE": {
     "responseMessage": "Android device that carries id '1234' has successfully dis-enrolled"

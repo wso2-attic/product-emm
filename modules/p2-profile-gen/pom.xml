@@ -29,13 +29,6 @@
     <name>WSO2 Mobile Device Manager (MDM) - P2 Profile Gen</name>
     <packaging>pom</packaging>
 
-    <repositories>
-        <repository>
-            <id>isCustom</id>
-            <url>https://maven.wso2.org/nexus/content/repositories/orgwso2carbonidentity-1242</url>
-        </repository>
-    </repositories>
-
     <build>
         <plugins>
             <plugin>

@@ -41,7 +41,7 @@
         <module>modules/features</module>
         <module>modules/p2-profile-gen</module>
         <module>modules/distribution</module>
-        <!--module>modules/integration</module-->
+        <module>modules/integration</module>
     </modules>
 
     <dependencyManagement>
@@ -1093,8 +1093,7 @@
         <caramel.version>1.0.1</caramel.version>
 
         <!-- App manager version-->
-        <appmgt.feature.version>1.2.5-SNAPSHOT</appmgt.feature.version>
-
+        <appmgt.feature.version>1.2.4</appmgt.feature.version>
         <!-- Carbon Store version-->
         <carbon.store.version>1.4.3</carbon.store.version>
         <!-- Cipher tool version-->
@@ -1110,8 +1109,8 @@
 
         <!-- Carbon Dashboards version-->
         <carbon.dashboards.version>2.0.3</carbon.dashboards.version>
-        <carbon.analytics.cdmf.version>1.0.1-SNAPSHOT</carbon.analytics.cdmf.version>
-        <carbon.analytics.emm.version>1.0.1-SNAPSHOT</carbon.analytics.emm.version>
+        <carbon.analytics.cdmf.version>1.0.2-SNAPSHOT</carbon.analytics.cdmf.version>
+        <carbon.analytics.emm.version>1.0.2-SNAPSHOT</carbon.analytics.emm.version>
 
         <!-- EMM QSG properties -->
         <apache.httpclient.version>4.5.2</apache.httpclient.version>
