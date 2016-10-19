@@ -30,6 +30,7 @@ import org.wso2.mdm.integration.common.*;
  */
 public class MobileDeviceManagementWithNoDevices extends TestBase {
     private MDMHttpClient client;
+    private static final String RESPONSE_BODY = "{\"devices\":[],\"count\":0}";
 
     @BeforeClass(alwaysRun = true, groups = {Constants.MobileDeviceManagement.MOBILE_DEVICE_MANAGEMENT_GROUP})
     public void initTest() throws Exception {
@@ -42,14 +43,14 @@ public class MobileDeviceManagementWithNoDevices extends TestBase {
     public void testCountDevicesWithNoDevices() throws Exception {
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_DEVICE_COUNT_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-        Assert.assertEquals(Constants.ZERO, response.getBody());
+        AssertUtil.jsonPayloadCompare(RESPONSE_BODY, response.getBody(), true);
     }
 
     @Test(description = "Test view devices with no added devices")
     public void testViewDevicesWithNoDevices() throws Exception {
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-        Assert.assertEquals(Constants.EMPTY_ARRAY, response.getBody());
+        AssertUtil.jsonPayloadCompare(RESPONSE_BODY, response.getBody(), true);
     }
 
 }

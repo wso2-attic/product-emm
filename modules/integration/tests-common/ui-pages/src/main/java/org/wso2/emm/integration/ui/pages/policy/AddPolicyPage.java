@@ -20,19 +20,24 @@ package org.wso2.emm.integration.ui.pages.policy;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.wso2.emm.integration.ui.pages.CommonUtil;
 import org.wso2.emm.integration.ui.pages.UIElementMapper;
 
 import java.io.IOException;
+import java.util.List;
 
 public class AddPolicyPage {
     private WebDriver driver;
+    private Actions actions;
     private UIElementMapper uiElementMapper;
 
     public AddPolicyPage(WebDriver driver) throws IOException {
         this.driver = driver;
+        this.actions = new Actions(driver);
         this.uiElementMapper = UIElementMapper.getInstance();
         // Check that we're on the right page.
-        if (!(driver.getCurrentUrl().contains("policies/add-policy"))) {
+        if (!(driver.getCurrentUrl().contains("policy/add"))) {
             throw new IllegalStateException("This is not the add policy page");
         }
     }
@@ -42,20 +47,44 @@ public class AddPolicyPage {
      *
      * @param policyName name of the policy to be added.
      * @throws IOException
+     * @throws InterruptedException
      */
-    public void addPolicy(String policyName) throws IOException {
-        driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.platform.android"))).click();
-        driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.profile.camera"))).click();
-        driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.profile.checkbox.camera"))).click();
-        driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.profile.continue"))).click();
-        driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.groups.continue"))).click();
-        WebElement policyNameField = driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.name")));
+    public void addPolicy(String policyName) throws IOException, InterruptedException {
+        driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.add.platform.android"))).click();
+        //configure policy
+        WebElement enableElement = driver
+                .findElement(By.xpath(uiElementMapper.getElement("emm.policy.add.profile.passcode.enable")));
+        actions.moveToElement(enableElement).click().build().perform();
+        CommonUtil.waitAndClick(driver,
+                By.xpath(uiElementMapper.getElement("emm.policy.add.profile.continue.button.xpath")));
+        //Group Tab
+        CommonUtil.waitAndClick(driver,
+                By.xpath(uiElementMapper.getElement("emm.policy.add.groups.continue.button.xpath")));
+        //Publish Policy Tab
+        WebElement policyNameField = driver
+                .findElement(By.xpath(uiElementMapper.getElement("emm.policy.add.name.input.xpath")));
         policyNameField.sendKeys(policyName);
-        driver.findElement(By.xpath(uiElementMapper.getElement("emm.add.policy.publish"))).click();
-        String resultText = driver
-                .findElement(By.id(uiElementMapper.getElement("emm.add.policy.publish.created.msg.div"))).getText();
+        driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.add.publish.button.xpath"))).click();
+        String resultText = driver.findElement(By.id(uiElementMapper.getElement("emm.policy.add.publish.created.msg")))
+                .getText();
         if (!resultText.contains("POLICY CREATION IS SUCCESSFUL.")) {
             throw new IllegalStateException("Policy was not added");
+        }
+    }
+
+    /**
+     * Imitates adding multiple policies action
+     *
+     * @param policyNameList policy name list.
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void addMultiplePolicy(List<String> policyNameList) throws IOException, InterruptedException {
+        addPolicy(policyNameList.get(0));
+        policyNameList.remove(0);
+        for (String policyName : policyNameList) {
+            driver.findElement(By.xpath(uiElementMapper.getElement("emm.policy.add.add.another.link"))).click();
+            addPolicy(policyName);
         }
     }
 }

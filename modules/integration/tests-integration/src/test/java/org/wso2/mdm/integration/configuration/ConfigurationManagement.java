@@ -57,12 +57,14 @@ public class ConfigurationManagement extends TestBase {
                         Constants.ConfigurationManagement.CONFIGURATION_RESPONSE_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_GET).toString(), response.getBody(), true);
     }
-//    @Test(description = "Test get configuration with erroneous end point.",
-//            dependsOnMethods = { "testSaveConfiguration"})
-//    public void testGetConfigurationWithErroneousEndPoint() throws Exception {
-//        MDMResponse response = client.get(Constants.ConfigurationManagement.CONFIGURATION_ERRONEOUS_ENDPOINT);
-//        Assert.assertEquals(HttpStatus.SC_UNAUTHORIZED, response.getStatus());
-//        Assert.assertEquals(Constants.ConfigurationManagement.CONFIGURATION_ERRONEOUS_RESPONSE, response.getBody());
-//    }
 
+    @Test(description = "Test get configuration with erroneous end point.",
+            dependsOnMethods = { "testSaveConfiguration"})
+    public void testGetConfigurationWithErroneousEndPoint() throws Exception {
+        try {
+            client.get(Constants.ConfigurationManagement.CONFIGURATION_ERRONEOUS_ENDPOINT);
+        } catch (Exception e) {
+            Assert.assertTrue(e.getMessage().contains("HTTP response code: 400"));
+        }
+    }
 }

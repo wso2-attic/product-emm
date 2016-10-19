@@ -48,6 +48,20 @@ public class MDMLoginTestCase extends EMMIntegrationUiBaseTestCase {
         driver.close();
     }
 
+    @Test(groups = { Constants.LOGIN_GROUP }, description = "verify change password and login.", dependsOnMethods = { "testLogin"})
+    public void testPasswordChange() throws Exception {
+        String tempPwd = "admin";
+        String userName = automationContext.getSuperTenant().getTenantAdmin().getUserName();
+        String password = automationContext.getSuperTenant().getTenantAdmin().getPassword();
+        MDMLoginPage login = new MDMLoginPage(driver);
+        MDMHomePage home = login.loginAs(userName, password);
+        home.changePassword(userName, password, tempPwd);
+        login = home.logout();
+        home = login.loginAs(userName, tempPwd);
+        home.changePassword(userName, tempPwd, password);
+        home.logout();
+    }
+
     @AfterClass(alwaysRun = true)
     public void tearDown() throws Exception {
         driver.quit();
