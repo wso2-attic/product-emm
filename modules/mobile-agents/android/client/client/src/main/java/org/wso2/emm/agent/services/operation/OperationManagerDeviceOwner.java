@@ -745,6 +745,17 @@ public class OperationManagerDeviceOwner extends OperationManager {
         }
     }
 
+    @Override
+    public void setLockDownTimePolicy(Operation operation) throws AndroidAgentException {
+        try {
+            JSONObject payload = new JSONObject(operation.getPayLoad().toString());
+            Preference.putString(getContext(), Constants.PreferenceFlag.LOCK_DOWN_TIME, payload.getString("lockdownTime"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private void switchToKioskMode(List<String> appList) {
 
         DevicePolicyManager devicePolicyManager =

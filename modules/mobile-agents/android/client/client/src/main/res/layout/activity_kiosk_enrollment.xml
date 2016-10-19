@@ -43,12 +43,22 @@
         android:layout_alignStart="@+id/buttonStart" />
 
     <TextView
-        android:text="KIOSK MODE"
+        android:text="WSO2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView3"
+        android:id="@+id/textViewKiosk"
         android:textSize="40sp"
         android:textColor="@color/common_signin_btn_light_text_disabled"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="Please click here to launch the app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewKiosk"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:visibility="invisible"
+        android:id="@+id/textViewLaunch" />
 </RelativeLayout>

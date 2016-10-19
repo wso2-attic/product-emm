@@ -20,11 +20,14 @@ package org.wso2.emm.agent.services;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.KioskLockActivity;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.WiFiConfig;
@@ -35,8 +38,12 @@ import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -90,6 +97,8 @@ public class PolicyComplianceChecker {
                 return checkWifiPolicy(operation);
             case Constants.Operation.WORK_PROFILE:
                 return checkWorkProfilePolicy(operation);
+            case Constants.Operation.LOCK_DOWN_TIME:
+                return checkLockDownTime(operation);
             case Constants.Operation.DISALLOW_ADJUST_VOLUME:
             case Constants.Operation.DISALLOW_CONFIG_BLUETOOTH:
             case Constants.Operation.DISALLOW_CONFIG_CELL_BROADCASTS:
@@ -397,7 +406,7 @@ public class PolicyComplianceChecker {
      * @return policy - ComplianceFeature object.
      */
     private ComplianceFeature checkWorkProfilePolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
-        String profileName;
+            String profileName;
         String systemAppsData;
         String googlePlayAppsData;
         try {
@@ -441,6 +450,41 @@ public class PolicyComplianceChecker {
         }
         policy.setCompliance(true);
         return policy;
+    }
+
+
+    private ComplianceFeature checkLockDownTime(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+        DateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        String lockDownTimeString = Preference.getString(context, Constants.PreferenceFlag.LOCK_DOWN_TIME);
+        Log.d(TAG, "Policy monitor lockdown time: " + lockDownTimeString);
+        String currentTimeString = sdf.format(new Date());
+
+        try {
+            Date lockDownTime = sdf.parse(lockDownTimeString);
+            Date currentTime = sdf.parse(currentTimeString);
+
+            if(lockDownTime.before(currentTime) || lockDownTime.equals(currentTime)){
+                policy.setCompliance(true);
+                policy.setMessage("time policy compliance failed");
+                if(Preference.getBoolean(context, "IS_LOCKED_DEVICE") == false){
+                    Log.d(TAG, "Launching Lock");
+                    Preference.putBoolean(context, "IS_LOCKED_DEVICE", true);
+                    Intent i = new Intent(context, KioskLockActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(i);
+                }
+
+                return policy;
+            }else{
+                Log.d(TAG, "time policy compliance");
+                policy.setCompliance(true);
+            }
+
+        } catch (ParseException e) {
+            throw new AndroidAgentException("Invalid time format.", e);
+        }
+        return  policy;
+
     }
 
 

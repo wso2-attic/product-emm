@@ -476,7 +476,10 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 					new String[]{android.Manifest.permission.READ_PHONE_STATE,
 							android.Manifest.permission.ACCESS_COARSE_LOCATION,
 							android.Manifest.permission.ACCESS_FINE_LOCATION,
-							android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+							android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+							android.Manifest.permission.WRITE_SECURE_SETTINGS,
+							android.Manifest.permission.WRITE_SETTINGS
+					},
 					110);
 		}else{
 			getConfigurationsFromServer();

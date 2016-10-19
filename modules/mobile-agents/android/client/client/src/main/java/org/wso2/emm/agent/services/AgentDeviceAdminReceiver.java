@@ -23,6 +23,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
@@ -41,8 +42,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
-
-import static android.security.KeyStore.getApplicationContext;
 
 /**
  * This is the component that is responsible for actual device administration.
@@ -180,6 +179,8 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 
 		ComponentName cdmDeviceAdmin = AgentDeviceAdminReceiver.getComponentName(context);
 
+		devicePolicyManager.setLockTaskPackages(cdmDeviceAdmin, new String[]{"org.wso2.emm.agent"});
+
 
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -199,18 +200,28 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 
 			devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, "org.wso2.emm.agent", "android.permission.ACCESS_FINE_LOCATION",
 					DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED);
+
+			devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, "org.wso2.emm.agent", "android.permission.WRITE_SETTINGS",
+					DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED);
+
+			devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, "org.wso2.emm.agent", "android.permission.WRITE_SECURE_SETTINGS",
+					DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED);
+
+			devicePolicyManager.setStatusBarDisabled(cdmDeviceAdmin, true);
 		}
 
 		setUserRestriction(devicePolicyManager, cdmDeviceAdmin, DISALLOW_SAFE_BOOT, true);
 
 
-		devicePolicyManager.setApplicationHidden(cdmDeviceAdmin, Constants.SystemApp.PLAY_STORE, true);
-
-
 
 		//Preference.putBoolean(context, Constants.PreferenceFlag.SKIP_DEVICE_ACTIVATION, true);
 
+
 		Intent launch = new Intent(context, KioskEnrollmentActivity.class);
+		context.getPackageManager().setComponentEnabledSetting(
+				new ComponentName(context.getPackageName(), KioskEnrollmentActivity.class.getName()),
+				PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+				PackageManager.DONT_KILL_APP);
 		launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(launch);
 

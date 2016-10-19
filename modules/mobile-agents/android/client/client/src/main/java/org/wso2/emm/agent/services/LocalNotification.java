@@ -49,23 +49,25 @@ public class LocalNotification {
 		stopPolling(context);
 		if (!Preference.getBoolean(context, LOCAL_NOTIFIER_INVOKED_PREF_KEY)) {
 			Preference.putBoolean(context, LOCAL_NOTIFIER_INVOKED_PREF_KEY, true);
-			Intent alarm = new Intent(context, AlarmReceiver.class);
+			Intent alarm = new Intent(context, AlarmNotificationReceiver.class);
 			PendingIntent recurringAlarm = PendingIntent.getBroadcast(context, REQUEST_CODE, alarm,
 							PendingIntent.FLAG_CANCEL_CURRENT);
 			AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 			alarms.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), interval, recurringAlarm);
 			Log.d(TAG, "Polling started!");
 		}
+
 	}
 
 	public static void stopPolling(Context context) {
 		if (Preference.getBoolean(context, LOCAL_NOTIFIER_INVOKED_PREF_KEY)) {
 			Preference.putBoolean(context, LOCAL_NOTIFIER_INVOKED_PREF_KEY, false);
-			Intent alarm = new Intent(context, AlarmReceiver.class);
+			Intent alarm = new Intent(context, AlarmNotificationReceiver.class);
 			PendingIntent sender = PendingIntent.getBroadcast(context, REQUEST_CODE, alarm, DEFAULT_INDEX);
 			AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 			alarmManager.cancel(sender);
 			Log.d(TAG, "Polling stopped!");
 		}
 	}
+
 }

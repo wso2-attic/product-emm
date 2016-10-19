@@ -17,15 +17,11 @@
 
 package org.wso2.emm.agent.services;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.utils.Constants;
-
-import java.util.List;
 
 /**
  * This class is used to create specific operation with respect to
@@ -94,6 +90,8 @@ public class PolicyOperationsMapper {
 			case Constants.Operation.KIOSK_APPS:
 			case Constants.Operation.SYSTEM_UPDATE_POLICY:
 				return buildKioskOperation(operation);
+			case Constants.Operation.LOCK_DOWN_TIME:
+				return buildLockDowntime(operation);
 			default:
 				throw new AndroidAgentException("Invalid operation code received");
 		}
@@ -165,6 +163,11 @@ public class PolicyOperationsMapper {
 	}
 
 	private Operation buildKioskOperation(Operation operation) {
+		operation.setId(INVALID_FLAG);
+		return operation;
+	}
+
+	private Operation buildLockDowntime(Operation operation) {
 		operation.setId(INVALID_FLAG);
 		return operation;
 	}

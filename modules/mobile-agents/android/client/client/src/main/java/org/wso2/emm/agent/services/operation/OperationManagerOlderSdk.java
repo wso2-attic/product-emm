@@ -23,7 +23,6 @@ import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -631,6 +630,14 @@ public class OperationManagerOlderSdk extends OperationManager {
     }
 
     public void enableKioskMode(Operation operation) throws AndroidAgentException {
+        operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+        operation.setOperationResponse("Operation not supported.");
+        getResultBuilder().build(operation);
+        Log.d(TAG, "Operation not supported.");
+    }
+
+    @Override
+    public void setLockDownTimePolicy(Operation operation) throws AndroidAgentException {
         operation.setStatus(getContextResources().getString(R.string.operation_value_error));
         operation.setOperationResponse("Operation not supported.");
         getResultBuilder().build(operation);

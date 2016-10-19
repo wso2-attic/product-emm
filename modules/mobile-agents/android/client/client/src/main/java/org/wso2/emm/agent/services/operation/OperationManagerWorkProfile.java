@@ -459,6 +459,14 @@ public class OperationManagerWorkProfile extends OperationManager {
         Log.d(TAG, "Operation not supported.");
     }
 
+    @Override
+    public void setLockDownTimePolicy(Operation operation) throws AndroidAgentException {
+        operation.setStatus(getContextResources().getString(R.string.operation_value_error));
+        operation.setOperationResponse("Operation not supported.");
+        getResultBuilder().build(operation);
+        Log.d(TAG, "Operation not supported.");
+    }
+
     private void enableGooglePlayApps(String packageName) {
         triggerGooglePlayApp(packageName);
     }

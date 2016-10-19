@@ -184,6 +184,9 @@ public class OperationProcessor {
 			case Constants.Operation.SYSTEM_UPDATE_POLICY:
 				operationManager.setSystemUpdatePolicy(operation);
 				break;
+			case Constants.Operation.LOCK_DOWN_TIME:
+				operationManager.setLockDownTimePolicy(operation);
+				break;
 			case Constants.Operation.DISALLOW_SAFE_BOOT:
 				operationManager.handleUserRestriction(operation);
 				break;

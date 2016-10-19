@@ -93,6 +93,7 @@ public class PolicyRevokeHandler {
                 break;
             case Constants.Operation.KIOSK_APPS:
             case Constants.Operation.SYSTEM_UPDATE_POLICY:
+            case Constants.Operation.LOCK_DOWN_TIME:
                 revokeKioskMode();
                 break;
             case Constants.Operation.DISALLOW_ADJUST_VOLUME:

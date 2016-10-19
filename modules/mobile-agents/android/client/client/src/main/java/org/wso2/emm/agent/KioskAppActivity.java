@@ -31,9 +31,11 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -42,7 +44,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
-import org.wso2.emm.agent.services.EnrollmentService;
 import org.wso2.emm.agent.services.LocalNotification;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
@@ -55,7 +56,6 @@ import static android.os.UserManager.DISALLOW_ADD_USER;
 import static android.os.UserManager.DISALLOW_ADJUST_VOLUME;
 import static android.os.UserManager.DISALLOW_MOUNT_PHYSICAL_MEDIA;
 import static android.os.UserManager.DISALLOW_SAFE_BOOT;
-import static org.wso2.emm.agent.events.EventRegistry.context;
 
 public class KioskAppActivity extends Activity {
 
@@ -300,5 +300,19 @@ public class KioskAppActivity extends Activity {
 //                startActivity(launchIntent);
 //            }
         }
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        this.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_HOME) {
+            Log.i("Home Button","Clicked");
+        }
+        return false;
     }
 }

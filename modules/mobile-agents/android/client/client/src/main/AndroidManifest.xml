@@ -49,6 +49,7 @@
     <uses-permission android:name="org.wso2.emm.system.service.permission.ACCESS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <permission android:name="android.permission.READ_LOGS" />
     <permission
@@ -111,9 +112,10 @@
 
             <meta-data
                 android:name="android.app.device_admin"
-                android:resource="@xml/agent_device_admin"></meta-data>
+                android:resource="@xml/agent_device_admin" />
         </receiver>
         <receiver android:name=".services.AlarmReceiver" />
+        <receiver android:name=".services.AlarmNotificationReceiver" />
         <receiver android:name=".events.EventAlarmReceiver" />
         <receiver
             android:name=".services.DeviceStartupIntentReceiver"
@@ -159,9 +161,16 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".events.listeners.AppInstallationListener"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="INSTALL_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".KioskEnrollmentActivity$AppInstallationBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="INSTALL_COMPLETED" />
@@ -244,7 +253,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".AgentReceptionActivity"
-            android:label="WSO2 Agent"></activity>
+            android:label="WSO2 Agent" />
         <activity
             android:name=".AppLockActivity"
             android:label="@string/title_activity_alert"
@@ -254,9 +263,7 @@
             android:name=".KioskAppActivity"
             android:label="@string/kiosk_mode"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-
-        </activity>
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
 
         <service
             android:name=".services.AppLockService"
@@ -265,16 +272,18 @@
 
         <activity
             android:name=".KioskEnrollmentActivity"
-            android:label="@string/title_activity_kiosk_enrollment"
+            android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
+        </activity>
+        <activity android:name=".KioskLockActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:screenOrientation="portrait">
 
         </activity>
     </application>

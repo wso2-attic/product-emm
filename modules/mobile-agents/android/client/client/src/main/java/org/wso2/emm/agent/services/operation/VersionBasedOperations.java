@@ -182,4 +182,6 @@ public interface VersionBasedOperations {
 
     void enableKioskMode(Operation operation) throws AndroidAgentException;
 
+    void setLockDownTimePolicy(Operation operation) throws AndroidAgentException;
+
 }

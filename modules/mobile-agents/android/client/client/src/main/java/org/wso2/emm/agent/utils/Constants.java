@@ -333,6 +333,7 @@ public class Constants {
 		public static final String SILENT_UNINSTALL_APPLICATION = "SILENT_UNINSTALL_APPLICATION";
 		public static final String APP_RESTRICTION = "APP-RESTRICTION";
 		public static final String WORK_PROFILE= "WORK_PROFILE";
+		public static final String LOCK_DOWN_TIME= "LOCKDOWN_TIME_POLICY";
 		public static final String GET_APPLICATION_LIST = "GET_APP_LIST";
 		public static final String UNINSTALL_WEBCLIP = "UNINSTALL_WEBCLIP";
 		public static final String GET_APP_DOWNLOAD_PROGRESS = "APP_DOWNLOAD_PROGRESS";
@@ -486,6 +487,7 @@ public class Constants {
 		public static final String CURRENT_INSTALLING_APP = "installingApplication";
 		public static final String KIOSK_MODE = "kiosk";
 		public static final String IS_LOCKED = "lock";
+		public static final String LOCK_DOWN_TIME = "lockdowntime";
 	}
 
 	public final class AppRestriction {

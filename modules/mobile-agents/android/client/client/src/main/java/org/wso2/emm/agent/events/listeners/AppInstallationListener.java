@@ -11,6 +11,8 @@ import android.content.Intent;
 
 import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
 
+import static android.app.admin.DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED;
+
 public class AppInstallationListener extends BroadcastReceiver {
 
     @Override
@@ -23,14 +25,31 @@ public class AppInstallationListener extends BroadcastReceiver {
 
         String packageName =  intent.getStringExtra("packageName");
 
-        devicePolicyManager.setLockTaskPackages(cdmDeviceAdmin, new String[]{packageName});
+
+
+        devicePolicyManager.setLockTaskPackages(cdmDeviceAdmin, new String[]{"org.wso2.emm.agent", packageName});
+
+
+        devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, packageName, "android.permission.ACCESS_FINE_LOCATION", PERMISSION_GRANT_STATE_GRANTED);
+        devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, packageName, "android.permission.CAMERA", PERMISSION_GRANT_STATE_GRANTED);
+        devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, packageName, "android.permission.GET_ACCOUNTS", PERMISSION_GRANT_STATE_GRANTED);
+        devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, packageName, "android.permission.MANAGE_ACCOUNTS", PERMISSION_GRANT_STATE_GRANTED);
+        devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, packageName, "android.permission.READ_CONTACTS", PERMISSION_GRANT_STATE_GRANTED);
+        devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, packageName, "android.permission.READ_EXTERNAL_STORAGE", PERMISSION_GRANT_STATE_GRANTED);
+        devicePolicyManager.setPermissionGrantState(cdmDeviceAdmin, packageName, "android.permission.WRITE_EXTERNAL_STORAGE", PERMISSION_GRANT_STATE_GRANTED);
+
+
+
 
 
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-        launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (launchIntent != null) {
-            context.startActivity(launchIntent);
-        }
+            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (launchIntent != null) {
+                context.startActivity(launchIntent);
+            }
+
+
 
     }
 }
+
