@@ -28,9 +28,11 @@ import org.wso2.carbon.automation.extensions.selenium.BrowserManager;
 import org.wso2.emm.integration.ui.pages.EMMIntegrationUiBaseTestCase;
 import org.wso2.emm.integration.ui.pages.policy.AddPolicyPage;
 import org.wso2.emm.integration.ui.pages.policy.EditPolicyPage;
+import org.wso2.emm.integration.ui.pages.policy.PolicyPriorityPage;
 import org.wso2.emm.integration.ui.pages.policy.RemovePolicyPage;
-import org.wso2.emm.integration.ui.pages.user.AddUserPage;
-import org.wso2.emm.integration.ui.pages.user.UserListPage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PolicyTestCase extends EMMIntegrationUiBaseTestCase {
 
@@ -48,21 +50,35 @@ public class PolicyTestCase extends EMMIntegrationUiBaseTestCase {
     public void testAddPolicy() throws Exception {
         driver.get(getWebAppURL() + Constants.MDM_POLICY_ADD_URL);
         AddPolicyPage addPolicyPage = new AddPolicyPage(driver);
-        addPolicyPage.addPolicy("Camera");
+        addPolicyPage.addPolicy("PassCode");
     }
 
-    @Test(description = "verify edit role to emm", dependsOnMethods = { "testAddPolicy" })
+    @Test(description = "verify edit policy in emm", dependsOnMethods = { "testAddPolicy" })
     public void testEditPolicy() throws Exception {
         driver.get(getWebAppURL() + GetURL(Constants.MDM_POLICY_EDIT_URL));
         EditPolicyPage editPolicyPage = new EditPolicyPage(driver);
         editPolicyPage.editPolicy("Encryption");
     }
 
+    @Test(description = "Verify editing policy priority")
+    public void testPolicyPriority() throws Exception {
+        driver.get(getWebAppURL() + GetURL(Constants.MDM_POLICY_ADD_URL));
+        AddPolicyPage addPolicyPage = new AddPolicyPage(driver);
+        List<String> policyNameList = new ArrayList<>();
+        policyNameList.add("policy1");
+        policyNameList.add("policy2");
+        policyNameList.add("policy3");
+        addPolicyPage.addMultiplePolicy(policyNameList);
+        driver.get(getWebAppURL() + GetURL(Constants.MDM_POLICY_PRIORITY_URL));
+        PolicyPriorityPage policyPriorityPage = new PolicyPriorityPage(driver);
+        policyPriorityPage.changePolicyPriority();
+    }
+
     @Test(description = "verify remove role to emm", dependsOnMethods = { "testEditPolicy" })
     public void testRemovePolicy() throws Exception {
         driver.get(getWebAppURL() + GetURL(Constants.MDM_POLICY_URL));
         RemovePolicyPage removePolicyPage = new RemovePolicyPage(driver);
-        removePolicyPage.PolicyList();
+        removePolicyPage.removePolicy();
     }
 
     @AfterClass(alwaysRun = true)

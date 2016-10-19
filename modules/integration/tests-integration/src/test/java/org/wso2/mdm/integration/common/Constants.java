@@ -124,13 +124,13 @@ public final class Constants {
             throw new AssertionError();
         }
 
-        public static final String DISCOVERY_GET_URL = "/mdm-windows-agent/services/discovery/get";
-        public static final String DISCOVERY_POST_URL = "/mdm-windows-agent/services/discovery/post";
-        public static final String BSD_URL = "/mdm-windows-agent/services/federated/bst/authentication";
-        public static final String MS_EXCEP = "/mdm-windows-agent/services/certificatepolicy/xcep";
+        public static final String DISCOVERY_GET_URL = "/api/device-mgt/windows/v1.0/services/discovery/get";
+        public static final String DISCOVERY_POST_URL = "/api/device-mgt/windows/v1.0/services/discovery/post";
+        public static final String BSD_URL = "/api/device-mgt/windows/v1.0/services/federated/bst/authentication";
+        public static final String MS_EXCEP = "/api/device-mgt/windows/v1.0/services/certificatepolicy/xcep";
         public static final String WINDOWS_ENROLLMENT_GROUP = "windows-enrollment";
-        public static final String WSTEP_URL = "/mdm-windows-agent/services/deviceenrolment/wstep";
-        public static final String SYNC_ML_URL = "/mdm-windows-agent/services/syncml/devicemanagement/request";
+        public static final String WSTEP_URL = "/api/device-mgt/windows/v1.0/services/deviceenrolment/wstep";
+        public static final String SYNC_ML_URL = "/api/device-mgt/windows/v1.0/services/syncml/devicemanagement/request";
         public static final String DISCOVERY_POST_FILE = "windows" + File.separator + "enrollment" + File
                 .separator + "discovery-post.xml";
         public static final String MS_XCEP_FILE =
@@ -149,6 +149,7 @@ public final class Constants {
             throw new AssertionError();
         }
 
+        public static final String ANDROID_DEVICE_MGT_API = "/api/device-mgt/android/v1.0";
         public static final String OPERATION_PAYLOAD_FILE_NAME = "android-operation-payloads.json";
         public static final String OPERATIONS_GROUP = "operations";
         public static final String COMMAND_OPERATION_PAYLOAD = "[\"" + DEVICE_ID + "\"]";
@@ -173,29 +174,29 @@ public final class Constants {
         public static final String DEVICE_LIST_START_INDEX = "1";
         public static final String DEVICE_LIST_LENGTH = "10";
         public static final String OPERATION_ENDPOINT = "/mdm-android-agent/operation/";
-        public static final String LOCK_ENDPOINT = "/mdm-android-agent/operation/lock";
-        public static final String UNLOCK_ENDPOINT = "/mdm-android-agent/operation/unlock";
-        public static final String LOCATION_ENDPOINT = "/api/device-mgt/android/v1.0/admin/devices/location";
-        public static final String CLEAR_PASSWORD_ENDPOINT = "/mdm-android-agent/operation/clear-password";
-        public static final String CAMERA_ENDPOINT = "/mdm-android-agent/operation/camera";
-        public static final String DEVICE_INFO_ENDPOINT = "/mdm-android-agent/operation/device-info";
-        public static final String ENTERPRISE_WIPE_ENDPOINT = "/mdm-android-agent/operation/enterprise-wipe";
-        public static final String WIPE_DATA_ENDPOINT = "/mdm-android-agent/operation/wipe-data";
-        public static final String APPLICATION_LIST_ENDPOINT = "/mdm-android-agent/operation/application-list";
-        public static final String RING_ENDPOINT = "/mdm-android-agent/operation/ring-device";
-        public static final String REBOOT_ENDPOINT = "/mdm-android-agent/operation/reboot-device";
-        public static final String UPGRADE_FIRMWARE_ENDPOINT = "/mdm-android-agent/operation/upgrade-firmware";
-        public static final String VPN_ENDPOINT = "/mdm-android-agent/operation/vpn";
-        public static final String MUTE_ENDPOINT = "/mdm-android-agent/operation/mute";
-        public static final String INSTALL_APPS_ENDPOINT = "/api/device-mgt/android/v1.0/admin/devices/install-application";
-        public static final String UNINSTALL_APPS_ENDPOINT = "/mdm-android-agent/operation/uninstall-application";
-        public static final String BLACKLIST_APPS_ENDPOINT = "/mdm-android-agent/operation/blacklist-applications";
+        public static final String LOCK_ENDPOINT = "/admin/devices/lock-devices";
+        public static final String UNLOCK_ENDPOINT = "/admin/devices/unlock-devices";
+        public static final String LOCATION_ENDPOINT = "/admin/devices/location";
+        public static final String CLEAR_PASSWORD_ENDPOINT = "/admin/devices/clear-password";
+        public static final String CAMERA_ENDPOINT = "/admin/devices/control-camera";
+        public static final String DEVICE_INFO_ENDPOINT = "/admin/devices/info";
+        public static final String ENTERPRISE_WIPE_ENDPOINT = "/admin/devices/enterprise-wipe";
+        public static final String WIPE_DATA_ENDPOINT = "/admin/devices/wipe";
+        public static final String APPLICATION_LIST_ENDPOINT = "/admin/devices/applications";
+        public static final String RING_ENDPOINT = "/admin/devices/ring";
+        public static final String REBOOT_ENDPOINT = "/admin/devices/reboot";
+        public static final String UPGRADE_FIRMWARE_ENDPOINT = "/admin/devices/upgrade-firmware";
+        public static final String VPN_ENDPOINT = "/admin/devices/configure-vpn";
+        public static final String MUTE_ENDPOINT = "/admin/devices/mute";
+        public static final String INSTALL_APPS_ENDPOINT = "/admin/devices/install-application";
+        public static final String UNINSTALL_APPS_ENDPOINT = "/admin/devices/uninstall-application";
+        public static final String BLACKLIST_APPS_ENDPOINT = "/admin/devices/blacklist-applications";
         public static final String NOTIFICATION_ENDPOINT = "/api/device-mgt/android/v1.0/admin/devices/send-notification";
-        public static final String WIFI_ENDPOINT = "/mdm-android-agent/operation/wifi";
-        public static final String ENCRYPT_ENDPOINT = "/mdm-android-agent/operation/encrypt";
-        public static final String CHANGE_LOCK_ENDPOINT = "/mdm-android-agent/operation/change-lock-code";
-        public static final String PASSWORD_POLICY_ENDPOINT = "/mdm-android-agent/operation/password-policy";
-        public static final String WEB_CLIP_ENDPOINT = "/mdm-android-agent/operation/webclip";
+        public static final String WIFI_ENDPOINT = "/admin/devices/configure-wifi";
+        public static final String ENCRYPT_ENDPOINT = "/admin/devices/encrypt-storage";
+        public static final String CHANGE_LOCK_ENDPOINT = "/admin/devices/change-lock-code";
+        public static final String PASSWORD_POLICY_ENDPOINT = "/admin/devices/set-password-policy";
+        public static final String WEB_CLIP_ENDPOINT = "/admin/devices/set-webclip";
     }
 
     public static final class WindowsOperation {
@@ -204,11 +205,11 @@ public final class Constants {
         public static final String WINDOWS_OPERATION_GROUP = "windows-operations";
         public static final String DEVICE_ID = "[urn:uuid:FAEFB2D5-1771-5446-A635-797AFC474895]";
 
-        public static final String LOCK_ENDPOINT = "/windows/operations/lock";
-        public static final String WIPE_ENDPOINT = "/windows/operations/data-wipe";
-        public static final String RING_ENDPOINT = "/windows/operations/ring";
-        public static final String DISENROLL_ENDPOINT = "/windows/operations/disenroll";
-        public static final String RESET_ENDPOINT = "/windows/operations/lock-reset";
+        public static final String LOCK_ENDPOINT = "/services/windows/operations/lock";
+        public static final String WIPE_ENDPOINT = "/services/windows/operations/data-wipe";
+        public static final String RING_ENDPOINT = "/services/windows/operations/ring";
+        public static final String DISENROLL_ENDPOINT = "/services/windows/operations/disenroll";
+        public static final String RESET_ENDPOINT = "/services/windows/operations/lock-reset";
     }
 
     public static final class AndroidDeviceManagement {
@@ -254,7 +255,7 @@ public final class Constants {
         public static final String OPERATION_MANAGEMENT_GROUP = "api-policy-mgt";
         public static final String GET_DEVICE_APPS_ENDPOINT = "/mdm-admin/operations/android/";
         public static final String GET_DEVICE_OPERATIONS_ENDPOINT = "/mdm-admin/operations/android/";
-        public static final String GET_DEVICE_LIST_OPERATIONS_END_POINT = "/mdm-admin/operations/paginate/android/";
+        public static final String GET_DEVICE_LIST_OPERATIONS_END_POINT = "/api/device-mgt/android/v1.0/devices";
     }
 
     public static final class MobileDeviceManagement {
@@ -308,8 +309,8 @@ public final class Constants {
 
         public static final String POLICY_MANAGEMENT_GROUP = "policy-mgt";
         public static final String ADD_POLICY_ENDPOINT= "/api/device-mgt/v1.0/policies";
-        public static final String GET_ALL_POLICIES_ENDPOINT = "/mdm-admin/policies";
-        public static final String POLICY_PRIORITIES_ENDPOINT = "/mdm-admin/policies/priorities";
+        public static final String GET_ALL_POLICIES_ENDPOINT = "/api/device-mgt/v1.0/policies";
+        public static final String POLICY_PRIORITIES_ENDPOINT = "/api/device-mgt/v1.0/policies/priorities";
 
         public static final String ANDROID_POLICY_PAYLOAD_FILE_NAME = "android-policy-payloads.json";
         public static final String ANDROID_POLICY_WORK_PROFILE_PAYLOAD_FILE_NAME = "android-policy-work-profile-payload.json";
@@ -392,28 +393,25 @@ public final class Constants {
     }
 
     public static final class DashboardAPIChecker {
-        private DashboardAPIChecker() { throw new AssertionError(); }
+        private DashboardAPIChecker() {
+            throw new AssertionError();
+        }
 
         public static final String DASHBOARD_TEST_CASES_GROUP = "dashboard-test-cases";
-        public static final String DEVICE_COUNT_OVERVIEW_API_ENDPOINT =
-            "/mdm-admin/dashboard/device-count-overview";
+        public static final String DASHBOARD_ENDPOINT = "/api/device-mgt/v1.0/dashboard";
+        public static final String DEVICE_COUNT_OVERVIEW_API_ENDPOINT = "/device-count-overview";
         public static final String DEVICE_COUNTS_BY_POTENTIAL_VULNERABILITIES_API_ENDPOINT =
-            "/mdm-admin/dashboard/device-counts-by-potential-vulnerabilities";
+                "/device-counts-by-potential-vulnerabilities";
         public static final String NON_COMPLIANT_DEVICE_COUNTS_BY_FEATURES_API_ENDPOINT =
-            "/mdm-admin/dashboard/non-compliant-device-counts-by-features?start=0&length=5";
-        public static final String DEVICE_COUNTS_BY_GROUPS_API_ENDPOINT =
-            "/mdm-admin/dashboard/device-counts-by-groups";
+                "/non-compliant-device-counts-by-features?start=0&length=5";
+        public static final String DEVICE_COUNTS_BY_GROUPS_API_ENDPOINT = "/device-counts-by-groups";
         public static final String FEATURE_NON_COMPLIANT_DEVICE_COUNTS_BY_GROUPS_API_ENDPOINT =
-            "/mdm-admin/dashboard/feature-non-compliant-device-counts-by-groups?non-compliant-feature-code=ABC";
-        public static final String FILTERED_DEVICE_COUNT_OVER_TOTAL_API_ENDPOINT =
-            "/mdm-admin/dashboard/filtered-device-count-over-total";
-        public static final String FEATURE_NON_COMPLIANT_DEVICE_COUNT_OVER_TOTAL_API_ENDPOINT =
-            "/mdm-admin/dashboard/feature-non-compliant-device-count-over-total?non-compliant-feature-code=ABC";
-        public static final String DEVICES_WITH_DETAILS_API_ENDPOINT =
-            "/mdm-admin/dashboard/devices-with-details?pagination-enabled=false";
+                "/feature-non-compliant-device-counts-by-groups?non-compliant-feature-code=ABC";
+        public static final String FILTERED_DEVICE_COUNT_OVER_TOTAL_API_ENDPOINT = "/filtered-device-count-over-total";
+        public static final String FEATURE_NON_COMPLIANT_DEVICE_COUNT_OVER_TOTAL_API_ENDPOINT = ""
+                + "/feature-non-compliant-device-count-over-total?non-compliant-feature-code=ABC";
+        public static final String DEVICES_WITH_DETAILS_API_ENDPOINT = "/devices-with-details?pagination-enabled=false";
         public static final String FEATURE_NON_COMPLIANT_DEVICES_WITH_DETAILS_API_ENDPOINT =
-            "/mdm-admin/dashboard/feature-non-compliant-devices-with-details" +
-                "?non-compliant-feature-code=ABC&pagination-enabled=false";
+                "/feature-non-compliant-devices-with-details?non-compliant-feature-code=ABC&pagination-enabled=false";
     }
-
 }

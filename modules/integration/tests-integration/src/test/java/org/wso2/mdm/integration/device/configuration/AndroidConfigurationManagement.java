@@ -46,10 +46,7 @@ public class AndroidConfigurationManagement extends TestBase {
                 PayloadGenerator.getJsonPayload(Constants.AndroidConfigurationManagement.PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_PUT).toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
-//        AssertUtil.jsonPayloadCompare(PayloadGenerator
-//                .getJsonPayload(Constants.AndroidConfigurationManagement.RESPONSE_PAYLOAD_FILE_NAME,
-//                        Constants.HTTP_METHOD_PUT).toString(), response.getData().toString(), true);
-        Assert.assertEquals(Constants.AndroidConfigurationManagement.RESPONSE_PAYLOAD, response.getData().toString());
+        Assert.assertTrue(response.getData().contains("Android platform configuration has been updated successfully."));
     }
 
     @Test(description = "Test get android configuration.", dependsOnMethods = { "testModifyConfiguration" })
@@ -58,6 +55,6 @@ public class AndroidConfigurationManagement extends TestBase {
         Assert.assertEquals(HttpStatus.SC_OK, response.getResponseCode());
         AssertUtil.jsonPayloadCompare(PayloadGenerator
                 .getJsonPayload(Constants.AndroidConfigurationManagement.PAYLOAD_FILE_NAME,
-                        Constants.HTTP_METHOD_PUT).toString(), response.getData().toString(), true);
+                        Constants.HTTP_METHOD_PUT).toString(), response.getData(), true);
     }
 }
