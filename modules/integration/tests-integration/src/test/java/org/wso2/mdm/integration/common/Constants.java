@@ -263,7 +263,7 @@ public final class Constants {
         public static final String MOBILE_DEVICE_MANAGEMENT_GROUP = "mobile-device-mgt";
         public static final String GET_DEVICE_COUNT_ENDPOINT = "/api/device-mgt/v1.0/devices";
         public static final String NO_OF_DEVICES = "10";
-        public static final String GET_ALL_DEVICES_ENDPOINT ="/api/device-mgt/v1.0/admin/devices";
+        public static final String GET_ALL_DEVICES_ENDPOINT ="/api/device-mgt/v1.0/devices";
         public static final String VIEW_DEVICE_TYPES_ENDPOINT = "/mdm-admin/devices/types";
         public static final String VIEW_DEVICE_RESPONSE_PAYLOAD_FILE_NAME =
                                                         "mobile-device-mgt-view-device-types-response-payloads.json";
@@ -309,8 +309,8 @@ public final class Constants {
 
         public static final String POLICY_MANAGEMENT_GROUP = "policy-mgt";
         public static final String ADD_POLICY_ENDPOINT= "/api/device-mgt/v1.0/policies";
-        public static final String GET_ALL_POLICIES_ENDPOINT = "/mdm-admin/policies";
-        public static final String POLICY_PRIORITIES_ENDPOINT = "/mdm-admin/policies/priorities";
+        public static final String GET_ALL_POLICIES_ENDPOINT = "/api/device-mgt/v1.0/policies";
+        public static final String POLICY_PRIORITIES_ENDPOINT = "/api/device-mgt/v1.0/policies/priorities";
 
         public static final String ANDROID_POLICY_PAYLOAD_FILE_NAME = "android-policy-payloads.json";
         public static final String ANDROID_POLICY_WORK_PROFILE_PAYLOAD_FILE_NAME = "android-policy-work-profile-payload.json";
