@@ -1045,7 +1045,7 @@
         <carbon.device.mgt.version.range>[1.1.1, 2.0.0)</carbon.device.mgt.version.range>
 
         <!-- Carbon Mobile Device Management -->
-        <carbon.mobile.device.mgt.version>2.2.3</carbon.mobile.device.mgt.version>
+        <carbon.mobile.device.mgt.version>2.2.4-SNAPSHOT</carbon.mobile.device.mgt.version>
         <mdm.version>2.2.0-SNAPSHOT</mdm.version>
 
         <!-- Carbon API Management -->
@@ -1093,8 +1093,7 @@
         <caramel.version>1.0.1</caramel.version>
 
         <!-- App manager version-->
-        <appmgt.feature.version>1.2.4</appmgt.feature.version>
-
+        <appmgt.feature.version>1.2.5-SNAPSHOT</appmgt.feature.version>
         <!-- Carbon Store version-->
         <carbon.store.version>1.4.4</carbon.store.version>
         <!-- Cipher tool version-->
@@ -1120,7 +1119,7 @@
         <google.json-simple.version>1.1.1</google.json-simple.version>
         <!-- apache pdfbox version -->
         <orbit.version.pdfbox>1.8.10.wso2v2</orbit.version.pdfbox>
-	<identity.auth.server.version>1.0.0</identity.auth.server.version>
+	<identity.auth.server.version>1.0.1</identity.auth.server.version>
     </properties>
 
     <scm>
