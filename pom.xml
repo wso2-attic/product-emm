@@ -1045,7 +1045,7 @@
         <carbon.device.mgt.version.range>[1.1.1, 2.0.0)</carbon.device.mgt.version.range>
 
         <!-- Carbon Mobile Device Management -->
-        <carbon.mobile.device.mgt.version>2.2.4-SNAPSHOT</carbon.mobile.device.mgt.version>
+        <carbon.mobile.device.mgt.version>2.2.5-SNAPSHOT</carbon.mobile.device.mgt.version>
         <mdm.version>2.2.0-SNAPSHOT</mdm.version>
 
         <!-- Carbon API Management -->
