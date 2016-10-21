@@ -21,14 +21,14 @@
     <parent>
         <groupId>org.wso2.mdm</groupId>
         <artifactId>wso2mdm-tools</artifactId>
-        <version>2.1.1</version>
+        <version>2.1.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.mdm</groupId>
     <artifactId>emm-qsg</artifactId>
-    <version>2.1.1</version>
+    <version>2.1.2-SNAPSHOT</version>
     <name>WSO2 EMM QSG tools</name>
     <description>This includes the tools for EMM QSG</description>
     <packaging>jar</packaging>
