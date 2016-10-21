@@ -76,7 +76,7 @@ public class AndroidPolicyManagement extends TestBase {
                         Constants.PolicyManagement.ANDROID_POLICY_PAYLOAD_FILE_NAME,
                         Constants.HTTP_METHOD_PUT).toString());
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-        Assert.assertEquals(Constants.PolicyManagement.UPDATE_POLICY_RESPONSE,response.getBody());
+        Assert.assertEquals(Constants.PolicyManagement.UPDATE_POLICY_RESPONSE, response.getBody());
     }
 
     @Test(description = "Test update policy with erroneous payload.", dependsOnMethods = { "testAddPolicy"})
