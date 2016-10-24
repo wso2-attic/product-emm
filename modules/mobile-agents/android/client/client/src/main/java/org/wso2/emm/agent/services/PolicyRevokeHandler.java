@@ -259,6 +259,9 @@ public class PolicyRevokeHandler {
     private void revokePasswordPolicy() {
         devicePolicyManager.setPasswordQuality(deviceAdmin,
                                                DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED);
+        devicePolicyManager.setMaximumFailedPasswordsForWipe(deviceAdmin, 0);
+        devicePolicyManager.setPasswordExpirationTimeout(deviceAdmin, 0);
+        devicePolicyManager.setPasswordMinimumLength(deviceAdmin, 0);
     }
 
     /**
