@@ -20,6 +20,7 @@ package org.wso2.emm.agent.services.operation;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -481,12 +482,26 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         if (Constants.DEBUG_MODE_ENABLED) {
             Log.d(TAG, "triggerGooglePlayApp started.");
         }
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setData(Uri.parse(Constants.GOOGLE_PLAY_APP_URI + packageName));
-        context.startActivity(intent);
-        if (Constants.DEBUG_MODE_ENABLED) {
-            Log.d(TAG, "triggerGooglePlayApp called app store.");
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setData(Uri.parse(Constants.GOOGLE_PLAY_APP_URI + packageName));
+            context.startActivity(intent);
+            Preference.putString(context, context.getResources().getString(
+                    R.string.app_install_status), context.getResources().getString(
+                    R.string.app_status_value_download_completed));
+            if (Constants.DEBUG_MODE_ENABLED) {
+                Log.d(TAG, "triggerGooglePlayApp called app store.");
+            }
+        } catch (ActivityNotFoundException e) {
+            String error = "App store is not installed.";
+            // Handling the exception when the market place is missing in the device
+            Log.e(TAG, error, e);
+            Preference.putString(context, context.getResources().getString(
+                    R.string.app_install_status), context.getResources().getString(
+                    R.string.app_status_value_download_failed));
+            Preference.putString(context, context.getResources().getString(
+                    R.string.app_install_failed_message), error);
         }
     }
 
