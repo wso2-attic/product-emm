@@ -487,21 +487,18 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.setData(Uri.parse(Constants.GOOGLE_PLAY_APP_URI + packageName));
             context.startActivity(intent);
-            Preference.putString(context, context.getResources().getString(
-                    R.string.app_install_status), context.getResources().getString(
-                    R.string.app_status_value_download_completed));
+            Preference.putString(context, context.getResources().getString(R.string.app_install_status),
+                    context.getResources().getString(R.string.app_status_value_download_completed));
             if (Constants.DEBUG_MODE_ENABLED) {
                 Log.d(TAG, "triggerGooglePlayApp called app store.");
             }
         } catch (ActivityNotFoundException e) {
-            String error = "App store is not installed.";
+            String error = "App store is not installed. Cannot install the app";
             // Handling the exception when the market place is missing in the device
             Log.e(TAG, error, e);
-            Preference.putString(context, context.getResources().getString(
-                    R.string.app_install_status), context.getResources().getString(
-                    R.string.app_status_value_download_failed));
-            Preference.putString(context, context.getResources().getString(
-                    R.string.app_install_failed_message), error);
+            Preference.putString(context, context.getResources().getString(R.string.app_install_status),
+                    context.getResources().getString(R.string.app_status_value_download_failed));
+            Preference.putString(context, context.getResources().getString(R.string.app_install_failed_message), error);
         }
     }
 
