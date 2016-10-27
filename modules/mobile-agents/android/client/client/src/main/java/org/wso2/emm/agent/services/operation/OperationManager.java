@@ -482,13 +482,12 @@ public abstract class OperationManager implements APIResultCallBack, VersionBase
         if (Constants.DEBUG_MODE_ENABLED) {
             Log.d(TAG, "triggerGooglePlayApp started.");
         }
+
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.setData(Uri.parse(Constants.GOOGLE_PLAY_APP_URI + packageName));
             context.startActivity(intent);
-            Preference.putString(context, context.getResources().getString(R.string.app_install_status),
-                    context.getResources().getString(R.string.app_status_value_download_completed));
             if (Constants.DEBUG_MODE_ENABLED) {
                 Log.d(TAG, "triggerGooglePlayApp called app store.");
             }
