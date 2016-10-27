@@ -47,14 +47,14 @@ public class CertificateManagement extends TestBase {
         Assert.assertEquals(HttpStatus.SC_CREATED, response.getStatus());
     }
 
-    @Test(description = "Test get certificate.")
+    @Test(description = "Test get certificate.", dependsOnMethods = {"testAddCertificate"})
     public void testGetCertificate() throws Exception {
         MDMResponse response = client.get(Constants.CertificateManagement.CERTIFICATE_GET_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
         Assert.assertTrue(response.getBody().contains(Constants.CertificateManagement.CERTIFICATE_PAYLOAD));
     }
 
-    @Test(description = "Test get all certificate.")
+    @Test(description = "Test get all certificate.", dependsOnMethods = {"testAddCertificate"})
     public void testGetAllCertificate() throws Exception {
         MDMResponse response = client.get(Constants.CertificateManagement.CERTIFICATE_GET_ALL_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
