@@ -138,10 +138,8 @@ public class EMMSystemService extends IntentService {
 
                 if (extras.containsKey("command")) {
                     command = extras.getString("command");
-                    if (command != null && (command.equals("true") || command.equals("false"))) {
-                        if (command.equals("true")) {
-                            restrictionCode = true;
-                        }
+                    if (command != null) {
+                        restrictionCode = command.equals("true");
                     }
                 }
 
