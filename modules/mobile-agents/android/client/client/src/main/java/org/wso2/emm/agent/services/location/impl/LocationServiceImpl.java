@@ -96,36 +96,29 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
                     return;
                 }
 
-                boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-                if (isNetworkEnabled) {
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                                                           MIN_TIME_BW_UPDATES,
-                                                           MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                    if (locationManager != null) {
-                        location = locationManager.getLastKnownLocation(
-                                LocationManager.NETWORK_PROVIDER);
-                        if (location != null) {
-                            Preference.putString(context, context.getResources().getString(R.string.shared_pref_location),
-                                                 new Gson().toJson(location));
-                        }
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                                                       MIN_TIME_BW_UPDATES,
+                                                       MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                if (locationManager != null) {
+                    location = locationManager.getLastKnownLocation(
+                            LocationManager.NETWORK_PROVIDER);
+                    if (location != null) {
+                        Preference.putString(context, context.getResources().getString(R.string.shared_pref_location),
+                                             new Gson().toJson(location));
                     }
                 }
 
-                if (isGpsEnabled) {
-                    if (location == null) {
-                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                                                               MIN_TIME_BW_UPDATES,
-                                                               MIN_DISTANCE_CHANGE_FOR_UPDATES,
-                                                               this);
-                        if (locationManager != null) {
-                            location = locationManager.getLastKnownLocation(
-                                    LocationManager.GPS_PROVIDER);
-                            if (location != null) {
-                                Preference.putString(context, context.getResources().getString(R.string.shared_pref_location),
-                                                     new Gson().toJson(location));
-                            }
+                if (location == null) {
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                                                           MIN_TIME_BW_UPDATES,
+                                                           MIN_DISTANCE_CHANGE_FOR_UPDATES,
+                                                           this);
+                    if (locationManager != null) {
+                        location = locationManager.getLastKnownLocation(
+                                LocationManager.GPS_PROVIDER);
+                        if (location != null) {
+                            Preference.putString(context, context.getResources().getString(R.string.shared_pref_location),
+                                                 new Gson().toJson(location));
                         }
                     }
                 }
@@ -168,7 +161,8 @@ public class LocationServiceImpl extends Service implements LocationListener, Lo
 
     @Override
     public void onProviderEnabled(String provider) {
-
+        serviceInstance = null;
+        serviceInstance = getInstance(context);
     }
 
     @Override
