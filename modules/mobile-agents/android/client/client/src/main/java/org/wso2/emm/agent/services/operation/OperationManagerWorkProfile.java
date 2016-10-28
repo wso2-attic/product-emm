@@ -35,6 +35,7 @@ import org.wso2.emm.agent.beans.Operation;
 import org.wso2.emm.agent.services.AppLockService;
 import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
 
 import java.util.ArrayList;
 
@@ -117,8 +118,12 @@ public class OperationManagerWorkProfile extends OperationManager {
 
                 } else if (type.equalsIgnoreCase(getContextResources().getString(R.string.intent_extra_public))) {
                     appUrl = data.getString(getContextResources().getString(R.string.app_identifier));
-                    operation.setStatus(getContextResources().getString(R.string.operation_value_progress));
+                    operation.setStatus(getContextResources().getString(R.string.operation_value_completed));
                     getResultBuilder().build(operation);
+                    Preference.putInt(getContext(), getContext().getResources().getString(R.string.app_install_id),
+                            operation.getId());
+                    Preference.putString(getContext(), getContext().getResources().getString(R.string.app_install_code),
+                            operation.getCode());
                     triggerGooglePlayApp(appUrl);
 
                 } else if (type.equalsIgnoreCase(getContextResources().getString(R.string.intent_extra_web))) {
