@@ -484,7 +484,8 @@ public class EMMSystemService extends IntentService {
 
                 if (!upgradeData.isNull(context.getResources().getString(R.string.firmware_server))) {
                     server = (String) upgradeData.get(context.getResources().getString(R.string.firmware_server));
-                    if(server.isEmpty() || (!server.isEmpty() && !Patterns.WEB_URL.matcher(server).matches())) {
+                    // When the server is empty, that means it is indicating to download from default server
+                    if (!server.isEmpty() && !Patterns.WEB_URL.matcher(server).matches()) {
                         String message = "Firmware upgrade URL provided is not valid.";
                         CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
                                 Constants.Status.MALFORMED_OTA_URL, message);
