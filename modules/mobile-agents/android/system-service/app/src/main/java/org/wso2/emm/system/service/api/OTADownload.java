@@ -96,7 +96,7 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
     }
 
     public void startOTA() {
-        // If the URL is not correctly provided, it server manager will contain a null
+        // If the URL is not correctly provided, server manager will be null
         if (otaServerManager != null) {
             CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.SUCCESS,
                     Constants.Status.REQUEST_PLACED, null);

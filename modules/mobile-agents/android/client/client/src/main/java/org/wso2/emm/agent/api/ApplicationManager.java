@@ -224,6 +224,7 @@ public class ApplicationManager {
 
     /**
      * Return the list of the package names of the apps(hidden and visible) that are user owned
+     *
      * @return - list of package names of the apps that are not system apps
      */
     public List<String> getAppsOfUser() {

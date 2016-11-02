@@ -518,7 +518,8 @@ public class CommonUtils {
 	}
 
 	/**
-	 *	Get package list of applications that are not system apps
+	 * Get package list of applications that are not system apps
+	 *
 	 * @param context Context object
 	 * @return list of package list that are not system apps
 	 */
