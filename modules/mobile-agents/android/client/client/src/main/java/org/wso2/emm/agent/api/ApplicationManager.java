@@ -223,6 +223,23 @@ public class ApplicationManager {
     }
 
     /**
+     * Return the list of the package names of the apps(hidden and visible) that are user owned
+     * @return - list of package names of the apps that are not system apps
+     */
+    public List<String> getAppsOfUser() {
+        List<String> packagesInstalledByUser = new ArrayList<>();
+        int flags = PackageManager.GET_META_DATA | PackageManager.GET_SHARED_LIBRARY_FILES
+                | PackageManager.GET_UNINSTALLED_PACKAGES;
+        List<ApplicationInfo> applications = packageManager.getInstalledApplications(flags);
+        for (ApplicationInfo appInfo : applications) {
+            if (!((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 1)) {
+                packagesInstalledByUser.add(appInfo.packageName);
+            }
+        }
+        return packagesInstalledByUser;
+    }
+
+    /**
      * Returns the app name for a particular package name.
      *
      * @param packageName - Package name which you need the app name.

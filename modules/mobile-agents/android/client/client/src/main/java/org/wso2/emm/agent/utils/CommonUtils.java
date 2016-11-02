@@ -517,6 +517,15 @@ public class CommonUtils {
 		return new ApplicationManager(context.getApplicationContext()).getInstalledAppsByUser();
 	}
 
+	/**
+	 *	Get package list of applications that are not system apps
+	 * @param context Context object
+	 * @return list of package list that are not system apps
+	 */
+	public static List<String> getAppsOfUser(Context context) {
+		return new ApplicationManager(context.getApplicationContext()).getAppsOfUser();
+	}
+
 	public static AppRestriction getAppRestrictionTypeAndList(Operation operation,
 	                                                          ResultPayload resultBuilder,
 	                                                          Resources resources)
