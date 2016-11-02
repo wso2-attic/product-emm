@@ -96,9 +96,13 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
     }
 
     public void startOTA() {
-        CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.SUCCESS, Constants.Status.REQUEST_PLACED, null);
-        //Check in the main service thread
-        otaServerManager.startCheckingVersion();
+        // If the URL is not correctly provided, it server manager will contain a null
+        if (otaServerManager != null) {
+            CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.SUCCESS,
+                    Constants.Status.REQUEST_PLACED, null);
+            //Check in the main service thread
+            otaServerManager.startCheckingVersion();
+        }
     }
 
     private int getBatteryLevel(Context context) {
