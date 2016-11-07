@@ -26,7 +26,11 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
-import org.wso2.mdm.integration.common.*;
+import org.wso2.mdm.integration.common.Constants;
+import org.wso2.mdm.integration.common.MDMHttpClient;
+import org.wso2.mdm.integration.common.MDMResponse;
+import org.wso2.mdm.integration.common.OAuthUtil;
+import org.wso2.mdm.integration.common.TestBase;
 
 public class SearchDevices extends TestBase {
     private MDMHttpClient client;
