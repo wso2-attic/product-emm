@@ -96,7 +96,7 @@
         <receiver
             android:name=".services.AgentDeviceAdminReceiver"
             android:permission="android.permission.BIND_DEVICE_ADMIN"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
 
                 <!-- This action is required -->
