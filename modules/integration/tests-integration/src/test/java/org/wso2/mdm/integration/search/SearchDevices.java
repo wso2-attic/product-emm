@@ -19,23 +19,43 @@
 
 package org.wso2.mdm.integration.search;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import junit.framework.Assert;
+import org.apache.commons.httpclient.HttpStatus;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.mdm.integration.common.Constants;
+import org.wso2.mdm.integration.common.MDMHttpClient;
+import org.wso2.mdm.integration.common.MDMResponse;
 import org.wso2.mdm.integration.common.OAuthUtil;
-import org.wso2.mdm.integration.common.RestClient;
 import org.wso2.mdm.integration.common.TestBase;
 
 public class SearchDevices extends TestBase {
-
-    private RestClient client;
+    private MDMHttpClient client;
 
     @BeforeTest(alwaysRun = true, groups = { Constants.AndroidEnrollment.ENROLLMENT_GROUP })
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         String accessTokenString = "Bearer " + OAuthUtil.getOAuthToken(backendHTTPURL, backendHTTPSURL);
-        this.client = new RestClient(backendHTTPURL, Constants.APPLICATION_JSON, accessTokenString);
+        this.client = new MDMHttpClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
+    @Test(description = "Testing the location search")
+    public void testAddPolicyWithErroneousPayload() throws Exception {
+        JsonObject jsonObject = new JsonObject();
+        JsonArray array = new JsonArray();
+        JsonObject item = new JsonObject();
+        item.addProperty("key", "LOCATION");
+        item.addProperty("operator", "=");
+        item.addProperty("value", "Colombo");
+        item.addProperty("state", "AND");
+        array.add(item);
+        jsonObject.add("conditions", array);
+        MDMResponse response = client
+                .post(Constants.MobileDeviceManagement.SEARCH_DEVICE_ENDPOINT, jsonObject.toString());
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
 }
 

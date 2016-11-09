@@ -267,6 +267,7 @@ public final class Constants {
         public static final String VIEW_DEVICE_TYPES_ENDPOINT = "/mdm-admin/devices/types";
         public static final String VIEW_DEVICE_RESPONSE_PAYLOAD_FILE_NAME =
                                                         "mobile-device-mgt-view-device-types-response-payloads.json";
+        public static final String SEARCH_DEVICE_ENDPOINT = "/api/device-mgt/v1.0/devices/search-devices";
     }
 
 
