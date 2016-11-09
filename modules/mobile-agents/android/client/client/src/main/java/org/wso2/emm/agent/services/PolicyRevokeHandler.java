@@ -204,10 +204,8 @@ public class PolicyRevokeHandler {
             for (String packageName : appRestriction.getRestrictedList()) {
                 CommonUtils.callSystemApp(context, operation.getCode(), "true", packageName);
             }
-        } else if (Constants.AppRestriction.WHITE_LIST
-                .equals(appRestriction.getRestrictionType())) {
-            List<String> installedAppPackages = CommonUtils.getInstalledAppPackages(context);
-
+        } else if (Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
+            List<String> installedAppPackages = CommonUtils.getAppsOfUser(context);
             List<String> toBeUnHideApps = new ArrayList<>(installedAppPackages);
             toBeUnHideApps.removeAll(appRestriction.getRestrictedList());
             for (String packageName : toBeUnHideApps) {
