@@ -167,7 +167,7 @@
                                     org.wso2.carbon.analytics:org.wso2.carbon.analytics.api.feature:${carbon.analytics.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-       h                             org.wso2.carbon.analytics:org.wso2.carbon.analytics.core.server.feature:${carbon.analytics.version}
+                                   org.wso2.carbon.analytics:org.wso2.carbon.analytics.core.server.feature:${carbon.analytics.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.analytics:org.wso2.carbon.analytics.datasource.rdbms.server.feature:${carbon.analytics.version}
