@@ -22,7 +22,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.wso2.mdm.qsg.dto.EMMConfig;
+import org.wso2.mdm.qsg.dto.EMMQSGConfig;
 import org.wso2.mdm.qsg.dto.HTTPResponse;
 import org.wso2.mdm.qsg.dto.MobileApplication;
 import org.wso2.mdm.qsg.utils.Constants;
@@ -39,7 +39,7 @@ public class AppOperations {
 
     public static MobileApplication uploadApplication(String platform, String appName, String appContentType) {
         String appUploadEndpoint =
-                EMMConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.1/apps/mobile/binaries";
+                EMMQSGConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.1/apps/mobile/binaries";
         String filePath = "apps" + File.separator + platform + File.separator + appName;
         HTTPResponse
                 httpResponse = HTTPInvoker.uploadFile(appUploadEndpoint, filePath, appContentType);
@@ -60,9 +60,17 @@ public class AppOperations {
         return null;
     }
 
+    public static MobileApplication getPublicApplication(String packageId, String version, String platform) {
+        MobileApplication application = new MobileApplication();
+        application.setVersion(version);
+        application.setPackageId(packageId);
+        application.setPlatform(platform);
+        return application;
+    }
+
     private static String uploadAsset(String path) {
         String resUploadEndpoint =
-                EMMConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.1/apps/static-contents?appType=mobileapp";
+                EMMQSGConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.1/apps/static-contents?appType=mobileapp";
         HTTPResponse httpResponse = HTTPInvoker.uploadFile(resUploadEndpoint, path, "image/jpeg");
         if (httpResponse.getResponseCode() == Constants.HTTPStatus.OK) {
             JSONObject resp = null;
@@ -130,15 +138,24 @@ public class AppOperations {
         return application;
     }
 
-    public static boolean addApplication(String name, MobileApplication mblApp) {
+    public static boolean addApplication(String name, MobileApplication mblApp, boolean isEnterpriseApp) {
         HashMap<String, String> headers = new HashMap<String, String>();
-        String appEndpoint = EMMConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.1/apps/mobileapp";
+        String appEndpoint = EMMQSGConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.1/apps/mobileapp";
         //Set the application payload
         JSONObject application = new JSONObject();
         application.put("name", name);
         application.put("description", "Sample application");
         application.put("type", "enterprise");
-        application.put("marketType", "enterprise");
+        //Set appMeta data
+        JSONObject appMeta = new JSONObject();
+        appMeta.put("package", mblApp.getPackageId());
+        appMeta.put("version", mblApp.getVersion());
+        if (isEnterpriseApp) {
+            application.put("marketType", "enterprise");
+            appMeta.put("path", mblApp.getAppId());
+        } else {
+            application.put("marketType", "public");
+        }
         application.put("provider", "admin");
         application.put("displayName", name);
         application.put("category", "Business");
@@ -150,11 +167,6 @@ public class AppOperations {
         //application.put("appUrL", mblApp.getAppId());
         application.put("mediaType", "application/vnd.wso2-mobileapp+xml");
 
-        //Set appMeta data
-        JSONObject appMeta = new JSONObject();
-        appMeta.put("path", mblApp.getAppId());
-        appMeta.put("package", mblApp.getPackageId());
-        appMeta.put("version", mblApp.getVersion());
         //Set screenshots
         JSONArray screenshots = new JSONArray();
         screenshots.add(mblApp.getScreenshot1());

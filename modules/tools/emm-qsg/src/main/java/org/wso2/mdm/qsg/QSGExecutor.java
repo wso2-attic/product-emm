@@ -18,6 +18,7 @@
 
 package org.wso2.mdm.qsg;
 
+import org.wso2.mdm.qsg.dto.EMMQSGConfig;
 import org.wso2.mdm.qsg.dto.MobileApplication;
 import org.wso2.mdm.qsg.utils.Constants;
 import org.wso2.mdm.qsg.utils.HTTPInvoker;
@@ -89,6 +90,12 @@ public class QSGExecutor {
             System.out.println("Unable to create the windows passcode policy. Terminating the EMM QSG now.");
             System.exit(0);
         }
+        //Add the iOS policy
+        status = PolicyOperations.createPasscodePolicy("ios-passcode-policy1", Constants.DeviceType.IOS);
+        if (!status) {
+            System.out.println("Unable to create the ios passcode policy. Terminating the EMM QSG now.");
+            System.exit(0);
+        }
         //Upload the android application
         MobileApplication application = AppOperations.uploadApplication(Constants.DeviceType.ANDROID, "catalog.apk",
                                                                         "application/vnd.android.package-archive");
@@ -104,7 +111,26 @@ public class QSGExecutor {
             System.exit(0);
         }
         //Create application entry in publisher
-        status = AppOperations.addApplication("Catalog", application);
+        status = AppOperations.addApplication("Catalog", application, true);
+        if (!status) {
+            System.out.println("Unable to create the mobile application. Terminating the EMM QSG now.");
+            System.exit(0);
+        }
+
+        //Create iOS public app
+        EMMQSGConfig emmQSGConfig = EMMQSGConfig.getInstance();
+        MobileApplication iOSApplication = AppOperations.getPublicApplication(emmQSGConfig.getiOSAppIdentifier(),
+                emmQSGConfig.getiOSAppVersion(), Constants.DeviceType.IOS);
+
+        //Upload the assets
+        iOSApplication = AppOperations.uploadAssets(Constants.DeviceType.IOS, iOSApplication);
+        if (iOSApplication == null) {
+            System.out.println(
+                    "Unable to upload the assets for sample iOS application. Terminating the EMM QSG now.");
+            System.exit(0);
+        }
+        //Create application entry in publisher
+        status = AppOperations.addApplication("WSO2Con", iOSApplication, false);
         if (!status) {
             System.out.println("Unable to create the mobile application. Terminating the EMM QSG now.");
             System.exit(0);

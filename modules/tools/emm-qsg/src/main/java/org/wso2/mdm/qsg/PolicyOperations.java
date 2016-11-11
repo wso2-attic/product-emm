@@ -20,7 +20,7 @@ package org.wso2.mdm.qsg;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.wso2.mdm.qsg.dto.EMMConfig;
+import org.wso2.mdm.qsg.dto.EMMQSGConfig;
 import org.wso2.mdm.qsg.dto.HTTPResponse;
 import org.wso2.mdm.qsg.utils.Constants;
 import org.wso2.mdm.qsg.utils.HTTPInvoker;
@@ -34,7 +34,7 @@ public class PolicyOperations {
 
     public static boolean createPasscodePolicy(String policyName, String deviceType) {
         HashMap<String, String> headers = new HashMap<String, String>();
-        String policyEndpoint = EMMConfig.getInstance().getEmmHost() + "/api/device-mgt/v1.0/policies";
+        String policyEndpoint = EMMQSGConfig.getInstance().getEmmHost() + "/api/device-mgt/v1.0/policies";
         //Set the policy payload
         JSONObject policyData = new JSONObject();
         policyData.put("policyName", policyName);
@@ -48,12 +48,12 @@ public class PolicyOperations {
         JSONArray featureList = new JSONArray();
         JSONObject feature = new JSONObject();
         feature.put("featureCode", "PASSCODE_POLICY");
-        feature.put("deviceType", "android");
+        feature.put("deviceType", deviceType);
         JSONObject featureContent = new JSONObject();
-        featureContent.put("allowSimple", true);
+        featureContent.put("allowSimple", false);
         featureContent.put("requireAlphanumeric", true);
-        featureContent.put("minLength", null);
-        featureContent.put("minComplexChars", null);
+        featureContent.put("minLength", "5");
+        featureContent.put("minComplexChars", "2");
         featureContent.put("maxPINAgeInDays", 7);
         featureContent.put("pinHistory", 7);
         featureContent.put("maxFailedAttempts", null);
