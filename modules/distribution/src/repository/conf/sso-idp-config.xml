@@ -100,10 +100,10 @@
             <EnableAudienceRestriction>true</EnableAudienceRestriction>
             <EnableRecipients>true</EnableRecipients>
             <AudiencesList>
-                <Audience>https://192.168.1.2:9443/oauth2/token</Audience>
+                <Audience>https://localhost:9443/oauth2/token</Audience>
             </AudiencesList>
             <RecipientList>
-                <Recipient>https://192.168.1.2:9443/oauth2/token</Recipient>
+                <Recipient>https://localhost:9443/oauth2/token</Recipient>
             </RecipientList>
         </ServiceProvider>
     </ServiceProviders>
