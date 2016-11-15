@@ -396,6 +396,7 @@
                 <exclude>publisherTheme/**</exclude>
                 <exclude>publisherSite/**</exclude>
                 <exclude>footer/**</exclude>
+                <exclude>jaggery.conf</exclude>
                 <exclude>localstyles.css</exclude>
             </excludes>
         </fileSet>
@@ -407,6 +408,7 @@
                 <exclude>storeSite/**</exclude>
                 <exclude>base-page/**</exclude>
                 <exclude>login/**</exclude>
+                <exclude>jaggery.conf</exclude>
                 <exclude>styles-layout.css</exclude>
             </excludes>
         </fileSet>
@@ -510,20 +512,20 @@
           </includes>
       </fileSet-->
         <!-- Copying Dashboard related files-->
-        <!--<fileSet>-->
-            <!--<directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps</directory>-->
-            <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>-->
-            <!--<includes>-->
-                <!--<include>shindig.war</include>-->
-            <!--</includes>-->
-        <!--</fileSet>-->
-        <!--<fileSet>-->
-            <!--<directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/portal</directory>-->
-            <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal</outputDirectory>-->
-            <!--<includes>-->
-                <!--<include>**/*</include>-->
-            <!--</includes>-->
-        <!--</fileSet>-->
+        <fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
+            <includes>
+                <include>shindig.war</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/portal</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
         <!-- Copying API application-registration related files-->
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps</directory>
@@ -550,7 +552,7 @@
     </dependencySets>
     <files>
         <file>
-            <source>../../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/carbon/WEB-INF/web.xml</source>
+            <source>src/repository/conf/tomcat/carbon/WEB-INF/web.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat/carbon/WEB-INF</outputDirectory>
             <fileMode>755</fileMode>
         </file>
@@ -1050,21 +1052,32 @@
         <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/carbonapps/</outputDirectory>-->
         <!--<fileMode>644</fileMode>-->
         <!--</file>-->
-        <!-- Adding EMM Analytics Dashboard and gadget CApps -->
-        <!--<file>-->
-            <!--<source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/carbonapps/org_wso2_carbon_analytics_cdmf-1.0.0.car</source>-->
-            <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/carbonapps/</outputDirectory>-->
-            <!--<fileMode>644</fileMode>-->
-        <!--</file>-->
-        <!--<file>-->
-            <!--<source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/carbonapps/org_wso2_carbon_analytics_emm-1.0.0.car</source>-->
-            <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/carbonapps/</outputDirectory>-->
-            <!--<fileMode>644</fileMode>-->
-        <!--</file>-->
+         <!--Adding EMM Analytics Dashboard and gadget CApps-->
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/carbonapps/org_wso2_carbon_analytics_cdmf-1.0.0.car</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/carbonapps/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/carbonapps/org_wso2_carbon_analytics_emm-1.0.0.car</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/carbonapps/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
         <!-- Tomcat catalina-server.xml with changes specific to EMM -->
         <file>
             <source>src/repository/conf/tomcat/catalina-server.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <!-- Copying Cache filter enabled conf files to Publisher and Store apps -->
+        <file>
+            <source>src/repository/deployment/server/jaggeryapps/publisher/jaggery.conf</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/publisher</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>src/repository/deployment/server/jaggeryapps/store/jaggery.conf</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/store</outputDirectory>
             <fileMode>644</fileMode>
         </file>
     </files>

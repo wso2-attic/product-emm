@@ -1110,7 +1110,7 @@
         <!-- Carbon Dashboards version-->
         <carbon.dashboards.version>2.0.3</carbon.dashboards.version>
         <carbon.analytics.cdmf.version>1.0.2-SNAPSHOT</carbon.analytics.cdmf.version>
-        <carbon.analytics.emm.version>1.0.2-SNAPSHOT</carbon.analytics.emm.version>
+        <carbon.analytics.emm.version>1.0.0</carbon.analytics.emm.version>
 
         <!-- EMM QSG properties -->
         <apache.httpclient.version>4.5.2</apache.httpclient.version>

@@ -25,7 +25,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.wso2.mdm.qsg.dto.ClientCredentials;
-import org.wso2.mdm.qsg.dto.EMMConfig;
+import org.wso2.mdm.qsg.dto.EMMQSGConfig;
 import org.wso2.mdm.qsg.dto.HTTPResponse;
 
 import java.io.FileInputStream;
@@ -43,20 +43,22 @@ import java.util.regex.Pattern;
  */
 public class QSGUtils {
 
-    public static EMMConfig initConfig() {
+    public static EMMQSGConfig initConfig() {
         Properties props = new Properties();
         InputStream input = null;
-        EMMConfig emmConfig = null;
+        EMMQSGConfig emmConfig = null;
         try {
             input = new FileInputStream("config.properties");
             // load a properties file and set the properties
             props.load(input);
-            emmConfig = EMMConfig.getInstance();
+            emmConfig = EMMQSGConfig.getInstance();
             emmConfig.setEmmHost(props.getProperty("emm-host"));
             emmConfig.setDcrEndPoint(props.getProperty("dcr-endpoint"));
             emmConfig.setOauthEndPoint(props.getProperty("oauth-endpoint"));
             emmConfig.setUsername(props.getProperty("username"));
             emmConfig.setPassword(props.getProperty("password"));
+            emmConfig.setiOSAppIdentifier(props.getProperty("iOSAppIdentifier"));
+            emmConfig.setiOSAppVersion(props.getProperty("iOSAppVersion"));
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
@@ -74,7 +76,7 @@ public class QSGUtils {
     private static ClientCredentials getClientCredentials() {
         ClientCredentials clientCredentials = null;
         HashMap<String, String> headers = new HashMap<String, String>();
-        String dcrEndPoint = EMMConfig.getInstance().getDcrEndPoint();
+        String dcrEndPoint = EMMQSGConfig.getInstance().getDcrEndPoint();
         //Set the DCR payload
         JSONObject obj = new JSONObject();
         obj.put("owner", "admin");
@@ -106,8 +108,8 @@ public class QSGUtils {
         HashMap<String, String> headers = new HashMap<String, String>();
         //Set the form params
         List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
-        urlParameters.add(new BasicNameValuePair("username", EMMConfig.getInstance().getUsername()));
-        urlParameters.add(new BasicNameValuePair("password", EMMConfig.getInstance().getPassword()));
+        urlParameters.add(new BasicNameValuePair("username", EMMQSGConfig.getInstance().getUsername()));
+        urlParameters.add(new BasicNameValuePair("password", EMMQSGConfig.getInstance().getPassword()));
         urlParameters.add(new BasicNameValuePair("grant_type", "password"));
         urlParameters.add(new BasicNameValuePair("scope",
                                                  "user:view user:manage user:admin:reset-password role:view role:manage policy:view policy:manage " +
@@ -116,7 +118,7 @@ public class QSGUtils {
         headers.put(Constants.Header.CONTENT_TYPE, Constants.ContentType.APPLICATION_URL_ENCODED);
         headers.put(Constants.Header.AUTH, authHeader);
         HTTPResponse httpResponse = HTTPInvoker
-                .sendHTTPPostWithURLParams(EMMConfig.getInstance().getOauthEndPoint(), urlParameters, headers);
+                .sendHTTPPostWithURLParams(EMMQSGConfig.getInstance().getOauthEndPoint(), urlParameters, headers);
         if (httpResponse.getResponseCode() == Constants.HTTPStatus.OK) {
             try {
                 JSONObject jsonObject = (JSONObject) new JSONParser().parse(httpResponse.getResponse());

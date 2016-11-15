@@ -21,16 +21,18 @@ package org.wso2.mdm.qsg.dto;
 /**
  * This holds the model object of EMM configuration.
  */
-public class EMMConfig {
+public class EMMQSGConfig {
 
     private String dcrEndPoint;
     private String oauthEndPoint;
     private String emmHost;
     private String username;
     private String password;
-    private static EMMConfig instance = new EMMConfig();
+    private String iOSAppIdentifier;
+    private String iOSAppVersion;
+    private static EMMQSGConfig instance = new EMMQSGConfig();
 
-    private EMMConfig() {
+    private EMMQSGConfig() {
 
     }
 
@@ -74,7 +76,23 @@ public class EMMConfig {
         this.password = password;
     }
 
-    public static EMMConfig getInstance() {
+    public static EMMQSGConfig getInstance() {
         return instance;
+    }
+
+    public String getiOSAppIdentifier() {
+        return iOSAppIdentifier;
+    }
+
+    public void setiOSAppIdentifier(String iOSAppIdentifier) {
+        this.iOSAppIdentifier = iOSAppIdentifier;
+    }
+
+    public String getiOSAppVersion() {
+        return iOSAppVersion;
+    }
+
+    public void setiOSAppVersion(String iOSAppVersion) {
+        this.iOSAppVersion = iOSAppVersion;
     }
 }

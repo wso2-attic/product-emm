@@ -20,7 +20,7 @@ package org.wso2.mdm.qsg;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.wso2.mdm.qsg.dto.EMMConfig;
+import org.wso2.mdm.qsg.dto.EMMQSGConfig;
 import org.wso2.mdm.qsg.dto.HTTPResponse;
 import org.wso2.mdm.qsg.utils.Constants;
 import org.wso2.mdm.qsg.utils.HTTPInvoker;
@@ -34,7 +34,7 @@ public class UserOperations {
 
     public static boolean createUser(String username, String email, boolean isAdmin) {
         HashMap<String, String> headers = new HashMap<String, String>();
-        String userEndpoint = EMMConfig.getInstance().getEmmHost() + "/api/device-mgt/v1.0/users";
+        String userEndpoint = EMMQSGConfig.getInstance().getEmmHost() + "/api/device-mgt/v1.0/users";
         //Set the user payload
         JSONObject userData = new JSONObject();
         userData.put("username", username);
@@ -63,7 +63,7 @@ public class UserOperations {
     public static boolean changePassword(String username, String pwd) {
         HashMap<String, String> headers = new HashMap<String, String>();
         String pwdEndpoint =
-                EMMConfig.getInstance().getEmmHost() + "/api/device-mgt/v1.0/admin/users/" + username + "/credentials";
+                EMMQSGConfig.getInstance().getEmmHost() + "/api/device-mgt/v1.0/admin/users/" + username + "/credentials";
         //Set the password payload
         JSONObject pwdData = new JSONObject();
         pwdData.put("newPassword", pwd);
@@ -121,7 +121,7 @@ public class UserOperations {
 
     public static boolean createRole(String roleName, String[] users) {
         HashMap<String, String> headers = new HashMap<String, String>();
-        String roleEndpoint = EMMConfig.getInstance().getEmmHost() + "/api/device-mgt/v1.0/roles";
+        String roleEndpoint = EMMQSGConfig.getInstance().getEmmHost() + "/api/device-mgt/v1.0/roles";
         //Set the role payload
         JSONObject roleData = new JSONObject();
         roleData.put("roleName", roleName);
