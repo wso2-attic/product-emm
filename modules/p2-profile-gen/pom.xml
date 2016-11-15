@@ -205,6 +205,12 @@
                                 </featureArtifactDef>
                                 <!-- End of Carbon Deployment Features -->
 
+                                <!-- Capp Management features -->
+                                <featureArtifactDef>
+                                    org.wso2.carbon.commons:org.wso2.carbon.application.mgt.feature:${carbon.commons.version}
+                                </featureArtifactDef>
+                                <!-- End of Capp management features-->
+
                                 <!-- Jaggery Features -->
                                 <featureArtifactDef>
                                     org.jaggeryjs:org.jaggeryjs.feature:${jaggery.version}
@@ -830,6 +836,10 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.tenant.mgt.common.feature.group</id>
+                                    <version>${carbon.commons.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.application.mgt.feature.group</id>
                                     <version>${carbon.commons.version}</version>
                                 </feature>
                                 <!-- End of Carbon Commons Features -->
