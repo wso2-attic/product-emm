@@ -203,9 +203,9 @@ client.getEncodedSignedSAMLAuthRequest = function (issuerId, destination, acsUrl
 client.getEncodedSignedSAMLLogoutRequest = function (user, sessionIndex, issuerId, tenantId, tenantDomain, destination, nameIdFormat) {
     return Util.encode(
         Util.marshall(
-            new Packages.org.wso2.store.sso.common.builders.LogoutRequestBuilder().buildLogoutRequest(user, sessionIndex,
-                Packages.org.wso2.store.sso.common.constants.SSOConstants.LOGOUT_USER,
-                issuerId)));
+            new Packages.org.jaggeryjs.modules.sso.common.builders.LogoutRequestBuilder().buildLogoutRequest(user, sessionIndex,
+                Packages.org.jaggeryjs.modules.sso.common.constants.SSOConstants.LOGOUT_USER,
+                issuerId, tenantId, tenantDomain, destination, nameIdFormat)));
 
 };
 
