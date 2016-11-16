@@ -184,7 +184,31 @@ client.validateSamlResponse = function(samlObj, props, keyStoreProps) {
         isValid = callValidateAssertionSignature(samlObj, keyStoreProps);
     }
     return isValid;
-}
+};
+
+/**
+ * getting url encoded signed saml authentication request
+ */
+client.getEncodedSignedSAMLAuthRequest = function (issuerId, destination, acsUrl, isPassive, tenantId, tenantDomain, nameIdPolicy) {
+    return Util.encode(
+        Util.marshall(
+            new Packages.org.jaggeryjs.modules.sso.common.builders.AuthReqBuilder().buildAuthenticationRequest(issuerId, destination, acsUrl,
+                isPassive, tenantId, tenantDomain, nameIdPolicy)
+        ));
+};
+
+/**
+ * get url encoded signed saml logout request
+ */
+client.getEncodedSignedSAMLLogoutRequest = function (user, sessionIndex, issuerId, tenantId, tenantDomain, destination, nameIdFormat) {
+    return Util.encode(
+        Util.marshall(
+            new Packages.org.jaggeryjs.modules.sso.common.builders.LogoutRequestBuilder().buildLogoutRequest(user, sessionIndex,
+                Packages.org.jaggeryjs.modules.sso.common.constants.SSOConstants.LOGOUT_USER,
+                issuerId, tenantId, tenantDomain, destination, nameIdFormat)));
+
+};
+
 /**
  * A utility method used to convert a JSON object to
  * a properties object
