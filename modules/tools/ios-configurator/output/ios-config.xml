@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<iOSEMMConfigurations>
+    <!-- iOS MDM endpoint urls -->
+    <iOSEnrollURL>https://sdsdsdsdsd:9443/ios-enrollment/scep</iOSEnrollURL>
+    <iOSProfileURL>https://sdsdsdsdsd:9443/ios-enrollment/profile</iOSProfileURL>
+    <iOSCheckinURL>https://sdsdsdsdsd:9443/ios-enrollment/checkin</iOSCheckinURL>
+    <iOSServerURL>https://sdsdsdsdsd:9443/ios-enrollment/server</iOSServerURL>
+</iOSEMMConfigurations>
