@@ -28,8 +28,6 @@ public class EMMQSGConfig {
     private String emmHost;
     private String username;
     private String password;
-    private String iOSAppIdentifier;
-    private String iOSAppVersion;
     private static EMMQSGConfig instance = new EMMQSGConfig();
 
     private EMMQSGConfig() {
@@ -78,21 +76,5 @@ public class EMMQSGConfig {
 
     public static EMMQSGConfig getInstance() {
         return instance;
-    }
-
-    public String getiOSAppIdentifier() {
-        return iOSAppIdentifier;
-    }
-
-    public void setiOSAppIdentifier(String iOSAppIdentifier) {
-        this.iOSAppIdentifier = iOSAppIdentifier;
-    }
-
-    public String getiOSAppVersion() {
-        return iOSAppVersion;
-    }
-
-    public void setiOSAppVersion(String iOSAppVersion) {
-        this.iOSAppVersion = iOSAppVersion;
     }
 }

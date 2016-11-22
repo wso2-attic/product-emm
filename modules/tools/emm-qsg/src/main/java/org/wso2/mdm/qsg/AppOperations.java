@@ -43,7 +43,8 @@ public class AppOperations {
         String filePath = "apps" + File.separator + platform + File.separator + appName;
         HTTPResponse
                 httpResponse = HTTPInvoker.uploadFile(appUploadEndpoint, filePath, appContentType);
-        if (httpResponse.getResponseCode() == Constants.HTTPStatus.OK) {
+        System.out.println(httpResponse.getResponseCode());
+        if (Constants.HTTPStatus.OK == httpResponse.getResponseCode()) {
             JSONObject appMeta = null;
             MobileApplication application = new MobileApplication();
             try {
@@ -72,7 +73,7 @@ public class AppOperations {
         String resUploadEndpoint =
                 EMMQSGConfig.getInstance().getEmmHost() + "/api/appm/publisher/v1.1/apps/static-contents?appType=mobileapp";
         HTTPResponse httpResponse = HTTPInvoker.uploadFile(resUploadEndpoint, path, "image/jpeg");
-        if (httpResponse.getResponseCode() == Constants.HTTPStatus.OK) {
+        if (Constants.HTTPStatus.OK == httpResponse.getResponseCode()) {
             JSONObject resp = null;
             try {
                 resp = (JSONObject) new JSONParser().parse(httpResponse.getResponse());
@@ -160,7 +161,7 @@ public class AppOperations {
         application.put("displayName", name);
         application.put("category", "Business");
         application.put("icon", mblApp.getIcon());
-        application.put("version", "1.0.0");
+        application.put("version", mblApp.getVersion());
         application.put("banner", mblApp.getBanner());
         application.put("platform", mblApp.getPlatform());
         application.put("appType", mblApp.getPlatform());
@@ -180,7 +181,7 @@ public class AppOperations {
         HTTPResponse
                 httpResponse =
                 HTTPInvoker.sendHTTPPostWithOAuthSecurity(appEndpoint, application.toJSONString(), headers);
-        if (httpResponse.getResponseCode() == Constants.HTTPStatus.OK) {
+        if (Constants.HTTPStatus.OK == httpResponse.getResponseCode()) {
             return true;
         }
         return false;
