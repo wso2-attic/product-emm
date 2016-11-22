@@ -57,8 +57,6 @@ public class QSGUtils {
             emmConfig.setOauthEndPoint(props.getProperty("oauth-endpoint"));
             emmConfig.setUsername(props.getProperty("username"));
             emmConfig.setPassword(props.getProperty("password"));
-            emmConfig.setiOSAppIdentifier(props.getProperty("iOSAppIdentifier"));
-            emmConfig.setiOSAppVersion(props.getProperty("iOSAppVersion"));
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {

@@ -83,11 +83,13 @@ public class UserOperations {
                              "/permission/admin/device-mgt/certificates/view," +
                              "/permission/admin/device-mgt/configurations/view," +
                              "/permission/admin/device-mgt/devices/enroll/android," +
+                             "/permission/admin/device-mgt/devices/enroll/ios," +
                              "/permission/admin/device-mgt/devices/owning/view," +
+                             "/permission/admin/device-mgt/devices/any-device/permitted-actions-under-owning-device," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/applications," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/blacklist-app," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/camera," +
-                             "/permission/admin/device-mgt/devices/owning-device/operations/android/change-lock," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/change-lock-code," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/clear-password," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/encrypt," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/enterprise-wipe," +
@@ -95,15 +97,50 @@ public class UserOperations {
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/install-app," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/location," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/lock," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/logcat," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/mute," +
-                             "/permission/admin/device-mgt/devices/owning-device/operations/android/notification," +
-                             "/permission/admin/device-mgt/devices/owning-device/operations/android/ring," +
-                             "/permission/admin/device-mgt/devices/owning-device/operations/android/unlock," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/password-policy," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/ring," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/reboot," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/send-notification," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/uninstall-app," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/update-app," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/unlock," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/upgrade," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/vpn," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/webclip," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/wifi," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/android/wipe," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/airplay," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/apn," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/app-list," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/app-lock," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/app-to-per-app-vpn," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/cal-subscription," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/caldav," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/cellular," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/clear-passcode," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/device-info," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/email," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/enterprise-app," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/enterprise-wipe," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/get-restrictions," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/ldap," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/location," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/lock," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/notification," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/passcode-policy," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/per-app-vpn," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/profile-list," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/remove-app," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/remove-profile," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/restriction," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/ring," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/store-app," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/vpn," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/webclip," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/wifi," +
                              "/permission/admin/device-mgt/notifications/view," +
                              "/permission/admin/device-mgt/platform-configurations/view," +
                              "/permission/admin/device-mgt/policies/view," +
