@@ -20,6 +20,8 @@ package org.wso2.emm.integration.ui.pages;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.wso2.carbon.authenticator.stub.LoginAuthenticationExceptionException;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
@@ -35,6 +37,7 @@ public class EMMIntegrationUiBaseTestCase {
 
     private static final Log log = LogFactory.getLog(EMMIntegrationUiBaseTestCase.class);
     protected AutomationContext automationContext;
+    public static String MDM_PRODUCT_GROUP_NAME = "EMM";
 
     protected void init() throws IOException, XMLStreamException, XPathExpressionException {
         automationContext = new AutomationContext("EMM", "emm001", TestUserMode.SUPER_TENANT_ADMIN);
@@ -65,5 +68,21 @@ public class EMMIntegrationUiBaseTestCase {
     }
     protected String getLoginURL() throws XPathExpressionException {
         return HomePageGenerator.getProductHomeURL(automationContext);
+    }
+
+    /**
+     * To check whether an element is present in the window
+     *
+     * @param driver Web driver
+     * @param by     Condition that need to be checked with the particular element
+     * @return true if the element is present, otherwise false
+     */
+    public static boolean isElementPresent(WebDriver driver, By by) {
+        try {
+            driver.findElement(by);
+            return true;
+        } catch (org.openqa.selenium.NoSuchElementException e) {
+            return false;
+        }
     }
 }

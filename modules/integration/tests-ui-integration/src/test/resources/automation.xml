@@ -129,10 +129,16 @@
                     <user key="user1">
                         <userName>testuser11</userName>
                         <password>testuser11</password>
+                        <roles>
+                            <role>role1</role>
+                        </roles>
                     </user>
                     <user key="user2">
                         <userName>testuser21</userName>
                         <password>testuser21</password>
+                        <roles>
+                            <role>role1</role>
+                        </roles>
                     </user>
                 </users>
             </tenant>
@@ -141,22 +147,35 @@
             <tenant domain="wso2.com" key="wso2">
                 <admin>
                     <user key="admin">
-                        <userName>admin</userName>
+                        <userName>adminwso2</userName>
                         <password>admin</password>
                     </user>
                 </admin>
                 <users>
                     <user key="user1">
-                        <userName>testuser11</userName>
+                        <userName>testuser11wso2</userName>
                         <password>testuser11</password>
+                        <roles>
+                            <role>role1</role>
+                        </roles>
                     </user>
                     <user key="user2">
-                        <userName>testuser21</userName>
+                        <userName>testuser21wso2</userName>
                         <password>testuser21</password>
+                        <roles>
+                            <role>role1</role>
+                        </roles>
                     </user>
                 </users>
             </tenant>
         </tenants>
+        <roles>
+            <role name="role1" key = "role1">
+                <permissions>
+                    <permission>/permission/admin/manage/webapp/subscribe</permission>
+                </permissions>
+            </role>
+        </roles>
     </userManagement>
     <!--
    This section will initiate the initial deployment of the platform required by

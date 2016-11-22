@@ -17,6 +17,7 @@
             <class name="org.wso2.emm.ui.integration.test.GeneralConfigurationTestCases"/>
             <!--<class name="org.wso2.emm.ui.integration.test.NotificationValidationTestCase"/>-->
             <class name="org.wso2.emm.ui.integration.test.CertificateConfigurationTestCase"/>
+            <class name="org.wso2.emm.ui.integration.test.store.EnterpriseInstallTestCase" />
         </classes>
 
     </test>

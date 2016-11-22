@@ -35,4 +35,5 @@ public class Constants {
     public static final String MDM_CERTIFICATE_CONFIG_URL = "/emm/certificates/add";
     public static final String MDM_HOME_URL = "/emm";
     public static final String SAMPLE_DEVICE_SERIAL_NO = "RF8FZXGH7JS2KP";
+    public static final String PUBLISHER_LOGIN_PATH = "/publisher";
 }
