@@ -18,7 +18,6 @@
 
 package org.wso2.mdm.qsg;
 
-import org.wso2.mdm.qsg.dto.EMMQSGConfig;
 import org.wso2.mdm.qsg.dto.MobileApplication;
 import org.wso2.mdm.qsg.utils.Constants;
 import org.wso2.mdm.qsg.utils.HTTPInvoker;
@@ -117,11 +116,10 @@ public class QSGExecutor {
             System.exit(0);
         }
 
-        //Create iOS public app
-        EMMQSGConfig emmQSGConfig = EMMQSGConfig.getInstance();
-        MobileApplication iOSApplication = AppOperations.getPublicApplication(emmQSGConfig.getiOSAppIdentifier(),
-                emmQSGConfig.getiOSAppVersion(), Constants.DeviceType.IOS);
-
+        //Upload the ios application
+        MobileApplication iOSApplication = AppOperations.uploadApplication(Constants.DeviceType.IOS, "PNDemo.ipa",
+                "application/octet-stream");
+        iOSApplication.setVersion("1.0.0");
         //Upload the assets
         iOSApplication = AppOperations.uploadAssets(Constants.DeviceType.IOS, iOSApplication);
         if (iOSApplication == null) {
@@ -130,7 +128,7 @@ public class QSGExecutor {
             System.exit(0);
         }
         //Create application entry in publisher
-        status = AppOperations.addApplication("WSO2Con", iOSApplication, false);
+        status = AppOperations.addApplication("WSO2Con", iOSApplication, true);
         if (!status) {
             System.out.println("Unable to create the mobile application. Terminating the EMM QSG now.");
             System.exit(0);
