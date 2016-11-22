@@ -123,7 +123,24 @@ public class UserOperations {
                              "/permission/admin/device-mgt/devices/owning-device/operations/ios/clear-passcode," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/ios/device-info," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/ios/email," +
-                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/enterprise-app","/permission/admin/device-mgt/devices/owning-device/operations/ios/enterprise-wipe","/permission/admin/device-mgt/devices/owning-device/operations/ios/get-restrictions","/permission/admin/device-mgt/devices/owning-device/operations/ios/ldap","/permission/admin/device-mgt/devices/owning-device/operations/ios/location","/permission/admin/device-mgt/devices/owning-device/operations/ios/lock","/permission/admin/device-mgt/devices/owning-device/operations/ios/notification","/permission/admin/device-mgt/devices/owning-device/operations/ios/passcode-policy","/permission/admin/device-mgt/devices/owning-device/operations/ios/per-app-vpn","/permission/admin/device-mgt/devices/owning-device/operations/ios/profile-list","/permission/admin/device-mgt/devices/owning-device/operations/ios/remove-app","/permission/admin/device-mgt/devices/owning-device/operations/ios/remove-profile","/permission/admin/device-mgt/devices/owning-device/operations/ios/restriction","/permission/admin/device-mgt/devices/owning-device/operations/ios/ring","/permission/admin/device-mgt/devices/owning-device/operations/ios/store-app","/permission/admin/device-mgt/devices/owning-device/operations/ios/vpn","/permission/admin/device-mgt/devices/owning-device/operations/ios/webclip","/permission/admin/device-mgt/devices/owning-device/operations/ios/wifi"
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/enterprise-app," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/enterprise-wipe," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/get-restrictions," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/ldap," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/location," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/lock," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/notification," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/passcode-policy," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/per-app-vpn," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/profile-list," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/remove-app," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/remove-profile," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/restriction," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/ring," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/store-app," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/vpn," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/webclip," +
+                             "/permission/admin/device-mgt/devices/owning-device/operations/ios/wifi," +
                              "/permission/admin/device-mgt/notifications/view," +
                              "/permission/admin/device-mgt/platform-configurations/view," +
                              "/permission/admin/device-mgt/policies/view," +
