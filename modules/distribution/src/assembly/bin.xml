@@ -142,6 +142,7 @@
                 <include>**/**.sh</include>
                 <include>**/**.txt</include>
                 <include>**/**.apk</include>
+                <include>**/**.ipa</include>
                 <include>**/**.jpg</include>
             </includes>
         </fileSet>
