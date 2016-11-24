@@ -87,8 +87,7 @@ public class AndroidDeviceManagement extends TestBase{
         device.addProperty(Constants.AndroidDeviceManagement.KEY_DEVICE_NAME, "NewDeviceName");
         MDMResponse response = client.put(Constants.AndroidDeviceManagement.DEVICE_MGT_ANDROID_UPDATE_ENDPOINT
                 + Constants.NUMBER_NOT_EQUAL_TO_DEVICE_ID, device.toString());
-        Assert.assertEquals(HttpStatus.SC_NOT_MODIFIED, response.getStatus());
-        /*TODO:Response status should be 404 (SC_NOT_FOUND) instead of 304 (SC_NOT_MODIFIED) when tested with a invalid device id.*/
+        Assert.assertEquals(HttpStatus.SC_NOT_FOUND, response.getStatus());
     }
 
     /*
