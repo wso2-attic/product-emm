@@ -522,9 +522,9 @@
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/portal</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal</outputDirectory>
-            <includes>
-                <include>**/*</include>
-            </includes>
+            <excludes>
+                <exclude>jaggery.conf</exclude>
+            </excludes>
         </fileSet>
         <!-- Copying API application-registration related files-->
         <fileSet>
@@ -1078,6 +1078,11 @@
         <file>
             <source>src/repository/deployment/server/jaggeryapps/store/jaggery.conf</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/store</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>src/repository/deployment/server/jaggeryapps/portal/jaggery.conf</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal</outputDirectory>
             <fileMode>644</fileMode>
         </file>
     </files>
