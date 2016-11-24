@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -15,24 +15,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-buildscript {
-    repositories {
-        jcenter()
+
+package org.wso2.emm.agent;
+
+import android.util.Log;
+import com.google.firebase.iid.FirebaseInstanceIdService;
+
+public class InstanceIDListenerService extends FirebaseInstanceIdService {
+
+    private static final String TAG = InstanceIDListenerService.class.getName();
+
+    @Override
+    public void onTokenRefresh() {
+        Log.d(TAG, "Refreshed token received.");
     }
 
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0'
-        classpath 'com.google.gms:google-services:3.0.0'
-    }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.2.3'
-}
-
-allprojects {
-    repositories {
-        jcenter()
-    }
 }

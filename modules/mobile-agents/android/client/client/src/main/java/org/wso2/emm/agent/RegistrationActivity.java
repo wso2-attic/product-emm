@@ -25,6 +25,7 @@ import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
 import org.wso2.emm.agent.services.DeviceInfoPayload;
 import org.wso2.emm.agent.utils.CommonDialogUtils;
 import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.FCMRegistrationUtil;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.CommonUtils;
 
@@ -35,12 +36,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.google.firebase.iid.FirebaseInstanceId;
 
 /**
  * Activity which handles user enrollment.
@@ -78,11 +80,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		// If the notification type is gcm, before registering the device, make sure that particular device has google
 		// play services installed
 		if (Constants.NOTIFIER_GCM.equals(Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE))) {
-			String senderId = Preference.getString(context, context.getResources().
-					getString(R.string.shared_pref_sender_id));
-			GCMRegistrationManager registrationManager = new GCMRegistrationManager(context, RegistrationActivity.this,
-					senderId);
-			if (registrationManager.isPlayServicesInstalled()) {
+			if (FCMRegistrationUtil.isPlayServicesInstalled(this.getApplicationContext())) {
 				registerDevice();
 			} else {
 				try {
@@ -276,34 +274,22 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
      * to the MDM server so that it can send notifications to the device.
      */
 	private void registerGCM() {
-		new AsyncTask<Void, Void, String>() {
-			String senderId = Preference.getString(context, context.getResources().getString(R.string.shared_pref_sender_id));
-			GCMRegistrationManager registrationManager = new GCMRegistrationManager(context, RegistrationActivity.this, senderId);
-
-			@Override
-			protected String doInBackground(Void... params) {
-				return registrationManager.registerWithGoogle();
+		String token =  FirebaseInstanceId.getInstance().getToken();
+		if(token != null) {
+			Preference.putString(context, Constants.GCM_REG_ID, token);
+			try {
+				sendRegistrationId();
+			} catch (AndroidAgentException e) {
+				Log.e(TAG, "Error while sending registration Id");
 			}
-
-			@Override
-			protected void onPostExecute(String regId) {
-				Preference.putString(context, Constants.GCM_REG_ID, regId);
-				if (regId != null) {
-					try {
-						sendRegistrationId();
-					} catch (AndroidAgentException e) {
-						Log.e(TAG, "Error while sending registration Id");
-					}
-				} else {
-					try {
-						CommonUtils.clearAppData(context);
-						displayGooglePlayServicesError();
-					} catch (AndroidAgentException e) {
-						Log.e(TAG, "Failed to clear app data", e);
-					}
-				}
+		} else {
+			try {
+				CommonUtils.clearAppData(context);
+				displayGooglePlayServicesError();
+			} catch (AndroidAgentException e) {
+				Log.e(TAG, "Failed to clear app data", e);
 			}
-		}.execute();
+		}
 	}
 
 	/**

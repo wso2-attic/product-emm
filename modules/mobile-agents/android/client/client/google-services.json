@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "919081834526",
+    "firebase_url": "https://wewrweragent.firebaseio.com",
+    "project_id": "wso2agent",
+    "storage_bucket": "wso2agent.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917891897426:android:cb1a80b8fbeae4c0",
+        "android_client_info": {
+          "package_name": "org.wso2.emm.agent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "9234081897234-j4f7tdaj1c6rad7bmqac05k3f3du66m1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "rerwerwwerwerwerwer"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

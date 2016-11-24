@@ -16,6 +16,7 @@
  * under the License.
  */
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 repositories {
     maven {
@@ -64,9 +65,10 @@ dependencies {
         exclude module: 'junit'
     }
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
-    compile 'com.google.android.gms:play-services-gcm:7.5.0'
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
     compile 'com.android.support:support-v4:23.1.1'
+    compile 'com.google.firebase:firebase-messaging:9.0.1'
+    compile 'com.google.android.gms:play-services-gcm:9.0.0'
     compile 'com.fasterxml.jackson.core:jackson-core:2.6.0-rc3'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.6.0-rc3'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.0-rc3'
