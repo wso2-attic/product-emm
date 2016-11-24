@@ -7,13 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AlreadyRegisteredActivity;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.EnableDeviceAdminActivity;
-import org.wso2.emm.agent.GCMRegistrationManager;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.DeviceInfo;
 import org.wso2.emm.agent.beans.ServerConfig;
@@ -328,36 +330,22 @@ public class EnrollmentService extends IntentService implements APIResultCallBac
      */
     private void registerGCM() {
         Log.i(TAG, "EMM auto enrollment, GCM registration initiated.");
-        new AsyncTask<Void, Void, String>() {
-            String senderId = Preference.getString(context, context.getResources().getString(R.string.shared_pref_sender_id));
-            GCMRegistrationManager registrationManager = new GCMRegistrationManager(EnrollmentService.this, null, senderId);
-
-            @Override
-            protected String doInBackground(Void... params) {
-                return registrationManager.registerWithGoogle();
+        String token =  FirebaseInstanceId.getInstance().getToken();
+        if(token != null) {
+            Preference.putString(context, Constants.GCM_REG_ID, token);
+            try {
+                sendRegistrationId();
+            } catch (AndroidAgentException e) {
+                Log.e(TAG, "Error while sending registration Id");
             }
-
-            @Override
-            protected void onPostExecute(String regId) {
-                Preference.putString(context, Constants.GCM_REG_ID, regId);
-                if (regId != null) {
-                    try {
-                        sendRegistrationId();
-                    } catch (AndroidAgentException e) {
-                        Log.e(TAG, "Error while sending registration Id");
-                    }
-                } else {
-                    try {
-                        CommonUtils.clearAppData(context);
-                        Log.e(TAG, "Auto enrollment failed, server is not available");
-                        startEnrollment();
-                    } catch (AndroidAgentException e) {
-                        Log.e(TAG, "Failed to clear app data", e);
-                        startEnrollment();
-                    }
-                }
+        } else {
+            Log.e(TAG, "Registration Id is not available during auto enrollment.");
+            try {
+                CommonUtils.clearAppData(context);
+            } catch (AndroidAgentException e) {
+                Log.e(TAG, "Failed to clear app data", e);
             }
-        }.execute();
+        }
     }
 
     /**
