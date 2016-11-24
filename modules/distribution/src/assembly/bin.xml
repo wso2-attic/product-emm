@@ -99,6 +99,9 @@
             <includes>
                 <include>**/*.sh</include>
             </includes>
+            <excludes>
+                <exclude>**/wso2server.sh</exclude>
+            </excludes>
             <fileMode>755</fileMode>
         </fileSet>
         <!-- Multi-tenancy related file -->
