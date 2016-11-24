@@ -50,6 +50,8 @@
                 <exclude>**/wso2carbon.jks</exclude>
                 <exclude>**/WSO2AM_DB.h2.db</exclude>
                 <exclude>**/WSO2DM_DB.h2.db</exclude>
+                <exclude>**/bin/wso2server.sh</exclude>
+                <exclude>**/bin/wso2server.bat</exclude>
                 <exclude>**/conf/axis2/axis2_client.xml</exclude>
                 <exclude>**/conf/axis2/axis2.xml</exclude>
                 <exclude>**/conf/etc/launch.ini</exclude>
@@ -1075,7 +1077,7 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat</outputDirectory>
             <fileMode>644</fileMode>
         </file>
-        <!-- Copying Cache filter enabled conf files to Publisher and Store apps -->
+        <!-- Copying Cache filter enabled conf files to Publisher,Store and portal apps -->
         <file>
             <source>src/repository/deployment/server/jaggeryapps/publisher/jaggery.conf</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/publisher</outputDirectory>
@@ -1090,6 +1092,20 @@
             <source>src/repository/deployment/server/jaggeryapps/portal/jaggery.conf</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal</outputDirectory>
             <fileMode>644</fileMode>
+        </file>
+        <!-- Copying opensaml hostname verification disabled startup scripts-->
+        <file>
+            <source>src/startup-scripts/wso2server.sh</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/bin/</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>755</fileMode>
+        </file>
+
+        <file>
+            <source>src/startup-scripts/wso2server.bat</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/bin/</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>755</fileMode>
         </file>
     </files>
 </assembly>
