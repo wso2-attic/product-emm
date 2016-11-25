@@ -18,10 +18,10 @@
 
 package org.wso2.emm.agent;
 import android.content.Context;
-import android.os.Bundle;
 
 import android.util.Log;
-import com.google.android.gms.gcm.GcmListenerService;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 
 import org.wso2.emm.agent.services.MessageProcessor;
 import org.wso2.emm.agent.utils.CommonUtils;
@@ -29,18 +29,13 @@ import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
 /**
- * IntentService responsible for handling GCM messages.
+ * IntentService responsible for handling FCM messages.
  */
-public class GCMIntentService extends GcmListenerService {
+public class FCMMessagingService extends FirebaseMessagingService {
+	private static final String TAG = FCMMessagingService.class.getName();
 
-	private static final String TAG = GCMIntentService.class.getName();
-
-	/**
-	 * This method gets called when a GCM message is received. We use GCM as the device wake up
-	 * method. Once the Agent receives a GCM notification, Agent polls the server for pending operations.
-	 */
 	@Override
-	public void onMessageReceived(String from, Bundle data) {
+	public void onMessageReceived(RemoteMessage message){
 		Context context = this.getApplicationContext();
 		MessageProcessor messageProcessor = new MessageProcessor(context);
 		try {
@@ -58,3 +53,4 @@ public class GCMIntentService extends GcmListenerService {
 	}
 
 }
+
