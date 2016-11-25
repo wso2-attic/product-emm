@@ -37,6 +37,7 @@ public class FCMMessagingService extends FirebaseMessagingService {
 	@Override
 	public void onMessageReceived(RemoteMessage message){
 		Context context = this.getApplicationContext();
+		Log.d(TAG, "New FCM notification.");
 		MessageProcessor messageProcessor = new MessageProcessor(context);
 		try {
 			messageProcessor.getMessages();
