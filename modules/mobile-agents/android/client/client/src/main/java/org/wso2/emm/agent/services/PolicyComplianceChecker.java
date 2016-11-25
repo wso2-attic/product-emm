@@ -131,15 +131,15 @@ public class PolicyComplianceChecker {
             case Constants.Operation.SET_SCREEN_CAPTURE_DISABLED:
             case Constants.Operation.SET_STATUS_BAR_DISABLED:
                 if(applicationManager.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
-                    CommonUtils.callSystemApp(context,operation.getCode(),
-                                              Boolean.toString(operation.isEnabled()), null);
-                    // Since without rooting the device a policy set by the device owner cannot
-                    // be violated or overridden, no compliance check is necessary.
-                    policy.setCompliance(true);
-                    return policy;
-                } else {
-                    throw new AndroidAgentException("Invalid operation code received");
+                    CommonUtils.callSystemApp(context, operation.getCode(),
+                            Boolean.toString(operation.isEnabled()), null);
                 }
+                // Since without rooting the device a policy set by the device owner cannot
+                // be violated or overridden, no compliance check is necessary.
+                //TODO: implement a mechanism in the system app to call the agent back and report
+                //policy status to agent.
+                policy.setCompliance(true);
+                return policy;
             case Constants.Operation.APP_RESTRICTION:
                 return checkAppRestrictionPolicy(operation);
             default:
