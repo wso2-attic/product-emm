@@ -84,7 +84,7 @@ public class UserOperations {
                              "/permission/admin/device-mgt/configurations/view," +
                              "/permission/admin/device-mgt/devices/enroll/android," +
                              "/permission/admin/device-mgt/devices/enroll/ios," +
-                             "/permission/admin/device-mgt/devices/owning/view," +
+                             "/permission/admin/device-mgt/devices/owning-device/view," +
                              "/permission/admin/device-mgt/devices/any-device/permitted-actions-under-owning-device," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/applications," +
                              "/permission/admin/device-mgt/devices/owning-device/operations/android/blacklist-app," +

@@ -43,7 +43,7 @@ public class AppOperations {
         String filePath = "apps" + File.separator + platform + File.separator + appName;
         HTTPResponse
                 httpResponse = HTTPInvoker.uploadFile(appUploadEndpoint, filePath, appContentType);
-        System.out.println(httpResponse.getResponseCode());
+
         if (Constants.HTTPStatus.OK == httpResponse.getResponseCode()) {
             JSONObject appMeta = null;
             MobileApplication application = new MobileApplication();
