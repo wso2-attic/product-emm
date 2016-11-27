@@ -530,6 +530,7 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal</outputDirectory>
             <excludes>
                 <exclude>jaggery.conf</exclude>
+                <exclude>**/designer.json</exclude>
             </excludes>
         </fileSet>
         <!-- Copying API application-registration related files-->
