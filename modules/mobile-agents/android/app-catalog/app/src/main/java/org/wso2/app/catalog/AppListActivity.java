@@ -270,7 +270,7 @@ public class AppListActivity extends Activity implements APIResultCallBack {
                     if (webAppCategories != null && !webAppCategories.contains(application.getCategory())) {
                         webAppCategories.add(application.getCategory());
                     }
-                } else {
+                } else if (Constants.ApplicationPayload.PLATFORM_ANDROID.equals(application.getPlatform())){
                     mobileApps.add(application);
                     if (mobileAppCategories != null && !mobileAppCategories.contains(application.getCategory())) {
                         mobileAppCategories.add(application.getCategory());

@@ -33,7 +33,7 @@ public class Constants {
 	public static final String SERVER_APP_ENDPOINT = "/api/appm/";
 	public static final String OAUTH_ENDPOINT = "/oauth2/token";
 	public static final String GOOGLE_PLAY_APP_URI = "market://details?id=";
-	public static final String APP_LIST_ENDPOINT = "/api/appm/publisher/v1.0/apps/mobileapp?field-filter=all";
+	public static final String APP_LIST_ENDPOINT = "/api/appm/publisher/v1.1/apps/mobileapp?field-filter=all";
 	public static final String APP_IMAGE_ENDPOINT = "/publisher/api/mobileapp/getfile/";
 	// This is set to override the server host name retrieving screen. If overriding is not
 	// needed, set this to null.
@@ -130,5 +130,6 @@ public class Constants {
 		public static final String PACKAGE = "package";
 		public static final String TYPE_MOBILE_APP = "enterprise";
 		public static final String TYPE_WEB_CLIP = "webapp";
+		public static final String PLATFORM_ANDROID = "android";
 	}
 }
