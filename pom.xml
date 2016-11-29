@@ -1041,12 +1041,12 @@
         <carbon.governance.version>4.6.5</carbon.governance.version>
 
         <!-- Carbon Device Management -->
-        <carbon.device.mgt.version>1.2.7-SNAPSHOT</carbon.device.mgt.version>
+        <carbon.device.mgt.version>1.2.8-SNAPSHOT</carbon.device.mgt.version>
         <carbon.device.mgt.version.range>[1.1.1, 2.0.0)</carbon.device.mgt.version.range>
 
         <!-- Carbon Mobile Device Management -->
-        <carbon.mobile.device.mgt.version>2.2.6-SNAPSHOT</carbon.mobile.device.mgt.version>
-        <mdm.version>2.2.0-SNAPSHOT</mdm.version>
+        <carbon.mobile.device.mgt.version>2.2.8-SNAPSHOT</carbon.mobile.device.mgt.version>
+        <mdm.version>${project.version}</mdm.version>
 
         <!-- Carbon API Management -->
         <carbon.api.mgt.version>6.0.5</carbon.api.mgt.version>
@@ -1109,7 +1109,7 @@
 
         <!-- Carbon Dashboards version-->
         <carbon.dashboards.version>2.0.3</carbon.dashboards.version>
-        <carbon.analytics.cdmf.version>1.0.2-SNAPSHOT</carbon.analytics.cdmf.version>
+        <carbon.analytics.cdmf.version>1.0.3</carbon.analytics.cdmf.version>
         <carbon.analytics.emm.version>1.0.0</carbon.analytics.emm.version>
 
         <!-- EMM QSG properties -->
