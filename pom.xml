@@ -1041,11 +1041,11 @@
         <carbon.governance.version>4.6.5</carbon.governance.version>
 
         <!-- Carbon Device Management -->
-        <carbon.device.mgt.version>1.2.8-SNAPSHOT</carbon.device.mgt.version>
+        <carbon.device.mgt.version>1.2.7</carbon.device.mgt.version>
         <carbon.device.mgt.version.range>[1.1.1, 2.0.0)</carbon.device.mgt.version.range>
 
         <!-- Carbon Mobile Device Management -->
-        <carbon.mobile.device.mgt.version>2.2.8-SNAPSHOT</carbon.mobile.device.mgt.version>
+        <carbon.mobile.device.mgt.version>2.2.7</carbon.mobile.device.mgt.version>
         <mdm.version>${project.version}</mdm.version>
 
         <!-- Carbon API Management -->
