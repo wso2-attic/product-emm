@@ -530,6 +530,7 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal</outputDirectory>
             <excludes>
                 <exclude>jaggery.conf</exclude>
+                <exclude>**/designer.json</exclude>
             </excludes>
         </fileSet>
         <!-- Copying API application-registration related files-->
@@ -923,11 +924,13 @@
             <destName>WSO2DM_DB.h2.db</destName>
             <fileMode>644</fileMode>
         </file>
-        <file>
-            <source>target/wso2carbon-core-${carbon.kernel.version}/repository/conf/carbon.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
-            <filtered>true</filtered>
-        </file>
+        <!-- Commenting out following original carbon.xml file copy
+            as a temporary solution to fix JIRA: https://wso2.org/jira/browse/EMM-1845 -->
+        <!--<file>-->
+            <!--<source>target/wso2carbon-core-${carbon.kernel.version}/repository/conf/carbon.xml</source>-->
+            <!--<outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>-->
+            <!--<filtered>true</filtered>-->
+        <!--</file>-->
         <!-- Copying identity-mgt.properties -->
         <!--file>
           <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity/identity-mgt.properties</source>
@@ -1104,12 +1107,27 @@
             <filtered>true</filtered>
             <fileMode>755</fileMode>
         </file>
-
         <file>
             <source>src/startup-scripts/wso2server.bat</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/bin/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>755</fileMode>
+        </file>
+        <!-- Copying alternate designer.json file to wso2-portal/configs
+            as a temporary solution to overcome a bug in original designer.json of
+            portal - JIRA: https://wso2.org/jira/browse/EMM-1845 -->
+        <file>
+            <source>src/repository/deployment/server/jaggeryapps/portal/designer.json</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal/configs/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <!-- Copying alternate carbon.xml file to repository/conf
+            as a temporary solution to overcome JIRA: https://wso2.org/jira/browse/EMM-1845 -->
+        <file>
+            <source>src/repository/conf/carbon.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
         </file>
     </files>
 </assembly>
