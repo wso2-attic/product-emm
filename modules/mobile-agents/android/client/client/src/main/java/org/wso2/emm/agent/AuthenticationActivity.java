@@ -329,12 +329,7 @@ public class AuthenticationActivity extends SherlockActivity implements APIAcces
 			info.setClientID(clientKey);
 			info.setClientSecret(clientSecret);
 			info.setUsername(username);
-			try {
-				info.setPassword(URLEncoder.encode(passwordVal, "UTF-8"));
-			} catch (UnsupportedEncodingException e) {
-				String msg = "error occurred while encoding password.";
-				Log.e(TAG, msg, e);
-			}
+			info.setPassword(passwordVal);
 			info.setTokenEndPoint(serverURL);
 			if (tenantDomain != null && !tenantDomain.toString().trim().isEmpty()) {
 				info.setTenantDomain(tenantDomain.toString().trim());
