@@ -79,16 +79,9 @@
                     android:button="@drawable/custom_checkbox"
                     android:checked="true"
                     android:text="@string/txt_byod"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:enabled="false"/>
 
-                <RadioButton
-                    android:id="@+id/radioCOPE"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:button="@drawable/custom_checkbox"
-                    android:text="@string/txt_cope"
-                    android:textColor="@android:color/black" />
             </RadioGroup>
 
             <Button
