@@ -264,10 +264,11 @@ public final class Constants {
         public static final String GET_DEVICE_COUNT_ENDPOINT = "/api/device-mgt/v1.0/devices";
         public static final String NO_OF_DEVICES = "10";
         public static final String GET_ALL_DEVICES_ENDPOINT ="/api/device-mgt/v1.0/devices";
-        public static final String VIEW_DEVICE_TYPES_ENDPOINT = "/mdm-admin/devices/types";
+        public static final String VIEW_DEVICE_TYPES_ENDPOINT = "/api/device-mgt/v1.0/device-types";
         public static final String VIEW_DEVICE_RESPONSE_PAYLOAD_FILE_NAME =
                                                         "mobile-device-mgt-view-device-types-response-payloads.json";
         public static final String SEARCH_DEVICE_ENDPOINT = "/api/device-mgt/v1.0/devices/search-devices";
+        public static final int DEVICE_TYPES_COUNT = 2;
     }
 
 

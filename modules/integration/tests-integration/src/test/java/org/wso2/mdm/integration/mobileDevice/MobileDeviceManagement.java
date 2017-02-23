@@ -89,39 +89,39 @@ public class MobileDeviceManagement extends TestBase {
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
    }
 
-//    @Test(dependsOnMethods = {"addEnrollment"}, description = "Test view device types")
-//    public void testViewDeviceTypes() throws Exception {
-//        MDMResponse response = client.get(Constants.MobileDeviceManagement.VIEW_DEVICE_TYPES_ENDPOINT);
-//        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-//        //Assert.assertEquals(PayloadGenerator.getJsonPayloadToString(Constants.MobileDeviceManagement.VIEW_DEVICE_RESPONSE_PAYLOAD_FILE_NAME),response.getBody());
-//        JsonArray responseDeviceTypes = parser.parse(response.getBody()).getAsJsonArray();
-//        Set<String> deviceTypesSet = new HashSet<>();
-//        for (int i = 0; i < responseDeviceTypes.size(); i++) {
-//            deviceTypesSet.add(responseDeviceTypes.get(i).getAsJsonObject().get("name").getAsString());
-//        }
-//        JsonArray deviceTypes = PayloadGenerator.getJsonPayload(
-//                Constants.MobileDeviceManagement.VIEW_DEVICE_RESPONSE_PAYLOAD_FILE_NAME);
-//        for (int i = 0; i < deviceTypes.size(); i++) {
-//            String type = deviceTypes.get(i).getAsJsonObject().get("name").getAsString();
-//            Assert.assertTrue(deviceTypesSet.contains(type));
-//
-//        }
-//        //Response has two device types, because in windows enrollment a windows device is previously enrolled.
-//    }
-//
-//    //Pagination testings for GetAllDevice Function
-//    @Test(dependsOnMethods = "addEnrollment", description = "Get 5 records of devices")
-//    public void testGetDevicesForSetOfDevices() throws Exception{
-//        MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT+"?start=0&length=5");
-//        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
-//        JsonObject jsonObject = parser.parse(response.getBody()).getAsJsonObject();
-//        Assert.assertTrue("missing 'recordsTotal' attribute in response",jsonObject.has("recordsTotal"));
-//        Assert.assertTrue("missing 'recordsFiltered' attribute in response",jsonObject.has("recordsFiltered"));
-//        Assert.assertTrue("missing 'data' attribute in response",jsonObject.has("data"));
-//        JsonArray jsonArray = jsonObject.getAsJsonArray("data");
-//        Assert.assertTrue("response array length not equal to requested length",String.valueOf(jsonArray.size()).equals("5"));
-//    }
-//
+    @Test(dependsOnMethods = {"addEnrollment"}, description = "Test view device types")
+    public void testViewDeviceTypes() throws Exception {
+        MDMResponse response = client.get(Constants.MobileDeviceManagement.VIEW_DEVICE_TYPES_ENDPOINT);
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        JsonObject deviceTypesJsonObject = parser.parse(response.getBody()).getAsJsonObject();
+        Assert.assertEquals(deviceTypesJsonObject.get("count").getAsInt(),
+                Constants.MobileDeviceManagement.DEVICE_TYPES_COUNT);
+        JsonArray responseDeviceTypes = deviceTypesJsonObject.getAsJsonArray("deviceTypes");
+        Set<String> deviceTypesSet = new HashSet<>();
+        for (int i = 0; i < responseDeviceTypes.size(); i++) {
+            deviceTypesSet.add(responseDeviceTypes.get(i).getAsString());
+        }
+        JsonArray deviceTypes = PayloadGenerator.getJsonPayload(
+                Constants.MobileDeviceManagement.VIEW_DEVICE_RESPONSE_PAYLOAD_FILE_NAME);
+        for (int i = 0; i < deviceTypes.size(); i++) {
+            String type = deviceTypes.get(i).getAsJsonObject().get("name").getAsString();
+            Assert.assertTrue(deviceTypesSet.contains(type));
+
+        }
+        //Response has two device types, because in windows enrollment a windows device is previously enrolled.
+    }
+
+    //Pagination testings for GetAllDevice Function
+    @Test(dependsOnMethods = "addEnrollment", description = "Get 5 records of devices")
+    public void testGetDevicesForSetOfDevices() throws Exception{
+        MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT+"?offset=0&limit=5");
+        Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        JsonObject jsonObject = parser.parse(response.getBody()).getAsJsonObject();
+        Assert.assertTrue("missing 'devices' attribute in response", jsonObject.has("devices"));
+        JsonArray jsonArray = jsonObject.getAsJsonArray("devices");
+        Assert.assertTrue("response array length not equal to requested length", String.valueOf(jsonArray.size()).equals("5"));
+    }
+
     @Test(dependsOnMethods = "addEnrollment", description = "Get all android devices")
     public void testGetAndroidDevices() throws Exception{
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT+"?type=android");
@@ -148,11 +148,11 @@ public class MobileDeviceManagement extends TestBase {
                                                                         String.valueOf(jsonObject.get("count")).equals("10"));
     }
 
-//    @Test(dependsOnMethods = "addEnrollment", description = "Test response for invalid start record number")
-//    public void testGetDevicesWithInvalidStartNumber() throws Exception{
-//        MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT+"?start=");
-//        Assert.assertEquals(HttpStatus.SC_NOT_FOUND,response.getStatus());
-//    }
+    @Test(dependsOnMethods = "addEnrollment", description = "Test response for invalid start record number")
+    public void testGetDevicesWithInvalidStartNumber() throws Exception{
+        MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT+"?offset=");
+        Assert.assertEquals(HttpStatus.SC_NOT_FOUND,response.getStatus());
+    }
 
     @Test(dependsOnMethods = "addEnrollment", description = "Test response for minus length")
     public void testGetDeviceWithMinusLength() throws Exception{
