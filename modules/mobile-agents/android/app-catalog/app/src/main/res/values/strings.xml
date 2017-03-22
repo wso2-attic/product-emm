@@ -26,6 +26,7 @@
     <string name="toast_error_username">Please enter username</string>
     <string name="filter_hint">Select a category to filter</string>
     <string name="app_list_error">Failed to retrieve application list, please contact administrator</string>
+    <string name="no_apps_found_msg">Sorry, There are no apps published yet! Please contact your publisher</string>
     <string name="toast_error_password">Please enter password</string>
     <string name="dialog_authenticate">Authenticating</string>
     <string name="dialog_message_please_wait">Please wait</string>
