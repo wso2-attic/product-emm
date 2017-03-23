@@ -64,6 +64,7 @@ public class AppListActivity extends Activity implements APIResultCallBack {
     private TextView btnMobileApps;
     private TextView btnWebApps;
     private TextView txtError;
+    private TextView txtNoAppsFound;
     private EditText etSearch;
     private TextView btnSignOut;
     private Spinner spinner;
@@ -88,6 +89,7 @@ public class AppListActivity extends Activity implements APIResultCallBack {
         btnMobileApps = (TextView)findViewById(R.id.btnMobileApps);
         btnWebApps = (TextView)findViewById(R.id.btnWebApps);
         txtError = (TextView)findViewById(R.id.txtError);
+        txtNoAppsFound = (TextView)findViewById(R.id.txtNoAppsFound);
         btnSignOut = (TextView)findViewById(R.id.btnSignOut);
         etSearch = (EditText)findViewById(R.id.etSearch);
         spinner = (Spinner)findViewById(R.id.spinner);
@@ -95,6 +97,7 @@ public class AppListActivity extends Activity implements APIResultCallBack {
         webApps = new ArrayList<>();
         appList.setVisibility(View.GONE);
         txtError.setVisibility(View.GONE);
+        txtNoAppsFound.setVisibility(View.GONE);
         mobileAppCategories = new ArrayList<>();
         webAppCategories = new ArrayList<>();
         mobileAppCategories.add(getResources().getString(R.string.filter_hint));
@@ -295,7 +298,7 @@ public class AppListActivity extends Activity implements APIResultCallBack {
             appList.setVisibility(View.GONE);
             btnMobileApps.setVisibility(View.GONE);
             btnWebApps.setVisibility(View.GONE);
-            txtError.setVisibility(View.VISIBLE);
+            txtNoAppsFound.setVisibility(View.VISIBLE);
         }
     }
 
