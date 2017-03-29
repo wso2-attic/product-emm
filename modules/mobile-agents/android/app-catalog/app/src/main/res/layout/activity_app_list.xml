@@ -62,15 +62,6 @@
             android:text="@string/app_list_error"
             android:layout_gravity="center"
             android:gravity="center"/>
-        <TextView android:id="@+id/txtNoAppsFound"
-            android:layout_width="match_parent"
-            android:textSize="14sp"
-            android:textColor="#535353"
-            android:visibility="gone"
-            android:layout_height="wrap_content"
-            android:text="@string/no_apps_found_msg"
-            android:layout_gravity="center"
-            android:gravity="center"/>
         <ListView
             android:id="@+id/appList"
             android:layout_width="match_parent"
