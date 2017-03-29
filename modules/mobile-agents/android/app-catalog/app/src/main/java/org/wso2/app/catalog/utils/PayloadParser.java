@@ -72,8 +72,7 @@ public class PayloadParser {
                     if(Constants.ApplicationPayload.TYPE_WEB_CLIP.equals(application.getAppType().trim())) {
                         application.setAppUrl(appMeta.getString(Constants.ApplicationPayload.WEB_URL));
                     } else {
-                        application.setAppUrl(serverUrl + Constants.APP_IMAGE_ENDPOINT +
-                                appMeta.getString(Constants.ApplicationPayload.WEB_URL));
+                        application.setAppUrl(serverUrl + appMeta.getString(Constants.ApplicationPayload.WEB_URL));
                     }
                 }
 
