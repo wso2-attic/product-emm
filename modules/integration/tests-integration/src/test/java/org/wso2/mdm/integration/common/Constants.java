@@ -298,8 +298,6 @@ public final class Constants {
                 = "/api/device-mgt/v1.0/roles?offset=0&limit=2";
         public static final String SCOPE_ROLE_ENDPOINT = "/api/device-mgt/v1.0/roles/scopes";
         public static final String ROLE_PAYLOAD_FILE_NAME = "role-payloads.json";
-        public static final String ROLE_RESPONSE_PAYLOAD
-                = "[{\"key\":\"role:view\",\"name\":\"View roles\",\"roles\":\"admin,manager\",\"description\":\"\"},{\"key\":\"role:manage\",\"name\":\"Add roles\",\"roles\":\"admin,manager\",\"description\":\"\"}]";
         public static final String ROLE_RESPONSE_PAYLOAD_FILE_NAME = "role-response-payloads.json";
         public static final String ROLE_ERRONEOUS_PAYLOAD_FILE_NAME = "role-erroneous-payloads.json";
         public static final String ROLE_UPDATE_PAYLOAD_FILE_NAME = "role-update-payloads.json";
