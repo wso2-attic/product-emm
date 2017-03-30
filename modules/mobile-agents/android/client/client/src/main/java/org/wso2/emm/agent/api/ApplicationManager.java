@@ -726,7 +726,7 @@ public class ApplicationManager {
                 //Initialise local responseHeaders map with response headers received
                 responseHeaders = response.headers;
                 //Pass the response data here
-                if ("application/octet-stream".equals(responseHeaders.get("Content-Type"))) {
+                if (response.statusCode == 200) {
                     return Response.success(response.data, HttpHeaderParser.parseCacheHeaders(response));
                 } else {
                     VolleyError error = new VolleyError("Invalid application file URL.");
