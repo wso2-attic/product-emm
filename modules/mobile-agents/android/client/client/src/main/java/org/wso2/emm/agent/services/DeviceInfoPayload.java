@@ -56,7 +56,7 @@ public class DeviceInfoPayload {
         this.context = context.getApplicationContext();
         deviceInfo = new DeviceInfo(context);
         mapper = new ObjectMapper();
-        registrationId = Preference.getString(context, Constants.GCM_REG_ID);
+//      registrationId = Preference.getString(context, Constants.GCM_REG_ID);
         phoneState = new DeviceState(context);
         locationService = LocationServiceImpl.getInstance(context);
     }
@@ -73,7 +73,7 @@ public class DeviceInfoPayload {
         //setting up basic details of the device
         info.setOwner(owner);
         info.setOwnership(type.equals(Constants.OWNERSHIP_BYOD) ? Device.EnrolmentInfo.OwnerShip.BYOD
-                                                                : Device.EnrolmentInfo.OwnerShip.COPE);
+                : Device.EnrolmentInfo.OwnerShip.COPE);
         device.setEnrolmentInfo(info);
         getInfo();
     }
@@ -104,6 +104,7 @@ public class DeviceInfoPayload {
         device.setDeviceIdentifier(deviceInfo.getDeviceId());
         device.setDescription(deviceInfo.getDeviceName());
         device.setName(deviceInfo.getDeviceName());
+        registrationId = Preference.getString(context, Constants.GCM_REG_ID);
 
         List<Device.Property> properties = new ArrayList<>();
 

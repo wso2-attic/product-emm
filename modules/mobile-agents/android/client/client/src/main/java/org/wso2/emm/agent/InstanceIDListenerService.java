@@ -29,5 +29,4 @@ public class InstanceIDListenerService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         Log.d(TAG, "Refreshed token received.");
     }
-
 }
