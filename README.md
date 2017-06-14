@@ -1,3 +1,6 @@
+# Note
+Since WSO2 IoTS will be used for all device types including the mobile devices which have been supported by EMM, we are deprecating this product and moving it to attic.
+
 ##WSO2 ENTERPRISE MOBILITY MANAGER
 
 [![Build Status](https://wso2.org/jenkins/buildStatus/icon?job=product-emm)](https://wso2.org/jenkins/view/Dashboard/job/product-emm/)
