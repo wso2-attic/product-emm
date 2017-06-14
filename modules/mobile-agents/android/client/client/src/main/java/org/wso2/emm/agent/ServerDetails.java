@@ -30,10 +30,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.wso2.emm.agent.api.DeviceInfo;
-import org.wso2.emm.agent.factory.DeviceStateFactory;
-import org.wso2.emm.agent.interfaces.DeviceState;
+import org.wso2.emm.agent.api.DeviceState;
+import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.Response;
@@ -46,7 +44,6 @@ public class ServerDetails extends Activity {
 	private TextView evServerIP;
 	private Button btnStartRegistration;
 	private Context context;
-	private DeviceInfo deviceInfo;
 	private DeviceState state;
 	private TextView txtSeverAddress;
 
@@ -55,40 +52,41 @@ public class ServerDetails extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 		context = this.getApplicationContext();
-		deviceInfo = new DeviceInfo(context);
-		state = DeviceStateFactory.getDeviceState(context, deviceInfo.getSdkVersion());
+		state = new DeviceState(context);
 		evServerIP = (TextView) findViewById(R.id.evServerIP);
 		txtSeverAddress = (TextView) findViewById(R.id.tvSeverAddress);
 		btnStartRegistration = (Button) findViewById(R.id.btnStartRegistration);
 		btnStartRegistration.setBackground(getResources().getDrawable(R.drawable.btn_grey));
 		btnStartRegistration.setTextColor(getResources().getColor(R.color.black));
+		Response deviceCompatibility = state.evaluateCompatibility();
 
-		Response compatibility = state.evaluateCompatibility();
-
-		if (!compatibility.getCode()) {
-			txtSeverAddress.setText(compatibility.getDescriptionResourceID());
+		if (!deviceCompatibility.getCode()) {
+			txtSeverAddress.setText(deviceCompatibility.getDescriptionResourceID());
 			btnStartRegistration.setVisibility(View.GONE);
 			txtSeverAddress.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.GONE);
 		} else {
 			btnStartRegistration.setVisibility(View.VISIBLE);
 			evServerIP.setVisibility(View.VISIBLE);
-			String ipSaved =
-					Preference.getString(context.getApplicationContext(), Constants.IP);
+			String ipSaved = Constants.DEFAULT_HOST;
+			String prefIP = Preference.getString(context.getApplicationContext(), Constants.PreferenceFlag.IP);
+			if (prefIP != null) {
+				ipSaved = prefIP;
+			}
+
+			if (Constants.DEFAULT_HOST != null) {
+				ipSaved = Constants.DEFAULT_HOST;
+				CommonUtils.saveHostDeatils(context, ipSaved);
+			}
 
 			// check if we have the IP saved previously.
 			if (ipSaved != null && !ipSaved.isEmpty()) {
 				evServerIP.setText(ipSaved);
 				startAuthenticationActivity();
-			} else {
-				evServerIP.setText(ipSaved);
 			}
+			boolean isDeviceActive = Preference.getBoolean(context, Constants.PreferenceFlag.DEVICE_ACTIVE);
 
-			String deviceActive = Preference.getString(context, context.getResources().
-					getString(R.string.shared_pref_device_active));
-
-			if (deviceActive != null && deviceActive.equals(context.getResources().
-					getString(R.string.shared_pref_reg_success))) {
+			if (isDeviceActive) {
 				Intent intent = new Intent(ServerDetails.this, AlreadyRegisteredActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
@@ -141,40 +139,37 @@ public class ServerDetails extends Activity {
 			btnStartRegistration.setEnabled(false);
 		}
 	}
-	
+
 	private void loadStartRegistrationDialog(){
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(ServerDetails.this);
 		StringBuilder messageBuilder = new StringBuilder();
-		messageBuilder
-				.append(getResources().getString(R.string.dialog_init_confirmation));
-		messageBuilder.append(context.getResources()
-		                             .getString(R.string.intent_extra_space));
+		messageBuilder.append(getResources().getString(R.string.dialog_init_confirmation));
+		messageBuilder.append(context.getResources().getString(R.string.intent_extra_space));
 		messageBuilder.append(evServerIP.getText().toString());
-		messageBuilder.append(context.getResources()
-		                             .getString(R.string.intent_extra_space));
-		messageBuilder
-				.append(getResources().getString(R.string.dialog_init_end_general));
+		messageBuilder.append(context.getResources().getString(R.string.intent_extra_space));
+		messageBuilder.append(getResources().getString(R.string.dialog_init_end_general));
 		alertBuilder.setMessage(messageBuilder.toString())
 		            .setPositiveButton(getResources().getString(R.string.yes),
 		                               dialogClickListener)
 		            .setNegativeButton(getResources().getString(R.string.no),
 		                               dialogClickListener).show();
 	}
-	
+
 	private DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
 			switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
 					if (!evServerIP.getText().toString().trim().isEmpty()) {
-						Preference.putString(context.getApplicationContext(), Constants.IP,
-						                     evServerIP.getText().toString().trim());
+						String host = evServerIP.getText().toString().trim();
+						CommonUtils.saveHostDeatils(context, host);
+
 						startAuthenticationActivity();
 					} else {
 						Toast.makeText(context.getApplicationContext(),
-						               getResources().getString(
-								               R.string.toast_message_enter_server_address),
-						               Toast.LENGTH_LONG).show();
+								getResources().getString(
+										R.string.toast_message_enter_server_address),
+								Toast.LENGTH_LONG).show();
 					}
 					break;
 
@@ -192,9 +187,11 @@ public class ServerDetails extends Activity {
 	 * This method is called to open AuthenticationActivity.
 	 */
 	private void startAuthenticationActivity() {
-		Intent intent = new Intent(ServerDetails.this, AuthenticationActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);
+		if (Constants.AUTO_ENROLLMENT_BACKGROUND_SERVICE_ENABLED == false) {
+			Intent intent = new Intent(ServerDetails.this, AuthenticationActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+		}
 	}
 
 	@Override

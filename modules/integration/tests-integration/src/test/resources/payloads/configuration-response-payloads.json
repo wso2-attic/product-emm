@@ -1,0 +1,23 @@
+{
+  "PUT":{
+    "type": "android",
+    "configuration": [
+      {
+        "name": "notifierFrequency",
+        "contentType": "text",
+        "value": "60000"
+      }
+    ]
+  },
+
+  "GET":{
+    "type": "android",
+    "configuration": [
+      {
+        "name": "notifierFrequency",
+        "contentType": "text",
+        "value": "60000"
+      }
+    ]
+  }
+}

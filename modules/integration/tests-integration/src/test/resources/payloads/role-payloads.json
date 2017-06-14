@@ -1,0 +1,39 @@
+{
+  "POST": {
+    "roleName": "administration",
+    "users": [
+      "admin"
+    ]
+  },
+  "DELETE": {
+    "scopes":[
+      {
+        "key": "role:view",
+        "name": "View roles",
+        "roles": "admin",
+        "description": ""
+      },
+      {
+        "key": "role:manage",
+        "name": "Add roles",
+        "roles": "admin",
+        "description": ""
+      }
+    ]
+  },
+  "PUT": [
+    {
+      "key": "role:view",
+      "name": "View roles",
+      "roles": "admin,manager",
+      "description": ""
+    },
+    {
+      "key": "role:manage",
+      "name": "Add roles",
+      "roles": "admin,manager",
+      "description": ""
+    }
+  ]
+}
+

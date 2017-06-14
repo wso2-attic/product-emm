@@ -1,4 +1,0 @@
-{
-  "extends": "bootstrap",
-  "predicate": "config.theme == 'default'"
-}

@@ -29,6 +29,7 @@ import org.wso2.emm.agent.utils.Preference;
 import org.wso2.emm.agent.utils.CommonUtils;
 
 import android.app.admin.DeviceAdminReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -42,6 +43,7 @@ import android.widget.Toast;
  * method onEnabled().
  */
 public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements APIResultCallBack {
+
 	private static final String TAG = AgentDeviceAdminReceiver.class.getName();
 	private String regId;
 
@@ -49,26 +51,20 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 	 * Called when this application is approved to be a device administrator.
 	 */
 	@Override
-	public void onEnabled(Context context, Intent intent) {
+	public void onEnabled(final Context context, Intent intent) {
 		super.onEnabled(context, intent);
+
 		Resources resources = context.getResources();
-		Preference.putString(context,
-				context.getResources().getString(R.string.shared_pref_device_active),
-				resources.getString(R.string.shared_pref_reg_success));
+		Preference.putBoolean(context, Constants.PreferenceFlag.DEVICE_ACTIVE, true);
 
-		MessageProcessor processor = new MessageProcessor(context);
-		try {
-			processor.getMessages();
-		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Failed to perform operation", e);
-		}
-
-		Toast.makeText(context, R.string.device_admin_enabled,
-				Toast.LENGTH_LONG).show();
-		String notifier = Preference.getString(context, resources.getString(R.string.shared_pref_notifier));
+//		MessageProcessor processor = new MessageProcessor(context);
+//		try {
+//			processor.getMessages();
+//		} catch (AndroidAgentException e) {
+//			Log.e(TAG, "Failed to perform operation", e);
+//		}
+		String notifier = Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE);
 		if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
-			LocalNotification.startPolling(context);
-		} else if(notifier == null) {
 			LocalNotification.startPolling(context);
 		}
 	}
@@ -82,14 +78,13 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 		Toast.makeText(context, R.string.device_admin_disabled,
 		               Toast.LENGTH_LONG).show();
 		regId = Preference
-				.getString(context, context.getResources().getString(R.string.shared_pref_regId));
+				.getString(context, Constants.PreferenceFlag.REG_ID);
 
 		if (regId != null && !regId.isEmpty()) {
 			startUnRegistration(context);
 		} else {
 			Log.e(TAG, "Registration ID is already null");
 		}
-
 	}
 
 	/**
@@ -97,24 +92,32 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 	 * @param context - Application context.
 	 */
 	public void startUnRegistration(Context context) {
-		String regId = Preference.getString(context, context
-				.getResources().getString(R.string.shared_pref_regId));
-		LocalNotification.stopPolling(context);
+		String regId = Preference.getString(context, Constants.PreferenceFlag.REG_ID);
+		if (regId != null && !regId.isEmpty()) {
+			String serverIP = Constants.DEFAULT_HOST;
+			String prefIP = Preference.getString(context, Constants.PreferenceFlag.IP);
+			if (prefIP != null) {
+				serverIP = prefIP;
+			}
+			if (serverIP != null && !serverIP.isEmpty()) {
+				ServerConfig utils = new ServerConfig();
+				utils.setServerIP(serverIP);
 
-		String serverIP = Preference.getString(context, Constants.IP);
-		ServerConfig utils = new ServerConfig();
-		utils.setServerIP(serverIP);
-
-		CommonUtils.callSecuredAPI(context,
-		                           utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT + regId,
-		                           HTTP_METHODS.DELETE,
-		                           null, AgentDeviceAdminReceiver.this,
-		                           Constants.UNREGISTER_REQUEST_CODE);
-		try {
-			CommonUtils.unRegisterClientApp(context);
-			CommonUtils.clearAppData(context);
-		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Error occurred while removing Oauth application", e);
+				CommonUtils.callSecuredAPI(context,
+				                           utils.getAPIServerURL(context) + Constants.UNREGISTER_ENDPOINT + regId,
+				                           HTTP_METHODS.DELETE,
+				                           null, AgentDeviceAdminReceiver.this,
+				                           Constants.UNREGISTER_REQUEST_CODE);
+				try {
+					LocalNotification.stopPolling(context);
+					CommonUtils.unRegisterClientApp(context, AgentDeviceAdminReceiver.this);
+					CommonUtils.clearAppData(context);
+				} catch (AndroidAgentException e) {
+					Log.e(TAG, "Error occurred while removing Oauth application", e);
+				}
+			} else {
+				Log.e(TAG, "There is no valid IP to contact the server");
+			}
 		}
 	}
 
@@ -148,4 +151,35 @@ public class AgentDeviceAdminReceiver extends DeviceAdminReceiver implements API
 			Log.d(TAG, "Unregistered." + arg0.toString());
 		}
 	}
+
+	@Override
+	public void onProfileProvisioningComplete(Context context, Intent intent) {
+		Intent launch = new Intent(context, EnableProfileActivity.class);
+		launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		context.startActivity(launch);
+
+	}
+
+	/**
+	 * Generates a {@link ComponentName} that is used throughout the app.
+	 * @return a {@link ComponentName}
+	 */
+	public static ComponentName getComponentName(Context context) {
+		return new ComponentName(context.getApplicationContext(), AgentDeviceAdminReceiver.class);
+	}
+
+	public void onLockTaskModeEntering(Context context, Intent intent, String pkg) {
+		Toast.makeText(context, "Device is locked", Toast.LENGTH_LONG).show();
+	}
+
+	public void onLockTaskModeExiting(Context context, Intent intent) {
+		Toast.makeText(context, "Device is unlocked", Toast.LENGTH_SHORT).show();
+	}
+
 }
+

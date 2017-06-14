@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>wso2mdm-features</artifactId>
+        <groupId>org.wso2.mdm</groupId>
+        <version>2.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.wso2.mdm</groupId>
+    <artifactId>org.wso2.mdm.mdmmgt.server.feature</artifactId>
+    <version>2.0.1-SNAPSHOT</version>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>src/main/resources</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>resources</directory>
+                                    <includes>
+                                        <include>build.properties</include>
+                                        <include>p2.inf</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.wso2.maven</groupId>
+                <artifactId>carbon-p2-plugin</artifactId>
+                <version>${carbon.p2.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>p2-feature-generation</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>p2-feature-gen</goal>
+                        </goals>
+                        <configuration>
+                            <id>org.wso2.mdm.mdmmgt.server</id>
+                            <propertiesFile>../../../features/etc/feature.properties</propertiesFile>
+                            <adviceFile>
+                                <properties>
+                                    <propertyDef>org.wso2.carbon.p2.category.type:server</propertyDef>
+                                    <propertyDef>org.eclipse.equinox.p2.type.group:false</propertyDef>
+                                </properties>
+                            </adviceFile>
+                            <bundles>
+                                <bundleDef>
+                                    org.wso2.mdm:org.wso2.mdm.mdmmgt:${mdm.version}
+                                </bundleDef>
+                                <bundleDef>
+                                    org.wso2.mdm:org.wso2.mdm.appmgt:${mdm.version}
+                                </bundleDef>
+
+                            </bundles>
+                            <importFeatures>
+                                <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.apimgt.core:${carbon.api.mgt.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.device.mgt.extensions:${carbon.device.mgt.version}</importFeatureDef>
+                            </importFeatures>
+                            <importBundles>
+                                <importBundleDef>com.google.code.gson:gson:${google.gson.version}</importBundleDef>
+                                <importBundleDef>org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.common:compatible:${carbon.device.mgt.version}</importBundleDef>
+                                <importBundleDef>org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.core:compatible:${carbon.device.mgt.version}</importBundleDef>
+                                <importBundleDef>org.wso2.carbon.devicemgt:org.wso2.carbon.policy.mgt.core:compatible:${carbon.device.mgt.version}</importBundleDef>
+                                <importBundleDef>org.wso2.carbon.appmgt:org.wso2.carbon.appmgt.mobile:compatible:${appmgt.feature.version}</importBundleDef>
+
+                            </importBundles>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

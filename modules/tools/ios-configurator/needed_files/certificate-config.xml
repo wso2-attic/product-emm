@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CertificateConfigurations>
+    <CertificateKeystore>
+        <!-- Certificate Keystore file location-->
+        <CertificateKeystoreLocation>${carbon.home}/repository/resources/security/wso2certs.jks</CertificateKeystoreLocation>
+        <!-- Certificate Keystore type (JKS/PKCS12 etc.)-->
+        <CertificateKeystoreType>JKS</CertificateKeystoreType>
+        <!-- Certificate Keystore password-->
+        <CertificateKeystorePassword>wso2carbon</CertificateKeystorePassword>
+        <!-- Certificate authority certificate alias -->
+        <CACertAlias>cacert</CACertAlias>
+        <!-- Certificate authority private key password -->
+        <CAPrivateKeyPassword>wso2carbon</CAPrivateKeyPassword>
+        <!-- Registration authority certificate alias -->
+        <RACertAlias>racert</RACertAlias>
+        <!-- Registration authority private key password -->
+        <RAPrivateKeyPassword>wso2carbon</RAPrivateKeyPassword>
+    </CertificateKeystore>
+    <ManagementRepository>
+       <DataSourceConfiguration>
+           <JndiLookupDefinition>
+               <Name>jdbc/DM_DS</Name>
+           </JndiLookupDefinition>
+       </DataSourceConfiguration>
+   </ManagementRepository>
+</CertificateConfigurations>

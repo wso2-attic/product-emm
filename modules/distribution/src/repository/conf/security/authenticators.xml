@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <!--
-  ~ Copyright 2005-2011 WSO2, Inc. (http://wso2.com)
+  ~ Copyright 2015 WSO2, Inc. (http://wso2.com)
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -22,21 +22,23 @@
 -->
 <Authenticators xmlns="http://wso2.org/projects/carbon/authenticators.xml">
 
-    <!-- Authenticator Configurations for OAuthAuthenticator -->
-    <Authenticator name="BackEndOAuthAuthenticator" disabled="false">
+    <!-- authenticator Configurations for OAuthAuthenticator -->
+    <Authenticator name="OAuthAuthenticator" disabled="false">
         <Priority>10</Priority>
         <Config>
             <Parameter name="isRemote">false</Parameter>
             <Parameter name="hostURL">https://localhost:9443</Parameter>
+            <Parameter name="adminUsername">admin</Parameter>
+            <Parameter name="adminPassword">admin</Parameter>
         </Config>
     </Authenticator>
 
-    <!-- Authenticator Configurations for TokenUIAuthenticator -->
+    <!-- authenticator Configurations for TokenUIAuthenticator -->
     <Authenticator name="TokenUIAuthenticator" disabled="false">
         <Priority>5</Priority>
     </Authenticator>
 
-    <!-- Authenticator Configurations for SAML2SSOAuthenticator -->
+    <!-- authenticator Configurations for SAML2SSOAuthenticator -->
     <Authenticator name="SAML2SSOAuthenticator" disabled="true">
         <Priority>10</Priority>
         <Config>
@@ -44,6 +46,8 @@
             <Parameter name="ServiceProviderID">carbonServer</Parameter>
             <Parameter name="IdentityProviderSSOServiceURL">https://localhost:9443/samlsso</Parameter>
             <Parameter name="NameIDPolicyFormat">urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</Parameter>
+            <Parameter name="ResponseSignatureValidationEnabled">false</Parameter>
+            <Parameter name="AssertionSignatureValidationEnabled">false</Parameter>
 	</Config>
 	
 	<!-- If this authenticator should skip any URI from authentication, specify it under "SkipAuthentication"

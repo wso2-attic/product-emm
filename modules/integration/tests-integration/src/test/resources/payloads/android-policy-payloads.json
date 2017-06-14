@@ -1,0 +1,56 @@
+{
+  "POST": {
+    "policyName": "Camera",
+    "description": "Optional",
+    "compliance": "enforce",
+    "ownershipType": "ANY",
+    "active": false,
+    "profile": {
+      "profileName": "Camera",
+      "deviceType": "android",
+      "profileFeaturesList": [
+        {
+          "featureCode": "CAMERA",
+          "deviceType": "android",
+          "content": {
+            "enabled": false
+          }
+        }
+      ]
+    },
+    "roles": [
+      "ANY"
+    ]
+  },
+  "PUT": {
+    "policyName": "Camera",
+    "description": "Optional",
+    "compliance": "enforce",
+    "ownershipType": "ANY",
+    "profile": {
+      "profileName": "Camera",
+      "deviceType": "android",
+      "profileFeaturesList": [
+        {
+          "featureCode": "CAMERA",
+          "deviceType": "android",
+          "content": {
+            "enabled": false
+          }
+        },
+        {
+          "featureCode": "DISALLOW_ADJUST_VOLUME",
+          "deviceType": "android",
+          "content": {
+            "enabled": true
+          }
+        }
+      ]
+    },
+    "users": [
+    ],
+    "roles": [
+      "ANY"
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "POST" : {
+    "compliance": "enforce",
+    "ownershipType": "ANY",
+    "profile": {
+      "profileName": "Camera",
+      "profileFeaturesList": [
+        {
+          "content": {
+            "enabled": true
+          }
+        }
+      ]
+    },
+    "users": [],
+    "roles": []
+  },
+  "PUT" : {
+    "compliance": "enforce",
+    "ownershipType": "ANY",
+    "profile": {
+      "profileName": "Camera",
+      "profileFeaturesList": [
+        {
+          "content": {
+            "enabled": true
+          }
+        }
+      ]
+    },
+    "users": [],
+    "roles": []
+  }
+}

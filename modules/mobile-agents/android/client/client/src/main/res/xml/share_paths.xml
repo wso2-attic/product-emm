@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen>
+    <files-path
+        name="appStore"
+        path="appStore" />
+    <external-path
+        name="Download"
+        path="/storage/" />
+
+</PreferenceScreen>

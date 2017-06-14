@@ -27,6 +27,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.wso2.emm.agent.utils.Constants;
+
 /**
  * Activity which handles authentication errors.
  */
@@ -97,13 +99,15 @@ public class AuthenticationErrorActivity extends Activity {
 	 * Retry authentication.
 	 */
 	private void tryAgain() {
-		Intent intent = new Intent(AuthenticationErrorActivity.this, AuthenticationActivity.class);
-		intent.putExtra(getResources().getString(R.string.intent_extra_from_activity),
-		                AuthenticationActivity.class.getSimpleName());
-		intent.putExtra(getResources().getString(R.string.intent_extra_regid), registrationId);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);
-		finish();
+		if (Constants.AUTO_ENROLLMENT_BACKGROUND_SERVICE_ENABLED == false) {
+			Intent intent = new Intent(AuthenticationErrorActivity.this, AuthenticationActivity.class);
+			intent.putExtra(getResources().getString(R.string.intent_extra_from_activity),
+					AuthenticationActivity.class.getSimpleName());
+			intent.putExtra(getResources().getString(R.string.intent_extra_regid), registrationId);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			finish();
+		}
 	}
 
 	@Override

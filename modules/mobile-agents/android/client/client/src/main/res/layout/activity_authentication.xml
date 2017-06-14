@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ WSO2 Inc. licenses this file to you under the Apache License,
@@ -19,19 +18,19 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:fillViewport="true" >
+    android:fillViewport="true">
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#ffffff" >
+        android:background="#ffffff">
 
         <LinearLayout
             android:id="@+id/errorLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dip" >
+            android:padding="10dip">
 
             <EditText
                 android:id="@+id/etDomain"
@@ -61,7 +60,7 @@
                 android:ems="10"
                 android:hint="@string/txt_password"
                 android:inputType="textPassword"
-                android:textColor="@android:color/black" >
+                android:textColor="@android:color/black">
 
                 <requestFocus />
             </EditText>
@@ -70,7 +69,7 @@
                 android:id="@+id/radioGroupType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp" >
+                android:layout_marginTop="5dp">
 
                 <RadioButton
                     android:id="@+id/radioBYOD"
@@ -114,8 +113,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/repeat_bg"
             android:gravity="center"
-            android:orientation="vertical" >
-        </LinearLayout>
+            android:orientation="vertical"></LinearLayout>
     </RelativeLayout>
 
 </ScrollView>

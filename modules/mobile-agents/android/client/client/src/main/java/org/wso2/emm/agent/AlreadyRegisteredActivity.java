@@ -17,20 +17,7 @@
  */
 package org.wso2.emm.agent;
 
-import java.util.Map;
-
 import android.app.Activity;
-import android.widget.Toast;
-import org.wso2.emm.agent.api.DeviceInfo;
-import org.wso2.emm.agent.beans.ServerConfig;
-import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
-import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
-import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
-import org.wso2.emm.agent.utils.CommonDialogUtils;
-import org.wso2.emm.agent.utils.Constants;
-import org.wso2.emm.agent.utils.Preference;
-import org.wso2.emm.agent.utils.CommonUtils;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.admin.DevicePolicyManager;
@@ -45,11 +32,24 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import org.wso2.emm.agent.api.DeviceInfo;
+import org.wso2.emm.agent.beans.ServerConfig;
+import org.wso2.emm.agent.events.EventRegistry;
+import org.wso2.emm.agent.proxy.interfaces.APIResultCallBack;
+import org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS;
+import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.services.LocalNotification;
+import org.wso2.emm.agent.utils.CommonDialogUtils;
+import org.wso2.emm.agent.utils.CommonUtils;
+import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
+
+import java.util.Map;
 
 /**
  * Activity which handles user un-registration from the MDM server.
@@ -73,6 +73,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	private DevicePolicyManager devicePolicyManager;
 	private ComponentName cdmDeviceAdmin;
 	private DeviceInfo info;
+	private RelativeLayout unregisterLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,14 +92,10 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		if (extras != null) {
 			if (extras.containsKey(getResources().getString(R.string.intent_extra_fresh_reg_flag))) {
-				freshRegFlag = extras.getBoolean(
-						getResources().getString(R.string.intent_extra_fresh_reg_flag));
+				freshRegFlag = extras.getBoolean(getResources().getString(R.string.intent_extra_fresh_reg_flag));
 			}
-
 		}
-
-		String registrationId =
-				Preference.getString(context, resources.getString(R.string.shared_pref_regId));
+		String registrationId = Preference.getString(context, Constants.PreferenceFlag.REG_ID);
 
 		if (registrationId != null && !registrationId.isEmpty()) {
 			regId = registrationId;
@@ -107,19 +104,34 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		}
 
 		if (freshRegFlag) {
-			Preference.putString(context, resources.getString(R.string.shared_pref_registered),
-					resources.getString(R.string.shared_pref_reg_success));
-
-			if (!devicePolicyManager.isAdminActive(cdmDeviceAdmin)) {
+			Preference.putBoolean(context, Constants.PreferenceFlag.REGISTERED, true);
+			if (!isDeviceAdminActive()) {
 				startDeviceAdminPrompt(cdmDeviceAdmin);
 			}
 			freshRegFlag = false;
+
+		} else if (Preference.getBoolean(context, Constants.PreferenceFlag.REGISTERED)) {
+			if (isDeviceAdminActive()) {
+				startEvents();
+				startPolling();
+			}
 		}
 
 		txtRegText = (TextView) findViewById(R.id.txtRegText);
 		btnUnregister = (Button) findViewById(R.id.btnUnreg);
 		btnUnregister.setTag(TAG_BTN_UNREGISTER);
 		btnUnregister.setOnClickListener(onClickListenerButtonClicked);
+		unregisterLayout = (RelativeLayout) findViewById(R.id.unregisterLayout);
+		if (Constants.HIDE_UNREGISTER_BUTTON) {
+			unregisterLayout.setVisibility(View.GONE);
+		}
+	}
+
+	private void startEvents() {
+		if(!EventRegistry.eventListeningStarted) {
+			EventRegistry registerEvent = new EventRegistry(this);
+			registerEvent.register();
+		}
 	}
 
 	private DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -177,16 +189,28 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 
 		if (regId != null && !regId.isEmpty()) {
 			if (CommonUtils.isNetworkAvailable(context)) {
-				String serverIP = Preference.getString(AlreadyRegisteredActivity.this, Constants.IP);
-				ServerConfig utils = new ServerConfig();
-				utils.setServerIP(serverIP);
+				String serverIP = Constants.DEFAULT_HOST;
+				String prefIP = Preference.getString(AlreadyRegisteredActivity.this, Constants.PreferenceFlag.IP);
+				if (prefIP != null) {
+					serverIP = prefIP;
+				}
+				if (serverIP != null && !serverIP.isEmpty()) {
+					stopPolling();
+					ServerConfig utils = new ServerConfig();
+					utils.setServerIP(serverIP);
 
-				CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-						utils.getAPIServerURL() + Constants.UNREGISTER_ENDPOINT + regId,
-						HTTP_METHODS.DELETE,
-						null, AlreadyRegisteredActivity.this,
-						Constants.UNREGISTER_REQUEST_CODE);
+					CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
+					                           utils.getAPIServerURL(context) + Constants.UNREGISTER_ENDPOINT + regId,
+					                           HTTP_METHODS.DELETE,
+					                           null, AlreadyRegisteredActivity.this,
+					                           Constants.UNREGISTER_REQUEST_CODE);
+				} else {
+					Log.e(TAG, "There is no valid IP to contact the server");
+					CommonDialogUtils.stopProgressDialog(progressDialog);
+					CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
+				}
 			} else {
+				Log.e(TAG, "Registration ID is not available");
 				CommonDialogUtils.stopProgressDialog(progressDialog);
 				CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
 			}
@@ -239,7 +263,9 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			loadHomeScreen();
 			return true;
 		}
-		return super.onKeyDown(keyCode, event);
+		else {
+			return super.onKeyDown(keyCode, event);
+		}
 	}
 
 	@Override
@@ -250,32 +276,46 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			Log.d(TAG, "Calling onResume");
 		}
 
-		String regFlag = Preference.getString(context, getResources().getString(R.string.shared_pref_registered));
+		boolean isRegistered = Preference.getBoolean(context, Constants.PreferenceFlag.REGISTERED);
 
-		if (getResources().getString(R.string.shared_pref_reg_success).equals(regFlag)) {
-
+		if (isRegistered) {
 			if (CommonUtils.isNetworkAvailable(context)) {
-
-				String serverIP = Preference.getString(context, Constants.IP);
-				regId = Preference.getString(context, resources.
-						getString(R.string.shared_pref_regId));
+				String serverIP = Constants.DEFAULT_HOST;
+				String prefIP = Preference.getString(context, Constants.PreferenceFlag.IP);
+				if (prefIP != null) {
+					serverIP = prefIP;
+				}
+				regId = Preference.getString(context, Constants.PreferenceFlag.REG_ID);
 
 				if (regId != null) {
 					if (regId.isEmpty() && isUnregisterBtnClicked) {
 						initiateUnregistration();
-					} else {
+					} else if (serverIP != null && !serverIP.isEmpty()) {
 						ServerConfig utils = new ServerConfig();
 						utils.setServerIP(serverIP);
-
-						CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
-								utils.getAPIServerURL() + Constants.IS_REGISTERED_ENDPOINT + regId,
-								HTTP_METHODS.GET,
-								null, AlreadyRegisteredActivity.this,
-								Constants.IS_REGISTERED_REQUEST_CODE);
+						if (utils.getHostFromPreferences(context) != null && !utils.getHostFromPreferences(context).isEmpty()) {
+							CommonUtils.callSecuredAPI(AlreadyRegisteredActivity.this,
+							                           utils.getAPIServerURL(context) + Constants.DEVICES_ENDPOINT + regId + Constants.IS_REGISTERED_ENDPOINT,
+							                           HTTP_METHODS.GET,
+							                           null, AlreadyRegisteredActivity.this,
+							                           Constants.IS_REGISTERED_REQUEST_CODE);
+						} else {
+							try {
+								CommonUtils.clearAppData(context);
+							} catch (AndroidAgentException e) {
+								String msg = "Device already dis-enrolled.";
+								Log.e(TAG, msg, e);
+							}
+							loadServerDetailsActivity();
+						}
+					} else {
+						Log.e(TAG, "There is no valid IP to contact server");
 					}
 				}
 			} else {
-				CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
+				if(!Constants.HIDE_ERROR_DIALOG) {
+					CommonDialogUtils.showNetworkUnavailableMessage(AlreadyRegisteredActivity.this);
+				}
 			}
 		}
 	}
@@ -300,19 +340,22 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 			Log.d(TAG, "onReceiveAPIResult-requestcode: " + requestCode);
 		}
 
-
 		if (requestCode == Constants.UNREGISTER_REQUEST_CODE) {
 			stopProgressDialog();
 			if (result != null) {
 				responseStatus = result.get(Constants.STATUS);
 				if (responseStatus != null && Constants.Status.SUCCESSFUL.equals(responseStatus)) {
+					stopPolling();
 					initiateUnregistration();
 				} else if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
+					startPolling();
 					displayInternalServerError();
 				} else {
+					startPolling();
 					loadAuthenticationErrorActivity();
 				}
 			} else {
+				startPolling();
 				loadAuthenticationErrorActivity();
 			}
 		}
@@ -323,10 +366,17 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 				responseStatus = result.get(Constants.STATUS);
 				if (Constants.Status.INTERNAL_SERVER_ERROR.equals(responseStatus)) {
 					displayInternalServerError();
-				} else if (Constants.Status.SUCCESSFUL.equals(responseStatus)) {
-					Log.d(TAG, "Device has already enrolled");
+				} else if (Constants.Status.SUCCESSFUL.equals(responseStatus) || Constants.Status.ACCEPT.equals(responseStatus)) {
+					if (Constants.DEBUG_MODE_ENABLED) {
+						Log.d(TAG, "Device has already enrolled");
+					}
+					if (isDeviceAdminActive()) {
+						startPolling();
+					}
 				} else {
+					stopPolling();
 					initiateUnregistration();
+					loadServerDetailsActivity();
 				}
 			}
 		}
@@ -348,11 +398,16 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 * Initiate unregistration.
 	 */
 	private void initiateUnregistration() {
-		txtRegText.setText(R.string.register_text_view_text_unregister);
-		btnUnregister.setText(R.string.register_button_text);
-		btnUnregister.setTag(TAG_BTN_RE_REGISTER);
-		btnUnregister.setOnClickListener(onClickListenerButtonClicked);
-		CommonUtils.disableAdmin(context);
+		AlreadyRegisteredActivity.this.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				txtRegText.setText(R.string.register_text_view_text_unregister);
+				btnUnregister.setText(R.string.register_button_text);
+				btnUnregister.setTag(TAG_BTN_RE_REGISTER);
+				btnUnregister.setOnClickListener(onClickListenerButtonClicked);
+				CommonUtils.disableAdmin(context);
+			}
+		});
 	}
 
 	/**
@@ -360,12 +415,17 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 *
 	 * @param cdmDeviceAdmin - Device admin component.
 	 */
-	private void startDeviceAdminPrompt(ComponentName cdmDeviceAdmin) {
-		Intent deviceAdminIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-		deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cdmDeviceAdmin);
-		deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-				getResources().getString(R.string.device_admin_enable_alert));
-		startActivityForResult(deviceAdminIntent, ACTIVATION_REQUEST);
+	private void startDeviceAdminPrompt(final ComponentName cdmDeviceAdmin) {
+		AlreadyRegisteredActivity.this.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Intent deviceAdminIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+				deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cdmDeviceAdmin);
+				deviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+				                           getResources().getString(R.string.device_admin_enable_alert));
+				startActivityForResult(deviceAdminIntent, ACTIVATION_REQUEST);
+			}
+		});
 	}
 
 	/**
@@ -398,7 +458,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 	 * Load server details activity.
 	 */
 	private void loadServerDetailsActivity() {
-		Preference.putString(context, Constants.IP, Constants.EMPTY_STRING);
+		Preference.putString(context, Constants.PreferenceFlag.IP, null);
 		Intent intent = new Intent(
 				AlreadyRegisteredActivity.this,
 				ServerDetails.class);
@@ -418,7 +478,7 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		Intent intent =
 				new Intent(AlreadyRegisteredActivity.this, PinCodeActivity.class);
 		intent.putExtra(getResources().getString(R.string.intent_extra_from_activity),
-				AlreadyRegisteredActivity.class.getSimpleName());
+		                AlreadyRegisteredActivity.class.getSimpleName());
 		startActivity(intent);
 	}
 
@@ -435,10 +495,48 @@ public class AlreadyRegisteredActivity extends SherlockActivity implements APIRe
 		startActivity(intent);
 	}
 
+	/**
+	 * Stops server polling task.
+	 */
+	private void stopPolling() {
+		String notifier = Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE);
+		if(Constants.NOTIFIER_LOCAL.equals(notifier)) {
+			LocalNotification.stopPolling(context);
+		}
+	}
+
+	/**
+	 * Starts server polling task.
+	 */
+	private void startPolling() {
+		String notifier = Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE);
+		if(Constants.NOTIFIER_LOCAL.equals(notifier) &&
+				!Constants.AUTO_ENROLLMENT_BACKGROUND_SERVICE_ENABLED) {
+			LocalNotification.startPolling(context);
+		}
+	}
+
 	private void stopProgressDialog() {
 		if (progressDialog != null && progressDialog.isShowing()) {
 			progressDialog.dismiss();
 		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == ACTIVATION_REQUEST) {
+			if (resultCode == Activity.RESULT_OK) {
+				startEvents();
+				CommonUtils.callSystemApp(context, null, null, null);
+				Log.i("onActivityResult", "Administration enabled!");
+			} else {
+				Log.i("onActivityResult", "Administration enable FAILED!");
+			}
+		}
+	}
+
+	private boolean isDeviceAdminActive() {
+		return devicePolicyManager.isAdminActive(cdmDeviceAdmin);
 	}
 
 }

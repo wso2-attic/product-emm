@@ -22,10 +22,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.wso2.emm.integration.ui.pages.UIElementMapper;
 
 import java.io.IOException;
-import org.wso2.emm.integration.ui.pages.login.LoginPage;
+
+import org.wso2.emm.integration.ui.pages.login.ManagementConsoleLoginPage;
 
 /**
  * Home page class holds the information of product page you got once login
@@ -41,13 +43,22 @@ public class HomePage {
         this.driver = driver;
         this.uiElementMapper = UIElementMapper.getInstance();
         // Check that we're on the right page.
-        if (!driver.findElement(By.id(uiElementMapper.getElement("home.dashboard.middle.text"))).getText().contains("Home")) {
+        if (!driver.findElement(By.id(uiElementMapper.getElement("home.dashboard.middle.text"))).
+                getText().contains("Home")) {
             throw new IllegalStateException("This is not the home page");
         }
     }
 
-    public LoginPage logout() throws IOException {
+    public ManagementConsoleLoginPage logout() throws IOException {
         driver.findElement(By.xpath(uiElementMapper.getElement("home.greg.sign.out.xpath"))).click();
-        return new LoginPage(driver);
+        return new ManagementConsoleLoginPage(driver);
+    }
+
+    public void checkNotificationCount(String value) {
+        WebElement notificationBubble = driver.findElement(By.id(uiElementMapper.
+                getElement("emm.notification.bubble.identifier")));
+        if (!notificationBubble.getText().contains(value)) {
+            throw new IllegalStateException("Invalid amount of notification in home page");
+        }
     }
 }

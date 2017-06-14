@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ WSO2 Inc. licenses this file to you under the Apache License,
@@ -18,24 +17,39 @@
 -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
+    android:layout_width="250dip"
     android:layout_height="wrap_content"
     android:background="@android:color/black"
     android:orientation="vertical"
-    tools:context=".AlertActivity" >
+    tools:context=".AlertActivity">
 
     <LinearLayout
         android:id="@+id/linInner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/txtMessageTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/abs__action_bar_title_text_size"
+                android:textColor="@android:color/white"/>
+
+        <View
+                android:id="@+id/hLine"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="#1e90ff"/>
 
         <TextView
             android:id="@+id/txtMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"/>
 
         <Button
             android:id="@+id/btnOK"

@@ -1,0 +1,29 @@
+{
+  "POST": {
+    "policyName": "Work-Profile",
+    "description": "",
+    "compliance": "enforce",
+    "ownershipType": "ANY",
+    "active": false,
+    "profile": {
+      "profileName": "Work-Profile",
+      "deviceType": "android",
+      "profileFeaturesList": [
+        {
+          "featureCode": "WORK_PROFILE",
+          "deviceType": "android",
+          "content": {
+            "profileName": "Work-Profile",
+            "enableSystemApps": "com.google.android.apps.maps",
+            "hideSystemApps": "com.google.android.calculator",
+            "unhideSystemApps": null,
+            "enablePlaystoreApps": "com.google.android.whity"
+          }
+        }
+      ]
+    },
+    "roles":[
+      "ANY"
+    ]
+  }
+}

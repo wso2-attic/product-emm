@@ -17,6 +17,7 @@
  */
 package org.wso2.emm.agent.proxy.interfaces;
 
+import java.security.cert.CertificateException;
 import java.util.Map;
 
 /**

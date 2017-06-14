@@ -1,0 +1,9 @@
+{
+  "GET": {
+    "roles": [
+      "admin",
+      "administration"
+    ],
+    "count": 2
+  }
+}

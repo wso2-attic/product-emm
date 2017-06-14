@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,21 +18,32 @@
 package org.wso2.emm.agent.services;
 
 import android.app.admin.DevicePolicyManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
 import android.util.Log;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.WiFiConfig;
+import org.wso2.emm.agent.beans.AppRestriction;
 import org.wso2.emm.agent.beans.ComplianceFeature;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
+import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class is used to check device policy compliance by checking each policy
@@ -46,7 +57,7 @@ public class PolicyComplianceChecker {
     private Resources resources;
     private ComponentName deviceAdmin;
     private ComplianceFeature policy;
-    private ApplicationManager appList;
+    private ApplicationManager applicationManager;
 
     public PolicyComplianceChecker(Context context) {
         this.context = context;
@@ -54,7 +65,7 @@ public class PolicyComplianceChecker {
         this.devicePolicyManager =
                 (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
         this.deviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
-        this.appList = new ApplicationManager(context.getApplicationContext());
+        this.applicationManager = new ApplicationManager(context.getApplicationContext());
     }
 
     /**
@@ -83,6 +94,54 @@ public class PolicyComplianceChecker {
                 return checkPasswordPolicy();
             case Constants.Operation.WIFI:
                 return checkWifiPolicy(operation);
+            case Constants.Operation.WORK_PROFILE:
+                return checkWorkProfilePolicy(operation);
+            case Constants.Operation.DISALLOW_ADJUST_VOLUME:
+            case Constants.Operation.DISALLOW_CONFIG_BLUETOOTH:
+            case Constants.Operation.DISALLOW_CONFIG_CELL_BROADCASTS:
+            case Constants.Operation.DISALLOW_CONFIG_CREDENTIALS:
+            case Constants.Operation.DISALLOW_CONFIG_MOBILE_NETWORKS:
+            case Constants.Operation.DISALLOW_CONFIG_TETHERING:
+            case Constants.Operation.DISALLOW_CONFIG_VPN:
+            case Constants.Operation.DISALLOW_CONFIG_WIFI:
+            case Constants.Operation.DISALLOW_APPS_CONTROL:
+            case Constants.Operation.DISALLOW_CREATE_WINDOWS:
+            case Constants.Operation.DISALLOW_CROSS_PROFILE_COPY_PASTE:
+            case Constants.Operation.DISALLOW_DEBUGGING_FEATURES:;
+            case Constants.Operation.DISALLOW_FACTORY_RESET:
+            case Constants.Operation.DISALLOW_ADD_USER:
+            case Constants.Operation.DISALLOW_INSTALL_APPS:
+            case Constants.Operation.DISALLOW_INSTALL_UNKNOWN_SOURCES:
+            case Constants.Operation.DISALLOW_MODIFY_ACCOUNTS:
+            case Constants.Operation.DISALLOW_MOUNT_PHYSICAL_MEDIA:
+            case Constants.Operation.DISALLOW_NETWORK_RESET:
+            case Constants.Operation.DISALLOW_OUTGOING_BEAM:
+            case Constants.Operation.DISALLOW_OUTGOING_CALLS:
+            case Constants.Operation.DISALLOW_REMOVE_USER:
+            case Constants.Operation.DISALLOW_SAFE_BOOT:
+            case Constants.Operation.DISALLOW_SHARE_LOCATION:
+            case Constants.Operation.DISALLOW_SMS:
+            case Constants.Operation.DISALLOW_UNINSTALL_APPS:
+            case Constants.Operation.DISALLOW_UNMUTE_MICROPHONE:
+            case Constants.Operation.DISALLOW_USB_FILE_TRANSFER:
+            case Constants.Operation.ALLOW_PARENT_PROFILE_APP_LINKING:
+            case Constants.Operation.ENSURE_VERIFY_APPS:
+            case Constants.Operation.AUTO_TIME:
+            case Constants.Operation.ENABLE_ADMIN:
+            case Constants.Operation.SET_SCREEN_CAPTURE_DISABLED:
+            case Constants.Operation.SET_STATUS_BAR_DISABLED:
+                if(applicationManager.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
+                    CommonUtils.callSystemApp(context, operation.getCode(),
+                            Boolean.toString(operation.isEnabled()), null);
+                }
+                // Since without rooting the device a policy set by the device owner cannot
+                // be violated or overridden, no compliance check is necessary.
+                //TODO: implement a mechanism in the system app to call the agent back and report
+                //policy status to agent.
+                policy.setCompliance(true);
+                return policy;
+            case Constants.Operation.APP_RESTRICTION:
+                return checkAppRestrictionPolicy(operation);
             default:
                 throw new AndroidAgentException("Invalid operation code received");
         }
@@ -187,7 +246,7 @@ public class PolicyComplianceChecker {
      */
     private boolean isAppInstalled(String appIdentifier){
         boolean appInstalled=false;
-        ArrayList<DeviceAppInfo> apps = new ArrayList<>(appList.getInstalledApps().values());
+        ArrayList<DeviceAppInfo> apps = new ArrayList<>(applicationManager.getInstalledApps().values());
         for (DeviceAppInfo appInfo : apps) {
             if(appIdentifier.trim().equals(appInfo.getPackagename())){
                 appInstalled = true;
@@ -260,6 +319,130 @@ public class PolicyComplianceChecker {
         } catch (JSONException e) {
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
+        return policy;
+    }
+
+	/**
+	 * Check the app restriction policy (black list or white list) for compliance
+     *
+     * @param operation - Operation object
+     * @return - Compliance feature object
+     * @throws AndroidAgentException
+     */
+
+    private ComplianceFeature checkAppRestrictionPolicy(
+            org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+
+        AppRestriction appRestriction =
+                CommonUtils.getAppRestrictionTypeAndList(operation, null, null);
+
+        List<String> installedAppPackages = CommonUtils.getInstalledAppPackages(context);
+
+        String ownershipType = Preference.getString(context, Constants.DEVICE_TYPE);
+
+        if (Constants.OWNERSHIP_COPE.equals(ownershipType)) {
+
+            if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
+                List<String> commonApps = new ArrayList<>(installedAppPackages);
+                if (commonApps.retainAll(appRestriction.getRestrictedList())) {
+                    if (commonApps.size() > 0) {
+                        policy.setCompliance(false);
+                        policy.setMessage(commonApps.toString());
+                        return policy;
+                    }
+                }
+            } else if (Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
+                List<String> installedAppPackagesByUser = CommonUtils.getInstalledAppPackagesByUser(context);
+                List<String> remainApps = new ArrayList<>(installedAppPackagesByUser);
+                remainApps.remove(Constants.AGENT_PACKAGE);
+                remainApps.remove(Constants.SYSTEM_SERVICE_PACKAGE);
+                remainApps.removeAll(appRestriction.getRestrictedList());
+                if (remainApps.size() > 0) {
+                    policy.setCompliance(false);
+                    policy.setMessage(remainApps.toString());
+                    return policy;
+                }
+            }
+
+            policy.setCompliance(true);
+            return policy;
+
+        }
+        else if (Constants.OWNERSHIP_BYOD.equals(ownershipType)) {
+            if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
+                List<String> commonApps = new ArrayList<>(installedAppPackages);
+                if (commonApps.retainAll(appRestriction.getRestrictedList())) {
+                    if (commonApps.size() > 0) {
+                        policy.setCompliance(false);
+                        return policy;
+                    }
+                }
+            } else if (Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
+                List<String> remainApps = new ArrayList<>(installedAppPackages);
+                remainApps.removeAll(appRestriction.getRestrictedList());
+                if (remainApps.size() >0) {
+                    policy.setCompliance(false);
+                    return policy;
+                }
+            }
+            policy.setCompliance(true);
+            return policy;
+
+        }
+        policy.setCompliance(true);
+        return policy;
+     }
+
+    /**
+     * Checks Work-Profile policy on the device (Particular work-profile configuration in the policy should be enforced).
+     *
+     * @param operation - Operation object.
+     * @return policy - ComplianceFeature object.
+     */
+    private ComplianceFeature checkWorkProfilePolicy(org.wso2.emm.agent.beans.Operation operation) throws AndroidAgentException {
+        String profileName;
+        String systemAppsData;
+        String googlePlayAppsData;
+        try {
+            JSONObject profileData = new JSONObject(operation.getPayLoad().toString());
+            if (!profileData.isNull(resources.getString(R.string.intent_extra_profile_name))) {
+                profileName = (String) profileData.get(resources.getString(
+                        R.string.intent_extra_profile_name));
+                    //yet there is no method is given to get the current profile name.
+                    //add a method to test whether profile name is set correctly once introduced.
+            }
+            if (!profileData.isNull(resources.getString(R.string.intent_extra_enable_system_apps))) {
+                // generate the System app list which are configured by user and received to agent as a single String
+                // with packages separated by Commas.
+                systemAppsData = (String) profileData.get(resources.getString(
+                        R.string.intent_extra_enable_system_apps));
+                List<String> systemAppList = Arrays.asList(systemAppsData.split(resources.getString(
+                        R.string.split_delimiter)));
+                for (String packageName : systemAppList) {
+                    if(!applicationManager.isPackageInstalled(packageName)){
+                        policy.setCompliance(false);
+                        policy.setMessage(resources.getString(R.string.error_work_profile_policy));
+                        return policy;
+                    }
+                }
+            }
+            if (!profileData.isNull(resources.getString(R.string.intent_extra_enable_google_play_apps))) {
+                googlePlayAppsData = (String) profileData.get(resources.getString(
+                        R.string.intent_extra_enable_google_play_apps));
+                List<String> playStoreAppList = Arrays.asList(googlePlayAppsData.split(resources.getString(
+                        R.string.split_delimiter)));
+                for (String packageName : playStoreAppList) {
+                    if(!applicationManager.isPackageInstalled(packageName)){
+                        policy.setCompliance(false);
+                        policy.setMessage(resources.getString(R.string.error_work_profile_policy));
+                        return policy;
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            throw new AndroidAgentException("Invalid JSON format.", e);
+        }
+        policy.setCompliance(true);
         return policy;
     }
 }

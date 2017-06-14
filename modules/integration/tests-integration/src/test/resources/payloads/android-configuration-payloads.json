@@ -1,14 +1,22 @@
 {
-    "POST" : {
-        "type" : "android",
-        "configuration" : [{"name":"notifierType","value":"1","contentType":"text"},
-          {"name":"notifierFrequency","value":"100000","contentType":"text"},
-          {"name":"androidEula","value":"This End User License Agreement.","contentType":"text"}]
-    },
     "PUT" : {
         "type" : "android",
-        "configuration" : [{"name":"notifierType","value":"1","contentType":"text"},
-          {"name":"notifierFrequency","value":"500000","contentType":"text"},
-          {"name":"androidEula","value":"This End User License Agreement is Eula.","contentType":"text"}]
+        "configuration" : [
+          {
+            "name":"notifierType",
+            "contentType":"text",
+            "value":"1"
+          },
+          {
+            "name":"notifierFrequency",
+            "contentType":"text",
+            "value":"500000"
+          },
+          {
+            "name":"androidEula",
+            "contentType":"text",
+            "value":"This End User License Agreement is Eula."
+          }
+        ]
     }
 }

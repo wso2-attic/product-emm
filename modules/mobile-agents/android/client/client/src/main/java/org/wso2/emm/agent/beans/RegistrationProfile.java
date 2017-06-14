@@ -19,6 +19,8 @@ package org.wso2.emm.agent.beans;
 
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.utils.CommonUtils;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class represents the data that are required to register
@@ -31,6 +33,7 @@ public class RegistrationProfile {
     private String tokenScope;
     private String owner;
     private String grantType;
+    private String applicationType;
 
     private static final String TAG = RegistrationProfile.class.getSimpleName();
 
@@ -74,7 +77,26 @@ public class RegistrationProfile {
         this.grantType = grantType;
     }
 
+    public String getApplicationType() {
+        return applicationType;
+    }
+
+    public void setApplicationType(String applicationType) {
+        this.applicationType = applicationType;
+    }
+
     public String toJSON() throws AndroidAgentException {
         return CommonUtils.toJSON(this);
+    }
+
+    public Map<String, String> toMap() throws AndroidAgentException {
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("callbackUrl", getCallbackUrl());
+        resultMap.put("clientName", getClientName());
+        resultMap.put("tokenScope", getTokenScope());
+        resultMap.put("owner", getOwner());
+        resultMap.put("grantType", getGrantType());
+        resultMap.put("applicationType", getApplicationType());
+        return resultMap;
     }
 }

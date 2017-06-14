@@ -20,18 +20,23 @@ package org.wso2.emm.agent.services;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
-import android.util.Log;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.emm.agent.AndroidAgentException;
 import org.wso2.emm.agent.R;
 import org.wso2.emm.agent.api.ApplicationManager;
 import org.wso2.emm.agent.api.WiFiConfig;
+import org.wso2.emm.agent.beans.AppRestriction;
 import org.wso2.emm.agent.beans.DeviceAppInfo;
+import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is used to revoke the existing policy on the device.
@@ -43,7 +48,7 @@ public class PolicyRevokeHandler {
     private DevicePolicyManager devicePolicyManager;
     private Resources resources;
     private ComponentName deviceAdmin;
-    private ApplicationManager appList;
+    private ApplicationManager applicationManager;
 
     public PolicyRevokeHandler(Context context){
         this.context = context;
@@ -51,7 +56,7 @@ public class PolicyRevokeHandler {
         this.devicePolicyManager =
                 (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
         this.deviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
-        this.appList = new ApplicationManager(context.getApplicationContext());
+        this.applicationManager = new ApplicationManager(context.getApplicationContext());
     }
 
     /**
@@ -63,25 +68,87 @@ public class PolicyRevokeHandler {
     public void revokeExistingPolicy(org.wso2.emm.agent.beans.Operation operation)
             throws AndroidAgentException {
 
-        switch (operation.getCode()) {
-
-            case Constants.Operation.CAMERA:
-                revokeCameraPolicy(operation);
-                break;
-            case Constants.Operation.INSTALL_APPLICATION:
-                revokeInstallAppPolicy(operation);
-                break;
-            case Constants.Operation.ENCRYPT_STORAGE:
-                revokeEncryptPolicy(operation);
-                break;
-            case Constants.Operation.PASSCODE_POLICY:
-                revokePasswordPolicy();
-                break;
-            case Constants.Operation.WIFI:
-                revokeWifiPolicy(operation);
-                break;
-            default:
-                throw new AndroidAgentException("Invalid operation code received");
+        if(applicationManager.isPackageInstalled(Constants.SERVICE_PACKAGE_NAME)) {
+            switch (operation.getCode()) {
+                case Constants.Operation.CAMERA:
+                    revokeCameraPolicy(operation);
+                    break;
+                case Constants.Operation.INSTALL_APPLICATION:
+                    revokeInstallAppPolicy(operation);
+                    break;
+                case Constants.Operation.ENCRYPT_STORAGE:
+                    revokeEncryptPolicy(operation);
+                    break;
+                case Constants.Operation.PASSCODE_POLICY:
+                    revokePasswordPolicy();
+                    break;
+                case Constants.Operation.WIFI:
+                    revokeWifiPolicy(operation);
+                    break;
+                case Constants.Operation.DISALLOW_ADJUST_VOLUME:
+                case Constants.Operation.DISALLOW_CONFIG_BLUETOOTH:
+                case Constants.Operation.DISALLOW_CONFIG_CELL_BROADCASTS:
+                case Constants.Operation.DISALLOW_CONFIG_CREDENTIALS:
+                case Constants.Operation.DISALLOW_CONFIG_MOBILE_NETWORKS:
+                case Constants.Operation.DISALLOW_CONFIG_TETHERING:
+                case Constants.Operation.DISALLOW_CONFIG_VPN:
+                case Constants.Operation.DISALLOW_CONFIG_WIFI:
+                case Constants.Operation.DISALLOW_APPS_CONTROL:
+                case Constants.Operation.DISALLOW_CREATE_WINDOWS:
+                case Constants.Operation.DISALLOW_CROSS_PROFILE_COPY_PASTE:
+                case Constants.Operation.DISALLOW_DEBUGGING_FEATURES:;
+                case Constants.Operation.DISALLOW_FACTORY_RESET:
+                case Constants.Operation.DISALLOW_ADD_USER:
+                case Constants.Operation.DISALLOW_INSTALL_APPS:
+                case Constants.Operation.DISALLOW_INSTALL_UNKNOWN_SOURCES:
+                case Constants.Operation.DISALLOW_MODIFY_ACCOUNTS:
+                case Constants.Operation.DISALLOW_MOUNT_PHYSICAL_MEDIA:
+                case Constants.Operation.DISALLOW_NETWORK_RESET:
+                case Constants.Operation.DISALLOW_OUTGOING_BEAM:
+                case Constants.Operation.DISALLOW_OUTGOING_CALLS:
+                case Constants.Operation.DISALLOW_REMOVE_USER:
+                case Constants.Operation.DISALLOW_SAFE_BOOT:
+                case Constants.Operation.DISALLOW_SHARE_LOCATION:
+                case Constants.Operation.DISALLOW_SMS:
+                case Constants.Operation.DISALLOW_UNINSTALL_APPS:
+                case Constants.Operation.DISALLOW_UNMUTE_MICROPHONE:
+                case Constants.Operation.DISALLOW_USB_FILE_TRANSFER:
+                case Constants.Operation.ALLOW_PARENT_PROFILE_APP_LINKING:
+                case Constants.Operation.ENSURE_VERIFY_APPS:
+                case Constants.Operation.AUTO_TIME:
+                case Constants.Operation.ENABLE_ADMIN:
+                case Constants.Operation.SET_SCREEN_CAPTURE_DISABLED:
+                case Constants.Operation.SET_STATUS_BAR_DISABLED:
+                     CommonUtils.callSystemApp(context, operation.getCode(),
+                                Boolean.toString(false), null);
+                     break;
+                case Constants.Operation.APP_RESTRICTION:
+                    revokeAppRestrictionPolicy(operation);
+                    break;
+                default:
+                    throw new AndroidAgentException("Invalid operation code received");
+            }
+        } else {
+            switch (operation.getCode()) {
+                case Constants.Operation.CAMERA:
+                    revokeCameraPolicy(operation);
+                    break;
+                case Constants.Operation.INSTALL_APPLICATION:
+                    revokeInstallAppPolicy(operation);
+                    break;
+                case Constants.Operation.ENCRYPT_STORAGE:
+                    revokeEncryptPolicy(operation);
+                    break;
+                case Constants.Operation.PASSCODE_POLICY:
+                    revokePasswordPolicy();
+                    break;
+                case Constants.Operation.WIFI:
+                    revokeWifiPolicy(operation);
+                    break;
+                case Constants.Operation.APP_RESTRICTION:
+                    revokeAppRestrictionPolicy(operation);
+                    break;
+            }
         }
     }
 
@@ -113,12 +180,39 @@ public class PolicyRevokeHandler {
             }
 
             if(isAppInstalled(appIdentifier)){
-                appList.uninstallApplication(appIdentifier);
+                applicationManager.uninstallApplication(appIdentifier, null);
             }
 
         } catch (JSONException e) {
             throw new AndroidAgentException("Invalid JSON format.", e);
         }
+    }
+
+    /**
+     * Revoke app restriction policy (black list or white list)
+     *
+     * @param operation - Operation object
+     * @throws AndroidAgentException
+     */
+    private void revokeAppRestrictionPolicy(org.wso2.emm.agent.beans.Operation operation)
+            throws AndroidAgentException {
+
+        AppRestriction appRestriction =
+                CommonUtils.getAppRestrictionTypeAndList(operation, null, null);
+
+        if (Constants.AppRestriction.BLACK_LIST.equals(appRestriction.getRestrictionType())) {
+            for (String packageName : appRestriction.getRestrictedList()) {
+                CommonUtils.callSystemApp(context, operation.getCode(), "true", packageName);
+            }
+        } else if (Constants.AppRestriction.WHITE_LIST.equals(appRestriction.getRestrictionType())) {
+            List<String> installedAppPackages = CommonUtils.getAppsOfUser(context);
+            List<String> toBeUnHideApps = new ArrayList<>(installedAppPackages);
+            toBeUnHideApps.removeAll(appRestriction.getRestrictedList());
+            for (String packageName : toBeUnHideApps) {
+                CommonUtils.callSystemApp(context, operation.getCode(), "true", packageName);
+            }
+        }
+
     }
 
     /**
@@ -129,7 +223,7 @@ public class PolicyRevokeHandler {
      */
     private boolean isAppInstalled(String appIdentifier){
         boolean appInstalled=false;
-        ArrayList<DeviceAppInfo> apps = new ArrayList<>(appList.getInstalledApps().values());
+        ArrayList<DeviceAppInfo> apps = new ArrayList<>(applicationManager.getInstalledApps().values());
         for (DeviceAppInfo appInfo : apps) {
             if(appIdentifier.trim().equals(appInfo.getPackagename())){
                 appInstalled = true;
@@ -163,6 +257,9 @@ public class PolicyRevokeHandler {
     private void revokePasswordPolicy() {
         devicePolicyManager.setPasswordQuality(deviceAdmin,
                                                DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED);
+        devicePolicyManager.setMaximumFailedPasswordsForWipe(deviceAdmin, 0);
+        devicePolicyManager.setPasswordExpirationTimeout(deviceAdmin, 0);
+        devicePolicyManager.setPasswordMinimumLength(deviceAdmin, 0);
     }
 
     /**

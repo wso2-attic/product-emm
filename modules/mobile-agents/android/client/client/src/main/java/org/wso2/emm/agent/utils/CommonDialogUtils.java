@@ -140,6 +140,29 @@ public abstract class CommonDialogUtils {
 	}
 
 	/**
+	 * Returns an Alert Dialog with OK button and title.
+	 * @param context               -The activity which need this alert.
+	 * @param title                 -The alert title.
+	 * @param message               -The alert message.
+	 * @param neutralBtnLabel       -The Neutral button label.
+	 * @param neutralClickListener  -The neutral button listener.
+	 * @return - An alert dialog.
+	 */
+	public static AlertDialog.Builder getAlertDialogWithNeutralButtonAndTitle(Context context,
+																		  String title,
+																		  String message,
+																		  String neutralBtnLabel,
+																		  DialogInterface.OnClickListener
+																					  neutralClickListener) {
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(title);
+		builder.setMessage(message).setNeutralButton(neutralBtnLabel, neutralClickListener);
+		return builder;
+	}
+
+
+	/**
 	 * Shows the ProgressDialog.
 	 *
 	 * @param context        -The Activity which needs the ProgressDialog.
@@ -148,8 +171,8 @@ public abstract class CommonDialogUtils {
 	 * @param cancelListener -The OnCancelListener.
 	 * @return - A progress dialog.
 	 */
-	public static ProgressDialog showPrgressDialog(Context context, String title, String message,
-	                                               OnCancelListener cancelListener) {
+	public static ProgressDialog showProgressDialog(Context context, String title, String message,
+	                                                OnCancelListener cancelListener) {
 		ProgressDialog progressDialog = ProgressDialog.show(context, title, message, true);
 		progressDialog.setCancelable(true);
 		progressDialog.setOnCancelListener(cancelListener);

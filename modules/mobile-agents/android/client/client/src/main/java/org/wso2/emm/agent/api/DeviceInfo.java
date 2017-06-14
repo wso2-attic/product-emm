@@ -17,10 +17,8 @@
  */
 package org.wso2.emm.agent.api;
 
-import java.util.List;
-
-import org.wso2.emm.agent.R;
-import org.wso2.emm.agent.utils.Preference;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.res.Resources;
 import android.hardware.Sensor;
@@ -31,6 +29,14 @@ import android.os.Build;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 
+import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.services.AgentDeviceAdminReceiver;
+import org.wso2.emm.agent.utils.CommonUtils;
+import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
+
+import java.util.List;
+
 /**
  * This class represents all the device information related APIs.
  */
@@ -39,12 +45,16 @@ public class DeviceInfo {
 	private Context context;
 	private Resources resources;
 	private TelephonyManager telephonyManager;
+	private DevicePolicyManager devicePolicyManager;
+	private ComponentName cdmDeviceAdmin;
+	private static final String BUILD_DATE_UTC_PROPERTY = "ro.build.date.utc";
 
 	public DeviceInfo(Context context) {
 		this.context = context;
 		this.resources = context.getResources();
-		this.telephonyManager = (TelephonyManager) context.
-									getSystemService(Context.TELEPHONY_SERVICE);
+		this.telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+		this.devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+		cdmDeviceAdmin = new ComponentName(context, AgentDeviceAdminReceiver.class);
 	}
 
 	/**
@@ -69,6 +79,26 @@ public class DeviceInfo {
 	 */
 	public String getDeviceManufacturer() {
 		return Build.MANUFACTURER;
+	}
+
+	/**
+	 * Returns the device OS build date.
+	 * @return - OS build date.
+	 */
+	public String getOSBuildDate() {
+		if (Constants.SYSTEM_APP_ENABLED) {
+			CommonUtils.registerSystemAppReceiver(context);
+			CommonUtils.callSystemApp(context, Constants.Operation.GET_FIRMWARE_BUILD_DATE, null, null);
+			String buildDate = Preference.getString(context, context.getResources().getString(
+					R.string.shared_pref_os_build_date));
+			if (buildDate != null) {
+				return buildDate;
+			} else {
+				return String.valueOf(Build.TIME);
+			}
+		} else {
+			return String.valueOf(Build.TIME);
+		}
 	}
 
 	/**
@@ -99,9 +129,14 @@ public class DeviceInfo {
 	 * Returns the IMEI Number.
 	 * @return - Device IMEI number.
 	 */
-	public String getDeviceId() {	
-		String deviceId = telephonyManager.getDeviceId();
-		
+	public String getDeviceId() {
+
+		String deviceId = null;
+
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+			deviceId = telephonyManager.getDeviceId();
+		}
+
 		if (deviceId == null || deviceId.isEmpty()) {
 			deviceId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
 		}
@@ -132,8 +167,8 @@ public class DeviceInfo {
 	 * @return - Device owner email address.
 	 */
 	public String getEmail() {
-		return Preference.getString(context, 
-	                                    resources.getString(R.string.shared_pref_username));
+		return Preference.getString(context,
+		                            resources.getString(R.string.shared_pref_username));
 	}
 
 	/**
@@ -154,6 +189,14 @@ public class DeviceInfo {
 	}
 
 	/**
+	 * Returns the hardware serial number.
+	 * @return - Hardware serial number.
+	 */
+	public String getDeviceSerialNumber() {
+		return Build.SERIAL;
+	}
+
+	/**
 	 * Returns all the sensors available on the device as a List.
 	 * @return - List of all the sensors available on the device.
 	 */
@@ -162,6 +205,41 @@ public class DeviceInfo {
                               (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 		
 		return sensorManager.getSensorList(Sensor.TYPE_ALL);
+	}
+
+	/**
+	 * This method is used to check the status of storage encryption.
+	 * @return Returns the current status.
+	 */
+	public boolean isEncryptionEnabled() {
+		if (isDeviceAdminActive()) {
+			switch (devicePolicyManager.getStorageEncryptionStatus()) {
+				case DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE:
+					return true;
+				case DevicePolicyManager.ENCRYPTION_STATUS_INACTIVE:
+					return false;
+				case DevicePolicyManager.ENCRYPTION_STATUS_ACTIVATING:
+					return false;
+				default:
+					return false;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * This method is used to get the status of the current activated passcode.
+	 * @return Returns true if sufficient.
+	 */
+	public boolean isPasscodeEnabled() {
+		if (isDeviceAdminActive()) {
+			return devicePolicyManager.isActivePasswordSufficient();
+		}
+		return false;
+	}
+
+	private boolean isDeviceAdminActive() {
+		return devicePolicyManager.isAdminActive(cdmDeviceAdmin);
 	}
 
 }

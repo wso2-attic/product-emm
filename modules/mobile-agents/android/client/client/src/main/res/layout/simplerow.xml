@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  ~ Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ WSO2 Inc. licenses this file to you under the Apache License,
@@ -22,6 +21,6 @@
     android:layout_height="wrap_content"
     android:padding="10dp"
     android:textColor="#372c24"
-    android:textSize="16sp" >
+    android:textSize="16sp">
 
 </TextView>

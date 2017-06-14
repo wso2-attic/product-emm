@@ -17,13 +17,21 @@
  */
 package org.wso2.emm.agent.services;
 
+import android.net.Uri;
+import android.os.AsyncTask;
 import org.wso2.emm.agent.AndroidAgentException;
+import org.wso2.emm.agent.R;
+import org.wso2.emm.agent.api.ApplicationManager;
+import org.wso2.emm.agent.beans.Operation;
+import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
+import org.wso2.emm.agent.utils.Preference;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * This class is a broadcast receiver which triggers on local notification timeouts.
@@ -38,12 +46,41 @@ public class AlarmReceiver extends BroadcastReceiver {
 			Log.d(TAG, "Recurring alarm; requesting alarm service.");
 		}
 
-		MessageProcessor messageProcessor = new MessageProcessor(context);
-		try {
-			messageProcessor.getMessages();
-		} catch (AndroidAgentException e) {
-			Log.e(TAG, "Failed to perform operation", e);
+		if (intent.hasExtra(context.getResources().getString(R.string.alarm_scheduled_operation))) {
+			String operationCode = intent.getStringExtra(context.getResources().getString(R.string.alarm_scheduled_operation));
+			ApplicationManager applicationManager = new ApplicationManager(context.getApplicationContext());
+			if(operationCode != null && operationCode.trim().equals(Constants.Operation.INSTALL_APPLICATION)) {
+				String appUrl = intent.getStringExtra(context.getResources().getString(R.string.app_url));
+				Operation operation = null;
+				if (intent.hasExtra(context.getResources().getString(R.string.alarm_scheduled_operation_payload)))				{
+					operation = (Operation) intent.getExtra(context.getResources().getString(R.string.alarm_scheduled_operation_payload));
+				}
+				applicationManager.installApp(appUrl, null, operation);
+			} else if(operationCode != null && operationCode.trim().equals(Constants.Operation.UNINSTALL_APPLICATION)) {
+				String packageUri = intent.getStringExtra(context.getResources().getString(R.string.app_uri));
+				applicationManager.uninstallApplication(packageUri, null);
+			}
+
+		} else {
+			OperationTask operationTask = new OperationTask();
+			operationTask.execute(context);
 		}
+
 	}
 
+	private class OperationTask extends AsyncTask<Context, Void, Void> {
+
+		@Override
+		protected Void doInBackground(Context... params) {
+			if (params != null) {
+				MessageProcessor messageProcessor = new MessageProcessor(params[0]);
+				try {
+					messageProcessor.getMessages();
+				} catch (AndroidAgentException e) {
+					Log.e(TAG, "Failed to perform operation", e);
+				}
+			}
+			return null;
+		}
+	}
 }

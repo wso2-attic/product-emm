@@ -18,11 +18,12 @@
 
 package org.wso2.mdm.integration.common;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.apache.commons.io.IOUtils;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.net.URL;
 
 /**
@@ -38,4 +39,18 @@ public class PayloadGenerator {
         JsonObject jsonObject = parser.parse(new FileReader(url.getPath())).getAsJsonObject();
         return jsonObject.get(method).getAsJsonObject();
     }
+
+    public static String getJsonPayloadToString(String fileName) throws IOException {
+        URL url = Thread.currentThread().getContextClassLoader().getResource(PAYLOAD_LOCATION + fileName);
+        FileInputStream fisTargetFile = new FileInputStream(new File(url.getPath()));
+        String returnString = IOUtils.toString(fisTargetFile, Constants.UTF8);
+        return returnString;
+    }
+
+    public static JsonArray getJsonPayload(String fileName) throws FileNotFoundException {
+        URL url = Thread.currentThread().getContextClassLoader().getResource(PAYLOAD_LOCATION + fileName);
+        JsonArray jsonArray = parser.parse(new FileReader(url.getPath())).getAsJsonArray();
+        return jsonArray;
+    }
+
 }

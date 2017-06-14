@@ -9,6 +9,11 @@
 	License for the ~ specific language governing permissions and limitations 
 	~ under the License. -->
 <Server xmlns="http://wso2.org/projects/carbon/carbon.xml">
+
+    <ResourceAccessControl>
+      <Resource context="/api/appm/*" secured="true" http-method="all"/>
+    </ResourceAccessControl>
+
     <JDBCPersistenceManager>
         <DataSource>
             <!-- Include a data source name (jndiConfigName) from the set of data
@@ -140,6 +145,11 @@
                 <GrantTypeName>iwa:ntlm</GrantTypeName>
                 <GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.token.handlers.grant.iwa.ntlm.NTLMAuthenticationGrantHandler</GrantTypeHandlerImplClass>
             </SupportedGrantType>
+            <SupportedGrantType>
+                <GrantTypeName>urn:ietf:params:oauth:grant-type:jwt-bearer</GrantTypeName>
+                <GrantTypeHandlerImplClass>org.wso2.carbon.identity.oauth2.grant.jwt.JWTBearerGrantHandler</GrantTypeHandlerImplClass>
+                <GrantTypeValidatorImplClass>org.wso2.carbon.identity.oauth2.grant.jwt.JWTGrantValidator</GrantTypeValidatorImplClass>
+            </SupportedGrantType>
         </SupportedGrantTypes>
         <OAuthCallbackHandlers>
             <OAuthCallbackHandler Class="org.wso2.carbon.device.mgt.oauth.extensions.handlers.DeviceMgtOAuthCallbackHandler"/>
@@ -222,7 +232,7 @@
         <SAMLSSOSigner>org.wso2.carbon.identity.sso.saml.builders.signature.DefaultSSOSigner</SAMLSSOSigner>
         <SAML2HTTPRedirectSignatureValidator>org.wso2.carbon.identity.sso.saml.validators.SAML2HTTPRedirectDeflateSignatureValidator</SAML2HTTPRedirectSignatureValidator>
         <!--SAMLSSOResponseBuilder>org.wso2.carbon.identity.sso.saml.builders.DefaultResponseBuilder</SAMLSSOResponseBuilder-->
-
+        <SLOHostNameVerificationEnabled>false</SLOHostNameVerificationEnabled>
         <!-- SAML Token validity period in minutes -->
         <SAMLResponseValidityPeriod>5</SAMLResponseValidityPeriod>
         <UseAuthenticatedUserDomainCrypto>false</UseAuthenticatedUserDomainCrypto>
