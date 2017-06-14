@@ -62,7 +62,7 @@ public class AgentReceptionActivity extends Activity {
             }
         } else {
             Toast.makeText(context, context.getResources().getString(R.string.network_not_available_message),
-                           Toast.LENGTH_LONG).show();
+                    Toast.LENGTH_LONG).show();
             finish();
         }
     }

@@ -1,13 +1,13 @@
 /*
  * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
- * 
+ *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -54,7 +54,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	private DeviceInfoPayload deviceInfoBuilder;
 	private Resources resources;
 	private String deviceIdentifier;
-    private String TAG = RegistrationActivity.class.getSimpleName();
+	private String TAG = RegistrationActivity.class.getSimpleName();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +66,9 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			@Override
 			public void run() {
 				progressDialog = CommonDialogUtils.showProgressDialog(RegistrationActivity.this,
-				                                                      getResources().getString(R.string.dialog_enrolling),
-				                                                      getResources().getString(R.string.dialog_please_wait),
-				                                                      null);
+						getResources().getString(R.string.dialog_enrolling),
+						getResources().getString(R.string.dialog_please_wait),
+						null);
 			}
 		});
 		deviceInfoBuilder = new DeviceInfoPayload(context);
@@ -81,7 +81,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 		// play services installed
 		if (Constants.NOTIFIER_GCM.equals(Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE))) {
 			if (FCMRegistrationUtil.isPlayServicesInstalled(this.getApplicationContext())) {
-				registerDevice();
+				registerGCM();
 			} else {
 				try {
 					CommonDialogUtils.stopProgressDialog(progressDialog);
@@ -92,16 +92,20 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 				}
 			}
 		} else {
-			registerDevice();
+			try {
+				registerDevice();
+			} catch (AndroidAgentException e) {
+				Log.e(TAG, "Failed Registration", e);
+			}
 		}
 
 	}
 
-	private void registerDevice() {
+	private void registerDevice() throws AndroidAgentException {
 		String type = Preference.getString(context,
-		                                   context.getResources().getString(R.string.shared_pref_reg_type));
+				context.getResources().getString(R.string.shared_pref_reg_type));
 		String username = Preference.getString(context,
-		                                       context.getResources().getString(R.string.username));
+				context.getResources().getString(R.string.username));
 		try {
 			deviceInfoBuilder.build(type, username);
 		} catch (AndroidAgentException e) {
@@ -121,11 +125,11 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 				utils.setServerIP(ipSaved);
 
 				CommonUtils.callSecuredAPI(RegistrationActivity.this,
-				                           utils.getAPIServerURL(context) + Constants.REGISTER_ENDPOINT,
-				                           HTTP_METHODS.POST,
-				                           deviceInfoBuilder.getDeviceInfoPayload(),
-				                           RegistrationActivity.this,
-				                           Constants.REGISTER_REQUEST_CODE);
+						utils.getAPIServerURL(context) + Constants.REGISTER_ENDPOINT,
+						HTTP_METHODS.POST,
+						deviceInfoBuilder.getDeviceInfoPayload(),
+						RegistrationActivity.this,
+						Constants.REGISTER_REQUEST_CODE);
 			} else {
 				Log.e(TAG, "There is no valid IP to contact the server");
 				CommonDialogUtils.stopProgressDialog(progressDialog);
@@ -167,23 +171,23 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface arg0,
-				                    int arg1) {
+									int arg1) {
 					loadAuthenticationErrorActivity();
 				}
-	};
-	
+			};
+
 	/**
 	 * Loads Already registered activity.
 	 */
 	private void loadAlreadyRegisteredActivity(){
 		Intent intent =
 				new Intent(RegistrationActivity.this,
-				           AlreadyRegisteredActivity.class);
+						AlreadyRegisteredActivity.class);
 		intent.putExtra(getResources().getString(R.string.intent_extra_fresh_reg_flag), true);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 	}
-	
+
 	/**
 	 * Display connectivity error.
 	 */
@@ -192,14 +196,14 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			@Override
 			public void run() {
 				alertDialog = CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-                                                        getResources().getString(R.string.title_head_connection_error),
-                                                        getResources().getString(R.string.error_internal_server),
-                                                        getResources().getString(R.string.button_ok),
-                                                        registrationFailedOKBtnClickListerner);
+						getResources().getString(R.string.title_head_connection_error),
+						getResources().getString(R.string.error_internal_server),
+						getResources().getString(R.string.button_ok),
+						registrationFailedOKBtnClickListerner);
 			}
 		});
 	}
-	
+
 	/**
 	 * Display internal server error.
 	 */
@@ -208,10 +212,10 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			@Override
 			public void run() {
 				alertDialog = CommonDialogUtils.getAlertDialogWithOneButtonAndTitle(context,
-                                                        getResources().getString(R.string.title_head_registration_error),
-                                                        getResources().getString(R.string.error_for_all_unknown_registration_failures),
-                                                        getResources().getString(R.string.button_ok),
-                                                        registrationFailedOKBtnClickListerner);
+						getResources().getString(R.string.title_head_registration_error),
+						getResources().getString(R.string.error_for_all_unknown_registration_failures),
+						getResources().getString(R.string.button_ok),
+						registrationFailedOKBtnClickListerner);
 			}
 		});
 	}
@@ -239,12 +243,10 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 				responseStatus = result.get(Constants.STATUS);
 				Preference.putString(context, Constants.PreferenceFlag.REG_ID, info.getDeviceId());
 				if (Constants.Status.SUCCESSFUL.equals(responseStatus) || Constants.Status.CREATED.equals(responseStatus)) {
-					if (Constants.NOTIFIER_GCM.equals(Preference.getString(context, Constants.PreferenceFlag.NOTIFIER_TYPE))) {
-						registerGCM();
-					} else {
-						CommonDialogUtils.stopProgressDialog(progressDialog);
-						loadAlreadyRegisteredActivity();
-					}
+
+					CommonDialogUtils.stopProgressDialog(progressDialog);
+					loadAlreadyRegisteredActivity();
+
 				} else {
 					displayInternalServerError();
 				}
@@ -268,17 +270,17 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 	}
 
 	/**
-     * This will start the GCM flow by registering the device with Google and sending the
-     * registration ID to MDM. This is done in a Async task as a network call may be done, and
-     * it should be done out side the UI thread. After retrieving the registration Id, it is send
-     * to the MDM server so that it can send notifications to the device.
-     */
+	 * This will start the GCM flow by registering the device with Google and sending the
+	 * registration ID to MDM. This is done in a Async task as a network call may be done, and
+	 * it should be done out side the UI thread. After retrieving the registration Id, it is send
+	 * to the MDM server so that it can send notifications to the device.
+	 */
 	private void registerGCM() {
 		String token =  FirebaseInstanceId.getInstance().getToken();
 		if(token != null) {
 			Preference.putString(context, Constants.GCM_REG_ID, token);
 			try {
-				sendRegistrationId();
+				registerDevice();
 			} catch (AndroidAgentException e) {
 				Log.e(TAG, "Error while sending registration Id");
 			}
@@ -317,7 +319,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 			String url = utils.getAPIServerURL(context) + Constants.DEVICE_ENDPOINT + deviceInfo.getDeviceId();
 
 			CommonUtils.callSecuredAPI(context, url, org.wso2.emm.agent.proxy.utils.Constants.HTTP_METHODS.PUT,
-			                           replyPayload, RegistrationActivity.this, Constants.GCM_REGISTRATION_ID_SEND_CODE);
+					replyPayload, RegistrationActivity.this, Constants.GCM_REGISTRATION_ID_SEND_CODE);
 		} else {
 			Log.e(TAG, "There is no valid IP to contact the server");
 		}
@@ -332,7 +334,7 @@ public class RegistrationActivity extends Activity implements APIResultCallBack 
 				RegistrationActivity.this,
 				ServerDetails.class);
 		intent.putExtra(getResources().getString(R.string.intent_extra_from_activity),
-		                RegistrationActivity.class.getSimpleName());
+				RegistrationActivity.class.getSimpleName());
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 		finish();
