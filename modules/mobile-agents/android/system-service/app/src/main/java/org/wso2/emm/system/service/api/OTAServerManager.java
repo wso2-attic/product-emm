@@ -139,7 +139,8 @@ public class OTAServerManager {
                 Log.e(TAG, message);
                 CommonUtils.sendBroadcast(context, Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS, Constants.Code.FAILURE,
                         Constants.Status.NETWORK_UNREACHABLE, message);
-                CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
+                CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+                        context, context.getResources().getString(R.string.operation_id)), message);
             }
         } else {
             reportCheckingError(OTAStateChangeListener.ERROR_CANNOT_FIND_SERVER);
@@ -267,7 +268,8 @@ public class OTAServerManager {
                         Constants.Status.WIFI_OFF, message);
             }
             Log.e(TAG, message);
-            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, message);
+            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+                    context, context.getResources().getString(R.string.operation_id)), message);
         }
     }
 
@@ -368,7 +370,8 @@ public class OTAServerManager {
                     Log.e(TAG, message + e);
                     CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
                             Constants.Status.CONNECTION_FAILED, message);
-                    CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
+                    CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+                            context, context.getResources().getString(R.string.operation_id)), message);
                     Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
                             Constants.Status.CONNECTION_FAILED);
                 } catch (IOException e) {
@@ -376,7 +379,8 @@ public class OTAServerManager {
                     Log.e(TAG, message + e);
                     CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
                             Constants.Status.FILE_NOT_FOUND, message);
-                    CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
+                    CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+                            context, context.getResources().getString(R.string.operation_id)), message);
                     reportDownloadError(OTAStateChangeListener.ERROR_WRITE_FILE_ERROR);
                     Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
                             Constants.Status.FILE_NOT_FOUND);
@@ -438,6 +442,8 @@ public class OTAServerManager {
             if (getBatteryLevel(context) >= Constants.REQUIRED_BATTERY_LEVEL_TO_FIRMWARE_UPGRADE) {
                 Log.d(TAG, "Installing upgrade package");
                 if (isAutomaticRetryEnabled || Constants.SILENT_FIRMWARE_INSTALLATION) {
+                    CommonUtils.callAgentApp(context, Constants.Operation.FIRMWARE_UPGRADE_COMPLETE, Preference.getInt(
+                            context, context.getResources().getString(R.string.operation_id)), "Starting firmware upgrade");
                     RecoverySystem.installPackage(context, recoveryFile);
                 } else {
                     setNotification(context, context.getResources().getString(R.string.ask_from_user_to_install_firmware), true);
@@ -583,12 +589,14 @@ public class OTAServerManager {
                     String message = "Connection failure (Socket timeout) when retrieving update package size.";
                     Log.e(TAG, message + e);
                     CommonUtils.sendBroadcast(context, operation, Constants.Code.FAILURE, Constants.Status.CONNECTION_FAILED, message);
-                    CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
+                    CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+                            context, context.getResources().getString(R.string.operation_id)), message);
                 } catch (IOException e) {
                     String message = "Property list (build.prop) not found in the server.";
                     Log.e(TAG, message + e);
                     CommonUtils.sendBroadcast(context, operation, Constants.Code.FAILURE, Constants.Status.FILE_NOT_FOUND, message);
-                    CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
+                    CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+                            context, context.getResources().getString(R.string.operation_id)), message);
                 } finally {
                     if (reader != null) {
                         try {

@@ -469,9 +469,8 @@ public class EMMSystemService extends IntentService {
                     schedule = (String) upgradeData.get(context.getResources().getString(R.string.alarm_schedule));
                 }
 
-                boolean isAutomaticRetry = (Preference.hasPreferenceKey(context, context.getResources()
-                        .getString(R.string.firmware_upgrade_automatic_retry)) && Preference.getBoolean(context, context.getResources()
-                        .getString(R.string.firmware_upgrade_automatic_retry))) || !Preference.hasPreferenceKey(context, context.getResources()
+                boolean isAutomaticRetry = !Preference.hasPreferenceKey(context, context.getResources()
+                        .getString(R.string.firmware_upgrade_automatic_retry)) || Preference.getBoolean(context, context.getResources()
                         .getString(R.string.firmware_upgrade_automatic_retry));
                 if (!upgradeData.isNull(context.getResources().getString(R.string.firmware_upgrade_automatic_retry))) {
                     isAutomaticRetry = upgradeData.getBoolean(context.getResources()

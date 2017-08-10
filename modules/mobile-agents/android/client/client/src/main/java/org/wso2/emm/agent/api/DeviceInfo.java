@@ -87,7 +87,6 @@ public class DeviceInfo {
 	 */
 	public String getOSBuildDate() {
 		if (Constants.SYSTEM_APP_ENABLED) {
-			CommonUtils.registerSystemAppReceiver(context);
 			CommonUtils.callSystemApp(context, Constants.Operation.GET_FIRMWARE_BUILD_DATE, null, null);
 			String buildDate = Preference.getString(context, context.getResources().getString(
 					R.string.shared_pref_os_build_date));

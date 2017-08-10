@@ -149,7 +149,6 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
                 firmware_status_check_in_progress)) ? Constants.Operation.GET_FIRMWARE_UPGRADE_PACKAGE_STATUS : Constants.Operation.UPGRADE_FIRMWARE;
         if (error == 0) {
             if (!otaServerManager.compareLocalVersionToServer(parser)) {
-                Log.i(TAG, "Software is up to date:" + Build.VERSION.RELEASE + ", " + Build.ID);
                 JSONObject result = new JSONObject();
                 try {
                     result.put(UPGRADE_AVAILABLE, false);
@@ -162,6 +161,10 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
                     CommonUtils.sendBroadcast(context, operation, Constants.Code.FAILURE, Constants.Status.UPDATE_INFO_NOT_READABLE, message);
                     Log.e(TAG, message + e);
                 }
+                String message = "Software is up to date:" + Build.VERSION.RELEASE + ", " + Build.ID;
+                Log.i(TAG, message);
+                CommonUtils.callAgentApp(context, Constants.Operation.FIRMWARE_UPGRADE_COMPLETE, Preference.getInt(
+                        context, context.getResources().getString(R.string.operation_id)), "No upgrades available. " + message);
             } else if (checkNetworkOnline()) {
                 new AsyncTask<Void, Void, Long>() {
                     protected Long doInBackground(Void... param) {
@@ -176,13 +179,15 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
                             String message = "Connection failure (Socket timeout) when retrieving update package size.";
                             Log.e(TAG, message + e);
                             CommonUtils.sendBroadcast(context, operation, Constants.Code.FAILURE, Constants.Status.CONNECTION_FAILED, message);
-                            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
+                            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+                                    context, context.getResources().getString(R.string.operation_id)), message);
                             return (long) -1;
                         } catch (IOException e) {
                             String message = "Connection failure when retrieving update package size.";
                             Log.e(TAG, message + e);
                             CommonUtils.sendBroadcast(context, operation, Constants.Code.FAILURE, Constants.Status.CONNECTION_FAILED, message);
-                            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
+                            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+                                    context, context.getResources().getString(R.string.operation_id)), message);
                             return (long) -1;
                         }
                     }
@@ -218,12 +223,11 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
                             }
 
                         } else {
-                            if (checkNetworkOnline()) {
-                                Boolean isAutomaticRetry = (Preference.hasPreferenceKey(context, context.getResources()
-                                        .getString(R.string.firmware_upgrade_automatic_retry)) && Preference.getBoolean(context, context.getResources()
-                                        .getString(R.string.firmware_upgrade_automatic_retry))) || !Preference.hasPreferenceKey(context, context.getResources()
-                                        .getString(R.string.firmware_upgrade_automatic_retry));
+                            Boolean isAutomaticRetry = !Preference.hasPreferenceKey(context, context.getResources()
+                                    .getString(R.string.firmware_upgrade_automatic_retry)) || Preference.getBoolean(context, context.getResources()
+                                    .getString(R.string.firmware_upgrade_automatic_retry));
 
+                            if (checkNetworkOnline()) {
                                 if (getBatteryLevel(context) >= Constants.REQUIRED_BATTERY_LEVEL_TO_FIRMWARE_UPGRADE) {
                                     otaServerManager.startDownloadUpgradePackage(otaServerManager);
                                 } else if (isAutomaticRetry) {
@@ -240,14 +244,25 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
                                     Log.e(TAG, message);
                                     CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
                                             Constants.Status.BATTERY_LEVEL_INSUFFICIENT_TO_DOWNLOAD, message);
-                                    CommonUtils.callAgentApp(context, Constants.Operation.FIRMWARE_UPGRADE_FAILURE, 0, message);
+                                    CommonUtils.callAgentApp(context, Constants.Operation.FIRMWARE_UPGRADE_FAILURE, Preference.getInt(
+                                            context, context.getResources().getString(R.string.operation_id)), message);
                                 }
                             } else {
                                 String message = "Connection failure when starting upgrade download.";
                                 Log.e(TAG, message);
-                                CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
-                                              Constants.Status.NETWORK_UNREACHABLE, message);
-                                CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, message);
+                                if (isAutomaticRetry) {
+                                    Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status),
+                                            Constants.Status.NETWORK_UNREACHABLE);
+                                    CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.PENDING,
+                                            Constants.Status.NETWORK_UNREACHABLE, message);
+                                    CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+                                            context, context.getResources().getString(R.string.operation_id)), message);
+                                } else {
+                                    CommonUtils.sendBroadcast(context, Constants.Operation.UPGRADE_FIRMWARE, Constants.Code.FAILURE,
+                                            Constants.Status.NETWORK_UNREACHABLE, message);
+                                    CommonUtils.callAgentApp(context, Constants.Operation.FIRMWARE_UPGRADE_FAILURE, Preference.getInt(
+                                            context, context.getResources().getString(R.string.operation_id)), message);
+                                }
                             }
                         }
                     }
@@ -257,7 +272,8 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
                 String message = "Connection failure when starting build prop download.";
                 Log.e(TAG, message);
                 CommonUtils.sendBroadcast(context, operation, Constants.Code.FAILURE, Constants.Status.CONNECTION_FAILED, message);
-                CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
+                CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, Preference.getInt(
+                        context, context.getResources().getString(R.string.operation_id)), null);
             }
         } else if (error == ERROR_WIFI_NOT_AVAILABLE) {
             Preference.putString(context, context.getResources().getString(R.string.upgrade_download_status), Constants.Status.WIFI_OFF);
@@ -302,12 +318,14 @@ public class OTADownload implements OTAServerManager.OTAStateChangeListener {
             Log.e(TAG, message);
             Preference.putBoolean(context, context.getResources().getString(R.string.verification_failed_flag), true);
             CommonUtils.sendBroadcast(context, operation, Constants.Code.FAILURE, Constants.Status.OTA_IMAGE_VERIFICATION_FAILED, message);
-            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
+            CommonUtils.callAgentApp(context, Constants.Operation.FIRMWARE_UPGRADE_FAILURE, Preference.getInt(
+                    context, context.getResources().getString(R.string.operation_id)), message);
         } else if (error == ERROR_PACKAGE_INSTALL_FAILED) {
             String message = "Package installation Failed.";
             Log.e(TAG, message);
             CommonUtils.sendBroadcast(context, operation, Constants.Code.FAILURE, Constants.Status.OTA_IMAGE_INSTALL_FAILED, message);
-            CommonUtils.callAgentApp(context, Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION, 0, null);
+            CommonUtils.callAgentApp(context, Constants.Operation.FIRMWARE_UPGRADE_FAILURE, Preference.getInt(
+                    context, context.getResources().getString(R.string.operation_id)), message);
         }
     }
 

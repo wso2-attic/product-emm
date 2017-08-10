@@ -37,7 +37,6 @@ import org.wso2.emm.agent.utils.CommonUtils;
 import org.wso2.emm.agent.utils.Constants;
 import org.wso2.emm.agent.utils.Preference;
 
-import java.io.FileNotFoundException;
 import java.util.Map;
 
 /**
@@ -167,41 +166,62 @@ public class ApplicationManagementService extends IntentService implements APIRe
                 sendBroadcast(Constants.Status.SUCCESSFUL, Preference.getString(context, context.getResources().
                         getString(R.string.app_download_progress)));
                 break;
+            case Constants.Operation.FIRMWARE_UPGRADE_COMPLETE:
+            case Constants.Operation.FIRMWARE_INSTALLATION_CANCELED:
+                Preference.putInt(context, context.getResources().
+                        getString(R.string.firmware_upgrade_retries), 0);
+                Preference.putString(context, context.getResources().
+                        getString(R.string.firmware_upgrade_response_message), message);
+                Preference.putString(context, context.getResources().
+                        getString(R.string.firmware_upgrade_response_status), context.getResources().getString(
+                        R.string.operation_value_completed));
+                Preference.putInt(context, context.getResources().
+                        getString(R.string.firmware_upgrade_response_id), id);
+                Preference.putBoolean(context, context.getResources().
+                        getString(R.string.firmware_upgrade_retry_pending), false);
+                break;
             case Constants.Operation.FIRMWARE_UPGRADE_FAILURE:
                 Preference.putInt(context, context.getResources().
                         getString(R.string.firmware_upgrade_retries), 0);
                 Preference.putString(context, context.getResources().
-                        getString(R.string.firmware_upgrade_failed_message), message);
+                        getString(R.string.firmware_upgrade_response_message), message);
+                Preference.putString(context, context.getResources().
+                        getString(R.string.firmware_upgrade_response_status), context.getResources().getString(
+                        R.string.operation_value_error));
                 Preference.putInt(context, context.getResources().
-                        getString(R.string.firmware_upgrade_failed_id), id);
+                        getString(R.string.firmware_upgrade_response_id), id);
+                Preference.putBoolean(context, context.getResources().
+                        getString(R.string.firmware_upgrade_retry_pending), false);
                 break;
             case Constants.Operation.FAILED_FIRMWARE_UPGRADE_NOTIFICATION:
                 int retryCount = Preference.getInt(context, context.getResources().
                         getString(R.string.firmware_upgrade_retries));
                 boolean isFirmwareUpgradeAutoRetry = Preference.getBoolean(context, context
                         .getResources().getString(R.string.is_automatic_firmware_upgrade));
-                if (retryCount < Constants.FIRMWARE_UPGRADE_RETRY_COUNT && isFirmwareUpgradeAutoRetry) {
+                if (isFirmwareUpgradeAutoRetry && retryCount < Constants.FIRMWARE_UPGRADE_RETRY_COUNT) {
                     Preference.putInt(context, context.getResources().
                             getString(R.string.firmware_upgrade_retries), ++retryCount);
                     Preference.putBoolean(context, context.getResources().
-                            getString(R.string.firmware_upgrade_failed), true);
-                    if (message != null && id != 0) {
-                        Preference.putBoolean(context, context.getResources().
-                                getString(R.string.firmware_upgrade_failed), false);
-                        Preference.putString(context, context.getResources().getString(R.string.firmware_upgrade_failed_message),
-                                             message);
-                        Preference.putInt(context, context.getResources().getString(R.string.firmware_upgrade_failed_id),
-                                          id);
-                    }
+                            getString(R.string.firmware_upgrade_retry_pending), true);
+                    Preference.putString(context, context.getResources().
+                            getString(R.string.firmware_upgrade_response_message), message);
+                    Preference.putString(context, context.getResources().
+                            getString(R.string.firmware_upgrade_response_status), context.getResources().getString(
+                            R.string.operation_value_progress));
+                    Preference.putInt(context, context.getResources().
+                            getString(R.string.firmware_upgrade_response_id), id);
                 } else {
                     Preference.putInt(context, context.getResources().
                             getString(R.string.firmware_upgrade_retries), 0);
                     Preference.putBoolean(context, context.getResources().
-                            getString(R.string.firmware_upgrade_failed), false);
-                    Preference.putString(context, context.getResources().getString(R.string.firmware_upgrade_failed_message),
-                                         null);
-                    Preference.putInt(context, context.getResources().getString(R.string.firmware_upgrade_failed_id),
-                                      0);
+                            getString(R.string.firmware_upgrade_retry_pending), false);
+                    Preference.putString(context, context.getResources().
+                            getString(R.string.firmware_upgrade_response_message), message);
+                    Preference.putString(context, context.getResources().
+                            getString(R.string.firmware_upgrade_response_status), context.getResources().getString(
+                            R.string.operation_value_error));
+                    Preference.putInt(context, context.getResources().
+                            getString(R.string.firmware_upgrade_response_id), id);
                 }
                 break;
             case Constants.Operation.GET_ENROLLMENT_STATUS:
