@@ -28,7 +28,12 @@ import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.annotations.ExecutionEnvironment;
 import org.wso2.carbon.automation.engine.annotations.SetEnvironment;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
-import org.wso2.mdm.integration.common.*;
+import org.wso2.mdm.integration.common.Constants;
+import org.wso2.mdm.integration.common.MDMHttpClient;
+import org.wso2.mdm.integration.common.OAuthUtil;
+import org.wso2.mdm.integration.common.TestBase;
+import org.wso2.mdm.integration.common.PayloadGenerator;
+import org.wso2.mdm.integration.common.MDMResponse;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,6 +46,11 @@ public class OracleMobileDeviceManagement extends TestBase {
     private MDMHttpClient client;
     private static JsonParser parser = new JsonParser();
 
+    /**
+     * Initialise tests.
+     *
+     * @throws Exception
+     */
     @BeforeClass(alwaysRun = true, groups = {Constants.MobileDeviceManagement.MOBILE_DEVICE_MANAGEMENT_GROUP})
     public void initTest() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
@@ -48,9 +58,14 @@ public class OracleMobileDeviceManagement extends TestBase {
         this.client = new MDMHttpClient(backendHTTPSURL, Constants.APPLICATION_JSON, accessTokenString);
     }
 
+    /**
+     * Adds an enrollment.
+     *
+     * @throws Exception
+     */
     @Test(description = "Add an Android device.")
     public void addEnrollment() throws Exception {
-        //enroll first device
+        //enroll the first device
         JsonObject enrollmentData = PayloadGenerator.getJsonPayload(
                 Constants.AndroidEnrollment.ENROLLMENT_PAYLOAD_FILE_NAME,
                 Constants.HTTP_METHOD_POST);
@@ -69,6 +84,13 @@ public class OracleMobileDeviceManagement extends TestBase {
         enrollDevice(Constants.DEVICE_ID_10, Constants.AndroidEnrollment.DEVICE_TEN_ENROLLMENT_DATA);
     }
 
+    /**
+     * Enrolls a device.
+     *
+     * @param deviceId  Device ID
+     * @param deviceEnrollmentData  Enrollment data
+     * @throws Exception
+     */
     private void enrollDevice(String deviceId, String deviceEnrollmentData) throws Exception{
         JsonObject enrollmentData = PayloadGenerator.getJsonPayload(
                 Constants.AndroidEnrollment.ENROLLMENT_ADDITIONAL_DEVICES_PAYLOAD_FILE_NAME,
@@ -79,6 +101,11 @@ public class OracleMobileDeviceManagement extends TestBase {
 
     }
 
+    /**
+     * Counts devices.
+     *
+     * @throws Exception
+     */
     @Test(dependsOnMethods = {"addEnrollment"}, description = "Test count devices")
     public void testCountDevices() throws Exception {
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_DEVICE_COUNT_ENDPOINT);
@@ -86,12 +113,23 @@ public class OracleMobileDeviceManagement extends TestBase {
         Assert.assertTrue(response.getBody().equals(Constants.MobileDeviceManagement.NO_OF_DEVICES));
 
     }
+
+    /**
+     * Views devices.
+     *
+     * @throws Exception
+     */
     @Test(dependsOnMethods = {"addEnrollment"}, description = "Test view devices")
     public void testViewDevices() throws Exception {
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
+    /**
+     * Views device types.
+     *
+     * @throws Exception
+     */
     @Test(dependsOnMethods = {"addEnrollment"}, description = "Test view device types")
     public void testViewDeviceTypes() throws Exception {
         MDMResponse response = client.get(Constants.MobileDeviceManagement.VIEW_DEVICE_TYPES_ENDPOINT);
@@ -113,7 +151,11 @@ public class OracleMobileDeviceManagement extends TestBase {
         //Response has two device types, because in windows enrollment a windows device is previously enrolled.
     }
 
-    //Pagination testings for GetAllDevice Function
+    /**
+     * Pagination test for the GetAllDevice() method.
+     *
+     * @throws Exception
+     */
     @Test(dependsOnMethods = "addEnrollment", description = "Get 5 records of devices")
     public void testGetDevicesForSetOfDevices() throws Exception{
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT+"?start=0&length=5");
@@ -126,6 +168,11 @@ public class OracleMobileDeviceManagement extends TestBase {
         Assert.assertTrue("response array length not equal to requested length",String.valueOf(jsonArray.size()).equals("5"));
     }
 
+    /**
+     * Retrieves Android devices.
+     *
+     * @throws Exception
+     */
     @Test(dependsOnMethods = "addEnrollment", description = "Get all android devices")
     public void testGetAndroidDevices() throws Exception{
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT+"?type=android");
@@ -135,6 +182,11 @@ public class OracleMobileDeviceManagement extends TestBase {
                 String.valueOf(jsonArray.size()).equals("10"));
     }
 
+    /**
+     * Retrieves Windows devices.
+     *
+     * @throws Exception
+     */
     @Test(dependsOnMethods = "addEnrollment", description = "Get all windows devices")
     public void testGetWindowsDevices() throws Exception{
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT+"?type=windows");
@@ -142,6 +194,11 @@ public class OracleMobileDeviceManagement extends TestBase {
         Assert.assertEquals(Constants.EMPTY_ARRAY, response.getBody().toString());
     }
 
+    /**
+     * Retrieves devices of the admin.
+     *
+     * @throws Exception
+     */
     @Test(dependsOnMethods = "addEnrollment", description = "Get all devices belongs to role admin")
     public void testGetDevicesBelongToAdmin() throws Exception{
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT+"?role=admin");
@@ -151,12 +208,22 @@ public class OracleMobileDeviceManagement extends TestBase {
                 String.valueOf(jsonArray.size()).equals("10"));
     }
 
+    /**
+     * Retrieves devices with an invalid start number.
+     *
+     * @throws Exception
+     */
     @Test(dependsOnMethods = "addEnrollment", description = "Test response for invalid start record number")
     public void testGetDevicesWithInvalidStartNumber() throws Exception{
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT+"?start=");
         Assert.assertEquals(HttpStatus.SC_NOT_FOUND,response.getStatus());
     }
 
+    /**
+     * Retrieves devices with minus length.
+     *
+     * @throws Exception
+     */
     @Test(dependsOnMethods = "addEnrollment", description = "Test response for minus length")
     public void testGetDeviceWithMinusLength() throws Exception{
         MDMResponse response = client.get(Constants.MobileDeviceManagement.GET_ALL_DEVICES_ENDPOINT+"?start=0&length=-2");
@@ -165,5 +232,4 @@ public class OracleMobileDeviceManagement extends TestBase {
         Assert.assertTrue("number of android devices in response not equal to the actual enrolled number.",
                 String.valueOf(jsonArray.size()).equals("10"));
     }
-    // End of pagination testing for GetAllDevices
 }
